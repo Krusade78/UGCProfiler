@@ -1,0 +1,15 @@
+LIBRARY	"DirectInput"
+
+EXPORTS
+	AbrirDirectInput	@1
+	CerrarDirectInput	@2
+	PollDirectInput		@3
+	EscribirCalibradoGameport @4
+	DescalibrarGameport @5
+	CalibrarGameport	@6
+	GetTipoDirectInput	@7
+	CalibrarHID			@8
+	DescalibrarHID		@9
+	EscribirCalibradoHID @10
+	CalibrarDirectInput	@11
+	EnviarConfiguracionX52 @12

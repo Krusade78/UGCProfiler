@@ -1,0 +1,4 @@
+LIBRARY	"Comsbn"
+
+EXPORTS
+	CargarMapa	@1

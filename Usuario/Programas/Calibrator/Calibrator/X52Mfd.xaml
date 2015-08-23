@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="Calibrator.X52Mfd"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="525" FontFamily="LCD">
+    <Grid>
+        <Border Height="30" VerticalAlignment="Top" CornerRadius="5,5,0,0">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#62139B2C"/>
+                    <GradientStop Color="#B2000000" Offset="1"/>
+                    <GradientStop Color="#62105B1D" Offset="0.941"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Label x:Name="LabelPestaña" Content="X52 Hud" Foreground="White" HorizontalAlignment="Center" FontSize="18.667" Padding="5,2,5,5"/>
+        </Border>
+        <Grid Margin="0,30,0,0">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#B2000000" Offset="0"/>
+                    <GradientStop Color="#A2000000" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Label Content="NOTA:" HorizontalAlignment="Left" Margin="78,38,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" FontFamily="Segoe UI"/>
+            <TextBlock Text="Esta configuración se puede saltarse en los perfiles." HorizontalAlignment="Left" Margin="137,43,0,0" VerticalAlignment="Top" Foreground="Red" Width="305" Height="43" TextWrapping="Wrap" FontStyle="Italic" FontSize="16" FontFamily="Segoe UI"/>
+            <GroupBox x:Name="GroupBox1" Header="Luz de los botones" HorizontalAlignment="Left" Height="141" Margin="32,118,0,0" VerticalAlignment="Top" Width="200" Foreground="GreenYellow" FontSize="16" >
+                <Grid Margin="4">
+                    <RadioButton x:Name="RadioButton1" Content="Ninguna" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Foreground="Yellow" Checked="RadioButton1_Checked"/>
+                    <RadioButton x:Name="RadioButton2" Content="Baja" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top" Foreground="Yellow" Checked="RadioButton2_Checked"/>
+                    <RadioButton x:Name="RadioButton3" Content="Alta" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Foreground="Yellow" Checked="RadioButton3_Checked"/>
+                    <Image x:Name="PictureBox1" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Source="res/b0.jpg"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox x:Name="GroupBox2" Header="Luz del MFD" HorizontalAlignment="Right" Height="141" Margin="0,118,33,0" VerticalAlignment="Top" Width="199" Foreground="GreenYellow" FontSize="16">
+                <Grid Margin="4">
+                    <RadioButton x:Name="RadioButton4" Content="Ninguna" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Foreground="Yellow" Checked="RadioButton4_Checked"/>
+                    <RadioButton x:Name="RadioButton5" Content="Baja" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top" Foreground="Yellow" Checked="RadioButton5_Checked"/>
+                    <RadioButton x:Name="RadioButton6" Content="Alta" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Foreground="Yellow" Checked="RadioButton6_Checked"/>
+                    <Image x:Name="PictureBox2" HorizontalAlignment="Right" VerticalAlignment="Center" Source="res/mfd1.png"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Configuración de horaio del MFD" HorizontalAlignment="Center" Height="158" Margin="32,297,33,0" VerticalAlignment="Top" Width="460" Foreground="GreenYellow" FontSize="16">
+                <Grid Margin="4">
+                    <Grid.Resources>
+                        <ControlTemplate x:Key="Numeric" TargetType="{x:Type ScrollBar}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="9" />
+                                    <RowDefinition Height="9" />
+                                </Grid.RowDefinitions>
+                                <RepeatButton Grid.Row="0" Grid.Column="1" Command="ScrollBar.LineDownCommand">
+                                    <Path Data="M 1,4 L7,4 4,0 Z" Fill="Black" StrokeThickness="0" />
+                                </RepeatButton>
+                                <TextBox Grid.RowSpan="2" Text="{Binding Value, ElementName=NumericUpDown1}" Width="27" HorizontalContentAlignment="Right" FontSize="12" Foreground="Yellow" Background="Black"/>
+                                <Track Visibility="Hidden"/>
+                                <RepeatButton Grid.Row="2" Grid.Column="1" Command="ScrollBar.LineUpCommand">
+                                    <Path Data="M 1,1 L7,1 4,5 Z" Fill="Black" StrokeThickness="0"  />
+                                </RepeatButton>
+                            </Grid>
+                        </ControlTemplate>
+                    </Grid.Resources>
+                    <Label Content="Primer reloj (relativo a la hora del sistema):" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top" Foreground="Yellow" />
+                    <Label Content="Segundo reloj (relativo al primer reloj):" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Foreground="Yellow"/>
+                    <Label Content="Tercer reloj (relativoe al primer reloj):" HorizontalAlignment="Left" Margin="10,82,0,0" VerticalAlignment="Top" Foreground="Yellow"/>
+                    <ScrollBar x:Name="NumericUpDown1" HorizontalAlignment="Right" Height="20" Margin="0,33,68,0" VerticalAlignment="Top" Orientation="Vertical" Width="38" Template="{DynamicResource Numeric}" Maximum="12" Minimum="-12" SmallChange="1" />
+                    <ScrollBar x:Name="NumericUpDown2" HorizontalAlignment="Right" Height="20" Margin="0,33,31,0" VerticalAlignment="Top" Orientation="Vertical" Width="38" Template="{DynamicResource Numeric}" Maximum="59" SmallChange="1" />
+                    <ScrollBar x:Name="NumericUpDown3" HorizontalAlignment="Right" Height="20" Margin="0,62,68,0" VerticalAlignment="Top" Orientation="Vertical" Width="38" Template="{DynamicResource Numeric}" Maximum="12" Minimum="-12" SmallChange="1" />
+                    <ScrollBar x:Name="NumericUpDown4" HorizontalAlignment="Right" Height="20" Margin="0,62,31,0" VerticalAlignment="Top" Orientation="Vertical" Width="38" Template="{DynamicResource Numeric}" Maximum="59" SmallChange="1" />
+                    <ScrollBar x:Name="NumericUpDown5" HorizontalAlignment="Right" Height="20" Margin="0,90,68,0" VerticalAlignment="Top" Orientation="Vertical" Width="38" Template="{DynamicResource Numeric}" Maximum="12" Minimum="-12" SmallChange="1" />
+                    <ScrollBar x:Name="NumericUpDown6" HorizontalAlignment="Right" Height="20" Margin="0,90,31,0" VerticalAlignment="Top" Orientation="Vertical" Width="38" Template="{DynamicResource Numeric}" Maximum="59" SmallChange="1" />
+                    <Label Content="24 H." HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Foreground="Yellow" FontSize="12"/>
+                    <CheckBox x:Name="CheckBox1" HorizontalAlignment="Right" Margin="0,34,10,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBox2" HorizontalAlignment="Right" Margin="0,64,10,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBox3" HorizontalAlignment="Right" Margin="0,92,10,0" VerticalAlignment="Top"/>
+                </Grid>
+            </GroupBox>
+            <Button Content="Aplicar" HorizontalAlignment="Left" Height="30" Margin="412,492,0,0" VerticalAlignment="Top" Width="80" Click="Button1_Click" FontSize="14"/>
+        </Grid>
+    </Grid>
+</UserControl>

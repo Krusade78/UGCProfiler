@@ -1,0 +1,129 @@
+[Version]
+Signature="$Windows NT$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider="Alfredo Costalago"
+LayoutFile=layout.inf
+CatalogFile=xh_hid.cat
+DriverVer=12/13/2014,6.6.0.0
+
+[SourceDisksFiles]
+xh_vmd.sys = 1
+xh_vmdf.sys = 1
+WdfCoInstaller01009.dll=1
+
+
+[SourceDisksNames]
+1 = %DISK_NAME%,,,
+
+[DestinationDirs]
+DefaultDestDir = 12
+CopyFilesDLL = 11
+CoInstaller_CopyFiles = 11
+
+
+
+[ControlFlags]
+ExcludeFromSelect  = HID\NullVirtualHidDevice
+
+[Manufacturer]
+%StdMfg%=Standard,NTAMD64
+
+;[Standard]
+;%VHidMini%    = VHidMini.Inst, VHID\XHOTASVirtualMinidriver
+;%VHidDevice%  = VHidDevice.Inst,  HID\NullVirtualHidDevice
+[Standard.NTAMD64]
+%VHidMini%    = VHidMini.Inst, VHID\XHOTASVirtualMinidriver
+%VHidDevice%  = VHidDevice.Inst,  HID\NullVirtualHidDevice
+
+;===============================================================
+;   VHIDMini (Root Enumerated Hid Device) install section
+;===============================================================
+[vhidMini.Inst.NT]
+CopyFiles = CopyFilesSYS, CopyFilesDLL
+
+[CopyFilesSYS]
+xh_vmd.sys
+xh_vmdf.sys
+HidClass.sys
+HidParse.sys
+
+[CopyFilesDLL]
+Hid.dll
+
+[vhidMini.Inst.NT.HW]
+AddReg = vhidMini_Parameters.AddReg 
+
+[vhidMini_Parameters.AddReg]
+HKR,,"LowerFilters",0x00010000,"XHIDMiniFilter"
+
+[vhidMini.Inst.NT.Services]
+AddService = XHIDMini,0x00000002,vhidmini_Service_Inst
+AddService = XHIDMiniFilter,,vhidminifilter_Service_Inst
+
+
+[vhidmini_Service_Inst]
+DisplayName    = %vhidMini.svc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 0
+ServiceBinary  = %12%\xh_vmd.sys 
+
+[vhidminifilter_Service_Inst]
+DisplayName    = %vhidMinifilter.svc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 0
+ServiceBinary  = %12%\xh_vmdf.sys
+Dependencies   = XHIDMini
+
+
+;===============================================================
+;--- MyDevice Co-installer installation ------
+;===============================================================
+
+[vhidMini.inst.NT.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller01009.dll,WdfCoInstaller"
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01009.dll
+
+[vhidMini.inst.NT.Wdf]
+KmdfService = XHIDMiniFilter, vhidMini_wdfsect
+[vhidMini_wdfsect]
+KmdfLibraryVersion = 1.9
+
+
+;===============================================================
+;   Devices virtuales install section
+; - Only a Null service is installed.
+;===============================================================
+;[VHidDevice.Inst]
+
+[VHidDevice.Inst.NT]
+
+[VHidDevice.Inst.NT.Services]
+AddService = ,0x00000002,   ; NULL Service
+
+
+;================================================================
+[Strings] 
+StdMfg		= "(Standard system devices)"
+vhidMini       = "XHOTAS Virtual controller" 
+vhidDevice     = "XHOTAS Virtual device" 
+vhidMini.svc       = "XHOTAS HID service" 
+vhidMinifilter.svc = "XHOTAS HID filter service"
+DISK_NAME      = "XHOTAS driver - Disk #1"
+
+[Strings.000a]
+StdMfg		= "(Dispositivos de sistema estándar)"
+vhidMini       = "Controlador virtual XHOTAS"
+vhidDevice     = "Dispositivo virtual XHOTAS" 
+vhidMini.svc       = "Servicio HID para XHOTAS" 
+vhidMinifilter.svc = "Servicio del filtro HID para XHOTAS"
+DISK_NAME      = "XHOTAS driver - Disco #1"
+
