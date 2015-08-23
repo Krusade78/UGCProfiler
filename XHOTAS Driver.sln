@@ -5,7 +5,14 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infs", "Infs", "{83B33AB6-544E-49B8-B6B0-A16FF14F6CD4}"
 	ProjectSection(SolutionItems) = preProject
+		Driver\inf\CA.cer = Driver\inf\CA.cer
+		Driver\inf\CA.pvk = Driver\inf\CA.pvk
+		Driver\inf\CodeSigning.cer = Driver\inf\CodeSigning.cer
+		Driver\inf\CodeSigning.pfx = Driver\inf\CodeSigning.pfx
+		Driver\inf\CodeSigning.pvk = Driver\inf\CodeSigning.pvk
+		Driver\inf\firmado.txt = Driver\inf\firmado.txt
 		Driver\inf\uninstall.inf = Driver\inf\uninstall.inf
+		Driver\inf\Vista_Seven_x64_Sign.zip = Driver\inf\Vista_Seven_x64_Sign.zip
 		Driver\inf\xh_hid.inf = Driver\inf\xh_hid.inf
 		Driver\inf\xhotas.inf = Driver\inf\xhotas.inf
 	EndProjectSection
@@ -47,6 +54,26 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xh_vmdf", "Driver\xh_vmdf\xh_vmdf.vcxproj", "{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xusb_hid", "Driver\xusb_hid\xusb_hid.vcxproj", "{25B04DCB-2DA5-467B-9355-8C336980F2A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "inst", "inst", "{3A676AB5-480C-49EF-B661-3BEC8EFE7BF3}"
+	ProjectSection(SolutionItems) = preProject
+		inst\Setup.exe = inst\Setup.exe
+		inst\uninstall.inf = inst\uninstall.inf
+		inst\WdfCoInstaller01009.dll = inst\WdfCoInstaller01009.dll
+		inst\WUDFUpdate_01009.dll = inst\WUDFUpdate_01009.dll
+		inst\xh_hid.cat = inst\xh_hid.cat
+		inst\xh_hid.inf = inst\xh_hid.inf
+		inst\xh_vmd.sys = inst\xh_vmd.sys
+		inst\xh_vmdf.sys = inst\xh_vmdf.sys
+		inst\xhotas.cat = inst\xhotas.cat
+		inst\xhotas.inf = inst\xhotas.inf
+		inst\xusb_hid.sys = inst\xusb_hid.sys
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BFBBC84E-E241-4016-8586-0C0DA3E8D388}"
+	ProjectSection(SolutionItems) = preProject
+		botones.txt = botones.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
