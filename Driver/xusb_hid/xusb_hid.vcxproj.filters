@@ -19,18 +19,41 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="control.c">
+    <Inf Include="..\inf\xhotas.inx">
+      <Filter>Driver Files</Filter>
+    </Inf>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="hidfilter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hidfilter.c">
+    <ClCompile Include="ioctl_x52.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ioctl_user.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="salida_x52.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="control.h">
+    <ClInclude Include="extensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hidfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ioctl_x52.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="salida_x52.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ioctl_user.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
