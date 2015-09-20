@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infs", "Infs", "{83B33AB6-5
 		Driver\inf\uninstall.inf = Driver\inf\uninstall.inf
 		Driver\inf\Vista_Seven_x64_Sign.zip = Driver\inf\Vista_Seven_x64_Sign.zip
 		Driver\inf\xh_hid.inf = Driver\inf\xh_hid.inf
-		Driver\inf\xhotas.inf = Driver\inf\xhotas.inf
+		Driver\inf\xhotas.inx = Driver\inf\xhotas.inx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver", "Driver", "{98460BE7-533F-4AD8-B8A9-2D086C5693F1}"
@@ -53,8 +53,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xh_vmd", "Driver\xh_vmd\xh_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xh_vmdf", "Driver\xh_vmdf\xh_vmdf.vcxproj", "{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xusb_hid", "Driver\xusb_hid\xusb_hid.vcxproj", "{25B04DCB-2DA5-467B-9355-8C336980F2A2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "inst", "inst", "{3A676AB5-480C-49EF-B661-3BEC8EFE7BF3}"
 	ProjectSection(SolutionItems) = preProject
 		inst\Setup.exe = inst\Setup.exe
@@ -74,6 +72,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		botones.txt = botones.txt
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xusb_hid", "Driver\xusb_hid\xusb_hid.vcxproj", "{9D5713AD-838B-4DB5-A289-9AF71CC199EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -220,24 +220,26 @@ Global
 		{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2}.Release|x86.ActiveCfg = Release|Win32
 		{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2}.Release|x86.Build.0 = Release|Win32
 		{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2}.Release|x86.Deploy.0 = Release|Win32
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|ARM.ActiveCfg = Debug|ARM
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|ARM.Build.0 = Debug|ARM
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|ARM64.Build.0 = Debug|ARM64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|x64.ActiveCfg = Debug|x64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|x64.Build.0 = Debug|x64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|x86.ActiveCfg = Debug|Win32
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|x86.Build.0 = Debug|Win32
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Debug|x86.Deploy.0 = Debug|Win32
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|ARM.ActiveCfg = Release|ARM
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|ARM.Build.0 = Release|ARM
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|ARM64.ActiveCfg = Release|ARM64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|ARM64.Build.0 = Release|ARM64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|x64.ActiveCfg = Release|x64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|x64.Build.0 = Release|x64
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|x86.ActiveCfg = Release|Win32
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|x86.Build.0 = Release|Win32
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2}.Release|x86.Deploy.0 = Release|Win32
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|ARM.ActiveCfg = Debug|ARM
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|ARM.Build.0 = Debug|ARM
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|ARM64.Build.0 = Debug|ARM64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|x64.ActiveCfg = Debug|x64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|x64.Build.0 = Debug|x64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|x64.Deploy.0 = Debug|x64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|x86.ActiveCfg = Debug|Win32
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|x86.Build.0 = Debug|Win32
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Debug|x86.Deploy.0 = Debug|Win32
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|ARM.ActiveCfg = Release|ARM
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|ARM.Build.0 = Release|ARM
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|ARM64.ActiveCfg = Release|ARM64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|ARM64.Build.0 = Release|ARM64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x64.ActiveCfg = Release|x64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x64.Build.0 = Release|x64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x64.Deploy.0 = Release|x64
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x86.ActiveCfg = Release|Win32
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x86.Build.0 = Release|Win32
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -257,7 +259,7 @@ Global
 		{D236D114-9A35-420C-9875-BD6C252A4CDD} = {0D652C85-8374-4C96-AC16-FE66029F4EFF}
 		{AAE5EA45-13A6-4201-A588-8545CE091369} = {98460BE7-533F-4AD8-B8A9-2D086C5693F1}
 		{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2} = {98460BE7-533F-4AD8-B8A9-2D086C5693F1}
-		{25B04DCB-2DA5-467B-9355-8C336980F2A2} = {98460BE7-533F-4AD8-B8A9-2D086C5693F1}
+		{9D5713AD-838B-4DB5-A289-9AF71CC199EA} = {98460BE7-533F-4AD8-B8A9-2D086C5693F1}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 11
@@ -292,17 +294,17 @@ Global
 		SccProjectTopLevelParentUniqueName7 = XHOTAS\u0020Driver.sln
 		SccProjectName7 = Usuario/SetupDrv
 		SccLocalPath7 = Usuario\\SetupDrv
-		SccProjectUniqueName8 = Driver\\xh_vmd\\xh_vmd.vcxproj
+		SccProjectUniqueName8 = Driver\\xusb_hid\\xusb_hid.vcxproj
 		SccProjectTopLevelParentUniqueName8 = XHOTAS\u0020Driver.sln
-		SccProjectName8 = Driver/xh_vmd
-		SccLocalPath8 = Driver\\xh_vmd
-		SccProjectUniqueName9 = Driver\\xh_vmdf\\xh_vmdf.vcxproj
+		SccProjectName8 = Driver/xusb_hid
+		SccLocalPath8 = Driver\\xusb_hid
+		SccProjectUniqueName9 = Driver\\xh_vmd\\xh_vmd.vcxproj
 		SccProjectTopLevelParentUniqueName9 = XHOTAS\u0020Driver.sln
-		SccProjectName9 = Driver/xh_vmdf
-		SccLocalPath9 = Driver\\xh_vmdf
-		SccProjectUniqueName10 = Driver\\xusb_hid\\xusb_hid.vcxproj
+		SccProjectName9 = Driver/xh_vmd
+		SccLocalPath9 = Driver\\xh_vmd
+		SccProjectUniqueName10 = Driver\\xh_vmdf\\xh_vmdf.vcxproj
 		SccProjectTopLevelParentUniqueName10 = XHOTAS\u0020Driver.sln
-		SccProjectName10 = Driver/xusb_hid
-		SccLocalPath10 = Driver\\xusb_hid
+		SccProjectName10 = Driver/xh_vmdf
+		SccLocalPath10 = Driver\\xh_vmdf
 	EndGlobalSection
 EndGlobal
