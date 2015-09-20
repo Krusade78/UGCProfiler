@@ -1,12 +1,16 @@
-#include <ntddk.h>
+#pragma once
 #include <wdf.h>
 
 DRIVER_INITIALIZE DriverEntry;
 
-EVT_WDF_DRIVER_DEVICE_ADD HF_AddDevice;
+#ifdef _PRIVATE_
 
-NTSTATUS IniciarInterfazControl(IN WDFDRIVER Driver, IN WDFDEVICE device);// PDEVICE_EXTENSION devExt)
+EVT_WDF_DRIVER_DEVICE_ADD AddDevice;
 
-EVT_WDF_DEVICE_PREPARE_HARDWARE  EvtDevicePrepareHardware;
+NTSTATUS IniciarInterfazControl(_In_ WDFDEVICE device);
 
-EVT_WDF_OBJECT_CONTEXT_CLEANUP EvtCleanupCallback;
+EVT_WDF_DEVICE_PREPARE_HARDWARE  DevicePrepareHardware;
+
+EVT_WDF_OBJECT_CONTEXT_CLEANUP CleanupCallback;
+
+#endif

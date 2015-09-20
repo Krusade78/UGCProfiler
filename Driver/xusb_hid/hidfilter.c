@@ -20,9 +20,12 @@ Environment:
 //#include <wdfusb.h>
 //#include <initguid.h>
 
+#define _PRIVATE_
 #include "hidfilter.h"
+#undef _PRIVATE_
 #include "extensions.h"
-#include "control.h"
+#include "pedales.h"
+//#include "control.h"
 
 
 #ifdef ALLOC_PRAGMA
@@ -31,8 +34,8 @@ Environment:
     #pragma alloc_text( PAGE, IniciarInterfazControl)
 #endif
 
-DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\XUsb_HidF") ;
-DECLARE_CONST_UNICODE_STRING(dosDeviceName, L"\\??\\XUSBInterface");
+//DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\XUsb_HidF") ;
+//DECLARE_CONST_UNICODE_STRING(dosDeviceName, L"\\??\\XUSBInterface");
 
 NTSTATUS DriverEntry
     (
@@ -43,14 +46,14 @@ NTSTATUS DriverEntry
 	NTSTATUS			status = STATUS_SUCCESS;
     WDF_DRIVER_CONFIG   config;
 
-	WDF_DRIVER_CONFIG_INIT(&config, HF_AddDevice);
+	WDF_DRIVER_CONFIG_INIT(&config, AddDevice);
     status = WdfDriverCreate(DriverObject, RegistryPath, WDF_NO_OBJECT_ATTRIBUTES, &config, WDF_NO_HANDLE);
 
     return status;
 }
 
-NTSTATUS
-HF_AddDevice(
+NTSTATUS AddDevice
+	(
     IN WDFDRIVER       Driver,
     IN PWDFDEVICE_INIT DeviceInit
     )
@@ -67,33 +70,38 @@ HF_AddDevice(
 	PAGED_CODE();
 
 	WdfFdoInitSetFilter(DeviceInit);
-	//WdfDeviceInitSetDeviceType(DeviceInit, FILE_DEVICE_UNKNOWN);
 
 	//WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
 	//	pnpPowerCallbacks.EvtDevicePrepareHardware	= EvtDevicePrepareHardware;
 	//WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
 	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_EXTENSION);
-		//attributes.EvtCleanupCallback = EvtCleanupCallback;
+		attributes.EvtCleanupCallback = CleanupCallback;
     status = WdfDeviceCreate(&DeviceInit, &attributes, &device);
 	if (!NT_SUCCESS(status)) return status;
 
-	GetDeviceExtension(device)->fecha = 0;
+	RtlZeroMemory(GetDeviceExtension(device), sizeof(DEVICE_EXTENSION));
+	GetDeviceExtension(device)->Self = device;
+
+	status = IniciarNotificacionPnP(device); //Pedales
+	if (!NT_SUCCESS(status)) return status;
+
+	//GetDeviceExtension(device)->fecha = 0;
 	//GetDeviceExtension(device)->UsbDevice = NULL;
 
-	status = IniciarInterfazControl(Driver, device);// GetDeviceExtension(device));
+	status = IniciarInterfazControl(device);
 
 	return status;
 }
 
-NTSTATUS IniciarInterfazControl(IN WDFDRIVER Driver, IN WDFDEVICE device)// PDEVICE_EXTENSION devExt)
+NTSTATUS IniciarInterfazControl(_In_ WDFDEVICE device)
 {
 	NTSTATUS                        status;
 	//WDF_OBJECT_ATTRIBUTES			attributes;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
 	//PWDFDEVICE_INIT					devInit;
 	
-	UNREFERENCED_PARAMETER(Driver);
+	//UNREFERENCED_PARAMETER(Driver);
 	UNREFERENCED_PARAMETER(device);
 
 	PAGED_CODE();
@@ -173,11 +181,13 @@ NTSTATUS IniciarInterfazControl(IN WDFDRIVER Driver, IN WDFDEVICE device)// PDEV
 //    return status;
 //}
 
-//VOID
-//  EvtCleanupCallback (
-//    IN WDFOBJECT  Object
-//    )
-//{
+VOID CleanupCallback (_In_ WDFOBJECT  Object)
+{
+	if (GetDeviceExtension(Object)->PnPNotifyHandle != NULL)
+	{
+		IoUnregisterPlugPlayNotificationEx(GetDeviceExtension(Object)->PnPNotifyHandle);
+		GetDeviceExtension(Object)->PnPNotifyHandle = NULL;
+	}
 //	if(GetDeviceExtension(Object)->ControlDevice != NULL)
 //		WdfObjectDelete(GetDeviceExtension(Object)->ControlDevice);
-//}
+}

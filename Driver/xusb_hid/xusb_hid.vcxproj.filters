@@ -24,16 +24,19 @@
     </Inf>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="pedales.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ioctl_x52.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ioctl_user.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="hidfilter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ioctl_x52.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ioctl_user.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="salida_x52.cpp">
+    <ClCompile Include="salida_x52.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ioctl_user.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pedales.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

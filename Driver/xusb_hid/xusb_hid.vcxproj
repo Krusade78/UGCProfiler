@@ -221,16 +221,18 @@
     <Inf Include="..\inf\xhotas.inx" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ioctl_user.cpp" />
+    <ClCompile Include="ioctl_user.c" />
     <ClCompile Include="hidfilter.c" />
-    <ClCompile Include="ioctl_x52.cpp" />
-    <ClCompile Include="salida_x52.cpp" />
+    <ClCompile Include="ioctl_x52.c" />
+    <ClCompile Include="pedales.c" />
+    <ClCompile Include="salida_x52.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ioctl_user.h" />
     <ClInclude Include="extensions.h" />
     <ClInclude Include="hidfilter.h" />
     <ClInclude Include="ioctl_x52.h" />
+    <ClInclude Include="pedales.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="salida_x52.h" />
   </ItemGroup>

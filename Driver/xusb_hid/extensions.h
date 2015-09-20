@@ -4,7 +4,9 @@
 
 typedef struct _DEVICE_EXTENSION
 {
-	USHORT			fecha;
+	WDFDEVICE	Self;
+	PVOID		PnPNotifyHandle;
+	//USHORT			fecha;
 	//WDFDEVICE		ControlDevice;
 	//WDFUSBDEVICE    UsbDevice;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
