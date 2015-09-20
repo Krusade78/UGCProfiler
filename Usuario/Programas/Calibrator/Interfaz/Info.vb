@@ -59,42 +59,42 @@ Public Class Info
         salir = False
     End Sub
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
-        Label12.Text = "X: " & Me.MousePosition.X
-        Label13.Text = "Y: " & Me.MousePosition.Y
-        If (Me.MouseButtons And Windows.Forms.MouseButtons.Left) = Windows.Forms.MouseButtons.Left Then
-            Label16.BackColor = Color.Red
-        Else
-            Label16.BackColor = Color.RosyBrown
-        End If
-        If (Me.MouseButtons And Windows.Forms.MouseButtons.Middle) = Windows.Forms.MouseButtons.Middle Then
-            Label17.BackColor = Color.Red
-        Else
-            Label17.BackColor = Color.RosyBrown
-        End If
-        If (Me.MouseButtons And Windows.Forms.MouseButtons.Right) = Windows.Forms.MouseButtons.Right Then
-            Label18.BackColor = Color.Red
-        Else
-            Label18.BackColor = Color.RosyBrown
-        End If
-        If wu = 5 Then
-            Label14.BackColor = Color.RosyBrown
-            wu = 0
-        Else
-            If wu > 0 Then wu = wu + 1
-        End If
-        If wd = 5 Then
-            Label15.BackColor = Color.RosyBrown
-            wd = 0
-        Else
-            If wd > 0 Then wd = wd + 1
-        End If
-        LeerTeclado()
-        js.Poll()
+        'Label12.Text = "X: " & Me.MousePosition.X
+        'Label13.Text = "Y: " & Me.MousePosition.Y
+        'If (Me.MouseButtons And Windows.Forms.MouseButtons.Left) = Windows.Forms.MouseButtons.Left Then
+        '    Label16.BackColor = Color.Red
+        'Else
+        '    Label16.BackColor = Color.RosyBrown
+        'End If
+        'If (Me.MouseButtons And Windows.Forms.MouseButtons.Middle) = Windows.Forms.MouseButtons.Middle Then
+        '    Label17.BackColor = Color.Red
+        'Else
+        '    Label17.BackColor = Color.RosyBrown
+        'End If
+        'If (Me.MouseButtons And Windows.Forms.MouseButtons.Right) = Windows.Forms.MouseButtons.Right Then
+        '    Label18.BackColor = Color.Red
+        'Else
+        '    Label18.BackColor = Color.RosyBrown
+        'End If
+        'If wu = 5 Then
+        '    Label14.BackColor = Color.RosyBrown
+        '    wu = 0
+        'Else
+        '    If wu > 0 Then wu = wu + 1
+        'End If
+        'If wd = 5 Then
+        '    Label15.BackColor = Color.RosyBrown
+        '    wd = 0
+        'Else
+        '    If wd > 0 Then wd = wd + 1
+        'End If
+        'LeerTeclado()
+        'js.Poll()
 
-        PintarBotones()
-        PintarPOVs()
-        PintarEjes()
-        PintarRuedas()
+        'PintarBotones()
+        'PintarPOVs()
+        'PintarEjes()
+        'PintarRuedas()
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
