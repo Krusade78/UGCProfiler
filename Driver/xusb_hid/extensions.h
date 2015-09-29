@@ -1,11 +1,22 @@
 #pragma once
-#include <ntddk.h>
+//#include <ntddk.h>
 #include <wdf.h>
+
+typedef struct _PEDALES_EXTENSION
+{
+	WDFIOTARGET		IoTarget;
+	WDFWAITLOCK		WaitLockIoTarget;
+	WDFSPINLOCK		SpinLockPosicion;
+	BOOLEAN			Activado;
+	UCHAR			PedalSel;
+	INT16			Posicion;
+} PEDALES_EXTENSION;
 
 typedef struct _DEVICE_EXTENSION
 {
-	WDFDEVICE	Self;
-	PVOID		PnPNotifyHandle;
+	WDFDEVICE			Self;
+	PVOID				PnPNotifyHandle;
+	PEDALES_EXTENSION	Pedales;
 	//USHORT			fecha;
 	//WDFDEVICE		ControlDevice;
 	//WDFUSBDEVICE    UsbDevice;

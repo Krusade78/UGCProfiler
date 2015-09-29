@@ -24,14 +24,15 @@ Environment:
 #include "hidfilter.h"
 #undef _PRIVATE_
 #include "extensions.h"
+#include "ioctl_x52.h"
 #include "pedales.h"
 //#include "control.h"
 
 
 #ifdef ALLOC_PRAGMA
     #pragma alloc_text(INIT, DriverEntry)
-    #pragma alloc_text(PAGE, HF_AddDevice)
-    #pragma alloc_text( PAGE, IniciarInterfazControl)
+    #pragma alloc_text(PAGE, AddDevice)
+    #pragma alloc_text(PAGE, IniciarInterfazControl)
 #endif
 
 //DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\XUsb_HidF") ;
@@ -83,7 +84,7 @@ NTSTATUS AddDevice
 	RtlZeroMemory(GetDeviceExtension(device), sizeof(DEVICE_EXTENSION));
 	GetDeviceExtension(device)->Self = device;
 
-	status = IniciarNotificacionPnP(device); //Pedales
+	status = IniciarPedales(device);
 	if (!NT_SUCCESS(status)) return status;
 
 	//GetDeviceExtension(device)->fecha = 0;
@@ -183,11 +184,7 @@ NTSTATUS IniciarInterfazControl(_In_ WDFDEVICE device)
 
 VOID CleanupCallback (_In_ WDFOBJECT  Object)
 {
-	if (GetDeviceExtension(Object)->PnPNotifyHandle != NULL)
-	{
-		IoUnregisterPlugPlayNotificationEx(GetDeviceExtension(Object)->PnPNotifyHandle);
-		GetDeviceExtension(Object)->PnPNotifyHandle = NULL;
-	}
+	CerrarPedales((WDFDEVICE)Object);
 //	if(GetDeviceExtension(Object)->ControlDevice != NULL)
 //		WdfObjectDelete(GetDeviceExtension(Object)->ControlDevice);
 }

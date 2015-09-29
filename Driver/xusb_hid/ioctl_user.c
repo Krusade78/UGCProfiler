@@ -42,6 +42,8 @@ void HF_IoControl(
 	PUCHAR				SystemBuffer;	
 
     UNREFERENCED_PARAMETER(OutputBufferLength);
+	UNREFERENCED_PARAMETER(InputBufferLength);
+	UNREFERENCED_PARAMETER(Queue);
 
 	PAGED_CODE();
 
@@ -55,54 +57,54 @@ void HF_IoControl(
 
 	switch(IoControlCode)
 	{
-		case IOCTL_MFD_LUZ:
-			{
-				status = Luz_MFD(WdfIoQueueGetDevice(Queue), SystemBuffer);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-				break;
-			}
-		case IOCTL_GLOBAL_LUZ:
-			{
-				status = Luz_Global(WdfIoQueueGetDevice(Queue), SystemBuffer);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-				break;
-			}
-		case IOCTL_INFO_LUZ:
-			{
-				status = Luz_Info(WdfIoQueueGetDevice(Queue), SystemBuffer);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-				break;
-			}
-		case IOCTL_PINKIE:
-			{
-				status = Set_Pinkie(WdfIoQueueGetDevice(Queue), SystemBuffer);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-				break;
-			}
-		case IOCTL_TEXTO:
-			{
-				status = Set_Texto(WdfIoQueueGetDevice(Queue), SystemBuffer, InputBufferLength);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, InputBufferLength);
-				break;
-			}
-		case IOCTL_HORA:
-			{
-				status = Set_Hora(WdfIoQueueGetDevice(Queue), SystemBuffer);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-				break;
-			}
-		case IOCTL_HORA24:
-			{
-				status = Set_Hora24(WdfIoQueueGetDevice(Queue), SystemBuffer);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-				break;
-			}
-		case IOCTL_FECHA:
-			{
-				status = Set_Fecha(WdfIoQueueGetDevice(Queue), SystemBuffer);
-				if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 2);
-				break;
-			}
+		//case IOCTL_MFD_LUZ:
+		//	{
+		//		status = Luz_MFD(WdfIoQueueGetDevice(Queue), SystemBuffer);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		//		break;
+		//	}
+		//case IOCTL_GLOBAL_LUZ:
+		//	{
+		//		status = Luz_Global(WdfIoQueueGetDevice(Queue), SystemBuffer);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		//		break;
+		//	}
+		//case IOCTL_INFO_LUZ:
+		//	{
+		//		status = Luz_Info(WdfIoQueueGetDevice(Queue), SystemBuffer);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		//		break;
+		//	}
+		//case IOCTL_PINKIE:
+		//	{
+		//		status = Set_Pinkie(WdfIoQueueGetDevice(Queue), SystemBuffer);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		//		break;
+		//	}
+		//case IOCTL_TEXTO:
+		//	{
+		//		status = Set_Texto(WdfIoQueueGetDevice(Queue), SystemBuffer, InputBufferLength);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, InputBufferLength);
+		//		break;
+		//	}
+		//case IOCTL_HORA:
+		//	{
+		//		status = Set_Hora(WdfIoQueueGetDevice(Queue), SystemBuffer);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		//		break;
+		//	}
+		//case IOCTL_HORA24:
+		//	{
+		//		status = Set_Hora24(WdfIoQueueGetDevice(Queue), SystemBuffer);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		//		break;
+		//	}
+		//case IOCTL_FECHA:
+		//	{
+		//		status = Set_Fecha(WdfIoQueueGetDevice(Queue), SystemBuffer);
+		//		if(NT_SUCCESS(status)) WdfRequestSetInformation(Request, 2);
+		//		break;
+		//	}
 		default:
 			status = STATUS_NOT_SUPPORTED;
 	}
