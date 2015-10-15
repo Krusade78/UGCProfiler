@@ -294,17 +294,17 @@ Global
 		SccProjectTopLevelParentUniqueName7 = XHOTAS\u0020Driver.sln
 		SccProjectName7 = Usuario/SetupDrv
 		SccLocalPath7 = Usuario\\SetupDrv
-		SccProjectUniqueName8 = Driver\\xusb_hid\\xusb_hid.vcxproj
+		SccProjectUniqueName8 = Driver\\xh_vmd\\xh_vmd.vcxproj
 		SccProjectTopLevelParentUniqueName8 = XHOTAS\u0020Driver.sln
-		SccProjectName8 = Driver/xusb_hid
-		SccLocalPath8 = Driver\\xusb_hid
-		SccProjectUniqueName9 = Driver\\xh_vmd\\xh_vmd.vcxproj
+		SccProjectName8 = Driver/xh_vmd
+		SccLocalPath8 = Driver\\xh_vmd
+		SccProjectUniqueName9 = Driver\\xh_vmdf\\xh_vmdf.vcxproj
 		SccProjectTopLevelParentUniqueName9 = XHOTAS\u0020Driver.sln
-		SccProjectName9 = Driver/xh_vmd
-		SccLocalPath9 = Driver\\xh_vmd
-		SccProjectUniqueName10 = Driver\\xh_vmdf\\xh_vmdf.vcxproj
+		SccProjectName9 = Driver/xh_vmdf
+		SccLocalPath9 = Driver\\xh_vmdf
+		SccProjectUniqueName10 = Driver\\xusb_hid\\xusb_hid.vcxproj
 		SccProjectTopLevelParentUniqueName10 = XHOTAS\u0020Driver.sln
-		SccProjectName10 = Driver/xh_vmdf
-		SccLocalPath10 = Driver\\xh_vmdf
+		SccProjectName10 = Driver/xusb_hid
+		SccLocalPath10 = Driver\\xusb_hid
 	EndGlobalSection
 EndGlobal

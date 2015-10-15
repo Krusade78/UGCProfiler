@@ -24,6 +24,9 @@
     </Inf>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="pedales.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ioctl_x52.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,9 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="salida_x52.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pedales.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
