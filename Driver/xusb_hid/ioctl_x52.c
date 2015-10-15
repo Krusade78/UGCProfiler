@@ -21,6 +21,51 @@ Kernel mode
 #include <hidport.h>
 #include "extensions.h"
 
+#ifdef ALLOC_PRAGMA
+#pragma alloc_text(PAGE, IniciarX52)
+#pragma alloc_text(PAGE, CerrarX52)
+#endif
+
+//PASSIVE
+NTSTATUS IniciarX52(_In_ WDFDEVICE device)
+{
+	NTSTATUS status;
+
+	PAGED_CODE();
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceExtension(device)->X52.SpinLockPosicion);
+	if (!NT_SUCCESS(status)) return status;
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceExtension(device)->X52.SpinLockRequest);
+	if (!NT_SUCCESS(status)) return status;
+	status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceExtension(device)->X52.ListaRequest);
+	if (!NT_SUCCESS(status)) return status;
+
+	return status;
+}
+
+//PASSIVE
+void CerrarX52(_In_ WDFDEVICE device)
+{
+	PAGED_CODE();
+
+	if (GetDeviceExtension(device)->X52.ListaRequest != NULL)
+	{
+		WdfObjectDelete(GetDeviceExtension(device)->X52.ListaRequest);
+		GetDeviceExtension(device)->X52.ListaRequest = NULL;
+	}
+	if (GetDeviceExtension(device)->X52.SpinLockPosicion != NULL)
+	{
+		WdfObjectDelete(GetDeviceExtension(device)->X52.SpinLockPosicion);
+		GetDeviceExtension(device)->X52.SpinLockPosicion = NULL;
+	}
+	if (GetDeviceExtension(device)->X52.SpinLockRequest != NULL)
+	{
+		WdfObjectDelete(GetDeviceExtension(device)->X52.SpinLockRequest);
+		GetDeviceExtension(device)->X52.SpinLockRequest = NULL;
+	}
+}
+
+//DISPATCH
 void HF_X52IOCtl(
 		__in  WDFQUEUE Queue,
 		__in  WDFREQUEST Request,
@@ -50,15 +95,35 @@ void HF_X52IOCtl(
 			{
 				if (purb->UrbBulkOrInterruptTransfer.TransferBufferLength >= (sizeof(HID_INPUT_DATA) + 1))
 				{
+					PDEVICE_EXTENSION devExt = GetDeviceExtension(WdfIoQueueGetDevice(Queue));
+
 					WdfRequestFormatRequestUsingCurrentType(Request);
 					WdfRequestSetCompletionRoutine(Request, CompletionX52Data, NULL);
 					purb->UrbBulkOrInterruptTransfer.TransferBufferLength = 0x0e;
-					ret = WdfRequestSend(Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), NULL);
-
-					if (ret == FALSE) {
-						status = WdfRequestGetStatus(Request);
-						WdfRequestComplete(Request, status);
+					WdfSpinLockAcquire(devExt->X52.SpinLockRequest);
+					{
+						WdfCollectionAdd(devExt->X52.ListaRequest, Request);
 					}
+					WdfSpinLockRelease(devExt->X52.SpinLockRequest);
+					ret = WdfRequestSend(Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), NULL);
+					WdfSpinLockAcquire(devExt->X52.SpinLockRequest);
+					{
+						if (ret == FALSE)
+						{
+							for (ULONG i = 0; i < WdfCollectionGetCount(devExt->X52.ListaRequest); i++)
+							{
+								if ((WDFREQUEST)WdfCollectionGetItem(devExt->X52.ListaRequest, i) == Request)
+								{
+									WdfCollectionRemoveItem(devExt->X52.ListaRequest, i);
+									break;
+								}
+							}
+							status = WdfRequestGetStatus(Request);
+							WdfRequestComplete(Request, status);
+						}
+					}
+					WdfSpinLockRelease(devExt->X52.SpinLockRequest);
+
 					return;
 				}
 				else
@@ -109,13 +174,14 @@ void HF_X52IOCtl(
 
 	WDF_REQUEST_SEND_OPTIONS_INIT(&options, WDF_REQUEST_SEND_OPTION_SEND_AND_FORGET);
 	ret = WdfRequestSend(Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), &options);
-
-	if (ret == FALSE) {
+	if (ret == FALSE)
+	{
 		status = WdfRequestGetStatus(Request);
 		WdfRequestComplete(Request, status);
 	}
 }
 
+//DISPATCH
 void CompletionConfigDescriptor(
 		__in WDFREQUEST                     Request,
 		__in WDFIOTARGET                    Target,
@@ -153,6 +219,7 @@ void CompletionConfigDescriptor(
 	WdfRequestComplete(Request, status);
 }
 
+//DISPATCH
 void CompletionX52Data(
 		__in WDFREQUEST                     Request,
 		__in WDFIOTARGET                    Target,
@@ -160,31 +227,73 @@ void CompletionX52Data(
 		__in WDFCONTEXT                     Context
 		)
 {
-	UNREFERENCED_PARAMETER(Target);
 	UNREFERENCED_PARAMETER(Context);
 	UNREFERENCED_PARAMETER(Params);
 
-	NTSTATUS status = WdfRequestGetStatus(Request);
+	WDFDEVICE	device = WdfIoTargetGetDevice(Target);
+	NTSTATUS	status;
+	BOOLEAN		cancelada = TRUE;
+	WDF_REQUEST_PARAMETERS params;
+	PURB purb;
 
-	if (status == STATUS_SUCCESS)
+	WdfSpinLockAcquire(GetDeviceExtension(device)->X52.SpinLockRequest);
 	{
-		WDF_REQUEST_PARAMETERS params;
-		PURB purb;
+		for (ULONG i = 0; i < WdfCollectionGetCount(GetDeviceExtension(device)->X52.ListaRequest); i++)
+		{
+			WDFREQUEST request = (WDFREQUEST)WdfCollectionGetItem(GetDeviceExtension(device)->X52.ListaRequest, i);
+			if (request == Request)
+			{
+				WdfCollectionRemoveItem(GetDeviceExtension(device)->X52.ListaRequest, i);
+				cancelada = FALSE;
+				break;
+			}
+		}
+	}
+	WdfSpinLockRelease(GetDeviceExtension(device)->X52.SpinLockRequest);
 
-		WDF_REQUEST_PARAMETERS_INIT(&params);
-		WdfRequestGetParameters(Request, &params);
-		purb = (PURB)params.Parameters.Others.Arg1;
+	WDF_REQUEST_PARAMETERS_INIT(&params);
+	WdfRequestGetParameters(Request, &params);
+	purb = (PURB)params.Parameters.Others.Arg1;
 
+	status = WdfRequestGetStatus(Request);
+
+	if ((status == STATUS_CANCELLED) && cancelada)
+	{
+		if (purb->UrbHeader.Status == USBD_STATUS_CANCELED)
+		{
+			INT16 posPedales;
+			PDEVICE_EXTENSION devExt = GetDeviceExtension(device);
+			WdfSpinLockAcquire(devExt->Pedales.SpinLockPosicion);
+			posPedales = devExt->Pedales.Posicion;
+			WdfSpinLockRelease(devExt->Pedales.SpinLockPosicion);
+			WdfSpinLockAcquire(devExt->X52.SpinLockPosicion);
+			{
+				devExt->X52.Posicion.Ejes[5] = posPedales >> 8;
+				devExt->X52.Posicion.Ejes[4] = posPedales & 0xff;
+				RtlCopyMemory((PVOID)((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer + 1), &devExt->X52.Posicion, sizeof(HID_INPUT_DATA));
+			}
+			WdfSpinLockRelease(devExt->X52.SpinLockPosicion);
+			
+			purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
+			*((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer) = 0x01; //Resport id
+			purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
+			status = STATUS_SUCCESS;
+		}
+	}
+	else if (NT_SUCCESS(status) && !cancelada)
+	{
 		if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
 		{
-			ConvertirX52(purb->UrbBulkOrInterruptTransfer.TransferBuffer);
+			ConvertirX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer);
 			*((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer) = 0x01; //Resport id
 			purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
 		}
 	}
+
 	WdfRequestComplete(Request, status);
 }
 
+//DISPATCH
 UCHAR Switch4To8(UCHAR in)
 {
 	switch (in)
@@ -202,7 +311,8 @@ UCHAR Switch4To8(UCHAR in)
 	}
 }
 
-void ConvertirX52(PVOID inputData)
+//DISPATCH
+void ConvertirX52(WDFDEVICE device, PVOID inputData)
 {
 	HID_INPUT_DATA hidData;
 	RtlZeroMemory(&hidData, sizeof(HID_INPUT_DATA));
@@ -214,7 +324,7 @@ void ConvertirX52(PVOID inputData)
 	hidData.Ejes[3] = (hidGameData->EjesXYR[2] >> 3) & 0x7;
 	hidData.Ejes[4] = (hidGameData->EjesXYR[2] >> 6) | ((hidGameData->EjesXYR[3] & 0x3f) << 2);
 	hidData.Ejes[5] = hidGameData->EjesXYR[3] >> 6;
-	hidData.Ejes[6] = hidGameData->Ejes[0]; //Z
+	hidData.Ejes[6] = 255 - hidGameData->Ejes[0]; //Z
 	hidData.Ejes[8] = hidGameData->Ejes[2];
 	hidData.Ejes[10] = hidGameData->Ejes[1];
 	hidData.Ejes[12] = hidGameData->Ejes[3];
@@ -247,18 +357,36 @@ void ConvertirX52(PVOID inputData)
 	hidData.Setas[3] = Switch4To8(hidData.Setas[3]);
 	hidData.MiniStick = hidGameData->Ministick;
 
+	if (GetDeviceExtension(device)->Pedales.Activado)
+	{
+		INT16 posPedales;
+		WdfSpinLockAcquire(GetDeviceExtension(device)->Pedales.SpinLockPosicion);
+			posPedales = GetDeviceExtension(device)->Pedales.Posicion;
+		WdfSpinLockRelease(GetDeviceExtension(device)->Pedales.SpinLockPosicion);
+		hidData.Ejes[4] = posPedales >> 8;
+		hidData.Ejes[5] = posPedales & 0xff;
+	}
+
 	RtlCopyMemory((PVOID)((PUCHAR)inputData + 1), &hidData, sizeof(HID_INPUT_DATA));
-	//if (devExt->PedalesActivados)
-	//{
-	//	HID_INPUT_DATA ultimoHID;
-	//	WdfSpinLockAcquire(devExt->SpinLockDeltaHid);
-	//	RtlCopyMemory(&ultimoHID, &devExt->DeltaHidData, sizeof(HID_INPUT_DATA));
-	//	WdfSpinLockRelease(devExt->SpinLockDeltaHid);
-	//	hidData.Ejes[16] = hidData.Ejes[4];
-	//	hidData.Ejes[17] = hidData.Ejes[5];
-	//	hidData.Ejes[14] = ultimoHID.Ejes[14];
-	//	hidData.Ejes[15] = ultimoHID.Ejes[15];
-	//	hidData.Ejes[4] = ultimoHID.Ejes[4];
-	//	hidData.Ejes[5] = ultimoHID.Ejes[5];
-	//}
+	WdfSpinLockAcquire(GetDeviceExtension(device)->X52.SpinLockPosicion);
+		RtlCopyMemory(&GetDeviceExtension(device)->X52.Posicion, &hidData, sizeof(HID_INPUT_DATA));
+	WdfSpinLockRelease(GetDeviceExtension(device)->X52.SpinLockPosicion);
+
+}
+
+//DISPATCH
+void LanzarRequestX52ConPedales(PDEVICE_EXTENSION devExt)
+{
+	WDFREQUEST request = NULL;
+	WdfSpinLockAcquire(devExt->X52.SpinLockRequest);
+	{
+		if (WdfCollectionGetCount(devExt->X52.ListaRequest) > 0)
+		{
+			request = (WDFREQUEST)WdfCollectionGetFirstItem(devExt->X52.ListaRequest);
+			WdfCollectionRemoveItem(devExt->X52.ListaRequest, 0);
+		}
+	}
+	WdfSpinLockRelease(devExt->X52.SpinLockRequest);
+	if (request != NULL)
+		WdfRequestCancelSentRequest(request);
 }
