@@ -3,10 +3,13 @@
 #include <wdf.h>
 
 EVT_WDF_IO_QUEUE_IO_INTERNAL_DEVICE_CONTROL HF_X52IOCtl;
+NTSTATUS IniciarX52(_In_ WDFDEVICE device);
+void CerrarX52(_In_ WDFDEVICE device);
+void LanzarRequestX52ConPedales();
 
 #ifdef _PRIVATE_
 
-void ConvertirX52(PVOID inputData);
+void ConvertirX52(WDFDEVICE device, PVOID inputData);
 
 EVT_WDF_REQUEST_COMPLETION_ROUTINE CompletionConfigDescriptor;
 EVT_WDF_REQUEST_COMPLETION_ROUTINE CompletionX52Data;
@@ -19,14 +22,6 @@ typedef struct _HIDX52_INPUT_DATA
 	UCHAR	Seta; // 2bits wheel + 2 blanco + 4 bits seta
 	UCHAR	Ministick;
 } HIDX52_INPUT_DATA, *PHIDX52_INPUT_DATA;
-
-typedef struct _HID_INPUT_DATA
-{
-	UCHAR   Ejes[18];
-	UCHAR	Setas[4];
-	UCHAR	Botones[4];
-	UCHAR   MiniStick;
-} HID_INPUT_DATA, *PHID_INPUT_DATA;
 
 CONST UCHAR ReportDescriptor[] = {
 	// Mouse Descriptor
@@ -95,18 +90,18 @@ CONST UCHAR ReportDescriptor[] = {
 	0x09, 0x33,  //Rx
 	0x09, 0x34,  //Ry
 	0x09, 0x36,  //Slider 1
-	0x95, 0x05, //report count 5
-	0x81, 0x02,
-	0x26, 0xff, 0x00, //logical max
+	//0x95, 0x05, //report count 5
+	//0x81, 0x02,
+	//0x26, 0xff, 0x00, //logical max
 	0x09, 0x36,  //Slider 2
-	0x95, 0x01,  //report count 1
+	0x95, 0x06,  //report count 6
 	0x81, 0x02,
-	0x26, 0xff, 0x03, //logical max
-	0x46, 0x0ff,0x03, //physical max
-	0x09, 0x43,  //Vz
-	0x95, 0x01,  //report count 1
-	0x66, 0x11, 0xf0, //unit velicity
-	0x81, 0x02,
+	//0x26, 0xff, 0x03, //logical max
+	//0x46, 0xff, 0x03, //physical max
+	//0x09, 0x43,  //Vz
+	//0x95, 0x01,  //report count 1
+	//0x66, 0x11, 0xf0, //unit velicity
+	//0x81, 0x02,
 
 	0x15, 0x01, //logical min 1
 	0x25, 0x08, //logical max 8
@@ -148,19 +143,6 @@ CONST UCHAR ReportDescriptor[] = {
 	0x66,0x11,0xf0, //unit velicity
 	0x81, 0x02,
 	0xc0,
-
-	//0x05,0x01, //ministick
-	//0x15,0x00,
-	//0x25,0x0f,
-	//0x35,0x00,
-	//0x45,0x0f,
-	//0x95,0x01,
-	//0x75,0x04,
-	//0x66,0x11,0xf0, //unit velicity
-	//0x09,0x30, //vx
-	//0x81,0x02,
-	//0x09,0x31, //vy
-	//0x81,0x02,
 
 	0xc0
 };
