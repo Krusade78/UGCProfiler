@@ -13,7 +13,8 @@ DRIVER_NOTIFICATION_CALLBACK_ROUTINE PnPCallback;
 NTSTATUS IniciarIoTarget(_In_ PUNICODE_STRING strId, _In_ WDFDEVICE device);
 
 NTSTATUS CerrarIoTarget(_In_ WDFDEVICE ioTarget);
-EVT_WDF_WORKITEM CerrarIoTargetPassive;
+EVT_WDF_WORKITEM CerrarIoTargetWI;
+void CerrarIoTargetPassive(_In_ WDFDEVICE device);
 
 EVT_WDF_IO_TARGET_REMOVE_COMPLETE EvIoTargetRemoveComplete;
 EVT_WDF_IO_TARGET_REMOVE_CANCELED EvIoTargetRemoveCanceled;
