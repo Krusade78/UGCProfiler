@@ -24,9 +24,9 @@ Environment:
 #include "hidfilter.h"
 #undef _PRIVATE_
 #include "extensions.h"
-#include "ioctl_x52.h"
+#include "ioctl_x52usb.h"
 #include "pedales.h"
-#include "ioctl_user.h"
+#include "ioctl_interface.h"
 
 
 #ifdef ALLOC_PRAGMA

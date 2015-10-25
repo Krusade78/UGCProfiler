@@ -173,6 +173,9 @@
     <ResourceCompile>
       <Culture>0x0c0a</Culture>
     </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>$(DDK_LIB_PATH)wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -221,17 +224,17 @@
     <Inf Include="..\inf\xhotas.inx" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ioctl_user.c" />
+    <ClCompile Include="ioctl_interface.c" />
     <ClCompile Include="hidfilter.c" />
-    <ClCompile Include="ioctl_x52.c" />
+    <ClCompile Include="ioctl_x52usb.c" />
     <ClCompile Include="pedales.c" />
     <ClCompile Include="salida_x52.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ioctl_user.h" />
+    <ClInclude Include="ioctl_interface.h" />
     <ClInclude Include="extensions.h" />
     <ClInclude Include="hidfilter.h" />
-    <ClInclude Include="ioctl_x52.h" />
+    <ClInclude Include="ioctl_x52usb.h" />
     <ClInclude Include="pedales.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="salida_x52.h" />

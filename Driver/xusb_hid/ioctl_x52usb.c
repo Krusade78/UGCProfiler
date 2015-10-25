@@ -14,7 +14,7 @@ Kernel mode
 --*/
 
 #define _PRIVATE_
-#include "ioctl_x52.h"
+#include "ioctl_x52usb.h"
 #undef _PRIVATE_
 #include <usb.h>
 #include <usbioctl.h>

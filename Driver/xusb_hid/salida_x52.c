@@ -88,11 +88,13 @@ NTSTATUS Set_Texto(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer, _In_ s
 
 	PAGED_CODE();
 
+	if ((tamBuffer - 1) > 16)
+		return STATUS_INVALID_BUFFER_SIZE;
+
 	RtlZeroMemory(texto, 17);
 	if ((tamBuffer - 1) <= 16)
 		RtlCopyMemory(texto, &(SystemBuffer)[1], tamBuffer - 1);
-	else
-		RtlCopyMemory(texto, &(SystemBuffer)[1], 16);
+
 
 	params[0] = 0x0; params[1] = 0;
 	switch(*(SystemBuffer)) //linea
@@ -195,7 +197,10 @@ NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params)
 //	WDF_REQUEST_SEND_OPTIONS		sendOptions;
 //	WDF_OBJECT_ATTRIBUTES			attributes;
 //	WDFREQUEST						newRequest = NULL;
-//
+
+	UNREFERENCED_PARAMETER(DeviceObject);
+	UNREFERENCED_PARAMETER(params);
+
 	PAGED_CODE();
 //
 //	if(GetControlExtension(DeviceObject)->devExt->UsbDevice == NULL)

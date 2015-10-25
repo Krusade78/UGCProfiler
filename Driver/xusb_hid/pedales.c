@@ -2,7 +2,7 @@
 #include "pedales.h"
 #undef _PRIVATE_
 #include "extensions.h"
-#include "ioctl_x52.h"
+#include "ioctl_x52usb.h"
 
 #include <wdm.h>
 #include <initguid.h>

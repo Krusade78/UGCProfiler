@@ -27,13 +27,13 @@
     <ClCompile Include="pedales.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ioctl_x52.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ioctl_user.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="hidfilter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ioctl_x52usb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ioctl_interface.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="salida_x52.c">
@@ -50,16 +50,16 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ioctl_x52.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="salida_x52.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ioctl_user.h">
+    <ClInclude Include="pedales.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pedales.h">
+    <ClInclude Include="ioctl_x52usb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ioctl_interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
