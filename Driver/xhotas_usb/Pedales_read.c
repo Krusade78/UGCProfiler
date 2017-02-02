@@ -1,168 +1,78 @@
-#define _PRIVATE_
-#include "pedales.h"
-#undef _PRIVATE_
-#include "extensions.h"
-#include "ioctl_x52usb.h"
+/*++
+Copyright (c) 2017 Alfredo Costalago
 
-#include <wdm.h>
-#include <initguid.h>
+Module Name:
+
+pedales_read.c
+
+Abstract:
+
+Archivo para el control de los pedales de Thrusmaster.
+
+Environment:
+
+User-mode Driver Framework 2
+
+--*/
+
+#define INITGUID
+
+#include <windows.h>
+#include <wdf.h>
+#include <cfgmgr32.h>
 #include <hidclass.h>
-#include <wdmguid.h>
-#include <Ntstrsafe.h>
+#include "context.h"
+#include "x52_read.h"
+#define _PRIVATE_
+#include "pedales_read.h"
+#undef _PRIVATE_
 
-#define HARDWARE_ID_PEDALES  L"\\??\\HID#Vid_044f&Pid_b653"
-#define REPORTPEDALES_TAM	 8
-
-
-#ifdef ALLOC_PRAGMA
-#pragma alloc_text(PAGE, IniciarPedales)
-#pragma alloc_text(PAGE, CerrarPedales)
-#pragma alloc_text(PAGE, PnPCallback)
-#pragma alloc_text(PAGE, IniciarIoTarget)
-#pragma alloc_text(PAGE, CerrarIoTarget)
-#pragma alloc_text(PAGE, CerrarIoTargetPassive)
-#pragma alloc_text(PAGE, EvIoTargetRemoveComplete)
-#pragma alloc_text(PAGE, EvIoTargetRemoveCanceled)
-#pragma alloc_text(PAGE, IniciarReports)
-#endif
-
+#pragma region "Cerrar"
 //PASSIVE_LEVEL
-NTSTATUS IniciarPedales(_In_ WDFDEVICE device)
+VOID CerrarPedales(_In_ WDFDEVICE device)
 {
-	NTSTATUS status;
-
-	PAGED_CODE();
-
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceExtension(device)->Pedales.SpinLockPosicion);
-	if (!NT_SUCCESS(status)) return status;
-	status = WdfWaitLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceExtension(device)->Pedales.WaitLockIoTarget);
-	if (!NT_SUCCESS(status)) return status;
-
-	return IoRegisterPlugPlayNotification(
-										EventCategoryDeviceInterfaceChange,
-										PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES,
-										(PGUID)&GUID_DEVINTERFACE_HID,
-										WdfDriverWdmGetDriverObject(WdfDeviceGetDriver(device)),
-										PnPCallback,
-										GetDeviceExtension(device),
-										&GetDeviceExtension(device)->Pedales.PnPNotifyHandle);
-}
-
-//PASSIVE_LEVEL
-void CerrarPedales(_In_ WDFDEVICE device)
-{
-	if (GetDeviceExtension(device)->Pedales.PnPNotifyHandle != NULL)
+	if (GetDeviceContext(device)->Pedales.PnPNotifyHandle != NULL)
 	{
-		IoUnregisterPlugPlayNotificationEx(GetDeviceExtension(device)->Pedales.PnPNotifyHandle);
-		GetDeviceExtension(device)->Pedales.PnPNotifyHandle = NULL;
+		CM_Unregister_Notification((HCMNOTIFICATION)GetDeviceContext(device)->Pedales.PnPNotifyHandle);
+		GetDeviceContext(device)->Pedales.PnPNotifyHandle = NULL;
 	}
-	if (GetDeviceExtension(device)->Pedales.WaitLockIoTarget != NULL)
+	if (GetDeviceContext(device)->Pedales.WaitLockIoTarget != NULL)
 	{
 		CerrarIoTargetPassive(device);
-		WdfObjectDelete(GetDeviceExtension(device)->Pedales.WaitLockIoTarget);
-		GetDeviceExtension(device)->Pedales.WaitLockIoTarget = NULL;
+		WdfObjectDelete(GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+		GetDeviceContext(device)->Pedales.WaitLockIoTarget = NULL;
 	}
-	if (GetDeviceExtension(device)->Pedales.SpinLockPosicion != NULL)
+	if (GetDeviceContext(device)->Pedales.SpinLockPosicion != NULL)
 	{
-		WdfObjectDelete(GetDeviceExtension(device)->Pedales.SpinLockPosicion);
-		GetDeviceExtension(device)->Pedales.SpinLockPosicion = NULL;
+		WdfObjectDelete(GetDeviceContext(device)->Pedales.SpinLockPosicion);
+		GetDeviceContext(device)->Pedales.SpinLockPosicion = NULL;
+	}
+}
+
+#pragma region "Cerrar IO Target"
+//PASSIVE_LEVEL
+VOID CerrarIoTargetPassive(_In_ WDFDEVICE device)
+{
+	WDFIOTARGET ioTarget = NULL;
+
+	WdfWaitLockAcquire(GetDeviceContext(device)->Pedales.WaitLockIoTarget, NULL);
+	{
+		ioTarget = GetDeviceContext(device)->Pedales.IoTarget;
+		GetDeviceContext(device)->Pedales.IoTarget = NULL;
+	}
+	WdfWaitLockRelease(GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+	if (ioTarget != NULL)
+	{
+		WdfIoTargetClose(ioTarget);
+		WdfObjectDelete(ioTarget);
 	}
 }
 
 //PASSIVE_LEVEL
-NTSTATUS PnPCallback(_In_ PVOID notification, _Inout_opt_ PVOID context)
+VOID CerrarIoTargetWI(_In_ WDFWORKITEM workItem)
 {
-	NTSTATUS status = STATUS_SUCCESS;
-	PDEVICE_INTERFACE_CHANGE_NOTIFICATION diNotify = (PDEVICE_INTERFACE_CHANGE_NOTIFICATION)notification;
-
-	PAGED_CODE();
-
-	if (IsEqualGUID((LPGUID)&diNotify->Event, (LPGUID)&GUID_DEVICE_INTERFACE_ARRIVAL))
-	{
-		UNICODE_STRING strId;
-		status = RtlUnicodeStringInit(&strId, HARDWARE_ID_PEDALES);
-		if (!NT_SUCCESS(status))
-			return status;
-		if (diNotify->SymbolicLinkName->Length >= strId.Length)
-		{
-			UNICODE_STRING strLink;
-			PWSTR wstrLink[sizeof(HARDWARE_ID_PEDALES)];
-			RtlCopyMemory(wstrLink, HARDWARE_ID_PEDALES, sizeof(HARDWARE_ID_PEDALES));
-			status = RtlUnicodeStringInit(&strLink, (NTSTRSAFE_PCWSTR)&wstrLink);
-			if (!NT_SUCCESS(status))
-				return status;
-			status = RtlUnicodeStringCbCopyN(&strLink, diNotify->SymbolicLinkName, strId.Length);
-			if (NT_SUCCESS(status))
-			{
-				if (RtlCompareUnicodeString(&strLink, &strId, TRUE) == 0)
-					return IniciarIoTarget(diNotify->SymbolicLinkName, ((PDEVICE_EXTENSION)context)->Self);
-			}
-		}
-	}
-
-	return status;
-}
-
-//PASSIVE_LEVEL
-NTSTATUS IniciarIoTarget(_In_ PUNICODE_STRING strId, _In_ WDFDEVICE device)
-{
-	NTSTATUS status = STATUS_SUCCESS;
-	WDF_OBJECT_ATTRIBUTES attributes;
-	WDFIOTARGET ioTarget;
-	WDF_IO_TARGET_OPEN_PARAMS  openParams;
-
-	PAGED_CODE();
-
-	WdfWaitLockAcquire(GetDeviceExtension(device)->Pedales.WaitLockIoTarget, NULL);
-	{
-		if (GetDeviceExtension(device)->Pedales.IoTarget == NULL)
-		{
-			WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-			attributes.ParentObject = device;
-
-			status = WdfIoTargetCreate(device, &attributes, &ioTarget);
-			if (NT_SUCCESS(status))
-			{
-				WDF_IO_TARGET_OPEN_PARAMS_INIT_OPEN_BY_NAME(&openParams, strId, STANDARD_RIGHTS_READ);
-				openParams.ShareAccess = FILE_SHARE_READ | FILE_SHARE_WRITE;
-				openParams.EvtIoTargetRemoveComplete = EvIoTargetRemoveComplete;
-				openParams.EvtIoTargetRemoveCanceled = EvIoTargetRemoveCanceled;
-
-				GetDeviceExtension(device)->Pedales.IoTarget = ioTarget;
-
-				status = WdfIoTargetOpen(ioTarget, &openParams);
-				if (NT_SUCCESS(status) && ((openParams.FileInformation == FILE_SUPERSEDED) || (openParams.FileInformation == FILE_OPENED)))
-				{
-					if (WdfIoTargetGetState(ioTarget) == WdfIoTargetStarted)
-					{
-						status = IniciarReports(ioTarget);
-						if (!NT_SUCCESS(status))
-						{
-							WdfWaitLockRelease(GetDeviceExtension(device)->Pedales.WaitLockIoTarget);
-							CerrarIoTargetPassive(device);
-							return status;
-						}
-					}
-					else
-					{
-						WdfWaitLockRelease(GetDeviceExtension(device)->Pedales.WaitLockIoTarget);
-						CerrarIoTargetPassive(device);
-						return STATUS_UNSUCCESSFUL;
-					}
-
-				}
-				else
-				{
-					WdfWaitLockRelease(GetDeviceExtension(device)->Pedales.WaitLockIoTarget);
-					CerrarIoTargetPassive(device);
-					return status;
-				}
-			}
-		}
-	}
-	WdfWaitLockRelease(GetDeviceExtension(device)->Pedales.WaitLockIoTarget);
-
-	return status;
+	CerrarIoTargetPassive((WDFDEVICE)WdfWorkItemGetParentObject(workItem));
+	WdfObjectDelete(workItem);
 }
 
 // <=DISPATCH_LEVEL
@@ -173,84 +83,210 @@ NTSTATUS CerrarIoTarget(_In_ WDFDEVICE device)
 	WDF_WORKITEM_CONFIG		workitemConfig;
 	WDFWORKITEM				workItem;
 
-	PAGED_CODE();
-
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-		attributes.ParentObject = device;
+	attributes.ParentObject = device;
 
 	WDF_WORKITEM_CONFIG_INIT(&workitemConfig, CerrarIoTargetWI);
-	status = WdfWorkItemCreate(&workitemConfig,	&attributes, &workItem);
+	status = WdfWorkItemCreate(&workitemConfig, &attributes, &workItem);
 	if (NT_SUCCESS(status))
 		WdfWorkItemEnqueue(workItem);
 
 	return status;
 }
-//PASSIVE_LEVEL
-VOID CerrarIoTargetWI(_In_ WDFWORKITEM workItem)
-{
-	PAGED_CODE();
+#pragma endregion
+#pragma endregion
 
-	CerrarIoTargetPassive((WDFDEVICE)WdfWorkItemGetParentObject(workItem));
+#pragma region "Iniciar"
+//PASSIVE_LEVEL
+NTSTATUS IniciarPedales(_In_ WDFDEVICE device)
+{
+	NTSTATUS status;
+	DWORD cmRet;
+	ULONG tam = 0;
+	CM_NOTIFY_FILTER cmFilter;
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Pedales.SpinLockPosicion);
+	if (!NT_SUCCESS(status)) return status;
+	status = WdfWaitLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+	if (!NT_SUCCESS(status)) return status;
+
+	GetDeviceContext(device)->Pedales.IoTarget = NULL;
+	RtlZeroMemory(GetDeviceContext(device)->Pedales.SymbolicLink, 100 * sizeof(WCHAR));
+	GetDeviceContext(device)->Pedales.Activado = FALSE;
+	GetDeviceContext(device)->Pedales.PedalSel = 0;
+	GetDeviceContext(device)->Pedales.Posicion = 512;
+
+	RtlZeroMemory(&cmFilter, sizeof(cmFilter));
+	cmFilter.cbSize = sizeof(cmFilter);
+	cmFilter.FilterType = CM_NOTIFY_FILTER_TYPE_DEVICEINTERFACE;
+	cmFilter.u.DeviceInterface.ClassGuid = GUID_DEVINTERFACE_HID;
+	cmRet = CM_Register_Notification(
+		&cmFilter,						// PCM_NOTIFY_FILTER pFilter,
+		(PVOID)GetDeviceContext(device),// PVOID pContext,
+		PnPCallback,					// PCM_NOTIFY_CALLBACK pCallback,
+		(PHCMNOTIFICATION)&GetDeviceContext(device)->Pedales.PnPNotifyHandle	// PHCMNOTIFICATION pNotifyContext
+	);
+
+	if (cmRet != CR_SUCCESS)
+		return STATUS_UNSUCCESSFUL;
+
+	cmRet = CM_Get_Device_Interface_List_Size(&tam, &cmFilter.u.DeviceInterface.ClassGuid, NULL, CM_GET_DEVICE_INTERFACE_LIST_PRESENT);
+	if ((cmRet != CR_SUCCESS))
+		return STATUS_UNSUCCESSFUL;
+
+	if (tam > 1)
+	{
+		WDF_OBJECT_ATTRIBUTES  attributes;
+		WDFMEMORY	hMem;
+		PVOID		pMem;
+		PWSTR		sInterfaz;
+
+		WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+		status = WdfMemoryCreate(&attributes, PagedPool, 0, tam * sizeof(WCHAR), &hMem, &pMem);
+		if (!NT_SUCCESS(status))
+			return status;
+
+		RtlZeroMemory(pMem, tam * sizeof(WCHAR));
+
+		cmRet = CM_Get_Device_Interface_List(&cmFilter.u.DeviceInterface.ClassGuid, NULL, pMem, tam, CM_GET_DEVICE_INTERFACE_LIST_PRESENT);
+		if ((cmRet != CR_SUCCESS))
+		{
+			WdfObjectDelete(hMem);
+			return STATUS_UNSUCCESSFUL;
+		}
+
+		for (sInterfaz = pMem; *sInterfaz; sInterfaz += wcslen(sInterfaz) + 1)
+		{
+			if (IniciarIoTarget(sInterfaz, device))
+				break;
+		}
+		WdfObjectDelete(hMem);
+	}
+
+	return STATUS_SUCCESS;
+}
+
+#pragma region "Iniciar IO target"
+//PASSIVE_LEVEL
+NTSTATUS IniciarIoTargetPassive(_In_ WDFDEVICE device)
+{
+	NTSTATUS status = STATUS_SUCCESS;
+	WDF_OBJECT_ATTRIBUTES attributes;
+	WDFIOTARGET ioTarget;
+	WDF_IO_TARGET_OPEN_PARAMS  openParams;
+
+	WdfWaitLockAcquire(GetDeviceContext(device)->Pedales.WaitLockIoTarget, NULL);
+	{
+		if (GetDeviceContext(device)->Pedales.IoTarget == NULL)
+		{
+			WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+			attributes.ParentObject = device;
+
+			status = WdfIoTargetCreate(device, &attributes, &ioTarget);
+			if (NT_SUCCESS(status))
+			{
+				UNICODE_STRING strId;
+				strId.Length = (USHORT)wcslen(GetDeviceContext(device)->Pedales.SymbolicLink);
+				strId.MaximumLength = strId.Length + sizeof(WCHAR);
+				strId.Buffer = GetDeviceContext(device)->Pedales.SymbolicLink;
+				WDF_IO_TARGET_OPEN_PARAMS_INIT_OPEN_BY_NAME(&openParams, &strId, STANDARD_RIGHTS_READ);
+				openParams.ShareAccess = FILE_SHARE_READ | FILE_SHARE_WRITE;
+				openParams.EvtIoTargetRemoveComplete = EvIoTargetRemoveComplete;
+				openParams.EvtIoTargetRemoveCanceled = EvIoTargetRemoveCanceled;
+
+				GetDeviceContext(device)->Pedales.IoTarget = ioTarget;
+
+				status = WdfIoTargetOpen(ioTarget, &openParams);
+				if (NT_SUCCESS(status))
+				{
+					if (WdfIoTargetGetState(ioTarget) == WdfIoTargetStarted)
+					{
+						status = IniciarReports(ioTarget);
+						if (!NT_SUCCESS(status))
+						{
+							WdfWaitLockRelease(GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+							CerrarIoTargetPassive(device);
+							return status;
+						}
+					}
+					else
+					{
+						WdfWaitLockRelease(GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+						CerrarIoTargetPassive(device);
+						return STATUS_UNSUCCESSFUL;
+					}
+
+				}
+				else
+				{
+					WdfWaitLockRelease(GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+					CerrarIoTargetPassive(device);
+					return status;
+				}
+			}
+		}
+	}
+	WdfWaitLockRelease(GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+
+	return status;
+}
+
+//PASSIVE_LEVEL
+VOID IniciarIoTargetWI(_In_ WDFWORKITEM workItem)
+{
+	IniciarIoTargetPassive((WDFDEVICE)WdfWorkItemGetParentObject(workItem));
 	WdfObjectDelete(workItem);
 }
-//PASSIVE_LEVEL
-void CerrarIoTargetPassive(_In_ WDFDEVICE device)
+
+BOOLEAN IniciarIoTarget(_In_ PWSTR nombre, _In_ WDFDEVICE device)
 {
-	WDFIOTARGET ioTarget = NULL;
-	PAGED_CODE();
+	DECLARE_CONST_UNICODE_STRING(strId, HARDWARE_ID_PEDALES);
 
-	WdfWaitLockAcquire(GetDeviceExtension(device)->Pedales.WaitLockIoTarget, NULL);
+	if (wcsnlen_s(nombre, 32) >= strId.Length)
 	{
-		ioTarget = GetDeviceExtension(device)->Pedales.IoTarget;
-		GetDeviceExtension(device)->Pedales.IoTarget = NULL;
-	}
-	WdfWaitLockRelease(GetDeviceExtension(device)->Pedales.WaitLockIoTarget);
-	if (ioTarget != NULL)
-	{
-		WdfIoTargetClose(ioTarget);
-		WdfObjectDelete(ioTarget);
-	}
-}
+		WCHAR wstrLink[28 * sizeof(WCHAR)];
+		UNICODE_STRING strLink;
+		strLink.Buffer = wstrLink;
+		strLink.Length = strId.Length;
+		strLink.MaximumLength = strId.MaximumLength;
+		RtlZeroMemory(strLink.Buffer, strLink.MaximumLength);
+		RtlCopyMemory(strLink.Buffer, nombre, strId.Length);
+		if (RtlCompareUnicodeString(&strLink, &strId, TRUE) == 0)
+		{
+			NTSTATUS				status = STATUS_SUCCESS;
+			WDF_OBJECT_ATTRIBUTES	attributes;
+			WDF_WORKITEM_CONFIG		workitemConfig;
+			WDFWORKITEM				workItem;
+			DWORD					tam = (DWORD)wcsnlen_s(nombre, 100);
 
-//PASSIVE_LEVEL
-VOID EvIoTargetRemoveComplete(_In_ WDFIOTARGET ioTarget)
-{
-	PAGED_CODE();
-	CerrarIoTarget(WdfIoTargetGetDevice(ioTarget));
-}
+			if (0 != RtlCopyMemory(GetDeviceContext(device)->Pedales.SymbolicLink, nombre, tam * sizeof(WCHAR)))
+				return FALSE;
 
-//PASSIVE_LEVEL
-VOID EvIoTargetRemoveCanceled(_In_ WDFIOTARGET ioTarget)
-{
-	WDF_IO_TARGET_OPEN_PARAMS openParams;
-	NTSTATUS status;
+			WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+			attributes.ParentObject = device;
 
-	PAGED_CODE();
-	
-	WDF_IO_TARGET_OPEN_PARAMS_INIT_REOPEN(&openParams);
-	status = WdfIoTargetOpen(ioTarget, &openParams);
-	if (NT_SUCCESS(status) && ((openParams.FileInformation == FILE_SUPERSEDED) || (openParams.FileInformation == FILE_OPENED)))
-	{
-		if (WdfIoTargetGetState(ioTarget) == WdfIoTargetStarted)
-			IniciarReports(ioTarget);
-		else
-			CerrarIoTarget(WdfIoTargetGetDevice(ioTarget));
+			WDF_WORKITEM_CONFIG_INIT(&workitemConfig, IniciarIoTargetWI);
+			status = WdfWorkItemCreate(&workitemConfig, &attributes, &workItem);
+			if (NT_SUCCESS(status))
+			{
+				WdfWorkItemEnqueue(workItem);
+				return TRUE;
+			}
+		}
 	}
-	else
-		CerrarIoTarget(WdfIoTargetGetDevice(ioTarget));
+
+	return FALSE;
 }
+#pragma endregion
 
 //PASSIVE_LEVEL
 //El writeBufferMemHandle se borra al borrar newRequest
 NTSTATUS IniciarReports(WDFIOTARGET ioTarget)
 {
 	WDF_OBJECT_ATTRIBUTES	attributes;
-	WDFREQUEST				newRequest = NULL;
+	WDFREQUEST				newRequest;
 	WDFMEMORY				writeBufferMemHandle;
 	NTSTATUS				status;
-	PVOID					buffer;
-
-	PAGED_CODE();
 
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
 	attributes.ParentObject = ioTarget;
@@ -261,7 +297,7 @@ NTSTATUS IniciarReports(WDFIOTARGET ioTarget)
 
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
 	attributes.ParentObject = newRequest;
-	status = WdfMemoryCreate(&attributes, NonPagedPool, 0, REPORTPEDALES_TAM, &writeBufferMemHandle, &buffer);
+	status = WdfMemoryCreate(&attributes, NonPagedPool, 0, TAM_REPORTPEDALES, &writeBufferMemHandle, NULL);
 	if (!NT_SUCCESS(status))
 	{
 		WdfObjectDelete(newRequest);
@@ -285,15 +321,61 @@ NTSTATUS IniciarReports(WDFIOTARGET ioTarget)
 
 	return status;
 }
+#pragma endregion
+
+#pragma region "Callbacks"
+DWORD PnPCallback(
+	_In_ HCMNOTIFICATION       hNotify,
+	_In_opt_ PVOID             Context,
+	_In_ CM_NOTIFY_ACTION      Action,
+	_In_reads_bytes_(EventDataSize) PCM_NOTIFY_EVENT_DATA EventData,
+	_In_ DWORD                 EventDataSize
+)
+{
+	UNREFERENCED_PARAMETER(hNotify);
+	UNREFERENCED_PARAMETER(EventDataSize);
+
+	WDFDEVICE device = (WDFDEVICE)Context;
+
+	if (Action == CM_NOTIFY_ACTION_DEVICEINTERFACEARRIVAL)
+		IniciarIoTarget(EventData->u.DeviceInterface.SymbolicLink, device);
+
+	return 0;
+}
+
+//PASSIVE_LEVEL
+VOID EvIoTargetRemoveComplete(_In_ WDFIOTARGET ioTarget)
+{
+	CerrarIoTarget(WdfIoTargetGetDevice(ioTarget));
+}
+
+//PASSIVE_LEVEL
+VOID EvIoTargetRemoveCanceled(_In_ WDFIOTARGET ioTarget)
+{
+	WDF_IO_TARGET_OPEN_PARAMS openParams;
+	NTSTATUS status;
+
+	WDF_IO_TARGET_OPEN_PARAMS_INIT_REOPEN(&openParams);
+	status = WdfIoTargetOpen(ioTarget, &openParams);
+	if (NT_SUCCESS(status))
+	{
+		if (WdfIoTargetGetState(ioTarget) == WdfIoTargetStarted)
+			IniciarReports(ioTarget);
+		else
+			CerrarIoTarget(WdfIoTargetGetDevice(ioTarget));
+	}
+	else
+		CerrarIoTarget(WdfIoTargetGetDevice(ioTarget));
+}
 
 // <=DISPATCH_LEVEL
 //El writeBufferMemHandle se borra al borrar newRequest
-void CompletionPedales(
+VOID CompletionPedales(
 	_In_ WDFREQUEST request,
 	_In_ WDFIOTARGET ioTarget,
 	_In_ PWDF_REQUEST_COMPLETION_PARAMS params,
 	_In_ WDFCONTEXT context
-	)
+)
 {
 	UNREFERENCED_PARAMETER(context);
 
@@ -305,7 +387,7 @@ void CompletionPedales(
 		WDF_REQUEST_REUSE_PARAMS  rparams;
 		WDFMEMORY mem = params->Parameters.Read.Buffer;
 
-		if (params->Parameters.Read.Length == REPORTPEDALES_TAM)
+		if (params->Parameters.Read.Length == TAM_REPORTPEDALES)
 			ProcesarEntradaPedales(WdfIoTargetGetDevice(ioTarget), WdfMemoryGetBuffer(mem, NULL));
 
 		WDF_REQUEST_REUSE_PARAMS_INIT(&rparams, WDF_REQUEST_REUSE_NO_FLAGS, STATUS_SUCCESS);
@@ -324,13 +406,14 @@ void CompletionPedales(
 	WdfObjectDelete(request);
 	CerrarIoTarget(WdfIoTargetGetDevice(ioTarget));
 }
+#pragma endregion
 
-void ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
+VOID ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 {
-	PDEVICE_EXTENSION	devExt = GetDeviceExtension(device);
-	UCHAR				izq = 0xff - ((PUCHAR)buffer)[6];
-	UCHAR				der = 0xff - ((PUCHAR)buffer)[5];
-	UINT16				eje = 0xff;
+	PDEVICE_CONTEXT	devExt = GetDeviceContext(device);
+	UCHAR			izq = 0xff - ((PUCHAR)buffer)[6];
+	UCHAR			der = 0xff - ((PUCHAR)buffer)[5];
+	UINT16			eje = 0xff;
 
 	if ((izq < 80) && (der < 80))
 	{
@@ -363,5 +446,5 @@ void ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 	WdfSpinLockRelease(devExt->Pedales.SpinLockPosicion);
 
 	if (devExt->Pedales.Activado)
-		LanzarRequestX52ConPedales(devExt);
+		LeerX52ConPedales(devExt);
 }

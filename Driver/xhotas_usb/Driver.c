@@ -1,85 +1,81 @@
 /*++
+Copyright (c) 2017 Alfredo Costalago
 
-Copyright (c) 2007 Alfredo Costalago
 Module Name:
 
-    hidfilter.c
+    driver.c
 
-Abstract: Filtro para - Human Interface Device (HID) USB driver
+Abstract:
+
+    This file contains the driver entry points and callbacks.
 
 Environment:
 
-    Kernel mode
+    User-mode Driver Framework 2
 
 --*/
 
+#define INITGUID
 
-
-//#include <usbdi.h>
-//#include <usbdlib.h>
-//#include <wdfusb.h>
-//#include <initguid.h>
-
+#include <windows.h>
+#include <wdf.h>
+#include "context.h"
+#include "x52_read.h"
+#include "Pedales_read.h"
 #define _PRIVATE_
-#include "hidfilter.h"
+#include "driver.h"
 #undef _PRIVATE_
-#include "extensions.h"
-#include "ioctl_x52usb.h"
-#include "pedales.h"
-#include "ioctl_interface.h"
-
 
 #ifdef ALLOC_PRAGMA
-    #pragma alloc_text(INIT, DriverEntry)
-    #pragma alloc_text(PAGE, AddDevice)
+#pragma alloc_text (INIT, DriverEntry)
+#pragma alloc_text (PAGE, EvtAddDevice)
+#pragma alloc_text (PAGE, EvtCleanupCallback);
 #endif
 
-NTSTATUS DriverEntry
-    (
-    IN PDRIVER_OBJECT  DriverObject,
-    IN PUNICODE_STRING RegistryPath
+
+NTSTATUS DriverEntry(
+    _In_ PDRIVER_OBJECT  DriverObject,
+    _In_ PUNICODE_STRING RegistryPath
     )
 {
-	NTSTATUS			status = STATUS_SUCCESS;
-    WDF_DRIVER_CONFIG   config;
+    WDF_DRIVER_CONFIG config;
+    NTSTATUS status;
 
-	WDF_DRIVER_CONFIG_INIT(&config, AddDevice);
-    status = WdfDriverCreate(DriverObject, RegistryPath, WDF_NO_OBJECT_ATTRIBUTES, &config, WDF_NO_HANDLE);
+	WDF_DRIVER_CONFIG_INIT(&config, EvtAddDevice);
+	status = WdfDriverCreate(DriverObject, RegistryPath, WDF_NO_OBJECT_ATTRIBUTES, &config, WDF_NO_HANDLE);
 
     return status;
 }
 
-NTSTATUS AddDevice
-	(
-    IN WDFDRIVER       Driver,
-    IN PWDFDEVICE_INIT DeviceInit
+NTSTATUS EvtAddDevice(
+    _In_    WDFDRIVER       Driver,
+    _Inout_ PWDFDEVICE_INIT DeviceInit
     )
 {
 	NTSTATUS                        status;
-    WDFDEVICE                       device;
+	WDFDEVICE                       device;
 	WDF_OBJECT_ATTRIBUTES			attributes;
 	//WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
 
-    UNREFERENCED_PARAMETER(Driver);
-
 	PAGED_CODE();
 
-	WdfFdoInitSetFilter(DeviceInit);
+    UNREFERENCED_PARAMETER(Driver);
 
+	WdfFdoInitSetFilter(DeviceInit);
+    
 	//WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
 	//	pnpPowerCallbacks.EvtDevicePrepareHardware	= EvtDevicePrepareHardware;
 	//WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
-	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_EXTENSION);
-		attributes.EvtCleanupCallback = CleanupCallback;
-    status = WdfDeviceCreate(&DeviceInit, &attributes, &device);
+	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_CONTEXT);
+	attributes.EvtCleanupCallback = EvtCleanupCallback;
+	status = WdfDeviceCreate(&DeviceInit, &attributes, &device);
 	if (!NT_SUCCESS(status))
 		return status;
 
-	RtlZeroMemory(GetDeviceExtension(device), sizeof(DEVICE_EXTENSION));
-	GetDeviceExtension(device)->Self = device;
-	GetDeviceExtension(device)->Pedales.Activado = TRUE;
+	RtlZeroMemory(GetDeviceContext(device), sizeof(DEVICE_CONTEXT));
+	//GetDeviceContext(device)->Self = device;
 
 	status = IniciarX52(device);
 	if (!NT_SUCCESS(status))
@@ -90,14 +86,11 @@ NTSTATUS AddDevice
 		return status;
 
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchSequential);
-	ioQConfig.EvtIoInternalDeviceControl = HF_X52IOCtl;
+	ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
+	ioQConfig.EvtIoDeviceControl = EvtX52IOCtl;
 	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
-	if (!NT_SUCCESS(status))
-		return status;
 
-	status = IniciarIOUsrControl(device);
-
-	return status;
+    return status;
 }
 
 //NTSTATUS
@@ -115,23 +108,23 @@ NTSTATUS AddDevice
 //
 //	pDeviceContext = DeviceGetContext(Device);
 //
-//	if (GetDeviceExtension(Device)->UsbDevice == NULL)
+//	if (GetDeviceContext(Device)->UsbDevice == NULL)
 //	{
 //		WDF_USB_DEVICE_CREATE_CONFIG createParams;
 //		WDF_USB_DEVICE_CREATE_CONFIG_INIT(&createParams, USBD_CLIENT_CONTRACT_VERSION_602);
 //
-//		//status = WdfUsbTargetDeviceCreate(Device, WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceExtension(Device)->UsbDevice);
-//		status = WdfUsbTargetDeviceCreateWithParameters(Device,	&createParams,	WDF_NO_OBJECT_ATTRIBUTES,&GetDeviceExtension(Device)->UsbDevice);
+//		status = WdfUsbTargetDeviceCreateWithParameters(Device,	&createParams,	WDF_NO_OBJECT_ATTRIBUTES,&GetDeviceContext(Device)->UsbDevice);
 //	}
 //
 //
 //    return status;
 //}
 
-VOID CleanupCallback (_In_ WDFOBJECT  Object)
+
+VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
 {
+	PAGED_CODE();
+
 	CerrarPedales((WDFDEVICE)Object);
 	CerrarX52((WDFDEVICE)Object);
-	if(GetDeviceExtension(Object)->UsrIOControlDevice != NULL)
-		WdfObjectDelete(GetDeviceExtension(Object)->UsrIOControlDevice);
 }

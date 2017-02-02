@@ -1,6 +1,4 @@
-#pragma once
-#include <ntddk.h>
-#include <wdf.h>
+EXTERN_C_START
 
 NTSTATUS Luz_MFD(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer);
 NTSTATUS Luz_Global(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer);
@@ -14,3 +12,5 @@ NTSTATUS Set_Fecha(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer);
 #ifdef _PRIVATE_
 NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params);
 #endif
+
+EXTERN_C_END

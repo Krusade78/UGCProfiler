@@ -1,7 +1,6 @@
-#pragma once
-//#include <ntddk.h>
-#include <wdf.h>
+EXTERN_C_START
 
+//HID_INPUT_DATA modificado
 typedef struct _HID_INPUT_DATA
 {
 	UCHAR   Ejes[16];
@@ -10,37 +9,40 @@ typedef struct _HID_INPUT_DATA
 	UCHAR   MiniStick;
 } HID_INPUT_DATA, *PHID_INPUT_DATA;
 
-typedef struct _PEDALES_EXTENSION
+typedef struct _X52READ_CONTEXT
 {
-	PVOID			PnPNotifyHandle;
+	WDFCOLLECTION	ListaRequest;
+	WDFSPINLOCK		SpinLockRequest;
+	WDFSPINLOCK		SpinLockPosicion;
+	HID_INPUT_DATA	Posicion;
+} X52READ_CONTEXT;
+
+typedef struct _X52WRITE_CONTEXT
+{
+	USHORT			fecha;
+} X52WRITE_CONTEXT;
+
+DECLARE_HANDLE(HNOTIFICATION);
+typedef struct _PEDALES_CONTEXT
+{
+	HNOTIFICATION	PnPNotifyHandle;
+	WCHAR			SymbolicLink[100];
 	WDFIOTARGET		IoTarget;
 	WDFWAITLOCK		WaitLockIoTarget;
 	WDFSPINLOCK		SpinLockPosicion;
 	BOOLEAN			Activado;
 	UCHAR			PedalSel;
 	INT16			Posicion;
-} PEDALES_EXTENSION;
+} PEDALES_CONTEXT;
 
-typedef struct _X52_EXTENSION
+typedef struct _DEVICE_CONTEXT
 {
-	WDFCOLLECTION	ListaRequest;
-	WDFSPINLOCK		SpinLockRequest;
-	WDFSPINLOCK		SpinLockPosicion;
-	HID_INPUT_DATA	Posicion;
-} X52_EXTENSION;
+	//WDFDEVICE			Self;
+	X52READ_CONTEXT		EntradaX52;
+	X52WRITE_CONTEXT	SalidaX52;
+	PEDALES_CONTEXT		Pedales;
+	//WDFUSBDEVICE		UsbDevice;
+} DEVICE_CONTEXT, *PDEVICE_CONTEXT;
+WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_CONTEXT, GetDeviceContext);
 
-typedef struct _X52USB_EXTENSION
-{
-	USHORT			fecha;
-} X52USB_EXTENSION;
-
-typedef struct _DEVICE_EXTENSION
-{
-	WDFDEVICE			Self;
-	X52_EXTENSION		X52;
-	PEDALES_EXTENSION	Pedales;
-	X52USB_EXTENSION	SalidaX52;
-	WDFDEVICE			UsrIOControlDevice;
-	//WDFUSBDEVICE    UsbDevice;
-} DEVICE_EXTENSION, *PDEVICE_EXTENSION;
-WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_EXTENSION, GetDeviceExtension);
+EXTERN_C_END

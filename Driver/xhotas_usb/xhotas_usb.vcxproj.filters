@@ -19,53 +19,39 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="..\inf\xhotas.inx">
+    <ClInclude Include="Driver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pedales_read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="X52_read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="X52_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Driver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pedales_read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X52_read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X52_write.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Inf Include="xhotas_usb.inx">
       <Filter>Driver Files</Filter>
     </Inf>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="pedales.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hidfilter.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ioctl_x52usb.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ioctl_interface.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="salida_x52.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="extensions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hidfilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="salida_x52.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pedales.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ioctl_x52usb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ioctl_interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="hidfilter.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

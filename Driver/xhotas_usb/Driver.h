@@ -1,16 +1,11 @@
-#pragma once
-#include <ntddk.h>
-#include <wdf.h>
-
+EXTERN_C_START
 
 DRIVER_INITIALIZE DriverEntry;
 
 #ifdef _PRIVATE_
+EVT_WDF_DRIVER_DEVICE_ADD EvtAddDevice;
+//EVT_WDF_DEVICE_PREPARE_HARDWARE  DevicePrepareHardware;
+EVT_WDF_OBJECT_CONTEXT_CLEANUP EvtCleanupCallback;
+#endif _PRIVATE_
 
-EVT_WDF_DRIVER_DEVICE_ADD AddDevice;
-
-EVT_WDF_DEVICE_PREPARE_HARDWARE  DevicePrepareHardware;
-
-EVT_WDF_OBJECT_CONTEXT_CLEANUP CleanupCallback;
-
-#endif
+EXTERN_C_END
