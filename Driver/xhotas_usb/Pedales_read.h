@@ -13,13 +13,13 @@ BOOLEAN IniciarIoTarget(_In_ PWSTR nombre, _In_ WDFDEVICE device);
 #define TAM_REPORTPEDALES 8
 NTSTATUS IniciarReports(WDFIOTARGET ioTarget);
 
-DWORD PnPCallback(
-	_In_ HCMNOTIFICATION    hNotify,
-	_In_opt_ PVOID          Context,
-	_In_ CM_NOTIFY_ACTION	Action,
-	_In_reads_bytes_(EventDataSize) PCM_NOTIFY_EVENT_DATA EventData,
-	_In_ DWORD              EventDataSize
-);
+//DWORD PnPCallback(
+//	_In_ HCMNOTIFICATION    hNotify,
+//	_In_opt_ PVOID          Context,
+//	_In_ CM_NOTIFY_ACTION	Action,
+//	_In_reads_bytes_(EventDataSize) PCM_NOTIFY_EVENT_DATA EventData,
+//	_In_ DWORD              EventDataSize
+//);
 VOID EvIoTargetRemoveComplete(_In_ WDFIOTARGET ioTarget);
 VOID EvIoTargetRemoveCanceled(_In_ WDFIOTARGET ioTarget);
 VOID CompletionPedales(

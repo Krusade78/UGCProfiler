@@ -16,7 +16,7 @@ User-mode Driver Framework 2
 --*/
 #define INITGUID
 
-#include <Windows.h>
+#include <ntddk.h>
 #include <wdf.h>
 #include <usbdi.h>
 #include <wdfusb.h>

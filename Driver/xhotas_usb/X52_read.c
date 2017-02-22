@@ -16,10 +16,11 @@ User-mode Driver Framework 2
 --*/
 #define INITGUID
 
-#include <windows.h>
+#include <ntddk.h>
 #include <wdf.h>
 #include <usb.h>
 #include <usbioctl.h>
+#include <hidport.h>
 #include "context.h"
 #include "X52_write.h"
 #define _PRIVATE_
@@ -28,7 +29,7 @@ User-mode Driver Framework 2
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, IniciarX52)
-#pragma alloc_text (PAGE, CerrarX52);
+#pragma alloc_text (PAGE, CerrarX52)
 #endif
 
 //PASSIVE
@@ -316,18 +317,6 @@ void EvtCompletionConfigDescriptor(
 	_In_ WDFCONTEXT                     Context
 )
 {
-	typedef struct _HID_DESCRIPTOR {
-		UCHAR   bLength;
-		UCHAR   bDescriptorType;
-		USHORT  bcdHID;
-		UCHAR   bCountry;
-		UCHAR   bNumDescriptors;
-		struct _HID_DESCRIPTOR_DESC_LIST {
-			UCHAR   bReportType;
-			USHORT  wReportLength;
-		} DescriptorList[1];
-	} HID_DESCRIPTOR, *PHID_DESCRIPTOR;
-
 	UNREFERENCED_PARAMETER(Target);
 	UNREFERENCED_PARAMETER(Context);
 	UNREFERENCED_PARAMETER(Params);
@@ -336,19 +325,21 @@ void EvtCompletionConfigDescriptor(
 
 	if (status == STATUS_SUCCESS)
 	{
-		WDF_REQUEST_PARAMETERS params;
+		WDF_REQUEST_PARAMETERS rparams;
 		PUSB_CONFIGURATION_DESCRIPTOR pconfig;
 		PUSB_INTERFACE_DESCRIPTOR pinterface;
 		PHID_DESCRIPTOR phid;
+		PURB purb;
 
-		WDF_REQUEST_PARAMETERS_INIT(&params);
-		WdfRequestGetParameters(Request, &params);
+		WDF_REQUEST_PARAMETERS_INIT(&rparams);
+		WdfRequestGetParameters(Request, &rparams);
+		purb = (PURB)rparams.Parameters.Others.Arg1;
 
-		if (((PURB)params.Parameters.Others.Arg1)->UrbHeader.Status == USBD_STATUS_SUCCESS)
+		if ((purb->UrbHeader.Status == USBD_STATUS_SUCCESS) && (purb->UrbHeader.Function == URB_FUNCTION_CONTROL_TRANSFER))
 		{
-			if (((PURB)params.Parameters.Others.Arg1)->UrbControlDescriptorRequest.TransferBufferLength != sizeof(USB_CONFIGURATION_DESCRIPTOR))
-			{
-				pconfig = (PUSB_CONFIGURATION_DESCRIPTOR)((PURB)params.Parameters.Others.Arg1)->UrbControlDescriptorRequest.TransferBuffer;
+			if (purb->UrbControlTransfer.TransferBufferLength == 34)
+			{		
+				pconfig = (PUSB_CONFIGURATION_DESCRIPTOR)purb->UrbControlTransfer.TransferBuffer;
 				pinterface = (PUSB_INTERFACE_DESCRIPTOR)((BYTE*)pconfig + pconfig->bLength);
 				phid = (PHID_DESCRIPTOR)((BYTE*)pinterface + pinterface->bLength);
 				phid->DescriptorList[0].wReportLength = sizeof(reportDescriptor);

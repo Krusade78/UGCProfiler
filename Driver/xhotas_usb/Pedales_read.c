@@ -17,9 +17,9 @@ User-mode Driver Framework 2
 
 #define INITGUID
 
-#include <windows.h>
+#include <ntddk.h>
 #include <wdf.h>
-#include <cfgmgr32.h>
+//#include <cfgmgr32.h>
 #include <hidclass.h>
 #include "context.h"
 #include "x52_read.h"
@@ -27,15 +27,20 @@ User-mode Driver Framework 2
 #include "pedales_read.h"
 #undef _PRIVATE_
 
+#ifdef ALLOC_PRAGMA
+#pragma alloc_text (PAGE, IniciarPedales)
+//#pragma alloc_text (PAGE, CerrarX52)
+#endif
+
 #pragma region "Cerrar"
 //PASSIVE_LEVEL
 VOID CerrarPedales(_In_ WDFDEVICE device)
 {
-	if (GetDeviceContext(device)->Pedales.PnPNotifyHandle != NULL)
-	{
-		CM_Unregister_Notification((HCMNOTIFICATION)GetDeviceContext(device)->Pedales.PnPNotifyHandle);
-		GetDeviceContext(device)->Pedales.PnPNotifyHandle = NULL;
-	}
+	//if (GetDeviceContext(device)->Pedales.PnPNotifyHandle != NULL)
+	//{
+	//	CM_Unregister_Notification((HCMNOTIFICATION)GetDeviceContext(device)->Pedales.PnPNotifyHandle);
+	//	GetDeviceContext(device)->Pedales.PnPNotifyHandle = NULL;
+	//}
 	if (GetDeviceContext(device)->Pedales.WaitLockIoTarget != NULL)
 	{
 		CerrarIoTargetPassive(device);
@@ -101,9 +106,11 @@ NTSTATUS CerrarIoTarget(_In_ WDFDEVICE device)
 NTSTATUS IniciarPedales(_In_ WDFDEVICE device)
 {
 	NTSTATUS status;
-	DWORD cmRet;
-	ULONG tam = 0;
-	CM_NOTIFY_FILTER cmFilter;
+	//DWORD cmRet;
+	//ULONG tam = 0;
+	//CM_NOTIFY_FILTER cmFilter;
+
+	PAGED_CODE();
 
 	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Pedales.SpinLockPosicion);
 	if (!NT_SUCCESS(status)) return status;
@@ -116,52 +123,52 @@ NTSTATUS IniciarPedales(_In_ WDFDEVICE device)
 	GetDeviceContext(device)->Pedales.PedalSel = 0;
 	GetDeviceContext(device)->Pedales.Posicion = 512;
 
-	RtlZeroMemory(&cmFilter, sizeof(cmFilter));
-	cmFilter.cbSize = sizeof(cmFilter);
-	cmFilter.FilterType = CM_NOTIFY_FILTER_TYPE_DEVICEINTERFACE;
-	cmFilter.u.DeviceInterface.ClassGuid = GUID_DEVINTERFACE_HID;
-	cmRet = CM_Register_Notification(
-		&cmFilter,						// PCM_NOTIFY_FILTER pFilter,
-		(PVOID)GetDeviceContext(device),// PVOID pContext,
-		PnPCallback,					// PCM_NOTIFY_CALLBACK pCallback,
-		(PHCMNOTIFICATION)&GetDeviceContext(device)->Pedales.PnPNotifyHandle	// PHCMNOTIFICATION pNotifyContext
-	);
+	//RtlZeroMemory(&cmFilter, sizeof(cmFilter));
+	//cmFilter.cbSize = sizeof(cmFilter);
+	//cmFilter.FilterType = CM_NOTIFY_FILTER_TYPE_DEVICEINTERFACE;
+	//cmFilter.u.DeviceInterface.ClassGuid = GUID_DEVINTERFACE_HID;
+	//cmRet = CM_Register_Notification(
+	//	&cmFilter,						// PCM_NOTIFY_FILTER pFilter,
+	//	(PVOID)GetDeviceContext(device),// PVOID pContext,
+	//	PnPCallback,					// PCM_NOTIFY_CALLBACK pCallback,
+	//	(PHCMNOTIFICATION)&GetDeviceContext(device)->Pedales.PnPNotifyHandle	// PHCMNOTIFICATION pNotifyContext
+	//);
 
-	if (cmRet != CR_SUCCESS)
-		return STATUS_UNSUCCESSFUL;
+	//if (cmRet != CR_SUCCESS)
+	//	return STATUS_UNSUCCESSFUL;
 
-	cmRet = CM_Get_Device_Interface_List_Size(&tam, &cmFilter.u.DeviceInterface.ClassGuid, NULL, CM_GET_DEVICE_INTERFACE_LIST_PRESENT);
-	if ((cmRet != CR_SUCCESS))
-		return STATUS_UNSUCCESSFUL;
+	//cmRet = CM_Get_Device_Interface_List_Size(&tam, &cmFilter.u.DeviceInterface.ClassGuid, NULL, CM_GET_DEVICE_INTERFACE_LIST_PRESENT);
+	//if ((cmRet != CR_SUCCESS))
+	//	return STATUS_UNSUCCESSFUL;
 
-	if (tam > 1)
-	{
-		WDF_OBJECT_ATTRIBUTES  attributes;
-		WDFMEMORY	hMem;
-		PVOID		pMem;
-		PWSTR		sInterfaz;
+	//if (tam > 1)
+	//{
+	//	WDF_OBJECT_ATTRIBUTES  attributes;
+	//	WDFMEMORY	hMem;
+	//	PVOID		pMem;
+	//	PWSTR		sInterfaz;
 
-		WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-		status = WdfMemoryCreate(&attributes, PagedPool, 0, tam * sizeof(WCHAR), &hMem, &pMem);
-		if (!NT_SUCCESS(status))
-			return status;
+	//	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	//	status = WdfMemoryCreate(&attributes, PagedPool, 0, tam * sizeof(WCHAR), &hMem, &pMem);
+	//	if (!NT_SUCCESS(status))
+	//		return status;
 
-		RtlZeroMemory(pMem, tam * sizeof(WCHAR));
+	//	RtlZeroMemory(pMem, tam * sizeof(WCHAR));
 
-		cmRet = CM_Get_Device_Interface_List(&cmFilter.u.DeviceInterface.ClassGuid, NULL, pMem, tam, CM_GET_DEVICE_INTERFACE_LIST_PRESENT);
-		if ((cmRet != CR_SUCCESS))
-		{
-			WdfObjectDelete(hMem);
-			return STATUS_UNSUCCESSFUL;
-		}
+	//	cmRet = CM_Get_Device_Interface_List(&cmFilter.u.DeviceInterface.ClassGuid, NULL, pMem, tam, CM_GET_DEVICE_INTERFACE_LIST_PRESENT);
+	//	if ((cmRet != CR_SUCCESS))
+	//	{
+	//		WdfObjectDelete(hMem);
+	//		return STATUS_UNSUCCESSFUL;
+	//	}
 
-		for (sInterfaz = pMem; *sInterfaz; sInterfaz += wcslen(sInterfaz) + 1)
-		{
-			if (IniciarIoTarget(sInterfaz, device))
-				break;
-		}
-		WdfObjectDelete(hMem);
-	}
+	//	for (sInterfaz = pMem; *sInterfaz; sInterfaz += wcslen(sInterfaz) + 1)
+	//	{
+	//		if (IniciarIoTarget(sInterfaz, device))
+	//			break;
+	//	}
+	//	WdfObjectDelete(hMem);
+	//}
 
 	return STATUS_SUCCESS;
 }
@@ -257,7 +264,7 @@ BOOLEAN IniciarIoTarget(_In_ PWSTR nombre, _In_ WDFDEVICE device)
 			WDF_OBJECT_ATTRIBUTES	attributes;
 			WDF_WORKITEM_CONFIG		workitemConfig;
 			WDFWORKITEM				workItem;
-			DWORD					tam = (DWORD)wcsnlen_s(nombre, 100);
+			size_t					tam = wcsnlen_s(nombre, 100);
 
 			if (0 != RtlCopyMemory(GetDeviceContext(device)->Pedales.SymbolicLink, nombre, tam * sizeof(WCHAR)))
 				return FALSE;
@@ -324,24 +331,24 @@ NTSTATUS IniciarReports(WDFIOTARGET ioTarget)
 #pragma endregion
 
 #pragma region "Callbacks"
-DWORD PnPCallback(
-	_In_ HCMNOTIFICATION       hNotify,
-	_In_opt_ PVOID             Context,
-	_In_ CM_NOTIFY_ACTION      Action,
-	_In_reads_bytes_(EventDataSize) PCM_NOTIFY_EVENT_DATA EventData,
-	_In_ DWORD                 EventDataSize
-)
-{
-	UNREFERENCED_PARAMETER(hNotify);
-	UNREFERENCED_PARAMETER(EventDataSize);
-
-	WDFDEVICE device = (WDFDEVICE)Context;
-
-	if (Action == CM_NOTIFY_ACTION_DEVICEINTERFACEARRIVAL)
-		IniciarIoTarget(EventData->u.DeviceInterface.SymbolicLink, device);
-
-	return 0;
-}
+//DWORD PnPCallback(
+//	_In_ HCMNOTIFICATION       hNotify,
+//	_In_opt_ PVOID             Context,
+//	_In_ CM_NOTIFY_ACTION      Action,
+//	_In_reads_bytes_(EventDataSize) PCM_NOTIFY_EVENT_DATA EventData,
+//	_In_ DWORD                 EventDataSize
+//)
+//{
+//	UNREFERENCED_PARAMETER(hNotify);
+//	UNREFERENCED_PARAMETER(EventDataSize);
+//
+//	WDFDEVICE device = (WDFDEVICE)Context;
+//
+//	if (Action == CM_NOTIFY_ACTION_DEVICEINTERFACEARRIVAL)
+//		IniciarIoTarget(EventData->u.DeviceInterface.SymbolicLink, device);
+//
+//	return 0;
+//}
 
 //PASSIVE_LEVEL
 VOID EvIoTargetRemoveComplete(_In_ WDFIOTARGET ioTarget)

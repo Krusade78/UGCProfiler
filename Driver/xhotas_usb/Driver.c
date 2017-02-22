@@ -3,21 +3,20 @@ Copyright (c) 2017 Alfredo Costalago
 
 Module Name:
 
-    driver.c
+driver.c
 
 Abstract:
 
-    This file contains the driver entry points and callbacks.
+This file contains the driver entry points and callbacks.
 
 Environment:
 
-    User-mode Driver Framework 2
+Kernel-mode Driver Framework
 
 --*/
-
 #define INITGUID
 
-#include <windows.h>
+#include <ntddk.h>
 #include <wdf.h>
 #include "context.h"
 #include "x52_read.h"
@@ -29,28 +28,28 @@ Environment:
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text (PAGE, EvtAddDevice)
-#pragma alloc_text (PAGE, EvtCleanupCallback);
+#pragma alloc_text (PAGE, EvtCleanupCallback)
 #endif
 
 
 NTSTATUS DriverEntry(
-    _In_ PDRIVER_OBJECT  DriverObject,
-    _In_ PUNICODE_STRING RegistryPath
-    )
+	_In_ PDRIVER_OBJECT  DriverObject,
+	_In_ PUNICODE_STRING RegistryPath
+)
 {
-    WDF_DRIVER_CONFIG config;
-    NTSTATUS status;
+	WDF_DRIVER_CONFIG config;
+	NTSTATUS status;
 
 	WDF_DRIVER_CONFIG_INIT(&config, EvtAddDevice);
 	status = WdfDriverCreate(DriverObject, RegistryPath, WDF_NO_OBJECT_ATTRIBUTES, &config, WDF_NO_HANDLE);
 
-    return status;
+	return status;
 }
 
 NTSTATUS EvtAddDevice(
-    _In_    WDFDRIVER       Driver,
-    _Inout_ PWDFDEVICE_INIT DeviceInit
-    )
+	_In_    WDFDRIVER       Driver,
+	_Inout_ PWDFDEVICE_INIT DeviceInit
+)
 {
 	NTSTATUS                        status;
 	WDFDEVICE                       device;
@@ -58,12 +57,12 @@ NTSTATUS EvtAddDevice(
 	//WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
 
+	UNREFERENCED_PARAMETER(Driver);
+
 	PAGED_CODE();
 
-    UNREFERENCED_PARAMETER(Driver);
-
 	WdfFdoInitSetFilter(DeviceInit);
-    
+
 	//WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
 	//	pnpPowerCallbacks.EvtDevicePrepareHardware	= EvtDevicePrepareHardware;
 	//WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
@@ -85,12 +84,12 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 
-	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchSequential);
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchParallel);
 	ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
-	ioQConfig.EvtIoDeviceControl = EvtX52IOCtl;
+	//ioQConfig.EvtIoDeviceControl = EvtX52IOCtl;
 	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
 
-    return status;
+	return status;
 }
 
 //NTSTATUS
