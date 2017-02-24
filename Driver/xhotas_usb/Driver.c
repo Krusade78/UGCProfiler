@@ -18,6 +18,7 @@ Kernel-mode Driver Framework
 
 #include <ntddk.h>
 #include <wdf.h>
+#include "PnP.h"
 #include "context.h"
 #include "x52_read.h"
 #include "Pedales_read.h"
@@ -54,7 +55,7 @@ NTSTATUS EvtAddDevice(
 	NTSTATUS                        status;
 	WDFDEVICE                       device;
 	WDF_OBJECT_ATTRIBUTES			attributes;
-	//WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
+	WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
 
 	UNREFERENCED_PARAMETER(Driver);
@@ -63,18 +64,21 @@ NTSTATUS EvtAddDevice(
 
 	WdfFdoInitSetFilter(DeviceInit);
 
-	//WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
-	//	pnpPowerCallbacks.EvtDevicePrepareHardware	= EvtDevicePrepareHardware;
-	//WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
+	WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
+		pnpPowerCallbacks.EvtDeviceSelfManagedIoInit = EvtDeviceSelfManagedIoInit;
+		pnpPowerCallbacks.EvtDeviceSelfManagedIoCleanup = EvtDeviceSelfManagedIoCleanup;
+		pnpPowerCallbacks.EvtDeviceD0Entry = EvtDeviceD0Entry;
+		pnpPowerCallbacks.EvtDeviceD0Exit = EvtDeviceD0Exit;
+	WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
 	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_CONTEXT);
-	attributes.EvtCleanupCallback = EvtCleanupCallback;
+		attributes.EvtCleanupCallback = EvtCleanupCallback;
 	status = WdfDeviceCreate(&DeviceInit, &attributes, &device);
 	if (!NT_SUCCESS(status))
 		return status;
 
 	RtlZeroMemory(GetDeviceContext(device), sizeof(DEVICE_CONTEXT));
-	//GetDeviceContext(device)->Self = device;
+	GetDeviceContext(device)->Device = device;
 
 	status = IniciarX52(device);
 	if (!NT_SUCCESS(status))
@@ -84,41 +88,12 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 
-	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchParallel);
-	ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
-	//ioQConfig.EvtIoDeviceControl = EvtX52IOCtl;
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchSequential);
+		ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
 	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
 
 	return status;
 }
-
-//NTSTATUS
-//EvtDevicePrepareHardware(
-//    IN WDFDEVICE    Device,
-//    IN WDFCMRESLIST ResourceList,
-//    IN WDFCMRESLIST ResourceListTranslated
-//    )
-//{
-//	PDEVICE_CONTEXT pDeviceContext;
-//    NTSTATUS status = STATUS_SUCCESS;
-//
-//    UNREFERENCED_PARAMETER(ResourceList);
-//    UNREFERENCED_PARAMETER(ResourceListTranslated);
-//
-//	pDeviceContext = DeviceGetContext(Device);
-//
-//	if (GetDeviceContext(Device)->UsbDevice == NULL)
-//	{
-//		WDF_USB_DEVICE_CREATE_CONFIG createParams;
-//		WDF_USB_DEVICE_CREATE_CONFIG_INIT(&createParams, USBD_CLIENT_CONTRACT_VERSION_602);
-//
-//		status = WdfUsbTargetDeviceCreateWithParameters(Device,	&createParams,	WDF_NO_OBJECT_ATTRIBUTES,&GetDeviceContext(Device)->UsbDevice);
-//	}
-//
-//
-//    return status;
-//}
-
 
 VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
 {

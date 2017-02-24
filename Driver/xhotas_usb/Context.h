@@ -25,7 +25,7 @@ typedef struct _X52WRITE_CONTEXT
 DECLARE_HANDLE(HNOTIFICATION);
 typedef struct _PEDALES_CONTEXT
 {
-	HNOTIFICATION	PnPNotifyHandle;
+	PVOID			PnPNotifyHandle;
 	WCHAR			SymbolicLink[100];
 	WDFIOTARGET		IoTarget;
 	WDFWAITLOCK		WaitLockIoTarget;
@@ -37,7 +37,7 @@ typedef struct _PEDALES_CONTEXT
 
 typedef struct _DEVICE_CONTEXT
 {
-	//WDFDEVICE			Self;
+	WDFDEVICE			Device;
 	X52READ_CONTEXT		EntradaX52;
 	X52WRITE_CONTEXT	SalidaX52;
 	PEDALES_CONTEXT		Pedales;
