@@ -419,6 +419,7 @@ void EvtCompletionX52Data(
 		}
 	}
 
+    WdfRequestSetInformation(Request, sizeof(HID_INPUT_DATA) + 1);
 	WdfRequestComplete(Request, status);
 }
 #pragma endregion
