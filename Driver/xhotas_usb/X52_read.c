@@ -121,14 +121,7 @@ VOID EvtX52InternalIOCtl(
 				{
 					if (ret == FALSE)
 					{
-						for (ULONG i = 0; i < WdfCollectionGetCount(devExt->EntradaX52.ListaRequest); i++)
-						{
-							if ((WDFREQUEST)WdfCollectionGetItem(devExt->EntradaX52.ListaRequest, i) == Request)
-							{
-								WdfCollectionRemoveItem(devExt->EntradaX52.ListaRequest, i);
-								break;
-							}
-						}
+                        WdfCollectionRemove(devExt->EntradaX52.ListaRequest, Request);
 						status = WdfRequestGetStatus(Request);
 						WdfRequestComplete(Request, status);
 					}
@@ -230,7 +223,7 @@ VOID EvtX52IOCtl(
 		}
 	}
 
-	switch (IoControlCode) //Viene del minidrive donde se envía en PASSIVE_LEVEL
+	switch (IoControlCode) //Viene del minidrive donde se envï¿½a en PASSIVE_LEVEL
 	{
 	case IOCTL_MFD_LUZ:
 	{
