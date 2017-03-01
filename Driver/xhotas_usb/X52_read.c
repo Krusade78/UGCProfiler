@@ -508,7 +508,8 @@ VOID ConvertirInputX52(WDFDEVICE device, PVOID inputData)
 //DISPATCH
 VOID LeerX52ConPedales(PDEVICE_CONTEXT devExt)
 {
-    // Cancela una de las request enviadas hacia abajo para
+    // Cancela una de las request enviadas hacia abajo para que se vuelva a hacer la petición
+    // con la posición de los pedales actualizada
 	WDFREQUEST request = NULL;
 	WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
 	{
