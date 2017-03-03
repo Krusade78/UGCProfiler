@@ -271,7 +271,7 @@ NTSTATUS PnPCallbackPedales(_In_ PVOID notification, _Inout_opt_ PVOID context)
 		{
 			UNICODE_STRING strLink;
 			PWSTR wstrLink[sizeof(HARDWARE_ID_PEDALES)];
-			RtlCopyMemory(wstrLink, HARDWARE_ID_PEDALES, sizeof(HARDWARE_ID_PEDALES));
+			RtlZeroMemory(wstrLink, sizeof(HARDWARE_ID_PEDALES)*sizeof(WCHAR));
 			status = RtlUnicodeStringInit(&strLink, (NTSTRSAFE_PCWSTR)&wstrLink);
 			if (!NT_SUCCESS(status))
 				return status;
@@ -280,11 +280,10 @@ NTSTATUS PnPCallbackPedales(_In_ PVOID notification, _Inout_opt_ PVOID context)
 			{
 				if (RtlCompareUnicodeString(&strLink, &strId, TRUE) == 0)
 				{
-					NTSTATUS				status = STATUS_SUCCESS;
 					WDF_OBJECT_ATTRIBUTES	attributes;
 					WDF_WORKITEM_CONFIG		workitemConfig;
 					WDFWORKITEM				workItem;
-					size_t					tam = wcsnlen_s(diNotify->SymbolicLinkName, 100);
+					size_t					tam = (diNotify->SymbolicLinkName->MaximumLength > 100) ? 100 : diNotify->SymbolicLinkName->MaximumLength;
 
 					RtlCopyMemory(((PDEVICE_CONTEXT)context)->Pedales.SymbolicLink, diNotify->SymbolicLinkName, tam * sizeof(WCHAR));
 

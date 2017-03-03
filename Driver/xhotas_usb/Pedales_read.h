@@ -8,6 +8,10 @@ VOID CerrarPedales(_In_ WDFDEVICE device);
 #ifdef _PRIVATE_
 NTSTATUS CerrarIoTarget(_In_ WDFDEVICE device);
 VOID CerrarIoTargetPassive(_In_ WDFDEVICE device);
+VOID CerrarIoTargetWI(_In_ WDFWORKITEM workItem);
+
+NTSTATUS IniciarIoTargetPassive(_In_ WDFDEVICE device);
+VOID IniciarIoTargetWI(_In_ WDFWORKITEM workItem);
 
 VOID EvIoTargetRemoveComplete(_In_ WDFIOTARGET ioTarget);
 VOID EvIoTargetRemoveCanceled(_In_ WDFIOTARGET ioTarget);
