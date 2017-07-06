@@ -104,10 +104,47 @@ VOID EvtX52InternalIOCtl(
 		{
 		case URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER:
 		{
-			if (purb->UrbBulkOrInterruptTransfer.TransferBufferLength >= (sizeof(HID_INPUT_DATA) + 1))
-			{
+			if (purb->UrbBulkOrInterruptTransfer.TransferBufferLength >= (29 + 3 + sizeof(HID_INPUT_DATA) + 1)) //keyboard
+			{			
 				PDEVICE_CONTEXT devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
+				NTSTATUS status = STATUS_SUCCESS;
+				WDFREQUEST requestEnCola = NULL;
 
+				//Keyboard
+				status = WdfIoQueueRetrieveNextRequest(devExt->TecladoQueue, &requestEnCola);
+				if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
+				{
+					if (requestEnCola == NULL)
+					{
+						requestEnCola = Request;
+					}
+
+					status = WdfRequestForwardToIoQueue(requestEnCola, devExt->KeyboardQueue);
+					if (!NT_SUCCESS(status))
+					{
+						WdfRequestComplete(Request, status);
+					}
+					return;
+				}
+
+				//Mouse
+				status = WdfIoQueueRetrieveNextRequest(devExt->MouseQueue, &requestEnCola);
+				if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
+				{
+					if (requestEnCola == NULL)
+					{
+						requestEnCola = Request;
+					}
+
+					status = WdfRequestForwardToIoQueue(requestEnCola, devExt->MouseQueue);
+					if (!NT_SUCCESS(status))
+					{
+						WdfRequestComplete(Request, status);
+					}
+					return;
+				}
+
+				//Joystick
 				WdfRequestFormatRequestUsingCurrentType(Request);
 				WdfRequestSetCompletionRoutine(Request, EvtCompletionX52Data, NULL);
 				purb->UrbBulkOrInterruptTransfer.TransferBufferLength = 0x0e;
@@ -132,7 +169,7 @@ VOID EvtX52InternalIOCtl(
 			}
 			else
 			{
-				purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
+				purb->UrbBulkOrInterruptTransfer.TransferBufferLength = 29 + 3 + sizeof(HID_INPUT_DATA) + 1;
 				purb->UrbHeader.Status = USBD_STATUS_BUFFER_TOO_SMALL;
 				WdfRequestComplete(Request, status);
 				return;
