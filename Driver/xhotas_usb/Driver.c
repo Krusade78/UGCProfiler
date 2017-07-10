@@ -91,6 +91,22 @@ NTSTATUS EvtAddDevice(
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchSequential);
 		ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
 	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchManual);
+		ioQConfig.EvtIoInternalDeviceControl = EvtTecladoIOCtl;
+	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
+	if (!NT_SUCCESS(status))
+		return status;
+	GetDeviceContext(device)->ColaTeclado = ioQConfig;
+
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchManual);
+		ioQConfig.EvtIoInternalDeviceControl = EvtRatonIOCtl;
+	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
+	if (!NT_SUCCESS(status))
+		return status;
+	GetDeviceContext(device)->ColaRaton = ioQConfig;
 
 	return status;
 }
