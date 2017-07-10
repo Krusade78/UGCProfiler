@@ -119,7 +119,7 @@ VOID EvtX52InternalIOCtl(
 						requestEnCola = Request;
 					}
 
-					status = WdfRequestForwardToIoQueue(requestEnCola, devExt->KeyboardQueue);
+					status = WdfRequestForwardToIoQueue(requestEnCola, devExt->TecladoQueue);
 					if (!NT_SUCCESS(status))
 					{
 						WdfRequestComplete(Request, status);
@@ -128,7 +128,7 @@ VOID EvtX52InternalIOCtl(
 				}
 
 				//Mouse
-				status = WdfIoQueueRetrieveNextRequest(devExt->MouseQueue, &requestEnCola);
+				status = WdfIoQueueRetrieveNextRequest(devExt->RatonQueue, &requestEnCola);
 				if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
 				{
 					if (requestEnCola == NULL)
@@ -136,7 +136,7 @@ VOID EvtX52InternalIOCtl(
 						requestEnCola = Request;
 					}
 
-					status = WdfRequestForwardToIoQueue(requestEnCola, devExt->MouseQueue);
+					status = WdfRequestForwardToIoQueue(requestEnCola, devExt->RatonQueue);
 					if (!NT_SUCCESS(status))
 					{
 						WdfRequestComplete(Request, status);
