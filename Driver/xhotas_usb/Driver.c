@@ -21,7 +21,10 @@ Kernel-mode Driver Framework
 #include "PnP.h"
 #include "context.h"
 #include "x52_read.h"
+#include "UserModeIO_read.h"
 #include "Pedales_read.h"
+#include "Teclado_read.h"
+#include "Raton_read.h"
 #define _PRIVATE_
 #include "driver.h"
 #undef _PRIVATE_
@@ -57,6 +60,7 @@ NTSTATUS EvtAddDevice(
 	WDF_OBJECT_ATTRIBUTES			attributes;
 	WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
+	WDFQUEUE						cola;
 
 	UNREFERENCED_PARAMETER(Driver);
 
@@ -88,25 +92,39 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 
-	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchSequential);
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+		attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchParallel);
 		ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
-	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
+	status = WdfIoQueueCreate(device, &ioQConfig, &attributes, WDF_NO_HANDLE);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchParallel);
+	ioQConfig.EvtIoInternalDeviceControl = EvtIOCtlUsuario;
+	status = WdfIoQueueCreate(device, &ioQConfig, &attributes, WDF_NO_HANDLE);
 	if (!NT_SUCCESS(status))
 		return status;
 
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchManual);
-		ioQConfig.EvtIoInternalDeviceControl = EvtTecladoIOCtl;
-	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
+	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
 	if (!NT_SUCCESS(status))
 		return status;
-	GetDeviceContext(device)->ColaTeclado = ioQConfig;
+	status = WdfIoQueueReadyNotify(cola, EvtTecladoListo, NULL);
+	if (!NT_SUCCESS(status))
+		return status;
+	GetDeviceContext(device)->ColaTeclado = cola;
 
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchManual);
-		ioQConfig.EvtIoInternalDeviceControl = EvtRatonIOCtl;
-	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
+	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
 	if (!NT_SUCCESS(status))
 		return status;
-	GetDeviceContext(device)->ColaRaton = ioQConfig;
+	status = WdfIoQueueReadyNotify(cola, EvtRatonListo, NULL);
+	if (!NT_SUCCESS(status))
+		return status;
+	GetDeviceContext(device)->ColaRaton = cola;
 
 	return status;
 }

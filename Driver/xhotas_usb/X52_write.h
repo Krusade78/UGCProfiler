@@ -10,6 +10,13 @@ NTSTATUS Set_Hora24(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer);
 NTSTATUS Set_Fecha(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer);
 
 #ifdef _PRIVATE_
+typedef struct _WI_CONTEXT
+{
+	USHORT valor;
+	UCHAR idx;
+} WI_CONTEXT, *PWI_CONTEXT;
+WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(WI_CONTEXT, GetWIContext);
+
 NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params);
 #endif
 

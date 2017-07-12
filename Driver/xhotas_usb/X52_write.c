@@ -37,63 +37,53 @@ User-mode Driver Framework 2
 #pragma alloc_text(PAGE, EnviarOrden)
 #endif
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Luz_MFD(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 {
 	UCHAR params[3];
-
-	PAGED_CODE();
 
 	params[0] = *(SystemBuffer); params[1] = 0;
 	params[2] = 0xb1;
 	return EnviarOrden(DeviceObject, params);
 }
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Luz_Global(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 {
 	UCHAR params[3];
-
-	PAGED_CODE();
 
 	params[0] = *(SystemBuffer); params[1] = 0;
 	params[2] = 0xb2;
 	return EnviarOrden(DeviceObject, params);
 }
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Luz_Info(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 {
 	UCHAR params[3];
-
-	PAGED_CODE();
 
 	params[0] = *(SystemBuffer)+0x50; params[1] = 0;
 	params[2] = 0xb4;
 	return EnviarOrden(DeviceObject, params);
 }
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Set_Pinkie(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 {
 	UCHAR params[3];
-
-	PAGED_CODE();
 
 	params[0] = *(SystemBuffer)+0x50; params[1] = 0;
 	params[2] = 0xfd;
 	return EnviarOrden(DeviceObject, params);
 }
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Set_Texto(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer, _In_ size_t tamBuffer)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	CHAR i = 0;
 	UCHAR params[3];
 	UCHAR texto[17];
-
-	PAGED_CODE();
 
 	if ((tamBuffer - 1) > 16)
 		return STATUS_INVALID_BUFFER_SIZE;
@@ -145,12 +135,10 @@ NTSTATUS Set_Texto(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer, _In_ s
 	return status;
 }
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Set_Hora(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 {
 	UCHAR params[3];
-
-	PAGED_CODE();
 
 	params[0] = (SystemBuffer)[2];
 	params[1] = (SystemBuffer)[1];
@@ -158,12 +146,10 @@ NTSTATUS Set_Hora(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 	return EnviarOrden(DeviceObject, params);
 }
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Set_Hora24(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 {
 	UCHAR params[3];
-
-	PAGED_CODE();
 
 	params[0] = (SystemBuffer)[2];
 	params[1] = (SystemBuffer)[1] + 0x80;
@@ -171,12 +157,10 @@ NTSTATUS Set_Hora24(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 	return EnviarOrden(DeviceObject, params);
 }
 
-//PASSIVE_LEVEL
+//DISPATCH_LEVEL
 NTSTATUS Set_Fecha(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 {
 	UCHAR params[3];
-
-	PAGED_CODE();
 
 	switch (SystemBuffer[0]) {
 	case 1:
@@ -200,8 +184,9 @@ NTSTATUS Set_Fecha(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
 	return EnviarOrden(DeviceObject, params);
 }
 
-//PASSIVE
-NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params)
+
+//PASSIVE_LEVEL
+NTSTATUS EnviarOrdenPassive(_In_ WDFDEVICE DeviceObject, _In_ USHORT valor, UCHAR idx)
 {
 	NTSTATUS                        status;
 	WDF_USB_CONTROL_SETUP_PACKET    controlSetupPacket;
@@ -221,8 +206,8 @@ NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params)
 		BmRequestHostToDevice,
 		BmRequestToDevice,
 		0x91, // Request
-		*(USHORT*)params, // Value
-		params[2]); // Index  
+		valor, // Value
+		idx); // Index  
 
 	WDF_REQUEST_SEND_OPTIONS_INIT(&sendOptions, WDF_REQUEST_SEND_OPTION_TIMEOUT);
 	WDF_REQUEST_SEND_OPTIONS_SET_TIMEOUT(&sendOptions, WDF_REL_TIMEOUT_IN_MS(500));
@@ -236,6 +221,36 @@ NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params)
 		NULL);
 
 	WdfObjectDelete(newRequest);
+
+	return status;
+}
+
+//PASSIVE_LEVEL
+VOID EnviarOrdenWI(_In_ WDFWORKITEM workItem)
+{
+	EnviarOrdenPassive((WDFDEVICE)WdfWorkItemGetParentObject(workItem), GetWIContext(workItem)->valor, GetWIContext(workItem)->idx);
+	WdfObjectDelete(workItem);
+}
+
+//DISPATCH_LEVEL
+NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params)
+{
+	NTSTATUS				status = STATUS_SUCCESS;
+	WDF_OBJECT_ATTRIBUTES	attributes;
+	WDF_WORKITEM_CONFIG		workitemConfig;
+	WDFWORKITEM				workItem;
+
+	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, WI_CONTEXT);
+	attributes.ParentObject = DeviceObject;
+
+	WDF_WORKITEM_CONFIG_INIT(&workitemConfig, EnviarOrdenWI);
+	status = WdfWorkItemCreate(&workitemConfig, &attributes, &workItem);
+	if (NT_SUCCESS(status))
+	{
+		GetWIContext(workItem)->valor = *(USHORT*)params;
+		GetWIContext(workItem)->idx = params[2];
+		WdfWorkItemEnqueue(workItem);
+	}
 
 	return status;
 }

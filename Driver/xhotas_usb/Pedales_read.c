@@ -126,9 +126,7 @@ NTSTATUS IniciarPedales(_In_ WDFDEVICE device)
 
 	GetDeviceContext(device)->Pedales.IoTarget = NULL;
 	RtlZeroMemory(GetDeviceContext(device)->Pedales.SymbolicLink, 100 * sizeof(WCHAR));
-	GetDeviceContext(device)->Pedales.Activado = FALSE;
-	GetDeviceContext(device)->Pedales.PedalSel = 0;
-	GetDeviceContext(device)->Pedales.Posicion = 512;
+	GetDeviceContext(device)->Pedales.UltimaPosicion = 512;
 
 	return STATUS_SUCCESS;
 }
@@ -403,7 +401,7 @@ VOID ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 
 	WdfSpinLockAcquire(devExt->Pedales.SpinLockPosicion);
 	{
-		devExt->Pedales.Posicion = eje;
+		devExt->Pedales.UltimaPosicion = eje;
 	}
 	WdfSpinLockRelease(devExt->Pedales.SpinLockPosicion);
 
