@@ -34,7 +34,7 @@ VOID AccionarRaton(WDFDEVICE device, PUCHAR accion)
 				}
 				WdfSpinLockRelease(devExt.SpinLockAcciones);
 				if (ok)
-					ProcesarAcciones(device);
+					ProcesarAcciones(device, FALSE);
 			}
 		}
 	}
@@ -100,13 +100,13 @@ VOID AccionarComando(WDFDEVICE device, UINT16 accionId, UCHAR boton)
 				}
 				WdfSpinLockRelease(devExt.SpinLockAcciones);
 				if (ok)
-					ProcesarAcciones(device);
+					ProcesarAcciones(device, FALSE);
 			}
 		}
 	}
 }
 
-VOID ProcesarAcciones(WDFDEVICE device)
+VOID ProcesarAcciones(WDFDEVICE device, BOOLEAN enDelay)
 {
 	HID_CONTEXT hidCtx = GetDeviceContext(device)->HID;
 
@@ -138,7 +138,7 @@ VOID ProcesarAcciones(WDFDEVICE device)
 			}
 			else
 			{
-				ProcesarComandos(device);
+				ProcesarComandos(device, enDelay);
 			}
 
 		}
@@ -146,7 +146,7 @@ VOID ProcesarAcciones(WDFDEVICE device)
 	}
 }
 
-VOID ProcesarComandos(_In_ WDFDEVICE device)
+VOID ProcesarComandos(_In_ WDFDEVICE device, BOOLEAN enDelay)
 {
 	HID_CONTEXT			devExt = GetDeviceContext(device)->HID;
 	PNODO				posAccion = devExt.ColaAcciones.principio;
@@ -172,7 +172,7 @@ VOID ProcesarComandos(_In_ WDFDEVICE device)
 				psiguiente = NULL; //salir
 				break;
 			}
-			else if (((evento.tipo & 0x1f) == 0) || ((evento.tipo & 0x1f) == 18) || ((evento.tipo & 0x1f) == 19))
+			else if ((evento.tipo & 0x1f) == 0)
 			{
 				if (ProcesarEventoTeclado(device, evento.tipo, evento.dato))
 				{
@@ -180,6 +180,16 @@ VOID ProcesarComandos(_In_ WDFDEVICE device)
 				}
 				psiguiente = NULL; //salir
 				break;
+			}
+			else if (((evento.tipo & 0x1f) == 18) || ((evento.tipo & 0x1f) == 19))
+			{
+				ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
+				ColaBorrarNodo((PCOLA)posAccion->Datos, nodoComando);
+				if (enDelay)
+				{
+					psiguiente = NULL; //salir
+					break;
+				}
 			}
 			else if ((((evento.tipo & 0x1f) > 13) && ((evento.tipo & 0x1f) < 17)) || ((evento.tipo & 0x1f) >= 20))
 			{
@@ -212,6 +222,57 @@ VOID ProcesarComandos(_In_ WDFDEVICE device)
 		}
 
 		posAccion = psiguiente;
+	}
+}
+
+VOID ProcesarDirectX(WDFDEVICE device, BOOLEAN enDelay, UCHAR tipo, UCHAR dato)
+{
+	HID_CONTEXT	devExt = GetDeviceContext(device)->HID;
+	WDFREQUEST	request;
+	BOOLEAN		soltar;
+	NTSTATUS	status;
+	PVOID		buffer;
+
+	soltar = ((tipo >> 5) == 1) ? TRUE : FALSE;
+	tipo &= 0x1f;
+
+	switch (tipo)
+	{
+	case 18: // Botón DX
+		if (!soltar)
+			devExt.stDirectX.Botones[dato / 8] |= 1 << (dato % 8);
+		else
+			devExt.stDirectX.Botones[dato / 8] &= ~(1 << (dato % 8));
+
+		break;
+	case 19: // Seta DX
+		if (!soltar)
+			devExt.stDirectX.Setas[dato / 8] = (dato % 8) + 1;
+		else
+			devExt.stDirectX.Setas[dato / 8] = 0;
+		break;
+	}
+
+	if (enDelay)
+	{
+		// Cancela una de las request enviadas hacia abajo para que se vuelva a hacer la petición
+		// y se lea el estado nuevo
+		WDFREQUEST request = NULL;
+		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+		{
+			if (WdfCollectionGetCount(GetDeviceContext(device)->EntradaX52.ListaRequest) > 0)
+			{
+				request = (WDFREQUEST)WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
+				WdfObjectReference(request);
+				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
+			}
+		}
+		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+		if (request != NULL)
+		{
+			WdfRequestCancelSentRequest(request);
+			WdfObjectDereference(request);
+		}
 	}
 }
 

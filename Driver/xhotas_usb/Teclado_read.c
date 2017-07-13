@@ -36,48 +36,17 @@ BOOLEAN ProcesarEventoTeclado_HOTAS(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 	soltar = ((tipo >> 5) == 1) ? TRUE : FALSE;
 	tipo &= 0x1f;
 
-	switch (tipo) {
-	case 0:	//Tecla
-		if (!soltar)
-			devExt.stTeclado[dato / 8] |= 1 << (dato % 8);
-		else
-			devExt.stTeclado[dato / 8] &= ~(1 << (dato % 8));
-		break;
-	case 18: // Botón DX
-		if (!soltar)
-			devExt.stHOTAS.Botones[dato / 8] |= 1 << (dato % 8);
-		else
-			devExt.stHOTAS.Botones[dato / 8] &= ~(1 << (dato % 8));
-
-		break;
-	case 19: // Seta DX
-		if (!soltar)
-			devExt.stHOTAS.Setas[dato / 8] = (dato % 8) + 1;
-		else
-			devExt.stHOTAS.Setas[dato / 8] = 0;
-		break;
-	}
-
-	if (tipo == 0)
-	{
-		status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt.stTeclado) + 1, &buffer, NULL);
-		if (NT_SUCCESS(status))
-		{
-			*((PUCHAR)buffer) = 3;
-			RtlCopyMemory((PUCHAR)buffer + 1, devExt.stTeclado, sizeof(devExt.stTeclado));
-			WdfRequestSetInformation(request, sizeof(devExt.stTeclado) + 1);
-		}
-		WdfRequestComplete(request, status);
-	}
+	if (!soltar)
+		devExt.stTeclado[dato / 8] |= 1 << (dato % 8);
 	else
+		devExt.stTeclado[dato / 8] &= ~(1 << (dato % 8));
+
+	status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt.stTeclado) + 1, &buffer, NULL);
+	if (NT_SUCCESS(status))
 	{
-		status = WdfRequestRetrieveOutputBuffer(request, sizeof(HID_INPUT_DATA) + 1, &buffer, NULL);
-		if (NT_SUCCESS(status))
-		{
-			*((PUCHAR)buffer) = 1;
-			RtlCopyMemory((PUCHAR)buffer + 1, &devExt.stHOTAS, sizeof(HID_INPUT_DATA));
-			WdfRequestSetInformation(request, sizeof(HID_INPUT_DATA) + 1);
-		}
-		WdfRequestComplete(request, status);
+		*((PUCHAR)buffer) = 3;
+		RtlCopyMemory((PUCHAR)buffer + 1, devExt.stTeclado, sizeof(devExt.stTeclado));
+		WdfRequestSetInformation(request, sizeof(devExt.stTeclado) + 1);
 	}
+	WdfRequestComplete(request, status);
 }

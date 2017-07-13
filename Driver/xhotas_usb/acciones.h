@@ -2,7 +2,7 @@ EXTERN_C_START
 
 VOID AccionarRaton(WDFDEVICE device, PUCHAR accion);
 VOID AccionarComando(WDFDEVICE device, UINT16 accionId,	UCHAR boton);
-VOID ProcesarAcciones(WDFDEVICE device);
+VOID ProcesarAcciones(WDFDEVICE device, BOOLEAN enDelay);
 
 #ifdef _ACCIONES_
 typedef	struct _EVENTO {
@@ -18,6 +18,8 @@ WDF_DECLARE_CONTEXT_TYPE(DELAY_CONTEXT)
 EVT_WDF_TIMER TimerDelay;
 
 VOID ProcesarComandos(_In_ WDFDEVICE device);
+
+VOID ProcesarDirectX(WDFDEVICE device, BOOLEAN enDelay, UCHAR tipo, UCHAR dato);
 
 VOID ProcesarEventoX52_Modos(_In_ WDFDEVICE device, PCOLA cola, PNODO nodo, PEVENTO evento);
 

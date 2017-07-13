@@ -37,6 +37,7 @@ typedef struct _HID_CONTEXT
 
 	UCHAR			stRaton[4];
 	UCHAR			stTeclado[29];
+	HID_INPUT_DATA	stDirectX;
 } HID_CONTEXT;
 
 #pragma region "Programación"
