@@ -1,3 +1,6 @@
+#pragma once
+#include "cola.h"
+
 EXTERN_C_START
 
 //HID_INPUT_DATA modificado
@@ -25,9 +28,18 @@ typedef struct _HID_CONTEXT
 
 	UCHAR			EstadoModos;
 	UCHAR			EstadoPinkie;
+	UCHAR			EstadoAux;
 	UCHAR			ModoRaw;
+
+	WDFSPINLOCK		SpinLockAcciones;
+	WDFWAITLOCK		WaitLockAcciones;
+	COLA			ColaAcciones;
+
+	UCHAR			stRaton[4];
+	UCHAR			stTeclado[29];
 } HID_CONTEXT;
 
+#pragma region "Programación"
 typedef struct _STLIMITES {
 	BOOLEAN cal;
 	UINT16 i;
@@ -42,13 +54,57 @@ typedef struct _STJITTER {
 	UCHAR Margen;
 	UCHAR Resistencia;
 } STJITTER, *PSTJITTER;
+typedef struct _ST_COMANDO
+{
+	UCHAR tam;
+	UINT16 *datos;
+} COMANDO, *PCOMANDO;
 typedef struct _PROGRAMADO_CONTEXT
 {
 	WDFSPINLOCK slCalibrado;
 	STLIMITES	limites[4];
 	STJITTER	jitter[4];
 
+	struct
+	{
+		UCHAR Estado;	// 4 bit idc 4 bit total posiciones
+		UINT16 Indices[15];
+	} MapaBotones[2][3][3][26]; // el ultimo es la rueda
+	struct
+	{
+		UCHAR Estado;
+		UINT16 Indices[15];
+	} MapaSetas[2][3][3][32];
+	struct
+	{
+		UCHAR Mouse;
+		UCHAR nEje;				//Mapeado 0:nada <20 normal >20 invertido
+		UCHAR Sensibilidad[10];
+		UCHAR Bandas[15];
+		UINT16 Indices[16];
+	} MapaEjes[2][3][3][4];
+	struct
+	{
+		UCHAR Mouse;
+		UCHAR nEje;
+		UCHAR Bandas[16];
+		UINT16 Indices[16];
+	} MapaEjesPeque[2][3][3][3];
+	struct
+	{
+		UCHAR Mouse;
+		UCHAR nEje;
+	} MapaEjesMini[2][3][3][2];
+
+	USHORT	posVieja[2][3][3][7];
+
+	WDFSPINLOCK slMapas;
+
+	COMANDO *Comandos;
+	UINT16 nComandos;
+	WDFSPINLOCK slComandos;
 } PROGRAMADO_CONTEXT;
+#pragma endregion
 
 typedef struct _X52WRITE_CONTEXT
 {

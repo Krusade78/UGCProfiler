@@ -4,6 +4,8 @@
 #include <wdf.h>
 #include "Context.h"
 #include "CalibradoHID.h"
+#include "botones_setas.h"
+#include "ejes_raton.h"
 #define _PRIVATE_
 #include "ProcesarHID.h"
 #undef _PRIVATE_
@@ -149,61 +151,57 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 
 	if (!devExt.ModoRaw)
 	{
-		// Botones
+		 //Botones
 
-		//for (idx = 0; idx < 4; idx++) {
-		//	cambios = hidData->Botones[idx] ^ viejohidData.Botones[idx];
-		//	if (cambios != 0)
-		//	{
-		//		UCHAR exp;
-		//		for (exp = 0; exp < 8; exp++)
-		//		{
-		//			if ((cambios >> exp) & 1)
-		//			{ // Si ha cambiado
-		//				if ((hidData->Botones[idx] >> exp) & 1)
-		//					GenerarPulsarBoton(devExt, (idx * 8) + exp);
-		//				else
-		//					GenerarSoltarBoton(devExt, (idx * 8) + exp);
-		//			}
-		//		}
-		//	}
-		//}
+		for (idx = 0; idx < 4; idx++) {
+			cambios = hidData->Botones[idx] ^ viejohidData.Botones[idx];
+			if (cambios != 0)
+			{
+				UCHAR exp;
+				for (exp = 0; exp < 8; exp++)
+				{
+					if ((cambios >> exp) & 1)
+					{ // Si ha cambiado
+						if ((hidData->Botones[idx] >> exp) & 1)
+							GenerarPulsarBoton(device, (idx * 8) + exp);
+						else
+							GenerarSoltarBoton(device, (idx * 8) + exp);
+					}
+				}
+			}
+		}
 
-		//// Setas
+		// Setas
 
-		//for (idx = 0; idx < 4; idx++)
-		//{
-		//	if (hidData->Setas[idx] != viejohidData.Setas[idx])
-		//	{
-		//		if (viejohidData.Setas[idx] != 0)
-		//			GenerarSoltarSeta(devExt, (idx * 8) + viejohidData.Setas[idx] - 1);
-		//		if (hidData->Setas[idx] != 0)
-		//			GenerarPulsarSeta(devExt, (idx * 8) + hidData->Setas[idx] - 1);
-		//	}
-		//}
+		for (idx = 0; idx < 4; idx++)
+		{
+			if (hidData->Setas[idx] != viejohidData.Setas[idx])
+			{
+				if (viejohidData.Setas[idx] != 0)
+					GenerarSoltarSeta(device, (idx * 8) + viejohidData.Setas[idx] - 1);
+				if (hidData->Setas[idx] != 0)
+					GenerarPulsarSeta(device, (idx * 8) + hidData->Setas[idx] - 1);
+			}
+		}
 
-		//// Ejes
+		// Ejes
 
-		//for (idx = 0; idx < 7; idx++)
-		//{
-		//	if (*((USHORT*)&hidData->Ejes[idx * 2]) != *((USHORT*)&viejohidData.Ejes[idx * 2]))
-		//		GenerarAccionesEjes(devExt, idx, *((USHORT*)&hidData->Ejes[idx * 2]));
-		//}
+		for (idx = 0; idx < 7; idx++)
+		{
+			if (*((USHORT*)&hidData->Ejes[idx * 2]) != *((USHORT*)&viejohidData.Ejes[idx * 2]))
+				GenerarAccionesEjes(device, idx, *((USHORT*)&hidData->Ejes[idx * 2]));
+		}
 
-		//// Sensibilidad y mapeado
-		//RtlZeroMemory(&outputData, sizeof(HID_INPUT_DATA));
-		//SensibilidadYMapeado(devExt, &viejohidData, hidData, &outputData);
+		// Sensibilidad y mapeado
+		RtlZeroMemory(&outputData, sizeof(HID_INPUT_DATA));
+		SensibilidadYMapeado(device, &viejohidData, hidData, &outputData);
 
 		//Frenos y R movido
 		outputData.Ejes[14] = hidData->Ejes[14];
 		outputData.Ejes[15] = hidData->Ejes[15];
 		outputData.Ejes[16] = hidData->Ejes[16];
 		outputData.Ejes[17] = hidData->Ejes[17];
-	}
-	else
-	{
-		RtlCopyMemory(&outputData, hidData, sizeof(HID_INPUT_DATA));
-	}
 
-	//GenerarHIDEjes(devExt, &outputData);
+		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
+	}
 }
