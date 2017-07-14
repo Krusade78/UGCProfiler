@@ -29,10 +29,9 @@ typedef struct _HID_CONTEXT
 	UCHAR			EstadoModos;
 	UCHAR			EstadoPinkie;
 	UCHAR			EstadoAux;
-	UCHAR			ModoRaw;
+	BOOLEAN			ModoRaw;
 
 	WDFSPINLOCK		SpinLockAcciones;
-	WDFWAITLOCK		WaitLockAcciones;
 	COLA			ColaAcciones;
 
 	UCHAR			stRaton[4];
@@ -128,6 +127,7 @@ typedef struct _PEDALES_CONTEXT
 typedef struct _DEVICE_CONTEXT
 {
 	WDFDEVICE			Device;
+	WDFDEVICE			ControlDevice;
 	WDFQUEUE			ColaTeclado;
 	WDFQUEUE			ColaRaton;
 	X52READ_CONTEXT		EntradaX52;

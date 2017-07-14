@@ -41,7 +41,7 @@
     <ClCompile Include="cola.c" />
     <ClCompile Include="Driver.c" />
     <ClCompile Include="ejes_raton.c" />
-    <ClCompile Include="ioctl_interface.c" />
+    <ClCompile Include="mapa.c" />
     <ClCompile Include="Pedales_read.c" />
     <ClCompile Include="Pnp.c" />
     <ClCompile Include="ProcesarHID.c" />
@@ -59,7 +59,7 @@
     <ClInclude Include="Context.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="ejes_raton.h" />
-    <ClInclude Include="ioctl_interface.h" />
+    <ClInclude Include="mapa.h" />
     <ClInclude Include="Pedales_read.h" />
     <ClInclude Include="PnP.h" />
     <ClInclude Include="ProcesarHID.h" />
@@ -77,6 +77,10 @@
     <Configuration>Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
     <RootNamespace>xhotas_usb</RootNamespace>
+    <SccProjectName>SAK</SccProjectName>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

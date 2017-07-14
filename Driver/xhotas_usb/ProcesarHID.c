@@ -97,8 +97,6 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData)
 
 	if ((hidData.Botones[2] & 0x1)) //Combinación para des/activar los pedales
 		GetDeviceContext(device)->Pedales.Activado = !GetDeviceContext(device)->Pedales.Activado;
-	if ((hidData.Botones[2] & 0x2)) //Combinación para des/activar el calibrado
-		GetDeviceContext(device)->HID.ModoRaw = !GetDeviceContext(device)->HID.ModoRaw;
 
 	if (GetDeviceContext(device)->Pedales.Activado)
 	{

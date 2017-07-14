@@ -63,7 +63,7 @@ BOOLEAN ColaPush(PCOLA cola, PVOID dato)
 
 	if (cola == NULL)
 	{
-		cola = ColaCrear();
+		cola = ColaCrearTemporal();
 		if (cola == NULL)
 			return FALSE;
 	}

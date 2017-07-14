@@ -3,6 +3,7 @@
 #include "context.h"
 #include "Teclado_read.h"
 #include "Raton_read.h"
+#include "X52_write.h"
 #define _ACCIONES_
 #include "acciones.h"
 #undef _ACCIONES_
@@ -10,7 +11,7 @@
 VOID AccionarRaton(WDFDEVICE device, PUCHAR accion)
 {
 	HID_CONTEXT devExt = GetDeviceContext(device)->HID;
-	PCOLA eventos = ColaCrear();
+	PCOLA eventos = ColaCrearTemporal();
 	if (eventos != NULL)
 	{
 		PVOID evt = ExAllocatePoolWithTag(NonPagedPool, sizeof(UCHAR) * 2, (ULONG)'vepV');
@@ -47,7 +48,7 @@ VOID AccionarComando(WDFDEVICE device, UINT16 accionId, UCHAR boton)
 	
 	if(accionId != 0)
 	{
-		PCOLA eventos = ColaCrear();
+		PCOLA eventos = ColaCrearTemporal();
 		if(eventos != NULL)
 		{
 			BOOLEAN ok = TRUE;
@@ -146,7 +147,7 @@ VOID ProcesarAcciones(WDFDEVICE device, BOOLEAN enDelay)
 	}
 }
 
-VOID ProcesarComandos(_In_ WDFDEVICE device, BOOLEAN enDelay)
+VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay)
 {
 	HID_CONTEXT			devExt = GetDeviceContext(device)->HID;
 	PNODO				posAccion = devExt.ColaAcciones.principio;
@@ -228,10 +229,7 @@ VOID ProcesarComandos(_In_ WDFDEVICE device, BOOLEAN enDelay)
 VOID ProcesarDirectX(WDFDEVICE device, BOOLEAN enDelay, UCHAR tipo, UCHAR dato)
 {
 	HID_CONTEXT	devExt = GetDeviceContext(device)->HID;
-	WDFREQUEST	request;
 	BOOLEAN		soltar;
-	NTSTATUS	status;
-	PVOID		buffer;
 
 	soltar = ((tipo >> 5) == 1) ? TRUE : FALSE;
 	tipo &= 0x1f;
@@ -295,30 +293,26 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, PEVENTO e
 		break;
 	case 20: //mfd_luz
 	{
-		UCHAR params;
-		params = evento->dato;
-		EnviarOrdenX52(devExt, 0, &params, 1);
+		UCHAR params = evento->dato;
+		Luz_MFD(device, &params);
 	}
 	break;
 	case 21: // luz
 	{
-		UCHAR params;
-		params = evento->dato;
-		EnviarOrdenX52(devExt, 1, &params, 1);
+		UCHAR params = evento->dato;
+		Luz_Global(device, &params);
 	}
 	break;
 	case 22: // info luz
 	{
-		UCHAR params;
-		params = evento->dato;
-		EnviarOrdenX52(devExt, 2, &params, 1);
+		UCHAR params = evento->dato;
+		Luz_Info(device, &params);
 	}
 	break;
 	case 23: // pinkie;
 	{
-		UCHAR params;
-		params = evento->dato;
-		EnviarOrdenX52(devExt, 3, &params, 1);
+		UCHAR params = evento->dato;
+		Set_Pinkie(device, &params);
 	}
 	break;
 	case 24: // texto
@@ -337,7 +331,7 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, PEVENTO e
 				nodos = nodos->siguiente;
 			}
 			ColaBorrarNodo(cola, nodos);
-			EnviarOrdenX52(devExt, 4, texto, idx);
+			Set_Texto(device, texto, idx);
 		}
 	}
 	break;
@@ -349,7 +343,7 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, PEVENTO e
 		ColaBorrarNodo(cola, nodo->siguiente);
 		params[2] = *((PUCHAR)nodo->siguiente->Datos + 1);
 		ColaBorrarNodo(cola, nodo->siguiente);
-		EnviarOrdenX52(devExt, 5, params, 3);
+		Set_Hora(device, params);
 	}
 	break;
 	case 26: // hora 24
@@ -360,7 +354,7 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, PEVENTO e
 		ColaBorrarNodo(cola, nodo->siguiente);
 		params[2] = *((PUCHAR)nodo->siguiente->Datos + 1);
 		ColaBorrarNodo(cola, nodo->siguiente);
-		EnviarOrdenX52(devExt, 6, params, 3);
+		Set_Hora24(device, params);
 	}
 	break;
 	case 27: // fecha
@@ -369,7 +363,7 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, PEVENTO e
 		params[0] = evento->dato;
 		params[1] = *((PUCHAR)nodo->siguiente->Datos + 1);
 		ColaBorrarNodo(cola, nodo->siguiente);
-		EnviarOrdenX52(devExt, 7, params, 2);
+		Set_Fecha(device, params);
 	}
 	break;
 	}
@@ -644,7 +638,7 @@ VOID TimerDelay(IN  WDFTIMER Timer)
 	HID_CONTEXT			devExt = GetDeviceContext(WdfTimerGetParentObject(Timer))->HID;
 	PCOLA				eventos;
 
-	eventos = ColaCrear();
+	eventos = ColaCrearTemporal();
 	if (eventos != NULL)
 	{
 		BOOLEAN ok = FALSE;
@@ -661,7 +655,7 @@ VOID TimerDelay(IN  WDFTIMER Timer)
 		}
 		WdfSpinLockRelease(devExt.SpinLockAcciones);
 		if (ok)
-			ProcesarAcciones(WdfTimerGetParentObject(Timer));
+			ProcesarAcciones(WdfTimerGetParentObject(Timer), TRUE);
 	}
 	WdfObjectDelete(Timer);
 }

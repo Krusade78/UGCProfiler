@@ -92,18 +92,25 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 
-	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-		attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
-	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchParallel);
-		ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
-	status = WdfIoQueueCreate(device, &ioQConfig, &attributes, WDF_NO_HANDLE);
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Programacion.slCalibrado);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Programacion.slComandos);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockDeltaHid);
+	if (!NT_SUCCESS(status))
+		return status;
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockAcciones);
 	if (!NT_SUCCESS(status))
 		return status;
 
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-	attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
+		attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchParallel);
-	ioQConfig.EvtIoInternalDeviceControl = EvtIOCtlUsuario;
+		ioQConfig.EvtIoInternalDeviceControl = EvtX52InternalIOCtl;
 	status = WdfIoQueueCreate(device, &ioQConfig, &attributes, WDF_NO_HANDLE);
 	if (!NT_SUCCESS(status))
 		return status;
@@ -125,6 +132,8 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 	GetDeviceContext(device)->ColaRaton = cola;
+
+	status = IniciarIoCtlAplicacion(device);
 
 	return status;
 }

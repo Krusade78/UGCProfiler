@@ -17,7 +17,7 @@ typedef struct _DELAY_CONTEXT {
 WDF_DECLARE_CONTEXT_TYPE(DELAY_CONTEXT)
 EVT_WDF_TIMER TimerDelay;
 
-VOID ProcesarComandos(_In_ WDFDEVICE device);
+VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay);
 
 VOID ProcesarDirectX(WDFDEVICE device, BOOLEAN enDelay, UCHAR tipo, UCHAR dato);
 

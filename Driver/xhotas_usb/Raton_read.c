@@ -22,7 +22,7 @@ VOID EvtRatonListo(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 {
 	UNREFERENCED_PARAMETER(Context);
 
-	ProcesarAcciones(WdfIoQueueGetDevice(Queue));
+	ProcesarAcciones(WdfIoQueueGetDevice(Queue), FALSE);
 }
 
 BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
@@ -93,6 +93,15 @@ BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 		break;
 	}
 
+	status = WdfIoQueueRetrieveNextRequest(GetDeviceContext(device)->ColaRaton, &request);
+	if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
+	{
+		if (request == NULL)
+			return FALSE;
+	}
+	if (!NT_SUCCESS(status))
+		return FALSE;
+
 	status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt.stRaton) + 1, &buffer, NULL);
 	if (NT_SUCCESS(status))
 	{
@@ -100,8 +109,10 @@ BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 		RtlCopyMemory((PUCHAR)buffer + 1, devExt.stRaton, sizeof(devExt.stRaton));
 		WdfRequestSetInformation(request, sizeof(devExt.stRaton) + 1);
 	}
+	WdfRequestComplete(request, status);
 
-	ActualizarTimerRaton(devExt);
+	//ActualizarTimerRaton(devExt);
+	return TRUE;
 }
 
 

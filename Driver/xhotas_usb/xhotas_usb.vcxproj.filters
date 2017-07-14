@@ -52,9 +52,6 @@
     <ClInclude Include="ejes_raton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ioctl_interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ProcesarHID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -65,6 +62,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UserModeIO_read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mapa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -99,9 +99,6 @@
     <ClCompile Include="ejes_raton.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ioctl_interface.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ProcesarHID.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -112,6 +109,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UserModeIO_read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mapa.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

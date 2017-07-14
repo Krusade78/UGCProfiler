@@ -21,12 +21,73 @@ Environment:
 #include "context.h"
 #include "X52_write.h"
 #include "CalibradoHID.h"
+#include "mapa.h"
 #define _PRIVATE_
 #include "UserModeIO_read.h"
 #undef _PRIVATE_
 
-//DISPATCH
-VOID EvtIOCtlUsuario(
+DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\XUsb_HidF");
+DECLARE_CONST_UNICODE_STRING(dosDeviceName, L"\\??\\XUSBInterface");
+
+//PASSIVE_LEVEL
+NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
+{
+	NTSTATUS                        status;
+	WDF_OBJECT_ATTRIBUTES			attributes;
+	WDF_IO_QUEUE_CONFIG				ioQConfig;
+	PWDFDEVICE_INIT					devInit;
+
+	PAGED_CODE();
+
+	devInit = WdfControlDeviceInitAllocate(WdfDeviceGetDriver(device), &SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_RW_RES_R);
+	if (devInit == NULL)
+		return STATUS_UNSUCCESSFUL;
+
+	status = WdfDeviceInitAssignName(devInit, &MyDeviceName);
+	if (!NT_SUCCESS(status))
+	{
+		WdfDeviceInitFree(devInit);
+		return status;
+	}
+
+	WdfDeviceInitSetIoType(devInit, WdfDeviceIoBuffered);
+
+	status = WdfDeviceCreate(&devInit, WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->ControlDevice);
+	if (!NT_SUCCESS(status))
+	{
+		WdfDeviceInitFree(devInit);
+		return status;
+	}
+
+	status = WdfDeviceCreateSymbolicLink(&GetDeviceContext(device)->ControlDevice, &dosDeviceName);
+	if (!NT_SUCCESS(status))
+	{
+		WdfObjectDelete(&GetDeviceContext(device)->ControlDevice);
+		&GetDeviceContext(device)->ControlDevice = NULL;
+		return status;
+	}
+
+	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchSequential);
+	ioQConfig.EvtIoInternalDeviceControl = EvtIOCtlAplicacion;
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	attributes.ParentObject = device;
+	attributes.ExecutionLevel = WdfExecutionLevelPassive;
+	attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
+	status = WdfIoQueueCreate(GetDeviceContext(device)->ControlDevice, &ioQConfig, &attributes, WDF_NO_HANDLE);
+	if (!NT_SUCCESS(status))
+	{
+		WdfObjectDelete(&GetDeviceContext(device)->ControlDevice);
+		&GetDeviceContext(device)->ControlDevice = NULL;
+		return status;
+	}
+
+	WdfControlFinishInitializing(&GetDeviceContext(device)->ControlDevice);
+
+	return STATUS_SUCCESS;
+}
+
+//PASSIVE_LEVEL
+VOID EvtIOCtlAplicacion(
 	_In_  WDFQUEUE Queue,
 	_In_  WDFREQUEST Request,
 	_In_  size_t OutputBufferLength,
@@ -34,6 +95,7 @@ VOID EvtIOCtlUsuario(
 	_In_  ULONG IoControlCode
 )
 {
+	WDFDEVICE	device;
 	NTSTATUS	status;
 	BOOLEAN		ret;
 	PUCHAR		SystemBuffer;
@@ -77,9 +139,19 @@ VOID EvtIOCtlUsuario(
 
 	switch (IoControlCode)
 	{
+	case IOCTL_RAW:
+		GetDeviceContext(WdfIoQueueGetDevice(Queue))->HID.ModoRaw = SystemBuffer[0];
+		WdfRequestSetInformation(Request, 1);
+		WdfRequestComplete(Request, status);
+		return;
 	case IOCTL_USR_CALIBRADO:
 		status = EscribirCalibrado(WdfIoQueueGetDevice(Queue), Request);
 		return;
+	case IOCTL_USR_MAPA:
+		status = HF_IoEscribirMapa(WdfIoQueueGetDevice(Queue));
+	case IOCTL_USR_COMANDOS:
+		status = HF_IoEscribirComandos(WdfIoQueueGetDevice(Queue));
+	//---------------------------------------------------------------------
 	case IOCTL_MFD_LUZ:
 	{
 		status = Luz_MFD(WdfIoQueueGetDevice(Queue), SystemBuffer);

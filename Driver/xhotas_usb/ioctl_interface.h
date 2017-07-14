@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 #include <ntddk.h>
 #include <wdf.h>
 
@@ -24,4 +24,4 @@ NTSTATUS IniciarInterface(WDFDEVICE device, WDFDEVICE deviceControl);
 EVT_WDF_IO_QUEUE_IO_INTERNAL_DEVICE_CONTROL IoControl;
 
 void EnviarOrdenX52(_In_ PINTERFACE InterfaceHeader, _In_ ULONG ctlCode, _In_ PUCHAR buffer, _In_ size_t tamBuffer);
-#endif
+#endif*/

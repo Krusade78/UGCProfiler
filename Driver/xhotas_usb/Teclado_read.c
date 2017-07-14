@@ -22,10 +22,10 @@ VOID EvtTecladoListo(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 {
 	UNREFERENCED_PARAMETER(Context);
 
-	ProcesarAcciones(WdfIoQueueGetDevice(Queue));
+	ProcesarAcciones(WdfIoQueueGetDevice(Queue), FALSE);
 }
 
-BOOLEAN ProcesarEventoTeclado_HOTAS(WDFDEVICE device, UCHAR tipo, UCHAR dato)
+BOOLEAN ProcesarEventoTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 {
 	HID_CONTEXT	devExt = GetDeviceContext(device)->HID;
 	WDFREQUEST	request;
@@ -41,6 +41,15 @@ BOOLEAN ProcesarEventoTeclado_HOTAS(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 	else
 		devExt.stTeclado[dato / 8] &= ~(1 << (dato % 8));
 
+	status = WdfIoQueueRetrieveNextRequest(GetDeviceContext(device)->ColaTeclado, &request);
+	if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
+	{
+		if (request == NULL)
+			return FALSE;
+	}
+	if (!NT_SUCCESS(status))
+		return FALSE;
+
 	status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt.stTeclado) + 1, &buffer, NULL);
 	if (NT_SUCCESS(status))
 	{
@@ -49,4 +58,5 @@ BOOLEAN ProcesarEventoTeclado_HOTAS(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 		WdfRequestSetInformation(request, sizeof(devExt.stTeclado) + 1);
 	}
 	WdfRequestComplete(request, status);
+	return TRUE;
 }
