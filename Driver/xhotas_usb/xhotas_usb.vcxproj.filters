@@ -37,6 +37,36 @@
     <ClInclude Include="PnP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="acciones.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="botones_setas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibradoHID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cola.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ejes_raton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ioctl_interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcesarHID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raton_read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Teclado_read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserModeIO_read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.c">
@@ -52,6 +82,36 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pnp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="acciones.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="botones_setas.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibradoHID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cola.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ejes_raton.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ioctl_interface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcesarHID.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Raton_read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Teclado_read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserModeIO_read.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
