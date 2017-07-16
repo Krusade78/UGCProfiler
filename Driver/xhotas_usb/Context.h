@@ -28,7 +28,6 @@ typedef struct _HID_CONTEXT
 
 	UCHAR			EstadoModos;
 	UCHAR			EstadoPinkie;
-	UCHAR			EstadoAux;
 	BOOLEAN			ModoRaw;
 
 	WDFSPINLOCK		SpinLockAcciones;
@@ -36,7 +35,8 @@ typedef struct _HID_CONTEXT
 
 	UCHAR			stRaton[4];
 	UCHAR			stTeclado[29];
-	HID_INPUT_DATA	stDirectX;
+	UCHAR			stSetas[4];
+	UCHAR			stBotones[4];
 } HID_CONTEXT;
 
 #pragma region "Programación"
@@ -97,6 +97,8 @@ typedef struct _PROGRAMADO_CONTEXT
 	} MapaEjesMini[2][3][3][2];
 
 	USHORT	posVieja[2][3][3][7];
+
+	UCHAR TickRaton;
 
 	WDFSPINLOCK slMapas;
 

@@ -63,7 +63,7 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 	if (!NT_SUCCESS(status))
 	{
 		WdfObjectDelete(&GetDeviceContext(device)->ControlDevice);
-		&GetDeviceContext(device)->ControlDevice = NULL;
+		GetDeviceContext(device)->ControlDevice = NULL;
 		return status;
 	}
 
@@ -77,7 +77,7 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 	if (!NT_SUCCESS(status))
 	{
 		WdfObjectDelete(&GetDeviceContext(device)->ControlDevice);
-		&GetDeviceContext(device)->ControlDevice = NULL;
+		GetDeviceContext(device)->ControlDevice = NULL;
 		return status;
 	}
 
@@ -143,80 +143,82 @@ VOID EvtIOCtlAplicacion(
 		GetDeviceContext(WdfIoQueueGetDevice(Queue))->HID.ModoRaw = SystemBuffer[0];
 		WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
+	//------------------- CalibradoHID.c ---------------------------------
 	case IOCTL_USR_CALIBRADO:
 		status = EscribirCalibrado(WdfIoQueueGetDevice(Queue), Request);
-		return;
+		WdfRequestComplete(Request, status);
+		break;
+	//-------------------- Mapa.c -----------------------------------
 	case IOCTL_USR_MAPA:
 		status = HF_IoEscribirMapa(WdfIoQueueGetDevice(Queue));
+		WdfRequestComplete(Request, status);
+		break;
 	case IOCTL_USR_COMANDOS:
 		status = HF_IoEscribirComandos(WdfIoQueueGetDevice(Queue));
-	//---------------------------------------------------------------------
+		WdfRequestComplete(Request, status);
+		break;
+	//------------------- X52_write.c -----------------------------------------
 	case IOCTL_MFD_LUZ:
 	{
 		status = Luz_MFD(WdfIoQueueGetDevice(Queue), SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	case IOCTL_GLOBAL_LUZ:
 	{
 		status = Luz_Global(WdfIoQueueGetDevice(Queue), SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	case IOCTL_INFO_LUZ:
 	{
 		status = Luz_Info(WdfIoQueueGetDevice(Queue), SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	case IOCTL_PINKIE:
 	{
 		status = Set_Pinkie(WdfIoQueueGetDevice(Queue), SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	case IOCTL_TEXTO:
 	{
 		status = Set_Texto(WdfIoQueueGetDevice(Queue), SystemBuffer, InputBufferLength);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, InputBufferLength);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	case IOCTL_HORA:
 	{
 		status = Set_Hora(WdfIoQueueGetDevice(Queue), SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	case IOCTL_HORA24:
 	{
 		status = Set_Hora24(WdfIoQueueGetDevice(Queue), SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	case IOCTL_FECHA:
 	{
 		status = Set_Fecha(WdfIoQueueGetDevice(Queue), SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 2);
 		WdfRequestComplete(Request, status);
-		return;
+		break;
 	}
 	default:
+		WdfRequestSetInformation(Request, 0);
+		WdfRequestComplete(Request, STATUS_NOT_SUPPORTED);
 		break;
 	}
 
-	WDF_REQUEST_SEND_OPTIONS_INIT(&options, WDF_REQUEST_SEND_OPTION_SEND_AND_FORGET);
-	ret = WdfRequestSend(Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), &options);
-	if (ret == FALSE)
-	{
-		status = WdfRequestGetStatus(Request);
-		WdfRequestComplete(Request, status);
-	}
 }

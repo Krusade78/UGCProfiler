@@ -9,10 +9,10 @@ NTSTATUS HF_IoEscribirMapa(_In_ WDFREQUEST Request)
     NTSTATUS                status = STATUS_SUCCESS;
 	PUCHAR					SystemBuffer;
 	size_t					tam;
-	UCHAR					tipoJoy; //por compatibilidad
 
-	status =  WdfRequestRetrieveInputBuffer(Request, (sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 2 + sizeof(devExt.MapaBotones)+sizeof(devExt.MapaSetas)), &SystemBuffer, &tam);
-	if(!NT_SUCCESS(status)) return status;
+	status =  WdfRequestRetrieveInputBuffer(Request, (sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 1 + sizeof(devExt.MapaBotones)+sizeof(devExt.MapaSetas)), &SystemBuffer, &tam);
+	if(!NT_SUCCESS(status))
+		return status;
 
 	if( tam == (sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 2 + sizeof(devExt.MapaBotones)+sizeof(devExt.MapaSetas)) )
 	{
@@ -21,10 +21,9 @@ NTSTATUS HF_IoEscribirMapa(_In_ WDFREQUEST Request)
 			RtlCopyMemory(devExt.MapaEjes,		SystemBuffer, sizeof(devExt.MapaEjes));
 			RtlCopyMemory(devExt.MapaEjesPeque, SystemBuffer + sizeof(devExt.MapaEjes), sizeof(devExt.MapaEjesPeque));
 			RtlCopyMemory(devExt.MapaEjesMini,	SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque), sizeof(devExt.MapaEjesMini));
-			RtlCopyMemory(&tipoJoy,				SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini), 1);
-			//RtlCopyMemory(&DeviceExtension->TickRaton, SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 1, 1);
-			RtlCopyMemory(devExt.MapaBotones,	SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 2, sizeof(devExt.MapaBotones));
-			RtlCopyMemory(devExt.MapaSetas,		SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 2 + sizeof(devExt.MapaBotones), sizeof(devExt.MapaSetas));
+			RtlCopyMemory(&devExt.TickRaton,	SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini), 1);
+			RtlCopyMemory(devExt.MapaBotones,	SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 1, sizeof(devExt.MapaBotones));
+			RtlCopyMemory(devExt.MapaSetas,		SystemBuffer + sizeof(devExt.MapaEjes) + sizeof(devExt.MapaEjesPeque) + sizeof(devExt.MapaEjesMini) + 1 + sizeof(devExt.MapaBotones), sizeof(devExt.MapaSetas));
 		}
 		WdfSpinLockRelease(devExt.slMapas);
 
@@ -32,7 +31,7 @@ NTSTATUS HF_IoEscribirMapa(_In_ WDFREQUEST Request)
 	}
 	else
 	{
-		LimpiarMemoria(devExt);
+		LimpiarMemoria(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
 		status = STATUS_BUFFER_TOO_SMALL;
 		WdfRequestSetInformation(Request, 0);
 	}
@@ -50,10 +49,11 @@ NTSTATUS HF_IoEscribirComandos(_In_ WDFREQUEST Request)
 	PVOID					SystemBuffer;
 	size_t					InputBufferLength;
 
-	LimpiarMemoria(devExt);
+	LimpiarMemoria(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
 
 	status =  WdfRequestRetrieveInputBuffer(Request, 2, &SystemBuffer, &InputBufferLength);
-	if(!NT_SUCCESS(status)) return status;
+	if(!NT_SUCCESS(status))
+		return status;
 
 	RtlCopyMemory(&npos, SystemBuffer, 2);
 	if(npos >= (PAGE_SIZE / sizeof(COMANDO)))
@@ -110,7 +110,7 @@ NTSTATUS HF_IoEscribirComandos(_In_ WDFREQUEST Request)
 			goto fin;
 mal:
 			WdfSpinLockRelease(devExt.slComandos);
-			LimpiarMemoria(devExt);
+			LimpiarMemoria(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
 fin:
 			WdfRequestSetInformation(Request, idxc + 2);
 		}
@@ -120,74 +120,57 @@ fin:
 	return status;
 }
 
-VOID LimpiarMemoria(PROGRAMADO_CONTEXT idevExt)
+VOID LimpiarMemoria(WDFDEVICE device)
 {
+	PROGRAMADO_CONTEXT	idevExt = GetDeviceContext(device)->Programacion;
+	HID_CONTEXT			devExt = GetDeviceContext(device)->HID;
 	UINT16 idx;
 
 	WdfSpinLockAcquire(idevExt.slComandos);
-	WdfSpinLockAcquire(devExt.SpinLockAcciones);
-
-		WdfSpinLockAcquire(idevExt->slMapas);
+	{
+		WdfSpinLockAcquire(devExt.SpinLockAcciones);
 		{
-			RtlZeroMemory(idevExt.MapaBotones, sizeof(idevExt.MapaBotones));
-			RtlZeroMemory(idevExt.MapaSetas, sizeof(idevExt.MapaSetas));
-			RtlZeroMemory(idevExt.MapaEjes, sizeof(idevExt.MapaEjes));
-			RtlZeroMemory(idevExt.MapaEjesPeque, sizeof(idevExt.MapaEjesPeque));
-			RtlZeroMemory(idevExt.MapaEjesMini, sizeof(idevExt.MapaEjesMini));
-			RtlZeroMemory(idevExt.posVieja, sizeof(idevExt.posVieja));
-		}
-		WdfSpinLockRelease(idevExt.slMapas);
-
-		if(idevExt->Comandos != NULL)
-		{
-			for(idx = 0; idx < idevExt->nComandos; idx++)
+			WdfSpinLockAcquire(idevExt.slMapas);
 			{
-				if(idevExt->Comandos[idx].datos != NULL) ExFreePoolWithTag((PVOID)idevExt->Comandos[idx].datos, (ULONG)'ocpV');
+				RtlZeroMemory(idevExt.MapaBotones, sizeof(idevExt.MapaBotones));
+				RtlZeroMemory(idevExt.MapaSetas, sizeof(idevExt.MapaSetas));
+				RtlZeroMemory(idevExt.MapaEjes, sizeof(idevExt.MapaEjes));
+				RtlZeroMemory(idevExt.MapaEjesPeque, sizeof(idevExt.MapaEjesPeque));
+				RtlZeroMemory(idevExt.MapaEjesMini, sizeof(idevExt.MapaEjesMini));
+				RtlZeroMemory(idevExt.posVieja, sizeof(idevExt.posVieja));
 			}
-			ExFreePoolWithTag((PVOID)idevExt->Comandos, (ULONG)'ocpV');
-			idevExt->Comandos = NULL;
-			idevExt->nComandos = 0;
-		}
+			WdfSpinLockRelease(idevExt.slMapas);
 
-		if(!ColaEstaVacia(&devExt->ColaAccionesHOTAS))
-		{
-			PNODO siguiente = devExt->ColaAccionesHOTAS.principio;
-			while(siguiente != NULL)
+			if (idevExt.Comandos != NULL)
 			{
-				ColaBorrar((PCOLA)siguiente->Datos); siguiente->Datos = NULL;
-				siguiente = siguiente->link;
-				ColaBorrarNodo(&devExt->ColaAccionesHOTAS, devExt->ColaAccionesHOTAS.principio);
+				for (idx = 0; idx < idevExt.nComandos; idx++)
+				{
+					if (idevExt.Comandos[idx].datos != NULL) ExFreePoolWithTag((PVOID)idevExt.Comandos[idx].datos, (ULONG)'ocpV');
+				}
+				ExFreePoolWithTag((PVOID)idevExt.Comandos, (ULONG)'ocpV');
+				idevExt.Comandos = NULL;
+				idevExt.nComandos = 0;
 			}
-		}
-		if(!ColaEstaVacia(&devExt->ColaAccionesRaton))
-		{
-			PNODO siguiente = devExt->ColaAccionesRaton.principio;
-			while(siguiente != NULL)
-			{
-				ColaBorrar((PCOLA)siguiente->Datos); siguiente->Datos = NULL;
-				siguiente = siguiente->link;
-				ColaBorrarNodo(&devExt->ColaAccionesRaton, devExt->ColaAccionesRaton.principio);
-			}
-		}
-		if(!ColaEstaVacia(&devExt->ColaAccionesComando))
-		{
-			PNODO siguiente = devExt->ColaAccionesComando.principio;
-			while(siguiente != NULL)
-			{
-				ColaBorrar((PCOLA)siguiente->Datos); siguiente->Datos = NULL;
-				siguiente = siguiente->link;
-				ColaBorrarNodo(&devExt->ColaAccionesComando, devExt->ColaAccionesComando.principio);
-			}
-		}
 
-		RtlZeroMemory(devExt->stTeclado, sizeof(devExt->stTeclado));
-		RtlZeroMemory(devExt->stRaton, sizeof(devExt->stRaton));
-		RtlZeroMemory(devExt->stHOTAS.Botones, sizeof(devExt->stHOTAS.Botones));
-		RtlZeroMemory(devExt->stHOTAS.Setas, sizeof(devExt->stHOTAS.Setas));
-		idevExt->stPinkie = FALSE;
-		idevExt->stModo = 0;
-		idevExt->stAux = 0;
+			if (!ColaEstaVacia(&devExt.ColaAcciones))
+			{
+				PNODO siguiente = devExt.ColaAcciones.principio;
+				while (siguiente != NULL)
+				{
+					ColaBorrar((PCOLA)siguiente->Datos); siguiente->Datos = NULL;
+					siguiente = siguiente->siguiente;
+					ColaBorrarNodo(&devExt.ColaAcciones, devExt.ColaAcciones.principio);
+				}
+			}
 
-	WdfSpinLockRelease(devExt->SpinLockAcciones);
-	WdfSpinLockRelease(idevExt->slComandos);
+			RtlZeroMemory(devExt.stTeclado, sizeof(devExt.stTeclado));
+			RtlZeroMemory(devExt.stRaton, sizeof(devExt.stRaton));
+			RtlZeroMemory(devExt.stBotones, sizeof(devExt.stBotones));
+			RtlZeroMemory(devExt.stSetas, sizeof(devExt.stSetas));
+			devExt.EstadoPinkie = FALSE;
+			devExt.EstadoModos = 0;
+		}
+		WdfSpinLockRelease(devExt.SpinLockAcciones);
+	}
+	WdfSpinLockRelease(idevExt.slComandos);
 }
