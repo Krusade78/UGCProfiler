@@ -154,7 +154,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://alfredocos.visualstudio.com/
+		SccTeamFoundationServer = https://alfredocos.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Usuario\\Programas\\Calibrator\\Calibrator\\Calibrator.csproj
 		SccProjectTopLevelParentUniqueName1 = XHOTAS\u0020Driver.sln
@@ -184,21 +184,21 @@ Global
 		SccProjectTopLevelParentUniqueName7 = XHOTAS\u0020Driver.sln
 		SccProjectName7 = Usuario/SetupDrv
 		SccLocalPath7 = Usuario\\SetupDrv
-		SccProjectUniqueName8 = Driver\\xhotas_usb\\xhotas_usb.vcxproj
+		SccProjectUniqueName8 = Driver\\xh_vmd\\xh_vmd.vcxproj
 		SccProjectTopLevelParentUniqueName8 = XHOTAS\u0020Driver.sln
-		SccProjectName8 = Driver/xhotas_usb
-		SccLocalPath8 = Driver\\xhotas_usb
-		SccProjectUniqueName9 = Driver\\xh_vmd\\xh_vmd.vcxproj
+		SccProjectName8 = Driver/xh_vmd
+		SccLocalPath8 = Driver\\xh_vmd
+		SccProjectUniqueName9 = Driver\\xh_vmdf\\xh_vmdf.vcxproj
 		SccProjectTopLevelParentUniqueName9 = XHOTAS\u0020Driver.sln
-		SccProjectName9 = Driver/xh_vmd
-		SccLocalPath9 = Driver\\xh_vmd
-		SccProjectUniqueName10 = Driver\\xh_vmdf\\xh_vmdf.vcxproj
+		SccProjectName9 = Driver/xh_vmdf
+		SccLocalPath9 = Driver\\xh_vmdf
+		SccProjectUniqueName10 = Driver\\xusb_hid\\xusb_hid.vcxproj
 		SccProjectTopLevelParentUniqueName10 = XHOTAS\u0020Driver.sln
-		SccProjectName10 = Driver/xh_vmdf
-		SccLocalPath10 = Driver\\xh_vmdf
-		SccProjectUniqueName11 = Driver\\xusb_hid\\xusb_hid.vcxproj
+		SccProjectName10 = Driver/xusb_hid
+		SccLocalPath10 = Driver\\xusb_hid
+		SccProjectUniqueName11 = Driver\\xhotas_usb\\xhotas_usb.vcxproj
 		SccProjectTopLevelParentUniqueName11 = XHOTAS\u0020Driver.sln
-		SccProjectName11 = Driver/xusb_hid
-		SccLocalPath11 = Driver\\xusb_hid
+		SccProjectName11 = Driver/xhotas_usb
+		SccLocalPath11 = Driver\\xhotas_usb
 	EndGlobalSection
 EndGlobal
