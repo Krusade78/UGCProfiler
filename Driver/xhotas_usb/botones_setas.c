@@ -14,16 +14,16 @@ VOID GenerarPulsarBoton(WDFDEVICE device, UCHAR idx)
 
 	WdfSpinLockAcquire(idevExt.slMapas);
 	{
-		if ((idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado & 0xf) > 0)
+		if ((idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado & 0xf) > 0)
 		{
-			accionId = idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Indices[idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado >> 4];
-			idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado += 16;
-			if ((idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado >> 4) == (idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado & 0xf))
-				idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado &= 0xf;
+			accionId = idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado >> 4];
+			idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado += 16;
+			if ((idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado >> 4) == (idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado & 0xf))
+				idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado &= 0xf;
 		}
 		else
 		{
-			accionId = idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Indices[0];
+			accionId = idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[0];
 		}
 	}
 	WdfSpinLockRelease(idevExt.slMapas);
@@ -39,9 +39,9 @@ VOID GenerarSoltarBoton(WDFDEVICE device, UCHAR idx)
 
 	WdfSpinLockAcquire(idevExt.slMapas);
 	{
-		if ((idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado & 0xf) == 0)
+		if ((idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado & 0xf) == 0)
 		{
-			accionId = idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Indices[1];
+			accionId = idevExt.MapaBotones[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[1];
 			WdfSpinLockRelease(idevExt.slMapas);
 
 			AccionarComando(device, accionId, idx);
@@ -61,16 +61,16 @@ VOID GenerarPulsarSeta(WDFDEVICE device, UCHAR idx)
 
 	WdfSpinLockAcquire(idevExt.slMapas);
 	{
-		if ((idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado & 0xf) > 0)
+		if ((idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado & 0xf) > 0)
 		{
-			accionId = idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Indices[idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado >> 4];
-			idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado += 16;
-			if ((idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado >> 4) == (idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado & 0xf))
-				idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado &= 0xf;
+			accionId = idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado >> 4];
+			idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado += 16;
+			if ((idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado >> 4) == (idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado & 0xf))
+				idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado &= 0xf;
 		}
 		else
 		{
-			accionId = idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Indices[0];
+			accionId = idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[0];
 		}
 	}
 	WdfSpinLockRelease(idevExt.slMapas);
@@ -86,10 +86,10 @@ VOID GenerarSoltarSeta(WDFDEVICE device, UCHAR idx)
 
 	WdfSpinLockAcquire(idevExt.slMapas);
 	{
-		if ((idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Estado & 0xf) == 0)
+		if ((idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Estado & 0xf) == 0)
 		{
 
-			accionId = idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Indices[1];
+			accionId = idevExt.MapaSetas[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[1];
 			WdfSpinLockRelease(idevExt.slMapas);
 
 			AccionarComando(device, accionId, idx + 101);

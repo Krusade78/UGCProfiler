@@ -42,8 +42,8 @@ VOID SensibilidadYMapeado(
 			{
 				WdfSpinLockAcquire(itfExt.slMapas);
 				{
-					sy1 = 100 - itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Sensibilidad[9 - pos];
-					sy2 = ((pos == 9) ? 100 : 100) - itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Sensibilidad[8 - pos];
+					sy1 = 100 - itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[9 - pos];
+					sy2 = ((pos == 9) ? 100 : 100) - itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[8 - pos];
 				}
 				WdfSpinLockRelease(itfExt.slMapas);
 				stope = (topes[idx] / 2) + 1;
@@ -53,8 +53,8 @@ VOID SensibilidadYMapeado(
 			{
 				WdfSpinLockAcquire(itfExt.slMapas);
 				{
-					sy1 = (pos == 10) ? 0 : itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Sensibilidad[pos - 11];
-					sy2 = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Sensibilidad[pos - 10];
+					sy1 = (pos == 10) ? 0 : itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[pos - 11];
+					sy2 = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[pos - 10];
 				}
 				WdfSpinLockRelease(itfExt.slMapas);
 				stope = (topes[idx] / 2) + 1;
@@ -75,13 +75,13 @@ VOID SensibilidadYMapeado(
 		{
 			if (idx < 4)
 			{
-				nEje = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].nEje & 127;
-				sRaton = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Mouse;
+				nEje = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].nEje & 127;
+				sRaton = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Mouse;
 			}
 			else
 			{
-				nEje = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx - 4].nEje & 127;
-				sRaton = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx - 4].Mouse;
+				nEje = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx - 4].nEje & 127;
+				sRaton = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx - 4].Mouse;
 			}
 		}
 		WdfSpinLockRelease(itfExt.slMapas);
@@ -141,8 +141,8 @@ VOID SensibilidadYMapeado(
 
 		WdfSpinLockAcquire(itfExt.slMapas);
 		{
-			nEje = itfExt.MapaEjesMini[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].nEje & 127;
-			sRaton = itfExt.MapaEjesMini[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Mouse;
+			nEje = itfExt.MapaEjesMini[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].nEje & 127;
+			sRaton = itfExt.MapaEjesMini[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Mouse;
 		}
 		WdfSpinLockRelease(itfExt.slMapas);
 		if(nEje > 19) { invertido = TRUE; nEje -= 20; }
@@ -242,7 +242,7 @@ VOID GenerarAccionRaton(WDFDEVICE device, UCHAR eje, CHAR mov)
 		}
 	}
 
-	AccionarRaton(device, (PUCHAR)&accion);
+	AccionarRaton(device, (PUCHAR)&accion, FALSE);
 }
 
 VOID GenerarAccionesEjes(WDFDEVICE device, UCHAR idx, USHORT nuevo)
@@ -258,9 +258,9 @@ VOID GenerarAccionesEjes(WDFDEVICE device, UCHAR idx, USHORT nuevo)
 		if (cambio != 0)
 		{
 			if (idx < 4)
-				accionID = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx].Indices[cambio - 1];
+				accionID = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[cambio - 1];
 			else
-				accionID = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][idx - 4].Indices[cambio - 1];
+				accionID = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx - 4].Indices[cambio - 1];
 		}
 	}
 	WdfSpinLockRelease(itfExt.slMapas);
@@ -275,13 +275,13 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 
 	USHORT	topes[]	= {2047, 2047, 1023, 255, 255, 255, 255, 15, 15};
 	UCHAR	idn		= 0;
-	USHORT	vieja	= idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje];
+	USHORT	vieja	= idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje];
     BOOLEAN incremental;
 
 	if(eje < 4)
-		incremental = (idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje].nEje & 128) == 128;
+		incremental = (idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].nEje & 128) == 128;
 	else
-		incremental = (idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje - 4].nEje & 128) == 128;
+		incremental = (idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].nEje & 128) == 128;
 
 
 	if (incremental)
@@ -290,15 +290,15 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR posiciones;
 			if(eje < 4)
-				posiciones = (UCHAR)idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje].Indices[3];
+				posiciones = (UCHAR)idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].Indices[3];
 			else
-				posiciones = (UCHAR)idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje - 4].Indices[3];
+				posiciones = (UCHAR)idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].Indices[3];
 
 			if(vieja < (topes[eje] - posiciones))
 			{
 				if (nueva > (vieja + posiciones))
 				{
-					idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje] = nueva;
+					idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje] = nueva;
 					idn = 1;
 				}
 			}
@@ -307,15 +307,15 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR posiciones;
 			if(eje < 4)
-				posiciones = (UCHAR)idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje].Indices[2];
+				posiciones = (UCHAR)idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].Indices[2];
 			else
-				posiciones = (UCHAR)idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje - 4].Indices[2];
+				posiciones = (UCHAR)idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].Indices[2];
 
 			if(vieja > posiciones)
 			{
 				if (nueva < (vieja - posiciones))
 				{
-					idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje] = nueva;
+					idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje] = nueva;
 					idn = 2;
 				}
 			}
@@ -331,9 +331,9 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR banda;
 			if(eje < 4)
-				banda = idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje].Bandas[idc];
+				banda = idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].Bandas[idc];
 			else
-				banda = idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje - 4].Bandas[idc];
+				banda = idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].Bandas[idc];
 
 			if(banda == 0)
 				break;
@@ -354,7 +354,7 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		}
 		if(posActual != 10000 && posActual != vieja)
 		{
-			idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][hidCtx.EstadoAux][eje] = posActual;
+			idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje] = posActual;
 			idn = (UCHAR)posActual + 1;
 		}
 	}

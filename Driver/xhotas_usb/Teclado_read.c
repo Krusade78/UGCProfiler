@@ -22,7 +22,7 @@ VOID EvtTecladoListo(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 {
 	UNREFERENCED_PARAMETER(Context);
 
-	ProcesarAcciones(WdfIoQueueGetDevice(Queue), FALSE);
+	ProcesarAcciones(WdfIoQueueGetDevice(Queue), TRUE);
 }
 
 BOOLEAN ProcesarEventoTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)

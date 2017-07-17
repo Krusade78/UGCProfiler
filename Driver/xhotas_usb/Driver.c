@@ -25,6 +25,7 @@ Kernel-mode Driver Framework
 #include "Pedales_read.h"
 #include "Teclado_read.h"
 #include "Raton_read.h"
+#include "mapa.h"
 #define _PRIVATE_
 #include "driver.h"
 #undef _PRIVATE_
@@ -32,6 +33,7 @@ Kernel-mode Driver Framework
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text (PAGE, EvtAddDevice)
+#pragma alloc_text (PAGE, IniciarContext)
 #pragma alloc_text (PAGE, EvtCleanupCallback)
 #endif
 
@@ -84,26 +86,7 @@ NTSTATUS EvtAddDevice(
 	RtlZeroMemory(GetDeviceContext(device), sizeof(DEVICE_CONTEXT));
 	GetDeviceContext(device)->Device = device;
 
-	status = IniciarX52(device);
-	if (!NT_SUCCESS(status))
-		return status;
-
-	status = IniciarPedales(device);
-	if (!NT_SUCCESS(status))
-		return status;
-
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Programacion.slCalibrado);
-	if (!NT_SUCCESS(status))
-		return status;
-
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Programacion.slComandos);
-	if (!NT_SUCCESS(status))
-		return status;
-
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockDeltaHid);
-	if (!NT_SUCCESS(status))
-		return status;
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockAcciones);
+	status = IniciarContext(device);
 	if (!NT_SUCCESS(status))
 		return status;
 
@@ -138,10 +121,69 @@ NTSTATUS EvtAddDevice(
 	return status;
 }
 
-VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
+//PASSIVE
+NTSTATUS IniciarContext(WDFDEVICE device)
 {
+	WDF_OBJECT_ATTRIBUTES	attributes;
+	WDF_TIMER_CONFIG		timerConfig;
+	NTSTATUS				status;
+
 	PAGED_CODE();
 
-	CerrarPedales((WDFDEVICE)Object);
-	CerrarX52((WDFDEVICE)Object);
+	status = IniciarX52(device);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = IniciarPedales(device);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	WDF_TIMER_CONFIG_INIT(&timerConfig, EvtTickRaton);
+	timerConfig.AutomaticSerialization = TRUE;
+	timerConfig.TolerableDelay = TolerableDelayUnlimited;
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	attributes.ParentObject = device;
+	status = WdfTimerCreate(&timerConfig, &attributes, &GetDeviceContext(device)->HID.RatonTimer);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.ListaTimersDelay);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Programacion.slCalibrado);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Programacion.slMapas);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Programacion.slComandos);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockDeltaHid);
+	if (!NT_SUCCESS(status))
+		return status;
+	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockAcciones);
+
+	return status;
+}
+
+VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
+{
+	WDFDEVICE device = (WDFDEVICE)Object;
+
+	PAGED_CODE();
+
+	CerrarPedales(device);
+
+	if (GetDeviceContext(device)->ControlDevice != NULL)
+	{
+		WdfObjectDelete(GetDeviceContext(device)->ControlDevice);
+		GetDeviceContext(device)->ControlDevice = NULL;
+	}
+
+	LimpiarMapa(device);
 }

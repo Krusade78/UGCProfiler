@@ -59,7 +59,7 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 		return status;
 	}
 
-	status = WdfDeviceCreateSymbolicLink(&GetDeviceContext(device)->ControlDevice, &dosDeviceName);
+	status = WdfDeviceCreateSymbolicLink(GetDeviceContext(device)->ControlDevice, &dosDeviceName);
 	if (!NT_SUCCESS(status))
 	{
 		WdfObjectDelete(&GetDeviceContext(device)->ControlDevice);
@@ -81,7 +81,7 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 		return status;
 	}
 
-	WdfControlFinishInitializing(&GetDeviceContext(device)->ControlDevice);
+	WdfControlFinishInitializing(GetDeviceContext(device)->ControlDevice);
 
 	return STATUS_SUCCESS;
 }
@@ -95,11 +95,8 @@ VOID EvtIOCtlAplicacion(
 	_In_  ULONG IoControlCode
 )
 {
-	WDFDEVICE	device;
 	NTSTATUS	status;
-	BOOLEAN		ret;
 	PUCHAR		SystemBuffer;
-	WDF_REQUEST_SEND_OPTIONS options;
 
 	UNREFERENCED_PARAMETER(OutputBufferLength);
 
@@ -151,11 +148,11 @@ VOID EvtIOCtlAplicacion(
 		break;
 	//-------------------- Mapa.c -----------------------------------
 	case IOCTL_USR_MAPA:
-		status = HF_IoEscribirMapa(WdfIoQueueGetDevice(Queue));
+		status = HF_IoEscribirMapa(Request);
 		WdfRequestComplete(Request, status);
 		break;
 	case IOCTL_USR_COMANDOS:
-		status = HF_IoEscribirComandos(WdfIoQueueGetDevice(Queue));
+		status = HF_IoEscribirComandos(Request);
 		WdfRequestComplete(Request, status);
 		break;
 	//------------------- X52_write.c -----------------------------------------

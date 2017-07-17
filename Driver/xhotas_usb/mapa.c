@@ -1,6 +1,7 @@
 #include <ntddk.h>
 #include <wdf.h>
 #include "context.h"
+#include "acciones.h"
 #include "mapa.h"
 
 NTSTATUS HF_IoEscribirMapa(_In_ WDFREQUEST Request)
@@ -31,7 +32,7 @@ NTSTATUS HF_IoEscribirMapa(_In_ WDFREQUEST Request)
 	}
 	else
 	{
-		LimpiarMemoria(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
+		LimpiarMapa(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
 		status = STATUS_BUFFER_TOO_SMALL;
 		WdfRequestSetInformation(Request, 0);
 	}
@@ -49,7 +50,7 @@ NTSTATUS HF_IoEscribirComandos(_In_ WDFREQUEST Request)
 	PVOID					SystemBuffer;
 	size_t					InputBufferLength;
 
-	LimpiarMemoria(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
+	LimpiarMapa(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
 
 	status =  WdfRequestRetrieveInputBuffer(Request, 2, &SystemBuffer, &InputBufferLength);
 	if(!NT_SUCCESS(status))
@@ -110,7 +111,7 @@ NTSTATUS HF_IoEscribirComandos(_In_ WDFREQUEST Request)
 			goto fin;
 mal:
 			WdfSpinLockRelease(devExt.slComandos);
-			LimpiarMemoria(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
+			LimpiarMapa(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
 fin:
 			WdfRequestSetInformation(Request, idxc + 2);
 		}
@@ -120,7 +121,7 @@ fin:
 	return status;
 }
 
-VOID LimpiarMemoria(WDFDEVICE device)
+VOID LimpiarMapa(WDFDEVICE device)
 {
 	PROGRAMADO_CONTEXT	idevExt = GetDeviceContext(device)->Programacion;
 	HID_CONTEXT			devExt = GetDeviceContext(device)->HID;
@@ -152,17 +153,6 @@ VOID LimpiarMemoria(WDFDEVICE device)
 				idevExt.nComandos = 0;
 			}
 
-			if (!ColaEstaVacia(&devExt.ColaAcciones))
-			{
-				PNODO siguiente = devExt.ColaAcciones.principio;
-				while (siguiente != NULL)
-				{
-					ColaBorrar((PCOLA)siguiente->Datos); siguiente->Datos = NULL;
-					siguiente = siguiente->siguiente;
-					ColaBorrarNodo(&devExt.ColaAcciones, devExt.ColaAcciones.principio);
-				}
-			}
-
 			RtlZeroMemory(devExt.stTeclado, sizeof(devExt.stTeclado));
 			RtlZeroMemory(devExt.stRaton, sizeof(devExt.stRaton));
 			RtlZeroMemory(devExt.stBotones, sizeof(devExt.stBotones));
@@ -171,6 +161,8 @@ VOID LimpiarMemoria(WDFDEVICE device)
 			devExt.EstadoModos = 0;
 		}
 		WdfSpinLockRelease(devExt.SpinLockAcciones);
+
+		LimpiarAcciones(device);
 	}
 	WdfSpinLockRelease(idevExt.slComandos);
 }

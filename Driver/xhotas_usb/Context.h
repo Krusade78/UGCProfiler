@@ -32,6 +32,10 @@ typedef struct _HID_CONTEXT
 
 	WDFSPINLOCK		SpinLockAcciones;
 	COLA			ColaAcciones;
+	WDFCOLLECTION	ListaTimersDelay;
+
+	WDFTIMER		RatonTimer;
+	BOOLEAN			RatonActivado;
 
 	UCHAR			stRaton[4];
 	UCHAR			stTeclado[29];
@@ -69,12 +73,12 @@ typedef struct _PROGRAMADO_CONTEXT
 	{
 		UCHAR Estado;	// 4 bit idc 4 bit total posiciones
 		UINT16 Indices[15];
-	} MapaBotones[2][3][3][26]; // el ultimo es la rueda
+	} MapaBotones[2][3][26]; // el ultimo es la rueda
 	struct
 	{
 		UCHAR Estado;
 		UINT16 Indices[15];
-	} MapaSetas[2][3][3][32];
+	} MapaSetas[2][3][32];
 	struct
 	{
 		UCHAR Mouse;
@@ -82,21 +86,21 @@ typedef struct _PROGRAMADO_CONTEXT
 		UCHAR Sensibilidad[10];
 		UCHAR Bandas[15];
 		UINT16 Indices[16];
-	} MapaEjes[2][3][3][4];
+	} MapaEjes[2][3][4];
 	struct
 	{
 		UCHAR Mouse;
 		UCHAR nEje;
 		UCHAR Bandas[16];
 		UINT16 Indices[16];
-	} MapaEjesPeque[2][3][3][3];
+	} MapaEjesPeque[2][3][3];
 	struct
 	{
 		UCHAR Mouse;
 		UCHAR nEje;
-	} MapaEjesMini[2][3][3][2];
+	} MapaEjesMini[2][3][2];
 
-	USHORT	posVieja[2][3][3][7];
+	USHORT	posVieja[2][3][7];
 
 	UCHAR TickRaton;
 

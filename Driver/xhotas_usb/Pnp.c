@@ -5,6 +5,7 @@
 #include <hidclass.h>
 #include "Context.h"
 #include "Pedales_read.h"
+#include "acciones.h"
 #include "PnP.h"
 
 #ifdef ALLOC_PRAGMA
@@ -70,16 +71,15 @@ NTSTATUS EvtDeviceD0Exit(
 	//WdfWaitLockAcquire(GetDeviceExtension(Device)->WaitLockCierre, NULL);
 	//GetDeviceExtension(Device)->D0Apagado = TRUE;
 	//WdfWaitLockRelease(GetDeviceExtension(Device)->WaitLockCierre);
-	//CerrarIoTargets(Device);
-	//LimpiarColaAcciones();
+	LimpiarAcciones(device);
 
-	//RtlZeroMemory(GetDeviceExtension(Device)->stTeclado, sizeof(GetDeviceExtension(Device)->stTeclado));
-	//RtlZeroMemory(GetDeviceExtension(Device)->stRaton, sizeof(GetDeviceExtension(Device)->stRaton));
-	//RtlZeroMemory(GetDeviceExtension(Device)->stHOTAS.Botones, sizeof(GetDeviceExtension(Device)->stHOTAS.Botones));
-	//RtlZeroMemory(GetDeviceExtension(Device)->stHOTAS.Setas, sizeof(GetDeviceExtension(Device)->stHOTAS.Setas));
+	RtlZeroMemory(GetDeviceContext(device)->HID.stTeclado, sizeof(GetDeviceContext(device)->HID.stTeclado));
+	RtlZeroMemory(GetDeviceContext(device)->HID.stRaton, sizeof(GetDeviceContext(device)->HID.stRaton));
+	RtlZeroMemory(GetDeviceContext(device)->HID.stBotones, sizeof(GetDeviceContext(device)->HID.stBotones));
+	RtlZeroMemory(GetDeviceContext(device)->HID.stSetas, sizeof(GetDeviceContext(device)->HID.stSetas));
 
-	//GetDeviceExtension(Device)->TimerRatonOn = FALSE;
-	//WdfTimerStop(GetDeviceExtension(Device)->TimerRaton, TRUE);
+	GetDeviceContext(device)->HID.RatonActivado = FALSE;
+	WdfTimerStop(GetDeviceContext(device)->HID.RatonTimer, TRUE);
 
 	return STATUS_SUCCESS;
 }

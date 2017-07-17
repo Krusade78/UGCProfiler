@@ -200,8 +200,8 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 		outputData.Ejes[16] = hidData->Ejes[16];
 		outputData.Ejes[17] = hidData->Ejes[17];
 
-		RtlCopyMemory(hidData->Botones, devExt.stDirectX.Botones, sizeof(hidData->Botones));
-		RtlCopyMemory(hidData->Setas, devExt.stDirectX.Setas, sizeof(hidData->Setas));
+		RtlCopyMemory(hidData->Botones, devExt.stBotones, sizeof(hidData->Botones));
+		RtlCopyMemory(hidData->Setas, devExt.stSetas, sizeof(hidData->Setas));
 		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
 	}
 }

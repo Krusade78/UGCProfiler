@@ -54,13 +54,7 @@ VOID CerrarPedales(_In_ WDFDEVICE device)
 	if (GetDeviceContext(device)->Pedales.WaitLockIoTarget != NULL)
 	{
 		CerrarIoTargetPassive(device);
-		WdfObjectDelete(GetDeviceContext(device)->Pedales.WaitLockIoTarget);
 		GetDeviceContext(device)->Pedales.WaitLockIoTarget = NULL;
-	}
-	if (GetDeviceContext(device)->Pedales.SpinLockPosicion != NULL)
-	{
-		WdfObjectDelete(GetDeviceContext(device)->Pedales.SpinLockPosicion);
-		GetDeviceContext(device)->Pedales.SpinLockPosicion = NULL;
 	}
 }
 

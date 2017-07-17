@@ -30,7 +30,6 @@ User-mode Driver Framework 2
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, IniciarX52)
-#pragma alloc_text (PAGE, CerrarX52)
 #endif
 
 //PASSIVE
@@ -47,29 +46,6 @@ NTSTATUS IniciarX52(_In_ WDFDEVICE device)
 	status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.ListaRequest);
 	
 	return status;
-}
-
-
-//PASSIVE
-VOID CerrarX52(_In_ WDFDEVICE device)
-{
-	PAGED_CODE();
-
-	if (GetDeviceContext(device)->EntradaX52.ListaRequest != NULL)
-	{
-		WdfObjectDelete(GetDeviceContext(device)->EntradaX52.ListaRequest);
-		GetDeviceContext(device)->EntradaX52.ListaRequest = NULL;
-	}
-	if (GetDeviceContext(device)->EntradaX52.SpinLockPosicion != NULL)
-	{
-		WdfObjectDelete(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
-		GetDeviceContext(device)->EntradaX52.SpinLockPosicion = NULL;
-	}
-	if (GetDeviceContext(device)->EntradaX52.SpinLockRequest != NULL)
-	{
-		WdfObjectDelete(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		GetDeviceContext(device)->EntradaX52.SpinLockRequest = NULL;
-	}
 }
 
 

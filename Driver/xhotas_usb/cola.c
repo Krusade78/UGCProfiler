@@ -4,7 +4,7 @@
 #include "cola.h"
 #undef _COLA_
 
-PCOLA ColaCrearTemporal()
+PCOLA ColaAllocate()
 {
 	PCOLA cola=(PCOLA)ExAllocatePoolWithTag(NonPagedPool, 
                                 sizeof(COLA), 
@@ -63,9 +63,7 @@ BOOLEAN ColaPush(PCOLA cola, PVOID dato)
 
 	if (cola == NULL)
 	{
-		cola = ColaCrearTemporal();
-		if (cola == NULL)
-			return FALSE;
+		return FALSE;
 	}
 
 	nodo = (PNODO)ExAllocatePoolWithTag(NonPagedPool, sizeof(NODO), (ULONG)'lcHV');

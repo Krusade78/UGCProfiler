@@ -22,7 +22,7 @@ VOID EvtRatonListo(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 {
 	UNREFERENCED_PARAMETER(Context);
 
-	ProcesarAcciones(WdfIoQueueGetDevice(Queue), FALSE);
+	ProcesarAcciones(WdfIoQueueGetDevice(Queue), TRUE);
 }
 
 BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
@@ -32,6 +32,8 @@ BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 	BOOLEAN soltar;
 	NTSTATUS status;
 	PVOID buffer;
+
+	WdfTimerStop(devExt.RatonTimer, FALSE);
 
 	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
 
@@ -111,10 +113,66 @@ BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 	}
 	WdfRequestComplete(request, status);
 
-	//ActualizarTimerRaton(devExt);
+	if ((devExt.stRaton[1] == 0) && (devExt.stRaton[2] == 0))
+	{
+		devExt.RatonActivado = FALSE;
+	}
+	else
+	{
+		devExt.RatonActivado = TRUE;
+		WdfTimerStart(devExt.RatonTimer, WDF_REL_TIMEOUT_IN_MS(GetDeviceContext(device)->Programacion.TickRaton));
+	}
 	return TRUE;
 }
 
+VOID EvtTickRaton(_In_ WDFTIMER Timer)
+{
+	WDFDEVICE	device = WdfTimerGetParentObject(Timer);
+	UCHAR accion[2] = { 0, 0 };
 
+	if (!GetDeviceContext(device)->HID.RatonActivado)
+		return;
 
+	WdfSpinLockAcquire(GetDeviceContext(device)->HID.SpinLockAcciones);
+	{
+		if (GetDeviceContext(device)->HID.stRaton[1] != 0)
+		{
+			if (GetDeviceContext(device)->HID.stRaton[1] < 0)
+			{
+				accion[0] = 4 | 64;
+			}
+			else
+			{
+				accion[0] = 5 | 64;
+			}
+			accion[1] = GetDeviceContext(device)->HID.stRaton[1];
+		}
+	}
+	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
+	if (accion[0] != 0)
+	{
+		AccionarRaton(device, accion, TRUE);
+	}
 
+	accion[0] = 0;
+	WdfSpinLockAcquire(GetDeviceContext(device)->HID.SpinLockAcciones);
+	{
+		if (GetDeviceContext(device)->HID.stRaton[2] != 0)
+		{
+			if (GetDeviceContext(device)->HID.stRaton[2] < 0)
+			{
+				accion[0] = 6 | 64;
+			}
+			else
+			{
+				accion[0] = 7 | 64;
+			}
+			accion[1] = GetDeviceContext(device)->HID.stRaton[2];
+		}
+	}
+	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
+	if (accion[0] != 0)
+	{
+		AccionarRaton(device, accion, TRUE);
+	}
+}
