@@ -202,7 +202,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDirectInput.h" />
-    <ClInclude Include="DirectInput.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -19,6 +19,4 @@ private:
 	static int CALLBACK DIEnumDevicesCallback( LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef );
 	static int CALLBACK DIEnumTiposCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
 	void Cerrar();
-
-	//static BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID pvRef);
 };

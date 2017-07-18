@@ -16,9 +16,6 @@ BYTE CDirectInput::GetTipo(HINSTANCE hInst)
 {
 	HRESULT         hr;
 
-	//hr = CoInitializeEx(NULL,COINIT_MULTITHREADED);
-	//if(FAILED(hr)) return 0;
-
 	const GUID IID_IDI= {0xBF798030,0x483A,0x4DA2,{0xAA,0x99,0x5D,0x64,0xED,0x36,0x97,0x00}};
 	hr = DirectInput8Create(hInst,DIRECTINPUT_VERSION,IID_IDI,(LPVOID*)&g_pDI,NULL);
 	if(FAILED(hr)) {
@@ -30,31 +27,15 @@ BYTE CDirectInput::GetTipo(HINSTANCE hInst)
 
 	g_pDI->Release();
 	g_pDI=NULL;
-	//CoUninitialize();
 
 	return tipo;
 }
 int CALLBACK CDirectInput::DIEnumTiposCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
 {
 	BYTE* tipo = (BYTE*)pvRef;
-	if(strcmp(lpddi->tszProductName,"Saitek X36+X35 gameport")==0) {
-		*tipo = 2;
-		return DIENUM_STOP;
-	} else if(strcmp(lpddi->tszProductName,"Saitek X36 gameport")==0) {
-		*tipo = 1;
-		return DIENUM_STOP;
-	} else if(strcmp(lpddi->tszProductName,"Saitek X36 USB")==0) {
-		*tipo = 3;
-		return DIENUM_STOP;
-	} else if(strcmp(lpddi->tszProductName,"Controlador virtual XHOTAS")==0) {//Saitek X52 Flight Control System")==0) {
+	if(strcmp(lpddi->tszProductName,"Saitek X52 Flight Control System")==0) {
 		*tipo = 5;
 		return DIENUM_STOP;
-	} else if(strcmp(lpddi->tszProductName,"Saitek X45")==0) {
-		*tipo = 4;
-		return DIENUM_STOP;
-	//} else if(strcmp(lpddi->tszProductName,"Saitek X52")==0) {
-	//	*tipo = 5;
-	//	return DIENUM_STOP;
 	} else {
 		return DIENUM_CONTINUE;
 	}
@@ -63,9 +44,6 @@ int CALLBACK CDirectInput::DIEnumTiposCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID
 bool CDirectInput::Abrir(HWND hwnd, HINSTANCE hInst)
 {
 	HRESULT         hr;
-
-	//hr = CoInitializeEx(NULL,COINIT_MULTITHREADED);
-	//if(FAILED(hr)) return false;
 
 	const GUID IID_IDI= {0xBF798030,0x483A,0x4DA2,{0xAA,0x99,0x5D,0x64,0xED,0x36,0x97,0x00}};
 	hr = DirectInput8Create(hInst,DIRECTINPUT_VERSION,IID_IDI,(LPVOID*)&g_pDI,NULL);
@@ -91,8 +69,7 @@ bool CDirectInput::Abrir(HWND hwnd, HINSTANCE hInst)
 int CALLBACK CDirectInput::DIEnumDevicesCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
 {
 	CDirectInput* di = (CDirectInput*)pvRef;
-	if(strcmp(lpddi->tszProductName,"Saitek X36+X35 gameport")==0 || strcmp(lpddi->tszProductName,"Saitek X36 gameport")==0 ||
-	   strcmp(lpddi->tszProductName,"Saitek X36 USB")==0 || strcmp(lpddi->tszProductName,"Controlador virtual XHOTAS")==0 || strcmp(lpddi->tszProductName,"Saitek X45")==0)// || strcmp(lpddi->tszProductName,"Saitek X52")==0 )
+	if(strcmp(lpddi->tszProductName,"Saitek X52")==0 )
 	{
 		di->g_pDI->CreateDevice(lpddi->guidInstance,&di->g_pJoystick, NULL);
 		return DIENUM_STOP;
@@ -111,7 +88,6 @@ void CDirectInput::Cerrar()
 		g_pDI->Release();
 		g_pDI=NULL;
 	}
-	//CoUninitialize();
 }
 
 bool CDirectInput::GetEstado(BYTE *joystick)
@@ -144,17 +120,8 @@ bool CDirectInput::GetEstado(BYTE *joystick)
 	return true; 
 }
 
-//BOOL CDirectInput::DIEnumDeviceObjectsCallback(
-//         LPCDIDEVICEOBJECTINSTANCE lpddoi,
-//         LPVOID pvRef)
-//{
-//	return  DIENUM_CONTINUE;
-//}
-
 bool CDirectInput::Calibrar(BOOLEAN esX52)
 {
-	//HRESULT hr = g_pJoystick->EnumObjects(DIEnumDeviceObjectsCallback, NULL, DIDFT_AXIS);
-
 	LONG maxxy=4095,maxr=255;
 	if(esX52) { maxxy=2047; maxr=1023; }
 

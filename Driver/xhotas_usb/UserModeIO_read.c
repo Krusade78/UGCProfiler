@@ -136,7 +136,7 @@ VOID EvtIOCtlAplicacion(
 
 	switch (IoControlCode)
 	{
-	case IOCTL_RAW:
+	case IOCTL_USR_RAW:
 		GetDeviceContext(WdfIoQueueGetDevice(Queue))->HID.ModoRaw = SystemBuffer[0];
 		WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
