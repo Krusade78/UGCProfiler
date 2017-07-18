@@ -4,9 +4,8 @@ EXPORTS
 	AbrirDirectInput	@1
 	CerrarDirectInput	@2
 	PollDirectInput		@3
-	GetTipoDirectInput	@7
-	CalibrarHID			@8
-	DescalibrarHID		@9
-	EscribirCalibradoHID @10
-	CalibrarDirectInput	@11
-	EnviarConfiguracionX52 @12
+	GetTipoDirectInput	@4
+	CalibrarDirectInput	@5
+	SetModoRawHID		@6
+	EscribirCalibradoHID @7
+

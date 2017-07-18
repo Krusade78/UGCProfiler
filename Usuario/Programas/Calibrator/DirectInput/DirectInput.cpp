@@ -24,21 +24,16 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 CDirectInput* di = NULL;
 HANDLE salir = NULL;
 
-__declspec(dllexport) BYTE GetTipoDirectInput(HWND hwnd)
-{
-	CDirectInput dinp;
-	return dinp.GetTipo(hInst);
-}
-
 __declspec(dllexport) BYTE AbrirDirectInput(HWND hwnd)
 {
 	di = new CDirectInput();
-	if( di->Abrir(hwnd, hInst) ) {
-		salir = CreateEvent(NULL,FALSE,FALSE,NULL);
-		WaitForSingleObject(salir,INFINITE);
+	if (di->Abrir(hwnd, hInst)) {
+		salir = CreateEvent(NULL, FALSE, FALSE, NULL);
+		WaitForSingleObject(salir, INFINITE);
 		CloseHandle(salir);
 		return true;
-	} else {
+	}
+	else {
 		delete di; di = NULL;
 		return false;
 	}
@@ -46,10 +41,16 @@ __declspec(dllexport) BYTE AbrirDirectInput(HWND hwnd)
 
 __declspec(dllexport) void CerrarDirectInput()
 {
-	if(di!=NULL) {
+	if (di != NULL) {
 		delete di; di = NULL;
 		SetEvent(salir);
 	}
+}
+
+__declspec(dllexport) BYTE GetTipoDirectInput(HWND hwnd)
+{
+	CDirectInput dinp;
+	return dinp.GetTipo(hInst);
 }
 
 __declspec(dllexport) BYTE PollDirectInput(BYTE* joystick)
@@ -85,12 +86,7 @@ typedef	struct _CALIBRADOHID {
 	BOOLEAN cal;
 	BOOLEAN antiv;
 } CALIBRADOHID;
-void ComprobarDatosHID(CALIBRADOHID* datosEje)
-{
-	if(datosEje->cal) {
-		if( (datosEje->d<=(datosEje->c+datosEje->n)) || (datosEje->i>=(datosEje->c-datosEje->n)) ) datosEje->cal=FALSE;
-	}
-}
+
 __declspec(dllexport) char SetModoRawHID(bool onoff)
 {
 	DWORD ret;
@@ -115,49 +111,53 @@ __declspec(dllexport) char SetModoRawHID(bool onoff)
 	return 0;
 }
 
-void LeerRegistroHID(CALIBRADOHID* datosEje)
+void ComprobarDatosHID(CALIBRADOHID* datosEje)
+{
+	if (datosEje->cal) {
+		if ((datosEje->d <= (datosEje->c + datosEje->n)) || (datosEje->i >= (datosEje->c - datosEje->n))) datosEje->cal = FALSE;
+	}
+}
+bool LeerRegistroHID(CALIBRADOHID* datosEje)
 {
 	HKEY key;
 	DWORD tipo,tam=sizeof(CALIBRADOHID);
-	LONG res;
+	DWORD res;
 
-	if(ERROR_SUCCESS!=RegOpenKeyEx(HKEY_CURRENT_USER,"SOFTWARE\\XHOTAS\\Calibrado",0,KEY_READ,&key))
-		return;
+	HANDLE archivo = CreateFile("calibrado.dat", GENERIC_READ, FILE_SHARE_READ,	NULL, OPEN_EXISTING, 0,	NULL);
+	if (archivo == INVALID_HANDLE_VALUE)
+		return false;
 
-	res=RegQueryValueEx(key,"Eje1",0,&tipo,(BYTE*)&datosEje[0],&tam);
-	if(ERROR_SUCCESS!=res || tam!=sizeof(CALIBRADOHID)) RtlZeroMemory(&datosEje[0],sizeof(CALIBRADOHID));
+	if (!ReadFile(archivo, datosEje, sizeof(CALIBRADOHID) * 4, &res, NULL))
+	{
+		CloseHandle(archivo);
+		return false;
+	}
+	if (res != (sizeof(CALIBRADOHID) * 4))
+	{
+		CloseHandle(archivo);
+		return false;
+	}
+
 	ComprobarDatosHID(&datosEje[0]);
-	res=RegQueryValueEx(key,"Eje2",0,&tipo,(BYTE*)&datosEje[1],&tam);
-	if(ERROR_SUCCESS!=res || tam!=sizeof(CALIBRADOHID)) RtlZeroMemory(&datosEje[1],sizeof(CALIBRADOHID));
 	ComprobarDatosHID(&datosEje[1]);
-	res=RegQueryValueEx(key,"Eje3",0,&tipo,(BYTE*)&datosEje[2],&tam);
-	if(ERROR_SUCCESS!=res || tam!=sizeof(CALIBRADOHID)) RtlZeroMemory(&datosEje[2],sizeof(CALIBRADOHID));
 	ComprobarDatosHID(&datosEje[2]);
-	res=RegQueryValueEx(key,"Eje4",0,&tipo,(BYTE*)&datosEje[3],&tam);
-	if(ERROR_SUCCESS!=res || tam!=sizeof(CALIBRADOHID)) RtlZeroMemory(&datosEje[3],sizeof(CALIBRADOHID));
 	ComprobarDatosHID(&datosEje[3]);
 
-	RegCloseKey(key);
+	CloseHandle(archivo);
+	return true;
 }
 __declspec(dllexport) char EscribirCalibradoHID()
 {
 	CALIBRADOHID ejes[4];
 	RtlZeroMemory(ejes,sizeof(CALIBRADOHID)*4);
-	LeerRegistroHID(ejes);
+	if (!LeerRegistroHID(ejes))
+		return 3;
 	
-	DWORD ret;
-
-	HANDLE driver=CreateFile(
-			"\\\\.\\XUSBInterface",
-			GENERIC_WRITE,
-			FILE_SHARE_WRITE,
-			NULL,
-			OPEN_EXISTING,
-			0,
-			NULL);
+	HANDLE driver=CreateFile("\\\\.\\XUSBInterface", GENERIC_WRITE,	FILE_SHARE_WRITE, NULL,	OPEN_EXISTING, 0, NULL);
 	if(driver==INVALID_HANDLE_VALUE)
 		return 1;
 
+	DWORD ret;
 	if (!DeviceIoControl(driver, IOCTL_USR_CALIBRADO, ejes, sizeof(CALIBRADOHID) * 4, NULL, 0, &ret, NULL))
 	{
 		CloseHandle(driver);
