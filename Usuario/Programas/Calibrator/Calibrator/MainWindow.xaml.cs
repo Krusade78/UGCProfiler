@@ -54,8 +54,6 @@ namespace Calibrator
             rid[0].Flags = 0;
             rid[0].WindowHandle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
             CRawInput.RegisterRawInputDevices(rid, 1, Marshal.SizeOf(rid[0]));
-            //String tipo = CDirectInput.GetTipo();
-            //    this.Title = "XHOTAS Calibrator - " + tipo;
             ucInfo.Iniciar(hJoy);           
         }
 

@@ -142,9 +142,6 @@ namespace Calibrator
             }
         }
 
-        [System.Runtime.InteropServices.DllImport("directinput.dll")]
-        private static extern byte EnviarConfiguracionX52();
-
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             GuardarRegistro();

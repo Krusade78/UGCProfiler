@@ -24,9 +24,9 @@ namespace Calibrator
         [System.Runtime.InteropServices.DllImport("directinput.dll")]
         private static extern byte AbrirDirectInput(IntPtr hWnd);
         [System.Runtime.InteropServices.DllImport("directinput.dll")]
-        private static extern byte GetTipoDirectInput();
-        [System.Runtime.InteropServices.DllImport("directinput.dll")]
         private static extern void CerrarDirectInput();
+        [System.Runtime.InteropServices.DllImport("directinput.dll")]
+        private static extern byte GetTipoDirectInput();
         [System.Runtime.InteropServices.DllImport("directinput.dll")]
         private static extern byte PollDirectInput(byte[] buf);
         [System.Runtime.InteropServices.DllImport("directinput.dll")]
