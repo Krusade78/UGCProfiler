@@ -105,7 +105,7 @@
                 <Label x:Name="label" Content="X: 0000&#13;Y: 0000" HorizontalAlignment="Left" Height="37" Margin="10,0,0,0" VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
-        <CheckBox x:Name="checkBox" Content="CheckBox" HorizontalAlignment="Left" Height="23" Margin="203,332,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="White"/>
+        <CheckBox x:Name="checkBox" Content="Datos en bruto" HorizontalAlignment="Left" Margin="203,332,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="White"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="134" Margin="226,376,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="261" Foreground="White"/>
     </Grid>
 </UserControl>

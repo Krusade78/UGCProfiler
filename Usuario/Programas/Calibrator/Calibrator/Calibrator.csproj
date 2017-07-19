@@ -92,12 +92,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CDirectInput.cs" />
-    <Compile Include="CDXInfo.cs" />
     <Compile Include="CRawInput.cs" />
-    <Compile Include="X52Mfd.xaml.cs">
-      <DependentUpon>X52Mfd.xaml</DependentUpon>
-    </Compile>
     <Page Include="HIDCal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,10 +119,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="X52Mfd.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

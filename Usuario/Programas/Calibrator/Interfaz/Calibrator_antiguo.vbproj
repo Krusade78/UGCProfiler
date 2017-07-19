@@ -139,12 +139,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Traduce.vb" />
-    <Compile Include="X36Cal.Designer.vb">
-      <DependentUpon>X36Cal.vb</DependentUpon>
-    </Compile>
-    <Compile Include="X36Cal.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="X52Mfd.Designer.vb">
       <DependentUpon>X52Mfd.vb</DependentUpon>
     </Compile>
@@ -170,10 +164,6 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="X36Cal.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>X36Cal.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="X52Mfd.resx">
       <SubType>Designer</SubType>

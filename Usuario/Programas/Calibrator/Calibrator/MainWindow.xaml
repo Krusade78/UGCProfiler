@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Calibrator"
-        Title="XHOTAS Calibrator" Height="650" Width="1200" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="res/Icon1.ico">
+        Title="XHOTAS Calibrador" Height="650" Width="590" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="res/Icon1.ico">
     <Window.Resources>
         <ControlTemplate x:Key="RadioButtonTemplate" TargetType="{x:Type RadioButton}">
             <Border x:Name="border" CornerRadius="5,5,0,0" SnapsToDevicePixels="True" RenderTransformOrigin="0,0">
@@ -13,9 +13,9 @@
                 </Border.RenderTransform>
                 <Border.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#7F139B2C"/>
-                        <GradientStop Color="#B2000000" Offset="1"/>
-                        <GradientStop Color="#62105B1D" Offset="0.941"/>
+                        <GradientStop Color="#F0003A0A"/>
+                        <GradientStop Color="#D0000000" Offset="1"/>
+                        <GradientStop Color="#90003009" Offset="0.8"/>
                     </LinearGradientBrush>
                 </Border.Background>
                 <ContentPresenter x:Name="contentPresenter" TextElement.Foreground="White" TextElement.FontFamily="LCD" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
@@ -25,9 +25,9 @@
                     <Setter Property="Background" TargetName="border">
                         <Setter.Value>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#F2139B2C"/>
-                                <GradientStop Color="#B2000000" Offset="1"/>
-                                <GradientStop Color="#62105B1D" Offset="0.941"/>
+                                <GradientStop Color="#F232B94A"/>
+                                <GradientStop Color="#D0000000" Offset="1"/>
+                                <GradientStop Color="#9030813F" Offset="0.8"/>
                             </LinearGradientBrush>
                         </Setter.Value>
                     </Setter>
@@ -36,9 +36,9 @@
                     <Setter Property="Background" TargetName="border">
                         <Setter.Value>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#D860D375"/>
-                                <GradientStop Color="#B2000000" Offset="1"/>
-                                <GradientStop Color="#62105B1D" Offset="0.941"/>
+                                <GradientStop Color="#F000B220"/>
+                                <GradientStop Color="#d0000000" Offset="1"/>
+                                <GradientStop Color="#90005B10" Offset="0.8"/>
                             </LinearGradientBrush>
                         </Setter.Value>
                     </Setter>
@@ -50,32 +50,30 @@
         <ImageBrush ImageSource="res/CalibrationGrid.jpg"/>
     </Window.Background>
     <Grid>
-        <local:X52Mfd HorizontalAlignment="Right" Margin="0,10,20,10" Width="528"/>
-        <Grid  HorizontalAlignment="Left" Margin="20,10,0,10" Width="30">
+        <Grid  HorizontalAlignment="Left" Margin="10,10,0,10" Width="30">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <RadioButton x:Name="tbPrueba" Content="Prueba" Template="{DynamicResource RadioButtonTemplate}" Height="30" Checked="toggleButton_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667" IsChecked="True" />
+            <RadioButton x:Name="tbPrueba" Content="Pruebas" Template="{DynamicResource RadioButtonTemplate}" Height="30" Checked="toggleButton_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667" IsChecked="True" />
             <RadioButton x:Name="tbCalibrar" Grid.Row="1" Content="Calibración HID" Template="{DynamicResource RadioButtonTemplate}"  Height="30" Checked="toggleButton1_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667"/>
         </Grid>
-        <local:HIDCal Margin="50,10,0,10" HorizontalAlignment="Left">
+        <local:HIDCal x:Name="ucCalibrar" Margin="40,10,0,10" HorizontalAlignment="Left" Width="0">
             <local:HIDCal.Style>
                 <Style TargetType="{x:Type UserControl}">
-                    <Setter Property="Width" Value="0" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=tbPrueba, Mode=OneWay}" Value="True">
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=tbCalibrar, Mode=OneWay}" Value="True">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="0" To="525" BeginTime="0:0:0.05" Duration="0:0:0.15"/>
+                                        <DoubleAnimation From="0" To="525" BeginTime="0:0:0.10" Duration="0:0:0.20"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="525" To="0"  Duration="0:0:0.05" />
+                                        <DoubleAnimation From="525" To="0"  Duration="0:0:0.10" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.ExitActions>
@@ -84,23 +82,22 @@
                 </Style>
             </local:HIDCal.Style>
         </local:HIDCal>
-        <local:Info x:Name="ucInfo" HorizontalAlignment="Left" Margin="50,10,0,10">
+        <local:Info x:Name="ucInfo" HorizontalAlignment="Left" Margin="40,10,0,10" Width="0">
             <local:Info.Style>
                 <Style TargetType="{x:Type UserControl}">
-                    <Setter Property="Width" Value="0" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=tbCalibrar, Mode=OneWay}" Value="True">
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=tbPrueba, Mode=OneWay}" Value="True">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="0" To="525" BeginTime="0:0:0.05" Duration="0:0:0.15"/>
+                                        <DoubleAnimation From="0" To="525" BeginTime="0:0:0.10" Duration="0:0:0.20"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="525" To="0"  Duration="0:0:0.05" />
+                                        <DoubleAnimation From="525" To="0"  Duration="0:0:0.10" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.ExitActions>
