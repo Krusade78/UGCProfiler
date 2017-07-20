@@ -76,20 +76,48 @@ namespace Calibrator
 
         private void ActualizarEstado(byte[] hidData)
         {
-            int x = (hidData[0] << 24) | (hidData[1] << 16) | (hidData[2] << 8) | hidData[3];
-            int y = (hidData[4] << 24) | (hidData[5] << 16) | (hidData[6] << 8) | hidData[7];
+            int x = (hidData[0] << 8) | hidData[1];
+            int y = (hidData[2] << 8) | hidData[3];
             Labelxy.Content = "X: " + x + " # " + "Y: " + y;
-            int z = (hidData[8] << 24) | (hidData[9] << 16) | (hidData[10] << 8) | hidData[11];
-            Labelz.Content = "Z: " + z;
-            ejeZ.Height = 
-            int r = (hidData[12] << 24) | (hidData[13] << 16) | (hidData[14] << 8) | hidData[15];
+            ejeXY.Margin = new Thickness(x, y, 0, 0);
+
+            int r = (hidData[4] << 8) | hidData[5];
             Labelr.Content = "R: " + r;
-            ////ejeXY.Margin = new Thickness(x, y, 0, 0);
-            //Labelxy.Content = "X: " + r + " # Y: " + y;
-            ////ejeZ.Height = z;
-            //Labelz.Content = "Z: " + z;
-            ////ejeR.Margin = new Thickness(r, 0, 0, 0);
-            //Labelr.Content = "R: " + r;
+            ejeR.Height = r;
+
+            int z = (hidData[6] << 8) | hidData[7];
+            Labelz.Content = "Z: " + z;
+            ejeZ.Height = z;
+
+            int rx = (hidData[8] << 8) | hidData[9];
+            Labelrx.Content = "Rx: " + rx;
+            double angulo = (Math.PI * ((360 / 2048) * rx)) / 180;
+            ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0": "1") + "0 " + (Math.Cos(angulo)*25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
+
+            int ry = (hidData[10] << 8) | hidData[11];
+            angulo = (Math.PI * ((360 / 2048) * ry)) / 180;
+            Labelry.Content = "Ry: " + ry;
+            ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0" : "1") + "0 " + (Math.Cos(angulo) * 25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
+
+            int sl1 = (hidData[12] << 8) | hidData[13];
+            Labelsl1.Content = "Slider 1: " + sl1;
+            ejeSl1.Width = sl1;
+
+            int sl2 = (hidData[14] >> 8) | hidData[15];
+            Labelsl2.Content = "Slider 2: " + sl2;
+            ejeSl2.Width = sl2;
+
+            int mx = hidData[24] >> 4;
+            int my = hidData[24] & 4;
+            Labelxy.Content = "mX: " + mx + "\n" + "mY: " + my;
+            ejeMXY.Margin = new Thickness(mx, my, 0, 0);
+
+            
+            for(int i = 0; i < 32; i++)
+            {
+
+            }
+
             textBlock.Text = "";
             for (int i = 0; i < hidData.Length; i++)
                 textBlock.Text += hidData[i].ToString() + ",";
