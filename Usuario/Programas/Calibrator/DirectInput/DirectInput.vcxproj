@@ -204,6 +204,10 @@
     <ClInclude Include="CDirectInput.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="dinput8x64.lib" />
+    <Library Include="dxguidx64.lib" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
