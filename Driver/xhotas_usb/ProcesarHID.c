@@ -217,11 +217,11 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 		RtlZeroMemory(&outputData, sizeof(HID_INPUT_DATA));
 		SensibilidadYMapeado(device, &viejohidData, hidData, &outputData);
 
-		//Frenos y R movido
-		outputData.Ejes[14] = hidData->Ejes[14];
-		outputData.Ejes[15] = hidData->Ejes[15];
-		outputData.Ejes[16] = hidData->Ejes[16];
-		outputData.Ejes[17] = hidData->Ejes[17];
+		////Frenos y R movido
+		//outputData.Ejes[14] = hidData->Ejes[14];
+		//outputData.Ejes[15] = hidData->Ejes[15];
+		//outputData.Ejes[16] = hidData->Ejes[16];
+		//outputData.Ejes[17] = hidData->Ejes[17];
 
 		RtlCopyMemory(hidData->Botones, devExt.stBotones, sizeof(hidData->Botones));
 		RtlCopyMemory(hidData->Setas, devExt.stSetas, sizeof(hidData->Setas));
