@@ -23,8 +23,7 @@ Kernel-mode Driver Framework
 #include "x52_read.h"
 #include "UserModeIO_read.h"
 #include "Pedales_read.h"
-#include "Teclado_read.h"
-#include "Raton_read.h"
+#include "TecladoRaton_read.h"
 #include "mapa.h"
 #define _PRIVATE_
 #include "driver.h"
@@ -60,7 +59,7 @@ NTSTATUS EvtAddDevice(
 	NTSTATUS                        status;
 	WDFDEVICE                       device;
 	WDF_OBJECT_ATTRIBUTES			attributes;
-	WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
+	//WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
 	WDFQUEUE						cola;
 
@@ -70,12 +69,12 @@ NTSTATUS EvtAddDevice(
 
 	WdfFdoInitSetFilter(DeviceInit);
 
-	WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
-		pnpPowerCallbacks.EvtDeviceSelfManagedIoInit = EvtDeviceSelfManagedIoInit;
-		pnpPowerCallbacks.EvtDeviceSelfManagedIoCleanup = EvtDeviceSelfManagedIoCleanup;
-		pnpPowerCallbacks.EvtDeviceD0Entry = EvtDeviceD0Entry;
-		pnpPowerCallbacks.EvtDeviceD0Exit = EvtDeviceD0Exit;
-	WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
+	//WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
+		//pnpPowerCallbacks.EvtDeviceSelfManagedIoInit = EvtDeviceSelfManagedIoInit;
+		//pnpPowerCallbacks.EvtDeviceSelfManagedIoCleanup = EvtDeviceSelfManagedIoCleanup;
+		//pnpPowerCallbacks.EvtDeviceD0Entry = EvtDeviceD0Entry;
+		//pnpPowerCallbacks.EvtDeviceD0Exit = EvtDeviceD0Exit;
+	//WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
 	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_CONTEXT);
 		attributes.EvtCleanupCallback = EvtCleanupCallback;
@@ -98,23 +97,14 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 
-	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchManual);
+	WDF_IO_QUEUE_CONFIG_INIT(&ioQConfig, WdfIoQueueDispatchManual);
 	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
 	if (!NT_SUCCESS(status))
 		return status;
-	status = WdfIoQueueReadyNotify(cola, EvtTecladoListo, NULL);
+	status = WdfIoQueueReadyNotify(cola, EvtTecladoRatonListo, NULL);
 	if (!NT_SUCCESS(status))
 		return status;
-	GetDeviceContext(device)->ColaTeclado = cola;
-
-	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchManual);
-	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
-	if (!NT_SUCCESS(status))
-		return status;
-	status = WdfIoQueueReadyNotify(cola, EvtRatonListo, NULL);
-	if (!NT_SUCCESS(status))
-		return status;
-	GetDeviceContext(device)->ColaRaton = cola;
+	GetDeviceContext(device)->ColaRequest = cola;
 
 	status = IniciarIoCtlAplicacion(device);
 

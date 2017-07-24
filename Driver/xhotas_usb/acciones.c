@@ -1,8 +1,7 @@
 #include <ntddk.h>
 #include <wdf.h>
 #include "context.h"
-#include "Teclado_read.h"
-#include "Raton_read.h"
+#include "TecladoRaton_read.h"
 #include "X52_write.h"
 #define _ACCIONES_
 #include "acciones.h"

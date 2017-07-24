@@ -70,7 +70,6 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 	WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQConfig, WdfIoQueueDispatchSequential);
 	ioQConfig.EvtIoInternalDeviceControl = EvtIOCtlAplicacion;
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-	attributes.ParentObject = device;
 	attributes.ExecutionLevel = WdfExecutionLevelPassive;
 	attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
 	status = WdfIoQueueCreate(GetDeviceContext(device)->ControlDevice, &ioQConfig, &attributes, WDF_NO_HANDLE);

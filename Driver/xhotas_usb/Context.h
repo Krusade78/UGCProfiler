@@ -134,8 +134,7 @@ typedef struct _DEVICE_CONTEXT
 {
 	WDFDEVICE			Device;
 	WDFDEVICE			ControlDevice;
-	WDFQUEUE			ColaTeclado;
-	WDFQUEUE			ColaRaton;
+	WDFQUEUE			ColaRequest;
 	X52READ_CONTEXT		EntradaX52;
 	X52WRITE_CONTEXT	SalidaX52;
 	PEDALES_CONTEXT		Pedales;

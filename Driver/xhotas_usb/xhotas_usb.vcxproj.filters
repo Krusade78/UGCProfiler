@@ -55,16 +55,13 @@
     <ClInclude Include="ProcesarHID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Raton_read.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Teclado_read.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UserModeIO_read.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mapa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TecladoRaton_read.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -102,16 +99,13 @@
     <ClCompile Include="ProcesarHID.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Raton_read.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Teclado_read.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UserModeIO_read.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mapa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TecladoRaton_read.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

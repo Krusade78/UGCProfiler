@@ -95,7 +95,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData)
 	hidData.Setas[3] = Switch4To8(hidData.Setas[3]);
 	hidData.MiniStick = hidGameData->Ministick;
 
-	if ((hidData.Botones[2] & 0x1)) //Combinación para des/activar los pedales
+	if ((hidData.Botones[1] & 0x28)) //Combinación para des/activar los pedales
 		GetDeviceContext(device)->Pedales.Activado = !GetDeviceContext(device)->Pedales.Activado;
 
 	if (GetDeviceContext(device)->Pedales.Activado)
@@ -112,7 +112,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData)
 		hidData.Ejes[5] = posPedales & 0xff;
 	}
 
-	ProcesarHID(device, &hidData);
+	//ProcesarHID(device, &hidData);
 
 	RtlCopyMemory((PVOID)((PUCHAR)inputData + 1), &hidData, sizeof(HID_INPUT_DATA));
 	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
