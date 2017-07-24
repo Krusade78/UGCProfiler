@@ -12,14 +12,25 @@ typedef struct _HID_INPUT_DATA
 	UCHAR   MiniStick;
 } HID_INPUT_DATA, *PHID_INPUT_DATA;
 
+#pragma region "X52 read"
+typedef struct _HIDX52_INPUT_DATA
+{
+	UCHAR   EjesXYR[4];
+	UCHAR	Ejes[4];
+	UCHAR	Botones[4];
+	UCHAR	Seta; // 2bits wheel + 2 blanco + 4 bits seta
+	UCHAR	Ministick;
+} HIDX52_INPUT_DATA, *PHIDX52_INPUT_DATA;
+
 typedef struct _X52READ_CONTEXT
 {
-	WDFCOLLECTION	ListaRequest;
-	WDFSPINLOCK		SpinLockRequest;
-	WDFSPINLOCK		SpinLockPosicion;
+	WDFCOLLECTION		ListaRequest;
+	WDFSPINLOCK			SpinLockRequest;
+	WDFSPINLOCK			SpinLockPosicion;
 
-	HID_INPUT_DATA	UltimaPosicion;
+	HIDX52_INPUT_DATA	UltimaPosicion;
 } X52READ_CONTEXT;
+#pragma endregion
 
 typedef struct _HID_CONTEXT
 {
@@ -91,9 +102,9 @@ typedef struct _PROGRAMADO_CONTEXT
 	{
 		UCHAR Mouse;
 		UCHAR nEje;
-		UCHAR Bandas[16];
+		UCHAR Bandas[15];
 		UINT16 Indices[16];
-	} MapaEjesPeque[2][3][3];
+	} MapaEjesPeque[2][3][4];
 	struct
 	{
 		UCHAR Mouse;

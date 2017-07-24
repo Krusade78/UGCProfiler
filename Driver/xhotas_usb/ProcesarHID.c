@@ -47,11 +47,37 @@ UCHAR Switch4To8(UCHAR in)
 	}
 }
 
+VOID ConvertirEjesA2048(PUCHAR ejes)
+{
+	UCHAR i;
+
+	for (i = 0; i < 16; i += 2)
+	{
+		USHORT pos = *((PUSHORT)&ejes[i]);
+		pos += 1;
+		if (pos == 1) pos == 0;
+		if (i == 4) //R
+		{
+			pos *= 2;
+		}
+		else if (i >= 6) //Z Rx, Ry Sl1 Sl2
+		{
+			pos *= 4;
+		}
+		RtlCopyMemory(&ejes[i], &pos, 2);
+	}
+}
+
 //DISPATCH
-VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData)
+VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 {
 	HID_INPUT_DATA hidData;
 	RtlZeroMemory(&hidData, sizeof(HID_INPUT_DATA));
+
+	if (repetirUltimo)
+		RtlCopyMemory(inputData, &GetDeviceContext(device)->EntradaX52.UltimaPosicion, sizeof(HIDX52_INPUT_DATA));
+	else
+		RtlCopyMemory(&GetDeviceContext(device)->EntradaX52.UltimaPosicion, inputData, sizeof(HIDX52_INPUT_DATA));
 
 	PreProcesarModos(device, (PUCHAR)inputData);
 
@@ -112,14 +138,11 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData)
 		hidData.Ejes[5] = posPedales & 0xff;
 	}
 
-	//ProcesarHID(device, &hidData);
+	ConvertirEjesA2048(&hidData);
+
+	ProcesarHID(device, &hidData);
 
 	RtlCopyMemory((PVOID)((PUCHAR)inputData + 1), &hidData, sizeof(HID_INPUT_DATA));
-	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
-	{
-		RtlCopyMemory(&GetDeviceContext(device)->EntradaX52.UltimaPosicion, &hidData, sizeof(HID_INPUT_DATA));
-	}
-	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 }
 
 //DISPATCH
@@ -184,7 +207,7 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 
 		// Ejes
 
-		for (idx = 0; idx < 7; idx++)
+		for (idx = 0; idx < 8; idx++)
 		{
 			if (*((USHORT*)&hidData->Ejes[idx * 2]) != *((USHORT*)&viejohidData.Ejes[idx * 2]))
 				GenerarAccionesEjes(device, idx, *((USHORT*)&hidData->Ejes[idx * 2]));

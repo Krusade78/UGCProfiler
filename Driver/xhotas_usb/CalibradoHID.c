@@ -80,32 +80,21 @@ VOID Calibrar(WDFDEVICE device, PHID_INPUT_DATA datosHID)
 		{
 			// Calibrado
 			UINT16 ancho1, ancho2;
-			UINT16 topes[] = { 2047, 2047, 1023, 255 };
 			ancho1 = (limites[idx].c - limites[idx].n) - limites[idx].i;
 			ancho2 = limites[idx].d - (limites[idx].c + limites[idx].n);
 			if (((pollEje[idx] >= (limites[idx].c - limites[idx].n)) && (pollEje[idx] <= (limites[idx].c + limites[idx].n))))
 			{
-				if (idx == 0 || idx == 1) {
-					pollEje[idx] = 1023;
-					continue;
-				}
-				else {
-					if (idx == 2)
-						pollEje[2] = 511;
-					else
-						pollEje[idx] = 127;
-					continue;
-				}
+				//Zona nula
+				pollEje[idx] = 1024;
+				continue;
 			}
 			else
 			{
 				if (pollEje[idx] < limites[idx].i)
 					pollEje[idx] = limites[idx].i;
-				else
-				{
-					if (pollEje[idx] > limites[idx].d)
-						pollEje[idx] = limites[idx].d;
-				}
+				if (pollEje[idx] > limites[idx].d)
+					pollEje[idx] = limites[idx].d;
+
 				if (pollEje[idx] < limites[idx].c)
 				{
 					pollEje[idx] = ((limites[idx].c - limites[idx].n) - pollEje[idx]);
@@ -123,9 +112,9 @@ VOID Calibrar(WDFDEVICE device, PHID_INPUT_DATA datosHID)
 				}
 			}
 			if (ancho2 > ancho1)
-				pollEje[idx] = ((pollEje[idx] + ancho1) * (topes[idx])) / (2 * ancho1);
+				pollEje[idx] = ((pollEje[idx] + ancho1) * (2048)) / (2 * ancho1);
 			else
-				pollEje[idx] = ((pollEje[idx] + ancho2) * (topes[idx])) / (2 * ancho2);
+				pollEje[idx] = ((pollEje[idx] + ancho2) * (2048)) / (2 * ancho2);
 		}
 	}
 

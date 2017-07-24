@@ -387,7 +387,7 @@ VOID ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 	}
 
 	if ((izq < 2) && (der < 2)) // zona nula
-		eje = 512;
+		eje = 511;
 	else if ((izq < 80) && (der < 80)) // zona con los dos pedales
 		eje = (der >= izq) ? (0x100 + der - izq) * 2 : (0xff - izq + der) * 2;
 	else // sólo un pedal

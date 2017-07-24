@@ -257,47 +257,33 @@ void EvtCompletionX52Data(
 
 	status = WdfRequestGetStatus(Request);
 
-	if ((status == STATUS_CANCELLED) && cancelada)
-	//La llamada viene por la cancelación de Request. Si !cancelada es una cancelación desde fuera del driver
-	// y no se toca nada
+	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 	{
-		if (purb->UrbHeader.Status == USBD_STATUS_CANCELED)
+		BOOLEAN repetirUltimo = FALSE;
+		if ((status == STATUS_CANCELLED) && cancelada)
+			//La llamada viene por la cancelación de Request. Si !cancelada es una cancelación desde fuera del driver
+			// y no se toca nada
 		{
-			INT16 posPedales = 512;
-			if (GetDeviceContext(device)->Pedales.Activado)
+			if (purb->UrbHeader.Status == USBD_STATUS_CANCELED)
 			{
-				WdfSpinLockAcquire(GetDeviceContext(device)->Pedales.SpinLockPosicion);
-					posPedales = GetDeviceContext(device)->Pedales.UltimaPosicion;
-				WdfSpinLockRelease(GetDeviceContext(device)->Pedales.SpinLockPosicion);
+				purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
+				status = STATUS_SUCCESS;
+				repetirUltimo = TRUE;
 			}
-			WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
+		}
+		if (NT_SUCCESS(status))
+			//La llamada no viene de WdfRequestCancelSentRequest. Aunque ya esté fuera de la lista de request todavía no
+			// se ha activado la cancelación y se pueden usar los datos
+		{
+			if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
 			{
-				if (GetDeviceContext(device)->Pedales.Activado)
-				{
-					GetDeviceContext(device)->EntradaX52.UltimaPosicion.Ejes[5] = posPedales >> 8;
-					GetDeviceContext(device)->EntradaX52.UltimaPosicion.Ejes[4] = posPedales & 0xff;
-				}
-				RtlCopyMemory((PVOID)((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer + 1), &GetDeviceContext(device)->EntradaX52.UltimaPosicion, sizeof(HID_INPUT_DATA));
+				ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, repetirUltimo);
+				*((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer) = 0x01; //Resport id
+				purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
 			}
-			WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
-
-			purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
-			*((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer) = 0x01; //Resport id
-			purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
-			status = STATUS_SUCCESS;
 		}
 	}
-	else if (NT_SUCCESS(status))
-	//La llamada no viene de WdfRequestCancelSentRequest. Aunque ya esté fuera de la lista de request todavía no
-	// se ha activado la cancelación y se pueden usar los datos
-	{
-		if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
-		{
-			ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer);
-			*((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer) = 0x01; //Resport id
-			purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
-		}
-	}
+	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 
     WdfRequestSetInformation(Request, sizeof(HID_INPUT_DATA) + 1);
 	WdfRequestComplete(Request, status);

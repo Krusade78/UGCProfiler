@@ -16,29 +16,26 @@ VOID SensibilidadYMapeado(
 	PROGRAMADO_CONTEXT	itfExt = GetDeviceContext(device)->Programacion;
 	HID_CONTEXT			hidCtx = GetDeviceContext(device)->HID;
 	UCHAR				idx;
-	UINT16				topes[] = {2047,2047,1023,255,255,255,255,15,15};
+	//UINT16				topes[] = {2047,2047,1023,255,255,255,255,15,15};
 	ULONG				x;
 	UCHAR				pos;
 	UCHAR				sy1;
 	UCHAR				sy2;
 	UINT16				stope;
-	HID_INPUT_DATA		nuevoHID;
-
-	RtlCopyMemory(&nuevoHID, entrada, sizeof(HID_INPUT_DATA));
 
 	//Sensibilidad
 	for(idx = 0; idx < 4; idx++)
 	{
 		x = *((UINT16*)&entrada->Ejes[idx * 2]);
-		if(x == (ULONG)(topes[idx] / 2))
+		if(x == (ULONG)(2048 / 2))
 		{
 			continue;
 		}
 		else
 		{
-			pos = (UCHAR) ((x * 20) / topes[idx]);
+			pos = (UCHAR) ((x * 20) / 2048);
 			if(pos == 20) pos = 19;
-			if( (UINT16)x < (topes[idx] / 2) )
+			if( (UINT16)x < (2048 / 2) )
 			{
 				WdfSpinLockAcquire(itfExt.slMapas);
 				{
@@ -46,8 +43,8 @@ VOID SensibilidadYMapeado(
 					sy2 = ((pos == 9) ? 100 : 100) - itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[8 - pos];
 				}
 				WdfSpinLockRelease(itfExt.slMapas);
-				stope = (topes[idx] / 2) + 1;
-				x = (  ( (sy2 - sy1) * ((20 * x)-(pos * topes[idx])) ) + (2 * sy1 * stope) ) /200;
+				stope = (2048 / 2) + 1;
+				x = (  ( (sy2 - sy1) * ((20 * x)-(pos * 2048)) ) + (2 * sy1 * stope) ) /200;
 			}
 			else
 			{
@@ -57,15 +54,15 @@ VOID SensibilidadYMapeado(
 					sy2 = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[pos - 10];
 				}
 				WdfSpinLockRelease(itfExt.slMapas);
-				stope = (topes[idx] / 2) + 1;
-				x = stope + ((  ( (sy2 - sy1) * ((20 * x) - (pos * topes[idx])) ) + (2 * sy1 * stope) ) /200);
+				stope = (2048 / 2) + 1;
+				x = stope + ((  ( (sy2 - sy1) * ((20 * x) - (pos * 2048)) ) + (2 * sy1 * stope) ) /200);
 			}
 			*((UINT16*)&entrada->Ejes[idx * 2]) = (UINT16)x;
 		}
 	}
 
 	//Mapeado
-	for(idx = 0; idx < 7; idx++)
+	for(idx = 0; idx < 8; idx++)
 	{
 		UCHAR	nEje;
 		UCHAR	sRaton;
@@ -89,46 +86,38 @@ VOID SensibilidadYMapeado(
 		if(nEje > 19) { invertido = TRUE; nEje -= 20; }
 		if(nEje != 0)
 		{
-			if(nEje < 8)
+			if(nEje < 9)
 			{
-				*((USHORT*)&salida->Ejes[(nEje - 1) * 2]) = ((*((USHORT*)&entrada->Ejes[idx * 2])) * topes[nEje - 1] ) / topes[idx];
-			}
-			else if(nEje < 10)
-			{
-				salida->MiniStick &= (nEje == 8)? 0xf0 : 0x0f; 
-				salida->MiniStick |= ( ( ((*((USHORT*)&entrada->Ejes[idx * 2])) * topes[nEje - 1]) / topes[idx] ) << (4 * (nEje - 8)) );
+				*((USHORT*)&salida->Ejes[(nEje - 1) * 2]) = *((USHORT*)&entrada->Ejes[idx * 2]);
 			}
 			else
 			{
-				if( *((USHORT*)&nuevoHID.Ejes[idx * 2])!= *((USHORT*)&viejo->Ejes[idx * 2]) )
+				if( *((USHORT*)&entrada->Ejes[idx * 2])!= *((USHORT*)&viejo->Ejes[idx * 2]) )
 				{
-					if( *((UINT16*)&entrada->Ejes[idx]) == (topes[idx] / 2) )
+					if( *((UINT16*)&entrada->Ejes[idx]) == (2048 / 2) )
 					{
-							GenerarAccionRaton(device, nEje - 9, 0);
+						GenerarAccionRaton(device, nEje - 9, 0);
 					} 
-					else if( *((UINT16*)&entrada->Ejes[idx]) < (topes[idx] / 2) )
+					else if( *((UINT16*)&entrada->Ejes[idx]) < (2048 / 2) )
 					{
 						if(invertido)
-							GenerarAccionRaton(device, nEje - 9, (UCHAR)(( ((topes[idx] / 2) - (*((UINT16*)&entrada->Ejes[idx * 2]))) *sRaton) / (topes[idx] / 2)) );
+							GenerarAccionRaton(device, nEje - 9, (UCHAR)(( ((2048 / 2) - (*((UINT16*)&entrada->Ejes[idx * 2]))) *sRaton) / (2048 / 2)) );
 						else
-							GenerarAccionRaton(device, nEje - 9, (UCHAR)(- (( ((topes[idx] / 2) - (*((UINT16*)&entrada->Ejes[idx * 2]))) *sRaton) / (topes[idx] / 2))) );
+							GenerarAccionRaton(device, nEje - 9, (UCHAR)(- (( ((2048 / 2) - (*((UINT16*)&entrada->Ejes[idx * 2]))) *sRaton) / (2048 / 2))) );
 
 					}
 					else 
 					{
 						if(invertido)
-							GenerarAccionRaton(device, nEje - 9, (UCHAR)(- (((*((UINT16*)&entrada->Ejes[idx * 2])-(topes[idx] / 2)) * sRaton) / (topes[idx] / 2))) );
+							GenerarAccionRaton(device, nEje - 9, (UCHAR)(- (((*((UINT16*)&entrada->Ejes[idx * 2])-(2048 / 2)) * sRaton) / (2048 / 2))) );
 						else
-							GenerarAccionRaton(device, nEje - 9, (UCHAR)(((*((UINT16*)&entrada->Ejes[idx * 2]) - (topes[idx] / 2))* sRaton) / (topes[idx] / 2)) );
+							GenerarAccionRaton(device, nEje - 9, (UCHAR)(((*((UINT16*)&entrada->Ejes[idx * 2]) - (2048 / 2))* sRaton) / (2048 / 2)) );
 					}
 				}
 			}
-			if(invertido)
+			if(invertido && (nEje < 9))
 			{
-				if(nEje < 8)
-					*((USHORT*)&salida->Ejes[(nEje - 1) * 2]) = topes[nEje - 1] - ( *((USHORT*)&salida->Ejes[(nEje - 1) * 2]) );
-				else if(nEje < 10)
-					salida->MiniStick = 15 - salida->MiniStick;
+				*((USHORT*)&salida->Ejes[(nEje - 1) * 2]) = 2048 - ( *((USHORT*)&salida->Ejes[(nEje - 1) * 2]) );
 			}
 		}
 	}
@@ -145,21 +134,16 @@ VOID SensibilidadYMapeado(
 			sRaton = itfExt.MapaEjesMini[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Mouse;
 		}
 		WdfSpinLockRelease(itfExt.slMapas);
-		if(nEje > 19) { invertido = TRUE; nEje -= 20; }
 		if(nEje != 0)
 		{
-			if(nEje < 8)
+			if(nEje < 9)
 			{
-				*((USHORT*)&salida->Ejes[(nEje - 1) * 2]) = ( ((idx == 0) ? (entrada->MiniStick & 0xf) : (entrada->MiniStick >> 4)) * topes[nEje - 1] ) / 15;
-			}
-			else if(nEje < 10)
-			{
-				salida->MiniStick &= (nEje == 8) ? 0xf0 : 0x0f; 
-				salida->MiniStick |= ((idx == 0) ? (entrada->MiniStick & 0xf) : (entrada->MiniStick >> 4)) << (4 * (nEje - 8));
+				salida->MiniStick &= (nEje == 1) ? 0xf0 : 0x0f; 
+				salida->MiniStick |= ((idx == 0) ? (entrada->MiniStick & 0xf) : (entrada->MiniStick >> 4)) << (4 * (nEje - 1));
 			}
 			else
 			{
-				if( nuevoHID.MiniStick != viejo->MiniStick )
+				if( entrada->MiniStick != viejo->MiniStick )
 				{
 					if( ((entrada->MiniStick >> (4 * (nEje - 10))) & 0xf) == 8 )
 					{
@@ -183,12 +167,7 @@ VOID SensibilidadYMapeado(
 			}
 			if(invertido)
 			{
-				if(nEje < 8)
-					*((USHORT*)&salida->Ejes[(nEje - 1) * 2]) = topes[nEje - 1] - ( *((USHORT*)&salida->Ejes[(nEje - 1) * 2]) );
-				else if(nEje < 10)
-				{
-					salida->MiniStick = 15 - salida->MiniStick;
-				}
+				salida->MiniStick = 15 - salida->MiniStick;
 			}
 		}
 	}
@@ -249,7 +228,7 @@ VOID GenerarAccionesEjes(WDFDEVICE device, UCHAR idx, USHORT nuevo)
 {
 	PROGRAMADO_CONTEXT	itfExt = GetDeviceContext(device)->Programacion;
 	HID_CONTEXT			hidCtx = GetDeviceContext(device)->HID;
-	UINT16 accionID = 0; //pirada de pinza del compilador warning false no es necesario "= 0"
+	UINT16 accionID;// = 0; //pirada de pinza del compilador warning false no es necesario "= 0"
 	UCHAR cambio;
 
 	WdfSpinLockAcquire(itfExt.slMapas);
@@ -273,7 +252,7 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 	PROGRAMADO_CONTEXT	idevExt = GetDeviceContext(device)->Programacion;
 	HID_CONTEXT			hidCtx = GetDeviceContext(device)->HID;
 
-	USHORT	topes[]	= {2047, 2047, 1023, 255, 255, 255, 255, 15, 15};
+	//USHORT	topes[]	= {2047, 2047, 1023, 255, 255, 255, 255, 15, 15};
 	UCHAR	idn		= 0;
 	USHORT	vieja	= idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje];
     BOOLEAN incremental;
@@ -294,7 +273,7 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 			else
 				posiciones = (UCHAR)idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].Indices[3];
 
-			if(vieja < (topes[eje] - posiciones))
+			if(vieja < (2048 - posiciones))
 			{
 				if (nueva > (vieja + posiciones))
 				{
@@ -339,17 +318,17 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 				break;
 			else
 			{
-				if(nueva >= posant && nueva<((banda * topes[eje]) / 100) )
+				if(nueva >= posant && nueva<((banda * 2048) / 100) )
 				{
 					posActual = idc;
 					break;
 				}
-				posant = (UCHAR)((banda * topes[eje]) / 100);
+				posant = (UCHAR)((banda * 2048) / 100);
 			}
 		}
 		if(posActual == 10000)
 		{
-			if(nueva >= posant && nueva < (topes[eje] + 1) )
+			if(nueva >= posant && nueva < (2048 + 1) )
 				posActual = idc;
 		}
 		if(posActual != 10000 && posActual != vieja)
