@@ -18,7 +18,7 @@ VOID ProcesarEventoX52_Modos(_In_ WDFDEVICE device, PCOLA cola, PNODO nodo, UCHA
 
 BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR* tipo, UCHAR dato);
 BOOLEAN ReservarMemoriaRepeticiones(PCOLA cola, PNODO nodo, UCHAR eof);
-BOOLEAN EstaHold(HID_CONTEXT devExt, UCHAR boton);
+BOOLEAN EstaHold(HID_CONTEXT* devExt, UCHAR boton);
 #endif // _ACCIONES_
 
 EXTERN_C_END

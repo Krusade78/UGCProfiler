@@ -13,8 +13,8 @@ VOID SensibilidadYMapeado(
 			PHID_INPUT_DATA salida
 			)
 {
-	PROGRAMADO_CONTEXT	itfExt = GetDeviceContext(device)->Programacion;
-	HID_CONTEXT			hidCtx = GetDeviceContext(device)->HID;
+	PROGRAMADO_CONTEXT*	itfExt = &GetDeviceContext(device)->Programacion;
+	HID_CONTEXT*		hidCtx = &GetDeviceContext(device)->HID;
 	UCHAR				idx;
 	//UINT16				topes[] = {2047,2047,1023,255,255,255,255,15,15};
 	ULONG				x;
@@ -37,23 +37,23 @@ VOID SensibilidadYMapeado(
 			if(pos == 20) pos = 19;
 			if( (UINT16)x < (2048 / 2) )
 			{
-				WdfSpinLockAcquire(itfExt.slMapas);
+				WdfSpinLockAcquire(itfExt->slMapas);
 				{
-					sy1 = 100 - itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[9 - pos];
-					sy2 = ((pos == 9) ? 100 : 100) - itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[8 - pos];
+					sy1 = 100 - itfExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Sensibilidad[9 - pos];
+					sy2 = ((pos == 9) ? 100 : 100) - itfExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Sensibilidad[8 - pos];
 				}
-				WdfSpinLockRelease(itfExt.slMapas);
+				WdfSpinLockRelease(itfExt->slMapas);
 				stope = (2048 / 2) + 1;
 				x = (  ( (sy2 - sy1) * ((20 * x)-(pos * 2048)) ) + (2 * sy1 * stope) ) /200;
 			}
 			else
 			{
-				WdfSpinLockAcquire(itfExt.slMapas);
+				WdfSpinLockAcquire(itfExt->slMapas);
 				{
-					sy1 = (pos == 10) ? 0 : itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[pos - 11];
-					sy2 = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Sensibilidad[pos - 10];
+					sy1 = (pos == 10) ? 0 : itfExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Sensibilidad[pos - 11];
+					sy2 = itfExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Sensibilidad[pos - 10];
 				}
-				WdfSpinLockRelease(itfExt.slMapas);
+				WdfSpinLockRelease(itfExt->slMapas);
 				stope = (2048 / 2) + 1;
 				x = stope + ((  ( (sy2 - sy1) * ((20 * x) - (pos * 2048)) ) + (2 * sy1 * stope) ) /200);
 			}
@@ -68,20 +68,20 @@ VOID SensibilidadYMapeado(
 		UCHAR	sRaton;
 		BOOLEAN invertido = FALSE;
 
-		WdfSpinLockAcquire(itfExt.slMapas);
+		WdfSpinLockAcquire(itfExt->slMapas);
 		{
 			if (idx < 4)
 			{
-				nEje = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].nEje & 127;
-				sRaton = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Mouse;
+				nEje = itfExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].nEje & 127;
+				sRaton = itfExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Mouse;
 			}
 			else
 			{
-				nEje = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx - 4].nEje & 127;
-				sRaton = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx - 4].Mouse;
+				nEje = itfExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx - 4].nEje & 127;
+				sRaton = itfExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx - 4].Mouse;
 			}
 		}
-		WdfSpinLockRelease(itfExt.slMapas);
+		WdfSpinLockRelease(itfExt->slMapas);
 
 		if(nEje > 19) { invertido = TRUE; nEje -= 20; }
 		if(nEje != 0)
@@ -128,12 +128,12 @@ VOID SensibilidadYMapeado(
 		UCHAR sRaton;
 		BOOLEAN invertido = FALSE;
 
-		WdfSpinLockAcquire(itfExt.slMapas);
+		WdfSpinLockAcquire(itfExt->slMapas);
 		{
-			nEje = itfExt.MapaEjesMini[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].nEje & 127;
-			sRaton = itfExt.MapaEjesMini[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Mouse;
+			nEje = itfExt->MapaEjesMini[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].nEje & 127;
+			sRaton = itfExt->MapaEjesMini[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Mouse;
 		}
-		WdfSpinLockRelease(itfExt.slMapas);
+		WdfSpinLockRelease(itfExt->slMapas);
 		if(nEje != 0)
 		{
 			if(nEje < 9)
@@ -226,41 +226,40 @@ VOID GenerarAccionRaton(WDFDEVICE device, UCHAR eje, CHAR mov)
 
 VOID GenerarAccionesEjes(WDFDEVICE device, UCHAR idx, USHORT nuevo)
 {
-	PROGRAMADO_CONTEXT	itfExt = GetDeviceContext(device)->Programacion;
-	HID_CONTEXT			hidCtx = GetDeviceContext(device)->HID;
-	UINT16 accionID;// = 0; //pirada de pinza del compilador warning false no es necesario "= 0"
+	PROGRAMADO_CONTEXT*	itfExt = &GetDeviceContext(device)->Programacion;
+	HID_CONTEXT*		hidCtx = &GetDeviceContext(device)->HID;
+	UINT16 accionID = 0; //pirada de pinza del compilador warning false no es necesario "= 0"
 	UCHAR cambio;
 
-	WdfSpinLockAcquire(itfExt.slMapas);
+	WdfSpinLockAcquire(itfExt->slMapas);
 	{
 		cambio = TraducirGiratorio(device, idx, nuevo);
 		if (cambio != 0)
 		{
 			if (idx < 4)
-				accionID = itfExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx].Indices[cambio - 1];
+				accionID = itfExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Indices[cambio - 1];
 			else
-				accionID = itfExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][idx - 4].Indices[cambio - 1];
+				accionID = itfExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx - 4].Indices[cambio - 1];
 		}
 	}
-	WdfSpinLockRelease(itfExt.slMapas);
+	WdfSpinLockRelease(itfExt->slMapas);
 
 	if(cambio != 0) AccionarComando(device, accionID, 0);
 }
 
 UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 {
-	PROGRAMADO_CONTEXT	idevExt = GetDeviceContext(device)->Programacion;
-	HID_CONTEXT			hidCtx = GetDeviceContext(device)->HID;
+	PROGRAMADO_CONTEXT*	idevExt = &GetDeviceContext(device)->Programacion;
+	HID_CONTEXT*		hidCtx = &GetDeviceContext(device)->HID;
 
-	//USHORT	topes[]	= {2047, 2047, 1023, 255, 255, 255, 255, 15, 15};
 	UCHAR	idn		= 0;
-	USHORT	vieja	= idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje];
+	USHORT	vieja	= idevExt->posVieja[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje];
     BOOLEAN incremental;
 
 	if(eje < 4)
-		incremental = (idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].nEje & 128) == 128;
+		incremental = (idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].nEje & 128) == 128;
 	else
-		incremental = (idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].nEje & 128) == 128;
+		incremental = (idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].nEje & 128) == 128;
 
 
 	if (incremental)
@@ -269,15 +268,15 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR posiciones;
 			if(eje < 4)
-				posiciones = (UCHAR)idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].Indices[3];
+				posiciones = (UCHAR)idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].Indices[3];
 			else
-				posiciones = (UCHAR)idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].Indices[3];
+				posiciones = (UCHAR)idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].Indices[3];
 
 			if(vieja < (2048 - posiciones))
 			{
 				if (nueva > (vieja + posiciones))
 				{
-					idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje] = nueva;
+					idevExt->posVieja[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje] = nueva;
 					idn = 1;
 				}
 			}
@@ -286,15 +285,15 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR posiciones;
 			if(eje < 4)
-				posiciones = (UCHAR)idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].Indices[2];
+				posiciones = (UCHAR)idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].Indices[2];
 			else
-				posiciones = (UCHAR)idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].Indices[2];
+				posiciones = (UCHAR)idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].Indices[2];
 
 			if(vieja > posiciones)
 			{
 				if (nueva < (vieja - posiciones))
 				{
-					idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje] = nueva;
+					idevExt->posVieja[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje] = nueva;
 					idn = 2;
 				}
 			}
@@ -310,9 +309,9 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR banda;
 			if(eje < 4)
-				banda = idevExt.MapaEjes[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje].Bandas[idc];
+				banda = idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].Bandas[idc];
 			else
-				banda = idevExt.MapaEjesPeque[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje - 4].Bandas[idc];
+				banda = idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].Bandas[idc];
 
 			if(banda == 0)
 				break;
@@ -333,7 +332,7 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		}
 		if(posActual != 10000 && posActual != vieja)
 		{
-			idevExt.posVieja[hidCtx.EstadoPinkie][hidCtx.EstadoModos][eje] = posActual;
+			idevExt->posVieja[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje] = posActual;
 			idn = (UCHAR)posActual + 1;
 		}
 	}

@@ -277,10 +277,10 @@ NTSTATUS PnPCallbackPedales(_In_ PVOID notification, _Inout_opt_ PVOID context)
 					WDFWORKITEM				workItem;
 					size_t					tam = (diNotify->SymbolicLinkName->MaximumLength > 100) ? 100 : diNotify->SymbolicLinkName->MaximumLength;
 
-					RtlCopyMemory(((PDEVICE_CONTEXT)context)->Pedales.SymbolicLink, diNotify->SymbolicLinkName, tam * sizeof(WCHAR));
+					RtlCopyMemory(GetDeviceContext((WDFDEVICE)context)->Pedales.SymbolicLink, diNotify->SymbolicLinkName, tam * sizeof(WCHAR));
 
 					WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-					attributes.ParentObject = ((PDEVICE_CONTEXT)context)->Device;
+					attributes.ParentObject = context;
 
 					WDF_WORKITEM_CONFIG_INIT(&workitemConfig, IniciarIoTargetWI);
 					status = WdfWorkItemCreate(&workitemConfig, &attributes, &workItem);

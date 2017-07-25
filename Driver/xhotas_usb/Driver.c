@@ -62,6 +62,7 @@ NTSTATUS EvtAddDevice(
 	//WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
 	WDFQUEUE						cola;
+	PDEVICE_CONTEXT					dc;
 
 	UNREFERENCED_PARAMETER(Driver);
 
@@ -83,7 +84,7 @@ NTSTATUS EvtAddDevice(
 		return status;
 
 	RtlZeroMemory(GetDeviceContext(device), sizeof(DEVICE_CONTEXT));
-	GetDeviceContext(device)->Device = device;
+	dc =  GetDeviceContext(device);
 
 	status = IniciarContext(device);
 	if (!NT_SUCCESS(status))

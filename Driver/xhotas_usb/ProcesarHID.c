@@ -53,9 +53,9 @@ VOID ConvertirEjesA2048(PUCHAR ejes)
 
 	for (i = 0; i < 16; i += 2)
 	{
-		USHORT pos = *((PUSHORT)&ejes[i]);
+		UINT16 pos = *((PUINT16)&ejes[i]);
 		pos += 1;
-		if (pos == 1) pos == 0;
+		if (pos == 1) pos = 0;
 		if (i == 4) //R
 		{
 			pos *= 2;
@@ -138,7 +138,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 		hidData.Ejes[5] = posPedales & 0xff;
 	}
 
-	ConvertirEjesA2048(&hidData);
+	ConvertirEjesA2048(hidData.Ejes);
 
 	ProcesarHID(device, &hidData);
 
@@ -148,29 +148,33 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 //DISPATCH
 VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 {
-	HID_CONTEXT devExt = GetDeviceContext(device)->HID;
+	HID_CONTEXT* devExt = &GetDeviceContext(device)->HID;
 	UCHAR idx;
 	UCHAR cambios;
 
 	HID_INPUT_DATA viejohidData;
 	HID_INPUT_DATA outputData;
 
-	if (RtlCompareMemory(&devExt.DeltaHidData, &hidData, sizeof(HID_INPUT_DATA)) == sizeof(HID_INPUT_DATA))
+	if (RtlCompareMemory(&devExt->DeltaHidData, hidData, sizeof(HID_INPUT_DATA)) == sizeof(HID_INPUT_DATA))
 		return;
 
-	WdfSpinLockAcquire(devExt.SpinLockDeltaHid);
-	RtlCopyMemory(&viejohidData, &devExt.DeltaHidData, sizeof(HID_INPUT_DATA));
-	WdfSpinLockRelease(devExt.SpinLockDeltaHid);
+	WdfSpinLockAcquire(devExt->SpinLockDeltaHid);
+	{
+		RtlCopyMemory(&viejohidData, &devExt->DeltaHidData, sizeof(HID_INPUT_DATA));
+	}
+	WdfSpinLockRelease(devExt->SpinLockDeltaHid);
 
 	// Calibrar
-	if (!devExt.ModoRaw)
+	if (!devExt->ModoRaw)
 		Calibrar(device, hidData);
 
-	WdfSpinLockAcquire(devExt.SpinLockDeltaHid);
-		RtlCopyMemory(&devExt.DeltaHidData, &hidData, sizeof(HID_INPUT_DATA));
-	WdfSpinLockRelease(devExt.SpinLockDeltaHid);
+	WdfSpinLockAcquire(devExt->SpinLockDeltaHid);
+	{
+		RtlCopyMemory(&devExt->DeltaHidData, hidData, sizeof(HID_INPUT_DATA));
+	}
+	WdfSpinLockRelease(devExt->SpinLockDeltaHid);
 
-	if (!devExt.ModoRaw)
+	if (!devExt->ModoRaw)
 	{
 		 //Botones
 
@@ -217,14 +221,8 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 		RtlZeroMemory(&outputData, sizeof(HID_INPUT_DATA));
 		SensibilidadYMapeado(device, &viejohidData, hidData, &outputData);
 
-		////Frenos y R movido
-		//outputData.Ejes[14] = hidData->Ejes[14];
-		//outputData.Ejes[15] = hidData->Ejes[15];
-		//outputData.Ejes[16] = hidData->Ejes[16];
-		//outputData.Ejes[17] = hidData->Ejes[17];
-
-		RtlCopyMemory(hidData->Botones, devExt.stBotones, sizeof(hidData->Botones));
-		RtlCopyMemory(hidData->Setas, devExt.stSetas, sizeof(hidData->Setas));
+		RtlCopyMemory(hidData->Botones, devExt->stBotones, sizeof(hidData->Botones));
+		RtlCopyMemory(hidData->Setas, devExt->stSetas, sizeof(hidData->Setas));
 		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
 	}
 }

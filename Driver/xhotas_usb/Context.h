@@ -143,7 +143,6 @@ typedef struct _PEDALES_CONTEXT
 
 typedef struct _DEVICE_CONTEXT
 {
-	WDFDEVICE			Device;
 	WDFDEVICE			ControlDevice;
 	WDFQUEUE			ColaRequest;
 	X52READ_CONTEXT		EntradaX52;

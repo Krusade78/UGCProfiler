@@ -9,7 +9,7 @@
 
 NTSTATUS EscribirCalibrado(_In_ WDFDEVICE device, _In_ WDFREQUEST request)
 {
-	PROGRAMADO_CONTEXT	devExt = GetDeviceContext(device)->Programacion;
+	PROGRAMADO_CONTEXT*	devExt = &GetDeviceContext(device)->Programacion;
 	NTSTATUS            status = STATUS_SUCCESS;
 	UCHAR				i;
 	PCALIBRADO			bufCal = NULL;
@@ -21,18 +21,18 @@ NTSTATUS EscribirCalibrado(_In_ WDFDEVICE device, _In_ WDFREQUEST request)
 
 	for (i = 0; i < 4; i++)
 	{
-		WdfSpinLockAcquire(devExt.slCalibrado);
+		WdfSpinLockAcquire(devExt->slCalibrado);
 		{
-			devExt.limites[i].c = bufCal[i].c;
-			devExt.limites[i].i = bufCal[i].i;
-			devExt.limites[i].d = bufCal[i].d;
-			devExt.limites[i].n = bufCal[i].n;
-			devExt.limites[i].cal = bufCal[i].cal;
-			devExt.jitter[i].Margen = bufCal[i].Margen;
-			devExt.jitter[i].Resistencia = bufCal[i].Resistencia;
-			devExt.jitter[i].antiv = bufCal[i].antiv;
+			devExt->limites[i].c = bufCal[i].c;
+			devExt->limites[i].i = bufCal[i].i;
+			devExt->limites[i].d = bufCal[i].d;
+			devExt->limites[i].n = bufCal[i].n;
+			devExt->limites[i].cal = bufCal[i].cal;
+			devExt->jitter[i].Margen = bufCal[i].Margen;
+			devExt->jitter[i].Resistencia = bufCal[i].Resistencia;
+			devExt->jitter[i].antiv = bufCal[i].antiv;
 		}
-		WdfSpinLockRelease(devExt.slCalibrado);
+		WdfSpinLockRelease(devExt->slCalibrado);
 	}
 
 	return status;

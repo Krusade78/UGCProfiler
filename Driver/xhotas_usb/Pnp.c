@@ -26,7 +26,7 @@ NTSTATUS EvtDeviceSelfManagedIoInit(_In_ WDFDEVICE device)
 		(PGUID)&GUID_DEVINTERFACE_HID,
 		WdfDriverWdmGetDriverObject(WdfDeviceGetDriver(device)),
 		PnPCallbackPedales,
-	    GetDeviceContext(device),
+	    device,
 		&GetDeviceContext(device)->Pedales.PnPNotifyHandle);
 }
 
