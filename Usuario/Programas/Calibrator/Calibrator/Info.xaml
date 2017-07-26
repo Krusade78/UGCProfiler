@@ -4,65 +4,88 @@
             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
             Width="525" Height="630" FontFamily="LCD"
             Loaded="UserControl_Loaded" Unloaded="UserControl_Unloaded">
+    <UserControl.Background>
+        <ImageBrush ImageSource="res/CalibrationGrid.jpg"/>
+    </UserControl.Background>
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="colorBarra" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            <GradientStop Color="Red" Offset="0"/>
+            <GradientStop Color="#FFFF9D9D" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
     <Grid>
         <Grid.Background>
-            <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                <GradientStop Color="#B2000000" Offset="0"/>
-                <GradientStop Color="#A2000000" Offset="1"/>
-            </LinearGradientBrush>
+            <RadialGradientBrush>
+                <GradientStop Color="#F0323232" Offset="1"/>
+                <GradientStop Color="#F0919191"/>
+            </RadialGradientBrush>
         </Grid.Background>
-        <GroupBox Header="Ejes" HorizontalAlignment="Left" Height="486" Margin="10,15,0,0" VerticalAlignment="Top" Width="188" Foreground="GreenYellow">
-            <GroupBox.Resources>
-                <LinearGradientBrush x:Key="colorBarra" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="Red" Offset="0"/>
-                    <GradientStop Color="#FFFF9D9D" Offset="1"/>
-                </LinearGradientBrush>
-            </GroupBox.Resources>
-            <Grid>
-                <Viewbox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="128" Width="128" Stretch="Fill">
-                    <Grid Height="4196" Width="4196" Background="#FF001900">
+        <Grid Width="190" HorizontalAlignment="Left" Margin="15,10">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Text="Ejes X,Y" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" Height="128" Width="128" Stretch="Fill" Margin="0,20,0,0">
+                    <Grid Height="4196" Width="4196" Background="#EF004F00">
                         <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="Red" Width="200" Height="200"/>
                     </Grid>
                 </Viewbox>
-                <Label x:Name="Labelxy" Content="X: 0000 # Y: 0000" Foreground="Yellow" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top" Width="128" Padding="0,2" HorizontalContentAlignment="Center"/>
-
-                <Viewbox HorizontalAlignment="Left" Margin="148,10,0,0" VerticalAlignment="Top" Height="128" Width="20" Stretch="Fill">
-                    <Grid Height="2048" Width="40" Background="#FF001900">
+                <TextBlock x:Name="Labelxy" Text="0000 # 0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,154,0,0" VerticalAlignment="Top"/>
+            </Grid>
+            <Grid HorizontalAlignment="Left" Margin="148,0,0,0" VerticalAlignment="Top">
+                <TextBlock Text="Eje Z" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                <Viewbox HorizontalAlignment="Center"  VerticalAlignment="Top" Height="128" Width="20" Stretch="Fill" Margin="0,20,0,0">
+                    <Grid Height="2048" Width="40" Background="#EF001900">
                         <Rectangle x:Name="ejeZ" VerticalAlignment="Bottom" Fill="{StaticResource colorBarra}" />
                     </Grid>
                 </Viewbox>
-                <Label x:Name="Labelz" Content="Z: 000" Foreground="Yellow" HorizontalAlignment="Left" Margin="138,138,0,0" VerticalAlignment="Top" Width="38" Padding="0,2" HorizontalContentAlignment="Center"/>
+                <TextBlock x:Name="Labelz" Text="0000" Foreground="Yellow" Margin="0,154,0,0" VerticalAlignment="Top" Padding="0,2" HorizontalAlignment="Center"/>
+            </Grid>
 
-                <Viewbox HorizontalAlignment="Left" Margin="10,161,0,0" VerticalAlignment="Top" Height="20" Width="128" Stretch="Fill">
-                    <Grid Height="80" Width="2048" Background="#FF001900">
+            <Grid VerticalAlignment="Top" Margin="0,188,0,0">
+                <TextBlock Text="Eje R" Foreground="GreenYellow" VerticalAlignment="Top" HorizontalAlignment="Center" />
+                <Viewbox VerticalAlignment="Top" Height="20" Width="128" Stretch="Fill" Margin="0,20,0,0">
+                    <Grid Height="80" Width="2048" Background="#EF001900">
                         <Rectangle x:Name="ejeR" HorizontalAlignment="Left" Margin="0,0,0,0" Fill="{StaticResource colorBarra}" />
                     </Grid>
                 </Viewbox>
-                <Label x:Name="Labelr" Content="R: 000" Foreground="Yellow" HorizontalAlignment="Left" Margin="10,181,0,0" VerticalAlignment="Top" Width="128" Padding="0,2" HorizontalContentAlignment="Center"/>
+                <TextBlock x:Name="Labelr" Text="0000" Foreground="Yellow" Margin="0,46,0,0" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            </Grid>
 
-                <Ellipse HorizontalAlignment="Left" Margin="20,204,0,0" VerticalAlignment="Top" Width="50" Height="50" Fill="#FF001900"/>
-                <Path x:Name="ejeRX" HorizontalAlignment="Left" Margin="20,204,0,0" VerticalAlignment="Top" Height="50" Width="50">
-                    <Path.Fill>
-                        <RadialGradientBrush>
-                            <GradientStop Color="#FFFF2424" Offset="1"/>
-                            <GradientStop Color="#FFFF6E6E" Offset="0"/>
-                        </RadialGradientBrush>
-                    </Path.Fill>
-                </Path>
-                <Label x:Name="Labelrx" Content="Rx: 000" Foreground="Yellow" HorizontalAlignment="Left" Margin="20,254,0,0" VerticalAlignment="Top" Width="50" Padding="0,2" HorizontalContentAlignment="Center"/>
+            <Grid VerticalAlignment="Top" Margin="0,268,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <TextBlock Text="Eje Rx" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                    <Ellipse HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Height="50" Fill="#FF001900" Margin="0,20,0,0"/>
+                    <Path x:Name="ejeRX" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="50" Width="50">
+                        <Path.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#FFFF2424" Offset="1"/>
+                                <GradientStop Color="#FFFF6E6E" Offset="0"/>
+                            </RadialGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                    <TextBlock x:Name="Labelrx" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,76,0,0" VerticalAlignment="Top" />
+                </Grid>
+                <Grid Grid.Column="1">
+                    <TextBlock Text="Eje Ry" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                    <Ellipse HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50" Fill="#EF001900"/>
+                    <Path x:Name="ejeRY" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50">
+                        <Path.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#FFFF2424" Offset="1"/>
+                                <GradientStop Color="#FFFF6E6E" Offset="0"/>
+                            </RadialGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                    <TextBlock x:Name="Labelry" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,76,0,0" VerticalAlignment="Top" />
+                </Grid>
+            </Grid>
 
-                <Ellipse HorizontalAlignment="Right" Margin="0,204,20,0" VerticalAlignment="Top" Width="50" Height="50" Fill="#FF001900"/>
-                <Path x:Name="ejeRY" HorizontalAlignment="Right" Margin="0,204,20,0" VerticalAlignment="Top" Width="50" Height="50">
-                    <Path.Fill>
-                        <RadialGradientBrush>
-                            <GradientStop Color="#FFFF2424" Offset="1"/>
-                            <GradientStop Color="#FFFF6E6E" Offset="0"/>
-                        </RadialGradientBrush>
-                    </Path.Fill>
-                </Path>
-                <Label x:Name="Labelry" Content="Ry: 000" Foreground="Yellow" HorizontalAlignment="Right" Margin="0,254,20,0" VerticalAlignment="Top" Width="50" Padding="0,2" HorizontalContentAlignment="Center"/>
-
-                <Viewbox HorizontalAlignment="Center" Margin="0,277,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
+            <Grid VerticalAlignment="Top" Margin="0,378,0,0">
+                <TextBlock Text="Eje Sl1" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                <Viewbox HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
                     <Grid Height="40" Width="2048" Background="#FF001900">
                         <Rectangle x:Name="ejeSl1" HorizontalAlignment="Left">
                             <Rectangle.Fill>
@@ -74,9 +97,12 @@
                         </Rectangle>
                     </Grid>
                 </Viewbox>
-                <Label x:Name="Labelsl1" Content="Slider 1: 000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,297,0,0" VerticalAlignment="Top" Padding="0,2" HorizontalContentAlignment="Center"/>
+                <TextBlock x:Name="Labelsl1" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,46,0,0" />
+            </Grid>
 
-                <Viewbox HorizontalAlignment="Center" Margin="0,320,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
+            <Grid VerticalAlignment="Top" Margin="0,458,0,0">
+                <TextBlock Text="Eje Sl2" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                <Viewbox HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
                     <Grid Height="40" Width="2048" Background="#FF001900">
                         <Rectangle x:Name="ejeSl2" HorizontalAlignment="Left">
                             <Rectangle.Fill>
@@ -88,24 +114,27 @@
                         </Rectangle>
                     </Grid>
                 </Viewbox>
-                <Label x:Name="Labelsl2" Content="Slider 2: 000" Foreground="Yellow" HorizontalAlignment="Center" Margin="10,340,0,0" VerticalAlignment="Top" Padding="0,2" HorizontalContentAlignment="Center"/>
+                <TextBlock x:Name="Labelsl2" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,46,0,0"/>
+            </Grid>
 
+            <Grid VerticalAlignment="Top" Margin="0,538,0,0">
                 <Viewbox HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="80" Width="80" Stretch="Fill">
                     <Grid Height="16" Width="16" Background="#FF001900">
                         <Ellipse x:Name="ejeMXY" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Fill="Red" Width="1" Height="1"/>
                     </Grid>
                 </Viewbox>
-                <Label x:Name="Labelmxy" Content="X: 0000&#x0a;Y: 0000" Foreground="Yellow" HorizontalAlignment="Left" Margin="100,374,0,0"  Padding="0,2" HorizontalContentAlignment="Left" Height="80" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
-
+                <Label x:Name="Labelmxy" Content="X: 0000&#x0a;Y: 0000" Foreground="Yellow" HorizontalAlignment="Left" Margin="95,511,0,0"  Padding="0,2" HorizontalContentAlignment="Left" Height="80" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                <Label Content="MiniStick" HorizontalContentAlignment="Center" Margin="0,480,0,0" VerticalAlignment="Top" Width="162"/>
             </Grid>
-        </GroupBox>
-        <GroupBox x:Name="groupBox" Header="GroupBox" HorizontalAlignment="Left" Height="65" Margin="10,506,0,0" VerticalAlignment="Top" Width="188">
+        </Grid>
+
+        <GroupBox x:Name="groupBox" Header="GroupBox" HorizontalAlignment="Left" Height="65" Margin="330,380,0,0" VerticalAlignment="Top" Width="188">
             <Grid>
                 <Label x:Name="label" Content="X: 0000&#13;Y: 0000" HorizontalAlignment="Left" Height="37" Margin="10,0,0,0" VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
-        <CheckBox x:Name="checkBox" Content="Datos en bruto" HorizontalAlignment="Left" Margin="203,332,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="White"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="134" Margin="226,376,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="261" Foreground="White"/>
+        <CheckBox x:Name="checkBox" Content="Datos en bruto" HorizontalAlignment="Left" Margin="226,404,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="White"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="60" Margin="226,450,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="261" Foreground="White"/>
 
         <GroupBox Header="Botones" HorizontalAlignment="Left" Height="178" Margin="215,15,0,0" VerticalAlignment="Top" Width="300" Foreground="GreenYellow">
             <StackPanel Margin="5">
@@ -237,14 +266,40 @@
                         <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
                     </Grid>
                     <Grid Margin="5,0">
-                        <Ellipse x:Name="bt31" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
+                        <Ellipse x:Name="bt31" Width="26" Height="26" >
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="Black" Offset="1"/>
+                                    <GradientStop Color="White"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <Label Content="31" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
                     </Grid>
                     <Grid Margin="5,0">
-                        <Ellipse x:Name="bt32" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
+                        <Ellipse x:Name="bt32" Width="26" Height="26" Fill="#C2003600" />
+                        <Label Content="32" Foreground="#FF979797" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
                     </Grid>
-                </StackPanel>                
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="215,198,0,0" Width="300" Height="164">
+            <StackPanel>
+                <StackPanel>
+                    <Ellipse Width="50" Height="50" >
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="Black" Offset="1"/>
+                                <GradientStop Color="White"/>
+                                <GradientStop Color="#FFC5C5C5" Offset="0.262"/>
+                                <GradientStop Color="#FF535252" Offset="0.388"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                </StackPanel>
+                <StackPanel>
+
+                </StackPanel>
             </StackPanel>
         </GroupBox>
     </Grid>

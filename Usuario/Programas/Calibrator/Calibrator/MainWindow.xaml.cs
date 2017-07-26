@@ -27,11 +27,11 @@ namespace Calibrator
                 {
                     for (uint i = 0; i < n; i++)
                     {
-                        CRawInput.RawInputDeviceList l = (CRawInput.RawInputDeviceList)Marshal.PtrToStructure(new IntPtr((lid.ToInt32() + ((uint)Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)) * i))), typeof(CRawInput.RawInputDeviceList));
+                        CRawInput.RawInputDeviceList l = (CRawInput.RawInputDeviceList)Marshal.PtrToStructure(IntPtr.Add(lid, (int)(Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)) * i)), typeof(CRawInput.RawInputDeviceList));
                         IntPtr buff = Marshal.AllocHGlobal(256);
                         uint cbsize = 128;
                         uint ret = CRawInput.GetRawInputDeviceInfo(l.DeviceHandle, CRawInput.RawInputDeviceInfoCommand.DeviceName, buff, ref cbsize);
-                        String nombre = Marshal.PtrToStringAuto(buff);
+                        String nombre = Marshal.PtrToStringAnsi(buff);
                         Marshal.FreeHGlobal(buff);
                         if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255#"))
                         {
@@ -49,7 +49,7 @@ namespace Calibrator
             }
 
             ucInfo.Iniciar(hJoy);
-            ucCalibrar.Iniciar(hJoy);
+            //ucCalibrar.Iniciar(hJoy);
         }
 
         private void toggleButton_Checked(object sender, RoutedEventArgs e)

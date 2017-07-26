@@ -1,8 +1,7 @@
 ﻿<Window x:Class="Calibrator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Calibrator"
-        Title="XHOTAS Calibrador" Height="650" Width="590" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="res/Icon1.ico">
+        xmlns:local="clr-namespace:Calibrator" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="res/Icon1.ico" Background="{x:Null}" SizeToContent="WidthAndHeight">
     <Window.Resources>
         <ControlTemplate x:Key="RadioButtonTemplate" TargetType="{x:Type RadioButton}">
             <Border x:Name="border" CornerRadius="5,5,0,0" SnapsToDevicePixels="True" RenderTransformOrigin="0,0">
@@ -46,65 +45,70 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-    <Window.Background>
-        <ImageBrush ImageSource="res/CalibrationGrid.jpg"/>
-    </Window.Background>
-    <Grid>
-        <Grid  HorizontalAlignment="Left" Margin="10,10,0,10" Width="30">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <RadioButton x:Name="tbPrueba" Content="Pruebas" Template="{DynamicResource RadioButtonTemplate}" Height="30" Checked="toggleButton_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667" IsChecked="True" />
-            <RadioButton x:Name="tbCalibrar" Grid.Row="1" Content="Calibración HID" Template="{DynamicResource RadioButtonTemplate}"  Height="30" Checked="toggleButton1_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667"/>
+        <Grid>
+        <!--<TabControl>
+                <TabItem Header="Pruebas" />
+                <TabItem Header="Calibración HID" />
+            </TabControl>-->
+            <!--<Grid  HorizontalAlignment="Left" Margin="0" Width="30">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <RadioButton x:Name="tbPrueba" Content="Pruebas" Template="{DynamicResource RadioButtonTemplate}" Height="30" Checked="toggleButton_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667" IsChecked="True" >
+                    <RadioButton.Effect>
+                        <DropShadowEffect Color="White"/>
+                    </RadioButton.Effect>
+                </RadioButton>
+                <RadioButton x:Name="tbCalibrar" Grid.Row="1" Content="Calibración HID" Template="{DynamicResource RadioButtonTemplate}"  Height="30" Checked="toggleButton1_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667"/>
+            </Grid>-->
+            <local:HIDCal x:Name="ucCalibrar" Margin="30,0,0,0" HorizontalAlignment="Left" Width="0">
+                <local:HIDCal.Style>
+                    <Style TargetType="{x:Type UserControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=tbCalibrar, Mode=OneWay}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard Storyboard.TargetProperty="Width">
+                                            <DoubleAnimation From="0" To="525" BeginTime="0:0:0.10" Duration="0:0:0.20"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard Storyboard.TargetProperty="Width">
+                                            <DoubleAnimation From="525" To="0"  Duration="0:0:0.10" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </local:HIDCal.Style>
+            </local:HIDCal>
+            <local:Info x:Name="ucInfo" HorizontalAlignment="Left" Margin="30,0,0,0" Width="525">
+                <local:Info.Style>
+                    <Style TargetType="{x:Type UserControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=tbPrueba, Mode=OneWay}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard Storyboard.TargetProperty="Width">
+                                            <DoubleAnimation From="0" To="525" BeginTime="0:0:0.10" Duration="0:0:0.20"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard Storyboard.TargetProperty="Width">
+                                            <DoubleAnimation From="525" To="0"  Duration="0:0:0.10" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </local:Info.Style>
+            </local:Info>
         </Grid>
-        <local:HIDCal x:Name="ucCalibrar" Margin="40,10,0,10" HorizontalAlignment="Left" Width="0">
-            <local:HIDCal.Style>
-                <Style TargetType="{x:Type UserControl}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=tbCalibrar, Mode=OneWay}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="0" To="525" BeginTime="0:0:0.10" Duration="0:0:0.20"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="525" To="0"  Duration="0:0:0.10" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </local:HIDCal.Style>
-        </local:HIDCal>
-        <local:Info x:Name="ucInfo" HorizontalAlignment="Left" Margin="40,10,0,10" Width="0">
-            <local:Info.Style>
-                <Style TargetType="{x:Type UserControl}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=tbPrueba, Mode=OneWay}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="0" To="525" BeginTime="0:0:0.10" Duration="0:0:0.20"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation From="525" To="0"  Duration="0:0:0.10" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </local:Info.Style>
-        </local:Info>
-    </Grid>
 </Window>

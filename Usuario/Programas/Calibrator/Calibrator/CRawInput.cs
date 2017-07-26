@@ -34,6 +34,23 @@ namespace Calibrator
             public DeviceInfoHID HIDInfo;
         }
 
+        public struct DeviceInfoMouse
+        {
+            public uint ID;
+            public uint NumberOfButtons;
+            public uint SampleRate;
+        }
+
+        public struct DeviceInfoKeyboard
+        {
+            public uint Type;
+            public uint SubType;
+            public uint KeyboardMode;
+            public uint NumberOfFunctionKeys;
+            public uint NumberOfIndicators;
+            public uint NumberOfKeysTotal;
+        }
+
         public struct DeviceInfoHID
         {
             public uint VendorID;
