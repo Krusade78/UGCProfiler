@@ -12,6 +12,10 @@
             <GradientStop Color="Red" Offset="0"/>
             <GradientStop Color="#FFFF9D9D" Offset="1"/>
         </LinearGradientBrush>
+        <RadialGradientBrush x:Key="colorCirculo">
+            <GradientStop Color="Red" Offset="1"/>
+            <GradientStop Color="#FFFF9D9D" Offset="0"/>
+        </RadialGradientBrush>
     </UserControl.Resources>
     <Grid>
         <Grid.Background>
@@ -24,8 +28,8 @@
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TextBlock Text="Ejes X,Y" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" />
                 <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" Height="128" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                    <Grid Height="4196" Width="4196" Background="#EF004F00">
-                        <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="Red" Width="200" Height="200"/>
+                    <Grid Height="4196" Width="4196" Background="#EF003200">
+                        <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="{DynamicResource colorCirculo}" Width="200" Height="200"/>
                     </Grid>
                 </Viewbox>
                 <TextBlock x:Name="Labelxy" Text="0000 # 0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,154,0,0" VerticalAlignment="Top"/>
@@ -33,7 +37,7 @@
             <Grid HorizontalAlignment="Left" Margin="148,0,0,0" VerticalAlignment="Top">
                 <TextBlock Text="Eje Z" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" />
                 <Viewbox HorizontalAlignment="Center"  VerticalAlignment="Top" Height="128" Width="20" Stretch="Fill" Margin="0,20,0,0">
-                    <Grid Height="2048" Width="40" Background="#EF001900">
+                    <Grid Height="2048" Width="40" Background="#EF003200">
                         <Rectangle x:Name="ejeZ" VerticalAlignment="Bottom" Fill="{StaticResource colorBarra}" />
                     </Grid>
                 </Viewbox>
@@ -43,7 +47,7 @@
             <Grid VerticalAlignment="Top" Margin="0,188,0,0">
                 <TextBlock Text="Eje R" Foreground="GreenYellow" VerticalAlignment="Top" HorizontalAlignment="Center" />
                 <Viewbox VerticalAlignment="Top" Height="20" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                    <Grid Height="80" Width="2048" Background="#EF001900">
+                    <Grid Height="80" Width="2048" Background="#EF003200">
                         <Rectangle x:Name="ejeR" HorizontalAlignment="Left" Margin="0,0,0,0" Fill="{StaticResource colorBarra}" />
                     </Grid>
                 </Viewbox>
@@ -57,28 +61,14 @@
                 </Grid.ColumnDefinitions>
                 <Grid>
                     <TextBlock Text="Eje Rx" Foreground="GreenYellow" HorizontalAlignment="Center" />
-                    <Ellipse HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Height="50" Fill="#FF001900" Margin="0,20,0,0"/>
-                    <Path x:Name="ejeRX" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="50" Width="50">
-                        <Path.Fill>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#FFFF2424" Offset="1"/>
-                                <GradientStop Color="#FFFF6E6E" Offset="0"/>
-                            </RadialGradientBrush>
-                        </Path.Fill>
-                    </Path>
+                    <Ellipse HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Height="50" Fill="#EF003200" Margin="0,20,0,0"/>
+                    <Path x:Name="ejeRX" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="50" Width="50" Fill="{DynamicResource colorCirculo}"/>
                     <TextBlock x:Name="Labelrx" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,76,0,0" VerticalAlignment="Top" />
                 </Grid>
                 <Grid Grid.Column="1">
                     <TextBlock Text="Eje Ry" Foreground="GreenYellow" HorizontalAlignment="Center" />
-                    <Ellipse HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50" Fill="#EF001900"/>
-                    <Path x:Name="ejeRY" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50">
-                        <Path.Fill>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#FFFF2424" Offset="1"/>
-                                <GradientStop Color="#FFFF6E6E" Offset="0"/>
-                            </RadialGradientBrush>
-                        </Path.Fill>
-                    </Path>
+                    <Ellipse HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50" Fill="#EF003200"/>
+                    <Path x:Name="ejeRY" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50" Fill="{DynamicResource colorCirculo}"/>
                     <TextBlock x:Name="Labelry" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,76,0,0" VerticalAlignment="Top" />
                 </Grid>
             </Grid>
@@ -86,221 +76,288 @@
             <Grid VerticalAlignment="Top" Margin="0,378,0,0">
                 <TextBlock Text="Eje Sl1" Foreground="GreenYellow" HorizontalAlignment="Center" />
                 <Viewbox HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
-                    <Grid Height="40" Width="2048" Background="#FF001900">
-                        <Rectangle x:Name="ejeSl1" HorizontalAlignment="Left">
-                            <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="1,0.5" MappingMode="RelativeToBoundingBox" StartPoint="0,0.5">
-                                    <GradientStop Color="Red" Offset="1"/>
-                                    <GradientStop Color="#FFFF9D9D" Offset="0"/>
-                                </LinearGradientBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
+                    <Grid Height="40" Width="2048" Background="#EF003200">
+                        <Rectangle x:Name="ejeSl1" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                     </Grid>
                 </Viewbox>
-                <TextBlock x:Name="Labelsl1" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,46,0,0" />
+                <TextBlock x:Name="Labelsl1" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,23,0,0" />
             </Grid>
 
-            <Grid VerticalAlignment="Top" Margin="0,458,0,0">
+            <Grid VerticalAlignment="Top" Margin="0,438,0,0">
                 <TextBlock Text="Eje Sl2" Foreground="GreenYellow" HorizontalAlignment="Center" />
                 <Viewbox HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
-                    <Grid Height="40" Width="2048" Background="#FF001900">
-                        <Rectangle x:Name="ejeSl2" HorizontalAlignment="Left">
-                            <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="1,0.5" MappingMode="RelativeToBoundingBox" StartPoint="0,0.5">
-                                    <GradientStop Color="Red" Offset="1"/>
-                                    <GradientStop Color="#FFFF9D9D" Offset="0"/>
-                                </LinearGradientBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
+                    <Grid Height="40" Width="2048" Background="#EF003200">
+                        <Rectangle x:Name="ejeSl2" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                     </Grid>
                 </Viewbox>
-                <TextBlock x:Name="Labelsl2" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,46,0,0"/>
+                <TextBlock x:Name="Labelsl2" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,23,0,0"/>
             </Grid>
 
-            <Grid VerticalAlignment="Top" Margin="0,538,0,0">
-                <Viewbox HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="80" Width="80" Stretch="Fill">
-                    <Grid Height="16" Width="16" Background="#FF001900">
-                        <Ellipse x:Name="ejeMXY" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Fill="Red" Width="1" Height="1"/>
-                    </Grid>
-                </Viewbox>
-                <Label x:Name="Labelmxy" Content="X: 0000&#x0a;Y: 0000" Foreground="Yellow" HorizontalAlignment="Left" Margin="95,511,0,0"  Padding="0,2" HorizontalContentAlignment="Left" Height="80" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
-                <Label Content="MiniStick" HorizontalContentAlignment="Center" Margin="0,480,0,0" VerticalAlignment="Top" Width="162"/>
+            <Grid VerticalAlignment="Top" Margin="0,498,0,0">
+                <TextBlock Text="MiniStick" HorizontalAlignment="Center" Foreground="GreenYellow"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Viewbox Height="80" Width="80" Stretch="Fill">
+                        <Grid Height="16" Width="16" Background="#EF003200">
+                            <Ellipse x:Name="ejeMXY" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Fill="{DynamicResource colorCirculo}" Width="1" Height="1"/>
+                        </Grid>
+                    </Viewbox>
+                    <TextBlock x:Name="Labelmxy" Text="X: 00&#x0a;Y: 00" Foreground="Yellow" Margin="10,0"  HorizontalAlignment="Left"  VerticalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </Grid>
 
-        <GroupBox x:Name="groupBox" Header="GroupBox" HorizontalAlignment="Left" Height="65" Margin="330,380,0,0" VerticalAlignment="Top" Width="188">
-            <Grid>
-                <Label x:Name="label" Content="X: 0000&#13;Y: 0000" HorizontalAlignment="Left" Height="37" Margin="10,0,0,0" VerticalAlignment="Center"/>
+        <Grid HorizontalAlignment="Left" Height="178" Margin="215,10,0,0" VerticalAlignment="Top" Width="300">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="GreenYellow" Grid.ColumnSpan="8"/>
+
+            <Grid Grid.Row="1">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt1" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="1" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="1" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt1}"/>
             </Grid>
-        </GroupBox>
-        <CheckBox x:Name="checkBox" Content="Datos en bruto" HorizontalAlignment="Left" Margin="226,404,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="White"/>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt2" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="2" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="2" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt2}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="2">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt3" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="3" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="3" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt3}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="3">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt4" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="4" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="4" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt4}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="4">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt5" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="5" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="5" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt5}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="5">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt6" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="6" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="6" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt6}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="6">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt7" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="7" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="7" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt7}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="7">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt8" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="8" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="8" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt8}"/>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt9" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="9" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="9" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt9}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="1">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt10" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="10" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="10" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt10}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="2">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt11" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="11" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="11" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt11}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="3">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt12" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="12" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="12" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt12}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="4">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt13" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="13" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="13" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt13}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="5">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt14" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="14" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="14" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt14}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="6">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt15" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="15" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="15" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt15}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="7">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt16" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="16" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="16" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt16}"/>
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt17" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="17" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="17" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt17}"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt18" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="18" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="18" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt18}"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="2">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt19" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="19" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="19" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt19}"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="3">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt20" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="20" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="20" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt20}"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="4">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt21" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="21" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="21" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt21}"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="5">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt22" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="22" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="22" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt22}"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="6">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt23" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="23" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="23" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt23}"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="7">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt24" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="24" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="24" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt24}"/>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt25" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="25" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="25" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt25}"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="1">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt26" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="26" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="26" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt26}"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="2">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt27" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="27" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="27" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt27}"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="3">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt28" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="28" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="28" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt28}"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="4">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt29" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="29" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="29" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt29}"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="5">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt30" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="30" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="30" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt30}"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="6">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt31" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="31" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="31" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt31}"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="7">
+                <Ellipse Width="26" Height="26" Fill="#EF003200" />
+                <Ellipse x:Name="bt32" Width="26" Height="26" Fill="{DynamicResource colorCirculo}" Visibility="Hidden" />
+                <TextBlock Text="32" Foreground="#FF079B00" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="32" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" Visibility="{Binding Visibility, ElementName=bt32}"/>
+            </Grid>
+        </Grid>
+
+        <Grid HorizontalAlignment="Left" Height="150" Margin="215,198,0,0" VerticalAlignment="Top" Width="300">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="POVs" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="GreenYellow" Grid.ColumnSpan="8"/>
+            <Grid Grid.Row="1">
+                <Ellipse Width="35" Height="35" Fill="#EF003200"/>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" HorizontalAlignment="Center" />
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Path.RenderTransform>
+                            <RotateTransform Angle="45"/>
+                    </Path.RenderTransform>
+                </Path>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+                <Path Data="M0,5 L5,0 10,5 7.5,5 7.5,10 2.5,10 2.5,5 Z" Fill="#FF004400" Grid.Row="1" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5"/>
+            </Grid>
+        </Grid>
+
+        <Grid>
+            <Label x:Name="label" Content="X: 0000&#13;Y: 0000" HorizontalAlignment="Left" Height="37" Margin="10,0,0,0" VerticalAlignment="Center"/>
+        </Grid>
+        <CheckBox x:Name="checkBox" Content="Datos en bruto" HorizontalAlignment="Left" Margin="330,575,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="White"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="60" Margin="226,450,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="261" Foreground="White"/>
-
-        <GroupBox Header="Botones" HorizontalAlignment="Left" Height="178" Margin="215,15,0,0" VerticalAlignment="Top" Width="300" Foreground="GreenYellow">
-            <StackPanel Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <Grid Margin="0,5,5,5">
-                        <Ellipse x:Name="bt1" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt2" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt3" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt4" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt5" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt6" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt7" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt8" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Grid  Margin="0,5,5,5">
-                        <Ellipse x:Name="bt9" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt10" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt11" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt12" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt13" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt14" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt15" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt16" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Grid  Margin="0,5,5,5">
-                        <Ellipse x:Name="bt17" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt18" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt19" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt20" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt21" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt22" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt23" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt24" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Grid  Margin="0,5,5,5">
-                        <Ellipse x:Name="bt25" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt26" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt27" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt28" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt29" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt30" Width="26" Height="26" Fill="#FF001900" />
-                        <Label Content="1" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt31" Width="26" Height="26" >
-                            <Ellipse.Fill>
-                                <RadialGradientBrush>
-                                    <GradientStop Color="Black" Offset="1"/>
-                                    <GradientStop Color="White"/>
-                                </RadialGradientBrush>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <Label Content="31" Foreground="White" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                    <Grid Margin="5,0">
-                        <Ellipse x:Name="bt32" Width="26" Height="26" Fill="#C2003600" />
-                        <Label Content="32" Foreground="#FF979797" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="11" FontWeight="Bold" />
-                    </Grid>
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="215,198,0,0" Width="300" Height="164">
-            <StackPanel>
-                <StackPanel>
-                    <Ellipse Width="50" Height="50" >
-                        <Ellipse.Fill>
-                            <RadialGradientBrush>
-                                <GradientStop Color="Black" Offset="1"/>
-                                <GradientStop Color="White"/>
-                                <GradientStop Color="#FFC5C5C5" Offset="0.262"/>
-                                <GradientStop Color="#FF535252" Offset="0.388"/>
-                            </RadialGradientBrush>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                </StackPanel>
-                <StackPanel>
-
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
     </Grid>
 </UserControl>
