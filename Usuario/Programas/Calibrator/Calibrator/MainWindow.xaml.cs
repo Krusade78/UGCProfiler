@@ -17,6 +17,7 @@ namespace Calibrator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("");
             uint n = 0;
             IntPtr hJoy = IntPtr.Zero;
             CRawInput.GetRawInputDeviceList(IntPtr.Zero, ref n, (uint)Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)));
@@ -28,15 +29,19 @@ namespace Calibrator
                     for (uint i = 0; i < n; i++)
                     {
                         CRawInput.RawInputDeviceList l = (CRawInput.RawInputDeviceList)Marshal.PtrToStructure(IntPtr.Add(lid, (int)(Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)) * i)), typeof(CRawInput.RawInputDeviceList));
-                        IntPtr buff = Marshal.AllocHGlobal(256);
-                        uint cbsize = 128;
-                        uint ret = CRawInput.GetRawInputDeviceInfo(l.DeviceHandle, CRawInput.RawInputDeviceInfoCommand.DeviceName, buff, ref cbsize);
-                        String nombre = Marshal.PtrToStringAnsi(buff);
-                        Marshal.FreeHGlobal(buff);
-                        if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255#"))
+                        if (l.DeviceType == CRawInput.RawInputDeviceType.HumanInterfaceDevice)
                         {
-                            hJoy = l.DeviceHandle;
-                            break;
+                            IntPtr buff = Marshal.AllocHGlobal(256);
+                            uint cbsize = 128;
+
+                            uint ret = CRawInput.GetRawInputDeviceInfo(l.DeviceHandle, CRawInput.RawInputDeviceInfoCommand.DeviceName, buff, ref cbsize);
+                            String nombre = Marshal.PtrToStringAnsi(buff);
+                            Marshal.FreeHGlobal(buff);
+                            if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
+                            {
+                                hJoy = l.DeviceHandle;
+                                break;
+                            }
                         }
                         //cbsize = (uint)Marshal.SizeOf(typeof(CRawInput.DeviceInfo));
                         //buff = Marshal.AllocHGlobal((int)cbsize);

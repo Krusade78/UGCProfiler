@@ -34,6 +34,7 @@ namespace Calibrator
 
             int cbsize = 0;
             int ret = CRawInput.GetRawInputData(hJoy, CRawInput.RawInputCommand.Input, IntPtr.Zero, ref cbsize, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+            int err = Marshal.GetLastWin32Error();
             if (ret == 0 && cbsize != 0)
             {
                 cbsize *= 8;
@@ -126,24 +127,27 @@ namespace Calibrator
         #region "Saltar perfil"
         [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
         private static extern Microsoft.Win32.SafeHandles.SafeFileHandle CreateFile(string lpFileName, System.UInt32 dwDesiredAccess, System.UInt32 dwShareMode, System.IntPtr pSecurityAttributes, System.UInt32 dwCreationDisposition, System.UInt32 dwFlagsAndAttributes, System.IntPtr hTemplateFile);
-        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
-        private static extern bool DeviceIoControl(Microsoft.Win32.SafeHandles.SafeFileHandle handle, System.UInt32 dwIoControlCode, byte[] lpInBuffer, System.UInt32 nInBufferSize, byte[] lpOutBuffer, System.UInt32 nOutBufferSize, ref System.UInt32 lpBytesReturned, System.IntPtr lpOverlapped);
+        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool DeviceIoControl(Microsoft.Win32.SafeHandles.SafeFileHandle handle, UInt32 dwIoControlCode, byte[] lpInBuffer, UInt32 nInBufferSize, byte[] lpOutBuffer, UInt32 nOutBufferSize, out UInt32 lpBytesReturned, IntPtr lpOverlapped);
         private void checkBox_Checked(object sender, RoutedEventArgs e)
         {
-            System.UInt32 ret = 0;
             Microsoft.Win32.SafeHandles.SafeFileHandle driver = CreateFile(
                     "\\\\.\\XUSBInterface",
                     0x40000000,//GENERIC_WRITE,
                     0x00000002, //FILE_SHARE_WRITE,
-                    (System.IntPtr)0,
+                    IntPtr.Zero,
                     3,//OPEN_EXISTING,
                     0,
-                    (System.IntPtr)0);
-            if (driver.IsInvalid) return;
-            System.UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0108) << 2) | (0);
+                    IntPtr.Zero);
+            if (driver.IsInvalid)
+                return;
+
+            UInt32 ret = 0;
+            UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0108) << 2) | (0);
             byte[] buff = new byte[] { 1 };
-            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, ref ret, System.IntPtr.Zero))
+            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, out ret, IntPtr.Zero))
             {
+                int err = Marshal.GetLastWin32Error();
                 driver.Close();
                 return;
             }
@@ -152,20 +156,23 @@ namespace Calibrator
         }
         private void checkBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            System.UInt32 ret = 0;
             Microsoft.Win32.SafeHandles.SafeFileHandle driver = CreateFile(
                     "\\\\.\\XUSBInterface",
                     0x40000000,//GENERIC_WRITE,
                     0x00000002, //FILE_SHARE_WRITE,
-                    (System.IntPtr)0,
+                    IntPtr.Zero,
                     3,//OPEN_EXISTING,
                     0,
-                    (System.IntPtr)0);
-            if (driver.IsInvalid) return;
-            System.UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0108) << 2) | (0);
+                    IntPtr.Zero);
+            if (driver.IsInvalid)
+                return;
+
+            UInt32 ret = 0;
+            UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0108) << 2) | (0);
             byte[] buff = new byte[] { 0 };
-            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, ref ret, System.IntPtr.Zero))
+            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, out ret, System.IntPtr.Zero))
             {
+                int err = Marshal.GetLastWin32Error();
                 driver.Close();
                 return;
             }
