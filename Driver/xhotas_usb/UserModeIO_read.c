@@ -50,6 +50,7 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 		return status;
 	}
 
+	WdfDeviceInitSetExclusive(devInit, TRUE);
 	WdfDeviceInitSetIoType(devInit, WdfDeviceIoBuffered);
 
 	status = WdfDeviceCreate(&devInit, WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->ControlDevice);
