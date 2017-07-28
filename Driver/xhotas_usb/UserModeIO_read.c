@@ -29,6 +29,11 @@ Environment:
 DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\XUsb_HidF");
 DECLARE_CONST_UNICODE_STRING(dosDeviceName, L"\\??\\XUSBInterface");
 
+#ifdef ALLOC_PRAGMA
+    #pragma alloc_text( PAGE, IniciarIoCtlAplicacion)
+	#pragma alloc_text( PAGE, EvtIOCtlAplicacion)
+#endif /* ALLOC_PRAGMA */
+
 //PASSIVE_LEVEL
 NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 {
@@ -100,6 +105,8 @@ VOID EvtIOCtlAplicacion(
 
 	UNREFERENCED_PARAMETER(OutputBufferLength);
 
+	PAGED_CODE();
+
 	status = WdfRequestRetrieveInputBuffer(Request, 0, (PVOID*)&SystemBuffer, NULL);
 	if (!NT_SUCCESS(status))
 	{
@@ -109,6 +116,7 @@ VOID EvtIOCtlAplicacion(
 	}
 	switch (IoControlCode)
 	{
+		case IOCTL_USR_RAW:
 		case IOCTL_MFD_LUZ:
 		case IOCTL_GLOBAL_LUZ:
 		case IOCTL_INFO_LUZ:
@@ -139,7 +147,7 @@ VOID EvtIOCtlAplicacion(
 	case IOCTL_USR_RAW:
 		GetDeviceContext(WdfIoQueueGetDevice(Queue))->HID.ModoRaw = SystemBuffer[0];
 		WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, status);
+		WdfRequestComplete(Request, STATUS_SUCCESS);
 		break;
 	//------------------- CalibradoHID.c ---------------------------------
 	case IOCTL_USR_CALIBRADO:
