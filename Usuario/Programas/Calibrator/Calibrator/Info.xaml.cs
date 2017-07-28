@@ -78,38 +78,38 @@ namespace Calibrator
         {
             int x = (hidData[0] << 8) | hidData[1];
             int y = (hidData[2] << 8) | hidData[3];
-            Labelxy.Content = "X: " + x + " # " + "Y: " + y;
+            Labelxy.Text =  x + " # " + y;
             ejeXY.Margin = new Thickness(x, y, 0, 0);
 
             int r = (hidData[4] << 8) | hidData[5];
-            Labelr.Content = "R: " + r;
+            Labelr.Text = r.ToString();
             ejeR.Height = r;
 
             int z = (hidData[6] << 8) | hidData[7];
-            Labelz.Content = "Z: " + z;
+            Labelz.Text = z.ToString();
             ejeZ.Height = z;
 
             int rx = (hidData[8] << 8) | hidData[9];
-            Labelrx.Content = "Rx: " + rx;
+            Labelrx.Text = rx.ToString();
             double angulo = (Math.PI * ((360 / 2048) * rx)) / 180;
             ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0": "1") + "0 " + (Math.Cos(angulo)*25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
 
             int ry = (hidData[10] << 8) | hidData[11];
             angulo = (Math.PI * ((360 / 2048) * ry)) / 180;
-            Labelry.Content = "Ry: " + ry;
+            Labelry.Text = ry.ToString();
             ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0" : "1") + "0 " + (Math.Cos(angulo) * 25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
 
             int sl1 = (hidData[12] << 8) | hidData[13];
-            Labelsl1.Content = "Slider 1: " + sl1;
+            Labelsl1.Text = sl1.ToString();
             ejeSl1.Width = sl1;
 
             int sl2 = (hidData[14] >> 8) | hidData[15];
-            Labelsl2.Content = "Slider 2: " + sl2;
+            Labelsl2.Text = sl2.ToString();
             ejeSl2.Width = sl2;
 
             int mx = hidData[24] >> 4;
             int my = hidData[24] & 4;
-            Labelxy.Content = "mX: " + mx + "\n" + "mY: " + my;
+            Labelxy.Text = "mX: " + mx + "\n" + "mY: " + my;
             ejeMXY.Margin = new Thickness(mx, my, 0, 0);
 
             
@@ -132,16 +132,17 @@ namespace Calibrator
         {
             System.UInt32 ret = 0;
             Microsoft.Win32.SafeHandles.SafeFileHandle driver = CreateFile(
-                    "\\\\.\\XHOTASHidInterface",
-                    0x80000000,//GENERIC_READ,
-                    0x00000001, //FILE_SHARE_READ,
+                    "\\\\.\\XUSBInterface",
+                    0x40000000,//GENERIC_WRITE,
+                    0x00000002, //FILE_SHARE_WRITE,
                     (System.IntPtr)0,
                     3,//OPEN_EXISTING,
                     0,
                     (System.IntPtr)0);
             if (driver.IsInvalid) return;
-            System.UInt32 IOCTL_USR_DESCALIBRAR = ((0x22) << 16) | ((1) << 14) | ((0x0102) << 2) | (0);
-            if (!DeviceIoControl(driver, IOCTL_USR_DESCALIBRAR, null, 0, null, 0, ref ret, System.IntPtr.Zero))
+            System.UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0108) << 2) | (0);
+            byte[] buff = new byte[] { 1 };
+            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, ref ret, System.IntPtr.Zero))
             {
                 driver.Close();
                 return;
@@ -153,16 +154,17 @@ namespace Calibrator
         {
             System.UInt32 ret = 0;
             Microsoft.Win32.SafeHandles.SafeFileHandle driver = CreateFile(
-                    "\\\\.\\XHOTASHidInterface",
-                    0x80000000,//GENERIC_READ,
-                    0x00000001, //FILE_SHARE_READ,
+                    "\\\\.\\XUSBInterface",
+                    0x40000000,//GENERIC_WRITE,
+                    0x00000002, //FILE_SHARE_WRITE,
                     (System.IntPtr)0,
                     3,//OPEN_EXISTING,
                     0,
                     (System.IntPtr)0);
             if (driver.IsInvalid) return;
-            System.UInt32 IOCTL_USR_CALIBRAR = ((0x22) << 16) | ((1) << 14) | ((0x0101) << 2) | (0);
-            if (!DeviceIoControl(driver, IOCTL_USR_CALIBRAR, null, 0, null, 0, ref ret, System.IntPtr.Zero))
+            System.UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0108) << 2) | (0);
+            byte[] buff = new byte[] { 0 };
+            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, ref ret, System.IntPtr.Zero))
             {
                 driver.Close();
                 return;
