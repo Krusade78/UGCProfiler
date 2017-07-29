@@ -4,9 +4,9 @@
 #include "acciones.h"
 #include "mapa.h"
 
-NTSTATUS HF_IoEscribirMapa(_In_ WDFREQUEST Request)
+NTSTATUS HF_IoEscribirMapa(_In_ WDFDEVICE device, _In_ WDFREQUEST Request)
 {
-    PROGRAMADO_CONTEXT*		devExt = &GetDeviceContext(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)))->Programacion;
+    PROGRAMADO_CONTEXT*		devExt = &GetDeviceContext(device)->Programacion;
     NTSTATUS                status = STATUS_SUCCESS;
 	PUCHAR					SystemBuffer;
 	size_t					tam;
@@ -40,9 +40,9 @@ NTSTATUS HF_IoEscribirMapa(_In_ WDFREQUEST Request)
 	return status;
 }
 
-NTSTATUS HF_IoEscribirComandos(_In_ WDFREQUEST Request)
+NTSTATUS HF_IoEscribirComandos(_In_ WDFDEVICE device, _In_ WDFREQUEST Request)
 {
-	PROGRAMADO_CONTEXT*		devExt = &GetDeviceContext(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)))->Programacion;
+	PROGRAMADO_CONTEXT*		devExt = &GetDeviceContext(device)->Programacion;
     NTSTATUS                status = STATUS_SUCCESS;
 	UINT16					npos = 0;
 	UINT32					idxc = 0;
@@ -50,7 +50,7 @@ NTSTATUS HF_IoEscribirComandos(_In_ WDFREQUEST Request)
 	PVOID					SystemBuffer;
 	size_t					InputBufferLength;
 
-	LimpiarMapa(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
+	LimpiarMapa(device);
 
 	status =  WdfRequestRetrieveInputBuffer(Request, 2, &SystemBuffer, &InputBufferLength);
 	if(!NT_SUCCESS(status))
@@ -111,7 +111,7 @@ NTSTATUS HF_IoEscribirComandos(_In_ WDFREQUEST Request)
 			goto fin;
 mal:
 			WdfSpinLockRelease(devExt->slComandos);
-			LimpiarMapa(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
+			LimpiarMapa(device);
 fin:
 			WdfRequestSetInformation(Request, idxc + 2);
 		}
