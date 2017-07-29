@@ -65,37 +65,37 @@ namespace Calibrator
             if (hJoy == IntPtr.Zero)
                 return;
 
-            int cbsize = 0;
-            int ret = CRawInput.GetRawInputData(hJoy, CRawInput.RawInputCommand.Input, IntPtr.Zero, ref cbsize, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
-            int err = Marshal.GetLastWin32Error();
-            if (ret == 0 && cbsize != 0)
-            {
-                cbsize *= 8;
-                IntPtr buff = Marshal.AllocHGlobal(cbsize);
-                ret = CRawInput.GetRawInputData(hJoy, CRawInput.RawInputCommand.Input, buff, ref cbsize, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
-                if (ret > 0)
-                {
-                    CRawInput.RawInput ri = Marshal.PtrToStructure<CRawInput.RawInput>(buff);
-                    int leidos = 0;
-                    while (true)
-                    {
-                        if (ri.Header.Type == CRawInput.RawInputType.HID)
-                        {
-                            byte[] data = new byte[ri.HID.Count * ri.HID.Size];
-                            Marshal.Copy((IntPtr)(buff.ToInt64() + Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)) + Marshal.SizeOf(typeof(CRawInput.RawHID))), data, 0, data.Length);
-                            byte[] hidData = new byte[data.Length];
-                            ActualizarEstado(hidData);
-                        }
-                        leidos += ri.Header.Size + 1;
-                        ret--;
-                        if (ret > 0)
-                            ri = Marshal.PtrToStructure<CRawInput.RawInput>(buff + leidos);
-                        else
-                            break;
-                    }
-                }
-                Marshal.FreeHGlobal(buff);
-            }
+            //int cbsize = 0;
+            //int ret = CRawInput.GetRawInputData(hJoy, CRawInput.RawInputCommand.Input, IntPtr.Zero, ref cbsize, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+            //int err = Marshal.GetLastWin32Error();
+            //if (ret == 0 && cbsize != 0)
+            //{
+            //    cbsize *= 8;
+            //    IntPtr buff = Marshal.AllocHGlobal(cbsize);
+            //    ret = CRawInput.GetRawInputData(hJoy, CRawInput.RawInputCommand.Input, buff, ref cbsize, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+            //    if (ret > 0)
+            //    {
+            //        CRawInput.RawInput ri = Marshal.PtrToStructure<CRawInput.RawInput>(buff);
+            //        int leidos = 0;
+            //        while (true)
+            //        {
+            //            if (ri.Header.Type == CRawInput.RawInputType.HID)
+            //            {
+            //                byte[] data = new byte[ri.HID.Count * ri.HID.Size];
+            //                Marshal.Copy((IntPtr)(buff.ToInt64() + Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)) + Marshal.SizeOf(typeof(CRawInput.RawHID))), data, 0, data.Length);
+            //                byte[] hidData = new byte[data.Length];
+            //                ActualizarEstado(hidData);
+            //            }
+            //            leidos += ri.Header.Size + 1;
+            //            ret--;
+            //            if (ret > 0)
+            //                ri = Marshal.PtrToStructure<CRawInput.RawInput>(buff + leidos);
+            //            else
+            //                break;
+            //        }
+            //    }
+            //    Marshal.FreeHGlobal(buff);
+            //}
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

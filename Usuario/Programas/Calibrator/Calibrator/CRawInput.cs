@@ -80,52 +80,52 @@ namespace Calibrator
             IntPtr data,
             ref uint size);
 
-        public enum RawInputCommand
-        {
-            Input = 0x10000003,
-            Header = 0x10000005
-        }
+        //public enum RawInputCommand
+        //{
+        //    Input = 0x10000003,
+        //    Header = 0x10000005
+        //}
 
-        [DllImport("user32.dll")]
-        public static extern int GetRawInputData(
-            IntPtr hRawInput,
-            RawInputCommand uiCommand,
-            IntPtr pData,
-            ref int pcbSize,
-            int cbSizeHeader);
+        //[DllImport("user32.dll")]
+        //public static extern int GetRawInputData(
+        //    IntPtr hRawInput,
+        //    RawInputCommand uiCommand,
+        //    IntPtr pData,
+        //    ref int pcbSize,
+        //    int cbSizeHeader);
 
-        public enum RawInputType
-        {
-            Mouse = 0,
-            Keyboard = 1,
-            HID = 2,
-            Other = 3
-        }
+        //public enum RawInputType
+        //{
+        //    Mouse = 0,
+        //    Keyboard = 1,
+        //    HID = 2,
+        //    Other = 3
+        //}
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RAWINPUTHEADER
-        {
-            public RawInputType Type;
-            public int Size;
-            public IntPtr Device;
-            public IntPtr wParam;
-        }
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct RAWINPUTHEADER
+        //{
+        //    public RawInputType Type;
+        //    public int Size;
+        //    public IntPtr Device;
+        //    public IntPtr wParam;
+        //}
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RawHID
-        {
-            public int Size;
-            public int Count;
-            public IntPtr Data;
-        }
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct RawHID
+        //{
+        //    public int Size;
+        //    public int Count;
+        //    public IntPtr Data;
+        //}
 
-        [StructLayout(LayoutKind.Explicit)]
-        public struct RawInput
-        {
-            [FieldOffset(0)]
-            public RAWINPUTHEADER Header;
-            [FieldOffset(16 + 8)]
-            public RawHID HID;
-        }
+        //[StructLayout(LayoutKind.Explicit)]
+        //public struct RawInput
+        //{
+        //    [FieldOffset(0)]
+        //    public RAWINPUTHEADER Header;
+        //    [FieldOffset(16 + 8)]
+        //    public RawHID HID;
+        //}
     }
 }
