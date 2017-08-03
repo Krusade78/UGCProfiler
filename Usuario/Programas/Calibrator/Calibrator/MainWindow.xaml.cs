@@ -21,33 +21,6 @@ namespace Calibrator
             
             uint n = 0;
             IntPtr hJoy = IntPtr.Zero;
-            CRawInput.GetRawInputDeviceList(IntPtr.Zero, ref n, (uint)Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)));
-            if (n > 0)
-            {
-                IntPtr lid = Marshal.AllocHGlobal((int)((uint)Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)) * n));
-                if ((int)CRawInput.GetRawInputDeviceList(lid, ref n, (uint)Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList))) != -1)
-                {
-                    for (uint i = 0; i < n; i++)
-                    {
-                        CRawInput.RawInputDeviceList l = (CRawInput.RawInputDeviceList)Marshal.PtrToStructure(IntPtr.Add(lid, (int)(Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)) * i)), typeof(CRawInput.RawInputDeviceList));
-                        if (l.DeviceType == CRawInput.RawInputDeviceType.HumanInterfaceDevice)
-                        {
-                            IntPtr buff = Marshal.AllocHGlobal(256);
-                            uint cbsize = 128;
-
-                            uint ret = CRawInput.GetRawInputDeviceInfo(l.DeviceHandle, CRawInput.RawInputDeviceInfoCommand.DeviceName, buff, ref cbsize);
-                            String nombre = Marshal.PtrToStringAnsi(buff);
-                            Marshal.FreeHGlobal(buff);
-                            if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
-                            {
-                                hJoy = l.DeviceHandle;
-                                break;
-                            }
-                        }
-                    }
-                }
-                Marshal.FreeHGlobal(lid);
-            }
 
             ucInfo.Iniciar(hJoy);
             //ucCalibrar.Iniciar(hJoy);

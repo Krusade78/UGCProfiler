@@ -37,23 +37,32 @@ namespace Calibrator
                     if (outSize != -1)
                     {
                         CRawInput.RAWINPUTHEADER header = new CRawInput.RAWINPUTHEADER();
-                        CRawInput.RAWINPUTHID hid = new CRawInput.RAWINPUTHID();
 
                         IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
                         Marshal.Copy(buff, 0, ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
                         header = Marshal.PtrToStructure<CRawInput.RAWINPUTHEADER>(ptr);
                         Marshal.FreeHGlobal(ptr);
 
-                        ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
-                        Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
-                        hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
-                        Marshal.FreeHGlobal(ptr);
+                        IntPtr pNombre = Marshal.AllocHGlobal(256);
+                        uint cbSize = 128;
+                        uint ret = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
+                        String nombre = Marshal.PtrToStringAnsi(pNombre);
+                        Marshal.FreeHGlobal(pNombre);
+                        if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
+                        {
+                            CRawInput.RAWINPUTHID hid = new CRawInput.RAWINPUTHID();
 
-                        byte[] hidData = new byte[hid.Size - 1];
-                        for (int i = 0; i < hidData.Length; i++)
-                            hidData[i] = buff[i + 1 + size - hid.Size];
+                            ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
+                            Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
+                            hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
+                            Marshal.FreeHGlobal(ptr);
 
-                        ActualizarEstado(hidData);
+                            byte[] hidData = new byte[hid.Size - 1];
+                            for (int i = 0; i < hidData.Length; i++)
+                                hidData[i] = buff[i + 1 + size - hid.Size];
+
+                            ActualizarEstado(hidData);
+                        }
                     }
                 }
                 
