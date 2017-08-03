@@ -19,10 +19,8 @@ namespace Calibrator
     /// <summary>
     /// Lógica de interacción para HIDCal.xaml
     /// </summary>
-    public partial class HIDCal : UserControl
+    internal partial class HIDCal : UserControl
     {
-        private IntPtr hJoy;
-        private System.Windows.Threading.DispatcherTimer timer;
         private int ejeSel = 0;
         private struct STLIMITES
         {
@@ -47,68 +45,11 @@ namespace Calibrator
         public HIDCal()
         {
             InitializeComponent();
-            timer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Input);
-            timer.Interval = new System.TimeSpan(50);
-            timer.Tick += Timer_Tick;
-
             limites.cal = true;
             jitter.antiv = true;
         }
 
-        public void Iniciar(IntPtr hJoy)
-        {
-            this.hJoy = hJoy;
-        }
-
-        private void Timer_Tick(object sender, System.EventArgs e)
-        {
-            if (hJoy == IntPtr.Zero)
-                return;
-
-            //int cbsize = 0;
-            //int ret = CRawInput.GetRawInputData(hJoy, CRawInput.RawInputCommand.Input, IntPtr.Zero, ref cbsize, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
-            //int err = Marshal.GetLastWin32Error();
-            //if (ret == 0 && cbsize != 0)
-            //{
-            //    cbsize *= 8;
-            //    IntPtr buff = Marshal.AllocHGlobal(cbsize);
-            //    ret = CRawInput.GetRawInputData(hJoy, CRawInput.RawInputCommand.Input, buff, ref cbsize, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
-            //    if (ret > 0)
-            //    {
-            //        CRawInput.RawInput ri = Marshal.PtrToStructure<CRawInput.RawInput>(buff);
-            //        int leidos = 0;
-            //        while (true)
-            //        {
-            //            if (ri.Header.Type == CRawInput.RawInputType.HID)
-            //            {
-            //                byte[] data = new byte[ri.HID.Count * ri.HID.Size];
-            //                Marshal.Copy((IntPtr)(buff.ToInt64() + Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)) + Marshal.SizeOf(typeof(CRawInput.RawHID))), data, 0, data.Length);
-            //                byte[] hidData = new byte[data.Length];
-            //                ActualizarEstado(hidData);
-            //            }
-            //            leidos += ri.Header.Size + 1;
-            //            ret--;
-            //            if (ret > 0)
-            //                ri = Marshal.PtrToStructure<CRawInput.RawInput>(buff + leidos);
-            //            else
-            //                break;
-            //        }
-            //    }
-            //    Marshal.FreeHGlobal(buff);
-            //}
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            timer.Start();
-        }
-
-        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
-        {
-            timer.Stop();
-        }
-
-        private void ActualizarEstado(byte[] hidData)
+        public void ActualizarEstado(byte[] hidData)
         {
             int posr = (hidData[ejeSel * 1] << 8) | hidData[(ejeSel * 2) + 1];
             txtPosReal.Text = posr.ToString();

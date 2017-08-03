@@ -1,93 +1,134 @@
-﻿<UserControl x:Class="Calibrator.HIDCal"
+﻿<UserControl x:Class="Calibrator.HIDCal" x:ClassModifier="internal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Width="525" Height="630">
+             Width="525" Height="630">
     <UserControl.Resources>
         <LinearGradientBrush x:Key="colorBarra" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
             <GradientStop Color="Red" Offset="0"/>
             <GradientStop Color="#FFFF9D9D" Offset="1"/>
         </LinearGradientBrush>
     </UserControl.Resources>
-    <Grid>
-        <Grid.Background>
-            <RadialGradientBrush>
-                <GradientStop Color="#F0323232" Offset="1"/>
-                <GradientStop Color="#F0919191"/>
-            </RadialGradientBrush>
-        </Grid.Background>
-        <Grid VerticalAlignment="Top" Margin="0,20,0,0">
-            <TextBlock Text="Posición bruta" Foreground="GreenYellow" HorizontalAlignment="Center" />
-            <Viewbox HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Height="40" Width="400" Stretch="Fill">
-                <Grid Height="40" Width="2048" Background="#EF003200">
-                    <Rectangle x:Name="posReal" Width="10" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
-                </Grid>
-            </Viewbox>
-            <TextBlock x:Name="txtPosReal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" />
-        </Grid>
-
-        <Grid VerticalAlignment="Top" Margin="0,115,0,0">
-            <TextBlock Text="Posición calibrada" Foreground="GreenYellow" HorizontalAlignment="Center" />
-            <Viewbox HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Height="40" Width="400" Stretch="Fill">
-                <Grid Height="40" Width="2048" Background="#EF003200">
-                    <Rectangle x:Name="posCal" HorizontalAlignment="Left" Width="10" Fill="{DynamicResource colorBarra}"/>
-                </Grid>
-            </Viewbox>
-            <TextBlock x:Name="txtPosCal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" />
-        </Grid>
-        <Grid VerticalAlignment="Top" Margin="0,250,0,0" Width="300" HorizontalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                
-                <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores de calibración" Foreground="GreenYellow" Margin="0,0,0,18" />
-                
-                <TextBlock Grid.Row="1" Text="Límite inferior:" Foreground="Yellow" />
-                <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtI" TextAlignment="Center" Text="0000" Width="50" Padding="0,2" />
-                
-                <TextBlock Grid.Row="2" Text="Posición central:" Foreground="Yellow" />
-                <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtC" TextAlignment="Center" Text="0000" Width="50"  Padding="0,2"/>
-
-                <TextBlock Grid.Row="3" Text="Zona nula:" Foreground="Yellow" />
-                <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtD" TextAlignment="Center" Text="0000" Width="50" Padding="0,2"/>
-
-                <TextBlock Grid.Row="4" Text="Límite superior:" Foreground="Yellow" />
-                <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtN" TextAlignment="Center"  Text="0000" Width="50" Padding="0,2"/>
+    <Border BorderBrush="#FF0074C5" BorderThickness="2,1,1,1" Margin="30,0,0,0" Width="525">
+        <Grid>
+            <Grid.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="#F0323232" Offset="1"/>
+                    <GradientStop Color="#F0919191"/>
+                </RadialGradientBrush>
+            </Grid.Background>
+            <Grid VerticalAlignment="Top" Margin="0,40,0,0">
+                <TextBlock Text="Posición bruta" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                <Viewbox HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Height="40" Width="400" Stretch="Fill">
+                    <Grid Height="40" Width="2048" Background="#EF003200">
+                        <Rectangle x:Name="posReal" Width="10" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
+                    </Grid>
+                </Viewbox>
+                <TextBlock x:Name="txtPosReal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" />
             </Grid>
 
-            <Grid Grid.Column="1">
+            <Grid VerticalAlignment="Top" Margin="0,307,0,0">
+                <TextBlock Text="Posición calibrada" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                <Viewbox HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Height="40" Width="400" Stretch="Fill">
+                    <Grid Height="40" Width="2048" Background="#EF003200">
+                        <Rectangle x:Name="posCal" HorizontalAlignment="Left" Width="10" Fill="{DynamicResource colorBarra}"/>
+                    </Grid>
+                </Viewbox>
+                <TextBlock x:Name="txtPosCal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" />
+            </Grid>
+
+            <Grid VerticalAlignment="Top" Margin="0,145,0,0" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <Grid Width="200">
+                    <Grid HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores antivibración" Foreground="GreenYellow" Margin="0,0,0,18" />
+                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores de calibración" Foreground="GreenYellow" Margin="0,0,0,18" />
 
-                <TextBox Grid.Column="1" x:Name="txtMargen" HorizontalAlignment="Left" Height="23" Margin="223,292,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-                <TextBox Grid.Column="1" x:Name="txtResistencia" HorizontalAlignment="Left" Height="23" Margin="223,292,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+                        <TextBlock Grid.Row="1" Text="Límite inferior:" Foreground="Yellow" />
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtI" TextAlignment="Center" Text="0000" Width="50" Padding="0,2" />
+
+                        <TextBlock Grid.Row="2" Text="Posición central:" Foreground="Yellow" />
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtC" TextAlignment="Center" Text="0000" Width="50"  Padding="0,2"/>
+
+                        <TextBlock Grid.Row="3" Text="Zona nula:" Foreground="Yellow" />
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtD" TextAlignment="Center" Text="0000" Width="50" Padding="0,2"/>
+
+                        <TextBlock Grid.Row="4" Text="Límite superior:" Foreground="Yellow" />
+                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtN" TextAlignment="Center"  Text="0000" Width="50" Padding="0,2"/>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Column="1" Width="200">
+                    <Grid HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores antivibración" Margin="0,0,0,18" Foreground="GreenYellow" VerticalAlignment="Top" />
+
+                        <TextBlock Grid.Row="1" Text="Márgen:" Foreground="Yellow" />
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtMargen" TextAlignment="Center" Text="0000" Width="50" Padding="0,2" />
+
+                        <TextBlock Grid.Row="2" Text="Resistencia:" Foreground="Yellow" />
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtResistencia" TextAlignment="Center" Text="0000" Width="50"  Padding="0,2"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,412,0,0">
+                <ToggleButton Width="100">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="res/x52jx.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <Image Source="res/x52jy.png" Stretch="None" />
+                <Image Source="res/x52tr.png" Stretch="None" />
+                <Image Source="res/x52tz.png" Stretch="None" />
+            </StackPanel>
+
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,552,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Content="Aplicar" HorizontalAlignment="Left" Width="140" Click="button_Click" Height="45" Foreground="GreenYellow">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF043304" Offset="0"/>
+                            <GradientStop Color="#FF095B09" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button Grid.Column="2" Content="Guardar eje" Width="140" Height="45" Foreground="GreenYellow">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF043304" Offset="0"/>
+                            <GradientStop Color="#FF095B09" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
             </Grid>
         </Grid>
-
-        <Button Content="Aplicar" HorizontalAlignment="Left" Margin="315,580,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <Button Content="Guardar eje" HorizontalAlignment="Left" Margin="421,580,0,0" VerticalAlignment="Top" Width="75"/>
-    </Grid>
-
+    </Border>
 </UserControl>
