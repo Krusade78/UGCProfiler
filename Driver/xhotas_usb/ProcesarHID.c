@@ -58,11 +58,11 @@ VOID ConvertirEjesA2048(PUCHAR ejes)
 		if (pos == 1) pos = 0;
 		if (i == 4) //R
 		{
-			pos *= 2;
+			pos *= 4;
 		}
 		else if (i >= 6) //Z Rx, Ry Sl1 Sl2
 		{
-			pos *= 4;
+			pos *= 8;
 		}
 		RtlCopyMemory(&ejes[i], &pos, 2);
 	}
@@ -121,7 +121,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 	hidData.Setas[3] = Switch4To8(hidData.Setas[3]);
 	hidData.MiniStick = hidGameData->Ministick;
 
-	if ((hidData.Botones[1] & 0x28)) //Combinación para des/activar los pedales
+	if ((hidData.Botones[1] & 0x28)) //Combinaciï¿½n para des/activar los pedales
 		GetDeviceContext(device)->Pedales.Activado = !GetDeviceContext(device)->Pedales.Activado;
 
 	if (GetDeviceContext(device)->Pedales.Activado)
