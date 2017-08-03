@@ -28,8 +28,8 @@
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TextBlock Text="Ejes X,Y" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" />
                 <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" Height="128" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                    <Grid Height="4196" Width="4196" Background="#EF003200">
-                        <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="{DynamicResource colorCirculo}" Width="200" Height="200"/>
+                    <Grid Height="2049" Width="2049" Background="#EF003200">
+                        <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="{DynamicResource colorCirculo}" Width="100" Height="100"/>
                     </Grid>
                 </Viewbox>
                 <TextBlock x:Name="Labelxy" Text="0000 # 0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,154,0,0" VerticalAlignment="Top"/>
@@ -37,7 +37,7 @@
             <Grid HorizontalAlignment="Left" Margin="148,0,0,0" VerticalAlignment="Top">
                 <TextBlock Text="Eje Z" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" />
                 <Viewbox HorizontalAlignment="Center"  VerticalAlignment="Top" Height="128" Width="20" Stretch="Fill" Margin="0,20,0,0">
-                    <Grid Height="2048" Width="40" Background="#EF003200">
+                    <Grid Height="2049" Width="40" Background="#EF003200">
                         <Rectangle x:Name="ejeZ" VerticalAlignment="Bottom" Fill="{StaticResource colorBarra}" />
                     </Grid>
                 </Viewbox>
@@ -47,7 +47,7 @@
             <Grid VerticalAlignment="Top" Margin="0,188,0,0">
                 <TextBlock Text="Eje R" Foreground="GreenYellow" VerticalAlignment="Top" HorizontalAlignment="Center" />
                 <Viewbox VerticalAlignment="Top" Height="20" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                    <Grid Height="80" Width="2048" Background="#EF003200">
+                    <Grid Height="80" Width="2049" Background="#EF003200">
                         <Rectangle x:Name="ejeR" HorizontalAlignment="Left" Margin="0,0,0,0" Fill="{StaticResource colorBarra}" />
                     </Grid>
                 </Viewbox>
@@ -76,7 +76,7 @@
             <Grid VerticalAlignment="Top" Margin="0,378,0,0">
                 <TextBlock Text="Eje Sl1" Foreground="GreenYellow" HorizontalAlignment="Center" />
                 <Viewbox HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
-                    <Grid Height="40" Width="2048" Background="#EF003200">
+                    <Grid Height="40" Width="2049" Background="#EF003200">
                         <Rectangle x:Name="ejeSl1" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                     </Grid>
                 </Viewbox>

@@ -8,22 +8,72 @@ namespace Calibrator
     /// <summary>
     /// Lógica de interacción para Info.xaml
     /// </summary>
-    public partial class Info : UserControl, 
+    public partial class Info : UserControl
     {
         IntPtr hJoy;
-        System.Windows.Threading.DispatcherTimer timer;
+        //System.Windows.Threading.DispatcherTimer timer;
 
         public Info()
         {
             InitializeComponent();
-            timer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Input);
-            timer.Interval = new System.TimeSpan(50);
-            timer.Tick += Timer_Tick;
+            //timer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Input);
+            //timer.Interval = new System.TimeSpan(50);
+            //timer.Tick += Timer_Tick;
+        }
+
+        public IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == 0x00FF)
+            {
+                int outSize = 0;
+                int size = 0;
+
+                outSize = CRawInput.GetRawInputData(lParam, 0x10000003, null, ref size, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+                if (size != 0)
+                {
+                    byte[] buff = new byte[size];
+
+                    outSize = CRawInput.GetRawInputData(lParam, 0x10000003, buff, ref size, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+                    if (outSize != -1)
+                    {
+                        CRawInput.RAWINPUTHEADER header = new CRawInput.RAWINPUTHEADER();
+                        CRawInput.RAWINPUTHID hid = new CRawInput.RAWINPUTHID();
+
+                        IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+                        Marshal.Copy(buff, 0, ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+                        header = Marshal.PtrToStructure<CRawInput.RAWINPUTHEADER>(ptr);
+                        Marshal.FreeHGlobal(ptr);
+
+                        ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
+                        Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
+                        hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
+                        Marshal.FreeHGlobal(ptr);
+
+                        byte[] hidData = new byte[hid.Size - 1];
+                        for (int i = 0; i < hidData.Length; i++)
+                            hidData[i] = buff[i + 1 + size - hid.Size];
+
+                        ActualizarEstado(hidData);
+                    }
+                }
+                
+            }
+            return IntPtr.Zero;
         }
 
         public void Iniciar(IntPtr hJoy)
         {
             this.hJoy = hJoy;
+            System.Windows.Interop.HwndSource hwnd = (System.Windows.Interop.HwndSource)System.Windows.Interop.HwndSource.FromVisual(this);
+
+            CRawInput.RAWINPUTDEVICE[] rdev = new CRawInput.RAWINPUTDEVICE[1];
+            rdev[0].UsagePage = 0x01;
+            rdev[0].Usage = 0x04;
+            rdev[0].WindowHandle = hwnd.Handle;
+            rdev[0].Flags = CRawInput.RawInputDeviceFlags.None;
+
+            bool ok = CRawInput.RegisterRawInputDevices(rdev, 1, (uint)Marshal.SizeOf(typeof(CRawInput.RAWINPUTDEVICE)));
+            hwnd.AddHook(WndProc);
         }
 
         private void Timer_Tick(object sender, System.EventArgs e)
@@ -69,50 +119,50 @@ namespace Calibrator
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            timer.Start();
+            //timer.Start();
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            timer.Stop();
+            //timer.Stop();
         }
 
         private void ActualizarEstado(byte[] hidData)
         {
-            int x = (hidData[0] << 8) | hidData[1];
-            int y = (hidData[2] << 8) | hidData[3];
+            int x = (hidData[1] << 8) | hidData[0];
+            int y = (hidData[3] << 8) | hidData[2];
             Labelxy.Text =  x + " # " + y;
             ejeXY.Margin = new Thickness(x, y, 0, 0);
 
-            int r = (hidData[4] << 8) | hidData[5];
+            int r = (hidData[5] << 8) | hidData[4];
             Labelr.Text = r.ToString();
             ejeR.Height = r;
 
-            int z = (hidData[6] << 8) | hidData[7];
+            int z = (hidData[7] << 8) | hidData[6];
             Labelz.Text = z.ToString();
             ejeZ.Height = z;
 
-            int rx = (hidData[8] << 8) | hidData[9];
+            int rx = (hidData[9] << 8) | hidData[8];
             Labelrx.Text = rx.ToString();
             double angulo = (Math.PI * ((360 / 2048) * rx)) / 180;
             ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0": "1") + "0 " + (Math.Cos(angulo)*25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
 
-            int ry = (hidData[10] << 8) | hidData[11];
+            int ry = (hidData[11] << 8) | hidData[10];
             angulo = (Math.PI * ((360 / 2048) * ry)) / 180;
             Labelry.Text = ry.ToString();
             ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0" : "1") + "0 " + (Math.Cos(angulo) * 25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
 
-            int sl1 = (hidData[12] << 8) | hidData[13];
+            int sl1 = (hidData[13] << 8) | hidData[12];
             Labelsl1.Text = sl1.ToString();
             ejeSl1.Width = sl1;
 
-            int sl2 = (hidData[14] >> 8) | hidData[15];
+            int sl2 = (hidData[15] >> 8) | hidData[14];
             Labelsl2.Text = sl2.ToString();
             ejeSl2.Width = sl2;
 
             int mx = hidData[24] >> 4;
-            int my = hidData[24] & 4;
-            Labelxy.Text = "mX: " + mx + "\n" + "mY: " + my;
+            int my = hidData[24] & 0xf;
+            Labelmxy.Text = "mX: " + mx + "\n" + "mY: " + my;
             ejeMXY.Margin = new Thickness(mx, my, 0, 0);
 
             System.Windows.Shapes.Ellipse[] bts = new System.Windows.Shapes.Ellipse[] { bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8,
@@ -123,13 +173,13 @@ namespace Calibrator
                 bts[i].Visibility = ((hidData[20 + (i / 8)] & (1 << (i % 8))) != 0) ? Visibility.Visible : Visibility.Hidden;
 
             pathP1.Visibility = (hidData[16] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP1.RenderTransform.Value.Rotate((hidData[16] > 5) ? (hidData[16] - 9) * 45 : (hidData[16] - 1) * 45);
+            pathP1.RenderTransform = new System.Windows.Media.RotateTransform((hidData[16] > 5) ? (hidData[16] - 9) * 45 : (hidData[16] - 1) * 45);
             pathP2.Visibility = (hidData[17] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP2.RenderTransform.Value.Rotate((hidData[16] > 5) ? (hidData[16] - 9) * 45 : (hidData[16] - 1) * 45);
+            pathP2.RenderTransform = new System.Windows.Media.RotateTransform((hidData[17] > 5) ? (hidData[17] - 9) * 45 : (hidData[17] - 1) * 45);
             pathP3.Visibility = (hidData[18] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP3.RenderTransform.Value.Rotate((hidData[16] > 5) ? (hidData[16] - 9) * 45 : (hidData[16] - 1) * 45);
+            pathP3.RenderTransform = new System.Windows.Media.RotateTransform((hidData[18] > 5) ? (hidData[18] - 9) * 45 : (hidData[18] - 1) * 45);
             pathP4.Visibility = (hidData[19] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP4.RenderTransform.Value.Rotate((hidData[16] > 5) ? (hidData[16] - 9) * 45 : (hidData[16] - 1) * 45);
+            pathP4.RenderTransform = new System.Windows.Media.RotateTransform((hidData[19] > 5) ? (hidData[19] - 9) * 45 : (hidData[19] - 1) * 45);
         }
 
         #region "Saltar perfil"

@@ -18,6 +18,7 @@ namespace Calibrator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("");
+            
             uint n = 0;
             IntPtr hJoy = IntPtr.Zero;
             CRawInput.GetRawInputDeviceList(IntPtr.Zero, ref n, (uint)Marshal.SizeOf(typeof(CRawInput.RawInputDeviceList)));
@@ -43,11 +44,6 @@ namespace Calibrator
                                 break;
                             }
                         }
-                        //cbsize = (uint)Marshal.SizeOf(typeof(CRawInput.DeviceInfo));
-                        //buff = Marshal.AllocHGlobal((int)cbsize);
-                        //CRawInput.GetRawInputDeviceInfo(l.DeviceHandle, 0x2000000b, buff, ref cbsize);
-                        //CRawInput.DeviceInfo di = Marshal.PtrToStructure<CRawInput.DeviceInfo>(buff);
-                        //Marshal.FreeHGlobal(buff);
                     }
                 }
                 Marshal.FreeHGlobal(lid);
