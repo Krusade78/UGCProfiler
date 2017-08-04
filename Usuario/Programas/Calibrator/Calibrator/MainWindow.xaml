@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Calibrator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Calibrator" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="res/Icon1.ico" SizeToContent="WidthAndHeight" Closing="Window_Closing"
+        xmlns:local="clr-namespace:Calibrator" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="res/combo.png" SizeToContent="WidthAndHeight" Closing="Window_Closing"
         Title="Calibrador de XHOTAS">
     <Window.Background>
         <ImageBrush ImageSource="res/CalibrationGrid.jpg"/>

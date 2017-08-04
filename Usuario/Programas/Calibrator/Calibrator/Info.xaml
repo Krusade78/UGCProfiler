@@ -544,24 +544,57 @@
                     </StackPanel>
                 </Grid>
 
-                <ToggleButton Content="Datos en bruto" HorizontalAlignment="Center" Margin="0,512,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="#FF078E02" Width="150" Height="50" BorderBrush="#FF05800B">
-                    <ToggleButton.Background>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF043304" Offset="0"/>
-                            <GradientStop Color="#FF095B09" Offset="1"/>
-                        </LinearGradientBrush>
-                    </ToggleButton.Background>
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="true">
-                                    <Setter Property="Background" Value="{StaticResource colorBarra}" />
-                                    <Setter Property="Foreground" Value="Yellow" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
+                <Grid HorizontalAlignment="Center" Margin="0,500,0,0" VerticalAlignment="Top" >
+                    <TextBlock HorizontalAlignment="Center" Text="Ver datos en bruto" VerticalAlignment="Top" Foreground="GreenYellow"/>
+                    <ToggleButton HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Foreground="#FF999999" Width="100" Height="50" BorderBrush="#FF707070" Background="{x:Null}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                            <Grid x:Name="gr">
+                                                <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <Grid>
+                                                        <Grid Margin="0,4,0,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+                                                            <Image Source="res/combo.png" Height="24" Margin="-52,0,0,0" />
+                                                            <TextBlock Margin="34,0,0,0" x:Name="contentPresenter" Text="319287u0101&#10;427469ewti&#10;023921237686" Foreground="#FFE89B4E" FontFamily="Wingdings 3" FontSize="6"  />
+                                                            <TextBlock Text="&#240;" Margin="-18,0,0,0" Foreground="#FFCBCB0D" FontFamily="Wingdings" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                        </Grid>
+                                                    </Grid>
+                                                </Border>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Cursor" Value="Hand" />
+                                                    <Setter Property="BorderBrush" TargetName="border" Value="#FF50A6E6"/>
+                                                    <Setter Property="Background" TargetName="border">
+                                                        <Setter.Value>
+                                                            <RadialGradientBrush>
+                                                                <GradientStop Color="#30003357" Offset="0"/>
+                                                                <GradientStop Color="#30002742" Offset="1"/>
+                                                            </RadialGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                    <Setter Property="Background" TargetName="border">
+                                                        <Setter.Value>
+                                                            <RadialGradientBrush>
+                                                                <GradientStop Color="#4F44B1FF" Offset="0"/>
+                                                                <GradientStop Color="#4F067BCC" Offset="1"/>
+                                                            </RadialGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="BorderBrush" TargetName="border" Value="#FF84BCEA"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                </Grid>
             </Grid>
         </Grid>
     </Border>

@@ -96,14 +96,58 @@
             </Grid>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,412,0,0">
-                <ToggleButton Width="100">
-                    <ToggleButton.Background>
-                        <ImageBrush ImageSource="res/x52jx.png"/>
-                    </ToggleButton.Background>
+                <StackPanel.Resources>
+                        <Style x:Key="tgb" TargetType="ToggleButton">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Grid>
+                                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                <ContentControl Content="{TemplateBinding Content}"/>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Setter Property="BorderBrush" TargetName="border" Value="#FF50A6E6"/>
+                                                <Setter Property="Background" TargetName="border">
+                                                    <Setter.Value>
+                                                        <RadialGradientBrush>
+                                                            <GradientStop Color="#30003357" Offset="0"/>
+                                                            <GradientStop Color="#30002742" Offset="1"/>
+                                                        </RadialGradientBrush>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                <Setter Property="Background" TargetName="border">
+                                                    <Setter.Value>
+                                                        <RadialGradientBrush>
+                                                            <GradientStop Color="#4F44B1FF" Offset="0"/>
+                                                            <GradientStop Color="#4F067BCC" Offset="1"/>
+                                                        </RadialGradientBrush>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="BorderBrush" TargetName="border" Value="#FF84BCEA"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                </StackPanel.Resources>
+                <ToggleButton Width="100" Height="100" BorderBrush="{x:Null}" Background="{x:Null}" IsChecked="True" Style="{StaticResource tgb}">
+                    <Image Source="res/x52jx.png" />
                 </ToggleButton>
-                <Image Source="res/x52jy.png" Stretch="None" />
-                <Image Source="res/x52tr.png" Stretch="None" />
-                <Image Source="res/x52tz.png" Stretch="None" />
+                <ToggleButton Width="100"  BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}" >
+                    <Image Source="res/x52jy.png" />
+                </ToggleButton>
+                <ToggleButton Width="100"  BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}" >
+                    <Image Source="res/x52tr.png" />
+                </ToggleButton>
+                <ToggleButton Width="100" Height="100" BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}" >
+                    <Image Source="res/x52tz.png" />
+                </ToggleButton>
             </StackPanel>
 
             <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,552,0,0">
