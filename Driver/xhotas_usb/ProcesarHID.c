@@ -54,14 +54,19 @@ VOID ConvertirEjesA2048(PUCHAR ejes)
 	for (i = 0; i < 16; i += 2)
 	{
 		UINT16 pos = *((PUINT16)&ejes[i]);
-		pos += 1;
-		if (pos == 1) pos = 0;
-		if (i == 4) //R
+		if (i < 4)
 		{
-			pos *= 4;
+			if (pos == 2047) pos = 2048;
 		}
-		else if (i >= 6) //Z Rx, Ry Sl1 Sl2
+		else if (i == 4) //R
 		{
+			if (pos == 1023) pos = 1024;
+			pos *= 2;
+		}
+		else //Z Rx, Ry Sl1 Sl2
+		{
+			pos += 1;
+			if (pos == 1) pos = 0;
 			pos *= 8;
 		}
 		RtlCopyMemory(&ejes[i], &pos, 2);
@@ -155,9 +160,6 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 	HID_INPUT_DATA viejohidData;
 	HID_INPUT_DATA outputData;
 
-	if (RtlCompareMemory(&devExt->DeltaHidData, hidData, sizeof(HID_INPUT_DATA)) == sizeof(HID_INPUT_DATA))
-		return;
-
 	WdfSpinLockAcquire(devExt->SpinLockDeltaHid);
 	{
 		RtlCopyMemory(&viejohidData, &devExt->DeltaHidData, sizeof(HID_INPUT_DATA));
@@ -221,8 +223,8 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 		RtlZeroMemory(&outputData, sizeof(HID_INPUT_DATA));
 		SensibilidadYMapeado(device, &viejohidData, hidData, &outputData);
 
-		RtlCopyMemory(hidData->Botones, devExt->stBotones, sizeof(hidData->Botones));
-		RtlCopyMemory(hidData->Setas, devExt->stSetas, sizeof(hidData->Setas));
+		RtlCopyMemory(outputData.Botones, devExt->stBotones, sizeof(hidData->Botones));
+		RtlCopyMemory(outputData.Setas, devExt->stSetas, sizeof(hidData->Setas));
 		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
 	}
 }
