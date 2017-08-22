@@ -13,7 +13,7 @@
             <GradientStop Color="#FFFF9D9D" Offset="0"/>
         </RadialGradientBrush>
     </UserControl.Resources>
-    <Border BorderBrush="#FF0074C5" BorderThickness="2,1,1,1" Margin="30,0,0,0" Width="525">
+    <Border BorderBrush="#FF0074C5" BorderThickness="2,1,1,1" Width="525">
         <Grid>
             <Grid.Background>
                 <RadialGradientBrush>
@@ -25,7 +25,7 @@
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                     <TextBlock Text="Ejes X,Y" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" />
                     <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" Height="128" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                        <Grid Height="2049" Width="2049" Background="#EF003200">
+                        <Grid Height="2148" Width="2148" Background="#EF003200">
                             <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="{DynamicResource colorCirculo}" Width="100" Height="100"/>
                         </Grid>
                     </Viewbox>
@@ -557,7 +557,7 @@
                                                     <Grid>
                                                         <Grid Margin="0,4,0,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
                                                             <Image Source="res/combo.png" Height="24" Margin="-52,0,0,0" />
-                                                            <TextBlock Margin="34,0,0,0" x:Name="contentPresenter" Text="319287u0101&#10;427469ewti&#10;023921237686" Foreground="#FFE89B4E" FontFamily="Wingdings 3" FontSize="6"  />
+                                                            <TextBlock Margin="34,0,0,0" x:Name="contentPresenter" Text="1001011101&#10;0010100110&#10;0101101011" Foreground="#FFE89B4E" FontFamily="Terminal" FontSize="8"  />
                                                             <TextBlock Text="&#240;" Margin="-18,0,0,0" Foreground="#FFCBCB0D" FontFamily="Wingdings" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                         </Grid>
                                                     </Grid>

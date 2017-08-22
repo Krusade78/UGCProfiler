@@ -58,6 +58,37 @@ namespace Calibrator
             ///// <summary>Data for the HID.</summary>
             //public IntPtr Data;
         }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RAWINPUTKEYBOARD
+        {
+            public ushort MakeCode;
+            public ushort Flags;
+            public ushort Reserved;
+            public ushort VKey;
+            public uint Message;
+            public ulong ExtraInformation;
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RAWINPUTMOUSE
+        {
+            public ushort usFlags;
+
+            [StructLayout(LayoutKind.Explicit)]
+            public struct Data
+            {
+                [FieldOffset(0)]
+                public ulong ulButtons;
+                [FieldOffset(0)]
+                public ushort usButtonFlags;
+                [FieldOffset(2)]
+                public ushort usButtonData;
+            }
+            public Data data;
+            public ulong ulRawButtons;
+            public long lLastX;
+            public long lLastY;
+            public ulong ulExtraInformation;
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RAWINPUTHEADER

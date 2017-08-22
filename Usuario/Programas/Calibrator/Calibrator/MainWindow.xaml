@@ -55,11 +55,11 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <RadioButton x:Name="tbPrueba" Content="Pruebas" Template="{DynamicResource RadioButtonTemplate}" Height="30" Checked="toggleButton_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667" IsChecked="True" />
-                <RadioButton x:Name="tbCalibrar" Grid.Row="1" Content="Calibración HID" Template="{DynamicResource RadioButtonTemplate}"  Height="30" Checked="toggleButton1_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="{Binding RowDefinitions/ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667"/>
+                <RadioButton x:Name="tbPrueba" Content="Pruebas" Template="{DynamicResource RadioButtonTemplate}" Height="30" Width="315" Checked="toggleButton_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667" IsChecked="True" />
+                <RadioButton x:Name="tbCalibrar" Grid.Row="1" Content="Calibración HID" Template="{DynamicResource RadioButtonTemplate}"  Height="30" Checked="toggleButton1_Checked" Margin="0,0,0,-30" VerticalAlignment="Bottom" Width="315" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18.667"/>
             </Grid>
             
-            <Grid Width="525">
+            <Grid Margin="30,0,0,0">
                 <local:HIDCal x:Name="ucCalibrar" HorizontalAlignment="Left" Width="0">
                     <local:HIDCal.Style>
                         <Style TargetType="{x:Type UserControl}">

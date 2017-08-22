@@ -109,6 +109,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CSystem32.cs" />
     <Compile Include="HIDCal.xaml.cs">
       <DependentUpon>HIDCal.xaml</DependentUpon>
     </Compile>
@@ -167,6 +168,9 @@
   <ItemGroup>
     <Resource Include="res\keybd.ico" />
     <Resource Include="res\Mouse.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\combo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

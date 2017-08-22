@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Runtime.InteropServices;
+using System.Globalization;
 
 namespace Calibrator
 {
@@ -13,7 +13,15 @@ namespace Calibrator
         public Info()
         {
             InitializeComponent();
-            checkBox_Unchecked(null, null);
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)((Grid)((Grid)((Grid)this.Parent).Parent).Parent).Parent).SetModoRaw(true);
+        }
+        private void checkBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)((Grid)((Grid)((Grid)this.Parent).Parent).Parent).Parent).SetModoRaw(false);
         }
 
         public void ActualizarEstado(byte[] hidData)
@@ -25,7 +33,7 @@ namespace Calibrator
 
             int r = (hidData[5] << 8) | hidData[4];
             Labelr.Text = r.ToString();
-            ejeR.Height = r;
+            ejeR.Width = r;
 
             int z = (hidData[7] << 8) | hidData[6];
             Labelz.Text = z.ToString();
@@ -33,13 +41,17 @@ namespace Calibrator
 
             int rx = (hidData[9] << 8) | hidData[8];
             Labelrx.Text = rx.ToString();
-            double angulo = (Math.PI * ((360 / 2048) * rx)) / 180;
-            ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0": "1") + "0 " + (Math.Cos(angulo)*25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
+            double angulo = (Math.PI * (((double)360 / 2048) * rx)) / 180;
+            String ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+            String ax = (rx == 2048) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+            ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1": "0") + " 1 " + ax + "," + ay + " Z");
 
             int ry = (hidData[11] << 8) | hidData[10];
-            angulo = (Math.PI * ((360 / 2048) * ry)) / 180;
             Labelry.Text = ry.ToString();
-            ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,0 A25,25 0 " + ((angulo > Math.PI) ? "0" : "1") + "0 " + (Math.Cos(angulo) * 25) + "," + (Math.Sin(angulo) * 25) + " L25,25");
+            angulo = (Math.PI * (((double)360 / 2048) * ry)) / 180;
+            ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+            ax = (ry == 2048) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+            ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1" : "0") + " 1 " + ax + "," + ay + " Z");
 
             int sl1 = (hidData[13] << 8) | hidData[12];
             Labelsl1.Text = sl1.ToString();
@@ -70,62 +82,5 @@ namespace Calibrator
             pathP4.Visibility = (hidData[19] == 0) ? Visibility.Hidden : Visibility.Visible;
             pathP4.RenderTransform = new System.Windows.Media.RotateTransform((hidData[19] > 5) ? (hidData[19] - 9) * 45 : (hidData[19] - 1) * 45);
         }
-
-        #region "Saltar perfil"
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern Microsoft.Win32.SafeHandles.SafeFileHandle CreateFile(string lpFileName, UInt32 dwDesiredAccess, UInt32 dwShareMode, IntPtr pSecurityAttributes, UInt32 dwCreationDisposition, UInt32 dwFlagsAndAttributes, IntPtr hTemplateFile);
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool DeviceIoControl(Microsoft.Win32.SafeHandles.SafeFileHandle handle, UInt32 dwIoControlCode, byte[] lpInBuffer, UInt32 nInBufferSize, byte[] lpOutBuffer, UInt32 nOutBufferSize, out UInt32 lpBytesReturned, IntPtr lpOverlapped);
-        private void checkBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CreateFile(
-                    "\\\\.\\XUSBInterface",
-                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                    IntPtr.Zero,
-                    3,//OPEN_EXISTING,
-                    0,
-                    IntPtr.Zero);
-            if (driver.IsInvalid)
-                return;
-
-            UInt32 ret = 0;
-            UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0808) << 2) | (0);
-            byte[] buff = new byte[] { 1 };
-            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, out ret, IntPtr.Zero))
-            {
-                int err = Marshal.GetLastWin32Error();
-                driver.Close();
-                return;
-            }
-
-            driver.Close();
-        }
-        private void checkBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CreateFile(
-                    "\\\\.\\XUSBInterface",
-                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                    IntPtr.Zero,
-                    3,//OPEN_EXISTING,
-                    0,
-                    IntPtr.Zero);
-            if (driver.IsInvalid)
-                return;
-
-            UInt32 ret = 0;
-            UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0808) << 2) | (0);
-            byte[] buff = new byte[] { 0 };
-            if (!DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, out ret, System.IntPtr.Zero))
-            {
-                int err = Marshal.GetLastWin32Error();
-                driver.Close();
-                return;
-            }
-
-            driver.Close();
-        }
-        #endregion
     }
 }
