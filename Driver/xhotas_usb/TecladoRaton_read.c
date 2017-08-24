@@ -34,7 +34,7 @@ BOOLEAN ProcesarEventoTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 	NTSTATUS		status;
 	PVOID			buffer;
 
-	soltar = ((tipo >> 5) == 1) ? TRUE : FALSE;
+	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
 	tipo &= 0x1f;
 
 	if (!soltar)
@@ -78,55 +78,55 @@ BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 
 	switch (tipo & 0x1f)
 	{
-	case 1:
+	case TipoComando_RatonBt1:
 		if (!soltar)
 			devExt->stRaton[0] |= 1;
 		else
 			devExt->stRaton[0] &= 254;
 		break;
-	case 2:
+	case TipoComando_RatonBt2:
 		if (!soltar)
 			devExt->stRaton[0] |= 2;
 		else
 			devExt->stRaton[0] &= 253;
 		break;
-	case 3:
+	case TipoComando_RatonBt3:
 		if (!soltar)
 			devExt->stRaton[0] |= 4;
 		else
 			devExt->stRaton[0] &= 251;
 		break;
-	case 4: //Eje -x
+	case TipoComando_RatonIzq: //Eje -x
 		if (!soltar)
 			devExt->stRaton[1] = -dato;
 		else
 			devExt->stRaton[1] = 0;
 		break;
-	case 5: //Eje x
+	case TipoComando_RatonDer: //Eje x
 		if (!soltar)
 			devExt->stRaton[1] = dato;
 		else
 			devExt->stRaton[1] = 0;
 		break;
-	case 6: //Eje -y
+	case TipoComando_RatonArr: //Eje -y
 		if (!soltar)
 			devExt->stRaton[2] = -dato;
 		else
 			devExt->stRaton[2] = 0;
 		break;
-	case 7: //Eje y
+	case TipoComando_RatonAba: //Eje y
 		if (!soltar)
 			devExt->stRaton[2] = dato;
 		else
 			devExt->stRaton[2] = 0;
 		break;
-	case 8: // Wheel up
+	case TipoComando_RatonWhArr: // Wheel up
 		if (!soltar)
 			devExt->stRaton[3] = 127;
 		else
 			devExt->stRaton[3] = 0;
 		break;
-	case 9: // Wheel down
+	case TipoComando_RatonWhAba: // Wheel down
 		if (!soltar)
 			devExt->stRaton[3] = (UCHAR)-127;
 		else
@@ -178,11 +178,11 @@ VOID EvtTickRaton(_In_ WDFTIMER Timer)
 		{
 			if (GetDeviceContext(device)->HID.stRaton[1] < 0)
 			{
-				accion[0] = 4 | 64;
+				accion[0] = TipoComando_RatonIzq | 64;
 			}
 			else
 			{
-				accion[0] = 5 | 64;
+				accion[0] = TipoComando_RatonDer| 64;
 			}
 			accion[1] = GetDeviceContext(device)->HID.stRaton[1];
 		}
@@ -200,11 +200,11 @@ VOID EvtTickRaton(_In_ WDFTIMER Timer)
 		{
 			if (GetDeviceContext(device)->HID.stRaton[2] < 0)
 			{
-				accion[0] = 6 | 64;
+				accion[0] = TipoComando_RatonArr | 64;
 			}
 			else
 			{
-				accion[0] = 7 | 64;
+				accion[0] = TipoComando_RatonAba | 64;
 			}
 			accion[1] = GetDeviceContext(device)->HID.stRaton[2];
 		}

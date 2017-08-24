@@ -149,7 +149,7 @@ VOID ProcesarAcciones(WDFDEVICE device, BOOLEAN enDelay)
 			while (nsiguiente != NULL)
 			{
 				PCOLA cola = (PCOLA)nsiguiente->Datos;
-				if ((((PUCHAR)cola->principio->Datos)[0] & 0x1f) != 11) //tipo
+				if ((((PUCHAR)cola->principio->Datos)[0]) != TipoComando_Hold) //tipo
 				{
 					soloHolds = FALSE;
 					break;
@@ -188,7 +188,7 @@ VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay)
 			} evento;
 			RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
 
-			if (((evento.tipo & 0x1f) > 0) && ((evento.tipo & 0x1f) < 10))
+			if (((evento.tipo & 0x1f) > TipoComando_Tecla) && ((evento.tipo & 0x1f) < TipoComando_Delay))
 			{
 				if (ProcesarEventoRaton(device, evento.tipo, evento.dato))
 				{
@@ -200,7 +200,7 @@ VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay)
 					break;
 				}
 			}
-			else if ((evento.tipo & 0x1f) == 0)
+			else if ((evento.tipo & 0x1f) == TipoComando_Tecla)
 			{
 				if (ProcesarEventoTeclado(device, evento.tipo, evento.dato))
 				{
@@ -212,7 +212,7 @@ VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay)
 					break;
 				}
 			}
-			else if (((evento.tipo & 0x1f) == 18) || ((evento.tipo & 0x1f) == 19))
+			else if (((evento.tipo & 0x1f) == TipoComando_DxBoton) || ((evento.tipo & 0x1f) == TipoComando_DxSeta))
 			{
 				ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
 				if (!enDelay)
@@ -225,18 +225,18 @@ VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay)
 					break;
 				}
 			}
-			else if ((((evento.tipo & 0x1f) > 13) && ((evento.tipo & 0x1f) < 17)) || ((evento.tipo & 0x1f) >= 20))
+			else if ((evento.tipo == TipoComando_Modo) || (evento.tipo == TipoComando_Pinkie) || ((evento.tipo & 0x1f) >= TipoComando_MfdLuz))
 			{
 				ProcesarEventoX52_Modos(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
 				ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
 			}
-			else if ((((evento.tipo & 0x1f) >= 10) && ((evento.tipo & 0x1f) <= 13)) || ((evento.tipo & 0x1f) == 17))
+			else if (((evento.tipo >= TipoComando_Delay) && (evento.tipo <= TipoComando_RepeatN)) || (evento.tipo == TipoComando_RepeatIni))
 			{
 				if (!ProcesarEventoRepeticiones_Delay(device, (PCOLA)posAccion->Datos, posComando, &evento.tipo, evento.dato))
 					break;
 				else
 				{
-					if ((evento.tipo & 0x1f) == 17)
+					if ((evento.tipo & 0x1f) == TipoComando_RepeatIni)
 						canterior = posComando;
 				}
 			}
@@ -267,19 +267,19 @@ VOID ProcesarDirectX(WDFDEVICE device, BOOLEAN enDelay, UCHAR tipo, UCHAR dato)
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
 	BOOLEAN			soltar;
 
-	soltar = ((tipo >> 5) == 1) ? TRUE : FALSE;
+	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
 	tipo &= 0x1f;
 
 	switch (tipo)
 	{
-	case 18: // Botón DX
+	case TipoComando_DxBoton: // Botón DX
 		if (!soltar)
 			devExt->stBotones[dato / 8] |= 1 << (dato % 8);
 		else
 			devExt->stBotones[dato / 8] &= ~(1 << (dato % 8));
 
 		break;
-	case 19: // Seta DX
+	case TipoComando_DxSeta: // Seta DX
 		if (!soltar)
 			devExt->stSetas[dato / 8] = (dato % 8) + 1;
 		else
@@ -314,49 +314,46 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tip
 {
 	HID_CONTEXT* devExt = &GetDeviceContext(device)->HID;
 
-	tipo &= 0x1f;
-
 	switch (tipo)
 	{
-	case 14: //Cambio modo
-		devExt->EstadoModos = dato;
-		break;
-	case 16: //Cambio modo Pinkie
-		devExt->EstadoPinkie = dato;
-		break;
-	case 20: //mfd_luz
-	{
-		UCHAR params = dato;
-		Luz_MFD(device, &params);
-	}
-	break;
-	case 21: // luz
-	{
-		UCHAR params = dato;
-		Luz_Global(device, &params);
-	}
-	break;
-	case 22: // info luz
-	{
-		UCHAR params = dato;
-		Luz_Info(device, &params);
-	}
-	break;
-	case 23: // pinkie;
-	{
-		UCHAR params = dato;
-		Set_Pinkie(device, &params);
-	}
-	break;
-	case 24: // texto
-	{
-		UCHAR texto[17];
+		case TipoComando_Modo: //Cambio modo
+			devExt->EstadoModos = dato;
+			break;
+		case TipoComando_Pinkie: //Cambio modo Pinkie
+			devExt->EstadoPinkie = dato;
+			break;
+		case TipoComando_MfdLuz: //mfd_luz
 		{
+			UCHAR params = dato;
+			Luz_MFD(device, &params);
+			break;
+		}
+		case TipoComando_Luz: // luz
+		{
+			UCHAR params = dato;
+			Luz_Global(device, &params);
+			break;
+		}
+		case TipoComando_InfoLuz: // info luz
+		{
+			UCHAR params = dato;
+			Luz_Info(device, &params);
+			break;
+		}
+		case TipoComando_MfdPinkie: // pinkie;
+		{
+			UCHAR params = dato;
+			Set_Pinkie(device, &params);
+			break;
+		}
+		case TipoComando_MfdTexto: // texto
+		{
+			UCHAR texto[17];
 			PNODO nodos = nodo->siguiente;
 			UCHAR idx = 1;
 			RtlZeroMemory(texto, 17);
 			texto[0] = dato;
-			while (*((PUCHAR)nodos->Datos) != 56) // fin texto
+			while (*((PUCHAR)nodos->Datos) != TipoComando_MfdTextoFin) // fin texto
 			{
 				texto[idx] = *((PUCHAR)nodos->Datos + 1);
 				idx++;
@@ -365,40 +362,39 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tip
 			}
 			ColaBorrarNodo(cola, nodos);
 			Set_Texto(device, texto, idx);
+			break;
 		}
-	}
-	break;
-	case 25: // hora
-	{
-		UCHAR params[3];
-		params[0] = dato;
-		params[1] = *((PUCHAR)nodo->siguiente->Datos + 1);
-		ColaBorrarNodo(cola, nodo->siguiente);
-		params[2] = *((PUCHAR)nodo->siguiente->Datos + 1);
-		ColaBorrarNodo(cola, nodo->siguiente);
-		Set_Hora(device, params);
-	}
-	break;
-	case 26: // hora 24
-	{
-		UCHAR params[3];
-		params[0] = dato;
-		params[1] = *((PUCHAR)nodo->siguiente->Datos + 1);
-		ColaBorrarNodo(cola, nodo->siguiente);
-		params[2] = *((PUCHAR)nodo->siguiente->Datos + 1);
-		ColaBorrarNodo(cola, nodo->siguiente);
-		Set_Hora24(device, params);
-	}
-	break;
-	case 27: // fecha
-	{
-		UCHAR params[2];
-		params[0] = dato;
-		params[1] = *((PUCHAR)nodo->siguiente->Datos + 1);
-		ColaBorrarNodo(cola, nodo->siguiente);
-		Set_Fecha(device, params);
-	}
-	break;
+		case TipoComando_MfdHora: // hora
+		{
+			UCHAR params[3];
+			params[0] = dato;
+			params[1] = *((PUCHAR)nodo->siguiente->Datos + 1);
+			ColaBorrarNodo(cola, nodo->siguiente);
+			params[2] = *((PUCHAR)nodo->siguiente->Datos + 1);
+			ColaBorrarNodo(cola, nodo->siguiente);
+			Set_Hora(device, params);
+			break;
+		}
+		case TipoComando_MfdHora24: // hora 24
+		{
+			UCHAR params[3];
+			params[0] = dato;
+			params[1] = *((PUCHAR)nodo->siguiente->Datos + 1);
+			ColaBorrarNodo(cola, nodo->siguiente);
+			params[2] = *((PUCHAR)nodo->siguiente->Datos + 1);
+			ColaBorrarNodo(cola, nodo->siguiente);
+			Set_Hora24(device, params);
+			break;
+		}
+		case TipoComando_MfdFecha: // fecha
+		{
+			UCHAR params[2];
+			params[0] = dato;
+			params[1] = *((PUCHAR)nodo->siguiente->Datos + 1);
+			ColaBorrarNodo(cola, nodo->siguiente);
+			Set_Fecha(device, params);
+			break;
+		}
 	}
 }
 
@@ -462,32 +458,32 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 
 		break;
 #pragma region "Autorepeat infinito"
-	case 12:
+	case TipoComando_Repeat:
 		if (!EstaHold(devExt, dato))
 		{
 			PNODO nodos = nodo->siguiente;
-			while (*((PUCHAR)nodos->Datos) != 44) // fin autorepeat infinito
+			while (*((PUCHAR)nodos->Datos) != TipoComando_RepeatFin) // fin autorepeat infinito
 			{
 				ColaBorrarNodo(cola, nodos);
 				nodos = nodo->siguiente;
 			}
-			ColaBorrarNodo(cola, nodos); // 44
-			ColaBorrarNodo(cola, nodo); //12
+			ColaBorrarNodo(cola, nodos); // TipoComando_RepeatFin
+			ColaBorrarNodo(cola, nodo); //TipoComando_Repeat
 		}
 		else
 		{
 			COLA nodosNuevos;
 
-			if (!ReservarMemoriaRepeticiones(&nodosNuevos, nodo, 44))
+			if (!ReservarMemoriaRepeticiones(&nodosNuevos, nodo, TipoComando_RepeatFin))
 			{
 				PNODO nodos = nodo->siguiente;
-				while (*((PUCHAR)nodos->Datos) != 44) // fin autorepeat infinito
+				while (*((PUCHAR)nodos->Datos) != TipoComando_RepeatFin) // fin autorepeat infinito
 				{
 					ColaBorrarNodo(cola, nodos);
 					nodos = nodo->siguiente;
 				}
-				ColaBorrarNodo(cola, nodos); // 44
-				ColaBorrarNodo(cola, nodo); //12
+				ColaBorrarNodo(cola, nodos); // TipoComando_RepeatFin
+				ColaBorrarNodo(cola, nodo); //TipoComando_Repeat
 			}
 			else
 			{
@@ -504,11 +500,11 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 				pos = nodosNuevos.principio->siguiente;
 
 				// primer nodo repetición "17"
-				*((PUCHAR)nodosNuevos.principio->Datos) = 17;
+				*((PUCHAR)nodosNuevos.principio->Datos) = TipoComando_RepeatIni;
 				*((PUCHAR)nodosNuevos.principio->Datos + 1) = 0;
 
 				// resto
-				while (*((PUCHAR)nodos->Datos) != 44) // fin autorepeat infinito
+				while (*((PUCHAR)nodos->Datos) != TipoComando_RepeatFin) // fin autorepeat infinito
 				{
 					RtlCopyMemory(pos->Datos, nodos->Datos, 2);
 					pos = pos->siguiente;
@@ -521,7 +517,7 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 		break;
 #pragma endregion
 #pragma region "Autorepeat N"
-	case 13:
+	case TipoComando_RepeatN:
 		if (dato == 0)
 			limpiar13 :
 		{
@@ -533,7 +529,7 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 
 			*((PUCHAR)nodo->Datos + 1) -= 1; //Reduce la cuenta (evento.dato)
 
-			if (!ReservarMemoriaRepeticiones(&nodosNuevos, nodo, 45))
+			if (!ReservarMemoriaRepeticiones(&nodosNuevos, nodo, TipoComando_RepeatNFin))
 				goto limpiar13;
 			else
 			{
@@ -551,11 +547,11 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 				pos = nodosNuevos.principio->siguiente;
 
 				// primer nodo repetición "17"
-				*((PUCHAR)nodosNuevos.principio->Datos) = 17;
+				*((PUCHAR)nodosNuevos.principio->Datos) = TipoComando_RepeatIni;
 				*((PUCHAR)nodosNuevos.principio->Datos + 1) = 0;
 
 				// resto
-				while (*((PUCHAR)nodos->Datos) != 45) // fin autorepeat infinito
+				while (*((PUCHAR)nodos->Datos) != TipoComando_RepeatNFin) // fin autorepeat infinito
 				{
 					RtlCopyMemory(pos->Datos, nodos->Datos, 2);
 					pos = pos->siguiente;
@@ -568,8 +564,8 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 		}
 		break;
 #pragma endregion
-	case 17: // estoy procesando repeat
-		if (*((PUCHAR)(nodo->siguiente->Datos)) == 12 || *((PUCHAR)(nodo->siguiente->Datos)) == 13)
+	case TipoComando_RepeatIni: // estoy procesando repeat
+		if (*((PUCHAR)(nodo->siguiente->Datos)) == TipoComando_Repeat || *((PUCHAR)(nodo->siguiente->Datos)) == TipoComando_RepeatN)
 		{
 			PNODO pos = devExt->ColaAcciones.principio;
 			while (pos != NULL)
@@ -581,7 +577,7 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 				if (nodo2 != NULL)
 					tipo2 = ((PUCHAR)nodo2->Datos)[0] & 0x1f;
 
-				if ((tipo1 == 17) && ((tipo2 == 12) || (tipo2 == 13)))
+				if ((tipo1 == TipoComando_RepeatIni) && ((tipo2 == TipoComando_Repeat) || (tipo2 == TipoComando_RepeatN)))
 					pos = pos->siguiente;
 				else
 					return FALSE;
