@@ -38,6 +38,22 @@ namespace ComsDrv {
         
         private ACCIONESDataTable tableACCIONES;
         
+        private INDICESEJESDataTable tableINDICESEJES;
+        
+        private INDICESEJESPEQUEDataTable tableINDICESEJESPEQUE;
+        
+        private INDICESSETASDataTable tableINDICESSETAS;
+        
+        private INDICESBOTONESDataTable tableINDICESBOTONES;
+        
+        private global::System.Data.DataRelation relationFK_ACCIONES_INDICESEJES;
+        
+        private global::System.Data.DataRelation relationFK_ACCIONES_INDICESEJESPEQUE;
+        
+        private global::System.Data.DataRelation relationFK_ACCIONES_INDICESSETAS;
+        
+        private global::System.Data.DataRelation relationFK_ACCIONES_INDICESBOTONES;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -86,6 +102,18 @@ namespace ComsDrv {
                 }
                 if ((ds.Tables["ACCIONES"] != null)) {
                     base.Tables.Add(new ACCIONESDataTable(ds.Tables["ACCIONES"]));
+                }
+                if ((ds.Tables["INDICESEJES"] != null)) {
+                    base.Tables.Add(new INDICESEJESDataTable(ds.Tables["INDICESEJES"]));
+                }
+                if ((ds.Tables["INDICESEJESPEQUE"] != null)) {
+                    base.Tables.Add(new INDICESEJESPEQUEDataTable(ds.Tables["INDICESEJESPEQUE"]));
+                }
+                if ((ds.Tables["INDICESSETAS"] != null)) {
+                    base.Tables.Add(new INDICESSETASDataTable(ds.Tables["INDICESSETAS"]));
+                }
+                if ((ds.Tables["INDICESBOTONES"] != null)) {
+                    base.Tables.Add(new INDICESBOTONESDataTable(ds.Tables["INDICESBOTONES"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -177,6 +205,46 @@ namespace ComsDrv {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public INDICESEJESDataTable INDICESEJES {
+            get {
+                return this.tableINDICESEJES;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public INDICESEJESPEQUEDataTable INDICESEJESPEQUE {
+            get {
+                return this.tableINDICESEJESPEQUE;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public INDICESSETASDataTable INDICESSETAS {
+            get {
+                return this.tableINDICESSETAS;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public INDICESBOTONESDataTable INDICESBOTONES {
+            get {
+                return this.tableINDICESBOTONES;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -263,6 +331,18 @@ namespace ComsDrv {
                 if ((ds.Tables["ACCIONES"] != null)) {
                     base.Tables.Add(new ACCIONESDataTable(ds.Tables["ACCIONES"]));
                 }
+                if ((ds.Tables["INDICESEJES"] != null)) {
+                    base.Tables.Add(new INDICESEJESDataTable(ds.Tables["INDICESEJES"]));
+                }
+                if ((ds.Tables["INDICESEJESPEQUE"] != null)) {
+                    base.Tables.Add(new INDICESEJESPEQUEDataTable(ds.Tables["INDICESEJESPEQUE"]));
+                }
+                if ((ds.Tables["INDICESSETAS"] != null)) {
+                    base.Tables.Add(new INDICESSETASDataTable(ds.Tables["INDICESSETAS"]));
+                }
+                if ((ds.Tables["INDICESBOTONES"] != null)) {
+                    base.Tables.Add(new INDICESBOTONESDataTable(ds.Tables["INDICESBOTONES"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -338,6 +418,34 @@ namespace ComsDrv {
                     this.tableACCIONES.InitVars();
                 }
             }
+            this.tableINDICESEJES = ((INDICESEJESDataTable)(base.Tables["INDICESEJES"]));
+            if ((initTable == true)) {
+                if ((this.tableINDICESEJES != null)) {
+                    this.tableINDICESEJES.InitVars();
+                }
+            }
+            this.tableINDICESEJESPEQUE = ((INDICESEJESPEQUEDataTable)(base.Tables["INDICESEJESPEQUE"]));
+            if ((initTable == true)) {
+                if ((this.tableINDICESEJESPEQUE != null)) {
+                    this.tableINDICESEJESPEQUE.InitVars();
+                }
+            }
+            this.tableINDICESSETAS = ((INDICESSETASDataTable)(base.Tables["INDICESSETAS"]));
+            if ((initTable == true)) {
+                if ((this.tableINDICESSETAS != null)) {
+                    this.tableINDICESSETAS.InitVars();
+                }
+            }
+            this.tableINDICESBOTONES = ((INDICESBOTONESDataTable)(base.Tables["INDICESBOTONES"]));
+            if ((initTable == true)) {
+                if ((this.tableINDICESBOTONES != null)) {
+                    this.tableINDICESBOTONES.InitVars();
+                }
+            }
+            this.relationFK_ACCIONES_INDICESEJES = this.Relations["FK_ACCIONES_INDICESEJES"];
+            this.relationFK_ACCIONES_INDICESEJESPEQUE = this.Relations["FK_ACCIONES_INDICESEJESPEQUE"];
+            this.relationFK_ACCIONES_INDICESSETAS = this.Relations["FK_ACCIONES_INDICESSETAS"];
+            this.relationFK_ACCIONES_INDICESBOTONES = this.Relations["FK_ACCIONES_INDICESBOTONES"];
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -362,6 +470,59 @@ namespace ComsDrv {
             base.Tables.Add(this.tableGENERAL);
             this.tableACCIONES = new ACCIONESDataTable();
             base.Tables.Add(this.tableACCIONES);
+            this.tableINDICESEJES = new INDICESEJESDataTable();
+            base.Tables.Add(this.tableINDICESEJES);
+            this.tableINDICESEJESPEQUE = new INDICESEJESPEQUEDataTable();
+            base.Tables.Add(this.tableINDICESEJESPEQUE);
+            this.tableINDICESSETAS = new INDICESSETASDataTable();
+            base.Tables.Add(this.tableINDICESSETAS);
+            this.tableINDICESBOTONES = new INDICESBOTONESDataTable();
+            base.Tables.Add(this.tableINDICESBOTONES);
+            global::System.Data.ForeignKeyConstraint fkc;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESEJES.IndiceColumn});
+            this.tableINDICESEJES.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJESPEQUE", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESEJESPEQUE.IndiceColumn});
+            this.tableINDICESEJESPEQUE.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESSETAS", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESSETAS.IndiceColumn});
+            this.tableINDICESSETAS.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESBOTONES", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESBOTONES.IndiceColumn});
+            this.tableINDICESBOTONES.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            this.relationFK_ACCIONES_INDICESEJES = new global::System.Data.DataRelation("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESEJES.IndiceColumn}, false);
+            this.Relations.Add(this.relationFK_ACCIONES_INDICESEJES);
+            this.relationFK_ACCIONES_INDICESEJESPEQUE = new global::System.Data.DataRelation("FK_ACCIONES_INDICESEJESPEQUE", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESEJESPEQUE.IndiceColumn}, false);
+            this.Relations.Add(this.relationFK_ACCIONES_INDICESEJESPEQUE);
+            this.relationFK_ACCIONES_INDICESSETAS = new global::System.Data.DataRelation("FK_ACCIONES_INDICESSETAS", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESSETAS.IndiceColumn}, false);
+            this.Relations.Add(this.relationFK_ACCIONES_INDICESSETAS);
+            this.relationFK_ACCIONES_INDICESBOTONES = new global::System.Data.DataRelation("FK_ACCIONES_INDICESBOTONES", new global::System.Data.DataColumn[] {
+                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
+                        this.tableINDICESBOTONES.IndiceColumn}, false);
+            this.Relations.Add(this.relationFK_ACCIONES_INDICESBOTONES);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -403,6 +564,30 @@ namespace ComsDrv {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeACCIONES() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeINDICESEJES() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeINDICESEJESPEQUE() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeINDICESSETAS() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeINDICESBOTONES() {
             return false;
         }
         
@@ -482,6 +667,18 @@ namespace ComsDrv {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void ACCIONESRowChangeEventHandler(object sender, ACCIONESRowChangeEvent e);
         
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void INDICESEJESRowChangeEventHandler(object sender, INDICESEJESRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void INDICESEJESPEQUERowChangeEventHandler(object sender, INDICESEJESPEQUERowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void INDICESSETASRowChangeEventHandler(object sender, INDICESSETASRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void INDICESBOTONESRowChangeEventHandler(object sender, INDICESBOTONESRowChangeEvent e);
+        
         /// <summary>
         ///Represents the strongly named DataTable class.
         ///</summary>
@@ -502,8 +699,6 @@ namespace ComsDrv {
             private global::System.Data.DataColumn columnSensibilidad;
             
             private global::System.Data.DataColumn columnBandas;
-            
-            private global::System.Data.DataColumn columnIndices;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -596,14 +791,6 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IndicesColumn {
-                get {
-                    return this.columnIndices;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -639,7 +826,7 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPAEJESRow AddMAPAEJESRow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Sensibilidad, byte[] Bandas, ushort[] Indices) {
+            public MAPAEJESRow AddMAPAEJESRow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Sensibilidad, byte[] Bandas) {
                 MAPAEJESRow rowMAPAEJESRow = ((MAPAEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
@@ -648,8 +835,7 @@ namespace ComsDrv {
                         Mouse,
                         nEje,
                         Sensibilidad,
-                        Bandas,
-                        Indices};
+                        Bandas};
                 rowMAPAEJESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPAEJESRow);
                 return rowMAPAEJESRow;
@@ -688,7 +874,6 @@ namespace ComsDrv {
                 this.columnnEje = base.Columns["nEje"];
                 this.columnSensibilidad = base.Columns["Sensibilidad"];
                 this.columnBandas = base.Columns["Bandas"];
-                this.columnIndices = base.Columns["Indices"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -708,8 +893,6 @@ namespace ComsDrv {
                 base.Columns.Add(this.columnSensibilidad);
                 this.columnBandas = new global::System.Data.DataColumn("Bandas", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBandas);
-                this.columnIndices = new global::System.Data.DataColumn("Indices", typeof(ushort[]), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIndices);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidEje,
                                 this.columnidModo,
@@ -721,7 +904,6 @@ namespace ComsDrv {
                 this.columnnEje.AllowDBNull = false;
                 this.columnSensibilidad.AllowDBNull = false;
                 this.columnBandas.AllowDBNull = false;
-                this.columnIndices.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -867,8 +1049,6 @@ namespace ComsDrv {
             
             private global::System.Data.DataColumn columnBandas;
             
-            private global::System.Data.DataColumn columnIndices;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public MAPAEJESPEQUEDataTable() {
@@ -952,14 +1132,6 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IndicesColumn {
-                get {
-                    return this.columnIndices;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -995,7 +1167,7 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPAEJESPEQUERow AddMAPAEJESPEQUERow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Bandas, ushort[] Indices) {
+            public MAPAEJESPEQUERow AddMAPAEJESPEQUERow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Bandas) {
                 MAPAEJESPEQUERow rowMAPAEJESPEQUERow = ((MAPAEJESPEQUERow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
@@ -1003,8 +1175,7 @@ namespace ComsDrv {
                         idEje,
                         Mouse,
                         nEje,
-                        Bandas,
-                        Indices};
+                        Bandas};
                 rowMAPAEJESPEQUERow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPAEJESPEQUERow);
                 return rowMAPAEJESPEQUERow;
@@ -1042,7 +1213,6 @@ namespace ComsDrv {
                 this.columnMouse = base.Columns["Mouse"];
                 this.columnnEje = base.Columns["nEje"];
                 this.columnBandas = base.Columns["Bandas"];
-                this.columnIndices = base.Columns["Indices"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1060,8 +1230,6 @@ namespace ComsDrv {
                 base.Columns.Add(this.columnnEje);
                 this.columnBandas = new global::System.Data.DataColumn("Bandas", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBandas);
-                this.columnIndices = new global::System.Data.DataColumn("Indices", typeof(ushort[]), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIndices);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidEje,
                                 this.columnidModo,
@@ -1072,7 +1240,6 @@ namespace ComsDrv {
                 this.columnMouse.AllowDBNull = false;
                 this.columnnEje.AllowDBNull = false;
                 this.columnBandas.AllowDBNull = false;
-                this.columnIndices.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1535,8 +1702,6 @@ namespace ComsDrv {
             
             private global::System.Data.DataColumn columnEstado;
             
-            private global::System.Data.DataColumn columnIndices;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public MAPABOTONESDataTable() {
@@ -1604,14 +1769,6 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IndicesColumn {
-                get {
-                    return this.columnIndices;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1647,14 +1804,13 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPABOTONESRow AddMAPABOTONESRow(byte idPinkie, byte idModo, byte idEje, byte Estado, ushort[] Indices) {
+            public MAPABOTONESRow AddMAPABOTONESRow(byte idPinkie, byte idModo, byte idEje, byte Estado) {
                 MAPABOTONESRow rowMAPABOTONESRow = ((MAPABOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
                         idModo,
                         idEje,
-                        Estado,
-                        Indices};
+                        Estado};
                 rowMAPABOTONESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPABOTONESRow);
                 return rowMAPABOTONESRow;
@@ -1690,7 +1846,6 @@ namespace ComsDrv {
                 this.columnidModo = base.Columns["idModo"];
                 this.columnidEje = base.Columns["idEje"];
                 this.columnEstado = base.Columns["Estado"];
-                this.columnIndices = base.Columns["Indices"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1704,8 +1859,6 @@ namespace ComsDrv {
                 base.Columns.Add(this.columnidEje);
                 this.columnEstado = new global::System.Data.DataColumn("Estado", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEstado);
-                this.columnIndices = new global::System.Data.DataColumn("Indices", typeof(ushort[]), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIndices);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidEje,
                                 this.columnidModo,
@@ -1715,8 +1868,6 @@ namespace ComsDrv {
                 this.columnidEje.AllowDBNull = false;
                 this.columnEstado.AllowDBNull = false;
                 this.columnEstado.Caption = "Mouse";
-                this.columnIndices.AllowDBNull = false;
-                this.columnIndices.Caption = "nEje";
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1858,8 +2009,6 @@ namespace ComsDrv {
             
             private global::System.Data.DataColumn columnEstado;
             
-            private global::System.Data.DataColumn columnIndices;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public MAPASETASDataTable() {
@@ -1927,14 +2076,6 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn IndicesColumn {
-                get {
-                    return this.columnIndices;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1970,14 +2111,13 @@ namespace ComsDrv {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPASETASRow AddMAPASETASRow(byte idPinkie, byte idModo, byte idEje, byte Estado, ushort[] Indices) {
+            public MAPASETASRow AddMAPASETASRow(byte idPinkie, byte idModo, byte idEje, byte Estado) {
                 MAPASETASRow rowMAPASETASRow = ((MAPASETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
                         idModo,
                         idEje,
-                        Estado,
-                        Indices};
+                        Estado};
                 rowMAPASETASRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPASETASRow);
                 return rowMAPASETASRow;
@@ -2013,7 +2153,6 @@ namespace ComsDrv {
                 this.columnidModo = base.Columns["idModo"];
                 this.columnidEje = base.Columns["idEje"];
                 this.columnEstado = base.Columns["Estado"];
-                this.columnIndices = base.Columns["Indices"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2027,8 +2166,6 @@ namespace ComsDrv {
                 base.Columns.Add(this.columnidEje);
                 this.columnEstado = new global::System.Data.DataColumn("Estado", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEstado);
-                this.columnIndices = new global::System.Data.DataColumn("Indices", typeof(ushort[]), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnIndices);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidEje,
                                 this.columnidModo,
@@ -2038,8 +2175,6 @@ namespace ComsDrv {
                 this.columnidEje.AllowDBNull = false;
                 this.columnEstado.AllowDBNull = false;
                 this.columnEstado.Caption = "Mouse";
-                this.columnIndices.AllowDBNull = false;
-                this.columnIndices.Caption = "nEje";
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2732,6 +2867,1184 @@ namespace ComsDrv {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class INDICESEJESDataTable : global::System.Data.TypedTableBase<INDICESEJESRow> {
+            
+            private global::System.Data.DataColumn columnidEje;
+            
+            private global::System.Data.DataColumn columnid;
+            
+            private global::System.Data.DataColumn columnIndice;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESDataTable() {
+                this.TableName = "INDICESEJES";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESEJESDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected INDICESEJESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idEjeColumn {
+                get {
+                    return this.columnidEje;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idColumn {
+                get {
+                    return this.columnid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IndiceColumn {
+                get {
+                    return this.columnIndice;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESRow this[int index] {
+                get {
+                    return ((INDICESEJESRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESRowChangeEventHandler INDICESEJESRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESRowChangeEventHandler INDICESEJESRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESRowChangeEventHandler INDICESEJESRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESRowChangeEventHandler INDICESEJESRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddINDICESEJESRow(INDICESEJESRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESRow AddINDICESEJESRow(uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJES) {
+                INDICESEJESRow rowINDICESEJESRow = ((INDICESEJESRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        idEje,
+                        id,
+                        null};
+                if ((parentACCIONESRowByFK_ACCIONES_INDICESEJES != null)) {
+                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESEJES[0];
+                }
+                rowINDICESEJESRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowINDICESEJESRow);
+                return rowINDICESEJESRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESRow FindByidEjeid(uint idEje, byte id) {
+                return ((INDICESEJESRow)(this.Rows.Find(new object[] {
+                            idEje,
+                            id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                INDICESEJESDataTable cln = ((INDICESEJESDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new INDICESEJESDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnidEje = base.Columns["idEje"];
+                this.columnid = base.Columns["id"];
+                this.columnIndice = base.Columns["Indice"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(uint), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidEje);
+                this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnid);
+                this.columnIndice = new global::System.Data.DataColumn("Indice", typeof(ushort), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIndice);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnidEje,
+                                this.columnid}, true));
+                this.columnidEje.AllowDBNull = false;
+                this.columnid.AllowDBNull = false;
+                this.columnid.Caption = "Mouse";
+                this.columnIndice.AllowDBNull = false;
+                this.columnIndice.Caption = "Indices";
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESRow NewINDICESEJESRow() {
+                return ((INDICESEJESRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new INDICESEJESRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(INDICESEJESRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.INDICESEJESRowChanged != null)) {
+                    this.INDICESEJESRowChanged(this, new INDICESEJESRowChangeEvent(((INDICESEJESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.INDICESEJESRowChanging != null)) {
+                    this.INDICESEJESRowChanging(this, new INDICESEJESRowChangeEvent(((INDICESEJESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.INDICESEJESRowDeleted != null)) {
+                    this.INDICESEJESRowDeleted(this, new INDICESEJESRowChangeEvent(((INDICESEJESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.INDICESEJESRowDeleting != null)) {
+                    this.INDICESEJESRowDeleting(this, new INDICESEJESRowChangeEvent(((INDICESEJESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveINDICESEJESRow(INDICESEJESRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DSPerfil ds = new DSPerfil();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "INDICESEJESDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class INDICESEJESPEQUEDataTable : global::System.Data.TypedTableBase<INDICESEJESPEQUERow> {
+            
+            private global::System.Data.DataColumn columnidEje;
+            
+            private global::System.Data.DataColumn columnid;
+            
+            private global::System.Data.DataColumn columnIndice;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUEDataTable() {
+                this.TableName = "INDICESEJESPEQUE";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESEJESPEQUEDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected INDICESEJESPEQUEDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idEjeColumn {
+                get {
+                    return this.columnidEje;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idColumn {
+                get {
+                    return this.columnid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IndiceColumn {
+                get {
+                    return this.columnIndice;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUERow this[int index] {
+                get {
+                    return ((INDICESEJESPEQUERow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddINDICESEJESPEQUERow(INDICESEJESPEQUERow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUERow AddINDICESEJESPEQUERow(uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE) {
+                INDICESEJESPEQUERow rowINDICESEJESPEQUERow = ((INDICESEJESPEQUERow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        idEje,
+                        id,
+                        null};
+                if ((parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE != null)) {
+                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE[0];
+                }
+                rowINDICESEJESPEQUERow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowINDICESEJESPEQUERow);
+                return rowINDICESEJESPEQUERow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUERow FindByidEjeid(uint idEje, byte id) {
+                return ((INDICESEJESPEQUERow)(this.Rows.Find(new object[] {
+                            idEje,
+                            id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                INDICESEJESPEQUEDataTable cln = ((INDICESEJESPEQUEDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new INDICESEJESPEQUEDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnidEje = base.Columns["idEje"];
+                this.columnid = base.Columns["id"];
+                this.columnIndice = base.Columns["Indice"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(uint), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidEje);
+                this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnid);
+                this.columnIndice = new global::System.Data.DataColumn("Indice", typeof(ushort), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIndice);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnidEje,
+                                this.columnid}, true));
+                this.columnidEje.AllowDBNull = false;
+                this.columnid.AllowDBNull = false;
+                this.columnid.Caption = "Mouse";
+                this.columnIndice.AllowDBNull = false;
+                this.columnIndice.Caption = "Indices";
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUERow NewINDICESEJESPEQUERow() {
+                return ((INDICESEJESPEQUERow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new INDICESEJESPEQUERow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(INDICESEJESPEQUERow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.INDICESEJESPEQUERowChanged != null)) {
+                    this.INDICESEJESPEQUERowChanged(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.INDICESEJESPEQUERowChanging != null)) {
+                    this.INDICESEJESPEQUERowChanging(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.INDICESEJESPEQUERowDeleted != null)) {
+                    this.INDICESEJESPEQUERowDeleted(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.INDICESEJESPEQUERowDeleting != null)) {
+                    this.INDICESEJESPEQUERowDeleting(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveINDICESEJESPEQUERow(INDICESEJESPEQUERow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DSPerfil ds = new DSPerfil();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "INDICESEJESPEQUEDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class INDICESSETASDataTable : global::System.Data.TypedTableBase<INDICESSETASRow> {
+            
+            private global::System.Data.DataColumn columnidSeta;
+            
+            private global::System.Data.DataColumn columnid;
+            
+            private global::System.Data.DataColumn columnIndice;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASDataTable() {
+                this.TableName = "INDICESSETAS";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESSETASDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected INDICESSETASDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idSetaColumn {
+                get {
+                    return this.columnidSeta;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idColumn {
+                get {
+                    return this.columnid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IndiceColumn {
+                get {
+                    return this.columnIndice;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASRow this[int index] {
+                get {
+                    return ((INDICESSETASRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESSETASRowChangeEventHandler INDICESSETASRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESSETASRowChangeEventHandler INDICESSETASRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESSETASRowChangeEventHandler INDICESSETASRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESSETASRowChangeEventHandler INDICESSETASRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddINDICESSETASRow(INDICESSETASRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASRow AddINDICESSETASRow(uint idSeta, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESSETAS) {
+                INDICESSETASRow rowINDICESSETASRow = ((INDICESSETASRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        idSeta,
+                        id,
+                        null};
+                if ((parentACCIONESRowByFK_ACCIONES_INDICESSETAS != null)) {
+                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESSETAS[0];
+                }
+                rowINDICESSETASRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowINDICESSETASRow);
+                return rowINDICESSETASRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASRow FindByidSetaid(uint idSeta, byte id) {
+                return ((INDICESSETASRow)(this.Rows.Find(new object[] {
+                            idSeta,
+                            id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                INDICESSETASDataTable cln = ((INDICESSETASDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new INDICESSETASDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnidSeta = base.Columns["idSeta"];
+                this.columnid = base.Columns["id"];
+                this.columnIndice = base.Columns["Indice"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnidSeta = new global::System.Data.DataColumn("idSeta", typeof(uint), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidSeta);
+                this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnid);
+                this.columnIndice = new global::System.Data.DataColumn("Indice", typeof(ushort), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIndice);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnidSeta,
+                                this.columnid}, true));
+                this.columnidSeta.AllowDBNull = false;
+                this.columnidSeta.Caption = "idEje";
+                this.columnid.AllowDBNull = false;
+                this.columnid.Caption = "Mouse";
+                this.columnIndice.AllowDBNull = false;
+                this.columnIndice.Caption = "Indices";
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASRow NewINDICESSETASRow() {
+                return ((INDICESSETASRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new INDICESSETASRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(INDICESSETASRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.INDICESSETASRowChanged != null)) {
+                    this.INDICESSETASRowChanged(this, new INDICESSETASRowChangeEvent(((INDICESSETASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.INDICESSETASRowChanging != null)) {
+                    this.INDICESSETASRowChanging(this, new INDICESSETASRowChangeEvent(((INDICESSETASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.INDICESSETASRowDeleted != null)) {
+                    this.INDICESSETASRowDeleted(this, new INDICESSETASRowChangeEvent(((INDICESSETASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.INDICESSETASRowDeleting != null)) {
+                    this.INDICESSETASRowDeleting(this, new INDICESSETASRowChangeEvent(((INDICESSETASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveINDICESSETASRow(INDICESSETASRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DSPerfil ds = new DSPerfil();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "INDICESSETASDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class INDICESBOTONESDataTable : global::System.Data.TypedTableBase<INDICESBOTONESRow> {
+            
+            private global::System.Data.DataColumn columnidBoton;
+            
+            private global::System.Data.DataColumn columnid;
+            
+            private global::System.Data.DataColumn columnIndice;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESDataTable() {
+                this.TableName = "INDICESBOTONES";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESBOTONESDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected INDICESBOTONESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idBotonColumn {
+                get {
+                    return this.columnidBoton;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idColumn {
+                get {
+                    return this.columnid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IndiceColumn {
+                get {
+                    return this.columnIndice;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESRow this[int index] {
+                get {
+                    return ((INDICESBOTONESRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESBOTONESRowChangeEventHandler INDICESBOTONESRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESBOTONESRowChangeEventHandler INDICESBOTONESRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESBOTONESRowChangeEventHandler INDICESBOTONESRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event INDICESBOTONESRowChangeEventHandler INDICESBOTONESRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddINDICESBOTONESRow(INDICESBOTONESRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESRow AddINDICESBOTONESRow(uint idBoton, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESBOTONES) {
+                INDICESBOTONESRow rowINDICESBOTONESRow = ((INDICESBOTONESRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        idBoton,
+                        id,
+                        null};
+                if ((parentACCIONESRowByFK_ACCIONES_INDICESBOTONES != null)) {
+                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESBOTONES[0];
+                }
+                rowINDICESBOTONESRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowINDICESBOTONESRow);
+                return rowINDICESBOTONESRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESRow FindByidBotonid(uint idBoton, byte id) {
+                return ((INDICESBOTONESRow)(this.Rows.Find(new object[] {
+                            idBoton,
+                            id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                INDICESBOTONESDataTable cln = ((INDICESBOTONESDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new INDICESBOTONESDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnidBoton = base.Columns["idBoton"];
+                this.columnid = base.Columns["id"];
+                this.columnIndice = base.Columns["Indice"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnidBoton = new global::System.Data.DataColumn("idBoton", typeof(uint), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidBoton);
+                this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnid);
+                this.columnIndice = new global::System.Data.DataColumn("Indice", typeof(ushort), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIndice);
+                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnidBoton,
+                                this.columnid}, true));
+                this.columnidBoton.AllowDBNull = false;
+                this.columnidBoton.Caption = "idEje";
+                this.columnid.AllowDBNull = false;
+                this.columnid.Caption = "Mouse";
+                this.columnIndice.AllowDBNull = false;
+                this.columnIndice.Caption = "Indices";
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESRow NewINDICESBOTONESRow() {
+                return ((INDICESBOTONESRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new INDICESBOTONESRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(INDICESBOTONESRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.INDICESBOTONESRowChanged != null)) {
+                    this.INDICESBOTONESRowChanged(this, new INDICESBOTONESRowChangeEvent(((INDICESBOTONESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.INDICESBOTONESRowChanging != null)) {
+                    this.INDICESBOTONESRowChanging(this, new INDICESBOTONESRowChangeEvent(((INDICESBOTONESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.INDICESBOTONESRowDeleted != null)) {
+                    this.INDICESBOTONESRowDeleted(this, new INDICESBOTONESRowChangeEvent(((INDICESBOTONESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.INDICESBOTONESRowDeleting != null)) {
+                    this.INDICESBOTONESRowDeleting(this, new INDICESBOTONESRowChangeEvent(((INDICESBOTONESRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveINDICESBOTONESRow(INDICESBOTONESRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                DSPerfil ds = new DSPerfil();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "INDICESBOTONESDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class MAPAEJESRow : global::System.Data.DataRow {
@@ -2821,17 +4134,6 @@ namespace ComsDrv {
                     this[this.tableMAPAEJES.BandasColumn] = value;
                 }
             }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ushort[] Indices {
-                get {
-                    return ((ushort[])(this[this.tableMAPAEJES.IndicesColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJES.IndicesColumn] = value;
-                }
-            }
         }
         
         /// <summary>
@@ -2911,17 +4213,6 @@ namespace ComsDrv {
                 }
                 set {
                     this[this.tableMAPAEJESPEQUE.BandasColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ushort[] Indices {
-                get {
-                    return ((ushort[])(this[this.tableMAPAEJESPEQUE.IndicesColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.IndicesColumn] = value;
                 }
             }
         }
@@ -3053,17 +4344,6 @@ namespace ComsDrv {
                     this[this.tableMAPABOTONES.EstadoColumn] = value;
                 }
             }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ushort[] Indices {
-                get {
-                    return ((ushort[])(this[this.tableMAPABOTONES.IndicesColumn]));
-                }
-                set {
-                    this[this.tableMAPABOTONES.IndicesColumn] = value;
-                }
-            }
         }
         
         /// <summary>
@@ -3121,17 +4401,6 @@ namespace ComsDrv {
                 }
                 set {
                     this[this.tableMAPASETAS.EstadoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ushort[] Indices {
-                get {
-                    return ((ushort[])(this[this.tableMAPASETAS.IndicesColumn]));
-                }
-                set {
-                    this[this.tableMAPASETAS.IndicesColumn] = value;
                 }
             }
         }
@@ -3246,6 +4515,286 @@ namespace ComsDrv {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetComandosNull() {
                 this[this.tableACCIONES.ComandosColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESRow[] GetINDICESBOTONESRows() {
+                if ((this.Table.ChildRelations["FK_ACCIONES_INDICESBOTONES"] == null)) {
+                    return new INDICESBOTONESRow[0];
+                }
+                else {
+                    return ((INDICESBOTONESRow[])(base.GetChildRows(this.Table.ChildRelations["FK_ACCIONES_INDICESBOTONES"])));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASRow[] GetINDICESSETASRows() {
+                if ((this.Table.ChildRelations["FK_ACCIONES_INDICESSETAS"] == null)) {
+                    return new INDICESSETASRow[0];
+                }
+                else {
+                    return ((INDICESSETASRow[])(base.GetChildRows(this.Table.ChildRelations["FK_ACCIONES_INDICESSETAS"])));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUERow[] GetINDICESEJESPEQUERows() {
+                if ((this.Table.ChildRelations["FK_ACCIONES_INDICESEJESPEQUE"] == null)) {
+                    return new INDICESEJESPEQUERow[0];
+                }
+                else {
+                    return ((INDICESEJESPEQUERow[])(base.GetChildRows(this.Table.ChildRelations["FK_ACCIONES_INDICESEJESPEQUE"])));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESRow[] GetINDICESEJESRows() {
+                if ((this.Table.ChildRelations["FK_ACCIONES_INDICESEJES"] == null)) {
+                    return new INDICESEJESRow[0];
+                }
+                else {
+                    return ((INDICESEJESRow[])(base.GetChildRows(this.Table.ChildRelations["FK_ACCIONES_INDICESEJES"])));
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class INDICESEJESRow : global::System.Data.DataRow {
+            
+            private INDICESEJESDataTable tableINDICESEJES;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESEJESRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableINDICESEJES = ((INDICESEJESDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public uint idEje {
+                get {
+                    return ((uint)(this[this.tableINDICESEJES.idEjeColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJES.idEjeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte id {
+                get {
+                    return ((byte)(this[this.tableINDICESEJES.idColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJES.idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ushort Indice {
+                get {
+                    return ((ushort)(this[this.tableINDICESEJES.IndiceColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJES.IndiceColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ACCIONESRow ACCIONESRow {
+                get {
+                    return ((ACCIONESRow)(this.GetParentRow(this.Table.ParentRelations["FK_ACCIONES_INDICESEJES"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_ACCIONES_INDICESEJES"]);
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class INDICESEJESPEQUERow : global::System.Data.DataRow {
+            
+            private INDICESEJESPEQUEDataTable tableINDICESEJESPEQUE;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESEJESPEQUERow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableINDICESEJESPEQUE = ((INDICESEJESPEQUEDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public uint idEje {
+                get {
+                    return ((uint)(this[this.tableINDICESEJESPEQUE.idEjeColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJESPEQUE.idEjeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte id {
+                get {
+                    return ((byte)(this[this.tableINDICESEJESPEQUE.idColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJESPEQUE.idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ushort Indice {
+                get {
+                    return ((ushort)(this[this.tableINDICESEJESPEQUE.IndiceColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJESPEQUE.IndiceColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ACCIONESRow ACCIONESRow {
+                get {
+                    return ((ACCIONESRow)(this.GetParentRow(this.Table.ParentRelations["FK_ACCIONES_INDICESEJESPEQUE"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_ACCIONES_INDICESEJESPEQUE"]);
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class INDICESSETASRow : global::System.Data.DataRow {
+            
+            private INDICESSETASDataTable tableINDICESSETAS;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESSETASRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableINDICESSETAS = ((INDICESSETASDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public uint idSeta {
+                get {
+                    return ((uint)(this[this.tableINDICESSETAS.idSetaColumn]));
+                }
+                set {
+                    this[this.tableINDICESSETAS.idSetaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte id {
+                get {
+                    return ((byte)(this[this.tableINDICESSETAS.idColumn]));
+                }
+                set {
+                    this[this.tableINDICESSETAS.idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ushort Indice {
+                get {
+                    return ((ushort)(this[this.tableINDICESSETAS.IndiceColumn]));
+                }
+                set {
+                    this[this.tableINDICESSETAS.IndiceColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ACCIONESRow ACCIONESRow {
+                get {
+                    return ((ACCIONESRow)(this.GetParentRow(this.Table.ParentRelations["FK_ACCIONES_INDICESSETAS"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_ACCIONES_INDICESSETAS"]);
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class INDICESBOTONESRow : global::System.Data.DataRow {
+            
+            private INDICESBOTONESDataTable tableINDICESBOTONES;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal INDICESBOTONESRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableINDICESBOTONES = ((INDICESBOTONESDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public uint idBoton {
+                get {
+                    return ((uint)(this[this.tableINDICESBOTONES.idBotonColumn]));
+                }
+                set {
+                    this[this.tableINDICESBOTONES.idBotonColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte id {
+                get {
+                    return ((byte)(this[this.tableINDICESBOTONES.idColumn]));
+                }
+                set {
+                    this[this.tableINDICESBOTONES.idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ushort Indice {
+                get {
+                    return ((ushort)(this[this.tableINDICESBOTONES.IndiceColumn]));
+                }
+                set {
+                    this[this.tableINDICESBOTONES.IndiceColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ACCIONESRow ACCIONESRow {
+                get {
+                    return ((ACCIONESRow)(this.GetParentRow(this.Table.ParentRelations["FK_ACCIONES_INDICESBOTONES"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_ACCIONES_INDICESBOTONES"]);
+                }
             }
         }
         
@@ -3473,6 +5022,142 @@ namespace ComsDrv {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ACCIONESRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class INDICESEJESRowChangeEvent : global::System.EventArgs {
+            
+            private INDICESEJESRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESRowChangeEvent(INDICESEJESRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class INDICESEJESPEQUERowChangeEvent : global::System.EventArgs {
+            
+            private INDICESEJESPEQUERow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUERowChangeEvent(INDICESEJESPEQUERow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESEJESPEQUERow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class INDICESSETASRowChangeEvent : global::System.EventArgs {
+            
+            private INDICESSETASRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASRowChangeEvent(INDICESSETASRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESSETASRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class INDICESBOTONESRowChangeEvent : global::System.EventArgs {
+            
+            private INDICESBOTONESRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESRowChangeEvent(INDICESBOTONESRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public INDICESBOTONESRow Row {
                 get {
                     return this.eventRow;
                 }

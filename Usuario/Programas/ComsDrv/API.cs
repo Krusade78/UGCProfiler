@@ -102,8 +102,9 @@ namespace ComsDrv
                                 bufferMapa[pos] = banda;
                                 pos++;
                             }
-                            foreach (UInt16 indice in datos.Indices)
+                            for (byte i = 0; i < 16; i++)
                             {
+                                UInt16 indice = perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);
@@ -129,8 +130,9 @@ namespace ComsDrv
                                 bufferMapa[pos] = banda;
                                 pos++;
                             }
-                            foreach (UInt16 indice in datos.Indices)
+                            for (byte i = 0; i < 16; i++)
                             {
+                                UInt16 indice = perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);
@@ -167,8 +169,9 @@ namespace ComsDrv
                             DSPerfil.MAPABOTONESRow datos = perfil.MAPABOTONES.FindByidEjeidModoidPinkie(b, m, p);
                             bufferMapa[pos] = datos.Estado;
                             pos++;
-                            foreach (UInt16 indice in datos.Indices)
+                            for (byte i = 0; i < 15; i++)
                             {
+                                UInt16 indice = perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | b), i).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);
@@ -187,8 +190,9 @@ namespace ComsDrv
                             DSPerfil.MAPASETASRow datos = perfil.MAPASETAS.FindByidEjeidModoidPinkie(s, m, p);
                             bufferMapa[pos] = datos.Estado;
                             pos++;
-                            foreach (UInt16 indice in datos.Indices)
+                            for (byte i = 0; i < 15; i++)
                             {
+                                UInt16 indice = perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | s), i).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);
