@@ -59,7 +59,7 @@ NTSTATUS EvtAddDevice(
 	NTSTATUS                        status;
 	WDFDEVICE                       device;
 	WDF_OBJECT_ATTRIBUTES			attributes;
-	//WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
+	WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
 	WDFQUEUE						cola;
 	PDEVICE_CONTEXT					dc;
@@ -70,12 +70,12 @@ NTSTATUS EvtAddDevice(
 
 	WdfFdoInitSetFilter(DeviceInit);
 
-	//WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
-		//pnpPowerCallbacks.EvtDeviceSelfManagedIoInit = EvtDeviceSelfManagedIoInit;
-		//pnpPowerCallbacks.EvtDeviceSelfManagedIoCleanup = EvtDeviceSelfManagedIoCleanup;
+	WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
+		pnpPowerCallbacks.EvtDeviceSelfManagedIoInit = EvtDeviceSelfManagedIoInit;
+		pnpPowerCallbacks.EvtDeviceSelfManagedIoCleanup = EvtDeviceSelfManagedIoCleanup;
 		//pnpPowerCallbacks.EvtDeviceD0Entry = EvtDeviceD0Entry;
-		//pnpPowerCallbacks.EvtDeviceD0Exit = EvtDeviceD0Exit;
-	//WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
+		pnpPowerCallbacks.EvtDeviceD0Exit = EvtDeviceD0Exit;
+	WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
 	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_CONTEXT);
 		attributes.EvtCleanupCallback = EvtCleanupCallback;

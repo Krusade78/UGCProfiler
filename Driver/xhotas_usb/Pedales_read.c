@@ -263,12 +263,13 @@ NTSTATUS PnPCallbackPedales(_In_ PVOID notification, _Inout_opt_ PVOID context)
 		{
 			UNICODE_STRING strLink;
 			PWSTR wstrLink[sizeof(HARDWARE_ID_PEDALES)];
-			RtlZeroMemory(wstrLink, sizeof(HARDWARE_ID_PEDALES)*sizeof(WCHAR));
+			RtlZeroMemory(wstrLink, sizeof(HARDWARE_ID_PEDALES));
+			RtlCopyMemory(wstrLink, diNotify->SymbolicLinkName->Buffer, strId.Length);
+
 			status = RtlUnicodeStringInit(&strLink, (NTSTRSAFE_PCWSTR)&wstrLink);
 			if (!NT_SUCCESS(status))
 				return status;
-			status = RtlUnicodeStringCbCopyN(&strLink, diNotify->SymbolicLinkName, strId.Length);
-			if (NT_SUCCESS(status))
+			else
 			{
 				if (RtlCompareUnicodeString(&strLink, &strId, TRUE) == 0)
 				{
