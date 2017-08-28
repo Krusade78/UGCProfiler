@@ -45,7 +45,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>res\Icon1.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -144,26 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\CalibrationGrid.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\barra.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\b2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\b1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\b0.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\Icon1.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\mfd1.png" />
-    <Resource Include="res\mfd2.png" />
-    <Resource Include="res\mfd3.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\keybd.ico" />
