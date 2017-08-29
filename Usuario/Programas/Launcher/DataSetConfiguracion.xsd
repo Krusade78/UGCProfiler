@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSetConfiguracion" targetNamespace="http://tempuri.org/DataSetConfiguracion.xsd" xmlns:mstns="http://tempuri.org/DataSetConfiguracion.xsd" xmlns="http://tempuri.org/DataSetConfiguracion.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSetConfiguracion" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSetConfiguracion" msprop:Generator_UserDSName="DataSetConfiguracion">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="CONFIGURACION" msprop:Generator_TableClassName="CONFIGURACIONDataTable" msprop:Generator_TableVarName="tableCONFIGURACION" msprop:Generator_RowChangedName="CONFIGURACIONRowChanged" msprop:Generator_TablePropName="CONFIGURACION" msprop:Generator_RowDeletingName="CONFIGURACIONRowDeleting" msprop:Generator_RowChangingName="CONFIGURACIONRowChanging" msprop:Generator_RowEvHandlerName="CONFIGURACIONRowChangeEventHandler" msprop:Generator_RowDeletedName="CONFIGURACIONRowDeleted" msprop:Generator_RowClassName="CONFIGURACIONRow" msprop:Generator_UserTableName="CONFIGURACION" msprop:Generator_RowEvArgName="CONFIGURACIONRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="LuzMfd" msprop:Generator_ColumnVarNameInTable="columnLuzMfd" msprop:Generator_ColumnPropNameInRow="LuzMfd" msprop:Generator_ColumnPropNameInTable="LuzMfdColumn" msprop:Generator_UserColumnName="LuzMfd" type="xs:unsignedByte" default="1" />
+              <xs:element name="LuzGlobal" msprop:Generator_ColumnVarNameInTable="columnLuzGlobal" msprop:Generator_ColumnPropNameInRow="LuzGlobal" msprop:Generator_ColumnPropNameInTable="LuzGlobalColumn" msprop:Generator_UserColumnName="LuzGlobal" type="xs:unsignedByte" default="1" />
+              <xs:element name="hora1" msprop:Generator_ColumnVarNameInTable="columnhora1" msprop:Generator_ColumnPropNameInRow="hora1" msprop:Generator_ColumnPropNameInTable="hora1Column" msprop:Generator_UserColumnName="hora1" type="xs:unsignedShort" default="0" />
+              <xs:element name="hora2" msdata:Caption="hora1" msprop:Generator_ColumnVarNameInTable="columnhora2" msprop:Generator_ColumnPropNameInRow="hora2" msprop:Generator_ColumnPropNameInTable="hora2Column" msprop:Generator_UserColumnName="hora2" type="xs:unsignedShort" default="0" />
+              <xs:element name="hora3" msdata:Caption="hora1" msprop:Generator_ColumnVarNameInTable="columnhora3" msprop:Generator_ColumnPropNameInRow="hora3" msprop:Generator_ColumnPropNameInTable="hora3Column" msprop:Generator_UserColumnName="hora3" type="xs:unsignedShort" default="0" />
+              <xs:element name="hora1_24h" msdata:Caption="hora3_24h" msprop:Generator_ColumnVarNameInTable="columnhora1_24h" msprop:Generator_ColumnPropNameInRow="hora1_24h" msprop:Generator_ColumnPropNameInTable="hora1_24hColumn" msprop:Generator_UserColumnName="hora1_24h" type="xs:boolean" default="false" />
+              <xs:element name="hora2_24h" msdata:Caption="hora3_24h" msprop:Generator_ColumnVarNameInTable="columnhora2_24h" msprop:Generator_ColumnPropNameInRow="hora2_24h" msprop:Generator_ColumnPropNameInTable="hora2_24hColumn" msprop:Generator_UserColumnName="hora2_24h" type="xs:boolean" default="false" />
+              <xs:element name="hora3_24h" msprop:Generator_ColumnVarNameInTable="columnhora3_24h" msprop:Generator_ColumnPropNameInRow="hora3_24h" msprop:Generator_ColumnPropNameInTable="hora3_24hColumn" msprop:Generator_UserColumnName="hora3_24h" type="xs:boolean" default="false" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

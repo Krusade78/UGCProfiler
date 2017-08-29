@@ -70,6 +70,11 @@
     <Compile Include="CBaseServicio.cs" />
     <Compile Include="CServicio.cs" />
     <Compile Include="CSystem32.cs" />
+    <Compile Include="DataSetConfiguracion.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -93,6 +98,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="DataSetConfiguracion.xsc">
+      <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
+    </None>
+    <None Include="DataSetConfiguracion.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSetConfiguracion.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataSetConfiguracion.xss">
+      <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
