@@ -132,7 +132,7 @@ DECLARE_HANDLE(HNOTIFICATION);
 typedef struct _PEDALES_CONTEXT
 {
 	PVOID			PnPNotifyHandle;
-	WCHAR			SymbolicLink[100];
+	WCHAR			SymbolicLink[200];
 	WDFIOTARGET		IoTarget;
 	WDFWAITLOCK		WaitLockIoTarget;
 	WDFSPINLOCK		SpinLockPosicion;

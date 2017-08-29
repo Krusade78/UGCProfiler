@@ -119,8 +119,7 @@ NTSTATUS IniciarPedales(_In_ WDFDEVICE device)
 	if (!NT_SUCCESS(status)) return status;
 
 	GetDeviceContext(device)->Pedales.IoTarget = NULL;
-	RtlZeroMemory(GetDeviceContext(device)->Pedales.SymbolicLink, 100 * sizeof(WCHAR));
-	GetDeviceContext(device)->Pedales.UltimaPosicion = 512;
+	GetDeviceContext(device)->Pedales.UltimaPosicion = 511;
 
 	return STATUS_SUCCESS;
 }
@@ -190,7 +189,7 @@ NTSTATUS IniciarIoTargetPassive(_In_ WDFDEVICE device)
 			if (NT_SUCCESS(status))
 			{
 				UNICODE_STRING strId;
-					strId.Length = (USHORT)wcslen(GetDeviceContext(device)->Pedales.SymbolicLink);
+					strId.Length = (USHORT)(wcslen(GetDeviceContext(device)->Pedales.SymbolicLink) * sizeof(WCHAR));
 					strId.MaximumLength = strId.Length + sizeof(WCHAR);
 					strId.Buffer = GetDeviceContext(device)->Pedales.SymbolicLink;
 				WDF_IO_TARGET_OPEN_PARAMS_INIT_OPEN_BY_NAME(&openParams, &strId, STANDARD_RIGHTS_READ);
@@ -276,9 +275,10 @@ NTSTATUS PnPCallbackPedales(_In_ PVOID notification, _Inout_opt_ PVOID context)
 					WDF_OBJECT_ATTRIBUTES	attributes;
 					WDF_WORKITEM_CONFIG		workitemConfig;
 					WDFWORKITEM				workItem;
-					size_t					tam = (diNotify->SymbolicLinkName->MaximumLength > 100) ? 100 : diNotify->SymbolicLinkName->MaximumLength;
+					size_t					tam = (diNotify->SymbolicLinkName->MaximumLength > 200) ? 199 : diNotify->SymbolicLinkName->MaximumLength;
 
-					RtlCopyMemory(GetDeviceContext((WDFDEVICE)context)->Pedales.SymbolicLink, diNotify->SymbolicLinkName, tam * sizeof(WCHAR));
+					RtlZeroMemory(GetDeviceContext((WDFDEVICE)context)->Pedales.SymbolicLink, 200 * sizeof(WCHAR));
+					RtlCopyMemory(GetDeviceContext((WDFDEVICE)context)->Pedales.SymbolicLink, diNotify->SymbolicLinkName->Buffer, tam * sizeof(WCHAR));
 
 					WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
 					attributes.ParentObject = context;
@@ -289,7 +289,6 @@ NTSTATUS PnPCallbackPedales(_In_ PVOID notification, _Inout_opt_ PVOID context)
 						return status;
 
 					WdfWorkItemEnqueue(workItem);
-					//return IniciarIoTarget(diNotify->SymbolicLinkName, ((PDEVICE_CONTEXT)context)->Device);
 				}
 			}
 		}
@@ -380,7 +379,7 @@ VOID ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 		eje = 0xff - izq;
 		break;
 	case 2:
-		eje = 0x0100 + der;
+		eje = 0x0101 + der;
 		break;
 	default:
 		if (izq > der) devExt->Pedales.PedalSel = 1;
@@ -388,11 +387,12 @@ VOID ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 	}
 
 	if ((izq < 2) && (der < 2)) // zona nula
-		eje = 511;
+		eje = 512;
 	else if ((izq < 80) && (der < 80)) // zona con los dos pedales
 		eje = (der >= izq) ? (0x100 + der - izq) * 2 : (0xff - izq + der) * 2;
 	else // sólo un pedal
 		eje *= 2;
+	if (eje == 1024) eje = 1023;
 
 	WdfSpinLockAcquire(devExt->Pedales.SpinLockPosicion);
 	{
