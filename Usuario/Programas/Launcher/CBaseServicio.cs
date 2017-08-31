@@ -63,10 +63,6 @@ namespace Launcher
                 else
                     serv.fechaActiva = false;
 
-                if (hFecha.WaitOne(0))
-                    serv.CargarConfiguracion();
-
-                serv.Tick();
                 Thread.Sleep(2000);
             }
             hHora.Close();

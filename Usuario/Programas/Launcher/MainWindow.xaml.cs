@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace Launcher
 {
@@ -20,11 +11,32 @@ namespace Launcher
     /// </summary>
     public partial class MainWindow : Window
     {
-        CBaseServicio servicio;
+        private NotifyIcon notifyIcon;
+        private CServicio servicio;
 
         public MainWindow()
         {
             InitializeComponent();
+            servicio = new CServicio();
+            if (servicio.Iniciar())
+            {
+                notifyIcon = new NotifyIcon();
+                notifyIcon.Icon = new System.Drawing.Icon(App.GetResourceStream(new Uri("/res/Launcher.ico", UriKind.Relative)).Stream);
+                notifyIcon.Visible = true;
+                notifyIcon.Click += NotifyIcon_Click;
+            }
+            else
+                this.Close();
+        }
+
+        private void NotifyIcon_Click(object sender, EventArgs e)
+        {
+            MenuLauncher pop = new MenuLauncher();
+            if (pop.ShowDialog() == true)
+            {
+                notifyIcon.Dispose(); notifyIcon = null;
+                this.Close();
+            }
         }
     }
 }
