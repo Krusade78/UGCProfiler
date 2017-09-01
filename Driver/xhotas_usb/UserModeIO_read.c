@@ -275,5 +275,9 @@ VOID EvtIOCtlAplicacion(
 		WdfRequestComplete(Request, STATUS_NOT_SUPPORTED);
 		break;
 	}
+}
 
+VOID EvtTickMenu(_In_ WDFTIMER Timer)
+{
+	GetDeviceContext(WdfTimerGetParentObject(Timer))->HID.MenuActivado = TRUE;
 }
