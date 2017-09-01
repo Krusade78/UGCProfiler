@@ -5,7 +5,7 @@ namespace ComsDrv
 {
     public class API
     {
-        public static byte CargarMapa(String archivo)
+        public static byte CargarMapa(String archivo, ref bool horaModif, ref bool fechaModif)
         {
             DSPerfil perfil = new DSPerfil();
             try
@@ -54,6 +54,10 @@ namespace ComsDrv
                         bufferComandos[pos] = (byte)(r.Comandos[i] & 0xff);
                         pos++;
                         bufferComandos[pos] = (byte)(r.Comandos[i] >> 8);
+                        if ((bufferComandos[pos] == (byte)CSystem32.TipoComando.TipoComando_MfdHora) || (bufferComandos[pos] == (byte)CSystem32.TipoComando.TipoComando_MfdHora24))
+                            horaModif = true;
+                        else if (bufferComandos[pos] == (byte)CSystem32.TipoComando.TipoComando_MfdFecha)
+                            fechaModif = true;
                         pos++;
                     }
                 }
@@ -213,6 +217,7 @@ namespace ComsDrv
             }
             #endregion
 
+            #region "Texto MFD"
             {
                 String nombre = System.IO.Path.GetFileName(archivo);
                 if (nombre.Length > 16)
@@ -247,5 +252,6 @@ namespace ComsDrv
 
             return 0;
         }
+        #endregion
     }
 }
