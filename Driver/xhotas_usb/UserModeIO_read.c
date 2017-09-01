@@ -124,7 +124,7 @@ VOID EvtIOCtlAplicacion(
 		case IOCTL_MFD_LUZ:
 		case IOCTL_GLOBAL_LUZ:
 		case IOCTL_INFO_LUZ:
-		//case IOCTL_PINKIE:
+		case IOCTL_PEDALES:
 		case IOCTL_HORA:
 		case IOCTL_HORA24:
 			if (InputBufferLength != 1)
@@ -193,12 +193,12 @@ VOID EvtIOCtlAplicacion(
 		WdfRequestComplete(Request, status);
 		break;
 	}
-	//case IOCTL_PINKIE:
-	//{
-	//	status = Set_Pinkie(device, SystemBuffer);
-	//	WdfRequestComplete(Request, status);
-	//	break;
-	//}
+	case IOCTL_PEDALES:
+	{
+		GetDeviceContext(device)->HID.Pedales = SystemBuffer[0];;
+		WdfRequestComplete(Request, STATUS_SUCCESS);
+		break;
+	}
 	case IOCTL_TEXTO:
 	{
 		status = Set_Texto(device, SystemBuffer, InputBufferLength);
