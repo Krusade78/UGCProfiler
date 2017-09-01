@@ -126,10 +126,17 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 	hidData.Setas[3] = Switch4To8(hidData.Setas[3]);
 	hidData.MiniStick = hidGameData->Ministick;
 
-	if ((hidData.Botones[1] & 0x28) == 0x28) //Combinación para des/activar los pedales
-		GetDeviceContext(device)->Pedales.Activado = FALSE;
-	if ((hidData.Botones[1] & 0x30) == 0x30) //Combinación para des/activar los pedales
-		GetDeviceContext(device)->Pedales.Activado = TRUE;
+	// Menu MFD
+	if (((hidData.Botones[1] & 0x8) == 0x8) && !GetDeviceContext(device)->HID.MenuTimerEsperando)
+	{		
+		GetDeviceContext(device)->HID.MenuTimerEsperando = TRUE;
+		WdfTimerStart(GetDeviceContext(device)->HID.MenuTimer, WDF_REL_TIMEOUT_IN_SEC(4));
+	}
+	else
+	{
+		GetDeviceContext(device)->HID.MenuTimerEsperando = FALSE;
+		WdfTimerStop(GetDeviceContext(device)->HID.MenuTimer);
+	}
 
 	if (GetDeviceContext(device)->Pedales.Activado)
 	{
