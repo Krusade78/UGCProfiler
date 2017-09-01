@@ -40,6 +40,8 @@ typedef struct _HID_CONTEXT
 	UCHAR			EstadoModos;
 	UCHAR			EstadoPinkie;
 	BOOLEAN			ModoRaw;
+	WDFTIMER		MenuTimer;
+	BOOLEAN			MenuTimerEsperando;
 	BOOLEAN			MenuActivado;
 
 	WDFSPINLOCK		SpinLockAcciones;
