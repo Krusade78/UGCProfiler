@@ -111,15 +111,44 @@ VOID EvtIOCtlAplicacion(
 
 	PAGED_CODE();
 
-	status = WdfRequestRetrieveInputBuffer(Request, 0, (PVOID*)&SystemBuffer, NULL);
-	if (!NT_SUCCESS(status))
+	if (IoControlCode == IOCTL_GET_MENU)
 	{
-		WdfRequestSetInformation(Request, 0);
-		WdfRequestComplete(Request, status);
-		return;
+		status = WdfRequestRetrieveOutputBuffer(Request, 0, (PVOID*)SystemBuffer, NULL);
+		if (!NT_SUCCESS(status))
+		{
+			WdfRequestSetInformation(Request, 1);
+			WdfRequestComplete(Request, status);
+			return;
+		}
+	}
+	else
+	{
+		status = WdfRequestRetrieveInputBuffer(Request, 0, (PVOID*)&SystemBuffer, NULL);
+		if (!NT_SUCCESS(status))
+		{
+			WdfRequestSetInformation(Request, 0);
+			WdfRequestComplete(Request, status);
+			return;
+		}
 	}
 	switch (IoControlCode)
 	{
+		case IOCTL_GET_MENU:
+			if (OutputBufferLength != 1)
+			{
+				WdfRequestSetInformation(Request, 1);
+				WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
+				return;
+			}
+			break;
+		case IOCTL_DESACTIVAR_MENU:
+			if (InputBufferLength != 0)
+			{
+				WdfRequestSetInformation(Request, 0);
+				WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
+				return;
+			}
+			break;
 		case IOCTL_USR_RAW:
 		case IOCTL_MFD_LUZ:
 		case IOCTL_GLOBAL_LUZ:
@@ -171,6 +200,26 @@ VOID EvtIOCtlAplicacion(
 		status = HF_IoEscribirComandos(device, Request);
 		WdfRequestComplete(Request, status);
 		break;
+	//-------------------- Menu -----------------------------------
+	case IOCTL_GET_MENU:
+	{
+		SystemBuffer[0] = GetDeviceContext(device)->HID.MenuActivado;
+		WdfRequestComplete(Request, STATUS_SUCCESS);
+		break;
+	}
+	case IOCTL_DESACTIVAR_MENU:
+	{
+		GetDeviceContext(device)->HID.MenuActivado = FALSE;
+		WdfRequestComplete(Request, STATUS_SUCCESS);
+		break;
+	}
+	//-------------------- Pedales -----------------------------------
+	case IOCTL_PEDALES:
+	{
+		GetDeviceContext(device)->Pedales.Activado = SystemBuffer[0];;
+		WdfRequestComplete(Request, STATUS_SUCCESS);
+		break;
+	}
 	//------------------- X52_write.c -----------------------------------------
 	case IOCTL_MFD_LUZ:
 	{
@@ -191,12 +240,6 @@ VOID EvtIOCtlAplicacion(
 		status = Luz_Info(device, SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
-		break;
-	}
-	case IOCTL_PEDALES:
-	{
-		GetDeviceContext(device)->HID.Pedales = SystemBuffer[0];;
-		WdfRequestComplete(Request, STATUS_SUCCESS);
 		break;
 	}
 	case IOCTL_TEXTO:
