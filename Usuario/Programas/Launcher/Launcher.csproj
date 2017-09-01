@@ -65,17 +65,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="CPerfil.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CBaseServicio.cs" />
+    <Compile Include="CMFD.cs" />
     <Compile Include="CServicio.cs" />
     <Compile Include="CSystem32.cs" />
     <Compile Include="DataSetConfiguracion.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DSPerfil.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DSPerfil.xsd</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -117,6 +123,18 @@
     </None>
     <None Include="DataSetConfiguracion.xss">
       <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
+    </None>
+    <None Include="DSPerfil.xsc">
+      <DependentUpon>DSPerfil.xsd</DependentUpon>
+    </None>
+    <None Include="DSPerfil.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>Launcher</CustomToolNamespace>
+    </None>
+    <None Include="DSPerfil.xss">
+      <DependentUpon>DSPerfil.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

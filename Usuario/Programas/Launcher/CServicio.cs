@@ -8,12 +8,15 @@ namespace Launcher
 {
     class CServicio : IDisposable
     {
-        //Los datos de horas están en minutos
+        //Nota: Los datos de horas están en minutos
+        private CMFD mfd = new CMFD();
+
         private DataSetConfiguracion dsc = new DataSetConfiguracion();
         private Timer timer = new Timer(2000);
 
-        public bool fechaActiva { set; get; } = true;
-        public bool horaActiva { set; get; } = true;
+        private bool fechaActiva = true;
+        private bool horaActiva = true;
+        private bool timerMenu = false;
 
         public CServicio()
         {
@@ -210,6 +213,14 @@ namespace Launcher
                 }
             }
 
+            buffer[0] = (dsc.CONFIGURACION[0].Pedales) ? (byte)1 : (byte)0;
+            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
+            {
+                driver.Close();
+                MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.9]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
             driver.Close();
 
             return true;
@@ -272,6 +283,14 @@ namespace Launcher
 
         private void Tick(object sender, ElapsedEventArgs e)
         {
+            if (timerMenu) //cada dos salto comprueba (4 segundos)
+            {
+                mfd.ComprobarEstado();
+                timerMenu = false;
+            }
+            else
+                timerMenu = true;
+
             if (!this.fechaActiva && !this.horaActiva)
                 return;
 
@@ -314,6 +333,15 @@ namespace Launcher
             }
 
             driver.Close();
+        }
+
+        private void CargarPerfil(String archivo)
+        {
+            bool horaModificada = false;
+            bool fechaModificada = false;
+            CPerfil.CargarMapa(archivo, ref horaModificada, ref fechaModificada);
+            horaActiva = !horaModificada;
+            fechaActiva = !fechaModificada;
         }
 
         private void ReiniciarX52()

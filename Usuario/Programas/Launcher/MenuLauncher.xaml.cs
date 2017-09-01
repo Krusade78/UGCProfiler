@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.IO;
+using System.Diagnostics;
 
 
 namespace Launcher
@@ -7,17 +10,21 @@ namespace Launcher
     /// <summary>
     /// Lógica de interacción para UserControl1.xaml
     /// </summary>
-    public partial class MenuLauncher : Window
+    internal partial class MenuLauncher : Window
     {
         private bool salir = false;
+        private static String ultimoCargado;
+        private CServicio svc;
 
-        public MenuLauncher()
+        public MenuLauncher(CServicio svc)
         {
-            InitializeComponent();
+            this.svc = svc;
+            InitializeComponent();     
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            CargarListaArchivos();
             this.Activate();
             this.ContextMenu.IsOpen = true;
         }
@@ -36,6 +43,41 @@ namespace Launcher
             salir = true;
             this.DialogResult = true;
             this.Close();
+        }
+
+        private void CargarListaArchivos()
+        {
+            foreach (String f in Directory.GetFiles(".", "*.xhp"))
+            {
+                MenuItem miL = new MenuItem();
+                miL.Header = Path.GetFileName(f).Remove(Path.GetFileName(f).Length - 4, 4);
+                miL.Click += MenuItemLanzar_Click;
+                mnLanzar.Items.Add(miL);
+                MenuItem miE = new MenuItem();
+                miE.Header = Path.GetFileName(f).Remove(Path.GetFileName(f).Length - 4, 4);
+                miE.Click += MenuItemEditar_Click;
+                mnEditar.Items.Add(miE);
+            }
+        }
+
+        private void MenuItemLanzar_Click(object sender, RoutedEventArgs e)
+        {
+            svc.CargarPerfil((String)((MenuItem)sender).Header);
+        }
+
+        private void MenuItemEditar_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("Editor.exe", (String)((MenuItem)sender).Header);
+        }
+
+        private void MenuEditor_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("Editor.exe");
+        }
+
+        private void MenuCalibrador_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("Calibrator.exe");
         }
     }
 }

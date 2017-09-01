@@ -5,13 +5,52 @@ namespace Launcher
 {
     class CSystem32
     {
+        public enum TipoComando
+        {
+            TipoComando_Tecla = 0,
+            TipoComando_RatonBt1,
+            TipoComando_RatonBt2,
+            TipoComando_RatonBt3,
+            TipoComando_RatonIzq,
+            TipoComando_RatonDer,
+            TipoComando_RatonArr,
+            TipoComando_RatonAba,
+            TipoComando_RatonWhArr,
+            TipoComando_RatonWhAba,
+            TipoComando_Delay,
+            TipoComando_Hold,
+            TipoComando_Repeat,
+            TipoComando_RepeatN,
+            TipoComando_Modo,
+            TipoComando_Pinkie = 16,
+            TipoComando_RepeatIni,
+            TipoComando_DxBoton,
+            TipoComando_DxSeta,
+            TipoComando_MfdLuz,
+            TipoComando_Luz,
+            TipoComando_InfoLuz,
+            TipoComando_MfdPinkie,
+            TipoComando_MfdTexto,
+            TipoComando_MfdHora,
+            TipoComando_MfdHora24,
+            TipoComando_MfdFecha,
+            TipoComando_RepeatFin = 44,
+            TipoComando_RepeatNFin,
+            TipoComando_MfdTextoFin = 56
+        };
+
         public const UInt32 IOCTL_MFD_LUZ =         ((0x22) << 16) | ((2) << 14) | ((0x0800) << 2) | (0);
         public const UInt32 IOCTL_GLOBAL_LUZ =      ((0x22) << 16) | ((2) << 14) | ((0x0801) << 2) | (0);
+        public const UInt32 IOCTL_INFO_LUZ =        ((0x22) << 16) | ((2) << 14) | ((0x0802) << 2) | (0);
+        public const UInt32 IOCTL_PEDALES =         ((0x22) << 16) | ((2) << 14) | ((0x0803) << 2) | (0);
         public const UInt32 IOCTL_TEXTO =           ((0x22) << 16) | ((2) << 14) | ((0x0804) << 2) | (0);
         public const UInt32 IOCTL_HORA =            ((0x22) << 16) | ((2) << 14) | ((0x0805) << 2) | (0);
         public const UInt32 IOCTL_HORA24 =          ((0x22) << 16) | ((2) << 14) | ((0x0806) << 2) | (0);
         public const UInt32 IOCTL_FECHA =           ((0x22) << 16) | ((2) << 14) | ((0x0807) << 2) | (0);
+        public const UInt32 IOCTL_USR_RAW =         ((0x22) << 16) | ((2) << 14) | ((0x0808) << 2) | (0);
         public const UInt32 IOCTL_USR_CALIBRADO =   ((0x22) << 16) | ((2) << 14) | ((0x0809) << 2) | (0);
+        public const UInt32 IOCTL_GET_MENU =        ((0x22) << 16) | ((1) << 14) | ((0x080c) << 2) | (0);
+        public const UInt32 IOCTL_DESACTIVAR_MENU = ((0x22) << 16) | ((2) << 14) | ((0x080d) << 2) | (0);
 
         [StructLayout(LayoutKind.Sequential)]
         public struct CALIBRADO

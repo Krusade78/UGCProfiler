@@ -31,7 +31,7 @@ namespace Launcher
 
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
-            MenuLauncher pop = new MenuLauncher();
+            MenuLauncher pop = new MenuLauncher(servicio);
             if (pop.ShowDialog() == true)
             {
                 notifyIcon.Dispose(); notifyIcon = null;

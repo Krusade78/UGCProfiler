@@ -22,7 +22,7 @@ namespace Launcher {
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
     [global::System.Xml.Serialization.XmlRootAttribute("DataSetConfiguracion")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class DataSetConfiguracion : global::System.Data.DataSet {
+    internal partial class DataSetConfiguracion : global::System.Data.DataSet {
         
         private CONFIGURACIONDataTable tableCONFIGURACION;
         
@@ -295,6 +295,8 @@ namespace Launcher {
             
             private global::System.Data.DataColumn columnhora3_24h;
             
+            private global::System.Data.DataColumn columnPedales;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public CONFIGURACIONDataTable() {
@@ -394,6 +396,14 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PedalesColumn {
+                get {
+                    return this.columnPedales;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -429,7 +439,7 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public CONFIGURACIONRow AddCONFIGURACIONRow(byte LuzMfd, byte LuzGlobal, ushort hora1, ushort hora2, ushort hora3, bool hora1_24h, bool hora2_24h, bool hora3_24h) {
+            public CONFIGURACIONRow AddCONFIGURACIONRow(byte LuzMfd, byte LuzGlobal, ushort hora1, ushort hora2, ushort hora3, bool hora1_24h, bool hora2_24h, bool hora3_24h, bool Pedales) {
                 CONFIGURACIONRow rowCONFIGURACIONRow = ((CONFIGURACIONRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         LuzMfd,
@@ -439,7 +449,8 @@ namespace Launcher {
                         hora3,
                         hora1_24h,
                         hora2_24h,
-                        hora3_24h};
+                        hora3_24h,
+                        Pedales};
                 rowCONFIGURACIONRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowCONFIGURACIONRow);
                 return rowCONFIGURACIONRow;
@@ -470,6 +481,7 @@ namespace Launcher {
                 this.columnhora1_24h = base.Columns["hora1_24h"];
                 this.columnhora2_24h = base.Columns["hora2_24h"];
                 this.columnhora3_24h = base.Columns["hora3_24h"];
+                this.columnPedales = base.Columns["Pedales"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -491,6 +503,8 @@ namespace Launcher {
                 base.Columns.Add(this.columnhora2_24h);
                 this.columnhora3_24h = new global::System.Data.DataColumn("hora3_24h", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnhora3_24h);
+                this.columnPedales = new global::System.Data.DataColumn("Pedales", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPedales);
                 this.columnLuzMfd.AllowDBNull = false;
                 this.columnLuzMfd.DefaultValue = ((byte)(1));
                 this.columnLuzGlobal.AllowDBNull = false;
@@ -511,6 +525,8 @@ namespace Launcher {
                 this.columnhora2_24h.DefaultValue = ((bool)(false));
                 this.columnhora3_24h.AllowDBNull = false;
                 this.columnhora3_24h.DefaultValue = ((bool)(false));
+                this.columnPedales.AllowDBNull = false;
+                this.columnPedales.DefaultValue = ((bool)(false));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -736,6 +752,17 @@ namespace Launcher {
                 }
                 set {
                     this[this.tableCONFIGURACION.hora3_24hColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool Pedales {
+                get {
+                    return ((bool)(this[this.tableCONFIGURACION.PedalesColumn]));
+                }
+                set {
+                    this[this.tableCONFIGURACION.PedalesColumn] = value;
                 }
             }
         }
