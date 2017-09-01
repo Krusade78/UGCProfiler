@@ -40,6 +40,7 @@ typedef struct _HID_CONTEXT
 	UCHAR			EstadoModos;
 	UCHAR			EstadoPinkie;
 	BOOLEAN			ModoRaw;
+	BOOLEAN			MenuActivado;
 
 	WDFSPINLOCK		SpinLockAcciones;
 	COLA			ColaAcciones;
@@ -54,7 +55,7 @@ typedef struct _HID_CONTEXT
 	UCHAR			stBotones[4];
 } HID_CONTEXT;
 
-#pragma region "Programación"
+#pragma region "Programaciï¿½n"
 typedef struct _STLIMITES {
 	BOOLEAN cal;
 	UINT16 i;
