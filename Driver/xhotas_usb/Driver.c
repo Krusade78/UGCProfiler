@@ -138,6 +138,12 @@ NTSTATUS IniciarContext(WDFDEVICE device)
 	if (!NT_SUCCESS(status))
 		return status;
 
+	WDF_TIMER_CONFIG_INIT(&timerConfig, EvtTickMenu);
+	timerConfig.TolerableDelay = TolerableDelayUnlimited;
+	status = WdfTimerCreate(&timerConfig, &attributes, &GetDeviceContext(device)->HID.MenuTimer);
+	if (!NT_SUCCESS(status))
+		return status;
+
 	status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.ListaTimersDelay);
 	if (!NT_SUCCESS(status))
 		return status;
