@@ -10,7 +10,6 @@ namespace Launcher
     {
         private bool activado = false;
         private SafeFileHandle driver = null;
-        pri
 
         private bool AbrirDriver()
         {
@@ -105,8 +104,7 @@ namespace Launcher
 
         private void CerrarMenu()
         {
-            SafeFileHandle driver = AbrirDriver();
-            if (driver.IsInvalid)
+            if (AbrirDriver())
                 return;
 
             UInt32 ret = 0;
@@ -127,7 +125,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero))
                 MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][2.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-            driver.Close();
+            CerrarDriver();
             return;
         }
 
@@ -188,7 +186,7 @@ namespace Launcher
             for (byte i = 0; i < 2; i++)
             {
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i + (pagina * 3)]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < (texto.Length + 1); i++)
                     buffer[c] = texto[c - 1];
@@ -218,7 +216,7 @@ namespace Launcher
             for (byte i = 0; i < 3; i++)
             {
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i + (pagina * 3)]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < (texto.Length + 1); i++)
                     buffer[c] = texto[c - 1];
@@ -248,7 +246,7 @@ namespace Launcher
             for (byte i = 0; i < 2; i++)
             {
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i + (pagina * 3)]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < (texto.Length + 1); i++)
                     buffer[c] = texto[c - 1];
