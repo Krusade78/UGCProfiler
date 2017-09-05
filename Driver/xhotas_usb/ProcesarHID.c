@@ -135,7 +135,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 	else
 	{
 		GetDeviceContext(device)->HID.MenuTimerEsperando = FALSE;
-		WdfTimerStop(GetDeviceContext(device)->HID.MenuTimer);
+		WdfTimerStop(GetDeviceContext(device)->HID.MenuTimer, FALSE);
 	}
 
 	if (GetDeviceContext(device)->Pedales.Activado)
@@ -187,21 +187,24 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 
 	if (!devExt->ModoRaw)
 	{
-		 //Botones
+		if (!devExt->MenuActivado)
+		{
+			//Botones
 
-		for (idx = 0; idx < 4; idx++) {
-			cambios = hidData->Botones[idx] ^ viejohidData.Botones[idx];
-			if (cambios != 0)
-			{
-				UCHAR exp;
-				for (exp = 0; exp < 8; exp++)
+			for (idx = 0; idx < 4; idx++) {
+				cambios = hidData->Botones[idx] ^ viejohidData.Botones[idx];
+				if (cambios != 0)
 				{
-					if ((cambios >> exp) & 1)
-					{ // Si ha cambiado
-						if ((hidData->Botones[idx] >> exp) & 1)
-							GenerarPulsarBoton(device, (idx * 8) + exp);
-						else
-							GenerarSoltarBoton(device, (idx * 8) + exp);
+					UCHAR exp;
+					for (exp = 0; exp < 8; exp++)
+					{
+						if ((cambios >> exp) & 1)
+						{ // Si ha cambiado
+							if ((hidData->Botones[idx] >> exp) & 1)
+								GenerarPulsarBoton(device, (idx * 8) + exp);
+							else
+								GenerarSoltarBoton(device, (idx * 8) + exp);
+						}
 					}
 				}
 			}
@@ -232,7 +235,9 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 		RtlZeroMemory(&outputData, sizeof(HID_INPUT_DATA));
 		SensibilidadYMapeado(device, &viejohidData, hidData, &outputData);
 
-		RtlCopyMemory(outputData.Botones, devExt->stBotones, sizeof(hidData->Botones));
+		if (!devExt->MenuActivado)
+			RtlCopyMemory(outputData.Botones, devExt->stBotones, sizeof(hidData->Botones));
+
 		RtlCopyMemory(outputData.Setas, devExt->stSetas, sizeof(hidData->Setas));
 		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
 	}
