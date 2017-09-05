@@ -17,7 +17,7 @@ namespace Launcher
         public MainWindow()
         {
             InitializeComponent();
-            servicio = new CServicio();
+            servicio = new CServicio(this);
             if (servicio.Iniciar())
             {
                 notifyIcon = new NotifyIcon();

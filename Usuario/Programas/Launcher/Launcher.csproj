@@ -71,6 +71,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CMFD.cs" />
+    <Compile Include="CRawInput.cs" />
     <Compile Include="CServicio.cs" />
     <Compile Include="CSystem32.cs" />
     <Compile Include="DataSetConfiguracion.Designer.cs">

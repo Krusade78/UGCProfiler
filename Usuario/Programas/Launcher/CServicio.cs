@@ -9,7 +9,8 @@ namespace Launcher
     class CServicio : IDisposable
     {
         //Nota: Los datos de horas están en minutos
-        private CMFD mfd = new CMFD();
+        private Window wnd;
+        private CMFD mfd;
 
         private DataSetConfiguracion dsc = new DataSetConfiguracion();
         private Timer timer = new Timer(2000);
@@ -18,8 +19,9 @@ namespace Launcher
         private bool horaActiva = true;
         private bool timerMenu = false;
 
-        public CServicio()
+        public CServicio(Window wnd)
         {
+            mfd = new CMFD((System.Windows.Interop.HwndSource)PresentationSource.FromVisual(wnd), ref dsc);
         }
 
         #region IDisposable Support
