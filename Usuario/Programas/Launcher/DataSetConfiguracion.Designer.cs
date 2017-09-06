@@ -439,7 +439,7 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public CONFIGURACIONRow AddCONFIGURACIONRow(byte LuzMfd, byte LuzGlobal, ushort hora1, ushort hora2, ushort hora3, bool hora1_24h, bool hora2_24h, bool hora3_24h, bool Pedales) {
+            public CONFIGURACIONRow AddCONFIGURACIONRow(byte LuzMfd, byte LuzGlobal, short hora1, short hora2, short hora3, bool hora1_24h, bool hora2_24h, bool hora3_24h, bool Pedales) {
                 CONFIGURACIONRow rowCONFIGURACIONRow = ((CONFIGURACIONRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         LuzMfd,
@@ -491,11 +491,11 @@ namespace Launcher {
                 base.Columns.Add(this.columnLuzMfd);
                 this.columnLuzGlobal = new global::System.Data.DataColumn("LuzGlobal", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnLuzGlobal);
-                this.columnhora1 = new global::System.Data.DataColumn("hora1", typeof(ushort), null, global::System.Data.MappingType.Element);
+                this.columnhora1 = new global::System.Data.DataColumn("hora1", typeof(short), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnhora1);
-                this.columnhora2 = new global::System.Data.DataColumn("hora2", typeof(ushort), null, global::System.Data.MappingType.Element);
+                this.columnhora2 = new global::System.Data.DataColumn("hora2", typeof(short), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnhora2);
-                this.columnhora3 = new global::System.Data.DataColumn("hora3", typeof(ushort), null, global::System.Data.MappingType.Element);
+                this.columnhora3 = new global::System.Data.DataColumn("hora3", typeof(short), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnhora3);
                 this.columnhora1_24h = new global::System.Data.DataColumn("hora1_24h", typeof(bool), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnhora1_24h);
@@ -510,13 +510,13 @@ namespace Launcher {
                 this.columnLuzGlobal.AllowDBNull = false;
                 this.columnLuzGlobal.DefaultValue = ((byte)(1));
                 this.columnhora1.AllowDBNull = false;
-                this.columnhora1.DefaultValue = ((ushort)(0));
+                this.columnhora1.DefaultValue = ((short)(0));
                 this.columnhora2.AllowDBNull = false;
                 this.columnhora2.Caption = "hora1";
-                this.columnhora2.DefaultValue = ((ushort)(0));
+                this.columnhora2.DefaultValue = ((short)(0));
                 this.columnhora3.AllowDBNull = false;
                 this.columnhora3.Caption = "hora1";
-                this.columnhora3.DefaultValue = ((ushort)(0));
+                this.columnhora3.DefaultValue = ((short)(0));
                 this.columnhora1_24h.AllowDBNull = false;
                 this.columnhora1_24h.Caption = "hora3_24h";
                 this.columnhora1_24h.DefaultValue = ((bool)(false));
@@ -691,9 +691,9 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ushort hora1 {
+            public short hora1 {
                 get {
-                    return ((ushort)(this[this.tableCONFIGURACION.hora1Column]));
+                    return ((short)(this[this.tableCONFIGURACION.hora1Column]));
                 }
                 set {
                     this[this.tableCONFIGURACION.hora1Column] = value;
@@ -702,9 +702,9 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ushort hora2 {
+            public short hora2 {
                 get {
-                    return ((ushort)(this[this.tableCONFIGURACION.hora2Column]));
+                    return ((short)(this[this.tableCONFIGURACION.hora2Column]));
                 }
                 set {
                     this[this.tableCONFIGURACION.hora2Column] = value;
@@ -713,9 +713,9 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ushort hora3 {
+            public short hora3 {
                 get {
-                    return ((ushort)(this[this.tableCONFIGURACION.hora3Column]));
+                    return ((short)(this[this.tableCONFIGURACION.hora3Column]));
                 }
                 set {
                     this[this.tableCONFIGURACION.hora3Column] = value;

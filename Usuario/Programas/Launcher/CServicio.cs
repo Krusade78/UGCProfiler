@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Timers;
+using System.IO.Pipes;
 using System.Threading.Tasks;
 
 namespace Launcher
@@ -9,11 +10,11 @@ namespace Launcher
     class CServicio : IDisposable
     {
         //Nota: Los datos de horas están en minutos
-        private Window wnd;
-        private CMFD mfd;
+        private CMFD mfd = null;
 
         private DataSetConfiguracion dsc = new DataSetConfiguracion();
         private Timer timer = new Timer(2000);
+        private System.Threading.CancellationTokenSource cerrarPipe = new System.Threading.CancellationTokenSource();
 
         private bool fechaActiva = true;
         private bool horaActiva = true;
@@ -33,8 +34,11 @@ namespace Launcher
             {
                 if (disposing)
                 {
+                    cerrarPipe.Cancel();
+                    while (cerrarPipe != null) { System.Threading.Thread.Sleep(100); }
                     timer.Stop();
                     timer.Close(); timer = null;
+                    if (mfd != null) { mfd.Dispose(); mfd = null; }
                     dsc.Dispose(); dsc = null;
                 }
                 disposedValue = true;
@@ -46,7 +50,6 @@ namespace Launcher
              GC.SuppressFinalize(this);
         }
         #endregion
-
         public bool Iniciar()
         {
             if (!CargarCalibrado())
@@ -57,6 +60,25 @@ namespace Launcher
             SetTextoInicio();
             timer.Elapsed += Tick;
             timer.Start();
+
+            Task.Run(() =>
+                {
+                    while (!cerrarPipe.Token.IsCancellationRequested)
+                    {
+                        using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("LauncherPipe", PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+                        {
+                            try { pipeServer.WaitForConnectionAsync(cerrarPipe.Token).Wait(); } catch { break; }
+                            if (cerrarPipe.Token.IsCancellationRequested)
+                                break;
+                            using (System.IO.StreamReader r = new System.IO.StreamReader(pipeServer))
+                            {
+                                CargarPerfil(r.ReadToEnd());
+                            }
+                        }
+                    }
+                    cerrarPipe.Dispose();
+                    cerrarPipe = null;
+                });
 
             return true;
         }
@@ -184,17 +206,31 @@ namespace Launcher
             }
 
             buffer = new byte[3];
-            UInt16[] horas = new UInt16[] { dsc.CONFIGURACION[0].hora1, dsc.CONFIGURACION[0].hora2, dsc.CONFIGURACION[0].hora3 };
+            Int16[] horas = new Int16[] { dsc.CONFIGURACION[0].hora1, dsc.CONFIGURACION[0].hora2, dsc.CONFIGURACION[0].hora3 };
             bool[] horas24 = new bool[] { dsc.CONFIGURACION[0].hora1_24h, dsc.CONFIGURACION[0].hora2_24h, dsc.CONFIGURACION[0].hora3_24h };
 
             fecha = fecha.AddMinutes(dsc.CONFIGURACION[0].hora1);
-            horas[0] = (UInt16)((fecha.Minute << 8) + fecha.Hour);
-
             for (byte i = 0; i < 3; i++)
             {
                 buffer[0] = (byte)(i + 1);
-                buffer[1] = (byte)(horas[i] >> 8);
-                buffer[2] = (byte)(horas[i] & 0xff);
+                if (i == 0)
+                {
+                    buffer[1] = (byte)(fecha.Minute);
+                    buffer[2] = (byte)(fecha.Hour);
+                }
+                else
+                {
+                    if (horas[i] < 0)
+                    {
+                        buffer[1] = (byte)(((-horas[i]) >> 8) + 4);
+                        buffer[2] = (byte)((-horas[i]) & 0xff);
+                    }
+                    else
+                    {
+                        buffer[1] = (byte)(horas[i] >> 8);
+                        buffer[2] = (byte)(horas[i] & 0xff);
+                    }
+                }
                 if (horas24[i])
                 {
                     if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
@@ -324,10 +360,9 @@ namespace Launcher
             if (this.horaActiva)
             {
                 t = t.AddMinutes(dsc.CONFIGURACION[0].hora1);
-                UInt16 auxHora = (UInt16)((t.Minute << 8) + t.Hour);
                 bf[0] = 1;
-                bf[1] = (byte)(auxHora >> 8);
-                bf[2] = (byte)(auxHora & 0xff);
+                bf[1] = (byte)(t.Minute);
+                bf[2] = (byte)(t.Hour);
                 if (dsc.CONFIGURACION[0].hora1_24h)
                     CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA24, bf, 3, null, 0, out ret, IntPtr.Zero);
                 else
@@ -337,13 +372,16 @@ namespace Launcher
             driver.Close();
         }
 
-        private void CargarPerfil(String archivo)
+        public void CargarPerfil(String archivo)
         {
-            bool horaModificada = false;
-            bool fechaModificada = false;
-            CPerfil.CargarMapa(archivo, ref horaModificada, ref fechaModificada);
-            horaActiva = !horaModificada;
-            fechaActiva = !fechaModificada;
+            lock (this)
+            {
+                bool horaModificada = false;
+                bool fechaModificada = false;
+                CPerfil.CargarMapa(archivo, ref horaModificada, ref fechaModificada);
+                horaActiva = !horaModificada;
+                fechaActiva = !fechaModificada;
+            }
         }
 
         private void ReiniciarX52()

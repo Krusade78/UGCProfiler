@@ -35,6 +35,7 @@ namespace Launcher
             if (pop.ShowDialog() == true)
             {
                 notifyIcon.Dispose(); notifyIcon = null;
+                servicio.Dispose();
                 this.Close();
             }
         }

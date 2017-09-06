@@ -13,7 +13,6 @@ namespace Launcher
     internal partial class MenuLauncher : Window
     {
         private bool salir = false;
-        private static String ultimoCargado;
         private CServicio svc;
 
         public MenuLauncher(CServicio svc)
@@ -62,7 +61,7 @@ namespace Launcher
 
         private void MenuItemLanzar_Click(object sender, RoutedEventArgs e)
         {
-            svc.CargarPerfil((String)((MenuItem)sender).Header);
+            svc.CargarPerfil(Directory.GetCurrentDirectory() + "\\" + (String)((MenuItem)sender).Header + ".xhp");
         }
 
         private void MenuItemEditar_Click(object sender, RoutedEventArgs e)
