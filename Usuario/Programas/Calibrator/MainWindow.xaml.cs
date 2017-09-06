@@ -110,7 +110,7 @@ namespace Calibrator
                                         keyb = Marshal.PtrToStructure<CRawInput.RAWINPUTKEYBOARD>(ptr);
                                         Marshal.FreeHGlobal(ptr);
 
-                                        //ucInfo.ActualizarTeclado(hidData);
+                                        ucInfo.ActualizarTeclado(keyb);
                                     }
                                 }
                                 break;
@@ -123,14 +123,14 @@ namespace Calibrator
                                     Marshal.FreeHGlobal(pNombre);
                                     if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
                                     {
-                                        CRawInput.RAWINPUTMOUSE keyb = new CRawInput.RAWINPUTMOUSE();
+                                        CRawInput.RAWINPUTMOUSE mouse = new CRawInput.RAWINPUTMOUSE();
 
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
-                                        keyb = Marshal.PtrToStructure<CRawInput.RAWINPUTMOUSE>(ptr);
+                                        mouse = Marshal.PtrToStructure<CRawInput.RAWINPUTMOUSE>(ptr);
                                         Marshal.FreeHGlobal(ptr);
 
-                                        //ucInfo.ActualizarRaton(hidData);
+                                        ucInfo.ActualizarRaton(mouse);
                                     }
                                 }
                                 break;
