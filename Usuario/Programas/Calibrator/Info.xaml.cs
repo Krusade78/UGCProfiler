@@ -85,9 +85,12 @@ namespace Calibrator
 
         public void ActualizarTeclado(data)
         {
-
+System.Windows.Input.KeyInterop.KeyFromVirtualKey(data.vkCode);
         }
 
         public void ActualizarMouse(data)
+        {
+            
+        }
     }
 }
