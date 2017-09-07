@@ -259,11 +259,11 @@ namespace Launcher
 
             String[] filas = new String[] { " Pedales        ",
                                             " Luz botones    ",
-                                            " Luz MFD        ",
-                                            " Hora 1         ",
+                                            " Luz MFD       »",
+                                            " Hora 1        «",
                                             " Hora 2         ",
-                                            " Hora 3         ",
-                                            " Salir          "
+                                            " Hora 3        »",
+                                            " Salir         «"
                                             };
             filas[cursor] = ">" + filas[cursor].Remove(0, 1);
 
@@ -271,17 +271,12 @@ namespace Launcher
             {
                 if ((pagina == 2) && (i == 1))
                     break;
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i + (pagina * 3)]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i + (pagina * 3)]));
                 byte[] buffer = new byte[17];
-                for (byte c = 1; c < 17; i++)
+                for (byte c = 1; c < 17; c++)
                     buffer[c] = texto[c - 1];
 
                 buffer[0] = (byte)(i + 1);
-
-                if ((i == 0) && (pagina != 0))
-                    buffer[16] = 174; //«
-                if (i == 2)
-                    buffer[16] = 175; //»
 
                 UInt32 ret = 0;
                 if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, buffer, 17, null, 0, out ret, IntPtr.Zero))
@@ -309,9 +304,9 @@ namespace Launcher
             for (byte i = 0; i < 2; i++)
             {
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
-                for (byte c = 1; c < (texto.Length + 1); i++)
+                for (byte c = 1; c < (texto.Length + 1); c++)
                     buffer[c] = texto[c - 1];
 
                 buffer[0] = (byte)(i + 1);
@@ -343,9 +338,9 @@ namespace Launcher
             for (byte i = 0; i < 3; i++)
             {
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
-                for (byte c = 1; c < (texto.Length + 1); i++)
+                for (byte c = 1; c < (texto.Length + 1); c++)
                     buffer[c] = texto[c - 1];
 
                 buffer[0] = (byte)(i + 1);
@@ -381,9 +376,9 @@ namespace Launcher
 
             for (byte i = 0; i < 2; i++)
             {
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(filas[i]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
-                for (byte c = 1; c < (texto.Length + 1); i++)
+                for (byte c = 1; c < (texto.Length + 1); c++)
                     buffer[c] = texto[c - 1];
 
                 buffer[0] = (byte)(i + 1);
@@ -409,6 +404,7 @@ namespace Launcher
         {
             if (!hidOn)
             {
+                System.Threading.Thread.Sleep(2000);
                 CRawInput.RAWINPUTDEVICE[] rdev = new CRawInput.RAWINPUTDEVICE[3];
                 rdev[0].UsagePage = 0x01;
                 rdev[0].Usage = 0x04;

@@ -225,7 +225,7 @@ namespace Launcher
                 else if (nombre.Length == 0)
                     nombre = "";
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(archivo));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(archivo));
                 byte[] buffer = new byte[18];
                 for (byte i = 1; i < 18; i++)
                 {

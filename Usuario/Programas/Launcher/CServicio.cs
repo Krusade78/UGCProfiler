@@ -215,8 +215,8 @@ namespace Launcher
                 buffer[0] = (byte)(i + 1);
                 if (i == 0)
                 {
-                    buffer[1] = (byte)(fecha.Minute);
-                    buffer[2] = (byte)(fecha.Hour);
+                    buffer[1] = (byte)(fecha.Hour);
+                    buffer[2] = (byte)(fecha.Minute);
                 }
                 else
                 {
@@ -287,7 +287,7 @@ namespace Launcher
             for (byte i = 0; i < 2; i++)
             {
                 String fila = filas[i];
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.ASCII, System.Text.Encoding.Unicode.GetBytes(fila));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(fila));
                 byte[] buffer = new byte[18];
                 for (byte c = 1; c < 18; c++)
                 {
@@ -361,8 +361,8 @@ namespace Launcher
             {
                 t = t.AddMinutes(dsc.CONFIGURACION[0].hora1);
                 bf[0] = 1;
-                bf[1] = (byte)(t.Minute);
-                bf[2] = (byte)(t.Hour);
+                bf[1] = (byte)(t.Hour);
+                bf[2] = (byte)(t.Minute);
                 if (dsc.CONFIGURACION[0].hora1_24h)
                     CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA24, bf, 3, null, 0, out ret, IntPtr.Zero);
                 else
@@ -384,33 +384,33 @@ namespace Launcher
             }
         }
 
-        private void ReiniciarX52()
-        {
-            CargarConfiguracion();
+        //private void ReiniciarX52()
+        //{
+        //    CargarConfiguracion();
 
-            String[] filas = new String[] { "  Saitek X-52",
-                                            "  Driver v7.0" };
+        //    String[] filas = new String[] { "  Saitek X-52",
+        //                                    "  Driver v7.0" };
 
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
-                            "\\\\.\\XUSBInterface",
-                            0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                            0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                            IntPtr.Zero,
-                            3,//OPEN_EXISTING,
-                            0,
-                            IntPtr.Zero);
-            if (driver.IsInvalid)
-                return;
+        //    Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
+        //                    "\\\\.\\XUSBInterface",
+        //                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
+        //                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
+        //                    IntPtr.Zero,
+        //                    3,//OPEN_EXISTING,
+        //                    0,
+        //                    IntPtr.Zero);
+        //    if (driver.IsInvalid)
+        //        return;
 
-            UInt32 ret = 0;
-            byte[] fila = new byte[2] { 1, 0 };
-            CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
-            fila[0] = 2;
-            CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
-            fila[0] = 3;
-            CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
+        //    UInt32 ret = 0;
+        //    byte[] fila = new byte[2] { 1, 0 };
+        //    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
+        //    fila[0] = 2;
+        //    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
+        //    fila[0] = 3;
+        //    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
 
-            driver.Close();
-        }
+        //    driver.Close();
+        //}
     }
 }
