@@ -18,6 +18,9 @@ Kernel-mode Driver Framework
 
 #include <ntddk.h>
 #include <wdf.h>
+#include <usbdi.h>
+#include <usbdlib.h>
+#include <wdfusb.h>
 #include "PnP.h"
 #include "context.h"
 #include "x52_read.h"
@@ -71,6 +74,7 @@ NTSTATUS EvtAddDevice(
 	WdfFdoInitSetFilter(DeviceInit);
 
 	WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
+		pnpPowerCallbacks.EvtDevicePrepareHardware = EvtDevicePrepareHardware;
 		pnpPowerCallbacks.EvtDeviceSelfManagedIoInit = EvtDeviceSelfManagedIoInit;
 		pnpPowerCallbacks.EvtDeviceSelfManagedIoCleanup = EvtDeviceSelfManagedIoCleanup;
 		//pnpPowerCallbacks.EvtDeviceD0Entry = EvtDeviceD0Entry;
@@ -166,6 +170,29 @@ NTSTATUS IniciarContext(WDFDEVICE device)
 	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockAcciones);
 
 	return status;
+}
+
+NTSTATUS
+EvtDevicePrepareHardware(
+    IN WDFDEVICE    Device,
+    IN WDFCMRESLIST ResourceList,
+    IN WDFCMRESLIST ResourceListTranslated
+    )
+{
+    NTSTATUS status = STATUS_SUCCESS;
+
+    UNREFERENCED_PARAMETER(ResourceList);
+    UNREFERENCED_PARAMETER(ResourceListTranslated);
+
+	if (GetDeviceContext(Device)->UsbDevice == NULL)
+	{
+		WDF_USB_DEVICE_CREATE_CONFIG createParams;
+		WDF_USB_DEVICE_CREATE_CONFIG_INIT(&createParams, USBD_CLIENT_CONTRACT_VERSION_602);
+		status = WdfUsbTargetDeviceCreateWithParameters(Device,	&createParams,	WDF_NO_OBJECT_ATTRIBUTES,&GetDeviceContext(Device)->UsbDevice);
+	}
+
+
+    return status;
 }
 
 VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)

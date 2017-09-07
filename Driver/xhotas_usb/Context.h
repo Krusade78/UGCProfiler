@@ -57,7 +57,7 @@ typedef struct _HID_CONTEXT
 	UCHAR			stBotones[4];
 } HID_CONTEXT;
 
-#pragma region "Programaci�n"
+#pragma region "Programación"
 typedef struct _STLIMITES {
 	BOOLEAN cal;
 	UINT16 i;
@@ -153,7 +153,7 @@ typedef struct _DEVICE_CONTEXT
 	PEDALES_CONTEXT		Pedales;
 	HID_CONTEXT			HID;
 	PROGRAMADO_CONTEXT	Programacion;
-	//WDFUSBDEVICE		UsbDevice;
+	WDFUSBDEVICE		UsbDevice;
 } DEVICE_CONTEXT, *PDEVICE_CONTEXT;
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_CONTEXT, GetDeviceContext);
 

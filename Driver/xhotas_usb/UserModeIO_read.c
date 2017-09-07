@@ -113,7 +113,7 @@ VOID EvtIOCtlAplicacion(
 
 	if (IoControlCode == IOCTL_GET_MENU)
 	{
-		status = WdfRequestRetrieveOutputBuffer(Request, 0, (PVOID*)SystemBuffer, NULL);
+		status = WdfRequestRetrieveOutputBuffer(Request, 0, (PVOID*)&SystemBuffer, NULL);
 		if (!NT_SUCCESS(status))
 		{
 			WdfRequestSetInformation(Request, 1);
@@ -154,8 +154,6 @@ VOID EvtIOCtlAplicacion(
 		case IOCTL_GLOBAL_LUZ:
 		case IOCTL_INFO_LUZ:
 		case IOCTL_PEDALES:
-		case IOCTL_HORA:
-		case IOCTL_HORA24:
 			if (InputBufferLength != 1)
 			{
 				WdfRequestSetInformation(Request, 1);
@@ -166,6 +164,17 @@ VOID EvtIOCtlAplicacion(
 		case IOCTL_FECHA:
 		{
 			if (InputBufferLength != 2)
+			{
+				WdfRequestSetInformation(Request, 2);
+				WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
+				return;
+			}
+			break;
+		}
+		case IOCTL_HORA:
+		case IOCTL_HORA24:
+		{
+			if (InputBufferLength != 3)
 			{
 				WdfRequestSetInformation(Request, 2);
 				WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
@@ -204,7 +213,7 @@ VOID EvtIOCtlAplicacion(
 	case IOCTL_GET_MENU:
 	{
 		SystemBuffer[0] = GetDeviceContext(device)->HID.MenuActivado;
-		WdfRequestComplete(Request, STATUS_SUCCESS);
+		WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, 1);
 		break;
 	}
 	case IOCTL_DESACTIVAR_MENU:
@@ -216,7 +225,7 @@ VOID EvtIOCtlAplicacion(
 	//-------------------- Pedales -----------------------------------
 	case IOCTL_PEDALES:
 	{
-		GetDeviceContext(device)->Pedales.Activado = SystemBuffer[0];;
+		GetDeviceContext(device)->Pedales.Activado = SystemBuffer[0];
 		WdfRequestComplete(Request, STATUS_SUCCESS);
 		break;
 	}
@@ -280,4 +289,5 @@ VOID EvtIOCtlAplicacion(
 VOID EvtTickMenu(_In_ WDFTIMER Timer)
 {
 	GetDeviceContext(WdfTimerGetParentObject(Timer))->HID.MenuActivado = TRUE;
+	GetDeviceContext(WdfTimerGetParentObject(Timer))->HID.MenuTimerEsperando = FALSE;
 }

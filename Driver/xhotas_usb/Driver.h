@@ -4,7 +4,7 @@ DRIVER_INITIALIZE DriverEntry;
 
 #ifdef _PRIVATE_
 EVT_WDF_DRIVER_DEVICE_ADD EvtAddDevice;
-//EVT_WDF_DEVICE_PREPARE_HARDWARE  DevicePrepareHardware;
+EVT_WDF_DEVICE_PREPARE_HARDWARE  EvtDevicePrepareHardware;
 NTSTATUS IniciarContext(WDFDEVICE device);
 EVT_WDF_OBJECT_CONTEXT_CLEANUP EvtCleanupCallback;
 #endif _PRIVATE_

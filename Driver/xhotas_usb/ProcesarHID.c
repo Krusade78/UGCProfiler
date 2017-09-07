@@ -127,15 +127,21 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 	hidData.MiniStick = hidGameData->Ministick;
 
 	// Menu MFD
-	if (((hidData.Botones[1] & 0x8) == 0x8) && !GetDeviceContext(device)->HID.MenuTimerEsperando)
-	{		
-		GetDeviceContext(device)->HID.MenuTimerEsperando = TRUE;
-		WdfTimerStart(GetDeviceContext(device)->HID.MenuTimer, WDF_REL_TIMEOUT_IN_SEC(4));
+	if ((hidData.Botones[1] & 0x8) == 0x8)
+	{	
+		if (!GetDeviceContext(device)->HID.MenuTimerEsperando && !GetDeviceContext(device)->HID.MenuActivado)
+		{
+			GetDeviceContext(device)->HID.MenuTimerEsperando = TRUE;
+			WdfTimerStart(GetDeviceContext(device)->HID.MenuTimer, WDF_REL_TIMEOUT_IN_SEC(4));
+		}
 	}
 	else
 	{
-		GetDeviceContext(device)->HID.MenuTimerEsperando = FALSE;
-		WdfTimerStop(GetDeviceContext(device)->HID.MenuTimer, FALSE);
+		if (GetDeviceContext(device)->HID.MenuTimerEsperando && !GetDeviceContext(device)->HID.MenuActivado)
+		{
+			GetDeviceContext(device)->HID.MenuTimerEsperando = FALSE;
+			WdfTimerStop(GetDeviceContext(device)->HID.MenuTimer, FALSE);
+		}
 	}
 
 	if (GetDeviceContext(device)->Pedales.Activado)

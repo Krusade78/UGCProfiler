@@ -192,15 +192,15 @@ NTSTATUS EnviarOrdenPassive(_In_ WDFDEVICE DeviceObject, _In_ USHORT valor, UCHA
 	WDF_USB_CONTROL_SETUP_PACKET    controlSetupPacket;
 	WDF_REQUEST_SEND_OPTIONS		sendOptions;
 	WDF_OBJECT_ATTRIBUTES			attributes;
-	WDFREQUEST						newRequest = NULL;
+	//WDFREQUEST						newRequest = NULL;
 
 	PAGED_CODE();
 
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
 	attributes.ParentObject = DeviceObject;
-	status = WdfRequestCreate(&attributes, WdfDeviceGetIoTarget(DeviceObject), &newRequest);
-	if (!NT_SUCCESS(status))
-		return status;
+	//status = WdfRequestCreate(&attributes, WdfDeviceGetIoTarget(DeviceObject), &newRequest);
+	//if (!NT_SUCCESS(status))
+	//	return status;
 
 	WDF_USB_CONTROL_SETUP_PACKET_INIT_VENDOR(&controlSetupPacket,
 		BmRequestHostToDevice,
@@ -213,14 +213,14 @@ NTSTATUS EnviarOrdenPassive(_In_ WDFDEVICE DeviceObject, _In_ USHORT valor, UCHA
 	WDF_REQUEST_SEND_OPTIONS_SET_TIMEOUT(&sendOptions, WDF_REL_TIMEOUT_IN_MS(500));
 
 	status = WdfUsbTargetDeviceSendControlTransferSynchronously(
-		(WDFUSBDEVICE)DeviceObject,
-		newRequest, // Optional WDFREQUEST
+		GetDeviceContext(DeviceObject)->UsbDevice,
+		NULL, //newRequest, // Optional WDFREQUEST
 		&sendOptions, // PWDF_REQUEST_SEND_OPTIONS
 		&controlSetupPacket,
 		NULL,
 		NULL);
 
-	WdfObjectDelete(newRequest);
+	//WdfObjectDelete(newRequest);
 
 	return status;
 }
