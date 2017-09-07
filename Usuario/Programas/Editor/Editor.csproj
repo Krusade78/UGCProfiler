@@ -61,6 +61,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CDatos.cs" />
+    <Compile Include="DSPerfil.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DSPerfil.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.Metodos.cs" />
+    <Compile Include="VEditorModos.xaml.cs">
+      <DependentUpon>VEditorModos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VEditorRaton.xaml.cs">
+      <DependentUpon>VEditorRaton.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,6 +86,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="VEditorModos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VEditorRaton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -92,6 +113,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="DSPerfil.xsc">
+      <DependentUpon>DSPerfil.xsd</DependentUpon>
+    </None>
+    <None Include="DSPerfil.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DSPerfil.xss">
+      <DependentUpon>DSPerfil.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

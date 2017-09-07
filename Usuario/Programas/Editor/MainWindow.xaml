@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="Editor.MainWindow"
         mc:Ignorable="d"
-        Title="Editor" Height="530" Width="754" Icon="res/editor.ico" WindowStartupLocation="CenterScreen">
+        Title="Editor" Height="530" Width="754" Icon="res/editor.ico" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF004DAA" Offset="0"/>
@@ -20,13 +20,13 @@
                         <StackPanel  ToolBar.OverflowMode="Never">
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Orientation="Horizontal">
-                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Nuevo" />
-                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Abrir" />
-                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Guardar" />
+                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Nuevo" Click="RibbonButtonNuevo_Click" />
+                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Abrir" Click="RibbonButtonAbrir_Click" />
+                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Guardar" Click="RibbonButtonGuardar_Click" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" ToolTip="Guardar como" />
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" ToolTip="Imprimir" />
+                                    <RibbonButton SmallImageSource="res/nuevo.ico" ToolTip="Guardar como" Click="RibbonButtonGuardarComo_Click" />
+                                    <RibbonButton SmallImageSource="res/nuevo.ico" ToolTip="Imprimir" Click="RibbonButtonImprimir_Click" />
                                 </StackPanel>
                             </StackPanel>
                             <TextBlock Text="Archivo" HorizontalAlignment="Center" Foreground="Gray" />
@@ -37,10 +37,10 @@
                     <ToolBarPanel>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Lanzar" />
+                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Lanzar" Click="RibbonButtonLanzar_Click" />
                                 <StackPanel Orientation="Vertical">
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" Label="Modos" />
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" Label="Ratón" />
+                                    <RibbonButton SmallImageSource="res/nuevo.ico" Label="Modos" Click="RibbonButtonModos_Click" />
+                                    <RibbonButton SmallImageSource="res/nuevo.ico" Label="Ratón" Click="RibbonButtonRaton_Click" />
                                 </StackPanel>
                             </StackPanel>
                             <TextBlock Text="Perfil" HorizontalAlignment="Center"  Foreground="Gray" />
@@ -51,8 +51,8 @@
                     <ToolBarPanel>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Edición" />
-                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Listado" />
+                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Edición" Click="RibbonButtonEdicion_Click" />
+                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Listado" Click="RibbonButtonListado_Click"/>
                             </StackPanel>
                             <TextBlock Text="Vista" HorizontalAlignment="Center" Foreground="Gray"  />
                         </StackPanel>

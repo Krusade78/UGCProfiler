@@ -20,9 +20,96 @@ namespace Editor
     /// </summary>
     public partial class MainWindow : Window
     {
+        public CDatos datos;
+        private bool esNuevo = true;
+        private Object report = null;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Environment.GetCommandLineArgs().Length == 1)
+                Abrir(Environment.GetCommandLineArgs()[0]);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (datos.GetModificado())
+            {
+                MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (r == MessageBoxResult.Cancel)
+                    e.Cancel = true;
+                else if (r == MessageBoxResult.Yes)
+                {
+                    if (!Guardar())
+                        e.Cancel = true;
+                }
+            }
+        }
+
+        private void RibbonButtonNuevo_Click(object sender, RoutedEventArgs e)
+        {
+            Nuevo();
+        }
+        private void RibbonButtonAbrir_Click(object sender, RoutedEventArgs e)
+        {
+            Abrir();
+        }
+        private void RibbonButtonGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            Guardar();
+        }
+        private void RibbonButtonGuardarComo_Click(object sender, RoutedEventArgs e)
+        {
+            GuardarComo();
+        }
+        private void RibbonButtonImprimir_Click(object sender, RoutedEventArgs e)
+        {
+            VImprimir imp = new VImprimir();
+            imp.PreVer();
+        }
+
+        private void RibbonButtonLanzar_Click(object sender, RoutedEventArgs e)
+        {
+            Lanzar();
+        }
+        private void RibbonButtonModos_Click(object sender, RoutedEventArgs e)
+        {
+            byte b;
+            byte old = datos.GetModosDefecto();
+            VEditorModos v = new VEditorModos();
+            v.Owner = this;
+            v.ShowDialog();
+            b = datos.GetModosDefecto();
+            if (b != old) Vista.RefrescarModos();
+        }
+        private void RibbonButtonRaton_Click(object sender, RoutedEventArgs e)
+        {
+            VEditorRaton v = new VEditorRaton();
+            v.Owner = this;
+            v.ShowDialog();
+        }
+
+        private void RibbonButtonEdicion_Click(object sender, RoutedEventArgs e)
+        {
+            if (report != null)
+            {
+                Fondo.Visible = True;
+                this.Controls.Remove(report);
+                report = null;
+            }
+        }
+        private void RibbonButtonListado_Click(object sender, RoutedEventArgs e)
+        {
+            if (report == null)
+            {
+                report = new VistaReport();
+                this.Controls.Add(report);
+                Fondo.Visible = False;
+            }
         }
     }
 }
