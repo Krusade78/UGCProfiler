@@ -259,11 +259,11 @@ namespace Launcher
 
             String[] filas = new String[] { " Pedales        ",
                                             " Luz botones    ",
-                                            " Luz MFD       »",
-                                            " Hora 1        «",
+                                            " Luz MFD      »",
+                                            " Hora 1       «",
                                             " Hora 2         ",
-                                            " Hora 3        »",
-                                            " Salir         «"
+                                            " Hora 3       »",
+                                            " Salir        «"
                                             };
             filas[cursor] = ">" + filas[cursor].Remove(0, 1);
 
@@ -365,7 +365,7 @@ namespace Launcher
             String[] filas = new String[] { " Hora:   ",
                                             " Minuto: ",
                                             " AM/PM: ",
-                                            " Volver        «"};
+                                            " Volver       «"};
 
             filas[cursor] = ">" + filas[cursor].Remove(0, 1);
             if (sel)

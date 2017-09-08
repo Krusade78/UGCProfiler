@@ -17,16 +17,6 @@ namespace Launcher
         public MainWindow()
         {
             InitializeComponent();
-            servicio = new CServicio(this);
-            if (servicio.Iniciar())
-            {
-                notifyIcon = new NotifyIcon();
-                notifyIcon.Icon = new System.Drawing.Icon(App.GetResourceStream(new Uri("/res/Launcher.ico", UriKind.Relative)).Stream);
-                notifyIcon.Visible = true;
-                notifyIcon.Click += NotifyIcon_Click;
-            }
-            else
-                this.Close();
         }
 
         private void NotifyIcon_Click(object sender, EventArgs e)
@@ -38,6 +28,21 @@ namespace Launcher
                 servicio.Dispose();
                 this.Close();
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            servicio = new CServicio(this);
+            if (servicio.Iniciar())
+            {
+                this.Visibility = Visibility.Hidden;
+                notifyIcon = new NotifyIcon();
+                notifyIcon.Icon = new System.Drawing.Icon(App.GetResourceStream(new Uri("/res/Launcher.ico", UriKind.Relative)).Stream);
+                notifyIcon.Visible = true;
+                notifyIcon.Click += NotifyIcon_Click;
+            }
+            else
+                this.Close();
         }
     }
 }
