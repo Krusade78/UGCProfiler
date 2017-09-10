@@ -2,6 +2,7 @@
 using System.Windows;
 using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Launcher
 {
@@ -10,9 +11,10 @@ namespace Launcher
         private System.Windows.Interop.HwndSource hWnd = null;
         private DataSetConfiguracion conf;
 
-        private bool activado = false;
         private bool hidOn = false;
         private SafeFileHandle driver = null;
+        private SemaphoreSlim semActivado = new SemaphoreSlim(1, 1);
+        private SemaphoreSlim semEnDriver = new SemaphoreSlim(1, 1);
 
         private byte estadoCursor = 0;
         private byte estadoPagina = 0;
@@ -49,47 +51,51 @@ namespace Launcher
         #region "Driver"
         private bool AbrirDriver()
         {
-            lock(this)
-            {
-                if (driver != null)
-                    return true;
+            semEnDriver.Wait();
+            if (driver != null)
+                throw new NotImplementedException();
 
-                driver = CSystem32.CreateFile(
-                        "\\\\.\\XUSBInterface",
-                        0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                        0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                        IntPtr.Zero,
-                        3,//OPEN_EXISTING,
-                        0,
-                        IntPtr.Zero);
-                if (driver.IsInvalid)
-                {
-                    driver = null;
-                    MessageBox.Show("No se puede abrir el driver", "[CMFD][0.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return false;
-                }
+            driver = CSystem32.CreateFile(
+                    "\\\\.\\XUSBInterface",
+                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
+                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
+                    IntPtr.Zero,
+                    3,//OPEN_EXISTING,
+                    0,
+                    IntPtr.Zero);
+            if (driver.IsInvalid)
+            {
+                driver = null;
+                MessageBox.Show("No se puede abrir el driver", "[CMFD][1.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                semEnDriver.Release();
+                return false;
             }
 
             return true;
         }
         private void CerrarDriver()
         {
-            lock (this)
-            {
-                if (driver == null)
-                    return;
-                else
-                {
-                    driver.Close();
-                    driver = null;
-                }
-            }
+            if (driver == null)
+                throw new NotImplementedException();
+
+            driver.Close();
+            driver = null;
+            semEnDriver.Release();
         }
 
         private bool SetPedales(bool onoff)
         {
             if (!AbrirDriver())
                 return false;
+
+            UInt32 ret = 0;
+            byte[] buffer = new byte[1] { (onoff) ? (byte)1 : (byte)0 };
+            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
+            {
+                CerrarDriver();
+                MessageBox.Show("Error de acceso al dispositivo", "[CMFD][2.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
 
             CerrarDriver();
             return true;
@@ -106,7 +112,7 @@ namespace Launcher
 
             if (!CSystem32.DeviceIoControl(driver, ioctl, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[CMFD][3.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
@@ -138,8 +144,8 @@ namespace Launcher
             {
                 if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
                 {
-                    driver.Close();
-                    MessageBox.Show("Error de acceso al dispositivo", "[CMFD][7.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    CerrarDriver();
+                    MessageBox.Show("Error de acceso al dispositivo", "[CMFD][4.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
@@ -147,8 +153,8 @@ namespace Launcher
             {
                 if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
                 {
-                    driver.Close();
-                    MessageBox.Show("Error de acceso al dispositivo", "[CMFD][7.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    CerrarDriver();
+                    MessageBox.Show("Error de acceso al dispositivo", "[CMFD][4.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
@@ -160,7 +166,7 @@ namespace Launcher
 
         public bool ComprobarEstado()
         {
-            if (activado)
+            if (!semActivado.Wait(0))
                 return true;
 
             if (!AbrirDriver())
@@ -171,43 +177,46 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_GET_MENU, null, 0, buf, 1, out ret, IntPtr.Zero))
             {
                 CerrarDriver();
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][4.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][5.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
             if (buf[0] == 1)
             {
-                activado = true;
                 if (!IniciarMenu() || !IniciarHID())
                 {
-                    activado = false;
-                    CerrarMenu(); //tambien cierra el HID y el driver
+                    semActivado.Release();
+                    CerrarDriver();
+                    CerrarMenu(); //tambien cierra el HID
                     return false;
                 }
+                CerrarDriver();
+                VerPantalla1(0, 0);
             }
+            else
+                CerrarDriver();
 
-            CerrarDriver();
             return true;
         }
 
-        private bool IniciarMenu()
+        private bool IniciarMenu() //driver abierto
         {
             UInt32 ret = 0;
             byte[] buf = new byte[] { 1 };
 
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_INFO_LUZ, buf, 1, null, 0, out ret, IntPtr.Zero))
             {
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][5.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_USR_RAW, buf, 1, null, 0, out ret, IntPtr.Zero))
             {
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][5.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            return VerPantalla1(0, 0);
+            return true;
         }
 
         private void CerrarMenu()
@@ -220,13 +229,13 @@ namespace Launcher
             byte[] buf = new byte[] { 0 };
 
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_INFO_LUZ, buf, 1, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_USR_RAW, buf, 1, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_DESACTIVAR_MENU, null, 0, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             //Limpiar pantalla
             byte[] fila = new byte[2] { 1, 0 };
@@ -235,7 +244,7 @@ namespace Launcher
             CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
             fila[0] = 3;
             if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.4]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.4]", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             CerrarDriver();
 
@@ -246,8 +255,11 @@ namespace Launcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "[CMFD][6.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(ex.Message, "[CMFD][7.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
+            if (semActivado.CurrentCount == 0)
+                semActivado.Release();
             return;
         }
 
@@ -259,19 +271,19 @@ namespace Launcher
 
             String[] filas = new String[] { " Pedales        ",
                                             " Luz botones    ",
-                                            " Luz MFD      »",
-                                            " Hora 1       «",
+                                            " Luz MFD       ú",
+                                            " Hora 1        ó",
                                             " Hora 2         ",
-                                            " Hora 3       »",
-                                            " Salir        «"
+                                            " Hora 3        ¹", //251
+                                            " Salir         ³", //252
+                                            "                ",
+                                            "                "
                                             };
             filas[cursor] = ">" + filas[cursor].Remove(0, 1);
 
             for (byte i = 0; i < 3; i++)
             {
-                if ((pagina == 2) && (i == 1))
-                    break;
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i + (pagina * 3)]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(filas[i + (pagina * 3)]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < 17; c++)
                     buffer[c] = texto[c - 1];
@@ -304,7 +316,7 @@ namespace Launcher
             for (byte i = 0; i < 2; i++)
             {
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < (texto.Length + 1); c++)
                     buffer[c] = texto[c - 1];
@@ -338,7 +350,7 @@ namespace Launcher
             for (byte i = 0; i < 3; i++)
             {
 
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < (texto.Length + 1); c++)
                     buffer[c] = texto[c - 1];
@@ -365,18 +377,18 @@ namespace Launcher
             String[] filas = new String[] { " Hora:   ",
                                             " Minuto: ",
                                             " AM/PM: ",
-                                            " Volver       «"};
+                                            " Volver       ¹"};
 
             filas[cursor] = ">" + filas[cursor].Remove(0, 1);
             if (sel)
                 filas[cursor] = ">" + filas[cursor];
             filas[0] += hora.ToString();
             filas[1] += minuto.ToString();
-            filas[2] += (ampm) ? "Si     »" : "No     »";
+            filas[2] += (ampm) ? "Si     ³" : "No     ³";
 
             for (byte i = 0; i < 2; i++)
             {
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(filas[i]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(filas[i]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < (texto.Length + 1); c++)
                     buffer[c] = texto[c - 1];
@@ -409,7 +421,7 @@ namespace Launcher
                 rdev[0].UsagePage = 0x01;
                 rdev[0].Usage = 0x04;
                 rdev[0].WindowHandle = hWnd.Handle;
-                rdev[0].Flags = CRawInput.RawInputDeviceFlags.None;
+                rdev[0].Flags = CRawInput.RawInputDeviceFlags.InputSink;
 
                 if (!CRawInput.RegisterRawInputDevices(rdev, 1, (uint)Marshal.SizeOf(typeof(CRawInput.RAWINPUTDEVICE))))
                 {
@@ -493,11 +505,17 @@ namespace Launcher
             return IntPtr.Zero;
         }
 
+        private byte datoAntiguo = 0;
         private void ComprobarEstadoHID(byte[] hidData)
         {
-            bool btIntro = (hidData[20 + (10/ 8)] & (1 << (10 % 8))) == 1;
-            bool btArriba = (hidData[20 + (11 / 8)] & (1 << (11 % 8))) == 1;
-            bool btAbajo = (hidData[20 + (12 / 8)] & (1 << (12 % 8))) == 1;
+            if (datoAntiguo == hidData[20 + 1]) //los tres botones están en byte 21
+                return;
+            else
+                datoAntiguo = hidData[20 + 1];
+
+            bool btIntro = ((hidData[20 + (12/ 8)] >> (11 % 8)) & 1) == 1;
+            bool btAbajo = ((hidData[20 + (13 / 8)] >> (12 % 8)) & 1) == 1;
+            bool btArriba = ((hidData[20 + (14 / 8)] >> (13 % 8)) & 1) == 1;
 
             #region "Boton intro"
             if (btIntro)

@@ -267,7 +267,8 @@ namespace Launcher
         private bool SetTextoInicio()
         {
             String[] filas = new String[] { "  Saitek X-52",
-                                            "  Driver v7.0" };
+                                            "  Driver v7.0"
+                                            };
 
             Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
                             "\\\\.\\XUSBInterface",
@@ -287,16 +288,12 @@ namespace Launcher
             for (byte i = 0; i < 2; i++)
             {
                 String fila = filas[i];
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.UTF8, System.Text.Encoding.Unicode.GetBytes(fila));
-                byte[] buffer = new byte[18];
-                for (byte c = 1; c < 18; c++)
-                {
-                    if (texto.Length >= c)
-                        buffer[c] = texto[c - 1];
-                    else
-                        buffer[c] = 0;
-                }
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(fila));
+                byte[] buffer = new byte[17];
+                for (byte c = 0; c < texto.Length; c++)
+                    buffer[c + 1] = texto[c];
 
+                uint tamBuffer = (uint)(texto.Length + 1 + (((texto.Length % 2) == 1) ? 1 : 0));
                 buffer[0] = (byte)(i + 1);
 
                 ret = 0;
@@ -307,8 +304,8 @@ namespace Launcher
                 }
             }
             //siguientes lineas en blanco
-            byte[] fila3 = new byte[2] { 3, 0 };
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila3, 2, null, 0, out ret, IntPtr.Zero))
+            byte[] fila3 = new byte[3] { 3, 0, 0 };
+            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila3, 17, null, 0, out ret, IntPtr.Zero))
             {
                 driver.Close();
                 return false;
