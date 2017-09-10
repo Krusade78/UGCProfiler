@@ -104,7 +104,7 @@ VOID EvtIOCtlAplicacion(
 )
 {
 	NTSTATUS	status;
-	PUCHAR		SystemBuffer;
+	PUCHAR		SystemBuffer = NULL;
 	WDFDEVICE	device = GetControlContext(WdfIoQueueGetDevice(Queue))->padre;
 
 	UNREFERENCED_PARAMETER(OutputBufferLength);
@@ -121,6 +121,8 @@ VOID EvtIOCtlAplicacion(
 			return;
 		}
 	}
+	else if (IoControlCode == IOCTL_DESACTIVAR_MENU)
+	{ }
 	else
 	{
 		status = WdfRequestRetrieveInputBuffer(Request, 0, (PVOID*)&SystemBuffer, NULL);

@@ -132,7 +132,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 		if (!GetDeviceContext(device)->HID.MenuTimerEsperando && !GetDeviceContext(device)->HID.MenuActivado)
 		{
 			GetDeviceContext(device)->HID.MenuTimerEsperando = TRUE;
-			WdfTimerStart(GetDeviceContext(device)->HID.MenuTimer, WDF_REL_TIMEOUT_IN_SEC(4));
+			WdfTimerStart(GetDeviceContext(device)->HID.MenuTimer, WDF_REL_TIMEOUT_IN_SEC(3));
 		}
 	}
 	else

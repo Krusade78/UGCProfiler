@@ -168,6 +168,10 @@ NTSTATUS IniciarContext(WDFDEVICE device)
 	if (!NT_SUCCESS(status))
 		return status;
 	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->HID.SpinLockAcciones);
+	if (!NT_SUCCESS(status))
+		return status;
+
+	status = WdfWaitLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->SalidaX52.WaitLockX52);
 
 	return status;
 }

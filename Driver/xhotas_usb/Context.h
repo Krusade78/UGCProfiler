@@ -128,6 +128,7 @@ typedef struct _PROGRAMADO_CONTEXT
 
 typedef struct _X52WRITE_CONTEXT
 {
+	WDFWAITLOCK		WaitLockX52;
 	USHORT			fecha;
 } X52WRITE_CONTEXT;
 

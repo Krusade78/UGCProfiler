@@ -12,12 +12,13 @@ NTSTATUS Set_Fecha(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer);
 #ifdef _PRIVATE_
 typedef struct _WI_CONTEXT
 {
-	USHORT valor;
-	UCHAR idx;
+	USHORT valor[18];
+	UCHAR idx[18];
+	UCHAR nordenes;
 } WI_CONTEXT, *PWI_CONTEXT;
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(WI_CONTEXT, GetWIContext);
 
-NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params);
+NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params, _In_ UCHAR nparams);
 #endif
 
 EXTERN_C_END
