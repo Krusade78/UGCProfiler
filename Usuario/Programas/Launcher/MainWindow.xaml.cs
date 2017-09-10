@@ -17,6 +17,7 @@ namespace Launcher
         public MainWindow()
         {
             InitializeComponent();
+            System.Windows.MessageBox.Show("");
         }
 
         private void NotifyIcon_Click(object sender, EventArgs e)

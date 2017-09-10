@@ -14,7 +14,6 @@ namespace Launcher
         private bool hidOn = false;
         private SafeFileHandle driver = null;
         private SemaphoreSlim semActivado = new SemaphoreSlim(1, 1);
-        private SemaphoreSlim semEnDriver = new SemaphoreSlim(1, 1);
 
         private byte estadoCursor = 0;
         private byte estadoPagina = 0;
@@ -37,6 +36,7 @@ namespace Launcher
                 if (disposing)
                 {
                     CerrarMenu();
+                    semActivado.Dispose();
                 }
                 disposedValue = true;
             }
@@ -51,10 +51,6 @@ namespace Launcher
         #region "Driver"
         private bool AbrirDriver()
         {
-            semEnDriver.Wait();
-            if (driver != null)
-                throw new NotImplementedException();
-
             driver = CSystem32.CreateFile(
                     "\\\\.\\XUSBInterface",
                     0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
@@ -67,7 +63,6 @@ namespace Launcher
             {
                 driver = null;
                 MessageBox.Show("No se puede abrir el driver", "[CMFD][1.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                semEnDriver.Release();
                 return false;
             }
 
@@ -75,12 +70,8 @@ namespace Launcher
         }
         private void CerrarDriver()
         {
-            if (driver == null)
-                throw new NotImplementedException();
-
             driver.Close();
             driver = null;
-            semEnDriver.Release();
         }
 
         private bool SetPedales(bool onoff)
@@ -170,7 +161,10 @@ namespace Launcher
                 return true;
 
             if (!AbrirDriver())
-               return false;
+            {
+                semActivado.Release();
+                return false;
+            }
 
             UInt32 ret = 0;
             byte[] buf = new byte[1];
@@ -178,6 +172,7 @@ namespace Launcher
             {
                 CerrarDriver();
                 MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][5.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                semActivado.Release();
                 return false;
             }
 
@@ -185,9 +180,9 @@ namespace Launcher
             {
                 if (!IniciarMenu() || !IniciarHID())
                 {
-                    semActivado.Release();
                     CerrarDriver();
                     CerrarMenu(); //tambien cierra el HID
+                    semActivado.Release();
                     return false;
                 }
                 CerrarDriver();
@@ -221,6 +216,9 @@ namespace Launcher
 
         private void CerrarMenu()
         {
+            if (semActivado.Wait(0)) //menu no activado
+                return;
+
             CerrarHID();
             if (!AbrirDriver())
                 return;
@@ -258,8 +256,7 @@ namespace Launcher
                 MessageBox.Show(ex.Message, "[CMFD][7.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
-            if (semActivado.CurrentCount == 0)
-                semActivado.Release();
+            semActivado.Release();
             return;
         }
 
@@ -279,7 +276,7 @@ namespace Launcher
                                             "                ",
                                             "                "
                                             };
-            filas[cursor] = ">" + filas[cursor].Remove(0, 1);
+            filas[cursor + (pagina * 3)] = ">" + filas[cursor + (pagina * 3)].Remove(0, 1);
 
             for (byte i = 0; i < 3; i++)
             {
@@ -377,7 +374,7 @@ namespace Launcher
             String[] filas = new String[] { " Hora:   ",
                                             " Minuto: ",
                                             " AM/PM: ",
-                                            " Volver       ¹"};
+                                            ">Volver       ¹"};
 
             filas[cursor] = ">" + filas[cursor].Remove(0, 1);
             if (sel)
@@ -656,9 +653,7 @@ namespace Launcher
                 switch (estadoPagina)
                 {
                     case 0:
-                        if (estadoCursor == 0)
-                            estadoCursor = 6;
-                        else
+                        if (estadoCursor != 0)
                             estadoCursor--;
 
                         VerPantalla1((byte)(estadoCursor % 3), (byte)(estadoCursor / 3));
