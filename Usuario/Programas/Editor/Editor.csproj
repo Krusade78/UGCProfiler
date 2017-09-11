@@ -62,6 +62,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CDatos.cs" />
+    <Compile Include="CtlAcelerador.xaml.cs">
+      <DependentUpon>CtlAcelerador.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CtlJoystick.xaml.cs">
+      <DependentUpon>CtlJoystick.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DSPerfil.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -74,6 +80,17 @@
     <Compile Include="VEditorRaton.xaml.cs">
       <DependentUpon>VEditorRaton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VEditorSensibilidad.xaml.cs">
+      <DependentUpon>VEditorSensibilidad.xaml</DependentUpon>
+    </Compile>
+    <Page Include="CtlAcelerador.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtlJoystick.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -91,6 +108,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="VEditorRaton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VEditorSensibilidad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

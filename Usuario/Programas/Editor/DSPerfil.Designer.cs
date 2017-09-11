@@ -1698,7 +1698,7 @@ namespace Editor {
             
             private global::System.Data.DataColumn columnidModo;
             
-            private global::System.Data.DataColumn columnidEje;
+            private global::System.Data.DataColumn columnidBoton;
             
             private global::System.Data.DataColumn columnEstado;
             
@@ -1753,9 +1753,9 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
+            public global::System.Data.DataColumn idBotonColumn {
                 get {
-                    return this.columnidEje;
+                    return this.columnidBoton;
                 }
             }
             
@@ -1804,12 +1804,12 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPABOTONESRow AddMAPABOTONESRow(byte idPinkie, byte idModo, byte idEje, byte Estado) {
+            public MAPABOTONESRow AddMAPABOTONESRow(byte idPinkie, byte idModo, byte idBoton, byte Estado) {
                 MAPABOTONESRow rowMAPABOTONESRow = ((MAPABOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
                         idModo,
-                        idEje,
+                        idBoton,
                         Estado};
                 rowMAPABOTONESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPABOTONESRow);
@@ -1818,9 +1818,9 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPABOTONESRow FindByidEjeidModoidPinkie(byte idEje, byte idModo, byte idPinkie) {
+            public MAPABOTONESRow FindByidBotonidModoidPinkie(byte idBoton, byte idModo, byte idPinkie) {
                 return ((MAPABOTONESRow)(this.Rows.Find(new object[] {
-                            idEje,
+                            idBoton,
                             idModo,
                             idPinkie})));
             }
@@ -1844,7 +1844,7 @@ namespace Editor {
             internal void InitVars() {
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
-                this.columnidEje = base.Columns["idEje"];
+                this.columnidBoton = base.Columns["idBoton"];
                 this.columnEstado = base.Columns["Estado"];
             }
             
@@ -1855,17 +1855,17 @@ namespace Editor {
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidModo);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
+                this.columnidBoton = new global::System.Data.DataColumn("idBoton", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidBoton);
                 this.columnEstado = new global::System.Data.DataColumn("Estado", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEstado);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidEje,
+                                this.columnidBoton,
                                 this.columnidModo,
                                 this.columnidPinkie}, true));
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
+                this.columnidBoton.AllowDBNull = false;
                 this.columnEstado.AllowDBNull = false;
                 this.columnEstado.Caption = "Mouse";
             }
@@ -2005,7 +2005,7 @@ namespace Editor {
             
             private global::System.Data.DataColumn columnidModo;
             
-            private global::System.Data.DataColumn columnidEje;
+            private global::System.Data.DataColumn columnidSeta;
             
             private global::System.Data.DataColumn columnEstado;
             
@@ -2060,9 +2060,9 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
+            public global::System.Data.DataColumn idSetaColumn {
                 get {
-                    return this.columnidEje;
+                    return this.columnidSeta;
                 }
             }
             
@@ -2111,12 +2111,12 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPASETASRow AddMAPASETASRow(byte idPinkie, byte idModo, byte idEje, byte Estado) {
+            public MAPASETASRow AddMAPASETASRow(byte idPinkie, byte idModo, byte idSeta, byte Estado) {
                 MAPASETASRow rowMAPASETASRow = ((MAPASETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
                         idModo,
-                        idEje,
+                        idSeta,
                         Estado};
                 rowMAPASETASRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPASETASRow);
@@ -2125,9 +2125,9 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPASETASRow FindByidEjeidModoidPinkie(byte idEje, byte idModo, byte idPinkie) {
+            public MAPASETASRow FindByidSetaidModoidPinkie(byte idSeta, byte idModo, byte idPinkie) {
                 return ((MAPASETASRow)(this.Rows.Find(new object[] {
-                            idEje,
+                            idSeta,
                             idModo,
                             idPinkie})));
             }
@@ -2151,7 +2151,7 @@ namespace Editor {
             internal void InitVars() {
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
-                this.columnidEje = base.Columns["idEje"];
+                this.columnidSeta = base.Columns["idSeta"];
                 this.columnEstado = base.Columns["Estado"];
             }
             
@@ -2162,17 +2162,17 @@ namespace Editor {
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidModo);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
+                this.columnidSeta = new global::System.Data.DataColumn("idSeta", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidSeta);
                 this.columnEstado = new global::System.Data.DataColumn("Estado", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEstado);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidEje,
+                                this.columnidSeta,
                                 this.columnidModo,
                                 this.columnidPinkie}, true));
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
+                this.columnidSeta.AllowDBNull = false;
                 this.columnEstado.AllowDBNull = false;
                 this.columnEstado.Caption = "Mouse";
             }
@@ -4325,12 +4325,12 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte idEje {
+            public byte idBoton {
                 get {
-                    return ((byte)(this[this.tableMAPABOTONES.idEjeColumn]));
+                    return ((byte)(this[this.tableMAPABOTONES.idBotonColumn]));
                 }
                 set {
-                    this[this.tableMAPABOTONES.idEjeColumn] = value;
+                    this[this.tableMAPABOTONES.idBotonColumn] = value;
                 }
             }
             
@@ -4384,12 +4384,12 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte idEje {
+            public byte idSeta {
                 get {
-                    return ((byte)(this[this.tableMAPASETAS.idEjeColumn]));
+                    return ((byte)(this[this.tableMAPASETAS.idSetaColumn]));
                 }
                 set {
-                    this[this.tableMAPASETAS.idEjeColumn] = value;
+                    this[this.tableMAPASETAS.idSetaColumn] = value;
                 }
             }
             

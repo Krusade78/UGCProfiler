@@ -20,10 +20,6 @@ namespace Editor
     /// </summary>
     public partial class MainWindow : Window
     {
-        public CDatos datos;
-        private bool esNuevo = true;
-        private Object report = null;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -37,7 +33,7 @@ namespace Editor
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (datos.GetModificado())
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
             {
                 MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (r == MessageBoxResult.Cancel)
@@ -64,27 +60,27 @@ namespace Editor
         }
         private void RibbonButtonGuardarComo_Click(object sender, RoutedEventArgs e)
         {
-            GuardarComo();
+            //GuardarComo();
         }
         private void RibbonButtonImprimir_Click(object sender, RoutedEventArgs e)
         {
-            VImprimir imp = new VImprimir();
-            imp.PreVer();
+            //VImprimir imp = new VImprimir();
+            //imp.PreVer();
         }
 
         private void RibbonButtonLanzar_Click(object sender, RoutedEventArgs e)
         {
-            Lanzar();
+            //Lanzar();
         }
         private void RibbonButtonModos_Click(object sender, RoutedEventArgs e)
         {
-            byte b;
-            byte old = datos.GetModosDefecto();
-            VEditorModos v = new VEditorModos();
-            v.Owner = this;
-            v.ShowDialog();
-            b = datos.GetModosDefecto();
-            if (b != old) Vista.RefrescarModos();
+            //byte b;
+            //byte old = datos.GetModosDefecto();
+            //VEditorModos v = new VEditorModos();
+            //v.Owner = this;
+            //v.ShowDialog();
+            //b = datos.GetModosDefecto();
+            //if (b != old) Vista.RefrescarModos();
         }
         private void RibbonButtonRaton_Click(object sender, RoutedEventArgs e)
         {
@@ -95,21 +91,21 @@ namespace Editor
 
         private void RibbonButtonEdicion_Click(object sender, RoutedEventArgs e)
         {
-            if (report != null)
-            {
-                Fondo.Visible = True;
-                this.Controls.Remove(report);
-                report = null;
-            }
+            //if (report != null)
+            //{
+            //    Fondo.Visible = True;
+            //    this.Controls.Remove(report);
+            //    report = null;
+            //}
         }
         private void RibbonButtonListado_Click(object sender, RoutedEventArgs e)
         {
-            if (report == null)
-            {
-                report = new VistaReport();
-                this.Controls.Add(report);
-                Fondo.Visible = False;
-            }
+            //if (report == null)
+            //{
+            //    report = new VistaReport();
+            //    this.Controls.Add(report);
+            //    Fondo.Visible = False;
+            //}
         }
     }
 }
