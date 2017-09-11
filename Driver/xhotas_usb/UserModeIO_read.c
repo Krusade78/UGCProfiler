@@ -220,8 +220,10 @@ VOID EvtIOCtlAplicacion(
 	}
 	case IOCTL_DESACTIVAR_MENU:
 	{
+		UCHAR dato = 0;
+		status = Luz_Info(device, &dato);
 		GetDeviceContext(device)->HID.MenuActivado = FALSE;
-		WdfRequestComplete(Request, STATUS_SUCCESS);
+		WdfRequestComplete(Request, status);
 		break;
 	}
 	//-------------------- Pedales -----------------------------------
@@ -290,6 +292,8 @@ VOID EvtIOCtlAplicacion(
 
 VOID EvtTickMenu(_In_ WDFTIMER Timer)
 {
+	UCHAR dato = 1;
 	GetDeviceContext(WdfTimerGetParentObject(Timer))->HID.MenuActivado = TRUE;
 	GetDeviceContext(WdfTimerGetParentObject(Timer))->HID.MenuTimerEsperando = FALSE;
+	Luz_Info(WdfTimerGetParentObject(Timer), &dato);
 }
