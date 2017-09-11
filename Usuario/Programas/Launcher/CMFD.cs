@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -12,7 +11,6 @@ namespace Launcher
         private DataSetConfiguracion conf;
 
         private bool hidOn = false;
-        private SafeFileHandle driver = null;
         private SemaphoreSlim semActivado = new SemaphoreSlim(1, 1);
 
         private byte estadoCursor = 0;
@@ -35,7 +33,8 @@ namespace Launcher
             {
                 if (disposing)
                 {
-                    CerrarMenu();
+                    if (!semActivado.Wait(0)) //si está activado
+                        CerrarMenu();
                     semActivado.Dispose();
                 }
                 disposedValue = true;
@@ -49,72 +48,47 @@ namespace Launcher
         #endregion
 
         #region "Driver"
-        private bool AbrirDriver()
-        {
-            driver = CSystem32.CreateFile(
-                    "\\\\.\\XUSBInterface",
-                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                    IntPtr.Zero,
-                    3,//OPEN_EXISTING,
-                    0,
-                    IntPtr.Zero);
-            if (driver.IsInvalid)
-            {
-                driver = null;
-                MessageBox.Show("No se puede abrir el driver", "[CMFD][1.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            return true;
-        }
-        private void CerrarDriver()
-        {
-            driver.Close();
-            driver = null;
-        }
-
         private bool SetPedales(bool onoff)
         {
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
                 return false;
 
             UInt32 ret = 0;
             byte[] buffer = new byte[1] { (onoff) ? (byte)1 : (byte)0 };
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
-                CerrarDriver();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[CMFD][2.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
             return true;
         }
 
         private bool SetLuz(byte nivel, bool global)
         {
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
                 return false;
 
             UInt32 ret = 0;
             byte[] buffer = new byte[1] { nivel };
             uint ioctl = global ? CSystem32.IOCTL_GLOBAL_LUZ :CSystem32.IOCTL_MFD_LUZ;
 
-            if (!CSystem32.DeviceIoControl(driver, ioctl, buffer, 1, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(ioctl, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
-                CerrarDriver();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[CMFD][3.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
             return true;
         }
 
         private bool SetHoras2y3(byte reloj, short hora, byte minuto, bool f24h)
         {
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
                 return false;
 
             UInt32 ret = 0;
@@ -133,24 +107,24 @@ namespace Launcher
             }
             if (f24h)
             {
-                if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
                 {
-                    CerrarDriver();
+                    CSystem32.CerrarDriver();
                     MessageBox.Show("Error de acceso al dispositivo", "[CMFD][4.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
             else
             {
-                if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
                 {
-                    CerrarDriver();
+                    CSystem32.CerrarDriver();
                     MessageBox.Show("Error de acceso al dispositivo", "[CMFD][4.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
             return true;
         }
         #endregion
@@ -160,7 +134,7 @@ namespace Launcher
             if (!semActivado.Wait(0))
                 return true;
 
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
             {
                 semActivado.Release();
                 return false;
@@ -168,9 +142,9 @@ namespace Launcher
 
             UInt32 ret = 0;
             byte[] buf = new byte[1];
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_GET_MENU, null, 0, buf, 1, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_GET_MENU, null, 0, buf, 1, out ret, IntPtr.Zero))
             {
-                CerrarDriver();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][5.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 semActivado.Release();
                 return false;
@@ -178,73 +152,55 @@ namespace Launcher
 
             if (buf[0] == 1)
             {
-                if (!IniciarMenu() || !IniciarHID())
+                if (!IniciarMenu())
                 {
-                    CerrarDriver();
-                    CerrarMenu(); //tambien cierra el HID
+                    CerrarMenu();
+                    CSystem32.CerrarDriver();
                     semActivado.Release();
                     return false;
                 }
-                CerrarDriver();
-                VerPantalla1(0, 0);
             }
-            else
-                CerrarDriver();
 
+            CSystem32.CerrarDriver();
             return true;
         }
 
-        private bool IniciarMenu() //driver abierto
+        private bool IniciarMenu()
         {
-            UInt32 ret = 0;
-            byte[] buf = new byte[] { 1 };
-
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_INFO_LUZ, buf, 1, null, 0, out ret, IntPtr.Zero))
+            if (IniciarHID())
             {
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+                VerPantalla1(0, 0);
+                return true;
             }
-
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_USR_RAW, buf, 1, null, 0, out ret, IntPtr.Zero))
-            {
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][6.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+            else
                 return false;
-            }
-
-            return true;
         }
 
         private void CerrarMenu()
         {
-            if (semActivado.Wait(0)) //menu no activado
-                return;
-
             CerrarHID();
-            if (!AbrirDriver())
+
+            if (!CSystem32.AbrirDriver())
                 return;
 
             UInt32 ret = 0;
-            byte[] buf = new byte[] { 0 };
-
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_INFO_LUZ, buf, 1, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_DESACTIVAR_MENU, null, 0, null, 0, out ret, IntPtr.Zero))
+            {
+                CSystem32.CerrarDriver();
                 MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_USR_RAW, buf, 1, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_DESACTIVAR_MENU, null, 0, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             //Limpiar pantalla
             byte[] fila = new byte[2] { 1, 0 };
-            CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
+            CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
             fila[0] = 2;
-            CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
+            CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
             fila[0] = 3;
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.4]", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero))
+                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
 
             //GuardarConfiguracion();
             try
@@ -253,7 +209,7 @@ namespace Launcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "[CMFD][7.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(ex.Message, "[CMFD][7.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             semActivado.Release();
@@ -263,7 +219,7 @@ namespace Launcher
         #region "Pantallas"
         private bool VerPantalla1(byte cursor, byte pagina)
         {
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
                 return false;
 
             String[] filas = new String[] { " Pedales        ",
@@ -288,20 +244,20 @@ namespace Launcher
                 buffer[0] = (byte)(i + 1);
 
                 UInt32 ret = 0;
-                if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, buffer, 17, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, 17, null, 0, out ret, IntPtr.Zero))
                 {
-                    CerrarDriver();
+                    CSystem32.CerrarDriver();
                     return false;
                 }
             }
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
             return true;
         }
 
         private bool VerPantallaOnOff(byte cursor, bool estado)
         {
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
                 return false;
 
             String[] filas = new String[] { " On  ",
@@ -321,20 +277,20 @@ namespace Launcher
                 buffer[0] = (byte)(i + 1);
 
                 UInt32 ret = 0;
-                if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
                 {
-                    CerrarDriver();
+                    CSystem32.CerrarDriver();
                     return false;
                 }
             }
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
             return true;
         }
 
         private bool VerPantallaLuz(byte cursor, byte estado)
         {
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
                 return false;
 
             String[] filas = new String[] { " Bajo  ",
@@ -355,20 +311,20 @@ namespace Launcher
                 buffer[0] = (byte)(i + 1);
 
                 UInt32 ret = 0;
-                if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
                 {
-                    CerrarDriver();
+                    CSystem32.CerrarDriver();
                     return false;
                 }
             }
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
             return true;
         }
 
         private bool VerPantallaHora(byte cursor, byte pagina, bool sel, short hora, byte minuto, bool ampm)
         {
-            if (!AbrirDriver())
+            if (!CSystem32.AbrirDriver())
                 return false;
 
             String[] filas = new String[] { " Hora:   ",
@@ -393,9 +349,9 @@ namespace Launcher
                 buffer[0] = (byte)(i + 1);
 
                 UInt32 ret = 0;
-                if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
                 {
-                    CerrarDriver();
+                    CSystem32.CerrarDriver();
                     return false;
                 }
 
@@ -403,7 +359,7 @@ namespace Launcher
                     break;
             }
 
-            CerrarDriver();
+            CSystem32.CerrarDriver();
             return true;
         }
         #endregion
@@ -413,7 +369,6 @@ namespace Launcher
         {
             if (!hidOn)
             {
-                System.Threading.Thread.Sleep(2000);
                 CRawInput.RAWINPUTDEVICE[] rdev = new CRawInput.RAWINPUTDEVICE[3];
                 rdev[0].UsagePage = 0x01;
                 rdev[0].Usage = 0x04;
@@ -427,6 +382,7 @@ namespace Launcher
                 }
                 else
                 {
+                    System.Threading.Thread.Sleep(2000);
                     hidOn = true;
                     hWnd.AddHook(WndProc);
                 }

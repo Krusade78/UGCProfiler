@@ -12,26 +12,15 @@ namespace Launcher
             {
                 perfil.ReadXml(archivo);
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 //MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 perfil.Dispose();
                 return 1;
             }
 
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = driver = CSystem32.CreateFile(
-                        "\\\\.\\XUSBInterface",
-                        0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                        0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                        IntPtr.Zero,
-                        3,//OPEN_EXISTING,
-                        0,
-                        IntPtr.Zero);
-            if (driver.IsInvalid)
-            {
-                MessageBox.Show("No se puede abrir el driver", "[CPerfil][0.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!CSystem32.AbrirDriver())
                 return 3;
-            }
 
             #region "Comandos"
             {
@@ -64,9 +53,9 @@ namespace Launcher
 
                 UInt32 ret = 0;
                 UInt32 IOCTL_USR_COMANDOS = ((0x22) << 16) | ((2) << 14) | ((0x080b) << 2) | (0);
-                if (!CSystem32.DeviceIoControl(driver, IOCTL_USR_COMANDOS, bufferComandos, (uint)bufferComandos.Length, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(IOCTL_USR_COMANDOS, bufferComandos, (uint)bufferComandos.Length, null, 0, out ret, IntPtr.Zero))
                 {
-                    driver.Close();
+                    CSystem32.CerrarDriver();
                     MessageBox.Show("No se puede enviar la orden al driver", "[CPerfil][0.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return 4;
                 }
@@ -208,9 +197,9 @@ namespace Launcher
 
                 UInt32 ret = 0;
                 UInt32 IOCTL_USR_MAPA = ((0x22) << 16) | ((2) << 14) | ((0x080a) << 2) | (0);
-                if (!CSystem32.DeviceIoControl(driver, IOCTL_USR_MAPA, bufferMapa, (uint)bufferMapa.Length, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(IOCTL_USR_MAPA, bufferMapa, (uint)bufferMapa.Length, null, 0, out ret, IntPtr.Zero))
                 {
-                    driver.Close();
+                    CSystem32.CerrarDriver();
                     MessageBox.Show("No se puede enviar la orden al driver", "[CPerfil][0.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return 4;
                 }
@@ -239,16 +228,16 @@ namespace Launcher
 
                 UInt32 ret = 0;
                 UInt32 IOCTL_TEXTO = ((0x22) << 16) | ((2) << 14) | ((0x0804) << 2) | (0);
-                CSystem32.DeviceIoControl(driver, IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero);
                 //siguientes lineas en blanco
                 buffer[1] = 0;
                 buffer[0] = 2;
-                CSystem32.DeviceIoControl(driver, IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
                 buffer[0] = 3;
-                CSystem32.DeviceIoControl(driver, IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
             }
 
-            driver.Close();
+            CSystem32.CerrarDriver();
 
             return 0;
         }

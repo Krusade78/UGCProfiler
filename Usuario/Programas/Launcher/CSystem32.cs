@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Launcher
 {
@@ -66,9 +68,67 @@ namespace Launcher
         };
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern Microsoft.Win32.SafeHandles.SafeFileHandle CreateFile(string lpFileName, UInt32 dwDesiredAccess, UInt32 dwShareMode, IntPtr pSecurityAttributes, UInt32 dwCreationDisposition, UInt32 dwFlagsAndAttributes, IntPtr hTemplateFile);
+        private static extern SafeFileHandle CreateFile(string lpFileName, UInt32 dwDesiredAccess, UInt32 dwShareMode, IntPtr pSecurityAttributes, UInt32 dwCreationDisposition, UInt32 dwFlagsAndAttributes, IntPtr hTemplateFile);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool DeviceIoControl(Microsoft.Win32.SafeHandles.SafeFileHandle handle, UInt32 dwIoControlCode, byte[] lpInBuffer, UInt32 nInBufferSize, byte[] lpOutBuffer, UInt32 nOutBufferSize, out UInt32 lpBytesReturned, IntPtr lpOverlapped);
+        private static extern bool DeviceIoControl(SafeFileHandle handle, UInt32 dwIoControlCode, byte[] lpInBuffer, UInt32 nInBufferSize, byte[] lpOutBuffer, UInt32 nOutBufferSize, out UInt32 lpBytesReturned, IntPtr lpOverlapped);
+
+        private static SafeFileHandle driver = null;
+        private static int driverRefs = 0;
+        private static SemaphoreSlim driverMutex = new SemaphoreSlim(1, 1);
+        public static bool AbrirDriver()
+        {
+            driverMutex.Wait();
+            driverRefs++;
+            if (driverRefs == 1)
+            {
+                driver = CSystem32.CreateFile(
+                        "\\\\.\\XUSBInterface",
+                        0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
+                        0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
+                        IntPtr.Zero,
+                        3,//OPEN_EXISTING,
+                        0,
+                        IntPtr.Zero);
+                if (driver.IsInvalid)
+                {
+                    driver = null;
+                    driverRefs--;
+                    System.Windows.MessageBox.Show("No se puede abrir el driver", "[CSystem32][1.1]", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                    driverMutex.Release();
+                    return false;
+                }
+            }
+
+            driverMutex.Release();
+            return true;
+        }
+
+        public static void CerrarDriver()
+        {
+            driverMutex.Wait();
+            if (driverRefs == 0)
+            {
+                driver.Close();
+                driver = null;
+            }
+            else
+                driverRefs--;
+            driverMutex.Release();
+        }
+
+        public static bool DeviceIoControl(UInt32 dwIoControlCode, byte[] lpInBuffer, UInt32 nInBufferSize, byte[] lpOutBuffer, UInt32 nOutBufferSize, out UInt32 lpBytesReturned, IntPtr lpOverlapped)
+        {
+            bool ok = false;
+            driverMutex.Wait();
+            {
+                if (driver != null)
+                    ok = DeviceIoControl(driver, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, out lpBytesReturned, lpOverlapped);
+                else
+                    lpBytesReturned = 0;
+            }
+            driverMutex.Release();
+            return ok;
+        }
     }
 }

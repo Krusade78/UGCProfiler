@@ -105,29 +105,18 @@ namespace Launcher
                 if (archivo != null) { try { archivo.Close(); archivo = null; } catch { } }
             }
 
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
-                    "\\\\.\\XUSBInterface",
-                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                    IntPtr.Zero,
-                    3,//OPEN_EXISTING,
-                    0,
-                    IntPtr.Zero);
-            if (driver.IsInvalid)
-            {
-                MessageBox.Show("No se puede abrir el driver", "[X52-Service][0.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!CSystem32.AbrirDriver())
                 return false;
-            }
 
             UInt32 ret = 0;
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_USR_CALIBRADO, buf, (uint)buf.Length, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_USR_CALIBRADO, buf, (uint)buf.Length, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("No se puede enviar la orden al driver", "[X52-Service][0.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            driver.Close();
+            CSystem32.CerrarDriver();
 
             return true;
         }
@@ -149,34 +138,23 @@ namespace Launcher
                 dsc.CONFIGURACION.AddCONFIGURACIONRow(dsc.CONFIGURACION.NewCONFIGURACIONRow());
             }
 
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
-                "\\\\.\\XUSBInterface",
-                0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                IntPtr.Zero,
-                3,//OPEN_EXISTING,
-                0,
-                IntPtr.Zero);
-            if (driver.IsInvalid)
-            {
-                MessageBox.Show("No se puede abrir el driver", "[X52-Service][1.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!CSystem32.AbrirDriver())
                 return false;
-            }
 
             UInt32 ret = 0;
 
             byte[] buffer = new byte[1] { dsc.CONFIGURACION[0].LuzMfd };
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_MFD_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_MFD_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             
             buffer[0] = dsc.CONFIGURACION[0].LuzGlobal;
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_GLOBAL_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_GLOBAL_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
@@ -184,23 +162,23 @@ namespace Launcher
             DateTime fecha = DateTime.Now;
             buffer = new byte[2] { 1, (byte)fecha.Day };
 
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.4]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             buffer[0] = 2; buffer[1] = (byte)fecha.Month;
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             buffer[0] = 3; buffer[1] = (byte)(fecha.Year % 100);
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.6]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
@@ -233,18 +211,18 @@ namespace Launcher
                 }
                 if (horas24[i])
                 {
-                    if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
+                    if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
                     {
-                        driver.Close();
+                        CSystem32.CerrarDriver();
                         MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.7]", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return false;
                     }
                 }
                 else
                 {
-                    if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
+                    if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
                     {
-                        driver.Close();
+                        CSystem32.CerrarDriver();
                         MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.8]", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return false;
                     }
@@ -252,14 +230,14 @@ namespace Launcher
             }
 
             buffer[0] = (dsc.CONFIGURACION[0].Pedales) ? (byte)1 : (byte)0;
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.9]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            driver.Close();
+            CSystem32.CerrarDriver();
 
             return true;
         }
@@ -270,19 +248,8 @@ namespace Launcher
                                             "  Driver v7.0"
                                             };
 
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
-                            "\\\\.\\XUSBInterface",
-                            0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                            0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                            IntPtr.Zero,
-                            3,//OPEN_EXISTING,
-                            0,
-                            IntPtr.Zero);
-            if (driver.IsInvalid)
-            {
-                MessageBox.Show("No se puede abrir el driver", "[X52-Service][2.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!CSystem32.AbrirDriver())
                 return false;
-            }
 
             UInt32 ret = 0;
             for (byte i = 0; i < 2; i++)
@@ -297,21 +264,21 @@ namespace Launcher
                 buffer[0] = (byte)(i + 1);
 
                 ret = 0;
-                if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
+                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
                 {
-                    driver.Close();
+                    CSystem32.CerrarDriver();
                     return false;
                 }
             }
             //siguientes lineas en blanco
             byte[] fila3 = new byte[3] { 3, 0, 0 };
-            if (!CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila3, 17, null, 0, out ret, IntPtr.Zero))
+            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, fila3, 17, null, 0, out ret, IntPtr.Zero))
             {
-                driver.Close();
+                CSystem32.CerrarDriver();
                 return false;
             }
 
-            driver.Close();
+            CSystem32.CerrarDriver();
 
             return true;
         }
@@ -330,15 +297,7 @@ namespace Launcher
                 return;
 
             UInt32 ret = 0;
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
-                            "\\\\.\\XUSBInterface",
-                            0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                            0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                            IntPtr.Zero,
-                            3,//OPEN_EXISTING,
-                            0,
-                            IntPtr.Zero);
-            if (driver.IsInvalid)
+            if (!CSystem32.AbrirDriver())
                 return;
 
             byte[] bf = new byte[3];
@@ -347,11 +306,11 @@ namespace Launcher
             if (this.fechaActiva)
             {
                 bf[0] = 1; bf[1] = (byte)t.Day;
-                CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
                 bf[0] = 2; bf[1] = (byte)t.Month;
-                CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
                 bf[0] = 3; bf[1] = (byte)(t.Year % 100);
-                CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
             }
 
             if (this.horaActiva)
@@ -361,12 +320,12 @@ namespace Launcher
                 bf[1] = (byte)(t.Hour);
                 bf[2] = (byte)(t.Minute);
                 if (dsc.CONFIGURACION[0].hora1_24h)
-                    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA24, bf, 3, null, 0, out ret, IntPtr.Zero);
+                    CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA24, bf, 3, null, 0, out ret, IntPtr.Zero);
                 else
-                    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_HORA, bf, 3, null, 0, out ret, IntPtr.Zero);
+                    CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA, bf, 3, null, 0, out ret, IntPtr.Zero);
             }
 
-            driver.Close();
+            CSystem32.CerrarDriver();
         }
 
         public void CargarPerfil(String archivo)
