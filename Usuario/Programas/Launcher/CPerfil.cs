@@ -27,6 +27,8 @@ namespace Launcher
                 uint tamBuffer = 2;
                 foreach (DSPerfil.ACCIONESRow r in perfil.ACCIONES.Rows)
                 {
+                    if (r.idAccion == 0)
+                        continue;
                     tamBuffer += (uint)(2 * r.Comandos.Length);
                 }
                 byte[] bufferComandos = new byte[tamBuffer];
@@ -36,6 +38,8 @@ namespace Launcher
                 int pos = 2;
                 foreach (DSPerfil.ACCIONESRow r in perfil.ACCIONES.Rows)
                 {
+                    if (r.idAccion == 0)
+                        continue;
                     bufferComandos[pos] = (byte)r.Comandos.Length;
                     pos++;
                     for (byte i = 0; i < (byte)r.Comandos.Length; i++)
