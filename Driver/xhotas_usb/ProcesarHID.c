@@ -243,6 +243,8 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 
 		if (!devExt->MenuActivado)
 			RtlCopyMemory(outputData.Botones, devExt->stBotones, sizeof(hidData->Botones));
+		else
+			RtlCopyMemory(outputData.Botones, hidData->Botones, sizeof(hidData->Botones));
 
 		RtlCopyMemory(outputData.Setas, devExt->stSetas, sizeof(hidData->Setas));
 		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
