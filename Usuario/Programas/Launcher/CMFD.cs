@@ -160,6 +160,8 @@ namespace Launcher
                     return false;
                 }
             }
+            else
+                semActivado.Release();
 
             CSystem32.CerrarDriver();
             return true;
@@ -224,11 +226,11 @@ namespace Launcher
 
             String[] filas = new String[] { " Pedales        ",
                                             " Luz botones    ",
-                                            " Luz MFD       ú",
-                                            " Hora 1        ó",
+                                            " Luz MFD       ³",
+                                            " Hora 1        ¹",
                                             " Hora 2         ",
-                                            " Hora 3        ¹", //251
-                                            " Salir         ³", //252
+                                            " Hora 3        ³", //251
+                                            " Salir         ¹", //252
                                             "                ",
                                             "                "
                                             };
@@ -322,7 +324,7 @@ namespace Launcher
             return true;
         }
 
-        private bool VerPantallaHora(byte cursor, byte pagina, bool sel, short hora, byte minuto, bool ampm)
+        private bool VerPantallaHora(byte cursor, byte pagina, bool sel, short hora, byte minuto, bool h24)
         {
             if (!CSystem32.AbrirDriver())
                 return false;
@@ -330,18 +332,18 @@ namespace Launcher
             String[] filas = new String[] { " Hora:   ",
                                             " Minuto: ",
                                             " AM/PM: ",
-                                            ">Volver       ¹"};
+                                            ">Volver       ¹",
+                                            "",
+                                            ""};
 
-            filas[cursor] = ">" + filas[cursor].Remove(0, 1);
-            if (sel)
-                filas[cursor] = ">" + filas[cursor];
+            filas[cursor] = ((sel) ? "#" : ">") + filas[cursor].Remove(0, 1);
             filas[0] += hora.ToString();
             filas[1] += minuto.ToString();
-            filas[2] += (ampm) ? "Si     ³" : "No     ³";
+            filas[2] += (!h24) ? " Si    ³" : " No    ³";
 
-            for (byte i = 0; i < 2; i++)
+            for (byte i = 0; i < 3; i++)
             {
-                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(filas[i]));
+                byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(filas[i + (3 * pagina)]));
                 byte[] buffer = new byte[17];
                 for (byte c = 1; c < (texto.Length + 1); c++)
                     buffer[c] = texto[c - 1];
@@ -354,9 +356,6 @@ namespace Launcher
                     CSystem32.CerrarDriver();
                     return false;
                 }
-
-                if (pagina == 1)
-                    break;
             }
 
             CSystem32.CerrarDriver();
@@ -382,7 +381,7 @@ namespace Launcher
                 }
                 else
                 {
-                    System.Threading.Thread.Sleep(2000);
+                    System.Threading.Thread.Sleep(1000);
                     hidOn = true;
                     hWnd.AddHook(WndProc);
                 }
@@ -549,8 +548,17 @@ namespace Launcher
                     case 4: //hora 1
                     case 5: //hora 2
                     case 6: //hora 3
-                        estadoPagina = (byte)(estadoPagina * 10 + estadoCursor);
-                        VerPantallaHora((byte)(estadoCursor % 3), (byte)(estadoCursor / 3), true, auxHora, auxMinuto, aux24h);
+                        if (estadoCursor == 3)
+                        {
+                            estadoCursor = (byte)(estadoPagina - 1);
+                            estadoPagina = 0;
+                            VerPantalla1((byte)(estadoCursor % 3), 1);
+                        }
+                        else
+                        {
+                            estadoPagina = (byte)(estadoPagina * 10 + estadoCursor);
+                            VerPantallaHora((byte)(estadoCursor % 3), (byte)(estadoCursor / 3), true, auxHora, auxMinuto, aux24h);
+                        }
                         break;
                     case 40:
                     case 41:
@@ -560,11 +568,6 @@ namespace Launcher
 
                         estadoPagina = 4;
                         VerPantallaHora(estadoCursor, 0, false, auxHora, auxMinuto, aux24h);
-                        break;
-                    case 43:
-                        estadoCursor = 3;
-                        estadoPagina = 0;
-                        VerPantalla1(3, 1);
                         break;
                     case 50:
                     case 51:
@@ -577,11 +580,6 @@ namespace Launcher
                         estadoPagina = 5;
                         VerPantallaHora(estadoCursor, 0, false, auxHora, auxMinuto, aux24h);
                         break;
-                    case 53:
-                        estadoCursor = 4;
-                        estadoPagina = 0;
-                        VerPantalla1(4, 1);
-                        break;
                     case 60:
                     case 61:
                     case 62:
@@ -593,12 +591,6 @@ namespace Launcher
                         estadoPagina = 6;
                         VerPantallaHora(estadoCursor, 0, false, auxHora, auxMinuto, aux24h);
                         break;
-                    case 63:
-                        estadoCursor = 5;
-                        estadoPagina = 0;
-                        VerPantalla1(5, 1);
-                        break;
-
                 }
             }
             #endregion
@@ -690,7 +682,7 @@ namespace Launcher
                         if (estadoCursor != 3)
                             estadoCursor++;
 
-                        VerPantallaHora(estadoCursor, (byte)(estadoCursor / 3), false, auxHora, auxMinuto, aux24h);
+                        VerPantallaHora((byte)(estadoCursor % 3), (byte)(estadoCursor / 3), false, auxHora, auxMinuto, aux24h);
                         break;
                     case 40:
                     case 50:

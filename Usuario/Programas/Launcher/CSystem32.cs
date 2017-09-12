@@ -107,13 +107,12 @@ namespace Launcher
         public static void CerrarDriver()
         {
             driverMutex.Wait();
+            driverRefs--;
             if (driverRefs == 0)
             {
                 driver.Close();
                 driver = null;
             }
-            else
-                driverRefs--;
             driverMutex.Release();
         }
 

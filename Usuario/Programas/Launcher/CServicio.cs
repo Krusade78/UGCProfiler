@@ -131,6 +131,7 @@ namespace Launcher
                 } catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
                 }
             }
             else
