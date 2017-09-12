@@ -12,7 +12,7 @@
     <Shape ID="DesignTable:MAPABOTONES" ZOrder="1" X="821" Y="291" Height="105" Width="159" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="101" />
     <Shape ID="DesignTable:MAPASETAS" ZOrder="8" X="826" Y="37" Height="105" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="101" />
     <Shape ID="DesignTable:GENERAL" ZOrder="11" X="527" Y="40" Height="105" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="120" />
-    <Shape ID="DesignTable:ACCIONES" ZOrder="12" X="527" Y="210" Height="67" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="63" />
+    <Shape ID="DesignTable:ACCIONES" ZOrder="12" X="527" Y="210" Height="86" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="82" />
     <Shape ID="DesignTable:INDICESEJES" ZOrder="10" X="24" Y="185" Height="86" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="82" />
     <Shape ID="DesignTable:INDICESEJESPEQUE" ZOrder="9" X="22" Y="477" Height="86" Width="164" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="82" />
     <Shape ID="DesignTable:INDICESSETAS" ZOrder="7" X="832" Y="182" Height="86" Width="185" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="82" />
@@ -35,7 +35,7 @@
       <RoutePoints>
         <Point>
           <X>544</X>
-          <Y>277</Y>
+          <Y>296</Y>
         </Point>
         <Point>
           <X>544</X>
@@ -63,7 +63,7 @@
       <RoutePoints>
         <Point>
           <X>660</X>
-          <Y>277</Y>
+          <Y>296</Y>
         </Point>
         <Point>
           <X>660</X>

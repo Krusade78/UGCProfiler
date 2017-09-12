@@ -62,6 +62,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CDatos.cs" />
+    <Compile Include="CEnums.cs" />
     <Compile Include="CtlAcelerador.xaml.cs">
       <DependentUpon>CtlAcelerador.xaml</DependentUpon>
     </Compile>
@@ -74,6 +75,10 @@
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.Metodos.cs" />
+    <Compile Include="VEditorMacros.Metodos.cs" />
+    <Compile Include="VEditorMacros.xaml.cs">
+      <DependentUpon>VEditorMacros.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VEditorModos.xaml.cs">
       <DependentUpon>VEditorModos.xaml</DependentUpon>
     </Compile>
@@ -103,6 +108,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="VEditorMacros.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VEditorModos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

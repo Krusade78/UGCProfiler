@@ -2603,6 +2603,8 @@ namespace Editor {
             
             private global::System.Data.DataColumn columnidAccion;
             
+            private global::System.Data.DataColumn columnNombre;
+            
             private global::System.Data.DataColumn columnComandos;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2643,6 +2645,14 @@ namespace Editor {
             public global::System.Data.DataColumn idAccionColumn {
                 get {
                     return this.columnidAccion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn NombreColumn {
+                get {
+                    return this.columnNombre;
                 }
             }
             
@@ -2691,10 +2701,11 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ACCIONESRow AddACCIONESRow(ushort idAccion, ushort[] Comandos) {
+            public ACCIONESRow AddACCIONESRow(ushort idAccion, string Nombre, ushort[] Comandos) {
                 ACCIONESRow rowACCIONESRow = ((ACCIONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idAccion,
+                        Nombre,
                         Comandos};
                 rowACCIONESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowACCIONESRow);
@@ -2726,6 +2737,7 @@ namespace Editor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
                 this.columnidAccion = base.Columns["idAccion"];
+                this.columnNombre = base.Columns["Nombre"];
                 this.columnComandos = base.Columns["Comandos"];
             }
             
@@ -2734,12 +2746,17 @@ namespace Editor {
             private void InitClass() {
                 this.columnidAccion = new global::System.Data.DataColumn("idAccion", typeof(ushort), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidAccion);
+                this.columnNombre = new global::System.Data.DataColumn("Nombre", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNombre);
                 this.columnComandos = new global::System.Data.DataColumn("Comandos", typeof(ushort[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnComandos);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidAccion}, true));
                 this.columnidAccion.AllowDBNull = false;
                 this.columnidAccion.Unique = true;
+                this.columnNombre.AllowDBNull = false;
+                this.columnNombre.DefaultValue = ((string)(""));
+                this.columnNombre.MaxLength = 32;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4486,6 +4503,17 @@ namespace Editor {
                 }
                 set {
                     this[this.tableACCIONES.idAccionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Nombre {
+                get {
+                    return ((string)(this[this.tableACCIONES.NombreColumn]));
+                }
+                set {
+                    this[this.tableACCIONES.NombreColumn] = value;
                 }
             }
             
