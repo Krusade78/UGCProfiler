@@ -4,18 +4,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Editor"
         Title="Editor de macros" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" Loaded="Window_Loaded">
+    <Window.Background>
+        <ImageBrush ImageSource="res/CalibrationGrid.JPG"/>
+    </Window.Background>
     <Grid Width="847" Height="627">
         <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF044D97" Offset="0"/>
-                <GradientStop Color="#FF1B70C5" Offset="1"/>
-            </LinearGradientBrush>
+            <RadialGradientBrush>
+                <GradientStop Color="#E0323232" Offset="1"/>
+                <GradientStop Color="#E0666666"/>
+            </RadialGradientBrush>
         </Grid.Background>
         <Border Width="816" Height="110" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,501,0,0" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
-                <Label x:Name="Label20" Content="Multi Function Display" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="White" Width="806" Padding="5,2" FontSize="11" FontWeight="Bold"/>
+                <Label x:Name="Label20" Content="Multi Function Display" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFBBE2B9" Width="806" Padding="5,4,5,1" FontSize="12" FontWeight="Bold" FontFamily="Orator Std"/>
 
-                <Label Content="Fechas" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="493,24,0,0" Padding="5,2" Width="121" HorizontalContentAlignment="Center" Background="SlateBlue" Foreground="White"/>
+                <Label Content="Fechas" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="493,24,0,0" Padding="5,4,5,1" Width="121" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontFamily="Orator Std" FontSize="9"/>
                 <Button x:Name="ButtonFecha3" Content="Fecha 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="496,86,0,0" Width="57" Height="21"/>
                 <Button x:Name="ButtonFecha2" Content="Fecha 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="496,65,0,0" Width="57" Height="21"/>
                 <Button x:Name="ButtonFecha1" Content="Fecha 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="496,44,0,0" Width="57" Height="21"/>
@@ -25,7 +28,7 @@
                     <ScrollBar x:Name="NumericUpDown13" Maximum="39" Minimum="0" SmallChange="1" Value="0" Height="26" />
                 </StackPanel>
 
-                <Label x:Name="LabelLight" Content="Luz" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="622,24,0,0" Padding="5,2" Width="187" HorizontalContentAlignment="Center" Background="SlateBlue" Foreground="White"/>
+                <Label x:Name="LabelLight" Content="Luz" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="622,24,0,0" Padding="5,4,5,1" Width="187" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontFamily="Orator Std" FontSize="9"/>
                 <Button x:Name="ButtonInfoOn" Content="Info On" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="628,49,0,0" Width="51" Height="21"/>
                 <Button x:Name="ButtonInfoOff" Content="Info Off" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="628,78,0,0" Width="51" Height="21"/>
                 <Button x:Name="ButtonLuzMfd" Content="Luz MFD" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="691,49,0,0" Width="65" Height="21"/>
@@ -36,7 +39,7 @@
                     <ScrollBar x:Name="NumericUpDownLuzMfd" Maximum="2" Minimum="0" SmallChange="1" Value="1" Height="26" />
                 </StackPanel>
 
-                <Label Content="Texto MFD" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,24,0,0" Padding="5,2" Width="184" HorizontalContentAlignment="Center" Background="SlateBlue" Foreground="White"/>
+                <Label Content="Texto MFD" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,24,0,0" Padding="5,4,5,1" Width="184" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontFamily="Orator Std" FontSize="9"/>
                 <Label Content="Texto:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,48,0,0" Foreground="White" Width="35" HorizontalContentAlignment="Right"/>
                 <TextBox x:Name="TextBox3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,51,0,0" Width="140" Height="21" MaxLength="16" Background="Black" Foreground="GreenYellow" Padding="0,1,0,0"/>
                 <Label Content="Línea:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,80,0,0" HorizontalContentAlignment="Right" Foreground="White"/>
@@ -46,7 +49,7 @@
                 </StackPanel>
                 <Button x:Name="ButtonLinea" Content="Línea de texto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="81,80,0,0" Width="101" Height="23"/>
 
-                <Label Content="Relojes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="192,24,0,0" Padding="5,2" Width="222" HorizontalContentAlignment="Center" Background="SlateBlue" Foreground="White"/>
+                <Label Content="Relojes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="192,24,0,0" Padding="5,4,5,1" Width="222" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontFamily="Orator Std" FontSize="9"/>
                 <Label Content="Reloj:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,50,0,0" Foreground="White" Padding="0,5,3,5"/>
                 <Label Content="Minuto:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="263,50,0,0" Foreground="White" Padding="0,5,3,5"/>
                 <Label Content="Hora:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,50,0,0" Foreground="White" Padding="0,5,3,5"/>
@@ -65,7 +68,7 @@
                 <Button x:Name="Button48" Content="AM/PM" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,80,0,0" Width="60" Height="23"/>
                 <Button x:Name="Button47" Content="24H" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="242,80,0,0" Width="60" Height="23" />
 
-                <Label Content="Texto Pinkie" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="418,24,0,0" Padding="5,2" Width="69" HorizontalContentAlignment="Center" Background="SlateBlue" Foreground="White"/>
+                <Label Content="Txt. Pinkie" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="418,24,0,0" Padding="5,4,5,1" Width="69" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontFamily="Orator Std" FontSize="9"/>
                 <Button x:Name="ButtonX52PinkieOff" Content="Pinkie Off" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="422,80,0,0" Width="63" Height="23"/>
                 <Button x:Name="ButtonX52PinkieOn" Content="Pinkie On" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="422,48,0,0" Width="63" Height="23"/>
 
@@ -84,14 +87,14 @@
                 <Button x:Name="ButtonBorrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,125,0,0" Width="25" Height="25">
                     <Image Source="res/DeleteHS.png" Stretch="None" />
                 </Button>
-                <ListBox x:Name="ListBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Width="186" Height="444" Background="Black" Foreground="GreenYellow" />
+                <ListBox x:Name="ListBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Width="186" Height="444" Background="#B2000000" Foreground="GreenYellow" />
             </Grid>
         </GroupBox>
 
         <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,206,0,0" Width="237" Height="110" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
                 <Label Content="x100 ms." HorizontalAlignment="Left" VerticalAlignment="Top" Margin="155,54,0,0" Foreground="White"/>
-                <Label Content="Comandos de estado" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Width="226" Background="DarkGreen"  Foreground="White" Padding="5,2" FontSize="11" FontWeight="Bold"/>
+                <Label Content="Comandos de estado" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Width="226" Background="DarkGreen"  Foreground="#FFBBE2B9" Padding="5,4,5,1" FontSize="12" FontWeight="Bold" FontFamily="Orator Std"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,53,0,0">
                     <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDown6, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
                     <ScrollBar x:Name="NumericUpDown6" Maximum="250" Minimum="0" SmallChange="1" Value="1" Height="26" />
@@ -110,7 +113,7 @@
 
         <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,105,0,0" Width="237" Height="89" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
-                <Label Content="Modos" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="White" Padding="5,2" FontSize="11" FontWeight="Bold" Width="226"/>
+                <Label Content="Modos" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFBBE2B9" Padding="5,4,5,1" FontSize="12" FontWeight="Bold" Width="226" FontFamily="Orator Std"/>
                 <Button Content="Pinkie On" x:Name="ButtonPinkieOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="157,30,0,0" Width="55" Height="23"/>
                 <Button Content="Pinkie Off" x:Name="ButtonPinkieOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="157,58,0,0" Width="55" Height="23" />
                 <Button Content="Modo 1" x:Name="ButtonModo1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,30,0,0" Width="55" Height="23" />
@@ -123,15 +126,15 @@
         <Border x:Name="Panel3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,323,0,0" Width="237" Height="167" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
                 <Label Content="Botón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="72,57,0,0" Foreground="White" />
-                <Label Content="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,26,0,0" Width="217" Background="SlateBlue" Foreground="White" HorizontalContentAlignment="Center" Padding="5,3"/>
-                <Label Content="DirectX" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="White" Padding="5,2" FontSize="11" FontWeight="Bold" Width="229" />
+                <Label Content="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,26,0,0" Width="217" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,4,5,1" FontFamily="Orator Std" FontSize="9"/>
+                <Label Content="DirectX" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFBBE2B9" Padding="5,4,5,1" FontSize="12" FontWeight="Bold" Width="229" FontFamily="Orator Std" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,56,0,0">
                     <TextBox Width="30" Text="{Binding Value, ElementName=NumericUpDown1, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
                     <ScrollBar x:Name="NumericUpDown1" Maximum="56" Minimum="1" SmallChange="1" Value="1" Height="26" />
                 </StackPanel>
                 <Label Content="Posición:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="115,112,0,0" Foreground="White"/>
                 <Label Content="Seta:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="29,112,0,0" Foreground="White"/>
-                <Label Content="Setas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,89,0,0" Width="216" Background="SlateBlue" Foreground="White" HorizontalContentAlignment="Center" Padding="5,3"/>
+                <Label Content="Setas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,89,0,0" Width="216" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,4,5,1" FontFamily="Orator Std" FontSize="9"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="163,111,0,0">
                     <TextBox Width="20" Text="{Binding Value, ElementName=NumericUpDownPosicion, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
                     <ScrollBar x:Name="NumericUpDownPosicion" Maximum="8" Minimum="1" SmallChange="1" Value="1" Height="26" />
@@ -151,17 +154,17 @@
 
         <Border x:Name="Panel2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,105,0,0" Width="323" Height="175" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
-                <Label Content="Teclado" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="2,3,0,0" Background="DarkGreen" Foreground="White" Padding="5,2" FontSize="11" FontWeight="Bold" Width="316"/>
-                <Label Content="Inserción sencilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,101,0,0" Width="306" Background="SlateBlue" Foreground="White" HorizontalContentAlignment="Center" Padding="5,3" />
+                <Label Content="Teclado" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="2,3,0,0" Background="DarkGreen" Foreground="#FFBBE2B9" Padding="5,4,5,1" FontSize="12" FontWeight="Bold" Width="316" FontFamily="Orator Std"/>
+                <Label Content="Inserción sencilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,101,0,0" Width="306" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,4,5,1" FontFamily="Orator Std" FontSize="9" />
                 <Button Content="Normal" x:Name="ButtonNormal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="136,147,0,0" Width="85" Height="21" />
                 <Button Content="Mantener"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="230,147,0,0" Width="85" Height="21"/>
                 <TextBox x:Name="TextBoxTecla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,123,0,0" Width="307" IsReadOnly="True" Height="22" Background="Black" Foreground="GreenYellow" FontSize="12" HorizontalContentAlignment="Center" />
 
-                <Label Content="Plantilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,25,0,0" Width="154" Background="SlateBlue" Foreground="White" Padding="5,3" HorizontalContentAlignment="Center"/>
+                <Label Content="Plantilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,25,0,0" Width="154" Background="#FF2F5A85" Foreground="#FFC7E0FF" Padding="5,4,5,1" HorizontalContentAlignment="Center" FontFamily="Orator Std" FontSize="9"/>
                 <ComboBox x:Name="vtSelPlantilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,58,0,0" Width="130" />
                 <Grid x:Name="PanelPlantilla" Visibility="Collapsed" Background="#7F808080" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,25,0,0" Width="154" Height="71"/>
 
-                <Label Content="Tecla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,25,0,0" Width="144" Background="SlateBlue" Foreground="White" Padding="5,3" HorizontalContentAlignment="Center"/>
+                <Label Content="Tecla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,25,0,0" Width="144" Background="#FF2F5A85" Foreground="#FFC7E0FF" Padding="5,4,5,1" HorizontalContentAlignment="Center" FontFamily="Orator Std" FontSize="9"/>
                 <ComboBox x:Name="ComboBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,49,0,0" Width="144" />
                 <Button Content="Soltar" x:Name="ButtonSoltar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="249,75,0,0" Width="65" Height="21" />
                 <Button Content="Presionar" x:Name="ButtonPresionar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="172,75,0,0" Width="65" Height="21" />
@@ -183,7 +186,7 @@
 
         <Border x:Name="Panel1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,292,0,0" Width="324" Height="197" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
-                <Label Content="Ratón" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0" Background="DarkGreen" Foreground="White" Padding="5,2" FontSize="11" FontWeight="Bold" Width="316" />
+                <Label Content="Ratón" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0" Background="DarkGreen" Foreground="#FFBBE2B9" Padding="5,4,5,1" FontSize="12" FontWeight="Bold" Width="316" FontFamily="Orator Std" />
 
                 <Label Content="Off -->" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,79,0,0" Foreground="White" Padding="0,5" />
                 <Label Content="On -->" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,51,0,0" Foreground="White" Padding="0,5" />
@@ -192,16 +195,16 @@
                 <Button Content="Arriba" x:Name="ButtonArribaOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="215,80,0,0" Width="43" Height="21" />
                 <Button Content="Arriba" x:Name="ButtonArribaOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="215,52,0,0" Width="43" Height="21" />
                 <Button Content="Derecho" x:Name="ButtonDerechoOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="147,80,0,0" Width="50" Height="21" />
-                <Label Content="Rueda" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="209,26,0,0" Background="SlateBlue" Foreground="White" Width="106" Padding="5,3" HorizontalContentAlignment="Center" />
-                <Label Content="Botones" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,25,0,0" Background="SlateBlue" Foreground="White" Width="195" Padding="5,3" HorizontalContentAlignment="Center"/>
+                <Label Content="Rueda" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="209,26,0,0" Background="#FF2F5A85" Foreground="#FFC7E0FF" Width="106" Padding="5,4,5,1" HorizontalContentAlignment="Center" FontFamily="Orator Std" FontSize="9" />
+                <Label Content="Botones" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,25,0,0" Background="#FF2F5A85" Foreground="#FFC7E0FF" Width="195" Padding="5,4,5,1" HorizontalContentAlignment="Center" FontFamily="Orator Std" FontSize="9"/>
                 <Button Content="Izquierdo" x:Name="ButtonIzquierdoOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,80,0,0" Width="50" Height="21" />
                 <Button Content="Izquierdo" x:Name="ButtonIzquierdoOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,52,0,0" Width="50" Height="21" />
                 <Button Content="Derecho" x:Name="ButtonDerechoOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="147,52,0,0" Width="50" Height="21" />
                 <Button Content="Central" x:Name="ButtonCentroOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,80,0,0" Width="50" Height="21" />
                 <Button Content="Central" x:Name="ButtonCentroOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,52,0,0" Width="50" Height="21" />
                 <Grid x:Name="PanelRatonOff" Visibility="Collapsed" Background="#7F808080" Margin="5,76,5,0" VerticalAlignment="Top" Height="28" />
-                
-                <Label Content="Movimiento" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,112,0,0" Background="SlateBlue" Foreground="White" Width="310" Padding="5,3" HorizontalContentAlignment="Center" />
+
+                <Label Content="Movimiento" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,112,0,0" Background="#FF2F5A85" Foreground="#FFC7E0FF" Width="310" Padding="5,4,5,1" HorizontalContentAlignment="Center" FontFamily="Orator Std" FontSize="9" />
                 <Button Content="Abajo" x:Name="ButtonMovAbajo" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="208,162,0,0" Width="50" Height="21" />
                 <Button Content="Arriba" x:Name="ButtonMovArriba" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="58,162,0,0" Width="50" Height="21" />
                 <Button Content="Derecha" x:Name="ButtonMovDerecha" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="209,136,0,0" Width="50" Height="21" />
