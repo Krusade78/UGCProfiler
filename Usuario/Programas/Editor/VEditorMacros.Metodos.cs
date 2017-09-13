@@ -40,7 +40,7 @@ namespace Editor
                     string st = TextBoxNombre.Text.Trim();
                     if (st.Length > 16)
                         st = st.Substring(0, 16);
-                    byte[] stb =System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st));
+                    byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st));
 
                     if (macro.Count >= (st.Length + 2))
                     {
@@ -94,11 +94,11 @@ namespace Editor
                     case TipoC.TipoComando_Tecla:
                         if (soltar)
                         {
-                            ListBox1.Items.Add("Soltar " + Convert.ToString(ComboBox1.Items(dato)).Remove(0, Convert.ToString(ComboBox1.Items(dato)).IndexOf(" ")));
+                            ListBox1.Items.Add("Soltar " + Convert.ToString(ComboBox1.Items[dato]).Remove(0, Convert.ToString(ComboBox1.Items[dato]).IndexOf(" ")));
                         }
                         else
                         {
-                            ListBox1.Items.Add("Presionar " + Convert.ToString(ComboBox1.Items(dato)).Remove(0, Convert.ToString(ComboBox1.Items(dato)).IndexOf(" ")));
+                            ListBox1.Items.Add("Presionar " + Convert.ToString(ComboBox1.Items[dato]).Remove(0, Convert.ToString(ComboBox1.Items[dato]).IndexOf(" ")));
                         }
                         break;
                     case TipoC.TipoComando_RatonBt1:
@@ -191,117 +191,147 @@ namespace Editor
                             ListBox1.Items.Add("Ratón->Rueda abajo On");
                         }
                         break;
-                    case 10:
-                        ListBox1.Items.Add(Traduce.Txt("pause") + " " + dato);
+                    case TipoC.TipoComando_Delay:
+                        ListBox1.Items.Add("Pausa " + dato);
                         break;
-                    case 11:
-                        ListBox1.Items.Add(Traduce.Txt("hold"));
+                    case TipoC.TipoComando_Hold:
+                        ListBox1.Items.Add("Mantener");
                         break;
-                    case 12:
+                    case TipoC.TipoComando_Repeat:
                         if (soltar)
-                            ListBox1.Items.Add(Traduce.Txt("repeat_end"));
+                            ListBox1.Items.Add("/-- Repetir Fin");
                         else
-                            ListBox1.Items.Add(Traduce.Txt("repeat"));
+                            ListBox1.Items.Add("/-- Repetir Inicio");
                         break;
-                    case 13:
+                    case TipoC.TipoComando_RepeatN:
                         if (soltar)
-                            ListBox1.Items.Add(Traduce.Txt("repeatn_end"));
+                            ListBox1.Items.Add("/-- Repetir N Fin");
                         else
-                            ListBox1.Items.Add(Traduce.Txt("repeatn") + " " + dato);
+                            ListBox1.Items.Add("/-- Repetir N[" + dato + "] Inicio");
                         break;
-                    case 14:
-                        ListBox1.Items.Add(Traduce.Txt("mode" + (dato + 1)));
+                    case TipoC.TipoComando_Modo:
+                        ListBox1.Items.Add("Modo " + (dato + 1));
                         break;
-                    case 15:
-                        ListBox1.Items.Add(Traduce.Txt("aux" + (dato + 1)));
-                        break;
-                    case 16:
+                    case TipoC.TipoComando_Pinkie:
                         if (dato == 0)
-                            ListBox1.Items.Add(Traduce.Txt("pinkie") + " Off");
+                            ListBox1.Items.Add("Pinkie Off");
                         else
-                            ListBox1.Items.Add(Traduce.Txt("pinkie") + " On");
+                            ListBox1.Items.Add("Pinkie On");
                         break;
-                    case 18:
+                    case TipoC.TipoComando_DxBoton:
                         if (soltar)
                         {
-                            ListBox1.Items.Add("DX " + Traduce.Txt("button") + " " + dato + 1 + " Off");
+                            ListBox1.Items.Add("Botón DX " + dato + 1 + " Off");
                         }
                         else
                         {
-                            ListBox1.Items.Add("DX " + Traduce.Txt("button") + " " + dato + 1 + " On");
+                            ListBox1.Items.Add("Botón DX " + dato + 1 + " On");
                         }
                         break;
-                    case 19:
+                    case TipoC.TipoComando_DxSeta:
                         if (soltar)
                         {
-                            ListBox1.Items.Add("DX " + Traduce.Txt("pov") + "_" + ((dato / 8) + 1) + ((dato % 8) + 1) + " Off");
+                            ListBox1.Items.Add("Seta DX " + ((dato / 8) + 1) + ((dato % 8) + 1) + " Off");
                         }
                         else
                         {
-                            ListBox1.Items.Add("DX " + Traduce.Txt("pov") + "_" + ((dato / 8) + 1) + ((dato % 8) + 1) + " On");
+                            ListBox1.Items.Add("Seta DX " + ((dato / 8) + 1) + ((dato % 8) + 1) + " On");
                         }
                         break;
-                    case 20:
-                        ListBox1.Items.Add(Traduce.Txt("mfd_light") + " " + dato);
+                    case TipoC.TipoComando_MfdLuz:
+                        ListBox1.Items.Add("Luz MFD " + dato);
                         break;
-                    case 21:
-                        ListBox1.Items.Add(Traduce.Txt("button_light") + " " + dato);
+                    case TipoC.TipoComando_Luz:
+                        ListBox1.Items.Add("Luz Botones " + dato);
                         break;
-                    case 22:
+                    case TipoC.TipoComando_InfoLuz:
                         if (dato == 0)
-                            ListBox1.Items.Add(Traduce.Txt("light") + " Info Off");
+                            ListBox1.Items.Add("Luz Info Off");
                         else
-                            ListBox1.Items.Add(Traduce.Txt("light") + " Info On");
+                            ListBox1.Items.Add("Luz Info On");
                         break;
-                    case 23:
+                    case TipoC.TipoComando_MfdPinkie:
                         if (dato == 0)
-                            ListBox1.Items.Add("MFD " + Traduce.Txt("pinkie") + " Off");
+                            ListBox1.Items.Add("MFD Pinkie Off");
                         else
-                            ListBox1.Items.Add("MFD " + Traduce.Txt("pinkie") + " On");
+                            ListBox1.Items.Add("MFD Pinkie On");
                         break;
-                    case 24:
-                        string texto = Traduce.Txt("text_line") + "_" + dato;
+                    case TipoC.TipoComando_MfdTexto:
+                        string texto = "Línea de texto " + dato;
                         byte[] ascii = new byte[16];
                         byte j = 0;
-                        while (macro(i + 1) != 56)
+                        while (macro[i + 1] != (ushort)TipoC.TipoComando_MfdTextoFin)
                         {
-                            i = i + 1;
-                            ascii(j) = macro(i) >> 8;
-                            j = j + 1;
+                            i++;
+                            ascii[j] = (byte)(macro[i] >> 8);
+                            j++;
                         }
-                        i = i + 1;
-                        texto = texto + "  " + System.Text.ASCIIEncoding.ASCII.GetString(ascii);
+                        i++;
+                        texto += "  " + System.Text.Encoding.Convert(System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode, ascii);
+                        texto = texto.Replace('ø', 'ñ').Replace('Ó', 'á').Replace('ß', 'í').Replace('Ô', 'ó').Replace('Ò', 'ú').Replace('£', 'Ñ').Replace('Ø', 'ª').Replace('×', 'º').Replace('ƒ', '¿').Replace('Ú', '¡');
                         ListBox1.Items.Add(texto);
                         break;
-                    case 25:
+                    case TipoC.TipoComando_MfdHora:
                         if (dato == 1)
                         {
-                            ListBox1.Items.Add("(AM/PM) " + Traduce.Txt("hour") + "_" + dato + " " + (macro(i + 1) >> 8) + ":" + (macro(i + 2) >> 8));
+                            ListBox1.Items.Add("MFD Hora " + dato + "(AM/PM)" + (macro[i + 1] >> 8) + ":" + (macro[i + 2] >> 8));
                         }
                         else
                         {
-                            ListBox1.Items.Add("(AM/PM) " + Traduce.Txt("hour") + "_" + dato + " " + ((((macro(i + 1) >> 8) * 256) + (macro(i + 2) >> 8)) / 60) + ":" + ((((macro(i + 1) >> 8) * 256) + (macro(i + 2) >> 8)) % 60));
+                            ListBox1.Items.Add("MFD Hora " + dato + "(AM/PM)" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) / 60) + ":" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) % 60));
                         }
-                        i = i + 2;
+                        i += 2;
                         break;
-                    case 26:
+                    case TipoC.TipoComando_MfdHora24:
                         if (dato == 1)
                         {
-                            ListBox1.Items.Add("(24H) " + Traduce.Txt("hour") + "_" + dato + " " + (macro(i + 1) >> 8) + ":" + (macro(i + 2) >> 8));
+                            ListBox1.Items.Add("MFD Hora " + dato + "(24H)" + (macro[i + 1] >> 8) + ":" + (macro[i + 2] >> 8));
                         }
                         else
                         {
-                            ListBox1.Items.Add("(24H) " + Traduce.Txt("hour") + "_" + dato + " " + ((((macro(i + 1) >> 8) * 256) + (macro(i + 2) >> 8)) / 60) + ":" + ((((macro(i + 1) >> 8) * 256) + (macro(i + 2) >> 8)) % 60));
+                            ListBox1.Items.Add("MFD Hora " + dato + "(24H)" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) / 60) + ":" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) % 60));
                         }
                         i = i + 2;
                         break;
-                    case 27:
-                        ListBox1.Items.Add(Traduce.Txt("date") + "_" + dato + " " + (macro(i + 1) >> 8));
+                    case TipoC.TipoComando_MfdFecha:
+                        ListBox1.Items.Add("MFD Fecha " + dato + " " + (macro[i + 1] >> 8));
                         i = i + 1;
                         break;
                 }
             }
 
+        }
+
+        private void PasarABasico()
+        {
+            PanelX52.Visibility = System.Windows.Visibility.Visible;
+            PanelSetas.Visibility = System.Windows.Visibility.Visible;
+            PanelRatonOff.Visibility = System.Windows.Visibility.Visible;
+            PanelMovimiento.Visibility = System.Windows.Visibility.Visible;
+            PanelEspecial.Visibility = System.Windows.Visibility.Visible;
+            PanelModos.Visibility = System.Windows.Visibility.Visible;
+            PanelPlantilla.Visibility = System.Windows.Visibility.Visible;
+            PanelTecla.Visibility = System.Windows.Visibility.Visible;
+
+            ButtonDXOff.IsEnabled = false;
+            ButtonSubir.IsEnabled = false;
+            ButtonBajar.IsEnabled = false;
+        }
+
+        private void PasarAAvanzado()
+        {
+            PanelX52.Visibility = System.Windows.Visibility.Collapsed;
+            PanelSetas.Visibility = System.Windows.Visibility.Collapsed;
+            PanelRatonOff.Visibility = System.Windows.Visibility.Collapsed;
+            PanelMovimiento.Visibility = System.Windows.Visibility.Collapsed;
+            PanelEspecial.Visibility = System.Windows.Visibility.Collapsed;
+            PanelModos.Visibility = System.Windows.Visibility.Collapsed;
+            PanelPlantilla.Visibility = System.Windows.Visibility.Collapsed;
+            PanelTecla.Visibility = System.Windows.Visibility.Collapsed;
+
+            ButtonDXOff.IsEnabled = true;
+            ButtonSubir.IsEnabled = true;
+            ButtonBajar.IsEnabled = true;
         }
 
         #region "Plantillas"
@@ -361,7 +391,7 @@ namespace Editor
         {
             ComboBox1.Items.Clear();
             using (System.IO.StreamReader f = new System.IO.StreamReader(vtSelPlantilla.SelectedItem + ".kbp"))
-            { 
+            {
                 while (f.Peek() >= 0)
                 {
                     ComboBox1.Items.Add(f.ReadLine());
@@ -370,5 +400,89 @@ namespace Editor
             }
         }
         #endregion
+
+        private void Guardar()
+        {
+            if (TextBoxNombre.Text.Trim() == "")
+                return;
+            if (indicep == -1)
+            {
+                Dim idx As Integer = padre.ComboBoxMacro.Items.IndexOf(Me.TextBoxNombre.Text.Trim())
+                If idx = -1 Then 'no existe
+                { 
+                    If CheckBox1.Checked Then 'texto x52
+                    {
+                        Dim st As String = Me.TextBoxNombre.Text.Trim()
+                        Dim stb(32) As Byte
+                        WideCharToMultiByte(20127, 0, st, st.Length, stb, 33, 0, 0)
+                        macro.Insert(0, 56)
+                        If st.Length > 16 Then
+                            For j As Short = 15 To 0 Step - 1
+                                macro.Insert(0, 24 + (CInt(stb(j)) << 8))
+                            Next
+                        Else
+                            For j As Short = st.Length - 1 To 0 Step - 1
+                                macro.Insert(0, 24 + (CInt(stb(j)) << 8))
+                            Next
+                        End If
+                        macro.Insert(0, 24 + (3 << 8))
+                    }
+                    idx = padre.ComboBoxAssigned.Items.Add(Me.TextBoxNombre.Text.Trim())
+                    padre.ComboBoxMacro.Items.Add(Me.TextBoxNombre.Text.Trim())
+                    padre.datos.AñadirIndice(idx - 1, macro)
+                    Me.Tag = idx - 1
+                    Me.DialogResult = Windows.Forms.DialogResult.Ignore
+                }
+                else
+                {
+                    Traduce.Msg("name_repeated", "warning", MsgBoxStyle.Exclamation)
+                    return;
+                }
+            }
+            else
+            {
+                If CheckBox1.Checked Then 'texto x52
+                {
+                    Dim st As String = Me.TextBoxNombre.Text.Trim()
+                    Dim stb(32) As Byte
+                    WideCharToMultiByte(20127, 0, st, st.Length, stb, 33, 0, 0)
+                    macro.Insert(0, 56)
+                    If st.Length > 16 Then
+                        For j As Short = 15 To 0 Step - 1
+                            macro.Insert(0, 24 + (CInt(stb(j)) << 8))
+                        Next
+                    Else
+                        For j As Short = st.Length - 1 To 0 Step - 1
+                            macro.Insert(0, 24 + (CInt(stb(j)) << 8))
+                        Next
+                    End If
+                    macro.Insert(0, 24 + (3 << 8))
+                }
+                Dim idx As Integer = padre.ComboBoxAssigned.Items.Add(Me.TextBoxNombre.Text.Trim())
+                padre.ComboBoxMacro.Items.Add(Me.TextBoxNombre.Text.Trim())
+                If idx<>(indicep + 1) Then
+                {
+                    padre.datos.AñadirIndice(idx - 1, macro)
+                    padre.datos.IntercambiarIndices(idx, indicep + 1, padre.ComboBoxAssigned, padre.ComboBoxMacro)
+                }
+                else
+                {
+                    padre.ComboBoxAssigned.Items.RemoveAt(idx + 1)
+                    padre.ComboBoxMacro.Items.RemoveAt(idx)
+                    padre.datos.GetMacro(indicep).Clear()
+                    For i As Integer = 0 To macro.Count - 1
+                        padre.datos.GetMacro(indicep).Add(macro(i))
+                    Next
+                }
+                If idx <= (indicep + 1) Then
+                    Me.Tag = idx - 1
+                else
+                    Me.Tag = idx - 2
+
+                Me.DialogResult = Windows.Forms.DialogResult.OK
+            }
+
+            this.Close();
+        }
     }
 }
