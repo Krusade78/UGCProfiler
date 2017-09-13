@@ -36,7 +36,7 @@ namespace Calibrator
             rdev[2].Flags = CRawInput.RawInputDeviceFlags.NoLegacy;   // adds HID keyboard and also ignores legacy keyboard messages
             rdev[2].WindowHandle = hWnd.Handle;
 
-            if (!CRawInput.RegisterRawInputDevices(rdev, 3, (uint)Marshal.SizeOf(typeof(CRawInput.RAWINPUTDEVICE))))
+            if (!CRawInput.RegisterRawInputDevices(rdev, 1, (uint)Marshal.SizeOf(typeof(CRawInput.RAWINPUTDEVICE))))
             {
                 MessageBox.Show("No se pudo registrar la entrada de datos HID", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 hWnd = null;

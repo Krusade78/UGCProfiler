@@ -83,12 +83,12 @@ namespace Calibrator
             pathP4.RenderTransform = new System.Windows.Media.RotateTransform((hidData[19] > 5) ? (hidData[19] - 9) * 45 : (hidData[19] - 1) * 45);
         }
 
-        public void ActualizarTeclado(data)
+        public void ActualizarTeclado(CRawInput.RAWINPUTKEYBOARD data)
         {
-System.Windows.Input.KeyInterop.KeyFromVirtualKey(data.vkCode);
+//System.Windows.Input.KeyInterop.KeyFromVirtualKey(data.vkCode);
         }
 
-        public void ActualizarMouse(data)
+        public void ActualizarRaton(CRawInput.RAWINPUTMOUSE data)
         {
             
         }

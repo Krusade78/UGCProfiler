@@ -13,17 +13,17 @@
             <Grid.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="#F0323232" Offset="1"/>
-                    <GradientStop Color="#F0919191"/>
+                    <GradientStop Color="#F0666666"/>
                 </RadialGradientBrush>
             </Grid.Background>
             <Grid VerticalAlignment="Top" Margin="0,35,0,0">
-                <TextBlock Text="Posición bruta" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                <TextBlock Text="Posición bruta" Foreground="GreenYellow" HorizontalAlignment="Center" FontFamily="Orator Std" FontSize="14" />
                 <Viewbox HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Height="40" Width="400" Stretch="Fill">
                     <Grid Height="40" Width="2048" Background="#EF003200">
                         <Rectangle x:Name="posReal" Width="10" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                     </Grid>
                 </Viewbox>
-                <TextBlock x:Name="txtPosReal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" />
+                <TextBlock x:Name="txtPosReal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="246,38,246,13" FontFamily="Orator Std" />
             </Grid>
 
             <Grid VerticalAlignment="Top" Margin="0,135,0,0" HorizontalAlignment="Center">
@@ -47,7 +47,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores de calibración" Foreground="GreenYellow" Margin="0,0,0,18" />
+                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores de calibración" Foreground="GreenYellow" Margin="0,0,0,18" FontFamily="Orator Std" FontSize="14" />
 
                         <CheckBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="chkCalActiva" Content="Activada" Margin="0,0,0,6" HorizontalAlignment="Center" Foreground="Yellow" Checked="chk_Cambiado" Unchecked="chk_Cambiado" />
 
@@ -78,7 +78,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores antivibración" Margin="0,0,0,18" Foreground="GreenYellow" VerticalAlignment="Top" />
+                        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores antivibración" Margin="0,0,0,18" Foreground="GreenYellow" VerticalAlignment="Top" FontFamily="Orator Std" FontSize="14" />
 
                         <CheckBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="chkAntivActiva" Content="Activada" Margin="0,0,0,6" HorizontalAlignment="Center" Foreground="Yellow" Checked="chk_Cambiado" Unchecked="chk_Cambiado" />
 
@@ -90,57 +90,57 @@
                     </Grid>
                 </Grid>
             </Grid>
-            
+
             <Grid VerticalAlignment="Top" Margin="0,313,0,0">
-                <TextBlock Text="Posición calibrada" Foreground="GreenYellow" HorizontalAlignment="Center" />
+                <TextBlock Text="Posición calibrada" Foreground="GreenYellow" HorizontalAlignment="Center" FontFamily="Orator Std" FontSize="14" />
                 <Viewbox HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Height="40" Width="400" Stretch="Fill">
                     <Grid Height="40" Width="2048" Background="#EF003200">
                         <Rectangle x:Name="posCal" HorizontalAlignment="Left" Width="10" Fill="{DynamicResource colorBarra}"/>
                     </Grid>
                 </Viewbox>
-                <TextBlock x:Name="txtPosCal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" />
+                <TextBlock x:Name="txtPosCal" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="246,39,246,12" FontFamily="Orator Std" />
             </Grid>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,413,0,0">
                 <StackPanel.Resources>
-                        <Style x:Key="tgb" TargetType="ToggleButton">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                        <Grid>
-                                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                                <ContentControl Content="{TemplateBinding Content}"/>
-                                            </Border>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Cursor" Value="Hand" />
-                                                <Setter Property="BorderBrush" TargetName="border" Value="#FF50A6E6"/>
-                                                <Setter Property="Background" TargetName="border">
-                                                    <Setter.Value>
-                                                        <RadialGradientBrush>
-                                                            <GradientStop Color="#30003357" Offset="0"/>
-                                                            <GradientStop Color="#30002742" Offset="1"/>
-                                                        </RadialGradientBrush>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                            <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                                <Setter Property="Background" TargetName="border">
-                                                    <Setter.Value>
-                                                        <RadialGradientBrush>
-                                                            <GradientStop Color="#4F44B1FF" Offset="0"/>
-                                                            <GradientStop Color="#4F067BCC" Offset="1"/>
-                                                        </RadialGradientBrush>
-                                                    </Setter.Value>
-                                                </Setter>
-                                                <Setter Property="BorderBrush" TargetName="border" Value="#FF84BCEA"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
+                    <Style x:Key="tgb" TargetType="ToggleButton">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Grid>
+                                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentControl Content="{TemplateBinding Content}"/>
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF50A6E6"/>
+                                            <Setter Property="Background" TargetName="border">
+                                                <Setter.Value>
+                                                    <RadialGradientBrush>
+                                                        <GradientStop Color="#30003357" Offset="0"/>
+                                                        <GradientStop Color="#30002742" Offset="1"/>
+                                                    </RadialGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                            <Setter Property="Background" TargetName="border">
+                                                <Setter.Value>
+                                                    <RadialGradientBrush>
+                                                        <GradientStop Color="#4F44B1FF" Offset="0"/>
+                                                        <GradientStop Color="#4F067BCC" Offset="1"/>
+                                                    </RadialGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF84BCEA"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                 </StackPanel.Resources>
                 <ToggleButton x:Name="tbX" Width="100" Height="100" BorderBrush="{x:Null}" Background="{x:Null}" IsChecked="True" Style="{StaticResource tgb}" Checked="tbX_Checked">
                     <Image Source="res/x52jx.png" />
@@ -162,7 +162,7 @@
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btAplicar" Content="Probar límites nuevos" HorizontalAlignment="Left" Width="140" Click="btAplicar_Click" Height="45" Foreground="GreenYellow">
+                <Button x:Name="btAplicar" Content="Probar límites nuevos" HorizontalAlignment="Left" Width="140" Click="btAplicar_Click" Height="45" Foreground="GreenYellow" FontFamily="Calibri">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF043304" Offset="0"/>
@@ -170,7 +170,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button Grid.Column="2" Content="Guardar y activar" Width="140" Height="45" Foreground="GreenYellow" Click="btGuardar_Click">
+                <Button Grid.Column="2" Content="Guardar y activar" Width="140" Height="45" Foreground="GreenYellow" Click="btGuardar_Click" FontFamily="Calibri">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF043304" Offset="0"/>
