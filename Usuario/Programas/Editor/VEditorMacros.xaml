@@ -78,13 +78,13 @@
 
         <GroupBox Header="Comandos" Foreground="Gold" x:Name="GroupBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="593,11,0,0" Width="235" Height="480" >
             <Grid>
-                <Button x:Name="ButtonBajar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,195,0,0" Width="25" Height="25">
+                <Button x:Name="ButtonBajar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,195,0,0" Width="25" Height="25" Click="ButtonBajar_Click">
                     <Image Source="res/bajar.gif" Stretch="None" />
                 </Button>
-                <Button x:Name="ButtonSubir" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,160,0,0" Width="25" Height="25">
+                <Button x:Name="ButtonSubir" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,160,0,0" Width="25" Height="25" Click="ButtonSubir_Click">
                     <Image Source="res/subir.gif" Stretch="None" />
                 </Button>
-                <Button x:Name="ButtonBorrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,125,0,0" Width="25" Height="25">
+                <Button x:Name="ButtonBorrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,125,0,0" Width="25" Height="25" Click="ButtonBorrar_Click">
                     <Image Source="res/DeleteHS.png" Stretch="None" />
                 </Button>
                 <ListBox x:Name="ListBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Width="186" Height="444" Background="#B2000000" Foreground="GreenYellow" />

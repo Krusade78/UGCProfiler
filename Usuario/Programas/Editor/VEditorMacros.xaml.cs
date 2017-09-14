@@ -33,12 +33,28 @@ namespace Editor
 
         private void ButtonAcepta_Click(object sender, RoutedEventArgs e)
         {
-
+            Guardar();
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
+            this.Close();
+        }
 
+        private void ButtonBorrar_Click(object sender, RoutedEventArgs e)
+        {
+            BorrarMacroLista(ListBox1.SelectedIndex, false);
+        }
+
+        private void ButtonSubir_Click(object sender, RoutedEventArgs e)
+        {
+            SubirMacroLista(ListBox1.SelectedIndex);
+        }
+
+        private void ButtonBajar_Click(object sender, RoutedEventArgs e)
+        {
+            BajarMacroLista(ListBox1.SelectedIndex);
         }
     }
 }
