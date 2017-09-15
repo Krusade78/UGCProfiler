@@ -37,7 +37,7 @@ namespace Editor
             Perfil.Clear();
 
             Perfil.GENERAL.AddGENERALRow(0, false, false, false);
-            DSPerfil.ACCIONESRow accionVacia = Perfil.ACCIONES.AddACCIONESRow(0, new ushort[0]);
+            DSPerfil.ACCIONESRow accionVacia = Perfil.ACCIONES.AddACCIONESRow(0, "", new ushort[0]);
             for (byte p = 0; p < 2; p++)
             {
                 for (byte m = 0; m < 3; m++)

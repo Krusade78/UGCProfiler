@@ -156,18 +156,18 @@
             <Grid TextElement.FontSize="10">
                 <Label Content="Teclado" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="2,3,0,0" Background="DarkGreen" Foreground="#FFBBE2B9" Padding="5,4,5,1" FontSize="12" FontWeight="Bold" Width="316" FontFamily="Orator Std"/>
                 <Label Content="Inserción sencilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,101,0,0" Width="306" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,4,5,1" FontFamily="Orator Std" FontSize="9" />
-                <Button Content="Normal" x:Name="ButtonNormal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="136,147,0,0" Width="85" Height="21" />
-                <Button Content="Mantener"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="230,147,0,0" Width="85" Height="21"/>
-                <TextBox x:Name="TextBoxTecla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,123,0,0" Width="307" IsReadOnly="True" Height="22" Background="Black" Foreground="GreenYellow" FontSize="12" HorizontalContentAlignment="Center" />
+                <Button Content="Normal" x:Name="ButtonNormal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="136,147,0,0" Width="85" Height="21" Click="ButtonNormal_Click" />
+                <Button Content="Mantener"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="230,147,0,0" Width="85" Height="21" Click="ButtonMantener_Click"/>
+                <TextBox x:Name="TextBoxTecla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,123,0,0" Width="307" IsReadOnly="True" Height="22" Background="Black" Foreground="GreenYellow" FontSize="12" HorizontalContentAlignment="Center" LostFocus="TextBoxTecla_LostFocus" GotFocus="TextBoxTecla_GotFocus" PreviewKeyDown="TextBoxTecla_PreviewKeyDown" PreviewKeyUp="TextBoxTecla_PreviewKeyUp" />
 
                 <Label Content="Plantilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,25,0,0" Width="154" Background="#FF2F5A85" Foreground="#FFC7E0FF" Padding="5,4,5,1" HorizontalContentAlignment="Center" FontFamily="Orator Std" FontSize="9"/>
-                <ComboBox x:Name="vtSelPlantilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,58,0,0" Width="130" />
+                <ComboBox x:Name="vtSelPlantilla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,58,0,0" Width="130" SelectionChanged="vtSelPlantilla_SelectionChanged" />
                 <Grid x:Name="PanelPlantilla" Visibility="Collapsed" Background="#7F808080" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,25,0,0" Width="154" Height="71"/>
 
                 <Label Content="Tecla" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,25,0,0" Width="144" Background="#FF2F5A85" Foreground="#FFC7E0FF" Padding="5,4,5,1" HorizontalContentAlignment="Center" FontFamily="Orator Std" FontSize="9"/>
                 <ComboBox x:Name="ComboBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,49,0,0" Width="144" />
-                <Button Content="Soltar" x:Name="ButtonSoltar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="249,75,0,0" Width="65" Height="21" />
-                <Button Content="Presionar" x:Name="ButtonPresionar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="172,75,0,0" Width="65" Height="21" />
+                <Button Content="Soltar" x:Name="ButtonSoltar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="249,75,0,0" Width="65" Height="21" Click="ButtonSoltar_Click" />
+                <Button Content="Presionar" x:Name="ButtonPresionar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="172,75,0,0" Width="65" Height="21" Click="ButtonPresionar_Click" />
                 <Grid x:Name="PanelTecla" Visibility="Collapsed" Background="#7F808080" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,25,0,0" Width="145" Height="71"/>
             </Grid>
         </Border>
@@ -175,8 +175,8 @@
         <GroupBox x:Name="GroupBox2" Header="Macro" Foreground="Gold" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,12" Width="568" Height="83">
             <Grid TextElement.FontSize="11">
                 <Button Content="Aceptar" x:Name="ButtonAcepta" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="391,13,0,0" Width="75" Height="21" Click="ButtonAcepta_Click"/>
-                <RadioButton Content="Modo avanzado" x:Name="RadioButtonAvanzado" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="449,44,0,0" Foreground="White"/>
-                <RadioButton Content="Modo básico" x:Name="RadioButtonBasico" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="362,44,0,0" Foreground="White"/>
+                <RadioButton Content="Modo avanzado" x:Name="RadioButtonAvanzado" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="449,44,0,0" Foreground="White" Checked="RadioButtonAvanzado_Checked"/>
+                <RadioButton Content="Modo básico" x:Name="RadioButtonBasico" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="362,44,0,0" Foreground="White" Checked="RadioButtonBasico_Checked"/>
                 <CheckBox Content="Usar nombre en el MFD (16 caracteres)" x:Name="CheckBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,38,0,0" Foreground="White"/>
                 <TextBox x:Name="TextBoxNombre" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,13,0,0" Width="295" MaxLength="32" Background="Black" Foreground="GreenYellow" Height="20"/>
                 <Label Content="Nombre:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,9,0,0" Foreground="White"/>

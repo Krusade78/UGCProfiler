@@ -75,8 +75,8 @@ namespace Editor
                 //ComboBoxAssigned.Items.Clear()
                 //ComboBoxAssigned.Items.Add("</------- " & Traduce.Txt("none") & " -------/>")
                 //ComboBoxAssigned.SelectedIndex = 0
-                if (datos.CargarArchivo(archivo, ComboBoxAssigned, ComboBoxMacro))
-                {
+                //if (datos.CargarArchivo(archivo, ComboBoxAssigned, ComboBoxMacro))
+                //{
                     //    if (report != null) // 'a vista normal
                     //    {
                     //        Fondo.Visible = True
@@ -90,7 +90,7 @@ namespace Editor
                     //    RadioButton13.Checked = True
                     //    this.Title = "Editor de perfiles - [" + archivo.Remove(0, archivo.LastIndexOf("\\") + 1) + "]";
                     //    esNuevo = false;
-                }
+                //}
             //else
             //{
             //    Label1.Visible = False
@@ -108,7 +108,7 @@ namespace Editor
             //    Me.Text = Traduce.Txt("profile_editor") & " - [" & Traduce.Txt("untitled") & "]"
             //    esNuevo = True
             //}
-        }
+            }
         }
 
         private bool Guardar()

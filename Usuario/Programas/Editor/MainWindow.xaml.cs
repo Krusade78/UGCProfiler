@@ -48,7 +48,10 @@ namespace Editor
 
         private void RibbonButtonNuevo_Click(object sender, RoutedEventArgs e)
         {
-            Nuevo();
+            VEditorMacros wnd = new VEditorMacros(-1);
+            wnd.Owner = this;
+            wnd.ShowDialog();
+            //Nuevo();
         }
         private void RibbonButtonAbrir_Click(object sender, RoutedEventArgs e)
         {
