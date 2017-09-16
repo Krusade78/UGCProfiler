@@ -155,6 +155,8 @@ namespace Editor
             {
                 ButtonPresionar.IsEnabled = false;
                 ButtonSoltar.IsEnabled = false;
+                ButtonNormal.IsEnabled = false;
+                ButtonMantener.IsEnabled = false;
             }
 
         }
@@ -729,27 +731,88 @@ namespace Editor
 
         private void LeerTeclado()
         {
+            String s = "";
             bool[] buff = new bool[256];
             for (Key k = Key.Cancel; k <= Key.DeadCharProcessed; k++)
             {
                 if (Keyboard.IsKeyDown(k))
                     buff[KeyInterop.VirtualKeyFromKey(k)] = true;
             }
-            for (int i = 0; i < 256; i++)
+            teclas.Clear();
+            if (buff[0x10] && !buff[0xa0] && !buff[0xa1])
             {
-                if (buff[i])
-                    MapKey(i);
+                s += "May.";
+                teclas.Add(0x10);
             }
+            if (buff[0x11] && !buff[0xa2] && !buff[0xa3])
+            {
+                s += ((s == "") ? "" : " + ") + "Control" ;
+                teclas.Add(0x11);
+            }
+            if (buff[0x12] && !buff[0xa4] && !buff[0xa5])
+            {
+                s += ((s == "") ? "" : " + ") + "Alt";
+                teclas.Add(0x12);
+            }
+            if (buff[0xa0])
+            {
+                s += ((s == "") ? "" : " + ") + "May.I";
+                teclas.Add(0xa0);
+            }
+            if (buff[0xa1])
+            {
+                s += ((s == "") ? "" : " + ") + "May.D";
+                teclas.Add(0xa1);
+            }
+            if (buff[0xa2])
+            {
+                s += ((s == "") ? "" : " + ") + "ControlI";
+                teclas.Add(0xa2);
+            }
+            if (buff[0xa3])
+            {
+                s += ((s == "") ? "" : " + ") + "ControlD";
+                teclas.Add(0xa3);
+            }
+            if (buff[0xa4])
+            {
+                s += ((s == "") ? "" : " + ") + "AltI";
+                teclas.Add(0xa4);
+            }
+            if (buff[0xa5])
+            {
+                s += ((s == "") ? "" : " + ") + "AltD";
+                teclas.Add(0xa5);
+            }
+            if (buff[0x5b])
+            {
+                s += ((s == "") ? "" : " + ") + "WinI";
+                teclas.Add(0x5b);
+            }
+            if (buff[0x5c])
+            {
+                s += ((s == "") ? "" : " + ") + "WinD";
+                teclas.Add(0x5c);
+            }
+            for (ushort i = 0; i < 256; i++)
+            {
+                if (((i < 0x10) || (i > 0x12)) && (i != 0x5B) && (i != 0x5C) && ((i < 0xA0) || (i > 0xA5)))
+                {
+                    if (buff[i])
+                    {
+                        s += ((s == "") ? "" : " + ") + KeyInterop.KeyFromVirtualKey(i).ToString();
+                        teclas.Add((byte)i);
+                        ButtonNormal.Focus();
+                        break;
+                    }
+                }
+            }
+            TextBoxTecla.Text = s;
         }
 
-
         #region "Conversiones"
-        [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
-        private static extern uint MapVirtualKey(uint key, uint tipo);
-
         private int MapKey(int vkey)
         {
-            uint sc = MapVirtualKey(0xc, 0);
             //especiales 0xE0
             switch(vkey)
             {
@@ -757,7 +820,7 @@ namespace Editor
                 case 2: //Right mouse button
                     return -1;
                 case 3: // crtl+break
-                    return 72;
+                    return 0x47;
                 case 4: //Middle mouse button (three-button mouse)
                 case 5: //X1 mouse button
                 case 6: //X2 mouse button
@@ -783,10 +846,10 @@ namespace Editor
                     return 0xE0;
                 case 0x12: //alt
                     return 0xE2;
-                case 0x13: //CAPS LOCK key
-                    return 0x39;
-                case 0x14: //pausa
+                case 0x13: //pausa
                     return 0x48;
+                case 0x14: //CAPS LOCK key
+                    return 0x39;
                 case 0x15:
                 case 0x16:
                 case 0x17:
@@ -922,7 +985,7 @@ namespace Editor
                 case 0x5E:
                     return -1;
                 case 0x5f: //sleep
-                    return 0x66;
+                    return -1;
                 case 0x60: // kp 0
                     return 0x62;
                 case 0x61: //kp 1
@@ -946,7 +1009,7 @@ namespace Editor
                 case 0x6b: // kp +
                     return 0x57;
                 case 0x6c: //separator
-                    return -1;
+                    return 0x9f;
                 case 0x6d: //kp -
                     return 0x56;
                 case 0x6E: //kp.
@@ -1024,13 +1087,19 @@ namespace Editor
                 case 0xA4: //left alt
                     return 0xE2;
                 case 0xA5: //right alt
-                    return 0xE6;
+                    //return 0xE6;
                 case 0xa6:
+                    //return 0x72;
                 case 0xa7:
+                    //return 0x71;
                 case 0xa8:
+                    //return 0x6f;
                 case 0xa9:
+                    //return 0x70;
                 case 0xaa:
+                    //return 0x6d;
                 case 0xab:
+                    //return 0x6e;
                 case 0xac:
                     return -1;
                 case 0xad: //Volume Mute key
@@ -1047,41 +1116,43 @@ namespace Editor
                 case 0xb3:
                 case 0xb4:
                 case 0xb5:
+                    return -1;
                 case 0xb6:
+                    return 0x73;
                 case 0xb7:
                     return -1;
                 //0xb8 - 0xb9
                 case 0xba: //VK_OEM_1
-                    return -1;
+                    return 0x2f;
                 case 0xbb: //For any country/region, the '+' key
-                    return 0x2e;
+                    return 0x30;
                 case 0xbc: //For any country/region, the ',' key
                     return 0x36;
                 case 0xBD: //For any country/region, the '-' key
                     return 0x38;
                 case 0xbe: //For any country/region, the '.' key
-                    return 0x33;
-                case 0xbf: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '/?' key
                     return 0x37;
+                case 0xbf: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '/?' key
+                    return 0x32;
                 case 0xc0: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '`~' key
-                    return 0x31;
+                    return 0x33;
                 //0xc1 - 0xd7
                 //0xd8 - 0xda
                 case 0xdb: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '[{' key
-                    return 0x2f;
+                    return 0x2d;
                 case 0xdc: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '\|' key
                     return 0x35;
                 case 0xdd: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the ']}' key
-                    return 0x30;
+                    return 0x2e;
                 case 0xde: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the 'single-quote/double-quote' key
                     return 0x34;
                 case 0xdf: //Used for miscellaneous characters; it can vary by keyboard.
-                    return 0x2d;
+                    return -1;
                 //0xe0
                 case 0xe1: //OEM specific
                     return -1;
                 case 0xe2: //Either the angle bracket key or the backslash key on the RT 102-key keyboard
-                    return 0x32 ;
+                    return 0x64 ;
                 case 0xe3: //OEM specific
                 case 0xe4: //OEM specific
                     return -1;
@@ -1093,7 +1164,9 @@ namespace Editor
                     return -1;
                 //0xe8
                 case 0xe9: //OEM specific
-                case 0xea: //&he7
+                    return -1;
+                case 0xea: 
+                    return 0xe7;
                 case 0xeb:
                 case 0xec:
                 case 0xed:
@@ -1113,7 +1186,7 @@ namespace Editor
                 case 0xf8: //ExSel key
                     return 0xa4;
                 case 0xF9: //Erase EOF key
-                    return -1; //0x65
+                    return 0x6a; //0x65
                 case 0xfa: //Play key
                 case 0xfb: //Zoom key
                     return -1;

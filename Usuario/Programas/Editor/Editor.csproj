@@ -154,6 +154,8 @@
     <None Include="DSPerfil.xss">
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </None>
+    <None Include="Plantillas\english-us.kbp" />
+    <None Include="Plantillas\español-es.kbp" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

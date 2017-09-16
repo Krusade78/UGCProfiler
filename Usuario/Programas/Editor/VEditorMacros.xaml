@@ -55,7 +55,7 @@
                 <Label Content="Hora:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,50,0,0" Foreground="White" Padding="0,5,3,5"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,50,0,0">
                     <TextBox Width="19" Text="{Binding Value, ElementName=NumericUpDown11, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown11" Maximum="59" Minimum="0" SmallChange="1" Value="59" Height="26" />
+                    <ScrollBar x:Name="NumericUpDown11" Maximum="59" Minimum="0" SmallChange="1" Value="0" Height="26" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="224,50,0,0">
                     <TextBox Width="17" Text="{Binding Value, ElementName=NumericUpDown10, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
@@ -176,7 +176,7 @@
             <Grid TextElement.FontSize="11">
                 <Button Content="Aceptar" x:Name="ButtonAcepta" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="391,13,0,0" Width="75" Height="21" Click="ButtonAcepta_Click"/>
                 <RadioButton Content="Modo avanzado" x:Name="RadioButtonAvanzado" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="449,44,0,0" Foreground="White" Checked="RadioButtonAvanzado_Checked"/>
-                <RadioButton Content="Modo básico" x:Name="RadioButtonBasico" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="362,44,0,0" Foreground="White" Checked="RadioButtonBasico_Checked"/>
+                <RadioButton Content="Modo básico" x:Name="RadioButtonBasico" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="362,44,0,0" Foreground="White" Checked="RadioButtonBasico_Checked" IsChecked="True"/>
                 <CheckBox Content="Usar nombre en el MFD (16 caracteres)" x:Name="CheckBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,38,0,0" Foreground="White"/>
                 <TextBox x:Name="TextBoxNombre" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,13,0,0" Width="295" MaxLength="32" Background="Black" Foreground="GreenYellow" Height="20"/>
                 <Label Content="Nombre:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,9,0,0" Foreground="White"/>

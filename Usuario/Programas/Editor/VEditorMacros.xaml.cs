@@ -49,7 +49,8 @@ namespace Editor
 
         private void RadioButtonBasico_Checked(object sender, RoutedEventArgs e)
         {
-            PasarABasico();
+            if (this.IsLoaded)
+                PasarABasico();
         }
 
         private void RadioButtonAvanzado_Checked(object sender, RoutedEventArgs e)
@@ -62,7 +63,6 @@ namespace Editor
         {
             CargarPlantilla(vtSelPlantilla.SelectedIndex);
         }
-        #endregion
 
         private void ButtonPresionar_Click(object sender, RoutedEventArgs e)
         {
@@ -99,8 +99,6 @@ namespace Editor
         private bool teclasActivado = false;
         private void TextBoxTecla_LostFocus(object sender, RoutedEventArgs e)
         {
-            teclas.Clear();
-            TextBoxTecla.Text = "";
             TextBoxTecla.Background = System.Windows.Media.Brushes.Black;
             TextBoxTecla.Foreground = System.Windows.Media.Brushes.GreenYellow;
             TextBoxTecla.FontWeight = FontWeights.Normal;
@@ -111,7 +109,7 @@ namespace Editor
         {
             teclas.Clear();
             TextBoxTecla.Text = "";
-            TextBoxTecla.Background = System.Windows.Media.Brushes.GreenYellow;
+            TextBoxTecla.Background = System.Windows.Media.Brushes.LimeGreen;
             TextBoxTecla.Foreground = System.Windows.Media.Brushes.Black;
             TextBoxTecla.FontWeight = FontWeights.Bold;
             teclasActivado = true;
@@ -134,5 +132,6 @@ namespace Editor
                 e.Handled = true;
             }
         }
+        #endregion
     }
 }
