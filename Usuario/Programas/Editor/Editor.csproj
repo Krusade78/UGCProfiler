@@ -63,11 +63,20 @@
     </ApplicationDefinition>
     <Compile Include="CDatos.cs" />
     <Compile Include="CEnums.cs" />
-    <Compile Include="CtlAcelerador.xaml.cs">
+    <Compile Include="Controles\CtlAcelerador.xaml.cs">
       <DependentUpon>CtlAcelerador.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CtlJoystick.xaml.cs">
+    <Compile Include="Controles\CtlJoystick.xaml.cs">
       <DependentUpon>CtlJoystick.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\CtlPropiedades.xaml.cs">
+      <DependentUpon>CtlPropiedades.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CtlEditar.xaml.cs">
+      <DependentUpon>CtlEditar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CtlListar.xaml.cs">
+      <DependentUpon>CtlListar.xaml</DependentUpon>
     </Compile>
     <Compile Include="DSPerfil.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -75,24 +84,36 @@
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.Metodos.cs" />
-    <Compile Include="VEditorMacros.Metodos.cs" />
-    <Compile Include="VEditorMacros.xaml.cs">
+    <Compile Include="Ventanas\VEditorMacros.Metodos.cs" />
+    <Compile Include="Ventanas\VEditorMacros.xaml.cs">
       <DependentUpon>VEditorMacros.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VEditorModos.xaml.cs">
+    <Compile Include="Ventanas\VEditorModos.xaml.cs">
       <DependentUpon>VEditorModos.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VEditorRaton.xaml.cs">
+    <Compile Include="Ventanas\VEditorRaton.xaml.cs">
       <DependentUpon>VEditorRaton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VEditorSensibilidad.xaml.cs">
+    <Compile Include="Ventanas\VEditorSensibilidad.xaml.cs">
       <DependentUpon>VEditorSensibilidad.xaml</DependentUpon>
     </Compile>
-    <Page Include="CtlAcelerador.xaml">
+    <Page Include="Controles\CtlAcelerador.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CtlJoystick.xaml">
+    <Page Include="Controles\CtlJoystick.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\CtlPropiedades.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtlEditar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtlListar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -108,19 +129,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="VEditorMacros.xaml">
+    <Page Include="Ventanas\VEditorMacros.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VEditorModos.xaml">
+    <Page Include="Ventanas\VEditorModos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VEditorRaton.xaml">
+    <Page Include="Ventanas\VEditorRaton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VEditorSensibilidad.xaml">
+    <Page Include="Ventanas\VEditorSensibilidad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,14 +188,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\bajar.gif" />
-    <Resource Include="res\barra.png" />
-    <Resource Include="res\bg_f15.png" />
-    <Resource Include="res\bg_mfd.png" />
     <Resource Include="res\CompileHS.png" />
     <Resource Include="res\DeleteHS.png" />
-    <Resource Include="res\EditInformationHS.png" />
+    <Resource Include="res\Modos.png" />
     <Resource Include="res\editor.ico" />
-    <Resource Include="res\EditTableHS.png" />
+    <Resource Include="res\Edicion.png" />
     <Resource Include="res\f1.gif" />
     <Resource Include="res\f2.gif" />
     <Resource Include="res\f3.gif" />
@@ -188,8 +206,7 @@
     <Resource Include="res\LaunchHS.png" />
     <Resource Include="res\mouse.png" />
     <Resource Include="res\subir.gif" />
-    <Resource Include="res\TableHS.png" />
-    <Resource Include="res\x52.png" />
+    <Resource Include="res\Listado.png" />
     <Resource Include="res\x52j.png" />
     <Resource Include="res\x52t.png" />
   </ItemGroup>

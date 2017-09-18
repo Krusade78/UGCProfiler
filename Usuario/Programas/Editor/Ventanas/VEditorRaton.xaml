@@ -1,0 +1,25 @@
+﻿<Window x:Class="Editor.VEditorRaton" x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Editor"
+        Title="Configuración del ratón" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" Loaded="Window_Loaded" FontFamily="OCR A Extended">
+    <Window.Background>
+        <ImageBrush ImageSource="/Editor;component/res/CalibrationGrid.JPG"/>
+    </Window.Background>
+    <Grid Height="165" Width="430">
+        <Grid.Background>
+            <RadialGradientBrush>
+            <GradientStop Color="#E0323232" Offset="1"/>
+            <GradientStop Color="#E0666666"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+        <TextBlock Text="Este control sirve para ralentizar el movimiento del ratón. Valores altos moverán el ratón más despacio y valores más bajos lo moverán más rápido. La forma recomendada de hacer esto es usando el control de sensibilidad del eje, pero si necesitas más precisión podrías necesitar modificar este valor." Height="72" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10" Foreground="#FFE6E6E6" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,94,0,0">
+            <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDown1, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
+            <ScrollBar x:Name="NumericUpDown1" Maximum="125" Minimum="1" SmallChange="1" Value="1" Height="26" />
+        </StackPanel>
+        <Button Margin="67,132,243,10" Width="120" Content="Aceptar" Click="Button1_Click" />
+        <Button Width="120" Content="Cancelar" Margin="238,132,72,10" Click="Button2_Click" />
+    </Grid>
+</Window>

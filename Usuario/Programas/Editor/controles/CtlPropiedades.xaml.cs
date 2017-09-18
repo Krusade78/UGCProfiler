@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Editor
 {
     /// <summary>
-    /// Lógica de interacción para VEditorModos.xaml
+    /// Lógica de interacción para CtlEdicionElemento.xaml
     /// </summary>
-    public partial class VEditorModos : Window
+    public partial class CtlEdicionElemento : UserControl
     {
-        public VEditorModos()
+        public CtlEdicionElemento()
         {
             InitializeComponent();
         }

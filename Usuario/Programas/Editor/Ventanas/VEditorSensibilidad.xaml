@@ -3,14 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Editor"
-        Title="Curva de sensibilidad" SizeToContent="WidthAndHeight" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow">
+        Title="Curva de sensibilidad" SizeToContent="WidthAndHeight" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" FontFamily="OCR A Extended">
     <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FF1F7AD4" Offset="1"/>
-            <GradientStop Color="#FF0054A8"/>
-        </LinearGradientBrush>
+        <ImageBrush ImageSource="/Editor;component/res/CalibrationGrid.JPG"/>
     </Window.Background>
     <Grid Height="250" Width="500">
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#E0323232" Offset="1"/>
+                <GradientStop Color="#E0666666"/>
+            </RadialGradientBrush>
+        </Grid.Background>
         <Grid Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -75,7 +78,7 @@
                 <Label Content="{Binding Value, ElementName=TrackBar10}" HorizontalAlignment="Center" BorderBrush="#FFDEDEDE" Background="Black" Foreground="GreenYellow" BorderThickness="1" FontSize="11" Width="30" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
             </StackPanel>
         </Grid>
-        <Button x:Name="Button1" Width="120" Content="Aceptar" Click="Button1_Click" VerticalAlignment="Bottom" Margin="110,0,270,10" />
-        <Button x:Name="Button2" Width="120" Content="Cancelar" Click="Button2_Click" VerticalAlignment="Bottom" Margin="270,0,110,10" />
+        <Button x:Name="Button1" Width="120" Content="Aceptar" Click="Button1_Click" VerticalAlignment="Bottom" Margin="110,0,270,10" Height="22" />
+        <Button x:Name="Button2" Width="120" Content="Cancelar" Click="Button2_Click" VerticalAlignment="Bottom" Margin="270,0,110,10" Height="22"/>
     </Grid>
 </Window>

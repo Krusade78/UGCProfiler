@@ -1201,5 +1201,125 @@ namespace Editor
         }
         #endregion
         #endregion
-}
+
+        #region "comandos estado"
+        private void Mantener()
+        {
+            if (macro.Count > 237)
+                return;
+
+            int idc = GetIndice();
+            int reps = 0;
+            for (int i = 0; i <= (idc - 1); i++)
+            {
+                if (((TipoC)macro[i] == TipoC.TipoComando_Repeat) || ((TipoC)macro[i] == TipoC.TipoComando_Hold))
+                {
+                    MessageBox.Show("Mantener y Repetir no pueden producirse a la vez", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatN)
+                    reps++;
+                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatNFin)
+                    reps--;
+            }
+            if (reps == 0)
+            {
+                macro.Insert(idc, (byte)TipoC.TipoComando_Hold);
+                CargarLista();
+            }
+            else
+                MessageBox.Show("Mantener no puede estar dentro de Repetir N.", "Advertencias", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void Repetir()
+        {
+            if (macro.Count > 236)
+                return;
+
+            int idc = GetIndice();
+            int reps = 0;
+            for (int i = 0; i <= (idc - 1); i++)
+            {
+                if (((TipoC)macro[i] == TipoC.TipoComando_Repeat) || ((TipoC)macro[i] == TipoC.TipoComando_Hold))
+                {
+                    MessageBox.Show("Mantener y Repetir no pueden producirse a la vez", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatN)
+                    reps++;
+                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatNFin)
+                    reps--;
+            }
+            if (reps == 0)
+            {
+                macro.Insert(idc, (byte)TipoC.TipoComando_Repeat);
+                macro.Insert(idc + 1, (byte)TipoC.TipoComando_RepeatFin);
+                CargarLista();
+            }
+            else
+                MessageBox.Show("repetir no puede estar dentro de Repetir N.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        #endregion
+
+        #region "MFD"
+        private void Linea()
+        {
+            if ((macro.Count + 2 + TextBox3.Text.Length) > 237)
+                return;
+
+            int idc = GetIndice();
+            macro.Insert(idc, (ushort)((byte)TipoC.TipoComando_MfdTexto + ((ushort)NumericUpDown9.Value << 8)));
+            byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(TextBox3.Text));
+            for (byte i = 0; i < TextBox3.Text.Length; i++)
+                macro.Insert(idc + i + 1, (ushort)((byte)TipoC.TipoComando_MfdTexto + (stb[i] << 8)));
+
+            macro.Insert(idc + stb.Length, (byte)TipoC.TipoComando_MfdTextoFin);
+            CargarLista();
+        }
+
+        private void Hora(bool f24h)
+        {
+            if (macro.Count > 235)
+                return;
+            if ((NumericUpDown10.Value < 0) && (NumericUpDown7.Value == 1))
+            {
+                MessageBox.Show("El reloj 1 no puede tener horas negativas.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            int idc = GetIndice();
+            TipoC tipo = (f24h) ? TipoC.TipoComando_MfdHora24 : TipoC.TipoComando_MfdHora;
+            macro.Insert(idc, (ushort)((byte)tipo + ((ushort)NumericUpDown7.Value << 8)));
+            if (NumericUpDown7.Value == 1)
+            {
+                macro.Insert(idc + 1, (ushort)((byte)tipo + ((ushort)NumericUpDown10.Value << 8)));
+                macro.Insert(idc + 2, (ushort)((byte)tipo + ((ushort)NumericUpDown11.Value << 8)));
+            }
+            else
+            {
+                int minutos = (int)((NumericUpDown10.Value * 60) + NumericUpDown11.Value);
+                if (minutos < 0)
+                {
+                    macro.Insert(idc + 1, (ushort)((byte)tipo + ((((ushort)-minutos >> 8) + 4) << 8) ));
+                    macro.Insert(idc + 2, (ushort)((byte)tipo + (((ushort)-minutos & 0xff) << 8) ));
+                }
+                else
+                {
+                    macro.Insert(idc + 1, (ushort)((byte)tipo + ((((ushort)minutos >> 8)) << 8)));
+                    macro.Insert(idc + 2, (ushort)((byte)tipo + (((ushort)minutos & 0xff) << 8)));
+                }
+            }
+            CargarLista();
+        }
+
+        private void Fecha(ushort f)
+        {
+            if (macro.Count > 236) return;
+            int idc = GetIndice();
+            macro.Insert(idc, (ushort)((byte)TipoC.TipoComando_MfdFecha + (f << 8)));
+            macro.Insert(idc + 1, (ushort)((byte)TipoC.TipoComando_MfdFecha + ((ushort)NumericUpDown13.Value << 8)));
+            CargarLista();
+        }
+        #endregion
+    }
 }

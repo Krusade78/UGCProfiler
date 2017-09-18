@@ -75,6 +75,36 @@
               <xs:element name="MFDFecha" msprop:Generator_ColumnVarNameInTable="columnMFDFecha" msprop:Generator_ColumnPropNameInRow="MFDFecha" msprop:Generator_ColumnPropNameInTable="MFDFechaColumn" msprop:Generator_UserColumnName="MFDFecha" type="xs:boolean" />
               <xs:element name="MFDHora" msprop:Generator_ColumnVarNameInTable="columnMFDHora" msprop:Generator_ColumnPropNameInRow="MFDHora" msprop:Generator_ColumnPropNameInTable="MFDHoraColumn" msprop:Generator_UserColumnName="MFDHora" type="xs:boolean" />
               <xs:element name="MFDCronometro" msprop:Generator_ColumnVarNameInTable="columnMFDCronometro" msprop:Generator_ColumnPropNameInRow="MFDCronometro" msprop:Generator_ColumnPropNameInTable="MFDCronometroColumn" msprop:Generator_UserColumnName="MFDCronometro" type="xs:boolean" />
+              <xs:element name="PinkieActivado" msprop:Generator_ColumnVarNameInTable="columnPinkieActivado" msprop:Generator_ColumnPropNameInRow="PinkieActivado" msprop:Generator_ColumnPropNameInTable="PinkieActivadoColumn" msprop:Generator_UserColumnName="PinkieActivado" type="xs:boolean" default="false" />
+              <xs:element name="NombrePinkie" msprop:Generator_ColumnVarNameInTable="columnNombrePinkie" msprop:Generator_ColumnPropNameInRow="NombrePinkie" msprop:Generator_ColumnPropNameInTable="NombrePinkieColumn" msprop:Generator_UserColumnName="NombrePinkie" default="Pinkie">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="16" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ModosActivado" msprop:Generator_ColumnVarNameInTable="columnModosActivado" msprop:Generator_ColumnPropNameInRow="ModosActivado" msprop:Generator_ColumnPropNameInTable="ModosActivadoColumn" msprop:Generator_UserColumnName="ModosActivado" type="xs:boolean" default="false" />
+              <xs:element name="NombreModo1" msprop:Generator_ColumnVarNameInTable="columnNombreModo1" msprop:Generator_ColumnPropNameInRow="NombreModo1" msprop:Generator_ColumnPropNameInTable="NombreModo1Column" msprop:Generator_UserColumnName="NombreModo1" default="Modo 1">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="16" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="NombreModo2" msprop:Generator_ColumnVarNameInTable="columnNombreModo2" msprop:Generator_ColumnPropNameInRow="NombreModo2" msprop:Generator_ColumnPropNameInTable="NombreModo2Column" msprop:Generator_UserColumnName="NombreModo2" default="Modo 2">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="16" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="NombreModo3" msprop:Generator_ColumnVarNameInTable="columnNombreModo3" msprop:Generator_ColumnPropNameInRow="NombreModo3" msprop:Generator_ColumnPropNameInTable="NombreModo3Column" msprop:Generator_UserColumnName="NombreModo3" default="Modo 3">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="16" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>

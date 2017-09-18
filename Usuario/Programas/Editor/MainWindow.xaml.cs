@@ -48,10 +48,7 @@ namespace Editor
 
         private void RibbonButtonNuevo_Click(object sender, RoutedEventArgs e)
         {
-            VEditorMacros wnd = new VEditorMacros(-1);
-            wnd.Owner = this;
-            wnd.ShowDialog();
-            //Nuevo();
+            Nuevo();
         }
         private void RibbonButtonAbrir_Click(object sender, RoutedEventArgs e)
         {
@@ -71,20 +68,18 @@ namespace Editor
             //imp.PreVer();
         }
 
+        #region "Perfil"
         private void RibbonButtonLanzar_Click(object sender, RoutedEventArgs e)
         {
             //Lanzar();
         }
-        private void RibbonButtonModos_Click(object sender, RoutedEventArgs e)
-        {
-            //byte b;
-            //byte old = datos.GetModosDefecto();
-            //VEditorModos v = new VEditorModos();
-            //v.Owner = this;
-            //v.ShowDialog();
-            //b = datos.GetModosDefecto();
-            //if (b != old) Vista.RefrescarModos();
-        }
+        //private void RibbonButtonModos_Click(object sender, RoutedEventArgs e)
+        //{
+        //    VEditorModos v = new VEditorModos();
+        //    v.Owner = this;
+        //    if (v.ShowDialog();
+        //    RefrescarModos();
+        //}
         private void RibbonButtonRaton_Click(object sender, RoutedEventArgs e)
         {
             VEditorRaton v = new VEditorRaton();
@@ -110,5 +105,6 @@ namespace Editor
             //    Fondo.Visible = False;
             //}
         }
+        #endregion
     }
 }

@@ -3,61 +3,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" 
-        Title="Editor" Height="530" Width="754" Icon="res/editor.ico" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing">
+        xmlns:local="clr-namespace:Editor"
+        Title="Editor" Height="530" Width="754" Icon="res/editor.ico" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing" FontFamily="OCR A Extended">
     <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FF004DAA" Offset="0"/>
-            <GradientStop Color="#FF83B5F1" Offset="1"/>
-        </LinearGradientBrush>
+        <ImageBrush ImageSource="res/CalibrationGrid.JPG"/>
     </Window.Background>
-    <StackPanel>
+    <Grid>
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#F0323232" Offset="1"/>
+                <GradientStop Color="#F0666666"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <Grid>
-            <ToolBarTray>
-                <ToolBar ToolBarTray.IsLocked="True">
-                    <ToolBarPanel ToolBar.OverflowMode="Never">
-                        <StackPanel  ToolBar.OverflowMode="Never">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Horizontal">
-                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Nuevo" Click="RibbonButtonNuevo_Click" />
-                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Abrir" Click="RibbonButtonAbrir_Click" />
-                                    <RibbonButton LargeImageSource="res/nuevo.ico" Label="Guardar" Click="RibbonButtonGuardar_Click" />
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" ToolTip="Guardar como" Click="RibbonButtonGuardarComo_Click" />
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" ToolTip="Imprimir" Click="RibbonButtonImprimir_Click" />
-                                </StackPanel>
-                            </StackPanel>
-                            <TextBlock Text="Archivo" HorizontalAlignment="Center" Foreground="Gray" />
-                        </StackPanel>
-                    </ToolBarPanel>
-                </ToolBar>
-                <ToolBar Background="{x:Null}">
-                    <ToolBarPanel>
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Lanzar" Click="RibbonButtonLanzar_Click" />
-                                <StackPanel Orientation="Vertical">
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" Label="Modos" Click="RibbonButtonModos_Click" />
-                                    <RibbonButton SmallImageSource="res/nuevo.ico" Label="Ratón" Click="RibbonButtonRaton_Click" />
-                                </StackPanel>
-                            </StackPanel>
-                            <TextBlock Text="Perfil" HorizontalAlignment="Center"  Foreground="Gray" />
-                        </StackPanel>
-                    </ToolBarPanel>
-                </ToolBar>
-                <ToolBar Background="{x:Null}">
-                    <ToolBarPanel>
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Edición" Click="RibbonButtonEdicion_Click" />
-                                <RibbonButton LargeImageSource="res/nuevo.ico" Label="Listado" Click="RibbonButtonListado_Click"/>
-                            </StackPanel>
-                            <TextBlock Text="Vista" HorizontalAlignment="Center" Foreground="Gray"  />
-                        </StackPanel>
-                    </ToolBarPanel>
-                </ToolBar>
-            </ToolBarTray>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Ribbon Background="#FF5F9154">
+                <Ribbon.ApplicationMenu>
+                    <RibbonApplicationMenu Visibility="Collapsed" />
+                </Ribbon.ApplicationMenu>
+                <RibbonTab>
+                    <RibbonTab.Header>
+                        <RibbonTabHeader Visibility="Collapsed" />
+                    </RibbonTab.Header>
+                    <RibbonGroup Header="Archivo">
+                        <RibbonButton LargeImageSource="res/nuevo.ico" Label="Nuevo" Click="RibbonButtonNuevo_Click" />
+                        <RibbonButton LargeImageSource="res/abrir.ico" Label="Abrir" Click="RibbonButtonAbrir_Click" />
+                        <RibbonButton LargeImageSource="res/guardar.ico" Label="Guardar" Click="RibbonButtonGuardar_Click" />
+                        <RibbonButton SmallImageSource="res/guardar.ico" ToolTip="Guardar como" Click="RibbonButtonGuardarComo_Click" />
+                        <RibbonButton SmallImageSource="res/imprimir.ico" ToolTip="Imprimir" Click="RibbonButtonImprimir_Click" />
+                    </RibbonGroup>
+                    <RibbonGroup Header="Perfil">
+                        <RibbonButton LargeImageSource="res/LaunchHS.png" Label="Lanzar" Click="RibbonButtonLanzar_Click" />
+                        <RibbonButton SmallImageSource="res/modos.png" Label="Modos" Click="RibbonButtonModos_Click" />
+                        <RibbonButton SmallImageSource="res/mouse.png" Label="Ratón" Click="RibbonButtonRaton_Click" />
+                    </RibbonGroup>
+                    <RibbonGroup Header="Vista">
+                        <RibbonToggleButton LargeImageSource="res/Edicion.png" Label="Edición" Click="RibbonButtonEdicion_Click" IsChecked="True" />
+                        <RibbonToggleButton LargeImageSource="res/Listado.png" Label="Listado" Click="RibbonButtonListado_Click"/>
+                    </RibbonGroup>
+                </RibbonTab>
+            </Ribbon>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,40,10,20">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF006AA6" Offset="0"/>
@@ -66,28 +55,16 @@
                 </StackPanel.Background>
                 <Label Content="Modo actual:" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" />
                 <ComboBox SelectedIndex="0" IsReadOnly="True" VerticalContentAlignment="Center">
-                    <ComboBoxItem Content="Sin Pinkie" />
-                    <ComboBoxItem Content="Pinkie On" />
                     <ComboBoxItem Content="Pinkie Off" />
+                    <ComboBoxItem Content="Pinkie On" />
                 </ComboBox>
                 <ComboBox SelectedIndex="0" IsReadOnly="True" VerticalContentAlignment="Center" Background="{x:Null}">
-                    <ComboBoxItem Content="Sin modos" />
+                    <ComboBoxItem Content="Modo 1" />
+                    <ComboBoxItem Content="Modo 2" />
+                    <ComboBoxItem Content="Modo 3" />
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions> 
-        </Grid>
-        <TabControl>
-            <TabItem Header="Joy">
-            </TabItem>
-            <TabItem Header="Acel" />
-        </TabControl>
-        <Grid Grid.Column="1">
-            
-        </Grid>
-    </StackPanel>
+        <Grid Grid.Row="1" x:Name="gridVista" />
+    </Grid>
 </Window>

@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Editor.CtlEdicionElemento"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:Editor"
+             Height="476" Width="240">
+    <Grid>
+        <Grid x:Name="PanelMacros" Width="240" Height="210">
+            <Label x:Name="LabelPosition" />
+            <Label x:Name="LabelAssigned" />
+            <RadioButton x:Name="RadioButton2" />
+            <Label x:Name="LabelMacro" />
+            <RadioButton x:Name="RadioButton1" />
+            <ComboBox x:Name="ComboBoxAssigned" />
+            <ComboBox x:Name="ComboBoxMacro" />
+            <Button x:Name="ButtonDelete" />
+            <Button x:Name="ButtonEdit" />
+            <Button x:Name="ButtonAdd" />
+        </Grid>
+    </Grid>
+</UserControl>
