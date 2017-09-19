@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Editor"
-        Title="Editor de modos" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" FontFamily="OCR A Extended" Loaded="Window_Loaded">
+        Title="Editor de modos" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" Loaded="Window_Loaded">
     <Window.Background>
         <ImageBrush ImageSource="/Editor;component/res/CalibrationGrid.JPG"/>
     </Window.Background>
@@ -17,32 +17,32 @@
         <GroupBox Header="Pinkie" VerticalAlignment="Top" Foreground="Gold" Margin="10">
             <Grid Margin="5">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="5" IsEnabled="{Binding IsChecked, ElementName=checkBox}">
-                    <Label Content="Nombre:" Foreground="White"/>
+                    <Label Content="Nombre:" Foreground="Gainsboro"/>
                     <TextBox x:Name="TextBox1" Text="Pinkie" ToolTip="TextBox1" Width="150" MaxLength="15" Background="Black" Foreground="GreenYellow" VerticalContentAlignment="Center" />
                 </StackPanel>
-                <CheckBox x:Name="CheckBox1" Content="Activar" VerticalAlignment="Top" Margin="15,35,0,0" ToolTip="CheckBox1" Foreground="White" VerticalContentAlignment="Center" />
+                <CheckBox x:Name="CheckBox1" Content="Activar" VerticalAlignment="Top" Margin="15,35,0,0" ToolTip="CheckBox1" Foreground="Gainsboro" VerticalContentAlignment="Center" />
             </Grid>
         </GroupBox>
         <GroupBox Header="Modos" VerticalAlignment="Top" Margin="10,90,10,0" Foreground="Gold">
             <Grid Margin="5">
                 <StackPanel Margin="5" IsEnabled="{Binding IsChecked, ElementName=checkBox1}">
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Nombre Modo 1:" Foreground="White" />
+                        <Label Content="Nombre Modo 1:" Foreground="Gainsboro" />
                         <TextBox x:Name="TextBox2" Text="Modo 1" ToolTip="TextBox2" Width="150" MaxLength="16" Background="Black" Foreground="GreenYellow" VerticalContentAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,4">
-                        <Label Content="Nombre Modo 2:" Foreground="White" />
+                        <Label Content="Nombre Modo 2:" Foreground="Gainsboro" />
                         <TextBox x:Name="TextBox3" Text="Modo 2" ToolTip="TextBox3" Width="150" MaxLength="16" Background="Black" Foreground="GreenYellow" VerticalContentAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Nombre Modo 3:" Foreground="White" />
+                        <Label Content="Nombre Modo 3:" Foreground="Gainsboro" />
                         <TextBox x:Name="TextBox4" Text="Modo 3" ToolTip="TextBox4" Width="150" MaxLength="16" Background="Black" Foreground="GreenYellow" VerticalContentAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
-                <CheckBox x:Name="CheckBox2" Content="Activar" VerticalAlignment="Top" Margin="15,90,0,0" ToolTip="CheckBox2" Foreground="White" VerticalContentAlignment="Center" />
+                <CheckBox x:Name="CheckBox2" Content="Activar" VerticalAlignment="Top" Margin="15,93,0,0" ToolTip="CheckBox2" Foreground="Gainsboro" VerticalContentAlignment="Center" />
             </Grid>
         </GroupBox>
-        <Button Content="Cancelar" HorizontalAlignment="Right" VerticalAlignment="Top" Width="131" Height="23" Margin="0,240,5,10" Click="ButtonCancelar_Click" />
-        <Button Content="Guardar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,240,0,10" Width="131" Height="23" Click="ButtonGuardar_Click" />
+        <Button Content="Cancelar" HorizontalAlignment="Right" VerticalAlignment="Top" Width="131" Height="23" Margin="0,240,5,10" Click="ButtonCancelar_Click" Background="Linen" Foreground="#FF762626" />
+        <Button Content="Guardar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,240,0,10" Width="131" Height="23" Click="ButtonGuardar_Click" Background="Linen" Foreground="#FF762626"/>
     </Grid>
 </Window>

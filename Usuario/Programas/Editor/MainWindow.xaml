@@ -1,10 +1,10 @@
-﻿<Window x:Class="Editor.MainWindow"
+﻿<Window x:Class="Editor.MainWindow" x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" 
         xmlns:local="clr-namespace:Editor"
-        Title="Editor" Height="530" Width="754" Icon="res/editor.ico" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing" FontFamily="OCR A Extended">
+        Title="Editor" Height="700" Width="830" Icon="res/editor.ico" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="NoResize">
     <Window.Background>
         <ImageBrush ImageSource="res/CalibrationGrid.JPG"/>
     </Window.Background>
@@ -20,7 +20,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid>
-            <Ribbon Background="#FF5F9154">
+            <Ribbon Background="#FF246FB9" Foreground="#FF001B49">
                 <Ribbon.ApplicationMenu>
                     <RibbonApplicationMenu Visibility="Collapsed" />
                 </Ribbon.ApplicationMenu>
@@ -28,21 +28,30 @@
                     <RibbonTab.Header>
                         <RibbonTabHeader Visibility="Collapsed" />
                     </RibbonTab.Header>
-                    <RibbonGroup Header="Archivo">
+                    <RibbonGroup>
+                        <RibbonGroup.Header>
+                            <TextBlock Text="Archivo" Foreground="#FF4E5A6E" />
+                        </RibbonGroup.Header>
                         <RibbonButton LargeImageSource="res/nuevo.ico" Label="Nuevo" Click="RibbonButtonNuevo_Click" />
                         <RibbonButton LargeImageSource="res/abrir.ico" Label="Abrir" Click="RibbonButtonAbrir_Click" />
                         <RibbonButton LargeImageSource="res/guardar.ico" Label="Guardar" Click="RibbonButtonGuardar_Click" />
                         <RibbonButton SmallImageSource="res/guardar.ico" ToolTip="Guardar como" Click="RibbonButtonGuardarComo_Click" />
                         <RibbonButton SmallImageSource="res/imprimir.ico" ToolTip="Imprimir" Click="RibbonButtonImprimir_Click" />
                     </RibbonGroup>
-                    <RibbonGroup Header="Perfil">
+                    <RibbonGroup>
+                        <RibbonGroup.Header>
+                            <TextBlock Text="Perfil" Foreground="#FF4E5A6E" />
+                        </RibbonGroup.Header>
                         <RibbonButton LargeImageSource="res/LaunchHS.png" Label="Lanzar" Click="RibbonButtonLanzar_Click" />
-                        <RibbonButton SmallImageSource="res/modos.png" Label="Modos" Click="RibbonButtonModos_Click" />
+                        <!--<RibbonButton SmallImageSource="res/modos.png" Label="Modos" Click="RibbonButtonModos_Click" />-->
                         <RibbonButton SmallImageSource="res/mouse.png" Label="Ratón" Click="RibbonButtonRaton_Click" />
                     </RibbonGroup>
-                    <RibbonGroup Header="Vista">
-                        <RibbonToggleButton LargeImageSource="res/Edicion.png" Label="Edición" Click="RibbonButtonEdicion_Click" IsChecked="True" />
-                        <RibbonToggleButton LargeImageSource="res/Listado.png" Label="Listado" Click="RibbonButtonListado_Click"/>
+                    <RibbonGroup>
+                        <RibbonGroup.Header>
+                            <TextBlock Text="Vista" Foreground="#FF4E5A6E" />
+                        </RibbonGroup.Header>
+                        <RibbonToggleButton x:Name="rtbEdicion" LargeImageSource="res/Edicion.png" Label="Edición" IsChecked="True" Checked="rtbEdicion_Checked" />
+                        <RibbonToggleButton x:Name="rtbListado" LargeImageSource="res/Listado.png" Label="Listado" Checked="rtbListado_Checked"/>
                     </RibbonGroup>
                 </RibbonTab>
             </Ribbon>
@@ -54,11 +63,11 @@
                     </LinearGradientBrush>
                 </StackPanel.Background>
                 <Label Content="Modo actual:" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" />
-                <ComboBox SelectedIndex="0" IsReadOnly="True" VerticalContentAlignment="Center">
+                <ComboBox x:Name="cbPinkie" SelectedIndex="0" IsReadOnly="True" VerticalContentAlignment="Center" SelectionChanged="cbModo_SelectionChanged">
                     <ComboBoxItem Content="Pinkie Off" />
                     <ComboBoxItem Content="Pinkie On" />
                 </ComboBox>
-                <ComboBox SelectedIndex="0" IsReadOnly="True" VerticalContentAlignment="Center" Background="{x:Null}">
+                <ComboBox x:Name="cbModo" SelectedIndex="0" IsReadOnly="True" VerticalContentAlignment="Center" Background="{x:Null}" SelectionChanged="cbModo_SelectionChanged">
                     <ComboBoxItem Content="Modo 1" />
                     <ComboBoxItem Content="Modo 2" />
                     <ComboBoxItem Content="Modo 3" />

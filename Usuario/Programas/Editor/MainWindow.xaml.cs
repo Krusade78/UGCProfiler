@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor
 {
     /// <summary>
     /// Lógica de interacción para MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    internal partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -46,6 +35,7 @@ namespace Editor
             }
         }
 
+        #region "Archivo"
         private void RibbonButtonNuevo_Click(object sender, RoutedEventArgs e)
         {
             Nuevo();
@@ -60,18 +50,19 @@ namespace Editor
         }
         private void RibbonButtonGuardarComo_Click(object sender, RoutedEventArgs e)
         {
-            //GuardarComo();
+            GuardarComo();
         }
         private void RibbonButtonImprimir_Click(object sender, RoutedEventArgs e)
         {
             //VImprimir imp = new VImprimir();
             //imp.PreVer();
         }
+        #endregion
 
         #region "Perfil"
         private void RibbonButtonLanzar_Click(object sender, RoutedEventArgs e)
         {
-            //Lanzar();
+            Lanzar();
         }
         //private void RibbonButtonModos_Click(object sender, RoutedEventArgs e)
         //{
@@ -86,25 +77,40 @@ namespace Editor
             v.Owner = this;
             v.ShowDialog();
         }
+        #endregion
 
-        private void RibbonButtonEdicion_Click(object sender, RoutedEventArgs e)
+        #region "Vista"
+        private void rtbEdicion_Checked(object sender, RoutedEventArgs e)
         {
-            //if (report != null)
-            //{
-            //    Fondo.Visible = True;
-            //    this.Controls.Remove(report);
-            //    report = null;
-            //}
+            rtbListado.IsChecked = false;
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            {
+                if (gridVista.Children.Count != 0)
+                {
+                    ((IDisposable)gridVista.Children[0]).Dispose();
+                    gridVista.Children.Clear();
+                }
+                gridVista.Children.Add(new CtlEditar());
+            }
         }
-        private void RibbonButtonListado_Click(object sender, RoutedEventArgs e)
+        private void rtbListado_Checked(object sender, RoutedEventArgs e)
         {
-            //if (report == null)
-            //{
-            //    report = new VistaReport();
-            //    this.Controls.Add(report);
-            //    Fondo.Visible = False;
-            //}
+            rtbEdicion.IsChecked = false;
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            {
+                if (gridVista.Children.Count != 0)
+                {
+                    ((IDisposable)gridVista.Children[0]).Dispose();
+                    gridVista.Children.Clear();
+                }
+                gridVista.Children.Add(new CtlListar());
+            }
         }
         #endregion
+
+        private void cbModo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetModos();
+        }
     }
 }

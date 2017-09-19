@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Editor.CtlEditar"
+﻿<UserControl x:Class="Editor.CtlEditar" x:ClassModifier="internal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,8 +11,8 @@
         <TabControl Background="{x:Null}">
             <TabItem>
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="res/x52j.png" Height="18" />
+                    <StackPanel Orientation="Horizontal" Width="150">
+                        <Image Source="/Editor;component/res/x52j.png" Height="18" />
                         <TextBlock Text="Joystick" />
                     </StackPanel>
                 </TabItem.Header>
@@ -20,8 +20,8 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="res/x52t.png" Height="18" />
+                    <StackPanel Orientation="Horizontal" Width="150">
+                        <Image Source="/Editor;component/res/x52t.png" Height="18" />
                         <TextBlock Text="Acelerador" />
                     </StackPanel>
                 </TabItem.Header>
@@ -31,7 +31,7 @@
 
         <Grid Grid.Column="1" Width="240">
             <GridSplitter HorizontalAlignment="Left" Width="3"/>
-            <local:CtlEdicionElemento x:Name="ctlEdicion" />
+            <local:CtlPropiedades x:Name="ctlPropiedades" />
         </Grid>
     </Grid>
 </UserControl>

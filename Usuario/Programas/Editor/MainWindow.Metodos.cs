@@ -3,11 +3,10 @@ using System.Windows;
 
 namespace Editor
 {
-    public partial class MainWindow
+    internal partial class MainWindow
     {
         private CDatos datos = new CDatos();
-        //private bool esNuevo = true;
-        //private Object report = null;
+        private String nombrePerfil = "";
 
         internal CDatos GetDatos()
         {
@@ -16,7 +15,7 @@ namespace Editor
 
         private void Nuevo()
         {
-            if (datos != null)
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
             {
                 MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (r == MessageBoxResult.Cancel)
@@ -26,27 +25,21 @@ namespace Editor
                     if (!Guardar())
                         return;
                 }
-                datos.Perfil.Clear();
             }
 
             datos.Nuevo();
+            if (gridVista.Children.Count != 0)
+            {
+                ((IDisposable)gridVista.Children[0]).Dispose();
+                gridVista.Children.Clear();
+            }
 
-            //Label1.Visible = False
-            //RadioButton13.Visible = False
-            //RadioButton14.Visible = False
-            //ComboBoxMacro.Items.Clear()
-            //ComboBoxAssigned.Items.Clear()
-            //ComboBoxAssigned.Items.Add("</------- " & Traduce.Txt("none") & " -------/>")
-            //ComboBoxAssigned.SelectedIndex = 0
-            //If parteJoy IsNot Nothing Then Fondo.Controls.Remove(parteJoy) : Me.Propiedades.Enabled = False
-            //Vista.Clear(False);
+            rtbEdicion.IsChecked = false;
+            rtbListado.IsChecked = false;
+            rtbEdicion.IsChecked = true;
+
             this.Title = "Editor de perfiles - [Sin nombre]";
-            //esNuevo = true;
-            //if (report != null)
-            //{
-            //    Fondo.Visible = True;
-            //    Me.Controls.Remove(report);
-            //}
+            nombrePerfil = "";
         }
 
         private void Abrir(String archivo = null)
@@ -71,94 +64,90 @@ namespace Editor
             }
             if (archivo != null)
             {
-                //ComboBoxMacro.Items.Clear()
-                //ComboBoxAssigned.Items.Clear()
-                //ComboBoxAssigned.Items.Add("</------- " & Traduce.Txt("none") & " -------/>")
-                //ComboBoxAssigned.SelectedIndex = 0
-                //if (datos.CargarArchivo(archivo, ComboBoxAssigned, ComboBoxMacro))
-                //{
-                    //    if (report != null) // 'a vista normal
-                    //    {
-                    //        Fondo.Visible = True
-                    //        Me.Controls.Remove(report)
-                    //    }
-                    //    Label1.Visible = True
-                    //    RadioButton13.Visible = True
-                    //    RadioButton14.Visible = True
-                    //    If RadioButton13.Checked Then RadioButton14.Checked = True
-                    //    Vista.Clear(True)
-                    //    RadioButton13.Checked = True
-                    //    this.Title = "Editor de perfiles - [" + archivo.Remove(0, archivo.LastIndexOf("\\") + 1) + "]";
-                    //    esNuevo = false;
-                //}
-            //else
-            //{
-            //    Label1.Visible = False
-            //    RadioButton13.Visible = False
-            //    RadioButton14.Visible = False
-            //    ComboBoxMacro.Items.Clear()
-            //    ComboBoxAssigned.Items.Clear()
-            //    ComboBoxAssigned.Items.Add("</------- " & Traduce.Txt("none") & " -------/>")
-            //    ComboBoxAssigned.SelectedIndex = 0
-            //    datos = Nothing
-            //    GC.Collect()
-            //    datos = New Datos()
-            //    If parteJoy IsNot Nothing Then Fondo.Controls.Remove(parteJoy) : Me.Propiedades.Enabled = False
-            //    Vista.Clear(False)
-            //    Me.Text = Traduce.Txt("profile_editor") & " - [" & Traduce.Txt("untitled") & "]"
-            //    esNuevo = True
-            //}
+                if (datos.Cargar(archivo))
+                {
+                    if (gridVista.Children.Count != 0)
+                    {
+                        ((IDisposable)gridVista.Children[0]).Dispose();
+                        gridVista.Children.Clear();
+                    }
+
+                    rtbEdicion.IsChecked = false;
+                    rtbListado.IsChecked = false;
+                    rtbEdicion.IsChecked = true;
+                    cbPinkie.SelectedIndex = 0;
+                    cbModo.SelectedIndex = 0;
+                    nombrePerfil = System.IO.Path.GetFileNameWithoutExtension(archivo);
+                    this.Title = "Editor de perfiles - [" + nombrePerfil + "]";
+                }
             }
         }
 
         private bool Guardar()
         {
-            //if (Fondo.Controls.Count == 5)
-            //{
-            //    if (esNuevo)
-            //        return GuardarComo();
-            //    else
-            //        return datos.Guardar(ComboBoxMacro);
-            //}
-            return true;
+            if (datos.Perfil.GENERAL.Rows.Count == 0)
+                return true;
+            else if (nombrePerfil == "")
+                return GuardarComo();
+            else
+                return datos.Guardar(nombrePerfil + ".xhp");
         }
 
-        //    private bool GuardarComo()
-        //    {
-        //        if (Fondo.Controls.Count == 5)
-        //        {
-        //            SaveFileDialog1.FileName = "nombre_perfil";
-        //            if (SaveFileDialog1.ShowDialog() == Windows.Forms.DialogResult.OK)
-        //            {
-        //                if (datos.Guardar(SaveFileDialog1.FileName, ComboBoxMacro))
-        //                {
-        //                    esNuevo = false;
-        //                    this.Title = "Editor de perfiles - [" + SaveFileDialog1.FileName.Remove(0, SaveFileDialog1.FileName.LastIndexOf("\\") + 1) + "]";
-        //                    return true;
-        //                }
-        //                else
-        //                    return false;
-        //            }
-        //            else
-        //                return false;
-        //        }
-        //    }
+        private bool GuardarComo()
+        {
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            {
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+                dlg.Filter = "Perfil (.xhp)|*.xhp";
+                dlg.FileName = "nombre_perfil";
+                if (dlg.ShowDialog() == true)
+                {
+                    if (datos.Guardar(dlg.FileName))
+                    {
+                        nombrePerfil = System.IO.Path.GetFileNameWithoutExtension(dlg.FileName);
+                        this.Title = "Editor de perfiles - [" + nombrePerfil + "]";
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                return true;
+        }
 
-        //    private void Lanzar()
-        //    {
-        //        if (datos.GetModificado())
-        //        {
-        //            MessageBoxResult r = MessageBox.Show("¿Guardar los cambios antes de lanzar el perfil?", "Advertencia", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-        //            if (r == MessageBoxResult.Cancel)
-        //                return;
-        //            else
-        //            {
-        //                if (!Guardar())
-        //                    return;
-        //            }
-        //        }
-        //        if (Driver.Lanzar(datos.GetRutaPerfil()))
-        //            MessageBox.Show("Perfil cargado correctamente", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
-        //    }
+        private void Lanzar()
+        {
+            //        if (datos.GetModificado())
+            //        {
+            //            MessageBoxResult r = MessageBox.Show("¿Guardar los cambios antes de lanzar el perfil?", "Advertencia", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            //            if (r == MessageBoxResult.Cancel)
+            //                return;
+            //            else
+            //            {
+            //                if (!Guardar())
+            //                    return;
+            //            }
+            //        }
+            //        if (Driver.Lanzar(datos.GetRutaPerfil()))
+            //            MessageBox.Show("Perfil cargado correctamente", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void SetModos()
+        {
+            if (gridVista.Children.Count == 1)
+            {
+                if (gridVista.Children[0] is CtlEditar)
+                    ((CtlEditar)gridVista.Children[0]).ctlPropiedades.Refrescar();
+            }
+        }
+
+        public void GetModos(ref byte pinkie, ref byte modo)
+        {
+            pinkie = (byte)cbPinkie.SelectedIndex;
+            modo = (byte)cbModo.SelectedIndex;
+        }
     }
 }

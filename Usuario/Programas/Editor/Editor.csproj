@@ -69,13 +69,14 @@
     <Compile Include="Controles\CtlJoystick.xaml.cs">
       <DependentUpon>CtlJoystick.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controles\CtlPropiedades.Metodos.cs" />
     <Compile Include="Controles\CtlPropiedades.xaml.cs">
       <DependentUpon>CtlPropiedades.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CtlEditar.xaml.cs">
+    <Compile Include="Controles\CtlEditar.xaml.cs">
       <DependentUpon>CtlEditar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CtlListar.xaml.cs">
+    <Compile Include="Controles\CtlListar.xaml.cs">
       <DependentUpon>CtlListar.xaml</DependentUpon>
     </Compile>
     <Compile Include="DSPerfil.Designer.cs">
@@ -109,11 +110,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CtlEditar.xaml">
+    <Page Include="Controles\CtlEditar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CtlListar.xaml">
+    <Page Include="Controles\CtlListar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

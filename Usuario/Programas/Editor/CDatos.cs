@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace Editor
 {
@@ -37,7 +34,7 @@ namespace Editor
             Perfil.Clear();
 
             Perfil.GENERAL.AddGENERALRow(Perfil.GENERAL.NewGENERALRow());
-            DSPerfil.ACCIONESRow accionVacia = Perfil.ACCIONES.AddACCIONESRow(0, "", new ushort[0]);
+            DSPerfil.ACCIONESRow accionVacia = Perfil.ACCIONES.AddACCIONESRow(0, "</------- Ninguna -------/>", new ushort[0]);
             for (byte p = 0; p < 2; p++)
             {
                 for (byte m = 0; m < 3; m++)
@@ -70,6 +67,35 @@ namespace Editor
                     }
                 }
             }
+        }
+
+        public bool Cargar(String archivo)
+        {
+            Perfil.Clear();
+            try
+            {
+                Perfil.ReadXml("archivo");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+
+        public bool Guardar(String archivo)
+        {
+            try
+            {
+                Perfil.WriteXml(archivo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
         }
     }
 }

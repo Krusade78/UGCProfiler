@@ -2549,9 +2549,13 @@ namespace Editor {
                 this.columnNombreModo3 = new global::System.Data.DataColumn("NombreModo3", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNombreModo3);
                 this.columnTickRaton.AllowDBNull = false;
+                this.columnTickRaton.DefaultValue = ((byte)(0));
                 this.columnMFDFecha.AllowDBNull = false;
+                this.columnMFDFecha.DefaultValue = ((bool)(false));
                 this.columnMFDHora.AllowDBNull = false;
+                this.columnMFDHora.DefaultValue = ((bool)(false));
                 this.columnMFDCronometro.AllowDBNull = false;
+                this.columnMFDCronometro.DefaultValue = ((bool)(false));
                 this.columnPinkieActivado.AllowDBNull = false;
                 this.columnPinkieActivado.DefaultValue = ((bool)(false));
                 this.columnNombrePinkie.AllowDBNull = false;
