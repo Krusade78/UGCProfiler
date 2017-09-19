@@ -2,36 +2,33 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:local="clr-namespace:Editor">
+             xmlns:local="clr-namespace:Editor" Loaded="UserControl_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TabControl Background="{x:Null}">
-            <TabItem>
+        <Grid x:Name="gridProps" Grid.Column="1" Width="240">
+            <local:CtlPropiedades x:Name="ctlPropiedades" BorderBrush="#FF818181" BorderThickness="1,0,0,0" />
+        </Grid>
+        
+        <TabControl Background="{x:Null}" BorderBrush="{x:Null}">
+            <TabItem x:Name="tabJoy" BorderBrush="{x:Null}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Width="150">
                         <Image Source="/Editor;component/res/x52j.png" Height="18" />
                         <TextBlock Text="Joystick" />
                     </StackPanel>
                 </TabItem.Header>
-                <local:CtlJoystick />
             </TabItem>
-            <TabItem>
+            <TabItem x:Name="tabAcel" BorderBrush="{x:Null}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Width="150">
                         <Image Source="/Editor;component/res/x52t.png" Height="18" />
                         <TextBlock Text="Acelerador" />
                     </StackPanel>
                 </TabItem.Header>
-                <local:CtlAcelerador />
             </TabItem>
         </TabControl>
-
-        <Grid Grid.Column="1" Width="240">
-            <GridSplitter HorizontalAlignment="Left" Width="3"/>
-            <local:CtlPropiedades x:Name="ctlPropiedades" />
-        </Grid>
     </Grid>
 </UserControl>

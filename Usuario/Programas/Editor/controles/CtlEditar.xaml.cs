@@ -12,5 +12,11 @@ namespace Editor
         {
             InitializeComponent();
         }
+
+        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            tabAcel.Content = new CtlAcelerador(this);
+            tabJoy.Content = new CtlJoystick(this);
+        }
     }
 }

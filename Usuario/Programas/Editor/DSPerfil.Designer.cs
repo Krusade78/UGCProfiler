@@ -2310,24 +2310,6 @@ namespace Editor {
             
             private global::System.Data.DataColumn columnTickRaton;
             
-            private global::System.Data.DataColumn columnMFDFecha;
-            
-            private global::System.Data.DataColumn columnMFDHora;
-            
-            private global::System.Data.DataColumn columnMFDCronometro;
-            
-            private global::System.Data.DataColumn columnPinkieActivado;
-            
-            private global::System.Data.DataColumn columnNombrePinkie;
-            
-            private global::System.Data.DataColumn columnModosActivado;
-            
-            private global::System.Data.DataColumn columnNombreModo1;
-            
-            private global::System.Data.DataColumn columnNombreModo2;
-            
-            private global::System.Data.DataColumn columnNombreModo3;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public GENERALDataTable() {
@@ -2371,78 +2353,6 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn MFDFechaColumn {
-                get {
-                    return this.columnMFDFecha;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn MFDHoraColumn {
-                get {
-                    return this.columnMFDHora;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn MFDCronometroColumn {
-                get {
-                    return this.columnMFDCronometro;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn PinkieActivadoColumn {
-                get {
-                    return this.columnPinkieActivado;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NombrePinkieColumn {
-                get {
-                    return this.columnNombrePinkie;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ModosActivadoColumn {
-                get {
-                    return this.columnModosActivado;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NombreModo1Column {
-                get {
-                    return this.columnNombreModo1;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NombreModo2Column {
-                get {
-                    return this.columnNombreModo2;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NombreModo3Column {
-                get {
-                    return this.columnNombreModo3;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2478,19 +2388,10 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public GENERALRow AddGENERALRow(byte TickRaton, bool MFDFecha, bool MFDHora, bool MFDCronometro, bool PinkieActivado, string NombrePinkie, bool ModosActivado, string NombreModo1, string NombreModo2, string NombreModo3) {
+            public GENERALRow AddGENERALRow(byte TickRaton) {
                 GENERALRow rowGENERALRow = ((GENERALRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        TickRaton,
-                        MFDFecha,
-                        MFDHora,
-                        MFDCronometro,
-                        PinkieActivado,
-                        NombrePinkie,
-                        ModosActivado,
-                        NombreModo1,
-                        NombreModo2,
-                        NombreModo3};
+                        TickRaton};
                 rowGENERALRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowGENERALRow);
                 return rowGENERALRow;
@@ -2514,15 +2415,6 @@ namespace Editor {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
                 this.columnTickRaton = base.Columns["TickRaton"];
-                this.columnMFDFecha = base.Columns["MFDFecha"];
-                this.columnMFDHora = base.Columns["MFDHora"];
-                this.columnMFDCronometro = base.Columns["MFDCronometro"];
-                this.columnPinkieActivado = base.Columns["PinkieActivado"];
-                this.columnNombrePinkie = base.Columns["NombrePinkie"];
-                this.columnModosActivado = base.Columns["ModosActivado"];
-                this.columnNombreModo1 = base.Columns["NombreModo1"];
-                this.columnNombreModo2 = base.Columns["NombreModo2"];
-                this.columnNombreModo3 = base.Columns["NombreModo3"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2530,48 +2422,8 @@ namespace Editor {
             private void InitClass() {
                 this.columnTickRaton = new global::System.Data.DataColumn("TickRaton", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTickRaton);
-                this.columnMFDFecha = new global::System.Data.DataColumn("MFDFecha", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMFDFecha);
-                this.columnMFDHora = new global::System.Data.DataColumn("MFDHora", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMFDHora);
-                this.columnMFDCronometro = new global::System.Data.DataColumn("MFDCronometro", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMFDCronometro);
-                this.columnPinkieActivado = new global::System.Data.DataColumn("PinkieActivado", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPinkieActivado);
-                this.columnNombrePinkie = new global::System.Data.DataColumn("NombrePinkie", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombrePinkie);
-                this.columnModosActivado = new global::System.Data.DataColumn("ModosActivado", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnModosActivado);
-                this.columnNombreModo1 = new global::System.Data.DataColumn("NombreModo1", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombreModo1);
-                this.columnNombreModo2 = new global::System.Data.DataColumn("NombreModo2", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombreModo2);
-                this.columnNombreModo3 = new global::System.Data.DataColumn("NombreModo3", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNombreModo3);
                 this.columnTickRaton.AllowDBNull = false;
                 this.columnTickRaton.DefaultValue = ((byte)(0));
-                this.columnMFDFecha.AllowDBNull = false;
-                this.columnMFDFecha.DefaultValue = ((bool)(false));
-                this.columnMFDHora.AllowDBNull = false;
-                this.columnMFDHora.DefaultValue = ((bool)(false));
-                this.columnMFDCronometro.AllowDBNull = false;
-                this.columnMFDCronometro.DefaultValue = ((bool)(false));
-                this.columnPinkieActivado.AllowDBNull = false;
-                this.columnPinkieActivado.DefaultValue = ((bool)(false));
-                this.columnNombrePinkie.AllowDBNull = false;
-                this.columnNombrePinkie.DefaultValue = ((string)("Pinkie"));
-                this.columnNombrePinkie.MaxLength = 16;
-                this.columnModosActivado.AllowDBNull = false;
-                this.columnModosActivado.DefaultValue = ((bool)(false));
-                this.columnNombreModo1.AllowDBNull = false;
-                this.columnNombreModo1.DefaultValue = ((string)("Modo 1"));
-                this.columnNombreModo1.MaxLength = 16;
-                this.columnNombreModo2.AllowDBNull = false;
-                this.columnNombreModo2.DefaultValue = ((string)("Modo 2"));
-                this.columnNombreModo2.MaxLength = 16;
-                this.columnNombreModo3.AllowDBNull = false;
-                this.columnNombreModo3.DefaultValue = ((string)("Modo 3"));
-                this.columnNombreModo3.MaxLength = 16;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4548,105 +4400,6 @@ namespace Editor {
                 }
                 set {
                     this[this.tableGENERAL.TickRatonColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool MFDFecha {
-                get {
-                    return ((bool)(this[this.tableGENERAL.MFDFechaColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.MFDFechaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool MFDHora {
-                get {
-                    return ((bool)(this[this.tableGENERAL.MFDHoraColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.MFDHoraColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool MFDCronometro {
-                get {
-                    return ((bool)(this[this.tableGENERAL.MFDCronometroColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.MFDCronometroColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool PinkieActivado {
-                get {
-                    return ((bool)(this[this.tableGENERAL.PinkieActivadoColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.PinkieActivadoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NombrePinkie {
-                get {
-                    return ((string)(this[this.tableGENERAL.NombrePinkieColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.NombrePinkieColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool ModosActivado {
-                get {
-                    return ((bool)(this[this.tableGENERAL.ModosActivadoColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.ModosActivadoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NombreModo1 {
-                get {
-                    return ((string)(this[this.tableGENERAL.NombreModo1Column]));
-                }
-                set {
-                    this[this.tableGENERAL.NombreModo1Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NombreModo2 {
-                get {
-                    return ((string)(this[this.tableGENERAL.NombreModo2Column]));
-                }
-                set {
-                    this[this.tableGENERAL.NombreModo2Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NombreModo3 {
-                get {
-                    return ((string)(this[this.tableGENERAL.NombreModo3Column]));
-                }
-                set {
-                    this[this.tableGENERAL.NombreModo3Column] = value;
                 }
             }
         }

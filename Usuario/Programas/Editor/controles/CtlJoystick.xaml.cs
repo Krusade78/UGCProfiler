@@ -12,10 +12,10 @@ namespace Editor
     {
         private CtlPropiedades Vista;
 
-        public CtlJoystick()
+        public CtlJoystick(CtlEditar padre)
         {
             InitializeComponent();
-            Vista = ((CtlEditar)this.Parent).ctlPropiedades;
+            Vista = padre.ctlPropiedades;
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)

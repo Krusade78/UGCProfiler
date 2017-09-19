@@ -16,7 +16,7 @@ namespace Editor
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Environment.GetCommandLineArgs().Length == 1)
+            if (Environment.GetCommandLineArgs().Length == 2)
                 Abrir(Environment.GetCommandLineArgs()[0]);
         }
 
@@ -82,15 +82,18 @@ namespace Editor
         #region "Vista"
         private void rtbEdicion_Checked(object sender, RoutedEventArgs e)
         {
-            rtbListado.IsChecked = false;
-            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            if (this.IsLoaded)
             {
-                if (gridVista.Children.Count != 0)
+                rtbListado.IsChecked = false;
+                if (datos.Perfil.GENERAL.Rows.Count != 0)
                 {
-                    ((IDisposable)gridVista.Children[0]).Dispose();
-                    gridVista.Children.Clear();
+                    if (gridVista.Children.Count != 0)
+                    {
+                        ((IDisposable)gridVista.Children[0]).Dispose();
+                        gridVista.Children.Clear();
+                    }
+                    gridVista.Children.Add(new CtlEditar());
                 }
-                gridVista.Children.Add(new CtlEditar());
             }
         }
         private void rtbListado_Checked(object sender, RoutedEventArgs e)
@@ -110,7 +113,8 @@ namespace Editor
 
         private void cbModo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SetModos();
+            if (this.IsLoaded)
+                SetModos();
         }
     }
 }

@@ -6,12 +6,12 @@
              Width="240" FontSize="11" >
     <Grid Loaded="Grid_Loaded">
         <StackPanel>
-            <Label x:Name="Label2" VerticalAlignment="Top" HorizontalContentAlignment="Center" Foreground="Yellow" FontWeight="Bold" >
+            <Label x:Name="Label2" Content="Eje X" VerticalAlignment="Top"  Margin="3,2,1,3" Foreground="Yellow" FontWeight="Bold" HorizontalContentAlignment="Center" FontSize="16" Padding="5,3">
                 <Label.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FFB0B0B0" Offset="1"/>
-                        <GradientStop Color="Gainsboro"/>
-                    </LinearGradientBrush>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#F0352A38" Offset="1"/>
+                        <GradientStop Color="#F0267C41"/>
+                    </RadialGradientBrush>
                 </Label.Background>
             </Label>
             <Grid x:Name="PanelMapaEjes">

@@ -11,10 +11,10 @@ namespace Editor
     {
         private CtlPropiedades Vista;
 
-        public CtlAcelerador()
+        public CtlAcelerador(CtlEditar padre)
         {
             InitializeComponent();
-            Vista = ((CtlEditar)this.Parent).ctlPropiedades;
+            Vista = padre.ctlPropiedades;
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
