@@ -1698,7 +1698,7 @@ namespace Launcher {
             
             private global::System.Data.DataColumn columnidModo;
             
-            private global::System.Data.DataColumn columnidEje;
+            private global::System.Data.DataColumn columnidBoton;
             
             private global::System.Data.DataColumn columnEstado;
             
@@ -1753,9 +1753,9 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
+            public global::System.Data.DataColumn idBotonColumn {
                 get {
-                    return this.columnidEje;
+                    return this.columnidBoton;
                 }
             }
             
@@ -1804,12 +1804,12 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPABOTONESRow AddMAPABOTONESRow(byte idPinkie, byte idModo, byte idEje, byte Estado) {
+            public MAPABOTONESRow AddMAPABOTONESRow(byte idPinkie, byte idModo, byte idBoton, byte Estado) {
                 MAPABOTONESRow rowMAPABOTONESRow = ((MAPABOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
                         idModo,
-                        idEje,
+                        idBoton,
                         Estado};
                 rowMAPABOTONESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPABOTONESRow);
@@ -1818,9 +1818,9 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPABOTONESRow FindByidEjeidModoidPinkie(byte idEje, byte idModo, byte idPinkie) {
+            public MAPABOTONESRow FindByidBotonidModoidPinkie(byte idBoton, byte idModo, byte idPinkie) {
                 return ((MAPABOTONESRow)(this.Rows.Find(new object[] {
-                            idEje,
+                            idBoton,
                             idModo,
                             idPinkie})));
             }
@@ -1844,7 +1844,7 @@ namespace Launcher {
             internal void InitVars() {
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
-                this.columnidEje = base.Columns["idEje"];
+                this.columnidBoton = base.Columns["idBoton"];
                 this.columnEstado = base.Columns["Estado"];
             }
             
@@ -1855,17 +1855,17 @@ namespace Launcher {
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidModo);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
+                this.columnidBoton = new global::System.Data.DataColumn("idBoton", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidBoton);
                 this.columnEstado = new global::System.Data.DataColumn("Estado", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEstado);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidEje,
+                                this.columnidBoton,
                                 this.columnidModo,
                                 this.columnidPinkie}, true));
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
+                this.columnidBoton.AllowDBNull = false;
                 this.columnEstado.AllowDBNull = false;
                 this.columnEstado.Caption = "Mouse";
             }
@@ -2005,7 +2005,7 @@ namespace Launcher {
             
             private global::System.Data.DataColumn columnidModo;
             
-            private global::System.Data.DataColumn columnidEje;
+            private global::System.Data.DataColumn columnidSeta;
             
             private global::System.Data.DataColumn columnEstado;
             
@@ -2060,9 +2060,9 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
+            public global::System.Data.DataColumn idSetaColumn {
                 get {
-                    return this.columnidEje;
+                    return this.columnidSeta;
                 }
             }
             
@@ -2111,12 +2111,12 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPASETASRow AddMAPASETASRow(byte idPinkie, byte idModo, byte idEje, byte Estado) {
+            public MAPASETASRow AddMAPASETASRow(byte idPinkie, byte idModo, byte idSeta, byte Estado) {
                 MAPASETASRow rowMAPASETASRow = ((MAPASETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
                         idModo,
-                        idEje,
+                        idSeta,
                         Estado};
                 rowMAPASETASRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPASETASRow);
@@ -2125,9 +2125,9 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPASETASRow FindByidEjeidModoidPinkie(byte idEje, byte idModo, byte idPinkie) {
+            public MAPASETASRow FindByidSetaidModoidPinkie(byte idSeta, byte idModo, byte idPinkie) {
                 return ((MAPASETASRow)(this.Rows.Find(new object[] {
-                            idEje,
+                            idSeta,
                             idModo,
                             idPinkie})));
             }
@@ -2151,7 +2151,7 @@ namespace Launcher {
             internal void InitVars() {
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
-                this.columnidEje = base.Columns["idEje"];
+                this.columnidSeta = base.Columns["idSeta"];
                 this.columnEstado = base.Columns["Estado"];
             }
             
@@ -2162,17 +2162,17 @@ namespace Launcher {
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidModo);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
+                this.columnidSeta = new global::System.Data.DataColumn("idSeta", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidSeta);
                 this.columnEstado = new global::System.Data.DataColumn("Estado", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEstado);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidEje,
+                                this.columnidSeta,
                                 this.columnidModo,
                                 this.columnidPinkie}, true));
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
+                this.columnidSeta.AllowDBNull = false;
                 this.columnEstado.AllowDBNull = false;
                 this.columnEstado.Caption = "Mouse";
             }
@@ -2310,12 +2310,6 @@ namespace Launcher {
             
             private global::System.Data.DataColumn columnTickRaton;
             
-            private global::System.Data.DataColumn columnMFDFecha;
-            
-            private global::System.Data.DataColumn columnMFDHora;
-            
-            private global::System.Data.DataColumn columnMFDCronometro;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public GENERALDataTable() {
@@ -2359,30 +2353,6 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn MFDFechaColumn {
-                get {
-                    return this.columnMFDFecha;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn MFDHoraColumn {
-                get {
-                    return this.columnMFDHora;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn MFDCronometroColumn {
-                get {
-                    return this.columnMFDCronometro;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2418,13 +2388,10 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public GENERALRow AddGENERALRow(byte TickRaton, bool MFDFecha, bool MFDHora, bool MFDCronometro) {
+            public GENERALRow AddGENERALRow(byte TickRaton) {
                 GENERALRow rowGENERALRow = ((GENERALRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        TickRaton,
-                        MFDFecha,
-                        MFDHora,
-                        MFDCronometro};
+                        TickRaton};
                 rowGENERALRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowGENERALRow);
                 return rowGENERALRow;
@@ -2448,9 +2415,6 @@ namespace Launcher {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
                 this.columnTickRaton = base.Columns["TickRaton"];
-                this.columnMFDFecha = base.Columns["MFDFecha"];
-                this.columnMFDHora = base.Columns["MFDHora"];
-                this.columnMFDCronometro = base.Columns["MFDCronometro"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2458,16 +2422,8 @@ namespace Launcher {
             private void InitClass() {
                 this.columnTickRaton = new global::System.Data.DataColumn("TickRaton", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTickRaton);
-                this.columnMFDFecha = new global::System.Data.DataColumn("MFDFecha", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMFDFecha);
-                this.columnMFDHora = new global::System.Data.DataColumn("MFDHora", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMFDHora);
-                this.columnMFDCronometro = new global::System.Data.DataColumn("MFDCronometro", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMFDCronometro);
                 this.columnTickRaton.AllowDBNull = false;
-                this.columnMFDFecha.AllowDBNull = false;
-                this.columnMFDHora.AllowDBNull = false;
-                this.columnMFDCronometro.AllowDBNull = false;
+                this.columnTickRaton.DefaultValue = ((byte)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2603,6 +2559,8 @@ namespace Launcher {
             
             private global::System.Data.DataColumn columnidAccion;
             
+            private global::System.Data.DataColumn columnNombre;
+            
             private global::System.Data.DataColumn columnComandos;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2643,6 +2601,14 @@ namespace Launcher {
             public global::System.Data.DataColumn idAccionColumn {
                 get {
                     return this.columnidAccion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn NombreColumn {
+                get {
+                    return this.columnNombre;
                 }
             }
             
@@ -2691,10 +2657,11 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ACCIONESRow AddACCIONESRow(ushort idAccion, ushort[] Comandos) {
+            public ACCIONESRow AddACCIONESRow(ushort idAccion, string Nombre, ushort[] Comandos) {
                 ACCIONESRow rowACCIONESRow = ((ACCIONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idAccion,
+                        Nombre,
                         Comandos};
                 rowACCIONESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowACCIONESRow);
@@ -2726,6 +2693,7 @@ namespace Launcher {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
                 this.columnidAccion = base.Columns["idAccion"];
+                this.columnNombre = base.Columns["Nombre"];
                 this.columnComandos = base.Columns["Comandos"];
             }
             
@@ -2734,12 +2702,17 @@ namespace Launcher {
             private void InitClass() {
                 this.columnidAccion = new global::System.Data.DataColumn("idAccion", typeof(ushort), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidAccion);
+                this.columnNombre = new global::System.Data.DataColumn("Nombre", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNombre);
                 this.columnComandos = new global::System.Data.DataColumn("Comandos", typeof(ushort[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnComandos);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidAccion}, true));
                 this.columnidAccion.AllowDBNull = false;
                 this.columnidAccion.Unique = true;
+                this.columnNombre.AllowDBNull = false;
+                this.columnNombre.DefaultValue = ((string)(""));
+                this.columnNombre.MaxLength = 32;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4325,12 +4298,12 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte idEje {
+            public byte idBoton {
                 get {
-                    return ((byte)(this[this.tableMAPABOTONES.idEjeColumn]));
+                    return ((byte)(this[this.tableMAPABOTONES.idBotonColumn]));
                 }
                 set {
-                    this[this.tableMAPABOTONES.idEjeColumn] = value;
+                    this[this.tableMAPABOTONES.idBotonColumn] = value;
                 }
             }
             
@@ -4384,12 +4357,12 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte idEje {
+            public byte idSeta {
                 get {
-                    return ((byte)(this[this.tableMAPASETAS.idEjeColumn]));
+                    return ((byte)(this[this.tableMAPASETAS.idSetaColumn]));
                 }
                 set {
-                    this[this.tableMAPASETAS.idEjeColumn] = value;
+                    this[this.tableMAPASETAS.idSetaColumn] = value;
                 }
             }
             
@@ -4429,39 +4402,6 @@ namespace Launcher {
                     this[this.tableGENERAL.TickRatonColumn] = value;
                 }
             }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool MFDFecha {
-                get {
-                    return ((bool)(this[this.tableGENERAL.MFDFechaColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.MFDFechaColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool MFDHora {
-                get {
-                    return ((bool)(this[this.tableGENERAL.MFDHoraColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.MFDHoraColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool MFDCronometro {
-                get {
-                    return ((bool)(this[this.tableGENERAL.MFDCronometroColumn]));
-                }
-                set {
-                    this[this.tableGENERAL.MFDCronometroColumn] = value;
-                }
-            }
         }
         
         /// <summary>
@@ -4486,6 +4426,17 @@ namespace Launcher {
                 }
                 set {
                     this[this.tableACCIONES.idAccionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Nombre {
+                get {
+                    return ((string)(this[this.tableACCIONES.NombreColumn]));
+                }
+                set {
+                    this[this.tableACCIONES.NombreColumn] = value;
                 }
             }
             

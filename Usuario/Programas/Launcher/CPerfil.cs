@@ -163,7 +163,7 @@ namespace Launcher
                     {
                         for (byte b = 0; b < 26; b++)
                         {
-                            DSPerfil.MAPABOTONESRow datos = perfil.MAPABOTONES.FindByidEjeidModoidPinkie(b, m, p);
+                            DSPerfil.MAPABOTONESRow datos = perfil.MAPABOTONES.FindByidBotonidModoidPinkie(b, m, p);
                             bufferMapa[pos] = datos.Estado;
                             pos++;
                             for (byte i = 0; i < 15; i++)
@@ -184,7 +184,7 @@ namespace Launcher
                     {
                         for (byte s = 0; s < 32; s++)
                         {
-                            DSPerfil.MAPASETASRow datos = perfil.MAPASETAS.FindByidEjeidModoidPinkie(s, m, p);
+                            DSPerfil.MAPASETASRow datos = perfil.MAPASETAS.FindByidSetaidModoidPinkie(s, m, p);
                             bufferMapa[pos] = datos.Estado;
                             pos++;
                             for (byte i = 0; i < 15; i++)

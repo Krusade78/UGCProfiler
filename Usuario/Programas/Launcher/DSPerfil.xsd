@@ -53,7 +53,7 @@
             <xs:sequence>
               <xs:element name="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_UserColumnName="idPinkie" type="xs:unsignedByte" />
               <xs:element name="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_UserColumnName="idModo" type="xs:unsignedByte" />
-              <xs:element name="idEje" msprop:Generator_ColumnVarNameInTable="columnidEje" msprop:Generator_ColumnPropNameInRow="idEje" msprop:Generator_ColumnPropNameInTable="idEjeColumn" msprop:Generator_UserColumnName="idEje" type="xs:unsignedByte" />
+              <xs:element name="idBoton" msprop:Generator_ColumnVarNameInTable="columnidBoton" msprop:Generator_ColumnPropNameInRow="idBoton" msprop:Generator_ColumnPropNameInTable="idBotonColumn" msprop:Generator_UserColumnName="idBoton" type="xs:unsignedByte" />
               <xs:element name="Estado" msdata:Caption="Mouse" msprop:Generator_ColumnVarNameInTable="columnEstado" msprop:Generator_ColumnPropNameInRow="Estado" msprop:Generator_ColumnPropNameInTable="EstadoColumn" msprop:Generator_UserColumnName="Estado" type="xs:unsignedByte" />
             </xs:sequence>
           </xs:complexType>
@@ -63,7 +63,7 @@
             <xs:sequence>
               <xs:element name="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_UserColumnName="idPinkie" type="xs:unsignedByte" />
               <xs:element name="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_UserColumnName="idModo" type="xs:unsignedByte" />
-              <xs:element name="idEje" msprop:Generator_ColumnVarNameInTable="columnidEje" msprop:Generator_ColumnPropNameInRow="idEje" msprop:Generator_ColumnPropNameInTable="idEjeColumn" msprop:Generator_UserColumnName="idEje" type="xs:unsignedByte" />
+              <xs:element name="idSeta" msprop:Generator_ColumnVarNameInTable="columnidSeta" msprop:Generator_ColumnPropNameInRow="idSeta" msprop:Generator_ColumnPropNameInTable="idSetaColumn" msprop:Generator_UserColumnName="idSeta" type="xs:unsignedByte" />
               <xs:element name="Estado" msdata:Caption="Mouse" msprop:Generator_ColumnVarNameInTable="columnEstado" msprop:Generator_ColumnPropNameInRow="Estado" msprop:Generator_ColumnPropNameInTable="EstadoColumn" msprop:Generator_UserColumnName="Estado" type="xs:unsignedByte" />
             </xs:sequence>
           </xs:complexType>
@@ -71,10 +71,7 @@
         <xs:element name="GENERAL" msprop:Generator_TableClassName="GENERALDataTable" msprop:Generator_TableVarName="tableGENERAL" msprop:Generator_RowChangedName="GENERALRowChanged" msprop:Generator_TablePropName="GENERAL" msprop:Generator_RowDeletingName="GENERALRowDeleting" msprop:Generator_RowChangingName="GENERALRowChanging" msprop:Generator_RowEvHandlerName="GENERALRowChangeEventHandler" msprop:Generator_RowDeletedName="GENERALRowDeleted" msprop:Generator_RowClassName="GENERALRow" msprop:Generator_UserTableName="GENERAL" msprop:Generator_RowEvArgName="GENERALRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="TickRaton" msprop:Generator_ColumnVarNameInTable="columnTickRaton" msprop:Generator_ColumnPropNameInRow="TickRaton" msprop:Generator_ColumnPropNameInTable="TickRatonColumn" msprop:Generator_UserColumnName="TickRaton" type="xs:unsignedByte" />
-              <xs:element name="MFDFecha" msprop:Generator_ColumnVarNameInTable="columnMFDFecha" msprop:Generator_ColumnPropNameInRow="MFDFecha" msprop:Generator_ColumnPropNameInTable="MFDFechaColumn" msprop:Generator_UserColumnName="MFDFecha" type="xs:boolean" />
-              <xs:element name="MFDHora" msprop:Generator_ColumnVarNameInTable="columnMFDHora" msprop:Generator_ColumnPropNameInRow="MFDHora" msprop:Generator_ColumnPropNameInTable="MFDHoraColumn" msprop:Generator_UserColumnName="MFDHora" type="xs:boolean" />
-              <xs:element name="MFDCronometro" msprop:Generator_ColumnVarNameInTable="columnMFDCronometro" msprop:Generator_ColumnPropNameInRow="MFDCronometro" msprop:Generator_ColumnPropNameInTable="MFDCronometroColumn" msprop:Generator_UserColumnName="MFDCronometro" type="xs:boolean" />
+              <xs:element name="TickRaton" msprop:Generator_ColumnVarNameInTable="columnTickRaton" msprop:Generator_ColumnPropNameInRow="TickRaton" msprop:Generator_ColumnPropNameInTable="TickRatonColumn" msprop:Generator_UserColumnName="TickRaton" type="xs:unsignedByte" default="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -82,6 +79,13 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="idAccion" msprop:Generator_ColumnVarNameInTable="columnidAccion" msprop:Generator_ColumnPropNameInRow="idAccion" msprop:Generator_ColumnPropNameInTable="idAccionColumn" msprop:Generator_UserColumnName="idAccion" type="xs:unsignedShort" />
+              <xs:element name="Nombre" msprop:Generator_ColumnVarNameInTable="columnNombre" msprop:Generator_ColumnPropNameInRow="Nombre" msprop:Generator_ColumnPropNameInTable="NombreColumn" msprop:Generator_UserColumnName="Nombre" default="">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="32" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
               <xs:element name="Comandos" msdata:DataType="System.UInt16[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnComandos" msprop:Generator_ColumnPropNameInRow="Comandos" msprop:Generator_ColumnPropNameInTable="ComandosColumn" msprop:Generator_UserColumnName="Comandos" type="xs:anyType" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
@@ -144,13 +148,13 @@
     </xs:unique>
     <xs:unique name="MAPABOTONES_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:MAPABOTONES" />
-      <xs:field xpath="mstns:idEje" />
+      <xs:field xpath="mstns:idBoton" />
       <xs:field xpath="mstns:idModo" />
       <xs:field xpath="mstns:idPinkie" />
     </xs:unique>
     <xs:unique name="MAPASETAS_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:MAPASETAS" />
-      <xs:field xpath="mstns:idEje" />
+      <xs:field xpath="mstns:idSeta" />
       <xs:field xpath="mstns:idModo" />
       <xs:field xpath="mstns:idPinkie" />
     </xs:unique>
