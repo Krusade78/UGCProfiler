@@ -24,7 +24,7 @@ namespace Editor
         public VEditorSensibilidad()
         {
             InitializeComponent();
-            padre = (MainWindow)this.Owner;
+            padre = (MainWindow)App.Current.MainWindow;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

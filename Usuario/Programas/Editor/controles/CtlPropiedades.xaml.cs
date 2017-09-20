@@ -29,5 +29,26 @@ namespace Editor
             ComboBoxMacro.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("Nombre", System.ComponentModel.ListSortDirection.Ascending));
             ComboBoxMacro.SelectedIndex = 0;
         }
+
+        #region "Ejes"
+        private void ButtonSensibility_Click(object sender, RoutedEventArgs e)
+        {
+            VEditorSensibilidad dlg = new VEditorSensibilidad();
+            dlg.Owner = App.Current.MainWindow;
+            dlg.ShowDialog();
+        }
+
+        private void ComboBoxAxes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.IsLoaded && eventos)
+                SetEje();
+        }
+
+        private void CheckBoxInverted_Checked(object sender, RoutedEventArgs e)
+        {
+            if (eventos)
+                SetEje();
+        }
+        #endregion
     }
 }

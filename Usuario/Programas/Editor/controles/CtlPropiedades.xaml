@@ -14,12 +14,26 @@
                     </RadialGradientBrush>
                 </Label.Background>
             </Label>
-            <Grid x:Name="PanelMapaEjes">
+            <Grid>
                 <Label Content="Configuración de eje" x:Name="LabelAxis" VerticalAlignment="Top" Margin="3,0" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" />
-                <ComboBox x:Name="ComboBoxAxes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,32,0,0" Height="23" Width="80" />
+                <ComboBox x:Name="ComboBoxAxes" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,32,0,0" Height="23" Width="80" SelectionChanged="ComboBoxAxes_SelectionChanged">
+                    <ComboBoxItem Content="Ninguno" />
+                    <ComboBoxItem Content="X" />
+                    <ComboBoxItem Content="Y" />
+                    <ComboBoxItem Content="R" />
+                    <ComboBoxItem Content="Z" />
+                    <ComboBoxItem Content="Rx" />
+                    <ComboBoxItem Content="Ry" />
+                    <ComboBoxItem Content="Sl 1" />
+                    <ComboBoxItem Content="Sl 2" />
+                    <ComboBoxItem Content="MiniStick X" />
+                    <ComboBoxItem Content="MiniStick Y" />
+                    <ComboBoxItem Content="Ratón X" />
+                    <ComboBoxItem Content="Ratón Y" />
+                </ComboBox>
                 <Label x:Name="LabelWorkAs" Content="Asignar a:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,31,0,0" Foreground="Gainsboro" />
-                <CheckBox x:Name="CheckBoxInverted" Content="Invertido" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="153,36,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" />
-                <Button x:Name="ButtonSensibility" Content="Curva sensibilidad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,61,0,0" Padding="10,2" Background="#FFF3C4C4" Foreground="#FF762626" />
+                <CheckBox x:Name="CheckBoxInverted" Content="Invertido" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="153,36,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" Checked="CheckBoxInverted_Checked" Unchecked="CheckBoxInverted_Checked" />
+                <Button x:Name="ButtonSensibility" Content="Curva sensibilidad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,61,0,0" Padding="10,2" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonSensibility_Click" />
 
                 <Label x:Name="LabelMSensibility" Content="Sensibilidad ratón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,87,0,0" Foreground="Gainsboro" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,87,0,0">
@@ -27,7 +41,7 @@
                     <ScrollBar x:Name="NumericUpDownMSensibility" Maximum="250" Minimum="1" SmallChange="1" Value="1" Height="26" />
                 </StackPanel>
 
-                <Label x:Name="LabelDigital" Content="Función digital" VerticalAlignment="Top" Margin="10,118,10,0" Foreground="White" Background="#FF99B49E" FontStyle="Italic" Padding="5,1" />
+                <Label Content="Función digital" VerticalAlignment="Top" Margin="10,118,10,0" Foreground="White" Background="#FF99B49E" FontStyle="Italic" Padding="5,1" />
                 <RadioButton Content="Bandas" x:Name="RadioButtonBands" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,140,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
                 <RadioButton Content="Incremental" x:Name="RadioButtonIncremental" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,140,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
                 <Grid x:Name="PanelIncremental" VerticalAlignment="Top" Margin="0,160,0,10">
@@ -43,8 +57,11 @@
                     <Label x:Name="LabelResistanceDec" Content="Resistencia dec.:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,29,0,0" Foreground="Gainsboro" />
                 </Grid>
                 <Button x:Name="ButtonEditBands" Content="Editar bandas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,170,0,0" Padding="5,3" Background="#FFF3C4C4" Foreground="#FF762626" />
+                <Grid x:Name="PanelDigital" Background="#7F808080" Margin="8,118,8,8" Visibility="Collapsed" />
+
+                <Grid x:Name="PanelMapaEjes" Background="#7F808080" Margin="3,0,3,3" Visibility="Collapsed" />
             </Grid>
-            <Grid x:Name="PanelButton" Height="90">
+            <Grid Height="90">
                 <Label Content="Configuración de botón" x:Name="LabelButton" VerticalAlignment="Top" Margin="3,0" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" />
                 <RadioButton Content="Toggle" x:Name="RadioButtonToggle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="147,30,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
                 <RadioButton Content="Presionar/Soltar" x:Name="RadioButtonUpDown" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="31,30,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
@@ -56,8 +73,10 @@
                 <Button x:Name="ButtonAssignModes" Content="Asignar a modos" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button x:Name="ButtonAssignPinkie" Content="Asignar a Pinkie" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" />
                 <Button x:Name="ButtonAssignPOV" Content="Asignar a seta" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" />
+
+                <Grid x:Name="PanelButton" Background="#7F808080" Margin="3,0,3,3" Visibility="Collapsed" />
             </Grid>
-            <Grid x:Name="PanelMacros" Height="205">
+            <Grid Height="90">
                 <Label Content="Asignación de macros" x:Name="LabelAssigned" VerticalAlignment="Top" Margin="3,0" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" />
                 <Grid x:Name="panelPos" VerticalAlignment="Top" Margin="0,31,0,0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110,0,0,0">
@@ -71,11 +90,14 @@
                     <RadioButton x:Name="RadioButton1" Content="Presionado" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,7,0,0" Foreground="White" VerticalContentAlignment="Center" />
                 </Grid>
                 <ComboBox x:Name="ComboBoxAssigned" ItemsSource="{Binding}" DisplayMemberPath="Nombre" VerticalAlignment="Top" Margin="8,65,8,0" Width="224" Height="22" VerticalContentAlignment="Center" HorizontalAlignment="Center" />
-                <Label Content="Configuración de macros" x:Name="LabelMacro" VerticalAlignment="Top" Margin="5,104,5,0" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" />
-                <ComboBox x:Name="ComboBoxMacro" ItemsSource="{Binding}" DisplayMemberPath="Nombre" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="8,138,8,0" Width="224" Height="22" VerticalContentAlignment="Center" />
-                <Button x:Name="ButtonDelete" Content="Borrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="166,170,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button x:Name="ButtonEdit" Content="Editar" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="88,170,88,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button x:Name="ButtonAdd" Content="Añadir" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,170,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Grid x:Name="PanelMacro" Background="#7F808080" Margin="3,0,3,3" Visibility="Collapsed" />
+            </Grid>
+            <Grid>
+                <Label Content="Configuración de macros" x:Name="LabelMacro" VerticalAlignment="Top" Margin="5,4,5,0" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" />
+                <ComboBox x:Name="ComboBoxMacro" ItemsSource="{Binding}" DisplayMemberPath="Nombre" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="8,38,8,0" Width="224" Height="22" VerticalContentAlignment="Center" />
+                <Button x:Name="ButtonDelete" Content="Borrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="166,70,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Button x:Name="ButtonEdit" Content="Editar" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="88,70,88,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Button x:Name="ButtonAdd" Content="Añadir" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,70,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
             </Grid>
         </StackPanel>
     </Grid>

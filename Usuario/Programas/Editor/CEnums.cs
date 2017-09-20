@@ -2,6 +2,15 @@
 {
     class CEnums
     {
+        public enum Tipo
+        {
+            Eje,
+            EjePeque,
+            EjeMini,
+            Boton,
+            Seta
+        }
+
         public enum TipoC : byte
         {
             TipoComando_Tecla = 0,
