@@ -81,7 +81,11 @@
                 <Grid x:Name="panelPos" VerticalAlignment="Top" Margin="0,31,0,0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110,0,0,0">
                         <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDownPosition, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                        <ScrollBar x:Name="NumericUpDownPosition" Maximum="16" Minimum="1" SmallChange="1" Value="1" Height="26" />
+                        <ScrollBar x:Name="NumericUpDownPosition" Maximum="16" Minimum="1" SmallChange="1" Value="1" Height="26" RenderTransformOrigin="0.5,0.5" >
+                            <ScrollBar.RenderTransform>
+                                <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                            </ScrollBar.RenderTransform>
+                        </ScrollBar>
                     </StackPanel>
                     <Label x:Name="LabelPosition" Content="Posición:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="58,1,0,0" Foreground="Gainsboro" />
                 </Grid>
@@ -89,15 +93,15 @@
                     <RadioButton Content="Soltado" x:Name="RadioButton2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="140,7,0,0" Foreground="White" VerticalContentAlignment="Center" />
                     <RadioButton x:Name="RadioButton1" Content="Presionado" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,7,0,0" Foreground="White" VerticalContentAlignment="Center" />
                 </Grid>
-                <ComboBox x:Name="ComboBoxAssigned" ItemsSource="{Binding}" DisplayMemberPath="Nombre" VerticalAlignment="Top" Margin="8,65,8,0" Width="224" Height="22" VerticalContentAlignment="Center" HorizontalAlignment="Center" />
+                <ComboBox x:Name="ComboBoxAssigned" ItemsSource="{Binding}" DisplayMemberPath="Nombre" SelectedValuePath="idAccion" VerticalAlignment="Top" Margin="8,65,8,0" Width="224" Height="22" VerticalContentAlignment="Center" HorizontalAlignment="Center" SelectionChanged="ComboBoxAssigned_SelectionChanged" />
                 <Grid x:Name="PanelMacro" Background="#7F808080" Margin="3,0,3,3" Visibility="Collapsed" />
             </Grid>
             <Grid>
                 <Label Content="Configuración de macros" x:Name="LabelMacro" VerticalAlignment="Top" Margin="5,4,5,0" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" />
-                <ComboBox x:Name="ComboBoxMacro" ItemsSource="{Binding}" DisplayMemberPath="Nombre" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="8,38,8,0" Width="224" Height="22" VerticalContentAlignment="Center" />
-                <Button x:Name="ButtonDelete" Content="Borrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="166,70,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button x:Name="ButtonEdit" Content="Editar" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="88,70,88,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button x:Name="ButtonAdd" Content="Añadir" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,70,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <ComboBox x:Name="ComboBoxMacro" ItemsSource="{Binding}" DisplayMemberPath="Nombre" SelectedValuePath="idAccion" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="8,38,8,0" Width="224" Height="22" VerticalContentAlignment="Center" />
+                <Button x:Name="ButtonDelete" Content="Borrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="166,70,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonDelete_Click"/>
+                <Button x:Name="ButtonEdit" Content="Editar" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="88,70,88,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonEdit_Click"/>
+                <Button x:Name="ButtonAdd" Content="Añadir" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,70,0,0" Width="64" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAdd_Click"/>
             </Grid>
         </StackPanel>
     </Grid>

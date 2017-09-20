@@ -24,11 +24,11 @@ namespace Editor
         public VEditorSensibilidad()
         {
             InitializeComponent();
-            padre = (MainWindow)App.Current.MainWindow;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            padre = (MainWindow)App.Current.MainWindow;
             //byte p, m, ej;
             //Vista.GetModos(ref p, ref m, ref ej);
             //DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(ej, m, p);

@@ -13,12 +13,12 @@ namespace Editor
         public VEditorMacros(int idx)
         {
             InitializeComponent();
-            this.padre = (MainWindow)this.Owner;
             indicep = idx;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            this.padre = (MainWindow)this.Owner;
             Iniciar();
         }
 

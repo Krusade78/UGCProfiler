@@ -224,38 +224,30 @@ namespace Editor
             if (tipoActual == Tipo.Seta)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                {
-                    ComboBoxAssigned.SelectedIndex = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
-                }
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
                 else
-                    ComboBoxAssigned.SelectedIndex = padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | (idActual - 100)), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | (idActual - 100)), (byte)(NumericUpDownPosition.Value - 1)).Indice;
             }
             else if (tipoActual == Tipo.Boton)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                {
-                    ComboBoxAssigned.SelectedIndex = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
-                }
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
                 else
-                    ComboBoxAssigned.SelectedIndex = padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
             }
             else if (tipoActual == Tipo.Eje)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                {
-                    ComboBoxAssigned.SelectedIndex = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
-                }
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
                 else
-                    ComboBoxAssigned.SelectedIndex = padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
             }
             else if (tipoActual == Tipo.EjePeque)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                {
-                    ComboBoxAssigned.SelectedIndex = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
-                }
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
                 else
-                    ComboBoxAssigned.SelectedIndex = padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
             }
 
             eventos = true;
@@ -275,6 +267,13 @@ namespace Editor
             //    padre.GetDatos().SetMapaEjes_nEje(p, m, ej, (datos.GetMapaEjes_nEje(p, m, a, ej) And 128) Or ComboBoxAxes.SelectedIndex)
 
             //Refrescar();
+        }
+        #endregion
+
+        #region "Macros"
+        private void AsignarMacro(ushort idc)
+        {
+
         }
         #endregion
 

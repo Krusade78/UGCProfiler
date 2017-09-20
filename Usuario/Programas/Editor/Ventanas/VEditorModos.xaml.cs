@@ -24,11 +24,11 @@ namespace Editor
         public VEditorModos()
         {
             InitializeComponent();
-            padre = (MainWindow)this.Owner;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            padre = (MainWindow)this.Owner;
             //if (padre.GetDatos().Perfil.GENERAL[0].PinkieActivado) CheckBox1.IsChecked = true;
             //if (padre.GetDatos().Perfil.GENERAL[0].ModosActivado) CheckBox2.IsChecked = true;
         }

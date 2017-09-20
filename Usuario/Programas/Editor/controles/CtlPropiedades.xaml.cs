@@ -25,7 +25,8 @@ namespace Editor
             ComboBoxAssigned.DataContext = padre.GetDatos().Perfil.ACCIONES;
             ComboBoxAssigned.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("Nombre", System.ComponentModel.ListSortDirection.Ascending));
             ComboBoxAssigned.SelectedIndex = 0;
-            ComboBoxMacro.DataContext = padre.GetDatos().Perfil.ACCIONES;
+            ComboBoxMacro.DataContext = new System.Data.DataView( padre.GetDatos().Perfil.ACCIONES);
+            ((System.Data.DataView)ComboBoxMacro.DataContext).RowFilter = "idAccion <> 0";
             ComboBoxMacro.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("Nombre", System.ComponentModel.ListSortDirection.Ascending));
             ComboBoxMacro.SelectedIndex = 0;
         }
@@ -48,6 +49,37 @@ namespace Editor
         {
             if (eventos)
                 SetEje();
+        }
+        #endregion
+
+        #region "Macros"
+        private void ComboBoxAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ComboBoxMacro.SelectedIndex != -1)
+                AsignarMacro((ushort)ComboBoxAssigned.SelectedValue);
+        }
+
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            VEditorMacros dlg = new VEditorMacros(-1);
+            dlg.Owner = App.Current.MainWindow;
+            dlg.ShowDialog();
+        }
+
+        private void ButtonEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxMacro.SelectedIndex != -1)
+            {
+                VEditorMacros dlg = new VEditorMacros((int)(ushort)ComboBoxMacro.SelectedValue);
+                dlg.Owner = App.Current.MainWindow;
+                dlg.ShowDialog();
+            }
+        }
+
+        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxMacro.SelectedIndex != -1)
+                padre.GetDatos().Perfil.ACCIONES.Rows.Remove(padre.GetDatos().Perfil.ACCIONES.FindByidAccion((ushort)ComboBoxMacro.SelectedValue));
         }
         #endregion
     }

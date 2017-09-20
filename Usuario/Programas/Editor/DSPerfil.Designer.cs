@@ -484,28 +484,28 @@ namespace Editor {
                         this.tableINDICESEJES.IndiceColumn});
             this.tableINDICESEJES.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJESPEQUE", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESEJESPEQUE.IndiceColumn});
             this.tableINDICESEJESPEQUE.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESSETAS", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESSETAS.IndiceColumn});
             this.tableINDICESSETAS.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESBOTONES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESBOTONES.IndiceColumn});
             this.tableINDICESBOTONES.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             this.relationFK_ACCIONES_INDICESEJES = new global::System.Data.DataRelation("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
@@ -3007,6 +3007,7 @@ namespace Editor {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3301,6 +3302,7 @@ namespace Editor {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3596,6 +3598,7 @@ namespace Editor {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3891,6 +3894,7 @@ namespace Editor {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

@@ -40,7 +40,7 @@ namespace Editor
                 if (idc)
                 {
                     bool nombreOk = true;
-                    string st = TextBoxNombre.Text.Trim();
+                    string st = r.Nombre;
                     if (st.Length > 16)
                         st = st.Substring(0, 16);
                     byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st));
@@ -58,7 +58,7 @@ namespace Editor
                         }
                         if ((macro[st.Length + 1] == (byte)TipoC.TipoComando_MfdTextoFin) && nombreOk)
                         {
-                            for (byte i = 0; i < st.Length + 1; i++)
+                            for (byte i = 0; i <= st.Length + 1; i++)
                                 macro.RemoveAt(0);
 
                             CheckBox1.IsChecked = true;
@@ -678,16 +678,21 @@ namespace Editor
 
             if (indicep == -1)
             {
-                DSPerfil.ACCIONESRow nr = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
-                nr.Comandos = macro.ToArray();
-                padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(nr);
+                ushort idnuevo = 0;
+                foreach (DSPerfil.ACCIONESRow r in padre.GetDatos().Perfil.ACCIONES.Rows)
+                {
+                    if (r.idAccion > idnuevo)
+                        idnuevo++;
+                }
+                idnuevo++;
+                padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(idnuevo, TextBoxNombre.Text.Trim(), macro.ToArray());
                 this.DialogResult = null;
             }
             else
             {
                 DSPerfil.ACCIONESRow nr = padre.GetDatos().Perfil.ACCIONES.FindByidAccion((ushort)indicep);
+                nr.Nombre = TextBoxNombre.Text.Trim();
                 nr.Comandos = macro.ToArray();
-                padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(nr);
                 this.DialogResult = true;
             }
 
