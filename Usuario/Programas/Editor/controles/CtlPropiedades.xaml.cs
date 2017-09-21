@@ -34,7 +34,7 @@ namespace Editor
         #region "Ejes"
         private void ButtonSensibility_Click(object sender, RoutedEventArgs e)
         {
-            VEditorSensibilidad dlg = new VEditorSensibilidad();
+            VEditorSensibilidad dlg = new VEditorSensibilidad(idActual);
             dlg.Owner = App.Current.MainWindow;
             dlg.ShowDialog();
         }
