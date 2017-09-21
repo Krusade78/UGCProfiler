@@ -62,7 +62,8 @@ namespace Editor
         #region "Perfil"
         private void RibbonButtonLanzar_Click(object sender, RoutedEventArgs e)
         {
-            Lanzar();
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
+                Lanzar();
         }
         //private void RibbonButtonModos_Click(object sender, RoutedEventArgs e)
         //{
@@ -73,9 +74,12 @@ namespace Editor
         //}
         private void RibbonButtonRaton_Click(object sender, RoutedEventArgs e)
         {
-            VEditorRaton v = new VEditorRaton();
-            v.Owner = this;
-            v.ShowDialog();
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            {
+                VEditorRaton v = new VEditorRaton();
+                v.Owner = this;
+                v.ShowDialog();
+            }
         }
         #endregion
 

@@ -23,48 +23,30 @@
                 <Button x:Name="ButtonFecha2" Content="Fecha 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="496,65,0,0" Width="57" Height="21" Click="ButtonFecha2_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button x:Name="ButtonFecha1" Content="Fecha 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="496,44,0,0" Width="57" Height="21" Click="ButtonFecha1_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Label Content="Dígito" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="562,48,0,0" Foreground="Gainsboro" Width="42" HorizontalContentAlignment="Center" FontSize="11"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="562,73,0,0">
-                    <TextBox Width="25" Text="{Binding Value, ElementName=NumericUpDown13, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown13" Maximum="39" Minimum="0" SmallChange="1" Value="0" Height="26" />
-                </StackPanel>
+                <local:CtlNumUpDown x:Name="NumericUpDown13" Maximum="39" Minimum="0" Value="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="562,73,0,0" Width="42" Height="21" />
 
                 <Label x:Name="LabelLight" Content="Luz" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="622,24,0,0" Padding="5,1,5,2" Width="187" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontSize="10"/>
                 <Button x:Name="ButtonInfoOn" Content="Info On" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="628,49,0,0" Width="51" Height="21" Click="ButtonInfoOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button x:Name="ButtonInfoOff" Content="Info Off" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="628,78,0,0" Width="51" Height="21" Click="ButtonInfoOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button x:Name="ButtonLuzMfd" Content="Luz MFD" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="691,49,0,0" Width="65" Height="21" Click="ButtonLuzMfd_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button x:Name="ButtonLuzBotones" Content="Luz botones" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="691,78,0,0" Width="65" Height="21" Click="ButtonLuzBotones_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Label Content="Nivel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="767,50,0,0" Foreground="Gainsboro" HorizontalContentAlignment="Center" Width="34" FontSize="11" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="767,73,0,0">
-                    <TextBox Width="17" Text="{Binding Value, ElementName=NumericUpDownLuzMfd, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDownLuzMfd" Maximum="2" Minimum="0" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
+                <Label Content="Nivel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="767,49,0,0" Foreground="Gainsboro" HorizontalContentAlignment="Center" Width="34" FontSize="11" />
+                <local:CtlNumUpDown x:Name="NumericUpDownLuzMfd" Maximum="2" Minimum="0" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="767,73,0,0" Width="34" Height="21" />
 
                 <Label Content="Texto MFD" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,24,0,0" Padding="5,1,5,2" Width="184" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontSize="10"/>
                 <Label Content="Texto:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,50,0,0" Foreground="Gainsboro" HorizontalContentAlignment="Right" FontSize="11"/>
                 <TextBox x:Name="TextBox3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,51,0,0" Width="140" Height="21" MaxLength="16" Background="Black" Foreground="GreenYellow" Padding="0,1,0,0"/>
-                <Label Content="Línea:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,79,0,0" HorizontalContentAlignment="Right" Foreground="Gainsboro" FontSize="11"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,79,0,0">
-                    <TextBox Width="17" Text="{Binding Value, ElementName=NumericUpDown9, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown9" Maximum="3" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
+                <Label Content="Línea:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,80,0,0" HorizontalContentAlignment="Right" Foreground="Gainsboro" FontSize="11"/>
+                <local:CtlNumUpDown x:Name="NumericUpDown9" Maximum="3" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,82,0,0" Width="34" Height="21" />
                 <Button x:Name="ButtonLinea" Content="Línea de texto" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="81,81,0,0" Width="101" Height="23" Click="ButtonLinea_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
 
                 <Label Content="Relojes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="192,24,0,0" Padding="5,1,5,2" Width="222" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontSize="10"/>
                 <Label Content="Reloj:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="347,50,0,0" Foreground="Gainsboro" Padding="0,5,3,5" FontSize="11"/>
                 <Label Content="Minuto:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="263,51,0,0" Foreground="Gainsboro" Padding="0,5,3,5" FontSize="10"/>
                 <Label Content="Hora:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,51,0,0" Foreground="Gainsboro" Padding="0,5,3,5" FontSize="10"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,50,0,0">
-                    <TextBox Width="19" Text="{Binding Value, ElementName=NumericUpDown11, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown11" Maximum="59" Minimum="0" SmallChange="1" Value="0" Height="26" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="224,50,0,0">
-                    <TextBox Width="17" Text="{Binding Value, ElementName=NumericUpDown10, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown10" Maximum="23" Minimum="-23" SmallChange="1" Value="0" Height="26" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="376,50,0,0">
-                    <TextBox Width="17" Text="{Binding Value, ElementName=NumericUpDown7, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown7" Maximum="3" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
+                <local:CtlNumUpDown x:Name="NumericUpDown11" Maximum="59" Minimum="0" Value="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,52,0,0" Width="34" Height="21" />
+                <local:CtlNumUpDown x:Name="NumericUpDown10" Maximum="23" Minimum="-23" Value="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="224,52,0,0" Width="36" Height="21" />
+                <local:CtlNumUpDown x:Name="NumericUpDown7" Maximum="3" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="376,51,0,0" Width="34" Height="21" />
                 <Button x:Name="Button48" Content="AM/PM" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,80,0,0" Width="60" Height="23" Click="Button48_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button x:Name="Button47" Content="24H" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="242,80,0,0" Width="60" Height="23" Click="Button47_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
 
@@ -95,14 +77,8 @@
             <Grid TextElement.FontSize="10">
                 <Label Content="x100 ms." HorizontalAlignment="Left" VerticalAlignment="Top" Margin="155,54,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
                 <Label Content="Comandos de estado" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Width="226" Background="DarkGreen"  Foreground="#FFD8E4D7" Padding="10,2,5,2" FontWeight="Bold" FontSize="11"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,53,0,0">
-                    <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDown6, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown6" Maximum="250" Minimum="0" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,79,0,0">
-                    <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDown4, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown4" Maximum="50" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
+                <local:CtlNumUpDown x:Name="NumericUpDown6" Maximum="250" Minimum="0" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,55,0,0" Width="49" Height="21" />
+                <local:CtlNumUpDown x:Name="NumericUpDown4" Maximum="50" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,81,0,0" Width="49" Height="21" />
                 <Button Content="Pausa" x:Name="ButtonPausa" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,55,0,0" Width="71" Height="21" Click="ButtonPausa_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button Content="Mantener" x:Name="ButtonMantener" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,27,0,0" Width="62" Height="21" Click="ButtonMantener_Click_1" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button Content="Repetir" x:Name="ButtonRepetir" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="118,27,0,0" Width="68" Height="21" Click="ButtonRepetir_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
@@ -128,21 +104,13 @@
                 <Label Content="Botón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="71,57,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11" />
                 <Label Content="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,26,0,0" Width="217" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,1,5,2" FontSize="10"/>
                 <Label Content="DirectX" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFD8E4D7" Padding="10,2,5,2" FontWeight="Bold" Width="229" FontSize="11"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,56,0,0">
-                    <TextBox Width="30" Text="{Binding Value, ElementName=NumericUpDown1, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDown1" Maximum="56" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
+                <local:CtlNumUpDown x:Name="NumericUpDown1" Maximum="56" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="113,58,0,0" Width="49" Height="21" />
+
                 <Label Content="Posición:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="115,112,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
-                <Label Content="Seta:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,111,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
+                <Label Content="Seta:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,112,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
                 <Label Content="Setas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,89,0,0" Width="216" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,1,5,2" FontSize="10"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="163,111,0,0">
-                    <TextBox Width="20" Text="{Binding Value, ElementName=NumericUpDownPosicion, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDownPosicion" Maximum="8" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,110,0,0">
-                    <TextBox Width="20" Text="{Binding Value, ElementName=NumericUpDownPov, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDownPov" Maximum="4" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
+                <local:CtlNumUpDown x:Name="NumericUpDownPosicion" Maximum="8" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="167,114,0,0" Width="37" Height="21" />
+                <local:CtlNumUpDown x:Name="NumericUpDownPov" Maximum="4" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="61,114,0,0" Width="37" Height="21" />
 
                 <Button Content="Off" x:Name="ButtonPovOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="133,141,0,0" Width="43" Height="21" Click="ButtonPovOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button Content="On" x:Name="ButtonPovOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="64,141,0,0" Width="43" Height="21" Click="ButtonPovOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
@@ -210,10 +178,7 @@
                 <Button Content="Derecha" x:Name="ButtonMovDerecha" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="209,136,0,0" Width="50" Height="21" Click="ButtonMovDerecha_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Button Content="Izquierda" x:Name="ButtonMovIzquierda" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="58,136,0,0" Width="50" Height="21" Click="ButtonMovIzquierda_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
                 <Label Content="Sensibilidad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,136,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="137,158,0,0">
-                    <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDownSensibilidad, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDownSensibilidad" Maximum="200" Minimum="0" SmallChange="1" Value="0" Height="26" />
-                </StackPanel>
+                <local:CtlNumUpDown x:Name="NumericUpDownSensibilidad" Maximum="200" Minimum="0" Value="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,158,0,0" Width="49" Height="21" FontSize="11"/>
                 <Grid x:Name="PanelMovimiento" Visibility="Collapsed" Background="#7F808080" Width="310" Height="75" Margin="0,112,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" />
             </Grid>
         </Border>

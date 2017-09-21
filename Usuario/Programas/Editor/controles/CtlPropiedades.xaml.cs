@@ -27,7 +27,7 @@ namespace Editor
             ComboBoxAssigned.SelectedIndex = 0;
             ComboBoxMacro.DataContext = new System.Data.DataView( padre.GetDatos().Perfil.ACCIONES);
             ((System.Data.DataView)ComboBoxMacro.DataContext).RowFilter = "idAccion <> 0";
-            ComboBoxMacro.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("Nombre", System.ComponentModel.ListSortDirection.Ascending));
+            ((System.Data.DataView)ComboBoxMacro.DataContext).Sort = "Nombre";
             ComboBoxMacro.SelectedIndex = 0;
         }
 
@@ -48,14 +48,124 @@ namespace Editor
         private void CheckBoxInverted_Checked(object sender, RoutedEventArgs e)
         {
             if (eventos)
-                SetEje();
+            {
+                if (ComboBoxAxesMini.Visibility == Visibility.Visible)
+                    SetEjeMini();
+                else
+                    SetEje();
+            }
+        }
+
+        private void ComboBoxAxesMini_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.IsLoaded && eventos)
+                SetEjeMini();
+        }
+
+        private void NumericUpDownMSensibility_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (this.IsLoaded && eventos)
+                SetSensibilidadRaton();
+
+        }
+
+        private void RadioButtonIncremental_Checked(object sender, RoutedEventArgs e)
+        {
+            if (eventos)
+            {
+                RadioButtonBands.IsChecked = false;
+                SetModoEje();
+            }
+        }
+
+        private void RadioButtonBands_Checked(object sender, RoutedEventArgs e)
+        {
+            if (eventos)
+            {
+                RadioButtonIncremental.IsChecked = false;
+                SetModoEje();
+            }
+        }
+
+        private void NumericUpDownResistanceInc_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (this.IsLoaded && eventos)
+                SetResistencia(true);
+        }
+
+        private void NumericUpDownResistanceDec_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (this.IsLoaded && eventos)
+                SetResistencia(false);
+        }
+
+        private void ButtonEditBands_Click(object sender, RoutedEventArgs e)
+        {
+            //VEditorBandas dlg = new VEditorBandas();
+            //dlg.Owner = App.Current.MainWindow;
+            //dlg.ShowDialog();
+        }
+        #endregion
+
+        #region "botones"
+        private void RadioButtonUpDown_Checked(object sender, RoutedEventArgs e)
+        {
+            if (eventos)
+                Refrescar();
+        }
+
+        private void RadioButtonToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            if (eventos)
+                Refrescar();
+        }
+
+        private void NumericUpDownPositions_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void ButtonAssignModes_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonAssignPinkie_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonAssignPOV_Click(object sender, RoutedEventArgs e)
+        {
+
         }
         #endregion
 
         #region "Macros"
+        private void RadioButton2_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton1.IsChecked = false;
+            Refrescar();
+        }
+
+        private void RadioButton1_Checked(object sender, RoutedEventArgs e)
+        {
+            if (eventos)
+            {
+                RadioButton2.IsChecked = false;
+                Refrescar();
+            }
+        }
+
+        private void NumericUpDownPosition_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (this.IsLoaded)
+                Refrescar();
+        }
+
         private void ComboBoxAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBoxMacro.SelectedIndex != -1)
+            if (this.IsLoaded && ComboBoxMacro.SelectedIndex != -1)
                 AsignarMacro((ushort)ComboBoxAssigned.SelectedValue);
         }
 

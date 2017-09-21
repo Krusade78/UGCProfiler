@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:Editor"
              Height="462" Width="434">
     <Grid Loaded="Grid_Loaded">
-        <Image Source="/Editor;component/res/x52j.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,43,0,0"/>
+        <!--<Image Source="/Editor;component/res/x52j.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,43,0,0"/>-->
         <Button x:Name="ButtonX" Content="Eje X" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="88,416,0,0" Height="23" Width="75" Click="ButtonX_Click"/>
         <Button x:Name="ButtonY" Content="Eje Y" Background="GhostWhite" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="180,416,180,0" Height="23" Width="74" Click="ButtonY_Click"/>
         <Button x:Name="ButtonR" Content="Eje R" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,416,0,0" Height="23" Width="75" Click="ButtonR_Click"/>

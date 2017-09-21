@@ -19,10 +19,18 @@ namespace Editor
         #region "Cargar"
         public void Ver(byte idc, Tipo tipo, String nombre)
         {
+            eventos = false;
+
             if (nombre != "")
+            {
                 Label2.Content = nombre;
+                RadioButton1.IsChecked = true;
+                RadioButton2.IsChecked = false;
+                NumericUpDownPosition.Value = 1;
+            }
             idActual = idc;
             tipoActual = tipo;
+
             if (tipo == Tipo.Seta)
                 Boton(idc, true);
             else if (tipo == Tipo.Boton)
@@ -33,16 +41,14 @@ namespace Editor
                 Eje(idc, true);
             else
                 MiniStick((byte)(idc - 64));
+
+            eventos = true;
         }
 
         private void Boton(byte b, bool seta)
         {
-            eventos = false;
             //'reset
-            RadioButton1.IsChecked = true;
-            RadioButton2.IsChecked = false;
             NumericUpDownPosition.Maximum = 15;
-            NumericUpDownPosition.Value = 1;
             //'/--------
 
             byte p = 0, m = 0, st;
@@ -57,6 +63,7 @@ namespace Editor
             ButtonAssignModes.Visibility = System.Windows.Visibility.Hidden;
             if (st > 0)
             {
+                RadioButtonUpDown.IsChecked = false;
                 RadioButtonToggle.IsChecked = true;
                 LabelPositions.Visibility = System.Windows.Visibility.Visible;
                 NumericUpDownPositions.Visibility = System.Windows.Visibility.Visible;
@@ -70,6 +77,7 @@ namespace Editor
             else
             {
                 RadioButtonUpDown.IsChecked = true;
+                RadioButtonToggle.IsChecked = false;
                 LabelPositions.Visibility = System.Windows.Visibility.Hidden;
                 NumericUpDownPositions.Visibility = System.Windows.Visibility.Hidden;
                 if (seta)
@@ -98,15 +106,14 @@ namespace Editor
             PanelDigital.Visibility = System.Windows.Visibility.Collapsed;
             PanelMacro.Visibility = System.Windows.Visibility.Collapsed;
 
-            eventos = true;
             CargarIndexMacro();
         }
 
         private void Eje(byte e, bool peque)
         {
-            eventos = false;
+            ComboBoxAxes.Visibility = System.Windows.Visibility.Visible;
+            ComboBoxAxesMini.Visibility = System.Windows.Visibility.Hidden;
             NumericUpDownPosition.Maximum = 16;
-            NumericUpDownPosition.Value = 1;
 
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
@@ -143,8 +150,8 @@ namespace Editor
                 RadioButtonIncremental.IsChecked = true;
                 ButtonEditBands.Visibility = System.Windows.Visibility.Hidden;
                 PanelIncremental.Visibility = System.Windows.Visibility.Visible;
-                NumericUpDownResistanceInc.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 0).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 0).Indice;
-                NumericUpDownResistanceDec.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 1).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 1).Indice;
+                NumericUpDownResistanceInc.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 2).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 2).Indice;
+                NumericUpDownResistanceDec.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 3).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 3).Indice;
                 //'macros
                 LabelPosition.Visibility = System.Windows.Visibility.Hidden;
                 NumericUpDownPosition.Visibility = System.Windows.Visibility.Hidden;
@@ -173,15 +180,14 @@ namespace Editor
             PanelButton.Visibility = System.Windows.Visibility.Visible;
             PanelMacro.Visibility = System.Windows.Visibility.Collapsed;
 
-            eventos = true;
             CargarIndexMacro();
         }
 
         private void MiniStick(byte id)
         {
-            eventos = false;
+            ComboBoxAxes.Visibility = System.Windows.Visibility.Hidden;
+            ComboBoxAxesMini.Visibility = System.Windows.Visibility.Visible;
             NumericUpDownPosition.Maximum = 16;
-            NumericUpDownPosition.Value = 1;
 
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
@@ -194,7 +200,7 @@ namespace Editor
             else
                 CheckBoxInverted.IsChecked = false;
 
-            ComboBoxAxes.SelectedIndex = neje;
+            ComboBoxAxes.SelectedIndex = neje - 9;
             if (neje > 10)
             {
                 LabelMSensibility.IsEnabled = true;
@@ -211,8 +217,6 @@ namespace Editor
             PanelButton.Visibility = System.Windows.Visibility.Visible;
             PanelDigital.Visibility = System.Windows.Visibility.Visible;
             PanelMacro.Visibility = System.Windows.Visibility.Collapsed;
-
-            eventos = true;
         }
 
         private void CargarIndexMacro()
@@ -259,21 +263,143 @@ namespace Editor
         #region "Ejes"
         private void SetEje()
         {
-            //byte p = 0, m = 0, ej = ((idActual > 63) && (idActual < 100)) ? (byte)(idActual - 64) : idActual;
-            //padre.GetModos(ref p, ref m);
-            //if (CheckBoxInverted.IsChecked == true)
-            //    padre.GetDatos().Perfil.mSetMapaEjes_nEje(p, m, ej, (datos.GetMapaEjes_nEje(p, m, a, ej) And 128) Or(ComboBoxAxes.SelectedIndex + 20))
-            //else
-            //    padre.GetDatos().SetMapaEjes_nEje(p, m, ej, (datos.GetMapaEjes_nEje(p, m, a, ej) And 128) Or ComboBoxAxes.SelectedIndex)
+            byte p = 0, m = 0;
+            padre.GetModos(ref p, ref m);
+            if (tipoActual == Tipo.Eje)
+            {
+                byte inc = (byte)(padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).nEje & 128);
+                if (CheckBoxInverted.IsChecked == true)
+                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(inc | (ComboBoxAxes.SelectedIndex + 20));
+                else
+                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(inc | ComboBoxAxes.SelectedIndex);
+            }
+            else if (tipoActual == Tipo.EjePeque)
+            {
+                byte inc = (byte)(padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje & 128);
+                if (CheckBoxInverted.IsChecked == true)
+                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(inc | (ComboBoxAxes.SelectedIndex + 20));
+                else
+                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(inc | ComboBoxAxes.SelectedIndex);
 
-            //Refrescar();
+            }
+            Refrescar();
+        }
+
+        private void SetEjeMini()
+        {
+            byte p = 0, m = 0;
+            padre.GetModos(ref p, ref m);
+
+            if (CheckBoxInverted.IsChecked == true)
+                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(ComboBoxAxes.SelectedIndex + 9 + 20);
+            else
+                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(ComboBoxAxes.SelectedIndex + 9);
+
+            Refrescar();
+        }
+
+        private void SetSensibilidadRaton()
+        {
+            byte p = 0, m = 0;
+            padre.GetModos(ref p, ref m);
+            if (tipoActual == Tipo.Eje)
+                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
+            else if (tipoActual == Tipo.EjePeque)
+                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
+            else
+                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
+        }
+
+        private void SetModoEje()
+        {
+            byte p = 0, m = 0;
+            padre.GetModos(ref p, ref m);
+            byte inc = (RadioButtonBands.IsChecked == true) ? (byte)0 : (byte)128;
+            if (tipoActual == Tipo.Eje)
+            {
+                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).nEje &= 127;
+                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).nEje |= inc;
+                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 2).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 3).Indice = 0;
+            }
+            else
+            {
+                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje &= 127;
+                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje |= inc;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 2).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 3).Indice = 0;
+            }
+        }
+
+        private void SetResistencia(bool inc)
+        {
+            byte p = 0, m = 0;
+            padre.GetModos(ref p, ref m);
+            if (tipoActual == Tipo.Eje)
+                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)((inc) ? 2 : 3)).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
+            else
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)((inc) ? 2 : 3)).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
         }
         #endregion
 
         #region "Macros"
         private void AsignarMacro(ushort idc)
         {
+            byte p = 0, m = 0;
+            padre.GetModos(ref p, ref m);
+            switch (tipoActual)
+            {
+                case Tipo.Seta:
+                    if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
+                    {
+                        if (RadioButton1.IsChecked == true)
+                            padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                        else
+                            padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                    }
+                    else
+                        padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
+                    break;
+                case Tipo.Boton:
+                    if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
+                    {
+                        if (RadioButton1.IsChecked == true)
+                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                        else
+                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                    }
+                    else
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
+                    break;
+                case Tipo.Eje:
+                    if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
+                    {
+                        if (RadioButton1.IsChecked == true)
+                            padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                        else
+                            padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                    }
+                    else
+                        padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
 
+                    break;
+                case Tipo.EjePeque:
+                    if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
+                    {
+                        if (RadioButton1.IsChecked == true)
+                            padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                        else
+                            padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                    }
+                    else
+                        padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
+
+                    break;
+            }
         }
         #endregion
 

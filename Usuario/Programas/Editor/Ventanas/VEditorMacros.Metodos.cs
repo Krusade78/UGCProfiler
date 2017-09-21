@@ -325,11 +325,11 @@ namespace Editor
                     case TipoC.TipoComando_DxBoton:
                         if (soltar)
                         {
-                            ListBox1.Items.Add("Botón DX " + dato + 1 + " Off");
+                            ListBox1.Items.Add("Botón DX " + (dato + 1) + " Off");
                         }
                         else
                         {
-                            ListBox1.Items.Add("Botón DX " + dato + 1 + " On");
+                            ListBox1.Items.Add("Botón DX " + (dato + 1) + " On");
                         }
                         break;
                     case TipoC.TipoComando_DxSeta:

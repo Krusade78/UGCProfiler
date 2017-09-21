@@ -41,8 +41,8 @@ namespace Editor
                 {
                     for (byte e = 0; e < 4; e++)
                     {
-                        Perfil.MAPAEJES.AddMAPAEJESRow(p, m, e, 0, 0, new byte[10], new byte[15]);
-                        Perfil.MAPAEJESPEQUE.AddMAPAEJESPEQUERow(p, m, e, 0, 0, new byte[15]);
+                        Perfil.MAPAEJES.AddMAPAEJESRow(p, m, e, 0, 0, new byte[10], new byte[15], 0, 0);
+                        Perfil.MAPAEJESPEQUE.AddMAPAEJESPEQUERow(p, m, e, 0, 0, new byte[15], 0, 0);
                         for (byte i = 0; i < 16; i++)
                         {
                             Perfil.INDICESEJES.AddINDICESEJESRow((UInt32)((p << 16) | (m << 8) | e), i, accionVacia);

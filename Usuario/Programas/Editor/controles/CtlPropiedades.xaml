@@ -31,67 +31,57 @@
                     <ComboBoxItem Content="Ratón X" />
                     <ComboBoxItem Content="Ratón Y" />
                 </ComboBox>
+                <ComboBox x:Name="ComboBoxAxesMini" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,32,0,0" Height="23" Width="80" Visibility="Hidden" SelectionChanged="ComboBoxAxesMini_SelectionChanged">
+                    <ComboBoxItem Content="Ninguno" />
+                    <ComboBoxItem Content="MiniStick X" />
+                    <ComboBoxItem Content="MiniStick Y" />
+                    <ComboBoxItem Content="Ratón X" />
+                    <ComboBoxItem Content="Ratón Y" />
+                </ComboBox>
                 <Label x:Name="LabelWorkAs" Content="Asignar a:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,31,0,0" Foreground="Gainsboro" />
                 <CheckBox x:Name="CheckBoxInverted" Content="Invertido" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="153,36,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" Checked="CheckBoxInverted_Checked" Unchecked="CheckBoxInverted_Checked" />
                 <Button x:Name="ButtonSensibility" Content="Curva sensibilidad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,61,0,0" Padding="10,2" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonSensibility_Click" />
 
                 <Label x:Name="LabelMSensibility" Content="Sensibilidad ratón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,87,0,0" Foreground="Gainsboro" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,87,0,0">
-                    <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDownMSensibility, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDownMSensibility" Maximum="250" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
+                <local:CtlNumUpDown x:Name="NumericUpDownMSensibility" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,88,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="250" Minimum="1" Value="1" Width="49" Height="21" TextChanged="NumericUpDownMSensibility_TextChanged" />
 
                 <Label Content="Función digital" VerticalAlignment="Top" Margin="10,118,10,0" Foreground="White" Background="#FF99B49E" FontStyle="Italic" Padding="5,1" />
-                <RadioButton Content="Bandas" x:Name="RadioButtonBands" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,140,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
-                <RadioButton Content="Incremental" x:Name="RadioButtonIncremental" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,140,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
+                <RadioButton Content="Bandas" x:Name="RadioButtonBands" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,140,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" Checked="RadioButtonBands_Checked" />
+                <RadioButton Content="Incremental" x:Name="RadioButtonIncremental" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,140,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" Checked="RadioButtonIncremental_Checked" />
                 <Grid x:Name="PanelIncremental" VerticalAlignment="Top" Margin="0,160,0,10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,29,0,0">
-                        <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDownResistanceDec, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                        <ScrollBar x:Name="NumericUpDownResistanceDec" Maximum="16" Minimum="0" SmallChange="1" Value="0" Height="26" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,0,0,0">
-                        <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDownResistanceInc, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                        <ScrollBar x:Name="NumericUpDownResistanceInc" Maximum="16" Minimum="0" SmallChange="1" Value="0" Height="26" />
-                    </StackPanel>
+                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceInc" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,2,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" TextChanged="NumericUpDownResistanceInc_TextChanged" />
+                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceDec" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,31,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" TextChanged="NumericUpDownResistanceDec_TextChanged" />
+
                     <Label x:Name="LabelResistanceInc" Content="Resistencia inc.:" HorizontalAlignment="Left" Margin="20,1,0,29" Foreground="Gainsboro" />
                     <Label x:Name="LabelResistanceDec" Content="Resistencia dec.:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,29,0,0" Foreground="Gainsboro" />
                 </Grid>
-                <Button x:Name="ButtonEditBands" Content="Editar bandas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,170,0,0" Padding="5,3" Background="#FFF3C4C4" Foreground="#FF762626" />
+                <Button x:Name="ButtonEditBands" Content="Editar bandas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,170,0,0" Padding="5,3" Background="#FFF3C4C4" Foreground="#FF762626" Visibility="Hidden" Click="ButtonEditBands_Click" />
                 <Grid x:Name="PanelDigital" Background="#7F808080" Margin="8,118,8,8" Visibility="Collapsed" />
 
                 <Grid x:Name="PanelMapaEjes" Background="#7F808080" Margin="3,0,3,3" Visibility="Collapsed" />
             </Grid>
             <Grid Height="90">
                 <Label Content="Configuración de botón" x:Name="LabelButton" VerticalAlignment="Top" Margin="3,0" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" />
-                <RadioButton Content="Toggle" x:Name="RadioButtonToggle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="147,30,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
-                <RadioButton Content="Presionar/Soltar" x:Name="RadioButtonUpDown" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="31,30,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" />
+                <RadioButton Content="Toggle" x:Name="RadioButtonToggle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="147,30,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" Checked="RadioButtonToggle_Checked" />
+                <RadioButton Content="Presionar/Soltar" x:Name="RadioButtonUpDown" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="31,30,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" Checked="RadioButtonUpDown_Checked" />
                 <Label x:Name="LabelPositions" Content="Posiciones:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="47,53,0,12" Foreground="Gainsboro" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,52,0,0">
-                    <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDownPositions, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                    <ScrollBar x:Name="NumericUpDownPositions" Maximum="16" Minimum="1" SmallChange="1" Value="1" Height="26" />
-                </StackPanel>
-                <Button x:Name="ButtonAssignModes" Content="Asignar a modos" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button x:Name="ButtonAssignPinkie" Content="Asignar a Pinkie" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" />
-                <Button x:Name="ButtonAssignPOV" Content="Asignar a seta" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" />
+                <local:CtlNumUpDown x:Name="NumericUpDownPositions" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,54,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="1" Value="1" Width="49" Height="21" TextChanged="NumericUpDownPositions_TextChanged" />
+
+                <Button x:Name="ButtonAssignModes" Content="Asignar a modos" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Visibility="Hidden" Click="ButtonAssignModes_Click"/>
+                <Button x:Name="ButtonAssignPinkie" Content="Asignar a Pinkie" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Visibility="Hidden" Click="ButtonAssignPinkie_Click" />
+                <Button x:Name="ButtonAssignPOV" Content="Asignar a seta" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Visibility="Hidden" Click="ButtonAssignPOV_Click" />
 
                 <Grid x:Name="PanelButton" Background="#7F808080" Margin="3,0,3,3" Visibility="Collapsed" />
             </Grid>
             <Grid Height="90">
                 <Label Content="Asignación de macros" x:Name="LabelAssigned" VerticalAlignment="Top" Margin="3,0" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" />
                 <Grid x:Name="panelPos" VerticalAlignment="Top" Margin="0,31,0,0">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110,0,0,0">
-                        <TextBox Width="32" Text="{Binding Value, ElementName=NumericUpDownPosition, Mode=TwoWay}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Black" Foreground="GreenYellow"/>
-                        <ScrollBar x:Name="NumericUpDownPosition" Maximum="16" Minimum="1" SmallChange="1" Value="1" Height="26" RenderTransformOrigin="0.5,0.5" >
-                            <ScrollBar.RenderTransform>
-                                <ScaleTransform ScaleY="-1" ScaleX="1"/>
-                            </ScrollBar.RenderTransform>
-                        </ScrollBar>
-                    </StackPanel>
+                    <local:CtlNumUpDown x:Name="NumericUpDownPosition" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="1" Value="1" Width="49" Height="21" TextChanged="NumericUpDownPosition_TextChanged" />
                     <Label x:Name="LabelPosition" Content="Posición:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="58,1,0,0" Foreground="Gainsboro" />
                 </Grid>
                 <Grid x:Name="panelPS" VerticalAlignment="Top" Margin="0,31,0,0">
-                    <RadioButton Content="Soltado" x:Name="RadioButton2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="140,7,0,0" Foreground="White" VerticalContentAlignment="Center" />
-                    <RadioButton x:Name="RadioButton1" Content="Presionado" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,7,0,0" Foreground="White" VerticalContentAlignment="Center" />
+                    <RadioButton Content="Soltado" x:Name="RadioButton2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="140,7,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" Checked="RadioButton2_Checked" />
+                    <RadioButton x:Name="RadioButton1" Content="Presionado" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,7,0,0" Foreground="Gainsboro" VerticalContentAlignment="Center" Checked="RadioButton1_Checked" />
                 </Grid>
                 <ComboBox x:Name="ComboBoxAssigned" ItemsSource="{Binding}" DisplayMemberPath="Nombre" SelectedValuePath="idAccion" VerticalAlignment="Top" Margin="8,65,8,0" Width="224" Height="22" VerticalContentAlignment="Center" HorizontalAlignment="Center" SelectionChanged="ComboBoxAssigned_SelectionChanged" />
                 <Grid x:Name="PanelMacro" Background="#7F808080" Margin="3,0,3,3" Visibility="Collapsed" />
