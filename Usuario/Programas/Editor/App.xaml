@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Editor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="Themes/EstiloPorDefecto.xaml" />
     </Application.Resources>
 </Application>

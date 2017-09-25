@@ -29,7 +29,7 @@
         <Button x:Name="Buttonsl" Content="Eje Sl" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,175,0,0" Height="23" Width="75" Click="Buttonsl_Click"/>
         <Button x:Name="ButtonZ" Content="Eje Z" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,211,0,0" Height="23" Width="75" Click="ButtonZ_Click"/>
 
-        <Label Content="Seta 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="9,7,0,0" Width="95" HorizontalContentAlignment="Center" Foreground="Gainsboro" />
+        <Label Content="Seta 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="9,7,0,0" Width="95" HorizontalContentAlignment="Center" />
         <Button x:Name="Buttonp11" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,38,0,0" Height="23" Width="31" Click="Buttonp11_Click">
             <Image Source="/Editor;component/res/f1.gif" Stretch="None" />
         </Button>
@@ -55,7 +55,7 @@
             <Image Source="/Editor;component/res/f8.gif" Stretch="None" />
         </Button>
 
-        <Label Content="Seta 4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="328,197,0,0" Width="95" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Foreground="Gainsboro" />
+        <Label Content="Seta 4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="328,197,0,0" Width="95" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" />
         <Button x:Name="Buttonp21" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="362,228,0,0" Height="23" Width="31" Click="Buttonp21_Click">
             <Image Source="/Editor;component/res/f1.gif" Stretch="None" />
         </Button>

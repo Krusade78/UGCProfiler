@@ -12,6 +12,8 @@ namespace Editor
         public MainWindow()
         {
             InitializeComponent();
+            VEditorBandas v = new VEditorBandas(0);
+            v.ShowDialog();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

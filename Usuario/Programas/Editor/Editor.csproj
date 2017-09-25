@@ -87,6 +87,7 @@
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.Metodos.cs" />
+    <Compile Include="Ventanas\CConverterBandas.cs" />
     <Compile Include="Ventanas\VEditorMacros.Metodos.cs" />
     <Compile Include="Ventanas\VEditorMacros.xaml.cs">
       <DependentUpon>VEditorMacros.xaml</DependentUpon>
@@ -96,6 +97,9 @@
     </Compile>
     <Compile Include="Ventanas\VEditorRaton.xaml.cs">
       <DependentUpon>VEditorRaton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\VEditorBandas.xaml.cs">
+      <DependentUpon>VEditorBandas.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ventanas\VEditorSensibilidad.xaml.cs">
       <DependentUpon>VEditorSensibilidad.xaml</DependentUpon>
@@ -136,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\EstiloPorDefecto.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Ventanas\VEditorMacros.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,6 +156,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Ventanas\VEditorBandas.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Ventanas\VEditorSensibilidad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -157,20 +169,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="DSPerfil.xsc">
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </None>
@@ -184,10 +182,6 @@
     </None>
     <None Include="Plantillas\english-us.kbp" />
     <None Include="Plantillas\español-es.kbp" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
