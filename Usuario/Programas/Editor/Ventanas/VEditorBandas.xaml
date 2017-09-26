@@ -23,7 +23,7 @@
             <Grid Grid.ColumnSpan="3" VerticalAlignment="Top" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Nº de bandas:" Foreground="Gold" FontWeight="Bold" />
-                    <local:CtlNumUpDown x:Name="numBandas" Minimum="1" Maximum="15" Value="1" Width="40" VerticalAlignment="Center" TextChanged="numBandas_TextChanged"/>
+                    <local:CtlNumUpDown x:Name="numBandas" Minimum="1" Maximum="16" Value="1" Width="40" VerticalAlignment="Center" TextChanged="numBandas_TextChanged"/>
                 </StackPanel>
             </Grid>
             <StackPanel Margin="0,40,0,0">
@@ -47,57 +47,57 @@
                 <StackPanel.Resources>
                     <local:CConverterBandas x:Key="cvtBandas" />
                 </StackPanel.Resources>
-                <local:CtlNumUpDown x:Name="lbl1" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" TextChanged="lbl1_TextChanged" />
-                <local:CtlNumUpDown x:Name="lbl2" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl3" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl4" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl5" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl6" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl7" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl8" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl9" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl10" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl11" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl12" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl13" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl14" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
-                <local:CtlNumUpDown x:Name="lbl15" Minimum="0" Maximum="4096" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl1" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" TextChanged="lbl1_TextChanged" />
+                <local:CtlNumUpDown x:Name="lbl2" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl3" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl4" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl5" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl6" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl7" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl8" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl9" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl10" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl11" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl12" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl13" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl14" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
+                <local:CtlNumUpDown x:Name="lbl15" Minimum="1" Maximum="99" Width="50" HorizontalContentAlignment="Center" Margin="0,4" />
             </StackPanel>
             <Viewbox Grid.Column="2" Height="390" Width="150" VerticalAlignment="Top" Margin="0,44,0,0" Stretch="Fill">
-                <Grid x:Name="grb" Height="100" Width="1" Background="DimGray" >
+                <Grid x:Name="grb" Height="100" Width="1">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Grid x:Name="b1" Background="#FFD0DFEA" SizeChanged="b1_SizeChanged" />
-                    <GridSplitter Grid.Row="1" x:Name="gs1" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
-                    <Grid x:Name="b2" Grid.Row="2" Background="#FFB7D8F3"  />
-                    <GridSplitter Grid.Row="3" x:Name="gs2" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" />
-                    <Grid x:Name="b3" Grid.Row="4" Background="#FFD0DFEA" SizeChanged="b2_SizeChanged"/>
-                    <GridSplitter Grid.Row="5" x:Name="gs3" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <Grid x:Name="b1" Background="#FFD0DFEA" />
+                    <GridSplitter Grid.Row="1" x:Name="gs1" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta" />
+                    <Grid x:Name="b2" Grid.Row="2" Background="#FFB7D8F3" />
+                    <GridSplitter Grid.Row="3" x:Name="gs2" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
+                    <Grid x:Name="b3" Grid.Row="4" Background="#FFD0DFEA" />
+                    <GridSplitter Grid.Row="5" x:Name="gs3" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b4" Grid.Row="6" Background="#FFB7D8F3" />
-                    <GridSplitter Grid.Row="7" x:Name="gs4" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="7" x:Name="gs4" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b5" Grid.Row="8" Background="#FFD0DFEA" />
-                    <GridSplitter Grid.Row="9" x:Name="gs5" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="9" x:Name="gs5" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b6" Grid.Row="10" Background="#FFB7D8F3" />
-                    <GridSplitter Grid.Row="11" x:Name="gs6" HorizontalAlignment="Stretch" Height="3" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="11" x:Name="gs6" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b7" Grid.Row="12" Background="#FFD0DFEA" />
-                    <GridSplitter Grid.Row="13" x:Name="gs7" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="13" x:Name="gs7" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b8" Grid.Row="14" Background="#FFB7D8F3" />
-                    <GridSplitter Grid.Row="15" x:Name="gs8" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="15" x:Name="gs8" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b9" Grid.Row="16" Background="#FFD0DFEA" />
-                    <GridSplitter Grid.Row="17" x:Name="gs9" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="17" x:Name="gs9" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b10" Grid.Row="18" Background="#FFB7D8F3" />
-                    <GridSplitter Grid.Row="19" x:Name="gs10" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
-                    <Grid x:Name="b11" Grid.Row="20" Background="#FFD0DFEA" />
-                    <GridSplitter Grid.Row="21" x:Name="gs11" HorizontalAlignment="Stretch" Height="3" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="19" x:Name="gs10" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
+                    <Grid x:Name="b11" Grid.Row="20" Background="#FFD0DFEA"/>
+                    <GridSplitter Grid.Row="21" x:Name="gs11" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b12" Grid.Row="22" Background="#FFB7D8F3" />
-                    <GridSplitter Grid.Row="23" x:Name="gs12" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="23" x:Name="gs12" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b13" Grid.Row="24" Background="#FFD0DFEA" />
-                    <GridSplitter Grid.Row="25" x:Name="gs13" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="25" x:Name="gs13" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b14" Grid.Row="26" Background="#FFB7D8F3" />
-                    <GridSplitter Grid.Row="27" x:Name="gs14" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
-                    <Grid x:Name="b15" Grid.Row="28" Background="#FFD0DFEA" />
-                    <GridSplitter Grid.Row="29" x:Name="gs15" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray"/>
+                    <GridSplitter Grid.Row="27" x:Name="gs14" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
+                    <Grid x:Name="b15" Grid.Row="28" Background="#FFD0DFEA"/>
+                    <GridSplitter Grid.Row="29" x:Name="gs15" HorizontalAlignment="Stretch" Height="1" VerticalAlignment="Center" Background="Gray" DragDelta="gs1_DragDelta"/>
                     <Grid x:Name="b16" Grid.Row="30" Background="#FFB7D8F3" />
                 </Grid>
             </Viewbox>
