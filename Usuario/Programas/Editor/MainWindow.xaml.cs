@@ -12,7 +12,7 @@ namespace Editor
         public MainWindow()
         {
             InitializeComponent();
-            VEditorBandas v = new VEditorBandas(0);
+            VEditorBandas v = new VEditorBandas(0, CEnums.Tipo.Eje);
             v.ShowDialog();
         }
 
