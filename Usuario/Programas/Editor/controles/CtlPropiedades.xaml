@@ -43,14 +43,14 @@
                 <Button x:Name="ButtonSensibility" Content="Curva sensibilidad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,61,0,0" Padding="10,2" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonSensibility_Click" />
 
                 <Label x:Name="LabelMSensibility" Content="Sensibilidad ratón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,87,0,0" />
-                <local:CtlNumUpDown x:Name="NumericUpDownMSensibility" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,88,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="250" Minimum="1" Value="1" Width="49" Height="21" TextChanged="NumericUpDownMSensibility_TextChanged" />
+                <local:CtlNumUpDown x:Name="NumericUpDownMSensibility" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,88,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="250" Minimum="1" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownMSensibility_TextChanged" />
 
                 <Label Content="Función digital" VerticalAlignment="Top" Margin="10,118,10,0" Foreground="White" Background="#FF99B49E" FontStyle="Italic" Padding="5,1" />
                 <RadioButton Content="Bandas" x:Name="RadioButtonBands" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,140,0,0" VerticalContentAlignment="Center" Checked="RadioButtonBands_Checked" />
                 <RadioButton Content="Incremental" x:Name="RadioButtonIncremental" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,140,0,0" VerticalContentAlignment="Center" Checked="RadioButtonIncremental_Checked" />
                 <Grid x:Name="PanelIncremental" VerticalAlignment="Top" Margin="0,160,0,10">
-                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceInc" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,2,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" TextChanged="NumericUpDownResistanceInc_TextChanged" />
-                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceDec" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,31,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" TextChanged="NumericUpDownResistanceDec_TextChanged" />
+                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceInc" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,2,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownResistanceInc_TextChanged" />
+                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceDec" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,31,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownResistanceDec_TextChanged" />
 
                     <Label x:Name="LabelResistanceInc" Content="Resistencia inc.:" HorizontalAlignment="Left" Margin="20,1,0,29" />
                     <Label x:Name="LabelResistanceDec" Content="Resistencia dec.:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,29,0,0" />
@@ -65,7 +65,7 @@
                 <RadioButton Content="Toggle" x:Name="RadioButtonToggle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="147,30,0,0" VerticalContentAlignment="Center" Checked="RadioButtonToggle_Checked" />
                 <RadioButton Content="Presionar/Soltar" x:Name="RadioButtonUpDown" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="31,30,0,0" VerticalContentAlignment="Center" Checked="RadioButtonUpDown_Checked" />
                 <Label x:Name="LabelPositions" Content="Posiciones:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="47,53,0,12"/>
-                <local:CtlNumUpDown x:Name="NumericUpDownPositions" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,54,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="1" Value="1" Width="49" Height="21" TextChanged="NumericUpDownPositions_TextChanged" />
+                <local:CtlNumUpDown x:Name="NumericUpDownPositions" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,54,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="1" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownPositions_TextChanged" />
 
                 <Button x:Name="ButtonAssignModes" Content="Asignar a modos" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Visibility="Hidden" Click="ButtonAssignModes_Click"/>
                 <Button x:Name="ButtonAssignPinkie" Content="Asignar a Pinkie" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,52,0,0" Width="130" Height="21" Background="#FFF3C4C4" Foreground="#FF762626" Visibility="Hidden" Click="ButtonAssignPinkie_Click" />
@@ -76,7 +76,7 @@
             <Grid Height="90">
                 <Label Content="Asignación de macros" x:Name="LabelAssigned" VerticalAlignment="Top" Margin="3,0" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" />
                 <Grid x:Name="panelPos" VerticalAlignment="Top" Margin="0,31,0,0">
-                    <local:CtlNumUpDown x:Name="NumericUpDownPosition" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="1" Value="1" Width="49" Height="21" TextChanged="NumericUpDownPosition_TextChanged" />
+                    <local:CtlNumUpDown x:Name="NumericUpDownPosition" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="1" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownPosition_TextChanged" />
                     <Label x:Name="LabelPosition" Content="Posición:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="58,1,0,0" />
                 </Grid>
                 <Grid x:Name="panelPS" VerticalAlignment="Top" Margin="0,31,0,0">

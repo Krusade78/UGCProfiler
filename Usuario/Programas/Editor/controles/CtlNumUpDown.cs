@@ -12,12 +12,20 @@ namespace Editor
         #region "Propiedades"
         public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(int), typeof(CtlNumUpDown));
 
-        public int Value { get { return (int)GetValue(ValueProperty); } set { SetValue(ValueProperty, value); } }
+        public int Value {
+            get { return (int)GetValue(ValueProperty); }
+            set {
+                this.Background = System.Windows.Media.Brushes.Black;
+                SetValue(ValueProperty, value);
+                ValueChanged?.Invoke(this, null);
+                }
+        }
         public double Minimum { get; set; } = int.MinValue;
         public double Maximum { get; set; } = int.MaxValue;
         #endregion
 
         private bool eventosOn = true;
+        public event EventHandler ValueChanged;
 
         static CtlNumUpDown()
         {
@@ -86,13 +94,11 @@ namespace Editor
 
         private void CtlNumUpDown_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!eventosOn)
+            if (!eventosOn || !this.IsLoaded)
                 return;
 
             if (((TextBox)e.OriginalSource).Text.Trim() == "")
-            {
                 return;
-            }
 
             try
             {
@@ -100,17 +106,16 @@ namespace Editor
             }
             catch
             {
-                this.Text = this.Text;
-                e.Handled = true;
+                this.Background = System.Windows.Media.Brushes.DarkRed;
                 return;
             }
 
-            if ((int.Parse(((TextBox)e.OriginalSource).Text) < Minimum) || (int.Parse(((TextBox)e.OriginalSource).Text) > Maximum))
-                this.Text = this.Text;
-            else
+            if ((int.Parse(((TextBox)e.OriginalSource).Text) >= Minimum) && (int.Parse(((TextBox)e.OriginalSource).Text) <= Maximum))
+            {
                 Value = int.Parse(((TextBox)e.OriginalSource).Text);
-
-            e.Handled = true;
+            }
+            else
+                this.Background = System.Windows.Media.Brushes.DarkRed;
         }
         #endregion
     }

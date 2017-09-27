@@ -682,7 +682,7 @@ namespace Editor
                 foreach (DSPerfil.ACCIONESRow r in padre.GetDatos().Perfil.ACCIONES.Rows)
                 {
                     if (r.idAccion > idnuevo)
-                        idnuevo++;
+                        idnuevo = r.idAccion;
                 }
                 idnuevo++;
                 padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(idnuevo, TextBoxNombre.Text.Trim(), macro.ToArray());

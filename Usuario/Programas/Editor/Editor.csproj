@@ -95,6 +95,12 @@
     <Compile Include="Ventanas\VEditorModos.xaml.cs">
       <DependentUpon>VEditorModos.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ventanas\VEditorPinkieModos.xaml.cs">
+      <DependentUpon>VEditorPinkieModos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\VEditorPOV.xaml.cs">
+      <DependentUpon>VEditorPOV.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ventanas\VEditorRaton.xaml.cs">
       <DependentUpon>VEditorRaton.xaml</DependentUpon>
     </Compile>
@@ -151,6 +157,14 @@
     <Page Include="Ventanas\VEditorModos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ventanas\VEditorPinkieModos.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ventanas\VEditorPOV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Ventanas\VEditorRaton.xaml">
       <SubType>Designer</SubType>

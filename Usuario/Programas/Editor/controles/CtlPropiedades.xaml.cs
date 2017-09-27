@@ -32,17 +32,16 @@ namespace Editor
         }
 
         #region "Ejes"
-        private void ButtonSensibility_Click(object sender, RoutedEventArgs e)
-        {
-            VEditorSensibilidad dlg = new VEditorSensibilidad(idActual);
-            dlg.Owner = App.Current.MainWindow;
-            dlg.ShowDialog();
-        }
-
         private void ComboBoxAxes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.IsLoaded && eventos)
                 SetEje();
+        }
+
+        private void ComboBoxAxesMini_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.IsLoaded && eventos)
+                SetEjeMini();
         }
 
         private void CheckBoxInverted_Checked(object sender, RoutedEventArgs e)
@@ -56,17 +55,17 @@ namespace Editor
             }
         }
 
-        private void ComboBoxAxesMini_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ButtonSensibility_Click(object sender, RoutedEventArgs e)
         {
-            if (this.IsLoaded && eventos)
-                SetEjeMini();
+            VEditorSensibilidad dlg = new VEditorSensibilidad(idActual);
+            dlg.Owner = App.Current.MainWindow;
+            dlg.ShowDialog();
         }
 
-        private void NumericUpDownMSensibility_TextChanged(object sender, TextChangedEventArgs e)
+        private void NumericUpDownMSensibility_TextChanged(object sender, EventArgs e)
         {
             if (this.IsLoaded && eventos)
                 SetSensibilidadRaton();
-
         }
 
         private void RadioButtonIncremental_Checked(object sender, RoutedEventArgs e)
@@ -77,7 +76,6 @@ namespace Editor
                 SetModoEje();
             }
         }
-
         private void RadioButtonBands_Checked(object sender, RoutedEventArgs e)
         {
             if (eventos)
@@ -87,13 +85,13 @@ namespace Editor
             }
         }
 
-        private void NumericUpDownResistanceInc_TextChanged(object sender, TextChangedEventArgs e)
+        private void NumericUpDownResistanceInc_TextChanged(object sender, EventArgs e)
         {
             if (this.IsLoaded && eventos)
                 SetResistencia(true);
         }
 
-        private void NumericUpDownResistanceDec_TextChanged(object sender, TextChangedEventArgs e)
+        private void NumericUpDownResistanceDec_TextChanged(object sender, EventArgs e)
         {
             if (this.IsLoaded && eventos)
                 SetResistencia(false);
@@ -101,9 +99,9 @@ namespace Editor
 
         private void ButtonEditBands_Click(object sender, RoutedEventArgs e)
         {
-            //VEditorBandas dlg = new VEditorBandas();
-            //dlg.Owner = App.Current.MainWindow;
-            //dlg.ShowDialog();
+            VEditorBandas dlg = new VEditorBandas(idActual, tipoActual);
+            dlg.Owner = App.Current.MainWindow;
+            dlg.ShowDialog();
         }
         #endregion
 
@@ -111,33 +109,40 @@ namespace Editor
         private void RadioButtonUpDown_Checked(object sender, RoutedEventArgs e)
         {
             if (eventos)
-                Refrescar();
+                SetModoBoton(0);
         }
 
         private void RadioButtonToggle_Checked(object sender, RoutedEventArgs e)
         {
             if (eventos)
-                Refrescar();
+                SetModoBoton(1);        
         }
 
-        private void NumericUpDownPositions_TextChanged(object sender, TextChangedEventArgs e)
+        private void NumericUpDownPositions_TextChanged(object sender, EventArgs e)
         {
-
+            if (eventos)
+                SetModoBoton((byte)NumericUpDownPositions.Value);
         }
 
         private void ButtonAssignModes_Click(object sender, RoutedEventArgs e)
         {
-
+            VEditorPinkieModos dlg = new VEditorPinkieModos(true);
+            dlg.Owner = App.Current.MainWindow;
+            dlg.ShowDialog();
         }
 
         private void ButtonAssignPinkie_Click(object sender, RoutedEventArgs e)
         {
-
+            VEditorPinkieModos dlg = new VEditorPinkieModos(false);
+            dlg.Owner = App.Current.MainWindow;
+            dlg.ShowDialog();
         }
 
         private void ButtonAssignPOV_Click(object sender, RoutedEventArgs e)
         {
-
+            VEditorPOV dlg = new VEditorPOV(idActual);
+            dlg.Owner = App.Current.MainWindow;
+            dlg.ShowDialog();
         }
         #endregion
 
@@ -157,7 +162,7 @@ namespace Editor
             }
         }
 
-        private void NumericUpDownPosition_TextChanged(object sender, TextChangedEventArgs e)
+        private void NumericUpDownPosition_TextChanged(object sender, EventArgs e)
         {
             if (this.IsLoaded)
                 Refrescar();

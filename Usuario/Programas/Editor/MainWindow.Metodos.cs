@@ -120,19 +120,38 @@ namespace Editor
 
         private void Lanzar()
         {
-            //        if (datos.GetModificado())
-            //        {
-            //            MessageBoxResult r = MessageBox.Show("¿Guardar los cambios antes de lanzar el perfil?", "Advertencia", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-            //            if (r == MessageBoxResult.Cancel)
-            //                return;
-            //            else
-            //            {
-            //                if (!Guardar())
-            //                    return;
-            //            }
-            //        }
-            //        if (Driver.Lanzar(datos.GetRutaPerfil()))
-            //            MessageBox.Show("Perfil cargado correctamente", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            {
+                MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios antes de lanzar el perfil?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+                if (r == MessageBoxResult.Cancel)
+                    return;
+                else if (r == MessageBoxResult.Yes)
+                {
+                    if (!Guardar())
+                        return;
+                }
+            }
+            else
+                return;
+
+            using (System.IO.Pipes.NamedPipeClientStream pipeClient = new System.IO.Pipes.NamedPipeClientStream("LauncherPipe"))
+            {
+                try
+                { 
+                    pipeClient.Connect(1000);
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(pipeClient))
+                    {
+                        sw.Write(nombrePerfil + ".xhp");
+                        sw.Flush();
+                    }
+                }
+                catch (Exception ex)
+                {
+                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                MessageBox.Show("Perfil cargado correctamente", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void SetModos()

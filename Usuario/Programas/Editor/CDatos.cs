@@ -86,6 +86,30 @@ namespace Editor
 
         public bool Guardar(String archivo)
         {
+            //Reordenar ids acciones
+            ushort idmax = 0;
+            foreach (DSPerfil.ACCIONESRow ar in Perfil.ACCIONES.Rows)
+                if (ar.idAccion > idmax)
+                    idmax = ar.idAccion;
+
+            ushort id = 0;
+            while (id < Perfil.ACCIONES.Rows.Count)
+            {
+                if (Perfil.ACCIONES.FindByidAccion(id) == null)
+                {
+                    for (ushort i = idmax; i > id; i--)
+                    {
+                        DSPerfil.ACCIONESRow recolocar = Perfil.ACCIONES.FindByidAccion(idmax);
+                        if (recolocar != null)
+                        {
+                            recolocar.idAccion = id;
+                            idmax = (ushort)(i - 1);
+                            break;
+                        }
+                    }
+                }
+                id++;
+            }
             try
             {
                 Perfil.WriteXml(archivo);

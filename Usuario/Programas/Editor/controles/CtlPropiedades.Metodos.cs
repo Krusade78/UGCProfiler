@@ -346,6 +346,20 @@ namespace Editor
         }
         #endregion
 
+        #region "Botones"
+        private void SetModoBoton(byte tipo)
+        {
+            byte p = 0, m = 0;
+            padre.GetModos(ref p, ref m);
+
+            if (tipoActual == CEnums.Tipo.Seta)
+                padre.GetDatos().Perfil.MAPASETAS.FindByidSetaidModoidPinkie(idActual, m, p).Estado = tipo;
+            else
+                padre.GetDatos().Perfil.MAPABOTONES.FindByidBotonidModoidPinkie(idActual, m, p).Estado = tipo;
+            Refrescar();
+        }
+        #endregion
+
         #region "Macros"
         private void AsignarMacro(ushort idc)
         {

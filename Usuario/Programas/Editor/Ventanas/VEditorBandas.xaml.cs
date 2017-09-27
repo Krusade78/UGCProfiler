@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace Editor
 {
@@ -22,64 +13,64 @@ namespace Editor
         private MainWindow padre;
         private byte eje;
         private CEnums.Tipo tipo;
-        private byte[] bandas = new byte[15];
+        private byte[] bandas;
+        private bool eventos = true;
 
         public VEditorBandas(byte eje, CEnums.Tipo tipo)
         {
             InitializeComponent();
             this.eje = eje;
             this.tipo = tipo;
+            padre = (MainWindow)App.Current.MainWindow;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            padre = (MainWindow)App.Current.MainWindow;
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
-            //if (tipo == CEnums.Tipo.Eje)
-            //{
-            //    DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
-            //    bandas = r.Bandas;
-            //}
-            //else
-            //{
-            //    DSPerfil.MAPAEJESPEQUERow r = padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(eje, m, p);
-            //    bandas = r.Bandas;
-            //}
-            int n = 1;
+            if (tipo == CEnums.Tipo.Eje)
+            {
+                DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
+                bandas = (byte[])r.Bandas.Clone();
+            }
+            else
+            {
+                DSPerfil.MAPAEJESPEQUERow r = padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(eje, m, p);
+                bandas = (byte[])r.Bandas.Clone();
+            }
+
+            eventos = false;
             foreach (byte b in bandas)
             {
                 if (b == 0)
                     break;
                 else
-                    n++;
+                    numBandas.Value++;
             }
-            numBandas.Value = n;
+            eventos = true;
+            CambiarBandas();
         }
 
-        private void numBandas_TextChanged(object sender, TextChangedEventArgs e)
+        private void numBandas_TextChanged(object sender, EventArgs e)
         {
             if (eventos)
                 CambiarBandas();
         }
 
-        private void lbl1_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (eventos & this.IsLoaded)
-            {
-                //double tam = b1.Height + b2.Height;
-                //b1.Height = new GridLength(double.Parse(((TextBox)e.OriginalSource).Text), GridUnitType.Star);
-                //b2.Height = new GridLength(tam - b1.Height, GridUnitType.Star);
-            }
-        }
-
-
-
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
-            DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
+            if (tipo == CEnums.Tipo.Eje)
+            {
+                DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
+                r.Bandas = (byte[])bandas.Clone();
+            }
+            else
+            {
+                DSPerfil.MAPAEJESPEQUERow r = padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(eje, m, p);
+                r.Bandas = (byte[])bandas.Clone();
+            }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
@@ -87,35 +78,58 @@ namespace Editor
             this.Close();
         }
 
-        bool eventos = true;
+        private void lbl_TextChanged(object sender, EventArgs e)
+        {
+            if (eventos & this.IsLoaded)
+            {
+                double d1 = (double)((CtlNumUpDown)sender).Value;
+                int idc = lbls.Children.IndexOf((UIElement)sender);
+                double d2 = Math.Round(grb.RowDefinitions[idc * 2].Height.Value) - d1;
+                d2 += (idc != 14) ? ((CtlNumUpDown)lbls.Children[idc + 1]).Value : int.Parse(lbl16.Text);
+                grb.RowDefinitions[idc * 2].Height = new GridLength(d1, GridUnitType.Star);
+                grb.RowDefinitions[(idc * 2) + 2].Height = new GridLength(d2, GridUnitType.Star);
+                CambiarSplitter((idc * 2) + 1);
+            }
+        }
+
         private void gs1_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
         {
-            if (!CambiarSplitter())
+            if (!CambiarSplitter(Grid.GetRow((GridSplitter)sender)))
                 e.Handled = true;
         }
 
-        private bool CambiarSplitter()
+        private bool CambiarSplitter(int idc)
         {
             if (numBandas.Value == 1)
                 return true;
 
+            bool ok = true;
             CtlNumUpDown[] ctls = new CtlNumUpDown[] { lbl1, lbl2, lbl3, lbl4, lbl5, lbl6, lbl7, lbl8, lbl9, lbl10, lbl11, lbl12, lbl13, lbl14, lbl15 };
             eventos = false;
-            int tam = (int)grb.RowDefinitions[0].Height.Value;
-            if (tam < 1)
-                return false;
-            for (int i = 0; i < ctls.Length; i++)
+
+            if ((int)grb.RowDefinitions[idc - 1].Height.Value < 1)
             {
-                if ((int)grb.RowDefinitions[i * 2].Height.Value < 1)
-                    return false;
-                if (i > (numBandas.Value - 2))
-                    break;
-                ctls[i].Value = tam;
-                bandas[i] = (byte)tam;
-                tam += (int)grb.RowDefinitions[(i * 2) + 2].Height.Value;
+                grb.RowDefinitions[idc - 1].Height = new GridLength(1, GridUnitType.Star);
+                grb.RowDefinitions[idc + 1].Height = new GridLength(grb.RowDefinitions[idc + 1].Height.Value - 1, GridUnitType.Star);
+                ok = false;
             }
+            if ((int)grb.RowDefinitions[idc + 1].Height.Value < 1)
+            {
+                grb.RowDefinitions[idc + 1].Height = new GridLength(1, GridUnitType.Star);
+                grb.RowDefinitions[idc - 1].Height = new GridLength(grb.RowDefinitions[idc - 1].Height.Value - 1, GridUnitType.Star);
+                ok = false;
+            }
+            ctls[(idc - 1) / 2].Value = (int)Math.Round(grb.RowDefinitions[idc - 1].Height.Value);
+            if (idc != 1)
+                ctls[((idc - 1) / 2) - 1].Maximum = ctls[(idc - 1) / 2].Value - 1;
+            bandas[(idc - 1) / 2] = (byte)(((idc == 1) ? 0 : bandas[((idc - 1) / 2) - 1]) + ctls[(idc - 1) / 2].Value);
+            if (idc != 29)
+                ctls[(idc + 1) / 2].Value = (int)Math.Round(grb.RowDefinitions[idc + 1].Height.Value);
+            else
+                lbl16.Text = ((int)Math.Round(grb.RowDefinitions[idc + 1].Height.Value)).ToString();
+
             eventos = true;
-            return true;
+            return ok;
         }
 
         private void CambiarBandas()
@@ -132,7 +146,7 @@ namespace Editor
                     bandas[i] = 0;
                 else
                 {
-                    if (bandas[i] >= 99)
+                    if (bandas[i] == 99)
                         numBandas.Value = i + 2;
                     else if (bandas[i] == 0)
                         bandas[i] = (i == 0) ? (byte)50 : (byte)(bandas[i - 1] + ((100 - bandas[i - 1]) / 2));
@@ -142,15 +156,25 @@ namespace Editor
             grb.Height = 100;
             grb.RowDefinitions.Clear();
             grb.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+            lbl1.Value = 100;
             int tam = 0;
             for (int i = 0; i < 15; i++)
             {
                 if (bandas[i] != 0)
                 {
                     grb.RowDefinitions[grb.RowDefinitions.Count - 1].Height = new GridLength(bandas[i] - tam, GridUnitType.Star);
-                    tam = bandas[i];
                     grb.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0, GridUnitType.Auto) });
                     grb.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(100 - bandas[i], GridUnitType.Star) });
+
+                    ctls[i].Value = bandas[i] - tam;
+                    if (i > 0)
+                        ctls[i - 1].Maximum = ctls[i - 1].Value + ctls[i].Value - 1;
+                    if (grb.RowDefinitions.Count != 31)
+                        ctls[i + 1].Value = 100 - bandas[i];
+                    else
+                        lbl16.Text = (100 - bandas[i]).ToString();
+
+                    tam = bandas[i];
                 }
                 ctls[i].IsEnabled = (bandas[i] != 0) ? true : false;
                 if (bandas[i] != 0) grb.Height += 1;
