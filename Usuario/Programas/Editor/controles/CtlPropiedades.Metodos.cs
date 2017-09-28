@@ -40,7 +40,7 @@ namespace Editor
             else if (tipo == Tipo.EjePeque)
                 Eje(idc, true);
             else
-                MiniStick((byte)(idc - 64));
+                MiniStick(idc);
 
             eventos = true;
         }
@@ -230,7 +230,7 @@ namespace Editor
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
                     ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | (idActual - 100)), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
             }
             else if (tipoActual == Tipo.Boton)
             {

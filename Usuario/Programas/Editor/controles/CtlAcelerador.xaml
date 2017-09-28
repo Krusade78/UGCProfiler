@@ -6,30 +6,30 @@
              Height="462" Width="434">
     <Grid Loaded="Grid_Loaded">
         <Image Source="/Editor;component/res/x52t.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,57,0,0" />
-        <Button x:Name="ButtonMinix" Content="Eje Mini X" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,394,0,0" Height="23" Width="75" Click="ButtonMinix_Click"/>
-        <Button x:Name="ButtonMiniy" Content="Eje Mini Y" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,366,0,0" Height="23" Width="75" Click="ButtonMiniy_Click"/>
+        <Button x:Name="ButtonMinix" Content="Eje Mini X" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,394,0,0" Height="25" Width="75" Click="ButtonMinix_Click"/>
+        <Button x:Name="ButtonMiniy" Content="Eje Mini Y" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,366,0,0" Height="25" Width="75" Click="ButtonMiniy_Click"/>
 
-        <Button x:Name="ButtonMouse" Content="Botón Ratón" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,304,0,0" Height="23" Width="75" Click="ButtonMouse_Click"/>
+        <Button x:Name="ButtonMouse" Content="Botón Ratón" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,304,0,0" Height="25" Width="75" Click="ButtonMouse_Click"/>
 
-        <Button x:Name="ButtonMfd3" Content="Botón MFD 3" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="200,366,0,0" Height="23" Width="75" Click="ButtonMfd3_Click"/>
-        <Button x:Name="ButtonMfd2" Content="Botón MFD 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,366,0,0" Height="23" Width="75" Click="ButtonMfd2_Click"/>
-        <Button x:Name="ButtonMfd1" Content="Botón MFD 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,366,0,0" Height="23" Width="75" Click="ButtonMfd1_Click"/>
+        <Button x:Name="ButtonMfd3" Content="Botón MFD 3" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="215,366,0,0" Height="25" Width="80" Click="ButtonMfd3_Click"/>
+        <Button x:Name="ButtonMfd2" Content="Botón MFD 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,366,0,0" Height="25" Width="80" Click="ButtonMfd2_Click"/>
+        <Button x:Name="ButtonMfd1" Content="Botón MFD 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,366,0,0" Height="25" Width="80" Click="ButtonMfd1_Click"/>
 
-        <Button x:Name="ButtonWup" Content="Rueda arriba" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="160,10,0,0" Height="23" Width="75" Click="ButtonWup_Click"/>
-        <Button x:Name="ButtonWb" Content="Botón rueda" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="240,21,0,0" Height="23" Width="75" Click="ButtonWb_Click"/>
-        <Button x:Name="ButtonWdown" Content="Rueda abajo" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="160,38,0,0" Height="23" Width="75" Click="ButtonWdown_Click"/>
+        <Button x:Name="ButtonWup" Content="Rueda arriba" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="160,10,0,0" Height="25" Width="75" Click="ButtonWup_Click"/>
+        <Button x:Name="ButtonWb" Content="Botón rueda" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="240,21,0,0" Height="25" Width="75" Click="ButtonWb_Click"/>
+        <Button x:Name="ButtonWdown" Content="Rueda abajo" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="160,38,0,0" Height="25" Width="75" Click="ButtonWdown_Click"/>
 
-        <Button x:Name="ButtonRy" Content="Eje Ry" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,141,0,0" Height="23" Width="75" Click="ButtonRy_Click"/>
-        <Button x:Name="ButtonRx" Content="Eje Rx" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,85,0,0" Height="23" Width="75" Click="ButtonRx_Click"/>
+        <Button x:Name="ButtonRy" Content="Eje Ry" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,141,0,0" Height="25" Width="75" Click="ButtonRy_Click"/>
+        <Button x:Name="ButtonRx" Content="Eje Rx" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,85,0,0" Height="25" Width="75" Click="ButtonRx_Click"/>
 
-        <Button x:Name="Buttond" Content="Botón D" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,113,0,0" Height="23" Width="75" Click="Buttond_Click"/>
-        <Button x:Name="Buttone" Content="Botón E" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,57,0,0" Height="23" Width="75" Click="Buttone_Click"/>
-        <Button x:Name="Buttoni" Content="Botón I" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,169,0,0" Height="23" Width="75" Click="Buttoni_Click"/>
+        <Button x:Name="Buttond" Content="Botón D" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,113,0,0" Height="25" Width="75" Click="Buttond_Click"/>
+        <Button x:Name="Buttone" Content="Botón E" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,57,0,0" Height="25" Width="75" Click="Buttone_Click"/>
+        <Button x:Name="Buttoni" Content="Botón I" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="349,169,0,0" Height="25" Width="75" Click="Buttoni_Click"/>
 
-        <Button x:Name="Buttonsl" Content="Eje Sl" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,175,0,0" Height="23" Width="75" Click="Buttonsl_Click"/>
-        <Button x:Name="ButtonZ" Content="Eje Z" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,211,0,0" Height="23" Width="75" Click="ButtonZ_Click"/>
+        <Button x:Name="Buttonsl" Content="Eje Sl" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,175,0,0" Height="25" Width="75" Click="Buttonsl_Click"/>
+        <Button x:Name="ButtonZ" Content="Eje Z" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,211,0,0" Height="25" Width="75" Click="ButtonZ_Click"/>
 
-        <Label Content="Seta 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="9,7,0,0" Width="95" HorizontalContentAlignment="Center" />
+        <Label Content="Seta 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,7,0,0" Width="93" HorizontalContentAlignment="Center" Foreground="Gold"/>
         <Button x:Name="Buttonp11" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,38,0,0" Height="23" Width="31" Click="Buttonp11_Click">
             <Image Source="/Editor;component/res/f1.gif" Stretch="None" />
         </Button>
@@ -55,7 +55,7 @@
             <Image Source="/Editor;component/res/f8.gif" Stretch="None" />
         </Button>
 
-        <Label Content="Seta 4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="328,197,0,0" Width="95" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" />
+        <Label Content="Seta 4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,197,0,0" Width="94" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Foreground="Gold" />
         <Button x:Name="Buttonp21" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="362,228,0,0" Height="23" Width="31" Click="Buttonp21_Click">
             <Image Source="/Editor;component/res/f1.gif" Stretch="None" />
         </Button>

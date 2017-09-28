@@ -125,7 +125,7 @@ namespace Editor
 
         private void ButtonLaunch_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(3, CEnums.Tipo.Boton, (String)ButtonC.Content);
+            Vista.Ver(3, CEnums.Tipo.Boton, (String)ButtonLaunch.Content);
         }
 
         private void ButtonTrigger1_Click(object sender, RoutedEventArgs e)

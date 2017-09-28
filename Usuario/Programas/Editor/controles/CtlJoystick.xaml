@@ -5,30 +5,30 @@
              xmlns:local="clr-namespace:Editor"
              Height="462" Width="434">
     <Grid Loaded="Grid_Loaded">
-        <!--<Image Source="/Editor;component/res/x52j.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,43,0,0"/>-->
-        <Button x:Name="ButtonX" Content="Eje X" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="88,416,0,0" Height="23" Width="75" Click="ButtonX_Click"/>
-        <Button x:Name="ButtonY" Content="Eje Y" Background="GhostWhite" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="180,416,180,0" Height="23" Width="74" Click="ButtonY_Click"/>
-        <Button x:Name="ButtonR" Content="Eje R" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,416,0,0" Height="23" Width="75" Click="ButtonR_Click"/>
-        <Button x:Name="ButtonPinkie" Content="Pinkie" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,229,0,0" Height="23" Width="75" Click="ButtonPinkie_Click"/>
-        <Button x:Name="ButtonTrigger1" Content="Gatillo 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,156,0,0" Height="23" Width="75" Click="ButtonTrigger1_Click"/>
-        <Button x:Name="ButtonTrigger2" Content="Gatillo 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,184,0,0" Height="23" Width="75" Click="ButtonTrigger2_Click"/>
-        <Button x:Name="ButtonLaunch" Content="Lanzar" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168,6,0,0" Height="23" Width="75" Click="ButtonLaunch_Click"/>
-        <Button x:Name="ButtonA" Content="Botón A" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,96,0,0" Height="23" Width="75" Click="ButtonA_Click"/>
-        <Button x:Name="ButtonB" Content="Botón B" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,121,0,0" Height="23" Width="75" Click="ButtonB_Click"/>
-        <Button x:Name="ButtonC" Content="Botón C" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,118,0,0" Height="23" Width="75" Click="ButtonC_Click"/>
+        <Image Source="/Editor;component/res/x52j.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,43,0,0"/>
+        <Button x:Name="ButtonX" Content="Eje X" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="88,416,0,0" Height="25" Width="75" Click="ButtonX_Click"/>
+        <Button x:Name="ButtonY" Content="Eje Y" Background="GhostWhite" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="180,416,180,0" Height="25" Width="74" Click="ButtonY_Click"/>
+        <Button x:Name="ButtonR" Content="Eje R" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,416,0,0" Height="25" Width="75" Click="ButtonR_Click"/>
+        <Button x:Name="ButtonPinkie" Content="Pinkie" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,229,0,0" Height="25" Width="75" Click="ButtonPinkie_Click"/>
+        <Button x:Name="ButtonTrigger1" Content="Gatillo 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,156,0,0" Height="25" Width="75" Click="ButtonTrigger1_Click"/>
+        <Button x:Name="ButtonTrigger2" Content="Gatillo 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,182,0,0" Height="25" Width="75" Click="ButtonTrigger2_Click"/>
+        <Button x:Name="ButtonLaunch" Content="Lanzar" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168,6,0,0" Height="25" Width="75" Click="ButtonLaunch_Click"/>
+        <Button x:Name="ButtonA" Content="Botón A" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,96,0,0" Height="25" Width="75" Click="ButtonA_Click"/>
+        <Button x:Name="ButtonB" Content="Botón B" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,122,0,0" Height="25" Width="75" Click="ButtonB_Click"/>
+        <Button x:Name="ButtonC" Content="Botón C" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="44,118,0,0" Height="25" Width="75" Click="ButtonC_Click"/>
 
-        <Button x:Name="ButtonMode1" Content="Modo 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,9,0,0" Height="23" Width="75" Click="ButtonMode1_Click"/>
-        <Button x:Name="ButtonMode2" Content="Modo 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,34,0,0" Height="23" Width="75" Click="ButtonMode2_Click"/>
-        <Button x:Name="ButtonMode3" Content="Modo 3" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,59,0,0" Height="23" Width="75" Click="ButtonMode3_Click"/>
+        <Button x:Name="ButtonMode1" Content="Modo 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,9,0,0" Height="25" Width="75" Click="ButtonMode1_Click"/>
+        <Button x:Name="ButtonMode2" Content="Modo 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,35,0,0" Height="25" Width="75" Click="ButtonMode2_Click"/>
+        <Button x:Name="ButtonMode3" Content="Modo 3" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,62,0,0" Height="25" Width="75" Click="ButtonMode3_Click"/>
 
-        <Button x:Name="ButtonTg1" Content="Toggle 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="43,346,0,0" Height="23" Width="75" Click="ButtonTg1_Click"/>
-        <Button x:Name="ButtonTg2" Content="Toggle 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="43,368,0,0" Height="23" Width="75" Click="ButtonTg2_Click"/>
-        <Button x:Name="ButtonTg3" Content="Toggle 3" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="123,346,0,0" Height="23" Width="75" Click="ButtonTg3_Click"/>
-        <Button x:Name="ButtonTg4" Content="Toggle 4" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="123,368,0,0" Height="23" Width="75" Click="ButtonTg4_Click"/>
-        <Button x:Name="ButtonTg5" Content="Toggle 5" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="203,346,0,0" Height="23" Width="75" Click="ButtonTg5_Click"/>
-        <Button x:Name="ButtonTg6" Content="Toggle 6" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="203,368,0,0" Height="23" Width="75" Click="ButtonTg6_Click"/>
+        <Button x:Name="ButtonTg1" Content="Toggle 1" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="43,346,0,0" Height="25" Width="75" Click="ButtonTg1_Click"/>
+        <Button x:Name="ButtonTg2" Content="Toggle 2" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="43,373,0,0" Height="25" Width="75" Click="ButtonTg2_Click"/>
+        <Button x:Name="ButtonTg3" Content="Toggle 3" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="123,346,0,0" Height="25" Width="75" Click="ButtonTg3_Click"/>
+        <Button x:Name="ButtonTg4" Content="Toggle 4" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="123,373,0,0" Height="25" Width="75" Click="ButtonTg4_Click"/>
+        <Button x:Name="ButtonTg5" Content="Toggle 5" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="203,346,0,0" Height="25" Width="75" Click="ButtonTg5_Click"/>
+        <Button x:Name="ButtonTg6" Content="Toggle 6" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="203,373,0,0" Height="25" Width="75" Click="ButtonTg6_Click"/>
 
-        <Label Content="Seta 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,150,0,0" Width="95" HorizontalContentAlignment="Center" />
+        <Label Content="Seta 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,150,0,0" Width="95" HorizontalContentAlignment="Center" Foreground="Gold" />
         <Button x:Name="Buttonp11" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="358,175,0,0" Height="23" Width="31" Click="Buttonp11_Click">
             <Image Source="/Editor;component/res/f1.gif" Stretch="None" />
         </Button>
@@ -54,7 +54,7 @@
             <Image Source="/Editor;component/res/f8.gif" Stretch="None" />
         </Button>
 
-        <Label Content="Seta 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,12,0,0" Width="95" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" />
+        <Label Content="Seta 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,12,0,0" Width="95" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" Foreground="Gold"/>
         <Button x:Name="Buttonp21" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="56,38,0,0" Height="23" Width="31" Click="Buttonp21_Click">
             <Image Source="/Editor;component/res/f1.gif" Stretch="None" />
         </Button>

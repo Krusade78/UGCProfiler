@@ -170,7 +170,7 @@ namespace Editor
 
         private void ComboBoxAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.IsLoaded && ComboBoxMacro.SelectedIndex != -1)
+            if (this.IsLoaded && ComboBoxMacro.SelectedIndex != -1 && eventos)
                 AsignarMacro((ushort)ComboBoxAssigned.SelectedValue);
         }
 

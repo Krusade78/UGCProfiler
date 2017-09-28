@@ -93,7 +93,7 @@ namespace Editor
                 {
                     if (gridVista.Children.Count != 0)
                     {
-                        ((IDisposable)gridVista.Children[0]).Dispose();
+                        gridVista.Children.RemoveAt(0);
                         gridVista.Children.Clear();
                     }
                     gridVista.Children.Add(new CtlEditar());
@@ -107,7 +107,7 @@ namespace Editor
             {
                 if (gridVista.Children.Count != 0)
                 {
-                    ((IDisposable)gridVista.Children[0]).Dispose();
+                    gridVista.Children.RemoveAt(0);
                     gridVista.Children.Clear();
                 }
                 gridVista.Children.Add(new CtlListar());

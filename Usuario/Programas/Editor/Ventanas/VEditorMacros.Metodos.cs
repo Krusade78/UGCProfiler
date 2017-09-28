@@ -10,7 +10,7 @@ namespace Editor
     {
         private MainWindow padre;
         private int indicep;
-        private static int ultimaPlantilla = 0;
+        private static int ultimaPlantilla = -1;
         private List<ushort> macro = new List<ushort>();
         private List<byte> teclas = new List<byte>();
 
@@ -109,14 +109,12 @@ namespace Editor
         #region "Plantillas"
         private void CargarPlantillas()
         {
-            System.IO.DirectoryInfo d = new System.IO.DirectoryInfo(".");
-            foreach (System.IO.FileInfo f in d.GetFiles("*.kbp"))
-            {
-                vtSelPlantilla.Items.Add(System.IO.Path.GetFileNameWithoutExtension(f.Name));
-            }
+            vtSelPlantilla.Items.Add(System.IO.Path.GetFileNameWithoutExtension("english-us"));
+            vtSelPlantilla.Items.Add(System.IO.Path.GetFileNameWithoutExtension("español-es"));
+
             if (vtSelPlantilla.Items.Count > 0)
             {
-                if (vtSelPlantilla.Items.Count > VEditorMacros.ultimaPlantilla)
+                if (VEditorMacros.ultimaPlantilla != -1)
                 {
                     vtSelPlantilla.SelectedIndex = VEditorMacros.ultimaPlantilla;
                     CargarPlantilla(VEditorMacros.ultimaPlantilla);
@@ -135,8 +133,8 @@ namespace Editor
                                 idx = vtSelPlantilla.Items.IndexOf("italian");
                             break;
                         case 0xa:
-                            if (vtSelPlantilla.Items.IndexOf("spanish-es") != -1)
-                                idx = vtSelPlantilla.Items.IndexOf("spanish-es");
+                            if (vtSelPlantilla.Items.IndexOf("español-es") != -1)
+                                idx = vtSelPlantilla.Items.IndexOf("español-es");
                             break;
                         case 0x7:
                             if (vtSelPlantilla.Items.IndexOf("german") != -1)
@@ -164,7 +162,7 @@ namespace Editor
         private void CargarPlantilla(int idx)
         {
             ComboBox1.Items.Clear();
-            using (System.IO.StreamReader f = new System.IO.StreamReader(vtSelPlantilla.SelectedItem + ".kbp"))
+            using (System.IO.StreamReader f = new System.IO.StreamReader(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Editor.Plantillas." + vtSelPlantilla.SelectedItem + ".kbp")))
             {
                 while (f.Peek() >= 0)
                 {

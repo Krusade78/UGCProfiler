@@ -194,8 +194,8 @@
     <None Include="DSPerfil.xss">
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </None>
-    <None Include="Plantillas\english-us.kbp" />
-    <None Include="Plantillas\español-es.kbp" />
+    <EmbeddedResource Include="Plantillas\english-us.kbp" />
+    <EmbeddedResource Include="Plantillas\español-es.kbp" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

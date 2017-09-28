@@ -36,7 +36,7 @@
                         <RibbonButton LargeImageSource="res/abrir.ico" Label="Abrir" Click="RibbonButtonAbrir_Click" />
                         <RibbonButton LargeImageSource="res/guardar.ico" Label="Guardar" Click="RibbonButtonGuardar_Click" />
                         <RibbonButton SmallImageSource="res/guardar.ico" ToolTip="Guardar como" Click="RibbonButtonGuardarComo_Click" />
-                        <RibbonButton SmallImageSource="res/imprimir.ico" ToolTip="Imprimir" Click="RibbonButtonImprimir_Click" />
+                        <!--<RibbonButton SmallImageSource="res/imprimir.ico" ToolTip="Imprimir" Click="RibbonButtonImprimir_Click" />-->
                     </RibbonGroup>
                     <RibbonGroup>
                         <RibbonGroup.Header>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Editor"
-        Title="Asignación de setas" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" Loaded="Window_Loaded">
+        Title="Asignación de setas" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight">
     <Window.Background>
         <ImageBrush ImageSource="/Editor;component/res/CalibrationGrid.JPG"/>
     </Window.Background>
