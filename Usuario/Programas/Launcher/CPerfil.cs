@@ -99,6 +99,10 @@ namespace Launcher
                                 bufferMapa[pos] = banda;
                                 pos++;
                             }
+                            bufferMapa[pos] = datos.ResistenciaInc;
+                            pos++;
+                            bufferMapa[pos] = datos.ResistenciaDec;
+                            pos++;
                             for (byte i = 0; i < 16; i++)
                             {
                                 UInt16 indice = perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i).Indice;
@@ -127,6 +131,10 @@ namespace Launcher
                                 bufferMapa[pos] = banda;
                                 pos++;
                             }
+                            bufferMapa[pos] = datos.ResistenciaInc;
+                            pos++;
+                            bufferMapa[pos] = datos.ResistenciaDec;
+                            pos++;
                             for (byte i = 0; i < 16; i++)
                             {
                                 UInt16 indice = perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i).Indice;
