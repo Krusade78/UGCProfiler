@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace Launcher {
+namespace Editor {
     
     
     /// <summary>
@@ -484,28 +484,28 @@ namespace Launcher {
                         this.tableINDICESEJES.IndiceColumn});
             this.tableINDICESEJES.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJESPEQUE", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESEJESPEQUE.IndiceColumn});
             this.tableINDICESEJESPEQUE.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESSETAS", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESSETAS.IndiceColumn});
             this.tableINDICESSETAS.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESBOTONES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESBOTONES.IndiceColumn});
             this.tableINDICESBOTONES.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetNull;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             this.relationFK_ACCIONES_INDICESEJES = new global::System.Data.DataRelation("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
@@ -700,6 +700,10 @@ namespace Launcher {
             
             private global::System.Data.DataColumn columnBandas;
             
+            private global::System.Data.DataColumn columnResistenciaInc;
+            
+            private global::System.Data.DataColumn columnResistenciaDec;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public MAPAEJESDataTable() {
@@ -791,6 +795,22 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ResistenciaIncColumn {
+                get {
+                    return this.columnResistenciaInc;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ResistenciaDecColumn {
+                get {
+                    return this.columnResistenciaDec;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -826,7 +846,7 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPAEJESRow AddMAPAEJESRow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Sensibilidad, byte[] Bandas) {
+            public MAPAEJESRow AddMAPAEJESRow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Sensibilidad, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
                 MAPAEJESRow rowMAPAEJESRow = ((MAPAEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
@@ -835,7 +855,9 @@ namespace Launcher {
                         Mouse,
                         nEje,
                         Sensibilidad,
-                        Bandas};
+                        Bandas,
+                        ResistenciaInc,
+                        ResistenciaDec};
                 rowMAPAEJESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPAEJESRow);
                 return rowMAPAEJESRow;
@@ -874,6 +896,8 @@ namespace Launcher {
                 this.columnnEje = base.Columns["nEje"];
                 this.columnSensibilidad = base.Columns["Sensibilidad"];
                 this.columnBandas = base.Columns["Bandas"];
+                this.columnResistenciaInc = base.Columns["ResistenciaInc"];
+                this.columnResistenciaDec = base.Columns["ResistenciaDec"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -893,6 +917,10 @@ namespace Launcher {
                 base.Columns.Add(this.columnSensibilidad);
                 this.columnBandas = new global::System.Data.DataColumn("Bandas", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBandas);
+                this.columnResistenciaInc = new global::System.Data.DataColumn("ResistenciaInc", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnResistenciaInc);
+                this.columnResistenciaDec = new global::System.Data.DataColumn("ResistenciaDec", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnResistenciaDec);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidEje,
                                 this.columnidModo,
@@ -904,6 +932,10 @@ namespace Launcher {
                 this.columnnEje.AllowDBNull = false;
                 this.columnSensibilidad.AllowDBNull = false;
                 this.columnBandas.AllowDBNull = false;
+                this.columnResistenciaInc.AllowDBNull = false;
+                this.columnResistenciaInc.DefaultValue = ((byte)(0));
+                this.columnResistenciaDec.AllowDBNull = false;
+                this.columnResistenciaDec.DefaultValue = ((byte)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1049,6 +1081,10 @@ namespace Launcher {
             
             private global::System.Data.DataColumn columnBandas;
             
+            private global::System.Data.DataColumn columnResistenciaInc;
+            
+            private global::System.Data.DataColumn columnResistenciaDec;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public MAPAEJESPEQUEDataTable() {
@@ -1132,6 +1168,22 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ResistenciaIncColumn {
+                get {
+                    return this.columnResistenciaInc;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ResistenciaDecColumn {
+                get {
+                    return this.columnResistenciaDec;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1167,7 +1219,7 @@ namespace Launcher {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MAPAEJESPEQUERow AddMAPAEJESPEQUERow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Bandas) {
+            public MAPAEJESPEQUERow AddMAPAEJESPEQUERow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte nEje, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
                 MAPAEJESPEQUERow rowMAPAEJESPEQUERow = ((MAPAEJESPEQUERow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idPinkie,
@@ -1175,7 +1227,9 @@ namespace Launcher {
                         idEje,
                         Mouse,
                         nEje,
-                        Bandas};
+                        Bandas,
+                        ResistenciaInc,
+                        ResistenciaDec};
                 rowMAPAEJESPEQUERow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMAPAEJESPEQUERow);
                 return rowMAPAEJESPEQUERow;
@@ -1213,6 +1267,8 @@ namespace Launcher {
                 this.columnMouse = base.Columns["Mouse"];
                 this.columnnEje = base.Columns["nEje"];
                 this.columnBandas = base.Columns["Bandas"];
+                this.columnResistenciaInc = base.Columns["ResistenciaInc"];
+                this.columnResistenciaDec = base.Columns["ResistenciaDec"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1230,6 +1286,10 @@ namespace Launcher {
                 base.Columns.Add(this.columnnEje);
                 this.columnBandas = new global::System.Data.DataColumn("Bandas", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBandas);
+                this.columnResistenciaInc = new global::System.Data.DataColumn("ResistenciaInc", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnResistenciaInc);
+                this.columnResistenciaDec = new global::System.Data.DataColumn("ResistenciaDec", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnResistenciaDec);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidEje,
                                 this.columnidModo,
@@ -1240,6 +1300,10 @@ namespace Launcher {
                 this.columnMouse.AllowDBNull = false;
                 this.columnnEje.AllowDBNull = false;
                 this.columnBandas.AllowDBNull = false;
+                this.columnResistenciaInc.AllowDBNull = false;
+                this.columnResistenciaInc.DefaultValue = ((byte)(0));
+                this.columnResistenciaDec.AllowDBNull = false;
+                this.columnResistenciaDec.DefaultValue = ((byte)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2423,7 +2487,7 @@ namespace Launcher {
                 this.columnTickRaton = new global::System.Data.DataColumn("TickRaton", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTickRaton);
                 this.columnTickRaton.AllowDBNull = false;
-                this.columnTickRaton.DefaultValue = ((byte)(0));
+                this.columnTickRaton.DefaultValue = ((byte)(1));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3007,6 +3071,7 @@ namespace Launcher {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3301,6 +3366,7 @@ namespace Launcher {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3596,6 +3662,7 @@ namespace Launcher {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3891,6 +3958,7 @@ namespace Launcher {
                 this.columnid.Caption = "Mouse";
                 this.columnIndice.AllowDBNull = false;
                 this.columnIndice.Caption = "Indices";
+                this.columnIndice.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4107,6 +4175,28 @@ namespace Launcher {
                     this[this.tableMAPAEJES.BandasColumn] = value;
                 }
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte ResistenciaInc {
+                get {
+                    return ((byte)(this[this.tableMAPAEJES.ResistenciaIncColumn]));
+                }
+                set {
+                    this[this.tableMAPAEJES.ResistenciaIncColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte ResistenciaDec {
+                get {
+                    return ((byte)(this[this.tableMAPAEJES.ResistenciaDecColumn]));
+                }
+                set {
+                    this[this.tableMAPAEJES.ResistenciaDecColumn] = value;
+                }
+            }
         }
         
         /// <summary>
@@ -4186,6 +4276,28 @@ namespace Launcher {
                 }
                 set {
                     this[this.tableMAPAEJESPEQUE.BandasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte ResistenciaInc {
+                get {
+                    return ((byte)(this[this.tableMAPAEJESPEQUE.ResistenciaIncColumn]));
+                }
+                set {
+                    this[this.tableMAPAEJESPEQUE.ResistenciaIncColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public byte ResistenciaDec {
+                get {
+                    return ((byte)(this[this.tableMAPAEJESPEQUE.ResistenciaDecColumn]));
+                }
+                set {
+                    this[this.tableMAPAEJESPEQUE.ResistenciaDecColumn] = value;
                 }
             }
         }
