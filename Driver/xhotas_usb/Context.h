@@ -100,6 +100,8 @@ typedef struct _PROGRAMADO_CONTEXT
 		UCHAR Sensibilidad[10];
 		UCHAR Bandas[15];
 		UINT16 Indices[16];
+		UCHAR ResistenciaInc;
+		UCHAR ResistenciaDec;
 	} MapaEjes[2][3][4];
 	struct
 	{
@@ -107,6 +109,8 @@ typedef struct _PROGRAMADO_CONTEXT
 		UCHAR nEje;
 		UCHAR Bandas[15];
 		UINT16 Indices[16];
+		UCHAR ResistenciaInc;
+		UCHAR ResistenciaDec;
 	} MapaEjesPeque[2][3][4];
 	struct
 	{

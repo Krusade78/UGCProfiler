@@ -268,9 +268,9 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR posiciones;
 			if(eje < 4)
-				posiciones = (UCHAR)idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].Indices[3];
+				posiciones = (UCHAR)idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].ResistenciaInc;
 			else
-				posiciones = (UCHAR)idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].Indices[3];
+				posiciones = (UCHAR)idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].ResistenciaInc;
 
 			if(vieja < (2048 - posiciones))
 			{
@@ -285,9 +285,9 @@ UCHAR TraducirGiratorio(WDFDEVICE device, UCHAR eje, USHORT nueva)
 		{
 			UCHAR posiciones;
 			if(eje < 4)
-				posiciones = (UCHAR)idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].Indices[2];
+				posiciones = (UCHAR)idevExt->MapaEjes[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje].ResistenciaDec;
 			else
-				posiciones = (UCHAR)idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].Indices[2];
+				posiciones = (UCHAR)idevExt->MapaEjesPeque[hidCtx->EstadoPinkie][hidCtx->EstadoModos][eje - 4].ResistenciaDec;
 
 			if(vieja > posiciones)
 			{
