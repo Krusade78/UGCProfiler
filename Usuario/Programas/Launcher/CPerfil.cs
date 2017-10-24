@@ -12,9 +12,9 @@ namespace Launcher
             {
                 perfil.ReadXml(archivo);
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 perfil.Dispose();
                 return 1;
             }
@@ -25,16 +25,18 @@ namespace Launcher
             #region "Comandos"
             {
                 uint tamBuffer = 2;
+                uint nAcciones = 0;
                 foreach (DSPerfil.ACCIONESRow r in perfil.ACCIONES.Rows)
                 {
                     if (r.idAccion == 0)
                         continue;
-                    tamBuffer += (uint)(2 * r.Comandos.Length);
+                    nAcciones++;
+                    tamBuffer += 1 + (uint)(2 * r.Comandos.Length);
                 }
                 byte[] bufferComandos = new byte[tamBuffer];
 
-                bufferComandos[0] = (byte)(perfil.ACCIONES.Rows.Count & 0xff);
-                bufferComandos[1] = (byte)(perfil.ACCIONES.Rows.Count >> 8);
+                bufferComandos[0] = (byte)(nAcciones & 0xff);
+                bufferComandos[1] = (byte)(nAcciones >> 8);
                 int pos = 2;
                 foreach (DSPerfil.ACCIONESRow r in perfil.ACCIONES.Rows)
                 {
@@ -69,11 +71,11 @@ namespace Launcher
 
             #region "Mapeado"
             {
-                const int TAM_MAPAEJES = (1 + 1 + 10 + 15 + (16 * 2)) * (2 * 3 * 4);
-                const int TAM_MAPAEJESPEQUE = (1 + 1 + 15 + (16 * 2)) * (2 * 3 * 4);
+                const int TAM_MAPAEJES = (1 + 1 + 10 + 15 + 1 + (16 * 2) + 1 + 1) * (2 * 3 * 4);
+                const int TAM_MAPAEJESPEQUE = (1 + 1 + 15 + 1 + (16 * 2) + 1 + 1) * (2 * 3 * 4);
                 const int TAM_MAPAEJESMINI = (1 + 1) * (2 * 3 * 2);
-                const int TAM_MAPABOTONES = (1 + (15 * 2)) * (2 * 3 * 26);
-                const int TAM_MAPASETAS = (1 + (15 * 2)) * (2 * 3 * 32);
+                const int TAM_MAPABOTONES = (1 + 1 + (15 * 2)) * (2 * 3 * 26);
+                const int TAM_MAPASETAS = (1 + 1 + (15 * 2)) * (2 * 3 * 32);
                 byte[] bufferMapa = new byte[TAM_MAPAEJES + TAM_MAPAEJESPEQUE + TAM_MAPAEJESMINI + 1 + TAM_MAPABOTONES + TAM_MAPASETAS];
 
                 int pos = 0;
@@ -99,9 +101,6 @@ namespace Launcher
                                 bufferMapa[pos] = banda;
                                 pos++;
                             }
-                            bufferMapa[pos] = datos.ResistenciaInc;
-                            pos++;
-                            bufferMapa[pos] = datos.ResistenciaDec;
                             pos++;
                             for (byte i = 0; i < 16; i++)
                             {
@@ -111,6 +110,10 @@ namespace Launcher
                                 bufferMapa[pos] = (byte)(indice >> 8);
                                 pos++;
                             }
+                            bufferMapa[pos] = datos.ResistenciaInc;
+                            pos++;
+                            bufferMapa[pos] = datos.ResistenciaDec;
+                            pos++;
                         }
                     }
                 }
@@ -131,9 +134,6 @@ namespace Launcher
                                 bufferMapa[pos] = banda;
                                 pos++;
                             }
-                            bufferMapa[pos] = datos.ResistenciaInc;
-                            pos++;
-                            bufferMapa[pos] = datos.ResistenciaDec;
                             pos++;
                             for (byte i = 0; i < 16; i++)
                             {
@@ -143,6 +143,10 @@ namespace Launcher
                                 bufferMapa[pos] = (byte)(indice >> 8);
                                 pos++;
                             }
+                            bufferMapa[pos] = datos.ResistenciaInc;
+                            pos++;
+                            bufferMapa[pos] = datos.ResistenciaDec;
+                            pos++;
                         }
                     }
                 }
@@ -174,6 +178,7 @@ namespace Launcher
                             DSPerfil.MAPABOTONESRow datos = perfil.MAPABOTONES.FindByidBotonidModoidPinkie(b, m, p);
                             bufferMapa[pos] = datos.Estado;
                             pos++;
+                            pos++;
                             for (byte i = 0; i < 15; i++)
                             {
                                 UInt16 indice = perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | b), i).Indice;
@@ -194,6 +199,7 @@ namespace Launcher
                         {
                             DSPerfil.MAPASETASRow datos = perfil.MAPASETAS.FindByidSetaidModoidPinkie(s, m, p);
                             bufferMapa[pos] = datos.Estado;
+                            pos++;
                             pos++;
                             for (byte i = 0; i < 15; i++)
                             {
@@ -239,14 +245,13 @@ namespace Launcher
                 buffer[0] = 1;
 
                 UInt32 ret = 0;
-                UInt32 IOCTL_TEXTO = ((0x22) << 16) | ((2) << 14) | ((0x0804) << 2) | (0);
-                CSystem32.DeviceIoControl(IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero);
                 //siguientes lineas en blanco
                 buffer[1] = 0;
                 buffer[0] = 2;
-                CSystem32.DeviceIoControl(IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
                 buffer[0] = 3;
-                CSystem32.DeviceIoControl(IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
+                CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, 2, null, 0, out ret, IntPtr.Zero);
             }
 
             CSystem32.CerrarDriver();
