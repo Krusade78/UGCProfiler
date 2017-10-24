@@ -573,7 +573,7 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 				PNODO nodo1 = ((PCOLA)pos->Datos)->principio;
 				PNODO nodo2 = nodo1->siguiente;
 				UCHAR tipo1 = ((PUCHAR)nodo1->Datos)[0] & 0x1f;
-				UCHAR tipo2 = 12;
+				UCHAR tipo2 = TipoComando_Repeat;
 				if (nodo2 != NULL)
 					tipo2 = ((PUCHAR)nodo2->Datos)[0] & 0x1f;
 

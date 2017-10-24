@@ -86,11 +86,13 @@ typedef struct _PROGRAMADO_CONTEXT
 	struct
 	{
 		UCHAR Estado;	// 4 bit idc 4 bit total posiciones
+		UCHAR Reservado; //padding
 		UINT16 Indices[15];
 	} MapaBotones[2][3][26]; // el ultimo es la rueda
 	struct
 	{
 		UCHAR Estado;
+		UCHAR Reservado; //padding
 		UINT16 Indices[15];
 	} MapaSetas[2][3][32];
 	struct
@@ -99,15 +101,17 @@ typedef struct _PROGRAMADO_CONTEXT
 		UCHAR nEje;				//Mapeado 0:nada <20 normal >20 invertido
 		UCHAR Sensibilidad[10];
 		UCHAR Bandas[15];
-		UINT16 Indices[16];
+		UCHAR Reservado; //padding
 		UCHAR ResistenciaInc;
 		UCHAR ResistenciaDec;
+		UINT16 Indices[16];
 	} MapaEjes[2][3][4];
 	struct
 	{
 		UCHAR Mouse;
 		UCHAR nEje;
 		UCHAR Bandas[15];
+		UCHAR Reservado; //padding
 		UINT16 Indices[16];
 		UCHAR ResistenciaInc;
 		UCHAR ResistenciaDec;

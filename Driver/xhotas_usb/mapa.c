@@ -15,7 +15,7 @@ NTSTATUS HF_IoEscribirMapa(_In_ WDFDEVICE device, _In_ WDFREQUEST Request)
 	if(!NT_SUCCESS(status))
 		return status;
 
-	if( tam == (sizeof(devExt->MapaEjes) + sizeof(devExt->MapaEjesPeque) + sizeof(devExt->MapaEjesMini) + 2 + sizeof(devExt->MapaBotones)+sizeof(devExt->MapaSetas)) )
+	if( tam == (sizeof(devExt->MapaEjes) + sizeof(devExt->MapaEjesPeque) + sizeof(devExt->MapaEjesMini) + 1 + sizeof(devExt->MapaBotones)+sizeof(devExt->MapaSetas)) )
 	{
 		WdfSpinLockAcquire(devExt->slMapas);
 		{
@@ -32,7 +32,7 @@ NTSTATUS HF_IoEscribirMapa(_In_ WDFDEVICE device, _In_ WDFREQUEST Request)
 	}
 	else
 	{
-		LimpiarMapa(WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request)));
+		LimpiarMapa(device);
 		status = STATUS_BUFFER_TOO_SMALL;
 		WdfRequestSetInformation(Request, 0);
 	}

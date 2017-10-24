@@ -134,12 +134,17 @@ VOID SensibilidadYMapeado(
 			sRaton = itfExt->MapaEjesMini[hidCtx->EstadoPinkie][hidCtx->EstadoModos][idx].Mouse;
 		}
 		WdfSpinLockRelease(itfExt->slMapas);
+
+		if (nEje > 19) { invertido = TRUE; nEje -= 20; }
 		if(nEje != 0)
 		{
-			if(nEje < 9)
+			if(nEje < 10)
 			{
-				salida->MiniStick &= (nEje == 1) ? 0xf0 : 0x0f; 
-				salida->MiniStick |= ((idx == 0) ? (entrada->MiniStick & 0xf) : (entrada->MiniStick >> 4)) << (4 * (nEje - 1));
+				UCHAR nuevo = (idx == 0) ? (entrada->MiniStick & 0xf) : (entrada->MiniStick >> 4);
+				if (invertido)
+					nuevo = 0xf - nuevo;
+				salida->MiniStick &= (nEje == 8) ? 0xf0 : 0x0f; 
+				salida->MiniStick |= nuevo << (4 * (nEje - 8));
 			}
 			else
 			{
@@ -164,10 +169,6 @@ VOID SensibilidadYMapeado(
 							GenerarAccionRaton(device, nEje - 9, ( (((entrada->MiniStick >> (4 * (nEje - 10))) & 0xf) - 8) * sRaton ) / 7 );
 					}
 				}
-			}
-			if(invertido)
-			{
-				salida->MiniStick = 15 - salida->MiniStick;
 			}
 		}
 	}

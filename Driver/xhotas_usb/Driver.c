@@ -135,7 +135,8 @@ NTSTATUS IniciarContext(WDFDEVICE device)
 
 	WDF_TIMER_CONFIG_INIT(&timerConfig, EvtTickRaton);
 	timerConfig.AutomaticSerialization = TRUE;
-	timerConfig.TolerableDelay = TolerableDelayUnlimited;
+	timerConfig.TolerableDelay = 0;
+	timerConfig.UseHighResolutionTimer = WdfTrue;
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
 	attributes.ParentObject = device;
 	status = WdfTimerCreate(&timerConfig, &attributes, &GetDeviceContext(device)->HID.RatonTimer);

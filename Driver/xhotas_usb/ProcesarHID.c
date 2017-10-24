@@ -14,19 +14,24 @@
 //#pragma alloc_text (PAGE, EvtDeviceSelfManagedIoInit)
 //#endif
 
-VOID PreProcesarModos(WDFDEVICE device, _Inout_ PUCHAR entrada)
-{ //x52 asegurar que primero se suelta el modo y luego se pulsa
-	BOOLEAN cambio = FALSE;
-	UCHAR buf[0x0e];
-	RtlCopyMemory(buf, entrada, 0x0e);
-	if (GetDeviceContext(device)->HID.EstadoModos != (((entrada[11] & 3) << 1) | (entrada[10] >> 7)))
+VOID PreProcesarModos(WDFDEVICE device, _In_ PUCHAR entrada)
+{ //Obligar x52 asegurar que primero se suelta el modo y luego se pulsa (se usa para porder usarlos como botones normales)
+	UCHAR				nuevoEstado = (((entrada[11] & 3) << 1) | (entrada[10] >> 7));
+	UCHAR				antiguoEstado;
+	HID_INPUT_DATA		viejohidData;
+
+	WdfSpinLockAcquire(GetDeviceContext(device)->HID.SpinLockDeltaHid);
 	{
-		buf[10] &= 0x7f; buf[11] &= 0xfc;
-		cambio = TRUE;
-		GetDeviceContext(device)->HID.EstadoModos = (((entrada[11] & 3) << 1) | (entrada[10] >> 7));
+		RtlCopyMemory(&viejohidData, &GetDeviceContext(device)->HID.DeltaHidData, sizeof(HID_INPUT_DATA));
 	}
-	if (cambio)
-		RtlCopyMemory(entrada, buf, 0x0e);
+	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockDeltaHid);
+	antiguoEstado = (viejohidData.Botones[1] & 0x7);
+
+	if (antiguoEstado != nuevoEstado)
+	{
+		viejohidData.Botones[1] &= 0xf8;
+		ProcesarHID(device, &viejohidData);
+	}
 }
 
 //DISPATCH
@@ -76,15 +81,22 @@ VOID ConvertirEjesA2048(PUCHAR ejes)
 //DISPATCH
 VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 {
-	HID_INPUT_DATA hidData;
-	RtlZeroMemory(&hidData, sizeof(HID_INPUT_DATA));
-
 	if (repetirUltimo)
 		RtlCopyMemory(inputData, &GetDeviceContext(device)->EntradaX52.UltimaPosicion, sizeof(HIDX52_INPUT_DATA));
 	else
+	{
+		PreProcesarModos(device, inputData);
 		RtlCopyMemory(&GetDeviceContext(device)->EntradaX52.UltimaPosicion, inputData, sizeof(HIDX52_INPUT_DATA));
+	}
 
-	PreProcesarModos(device, (PUCHAR)inputData);
+	ProcesarX52(device, inputData);
+}
+
+//DISPATCH
+VOID ProcesarX52(WDFDEVICE device, PVOID inputData)
+{
+	HID_INPUT_DATA hidData;
+	RtlZeroMemory(&hidData, sizeof(HID_INPUT_DATA));
 
 	PHIDX52_INPUT_DATA hidGameData = (PHIDX52_INPUT_DATA)inputData;
 	hidData.Ejes[0] = hidGameData->EjesXYR[0];
@@ -128,7 +140,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 
 	// Menu MFD
 	if ((hidData.Botones[1] & 0x8) == 0x8)
-	{	
+	{
 		if (!GetDeviceContext(device)->HID.MenuTimerEsperando && !GetDeviceContext(device)->HID.MenuActivado)
 		{
 			GetDeviceContext(device)->HID.MenuTimerEsperando = TRUE;
