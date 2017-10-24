@@ -693,8 +693,6 @@ namespace Editor
                 nr.Comandos = macro.ToArray();
                 this.DialogResult = true;
             }
-
-            this.Close();
         }
 
         #region "teclas"

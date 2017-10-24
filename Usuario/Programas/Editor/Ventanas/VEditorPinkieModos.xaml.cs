@@ -27,6 +27,8 @@ namespace Editor
                 GuardarModos();
             else
                 GuardarPinkie();
+
+            this.DialogResult = true;
             this.Close();
         }
 
@@ -38,7 +40,7 @@ namespace Editor
         private void GuardarPinkie()
         {
             ushort idAccion = 0;
-            MainWindow padre = (MainWindow)App.Current.MainWindow;
+            MainWindow padre = (MainWindow)this.Owner;
 
             //'on
             foreach (DSPerfil.ACCIONESRow ar in padre.GetDatos().Perfil.ACCIONES.Rows)
@@ -74,7 +76,14 @@ namespace Editor
 
             if (idAccion == 0)
             {
+                idAccion = 0;
+                foreach (DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                    if (aar.idAccion > idAccion)
+                        idAccion = aar.idAccion;
+                idAccion++;
+
                 DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
+                ar.idAccion = idAccion;
                 ar.Nombre = "<Pinkie Off>";
                 ar.Comandos = new ushort[] { (byte)CEnums.TipoC.TipoComando_Pinkie, (byte)CEnums.TipoC.TipoComando_MfdPinkie };
                 padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
@@ -90,7 +99,7 @@ namespace Editor
 
         private void GuardarModos()
         {
-            MainWindow padre = (MainWindow)App.Current.MainWindow;
+            MainWindow padre = (MainWindow)this.Owner;
 
             for (byte modo = 1; modo <= 3; modo++)
             {
@@ -105,11 +114,17 @@ namespace Editor
 
                 if (idAccion == 0)
                 {
+                    idAccion = 0;
+                    foreach (DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                        if (aar.idAccion > idAccion)
+                            idAccion = aar.idAccion;
+                    idAccion++;
+
                     DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
+                    ar.idAccion = idAccion;
                     ar.Nombre = "<Modo " + modo.ToString() + ">";
                     ar.Comandos = new ushort[] { (ushort)((byte)CEnums.TipoC.TipoComando_Modo + ((modo - 1) << 8)) };
                     padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
-                    idAccion = ar.idAccion;
                 }
                 for (byte p = 0; p < 2; p++)
                 {

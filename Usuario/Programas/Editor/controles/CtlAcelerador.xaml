@@ -6,8 +6,8 @@
              Height="462" Width="434">
     <Grid Loaded="Grid_Loaded">
         <Image Source="/Editor;component/res/x52t.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,57,0,0" />
-        <Button x:Name="ButtonMinix" Content="Eje Mini X" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,394,0,0" Height="25" Width="75" Click="ButtonMinix_Click"/>
-        <Button x:Name="ButtonMiniy" Content="Eje Mini Y" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,366,0,0" Height="25" Width="75" Click="ButtonMiniy_Click"/>
+        <Button x:Name="ButtonMinix" Content="Eje Mini X" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,366,0,0" Height="25" Width="75" Click="ButtonMinix_Click"/>
+        <Button x:Name="ButtonMiniy" Content="Eje Mini Y" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,394,0,0" Height="25" Width="75" Click="ButtonMiniy_Click"/>
 
         <Button x:Name="ButtonMouse" Content="Botón Ratón" Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="330,304,0,0" Height="25" Width="75" Click="ButtonMouse_Click"/>
 

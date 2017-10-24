@@ -18,6 +18,7 @@ namespace Editor
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             Guardar();
+            this.DialogResult = true;
             this.Close();
         }
 
@@ -47,7 +48,14 @@ namespace Editor
 
                 if (idx == 0)
                 {
+                    idx = 0;
+                    foreach (DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                        if (aar.idAccion > idx)
+                            idx = aar.idAccion;
+                    idx++;
+
                     DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
+                    ar.idAccion = idx;
                     ar.Nombre = st[i];
                     ar.Comandos = new ushort[1 + st[i].Length + 1 + 3];
                     //'texto x52
@@ -63,12 +71,11 @@ namespace Editor
                     ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)CEnums.TipoC.TipoComando_DxSeta + 32 + ((((NumericUpDown1.Value - 1) * 8) + i) << 8));
 
                     padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
-                    idx = ar.idAccion;
                 }
 
-                padre.GetDatos().Perfil.MAPABOTONES.FindByidBotonidModoidPinkie((byte)(i + (pov * 8)), m, p).Estado = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | (i + (pov * 8))), 0).Indice = idx;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | (i + (pov * 8))), 1).Indice = 0;
+                padre.GetDatos().Perfil.MAPASETAS.FindByidSetaidModoidPinkie((byte)(i + (pov * 8)), m, p).Estado = 0;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | (i + (pov * 8))), 0).Indice = idx;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | (i + (pov * 8))), 1).Indice = 0;
             }
         }
     }

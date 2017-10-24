@@ -200,8 +200,11 @@ namespace Editor
             else
                 CheckBoxInverted.IsChecked = false;
 
-            ComboBoxAxes.SelectedIndex = neje - 9;
-            if (neje > 10)
+            if (neje == 0)
+                ComboBoxAxesMini.SelectedIndex = 0;
+            else
+                ComboBoxAxesMini.SelectedIndex = neje - 7;
+            if (neje > 9)
             {
                 LabelMSensibility.IsEnabled = true;
                 NumericUpDownMSensibility.IsEnabled = true;
@@ -282,6 +285,7 @@ namespace Editor
                     padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(inc | ComboBoxAxes.SelectedIndex);
 
             }
+            padre.GetDatos().Modificado = true;
             Refrescar();
         }
 
@@ -290,11 +294,13 @@ namespace Editor
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
 
+            byte sel = (ComboBoxAxesMini.SelectedIndex == 0) ? (byte)0 : (byte)(ComboBoxAxesMini.SelectedIndex + 7);
             if (CheckBoxInverted.IsChecked == true)
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(ComboBoxAxes.SelectedIndex + 9 + 20);
+                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(sel + 20);
             else
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).nEje = (byte)(ComboBoxAxes.SelectedIndex + 9);
+                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).nEje = sel;
 
+            padre.GetDatos().Modificado = true;
             Refrescar();
         }
 
@@ -308,6 +314,8 @@ namespace Editor
                 padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
             else
                 padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
+
+            padre.GetDatos().Modificado = true;
         }
 
         private void SetModoEje()
@@ -333,6 +341,8 @@ namespace Editor
                 padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 2).Indice = 0;
                 padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 3).Indice = 0;
             }
+
+            padre.GetDatos().Modificado = true;
         }
 
         private void SetResistencia(bool inc)
@@ -343,6 +353,8 @@ namespace Editor
                 padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)((inc) ? 2 : 3)).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
             else
                 padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)((inc) ? 2 : 3)).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
+
+            padre.GetDatos().Modificado = true;
         }
         #endregion
 
@@ -356,6 +368,8 @@ namespace Editor
                 padre.GetDatos().Perfil.MAPASETAS.FindByidSetaidModoidPinkie(idActual, m, p).Estado = tipo;
             else
                 padre.GetDatos().Perfil.MAPABOTONES.FindByidBotonidModoidPinkie(idActual, m, p).Estado = tipo;
+
+            padre.GetDatos().Modificado = true;
             Refrescar();
         }
         #endregion
@@ -414,6 +428,8 @@ namespace Editor
 
                     break;
             }
+
+            padre.GetDatos().Modificado = true;
         }
         #endregion
 

@@ -16,13 +16,14 @@ namespace Editor
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("a");
             if (Environment.GetCommandLineArgs().Length == 2)
-                Abrir(Environment.GetCommandLineArgs()[0]);
+                Abrir(Environment.GetCommandLineArgs()[1]);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            if (datos.Modificado)
             {
                 MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (r == MessageBoxResult.Cancel)
@@ -78,7 +79,8 @@ namespace Editor
             {
                 VEditorRaton v = new VEditorRaton();
                 v.Owner = this;
-                v.ShowDialog();
+                if (v.ShowDialog() == true)
+                    GetDatos().Modificado = true;
             }
         }
         #endregion

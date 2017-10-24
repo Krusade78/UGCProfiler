@@ -71,6 +71,9 @@ namespace Editor
                 DSPerfil.MAPAEJESPEQUERow r = padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(eje, m, p);
                 r.Bandas = (byte[])bandas.Clone();
             }
+
+            this.DialogResult = true;
+            this.Close();
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)

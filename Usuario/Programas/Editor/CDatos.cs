@@ -6,6 +6,7 @@ namespace Editor
     class CDatos : IDisposable
     {
         public DSPerfil Perfil { get; } = new DSPerfil();
+        public bool Modificado { get; set; } = false;
 
         #region IDisposable Support
         private bool disposedValue = false; // Para detectar llamadas redundantes
@@ -41,8 +42,8 @@ namespace Editor
                 {
                     for (byte e = 0; e < 4; e++)
                     {
-                        Perfil.MAPAEJES.AddMAPAEJESRow(p, m, e, 0, 0, new byte[10], new byte[15], 0, 0);
-                        Perfil.MAPAEJESPEQUE.AddMAPAEJESPEQUERow(p, m, e, 0, 0, new byte[15], 0, 0);
+                        Perfil.MAPAEJES.AddMAPAEJESRow(p, m, e, 1, 0, new byte[10] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100}, new byte[15], 0, 0);
+                        Perfil.MAPAEJESPEQUE.AddMAPAEJESPEQUERow(p, m, e, 1, 0, new byte[15], 0, 0);
                         for (byte i = 0; i < 16; i++)
                         {
                             Perfil.INDICESEJES.AddINDICESEJESRow((UInt32)((p << 16) | (m << 8) | e), i, accionVacia);
@@ -51,7 +52,7 @@ namespace Editor
                     }
                     for (byte e = 0; e < 2; e++)
                     {
-                        Perfil.MAPAEJESMINI.AddMAPAEJESMINIRow(p, m, e, 0, 0);
+                        Perfil.MAPAEJESMINI.AddMAPAEJESMINIRow(p, m, e, 1, 0);
                     }
                     for (byte b = 0; b < 26; b++)
                     {
@@ -67,6 +68,8 @@ namespace Editor
                     }
                 }
             }
+
+            Modificado = true;
         }
 
         public bool Cargar(String archivo)
@@ -74,13 +77,15 @@ namespace Editor
             Perfil.Clear();
             try
             {
-                Perfil.ReadXml("archivo");
+                Perfil.ReadXml(archivo);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
+
+            Modificado = false;
             return true;
         }
 
@@ -119,6 +124,8 @@ namespace Editor
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
+
+            Modificado = false;
             return true;
         }
     }

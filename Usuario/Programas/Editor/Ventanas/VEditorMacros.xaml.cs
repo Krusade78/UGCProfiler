@@ -25,6 +25,8 @@ namespace Editor
         private void ButtonAcepta_Click(object sender, RoutedEventArgs e)
         {
             Guardar();
+            this.DialogResult = true;
+            this.Close();
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)

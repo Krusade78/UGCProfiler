@@ -15,7 +15,7 @@ namespace Editor
 
         private void Nuevo()
         {
-            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            if (datos.Modificado)
             {
                 MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (r == MessageBoxResult.Cancel)
@@ -46,7 +46,7 @@ namespace Editor
         {
             if (archivo == null)
             {
-                if (datos.Perfil.GENERAL.Rows.Count != 0)
+                if (datos.Modificado)
                 {
                     MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                     if (r == MessageBoxResult.Cancel)
@@ -120,7 +120,7 @@ namespace Editor
 
         private void Lanzar()
         {
-            if (datos.Perfil.GENERAL.Rows.Count != 0)
+            if (datos.Modificado)
             {
                 MessageBoxResult r = MessageBox.Show("¿Quieres guardar los cambios antes de lanzar el perfil?", "Advertencia", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
                 if (r == MessageBoxResult.Cancel)

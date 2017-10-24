@@ -59,7 +59,8 @@ namespace Editor
         {
             VEditorSensibilidad dlg = new VEditorSensibilidad(idActual);
             dlg.Owner = App.Current.MainWindow;
-            dlg.ShowDialog();
+            if (dlg.ShowDialog() == true)
+                padre.GetDatos().Modificado = true;
         }
 
         private void NumericUpDownMSensibility_TextChanged(object sender, EventArgs e)
@@ -101,7 +102,8 @@ namespace Editor
         {
             VEditorBandas dlg = new VEditorBandas(idActual, tipoActual);
             dlg.Owner = App.Current.MainWindow;
-            dlg.ShowDialog();
+            if (dlg.ShowDialog() == true)
+                padre.GetDatos().Modificado = true;
         }
         #endregion
 
@@ -128,21 +130,33 @@ namespace Editor
         {
             VEditorPinkieModos dlg = new VEditorPinkieModos(true);
             dlg.Owner = App.Current.MainWindow;
-            dlg.ShowDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                padre.GetDatos().Modificado = true;
+                Ver(idActual, tipoActual, "");
+            }
         }
 
         private void ButtonAssignPinkie_Click(object sender, RoutedEventArgs e)
         {
             VEditorPinkieModos dlg = new VEditorPinkieModos(false);
             dlg.Owner = App.Current.MainWindow;
-            dlg.ShowDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                padre.GetDatos().Modificado = true;
+                Ver(idActual, tipoActual, "");
+            }
         }
 
         private void ButtonAssignPOV_Click(object sender, RoutedEventArgs e)
         {
             VEditorPOV dlg = new VEditorPOV(idActual);
             dlg.Owner = App.Current.MainWindow;
-            dlg.ShowDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                padre.GetDatos().Modificado = true;
+                Ver(idActual, tipoActual, "");
+            }
         }
         #endregion
 
@@ -178,7 +192,8 @@ namespace Editor
         {
             VEditorMacros dlg = new VEditorMacros(-1);
             dlg.Owner = App.Current.MainWindow;
-            dlg.ShowDialog();
+            if (dlg.ShowDialog() == true)
+                padre.GetDatos().Modificado = true;
         }
 
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
@@ -187,7 +202,8 @@ namespace Editor
             {
                 VEditorMacros dlg = new VEditorMacros((int)(ushort)ComboBoxMacro.SelectedValue);
                 dlg.Owner = App.Current.MainWindow;
-                dlg.ShowDialog();
+                if (dlg.ShowDialog() == true)
+                    padre.GetDatos().Modificado = true;
             }
         }
 

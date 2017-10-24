@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace Editor
 {
@@ -30,7 +21,7 @@ namespace Editor
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            padre = (MainWindow)App.Current.MainWindow;
+            padre = (MainWindow)this.Owner;
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
             DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
@@ -61,11 +52,19 @@ namespace Editor
             r.Sensibilidad[7] = (byte)TrackBar8.Value;
             r.Sensibilidad[8] = (byte)TrackBar9.Value;
             r.Sensibilidad[9] = (byte)TrackBar10.Value;
+
+            this.DialogResult = true;
+            this.Close();
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void TrackBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            ((Slider)sender).Value = Math.Round(e.NewValue);
         }
     }
 }

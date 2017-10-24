@@ -20,6 +20,8 @@ namespace Editor
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             ((MainWindow)this.Owner).GetDatos().Perfil.GENERAL[0].TickRaton = (byte)NumericUpDown1.Value;
+            this.DialogResult = true;
+            this.Close();
         }
     }
 }

@@ -79,6 +79,7 @@ namespace Editor
             //}
             //padre.GetDatos().Perfil.GENERAL[0].PinkieActivado = (CheckBox1.IsChecked == true);
             //padre.GetDatos().Perfil.GENERAL[0].ModosActivado = (CheckBox2.IsChecked == true);
+            this.DialogResult = true;
             this.Close();
         }
 
