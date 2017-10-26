@@ -24,7 +24,7 @@ typedef struct _HIDX52_INPUT_DATA
 
 typedef struct _X52READ_CONTEXT
 {
-	WDFCOLLECTION		ListaRequest;
+	WDFREQUEST			Request;
 	WDFSPINLOCK			SpinLockRequest;
 	WDFSPINLOCK			SpinLockPosicion;
 

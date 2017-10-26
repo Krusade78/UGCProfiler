@@ -42,8 +42,8 @@ NTSTATUS IniciarX52(_In_ WDFDEVICE device)
 	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 	if (!NT_SUCCESS(status)) return status;
 	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-	if (!NT_SUCCESS(status)) return status;
-	status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.ListaRequest);
+	//if (!NT_SUCCESS(status)) return status;
+	//status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.ListaRequest);
 	
 	return status;
 }
@@ -82,44 +82,44 @@ VOID EvtX52InternalIOCtl(
 			{
 				PDEVICE_CONTEXT devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
 				WDFREQUEST requestEnCola = NULL;
-				//Keyboard y Mouse
-				{
-					status = WdfIoQueueRetrieveNextRequest(devExt->ColaRequest, &requestEnCola);
-					if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
-					{
-						if (requestEnCola == NULL)
-						{
-							requestEnCola = Request;
-						}
 
-						status = WdfRequestForwardToIoQueue(requestEnCola, devExt->ColaRequest);
-						if (NT_SUCCESS(status) && (requestEnCola == Request))
-							return;
-					}
-					if (!NT_SUCCESS(status))
+				WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
+				{
+					requestEnCola = devExt->EntradaX52.Request;
+					if (requestEnCola == NULL)
 					{
-						WdfRequestComplete(Request, status);
-						return;
+						devExt->EntradaX52.Request = Request;
 					}
 				}
-
-				//Joystick
+				WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
+				if (requestEnCola == NULL) //pasar request hacia abajo
 				{
+					
 					WdfRequestFormatRequestUsingCurrentType(Request);
 					WdfRequestSetCompletionRoutine(Request, EvtCompletionX52Data, NULL);
 					purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
 					ret = WdfRequestSend(Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), NULL);
-					WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
 					{
 						if (ret == FALSE)
 						{
+							devExt->EntradaX52.Request = NULL;
 							status = WdfRequestGetStatus(Request);
 							WdfRequestComplete(Request, status);
 						}
-						else
-							WdfCollectionAdd(devExt->EntradaX52.ListaRequest, Request);
 					}
-					WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
+				}
+				else //procesar acciones pendientes
+				{
+					status = WdfRequestForwardToIoQueue(Request, devExt->ColaRequest);
+					if (NT_SUCCESS(status))
+					{
+						return;
+					}
+					else
+					{
+						WdfRequestComplete(Request, status);
+						return;
+					}
 				}
 
 				return;
@@ -238,15 +238,10 @@ void EvtCompletionX52Data(
 
 	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 	{
-		for (ULONG i = 0; i < WdfCollectionGetCount(GetDeviceContext(device)->EntradaX52.ListaRequest); i++)
+		if (GetDeviceContext(device)->EntradaX52.Request != NULL)
 		{
-			WDFREQUEST request = (WDFREQUEST)WdfCollectionGetItem(GetDeviceContext(device)->EntradaX52.ListaRequest, i);
-			if (request == Request)
-			{
-				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, i);
-				cancelada = FALSE;
-				break;
-			}
+			GetDeviceContext(device)->EntradaX52.Request = NULL;
+			cancelada = FALSE;
 		}
 	}
 	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
@@ -259,7 +254,6 @@ void EvtCompletionX52Data(
 
 	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 	{
-		BOOLEAN repetirUltimo = FALSE;
 		if ((status == STATUS_CANCELLED) && cancelada)
 			//La llamada viene por la cancelación de Request. Si !cancelada es una cancelación desde fuera del driver
 			// y no se toca nada
@@ -268,7 +262,6 @@ void EvtCompletionX52Data(
 			{
 				purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
 				status = STATUS_SUCCESS;
-				repetirUltimo = TRUE;
 			}
 		}
 		if (NT_SUCCESS(status))
@@ -277,9 +270,13 @@ void EvtCompletionX52Data(
 		{
 			if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
 			{
-				ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, repetirUltimo);
-				*((PUCHAR)purb->UrbBulkOrInterruptTransfer.TransferBuffer) = 0x01; //Resport id
-				purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
+				ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer);
+				status = WdfRequestForwardToIoQueue(Request, GetDeviceContext(device)->ColaRequest);
+				if (NT_SUCCESS(status))
+				{
+					WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
+					return;
+				}
 			}
 		}
 	}
@@ -298,11 +295,11 @@ VOID LeerX52ConPedales(PDEVICE_CONTEXT devExt)
 	WDFREQUEST request = NULL;
 	WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
 	{
-		if (WdfCollectionGetCount(devExt->EntradaX52.ListaRequest) > 0)
+		if (devExt->EntradaX52.Request != NULL)
 		{
-			request = (WDFREQUEST)WdfCollectionGetFirstItem(devExt->EntradaX52.ListaRequest);
+			request = devExt->EntradaX52.Request;
+			devExt->EntradaX52.Request = NULL;
 			WdfObjectReference(request);
-			WdfCollectionRemoveItem(devExt->EntradaX52.ListaRequest, 0);
 		}
 	}
 	WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
