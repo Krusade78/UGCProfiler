@@ -84,20 +84,22 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 				} evento;
 				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
 
-				if (!dxPosCambiada && (evento.tipo == TipoComando_DxPosicion))
+				if (evento.tipo == TipoComando_DxPosicion)
 				{
-					PHID_INPUT_DATA dato = (PUCHAR)posComando->Datos + 1;
-					RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
-					RtlCopyMemory(devExt->stDirectX.MiniStick, dato->MiniStick, sizeof(devExt->stDirectX.MiniStick));
-					ColaBorrarNodo(colaComandos, posComando);
-					dxPosCambiada = TRUE;
-					vacio = FALSE;
-					break;
+					if (!dxPosCambiada)
+					{
+						PHID_INPUT_DATA dato = (PUCHAR)posComando->Datos + 1;
+						RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
+						RtlCopyMemory(devExt->stDirectX.MiniStick, dato->MiniStick, sizeof(devExt->stDirectX.MiniStick));
+						ColaBorrarNodo(colaComandos, posComando);
+						dxPosCambiada = TRUE;
+						vacio = FALSE;
+						break;
+					}
 				}
-
+				else if ((evento.tipo & 0x1f) == TipoComando_DxBoton)
 				{
-
-					if (!botonCambiado && ((evento.tipo & 0x1f) == TipoComando_DxBoton))
+					if (!botonCambiado)
 					{
 						botonCambiado = TRUE;
 						ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
@@ -105,13 +107,11 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 						{
 							ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
 						}
-						else
-						{
-							finProceso = TRUE;
-							break;
-						}
 					}
-					if (!setaCambiada && ((evento.tipo & 0x1f) == TipoComando_DxSeta))
+				}
+				if ((evento.tipo & 0x1f) == TipoComando_DxSeta)
+				{
+					if (!setaCambiada)
 					{
 						setaCambiada = TRUE;
 						ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
@@ -119,13 +119,17 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 						{
 							ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
 						}
-						else
-						{
-							finProceso = TRUE;
-							break;
-						}
 					}
 				}
+				else
+				{
+					break;
+				}
+
+				if (botonCambiado && setaCambiada && botonCambiado)
+					break;
+
+				posComando = posComando->siguiente;
 			}
 
 			if (ColaEstaVacia(colaComandos))
