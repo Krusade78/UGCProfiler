@@ -3,9 +3,9 @@
 #include "context.h"
 #include "TecladoRaton_read.h"
 #include "X52_write.h"
-#define _ACCIONES_
-#include "acciones.h"
-#undef _ACCIONES_
+#define _PRIVATE_
+#include "AccionesProcesar.h"
+#undef _PRIVATE_
 
 VOID LimpiarAcciones(WDFDEVICE device)
 {
@@ -35,135 +35,142 @@ VOID LimpiarAcciones(WDFDEVICE device)
 	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
 }
 
-VOID AccionarRaton(WDFDEVICE device, PUCHAR accion, BOOLEAN enDelay)
+VOID ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
 {
-	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
-	PCOLA			eventos = ColaAllocate();
-	if (eventos != NULL)
+	BOOLEAN procesado = FALSE;
+	do
 	{
-		PVOID evt = ExAllocatePoolWithTag(NonPagedPool, sizeof(UCHAR) * 2, (ULONG)'vepV');
-		if (evt != NULL)
+		switch (GetDeviceContext(device)->HID.TurnoReport)
 		{
-			RtlCopyMemory(evt, accion, sizeof(UCHAR) * 2);
-			if (!ColaPush(eventos, evt))
-			{
-				ExFreePoolWithTag(evt, (ULONG)'vepV');
-				ColaBorrar(eventos); eventos = NULL;
-			}
-			else
-			{
-				BOOLEAN ok = FALSE;
-				WdfSpinLockAcquire(devExt->SpinLockAcciones);
-				{
-					if (!ColaPush(&devExt->ColaAcciones, eventos))
-						ExFreePoolWithTag(evt, (ULONG)'vepV');
-					else
-						ok = TRUE;
-				}
-				WdfSpinLockRelease(devExt->SpinLockAcciones);
-				if (ok)
-					ProcesarAcciones(device, enDelay);
-			}
+		case 0:
+			GetDeviceContext(device)->HID.TurnoReport = 1;
+			procesado = PrepararDirectX(device, request);
+			break;
+		case 1:
+			GetDeviceContext(device)->HID.TurnoReport = 2;
+			procesado =	PrepararRaton(device, request);
+			break;
+		case 2:
+			GetDeviceContext(device)->HID.TurnoReport = 0;
+			procesado = PrepararComando(device, request);
+			break;
 		}
-	}
+	} while (!procesado);
 }
 
-VOID AccionarComando(WDFDEVICE device, UINT16 accionId, UCHAR boton)
+BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 {
-	HID_CONTEXT*		devExt = &GetDeviceContext(device)->HID;
-	PROGRAMADO_CONTEXT*	idevExt = &GetDeviceContext(device)->Programacion;
-	
-	if(accionId != 0)
-	{
-		PCOLA eventos = ColaAllocate();
-		if(eventos != NULL)
-		{
-			BOOLEAN ok = TRUE;
-			WdfSpinLockAcquire(idevExt->slComandos);
-			{
-				if (idevExt->nComandos == 0 || idevExt->Comandos == NULL)
-				{
-					ColaBorrar(eventos); eventos = NULL;
-					ok = FALSE;
-				}
-				else
-				{
-					UCHAR idx;
-					for (idx = 0; idx < idevExt->Comandos[accionId - 1].tam; idx++)
-					{
-						PVOID evt = ExAllocatePoolWithTag(NonPagedPool, sizeof(UCHAR) * 2, (ULONG)'vepV');
-						if (evt != NULL)
-						{
-							RtlCopyMemory(evt, &(idevExt->Comandos[accionId - 1].datos[idx]), sizeof(UCHAR) * 2);
-							if (*((PUCHAR)evt) == 11 || *((PUCHAR)evt) == 12)
-								((PUCHAR)evt)[1] = boton;
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	BOOLEAN			vacio = TRUE;
 
-							if (!ColaPush(eventos, evt))
-							{
-								ExFreePoolWithTag(evt, (ULONG)'vepV');
-								ColaBorrar(eventos); eventos = NULL;
-								ok = FALSE;
-								break;
-							}
+	WdfSpinLockAcquire(devExt->SpinLockAcciones);
+	{
+		PNODO	posAccion = devExt->ColaAcciones.principio;
+		BOOLEAN	dxPosCambiada = FALSE;
+
+		while (posAccion != NULL)
+		{
+			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+			PNODO	posComando = colaComandos->principio;
+			BOOLEAN setaCambiada = FALSE;
+			BOOLEAN botonCambiado = FALSE;
+
+			while (posComando != NULL)
+			{
+				struct
+				{
+					UCHAR tipo;
+					UCHAR dato;
+				} evento;
+				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+
+				if (!dxPosCambiada && (evento.tipo == TipoComando_DxPosicion))
+				{
+					PHID_INPUT_DATA dato = (PUCHAR)posComando->Datos + 1;
+					RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
+					RtlCopyMemory(devExt->stDirectX.MiniStick, dato->MiniStick, sizeof(devExt->stDirectX.MiniStick));
+					ColaBorrarNodo(colaComandos, posComando);
+					dxPosCambiada = TRUE;
+					vacio = FALSE;
+					break;
+				}
+
+				{
+
+					if (!botonCambiado && ((evento.tipo & 0x1f) == TipoComando_DxBoton))
+					{
+						botonCambiado = TRUE;
+						ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
+						if (!enDelay)
+						{
+							ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
 						}
 						else
 						{
-							ColaBorrar(eventos); eventos = NULL;
-							ok = FALSE;
+							finProceso = TRUE;
+							break;
+						}
+					}
+					if (!setaCambiada && ((evento.tipo & 0x1f) == TipoComando_DxSeta))
+					{
+						setaCambiada = TRUE;
+						ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
+						if (!enDelay)
+						{
+							ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+						}
+						else
+						{
+							finProceso = TRUE;
 							break;
 						}
 					}
 				}
 			}
-			WdfSpinLockRelease(idevExt->slComandos);
-			if(ok)
-			{
-				WdfSpinLockAcquire(devExt->SpinLockAcciones);
-				{
-					if (!ColaPush(&devExt->ColaAcciones, eventos))
-					{
-						ColaBorrar(eventos); eventos = NULL;
-						ok = FALSE;
-					}
-				}
-				WdfSpinLockRelease(devExt->SpinLockAcciones);
-				if (ok)
-					ProcesarAcciones(device, FALSE);
+
+			if (ColaEstaVacia(colaComandos))
+			{ // Fin eventos
+				ColaBorrar(colaComandos); posAccion->Datos = NULL;
+				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
 			}
+
+			posAccion = posAccion->siguiente;
 		}
 	}
+	WdfSpinLockRelease(devExt->SpinLockAcciones);
+
+	return !vacio;
 }
 
-VOID ProcesarAcciones(WDFDEVICE device, BOOLEAN enDelay)
+VOID ProcesarDirectX(WDFDEVICE device, PHID_INPUT_DATA datos)
 {
-	HID_CONTEXT*	hidCtx = &GetDeviceContext(device)->HID;
-	BOOLEAN			soloHolds = FALSE;
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	BOOLEAN			soltar;
 
-	WdfSpinLockAcquire(hidCtx->SpinLockAcciones);
+	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
+	tipo &= 0x1f;
+
+	if (enDelay)
 	{
-		// Comprueba si hay acciones nuevas que no sean hold
-		if (!ColaEstaVacia(&hidCtx->ColaAcciones))
+		// Cancela una de las request enviadas hacia abajo para que se vuelva a hacer la petición
+		// y se lea el estado nuevo
+		WDFREQUEST request = NULL;
+		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 		{
-			PNODO nsiguiente = hidCtx->ColaAcciones.principio;
-			soloHolds = TRUE;
-			while (nsiguiente != NULL)
+			if (WdfCollectionGetCount(GetDeviceContext(device)->EntradaX52.ListaRequest) > 0)
 			{
-				PCOLA cola = (PCOLA)nsiguiente->Datos;
-				if ((((PUCHAR)cola->principio->Datos)[0]) != TipoComando_Hold) //tipo
-				{
-					soloHolds = FALSE;
-					break;
-				}
-				nsiguiente = nsiguiente->siguiente;
-			}
-
-			if (!soloHolds)
-			{
-				ProcesarComandos(device, enDelay);
+				request = (WDFREQUEST)WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
+				WdfObjectReference(request);
+				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
 			}
 		}
+		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+		if (request != NULL)
+		{
+			WdfRequestCancelSentRequest(request);
+			WdfObjectDereference(request);
+		}
 	}
-	WdfSpinLockRelease(hidCtx->SpinLockAcciones);
 }
 
 VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay)

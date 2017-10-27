@@ -51,10 +51,11 @@ typedef struct _HID_CONTEXT
 	WDFTIMER		RatonTimer;
 	BOOLEAN			RatonActivado;
 
+	UCHAR			TurnoReport;
+
 	UCHAR			stRaton[4];
 	UCHAR			stTeclado[29];
-	UCHAR			stSetas[4];
-	UCHAR			stBotones[4];
+	HID_INPUT_DATA	stDirectX;
 } HID_CONTEXT;
 
 #pragma region "Programación"

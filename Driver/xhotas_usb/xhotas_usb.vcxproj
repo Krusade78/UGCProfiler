@@ -35,34 +35,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="acciones.c" />
+    <ClCompile Include="AccionesGenerar.c" />
+    <ClCompile Include="AccionesProcesar.c" />
     <ClCompile Include="botones_setas.c" />
     <ClCompile Include="CalibradoHID.c" />
     <ClCompile Include="cola.c" />
+    <ClCompile Include="directx.c" />
     <ClCompile Include="Driver.c" />
     <ClCompile Include="ejes_raton.c" />
     <ClCompile Include="mapa.c" />
     <ClCompile Include="Pedales_read.c" />
     <ClCompile Include="Pnp.c" />
     <ClCompile Include="ProcesarHID.c" />
-    <ClCompile Include="TecladoRaton_read.c" />
+    <ClCompile Include="RequestHID_read.c" />
     <ClCompile Include="UserModeIO_read.c" />
     <ClCompile Include="X52_read.c" />
     <ClCompile Include="X52_write.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="acciones.h" />
+    <ClInclude Include="AccionesGenerar.h" />
+    <ClInclude Include="AccionesProcesar.h" />
     <ClInclude Include="botones_setas.h" />
     <ClInclude Include="CalibradoHID.h" />
     <ClInclude Include="cola.h" />
     <ClInclude Include="Context.h" />
+    <ClInclude Include="directx.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="ejes_raton.h" />
     <ClInclude Include="mapa.h" />
     <ClInclude Include="Pedales_read.h" />
     <ClInclude Include="PnP.h" />
     <ClInclude Include="ProcesarHID.h" />
-    <ClInclude Include="TecladoRaton_read.h" />
+    <ClInclude Include="RequestHID_read.h" />
     <ClInclude Include="UserModeIO_read.h" />
     <ClInclude Include="X52_read.h" />
     <ClInclude Include="X52_write.h" />

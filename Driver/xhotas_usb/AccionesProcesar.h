@@ -29,17 +29,16 @@ enum
 	TipoComando_MfdHora,
 	TipoComando_MfdHora24,
 	TipoComando_MfdFecha,
+	TipoComando_DxPosicion,
 	TipoComando_RepeatFin = 44,
 	TipoComando_RepeatNFin,
 	TipoComando_MfdTextoFin = 56
 };
 
-VOID AccionarRaton(WDFDEVICE device, PUCHAR accion, BOOLEAN enDelay);
-VOID AccionarComando(WDFDEVICE device, UINT16 accionId,	UCHAR boton);
-VOID ProcesarAcciones(WDFDEVICE device, BOOLEAN enDelay);
+VOID ProcesarAcciones(WDFDEVICE device, WDFREQUEST request);
 VOID LimpiarAcciones(WDFDEVICE device);
 
-#ifdef _ACCIONES_
+#ifdef _PRIVATE_
 typedef COLA DELAY_CONTEXT;
 WDF_DECLARE_CONTEXT_TYPE(DELAY_CONTEXT)
 EVT_WDF_TIMER TimerDelay;

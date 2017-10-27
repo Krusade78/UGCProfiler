@@ -1,7 +1,7 @@
 #include <ntddk.h>
 #include <wdf.h>
 #include "context.h"
-#include "acciones.h"
+#include "AccionesGenerar.h"
 #define _EJES_
 #include "ejes_raton.h"
 #undef _EJES

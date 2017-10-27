@@ -26,7 +26,7 @@ Kernel-mode Driver Framework
 #include "x52_read.h"
 #include "UserModeIO_read.h"
 #include "Pedales_read.h"
-#include "TecladoRaton_read.h"
+#include "RequestHID_read.h"
 #include "mapa.h"
 #define _PRIVATE_
 #include "driver.h"
@@ -106,7 +106,7 @@ NTSTATUS EvtAddDevice(
 	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
 	if (!NT_SUCCESS(status))
 		return status;
-	status = WdfIoQueueReadyNotify(cola, EvtTecladoRatonListo, NULL);
+	status = WdfIoQueueReadyNotify(cola, EvtRequestHIDLista, NULL);
 	if (!NT_SUCCESS(status))
 		return status;
 	GetDeviceContext(device)->ColaRequest = cola;

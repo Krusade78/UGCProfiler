@@ -15,14 +15,60 @@ Pasar datos del teclado al HID.
 #include <ntddk.h>
 #include <wdf.h>
 #include "Context.h"
-#include "acciones.h"
-#include "TecladoRaton_read.h"
+#include "AccionesProcesar.h"
+#include "RequestHID_read.h"
 
-VOID EvtTecladoRatonListo(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
+VOID EvtRequestHIDLista(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 {
 	UNREFERENCED_PARAMETER(Context);
-	UNREFERENCED_PARAMETER(Queue);
-	//ProcesarAcciones(WdfIoQueueGetDevice(Queue), TRUE);
+
+	PDEVICE_CONTEXT devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
+
+	while (TRUE)
+	{
+		BOOLEAN vacia;
+		WdfSpinLockAcquire(devExt->HID.SpinLockAcciones);
+		{
+			vacia = ColaEstaVacia(&devExt->HID.ColaAcciones);
+			if (!vacia)
+			{
+				BOOLEAN soloHolds = TRUE;
+				PNODO	nsiguiente = devExt->HID.ColaAcciones.principio;
+				while (nsiguiente != NULL)
+				{
+					PCOLA cola = (PCOLA)nsiguiente->Datos;
+					if ((((PUCHAR)cola->principio->Datos)[0]) != TipoComando_Hold) //tipo
+					{
+						soloHolds = FALSE;
+						break;
+					}
+					nsiguiente = nsiguiente->siguiente;
+				}
+				vacia = soloHolds;
+			}
+		}
+		WdfSpinLockRelease(devExt->HID.SpinLockAcciones);
+		if (!vacia)
+		{
+			WDFREQUEST	request = NULL;
+			NTSTATUS	status = WdfIoQueueRetrieveNextRequest(Queue, &request);
+
+			if (NT_SUCCESS(status))
+			{
+				ProcesarAcciones(WdfIoQueueGetDevice(Queue), request);
+			}
+			else if (status == STATUS_NO_MORE_ENTRIES)
+			{
+				break;
+			}
+			else if (request != NULL)
+			{
+				WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
+			}
+		}
+		else
+			break;
+	}
 }
 
 #pragma region "Teclado"
@@ -215,4 +261,7 @@ VOID EvtTickRaton(_In_ WDFTIMER Timer)
 		AccionarRaton(device, accion, TRUE);
 	}
 }
+#pragma endregion
+
+#pragma region "DirectX"
 #pragma endregion

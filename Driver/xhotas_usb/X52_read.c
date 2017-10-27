@@ -254,6 +254,7 @@ void EvtCompletionX52Data(
 
 	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 	{
+		BOOLEAN repetirUltimo = FALSE;
 		if ((status == STATUS_CANCELLED) && cancelada)
 			//La llamada viene por la cancelación de Request. Si !cancelada es una cancelación desde fuera del driver
 			// y no se toca nada
@@ -262,6 +263,7 @@ void EvtCompletionX52Data(
 			{
 				purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
 				status = STATUS_SUCCESS;
+				repetirUltimo = TRUE;
 			}
 		}
 		if (NT_SUCCESS(status))
@@ -270,7 +272,7 @@ void EvtCompletionX52Data(
 		{
 			if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
 			{
-				ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer);
+				ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, repetirUltimo);
 				status = WdfRequestForwardToIoQueue(Request, GetDeviceContext(device)->ColaRequest);
 				if (NT_SUCCESS(status))
 				{

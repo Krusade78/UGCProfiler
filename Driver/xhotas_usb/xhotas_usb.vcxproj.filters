@@ -37,9 +37,6 @@
     <ClInclude Include="PnP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="acciones.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="botones_setas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -61,7 +58,16 @@
     <ClInclude Include="mapa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TecladoRaton_read.h">
+    <ClInclude Include="directx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AccionesGenerar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AccionesProcesar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RequestHID_read.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -79,9 +85,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pnp.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="acciones.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="botones_setas.c">
@@ -105,7 +108,16 @@
     <ClCompile Include="mapa.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TecladoRaton_read.c">
+    <ClCompile Include="directx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AccionesGenerar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AccionesProcesar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestHID_read.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

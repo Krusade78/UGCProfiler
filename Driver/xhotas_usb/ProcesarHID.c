@@ -6,6 +6,7 @@
 #include "CalibradoHID.h"
 #include "botones_setas.h"
 #include "ejes_raton.h"
+#include "directx.h"
 #define _PRIVATE_
 #include "ProcesarHID.h"
 #undef _PRIVATE_
@@ -79,7 +80,7 @@ VOID ConvertirEjesA2048(PUCHAR ejes)
 }
 
 //DISPATCH
-VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
+VOID ProcesarInputX52(WDFDEVICE device, _In_ PVOID inputData, BOOLEAN repetirUltimo)
 {
 	if (repetirUltimo)
 		RtlCopyMemory(inputData, &GetDeviceContext(device)->EntradaX52.UltimaPosicion, sizeof(HIDX52_INPUT_DATA));
@@ -93,7 +94,7 @@ VOID ProcesarInputX52(WDFDEVICE device, PVOID inputData, BOOLEAN repetirUltimo)
 }
 
 //DISPATCH
-VOID ProcesarX52(WDFDEVICE device, PVOID inputData)
+VOID ProcesarX52(WDFDEVICE device, _In_ PVOID inputData)
 {
 	HID_INPUT_DATA hidData;
 	RtlZeroMemory(&hidData, sizeof(HID_INPUT_DATA));
@@ -178,7 +179,7 @@ VOID ProcesarX52(WDFDEVICE device, PVOID inputData)
 }
 
 //DISPATCH
-VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
+VOID ProcesarHID(WDFDEVICE device, _In_ PHID_INPUT_DATA hidData)
 {
 	HID_CONTEXT* devExt = &GetDeviceContext(device)->HID;
 	UCHAR idx;
@@ -253,12 +254,11 @@ VOID ProcesarHID(WDFDEVICE device, _Inout_ PHID_INPUT_DATA hidData)
 		RtlZeroMemory(&outputData, sizeof(HID_INPUT_DATA));
 		SensibilidadYMapeado(device, &viejohidData, hidData, &outputData);
 
-		if (!devExt->MenuActivado)
-			RtlCopyMemory(outputData.Botones, devExt->stBotones, sizeof(hidData->Botones));
-		else
+		if (devExt->MenuActivado)
 			RtlCopyMemory(outputData.Botones, hidData->Botones, sizeof(hidData->Botones));
 
-		RtlCopyMemory(outputData.Setas, devExt->stSetas, sizeof(hidData->Setas));
 		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
 	}
+
+	GenerarDirectX(device, &hidData);
 }
