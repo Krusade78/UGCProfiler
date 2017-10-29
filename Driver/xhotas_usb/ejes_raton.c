@@ -222,7 +222,7 @@ VOID GenerarAccionRaton(WDFDEVICE device, UCHAR eje, CHAR mov)
 		}
 	}
 
-	AccionarRaton(device, (PUCHAR)&accion, FALSE);
+	AccionarRaton(device, (PUCHAR)&accion);
 }
 
 VOID GenerarAccionesEjes(WDFDEVICE device, UCHAR idx, USHORT nuevo)

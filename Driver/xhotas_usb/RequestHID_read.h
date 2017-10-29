@@ -1,10 +1,15 @@
 EXTERN_C_START
 
 EVT_WDF_IO_QUEUE_STATE EvtRequestHIDLista;
-
-BOOLEAN ProcesarEventoTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato);
-BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato);
 EVT_WDF_TIMER EvtTickRaton;
+
+VOID ProcesarRequest(WDFDEVICE device);
+VOID CompletarRequestDirectX(WDFDEVICE device, WDFREQUEST request);
+VOID CompletarRequestTeclado(WDFDEVICE device, WDFREQUEST request);
+VOID CompletarRequestRaton(WDFDEVICE device, WDFREQUEST request);
+
+#ifdef _PRIVATE_
+#endif // _PRIVATE_
 
 EXTERN_C_END
 

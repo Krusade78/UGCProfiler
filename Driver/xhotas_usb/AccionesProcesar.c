@@ -1,7 +1,7 @@
 #include <ntddk.h>
 #include <wdf.h>
 #include "context.h"
-#include "TecladoRaton_read.h"
+#include "RequestHID_read.h"
 #include "X52_write.h"
 #define _PRIVATE_
 #include "AccionesProcesar.h"
@@ -38,6 +38,9 @@ VOID LimpiarAcciones(WDFDEVICE device)
 VOID ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
 {
 	BOOLEAN procesado = FALSE;
+	UCHAR max = 3; //por si se vacia la cola
+
+	ProcesarComandos(device);
 	do
 	{
 		switch (GetDeviceContext(device)->HID.TurnoReport)
@@ -52,12 +55,15 @@ VOID ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
 			break;
 		case 2:
 			GetDeviceContext(device)->HID.TurnoReport = 0;
-			procesado = PrepararComando(device, request);
+			procesado = PrepararTeclado(device, request);
 			break;
 		}
-	} while (!procesado);
+		max--;
+	} while (!procesado && (max > 0));
+	ProcesarComandos(device);
 }
 
+#pragma region "DirectX"
 BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
@@ -77,6 +83,7 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 
 			while (posComando != NULL)
 			{
+				PNODO posAnterior = posComando->anterior;
 				struct
 				{
 					UCHAR tipo;
@@ -88,9 +95,9 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 				{
 					if (!dxPosCambiada)
 					{
-						PHID_INPUT_DATA dato = (PUCHAR)posComando->Datos + 1;
+						PHID_INPUT_DATA dato = (PHID_INPUT_DATA)((PUCHAR)posComando->Datos + 1);
 						RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
-						RtlCopyMemory(devExt->stDirectX.MiniStick, dato->MiniStick, sizeof(devExt->stDirectX.MiniStick));
+						devExt->stDirectX.MiniStick = dato->MiniStick;
 						ColaBorrarNodo(colaComandos, posComando);
 						dxPosCambiada = TRUE;
 						vacio = FALSE;
@@ -102,11 +109,8 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 					if (!botonCambiado)
 					{
 						botonCambiado = TRUE;
-						ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
-						if (!enDelay)
-						{
-							ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-						}
+						ProcesarDirectX(device, evento.tipo, evento.dato);
+						ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
 					}
 				}
 				if ((evento.tipo & 0x1f) == TipoComando_DxSeta)
@@ -114,11 +118,8 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 					if (!setaCambiada)
 					{
 						setaCambiada = TRUE;
-						ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
-						if (!enDelay)
-						{
-							ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-						}
+						ProcesarDirectX(device, evento.tipo, evento.dato);
+						ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
 					}
 				}
 				else
@@ -129,7 +130,10 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 				if (botonCambiado && setaCambiada && botonCambiado)
 					break;
 
-				posComando = posComando->siguiente;
+				if (posAnterior == NULL)
+					posComando = ((PCOLA)posAccion->Datos)->principio;
+				else
+					posComando = posAnterior->siguiente;
 			}
 
 			if (ColaEstaVacia(colaComandos))
@@ -143,137 +147,13 @@ BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
 	}
 	WdfSpinLockRelease(devExt->SpinLockAcciones);
 
+	if (!vacio)
+		CompletarRequestDirectX(device, request);
+
 	return !vacio;
 }
 
-VOID ProcesarDirectX(WDFDEVICE device, PHID_INPUT_DATA datos)
-{
-	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
-	BOOLEAN			soltar;
-
-	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
-	tipo &= 0x1f;
-
-	if (enDelay)
-	{
-		// Cancela una de las request enviadas hacia abajo para que se vuelva a hacer la petición
-		// y se lea el estado nuevo
-		WDFREQUEST request = NULL;
-		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		{
-			if (WdfCollectionGetCount(GetDeviceContext(device)->EntradaX52.ListaRequest) > 0)
-			{
-				request = (WDFREQUEST)WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
-				WdfObjectReference(request);
-				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
-			}
-		}
-		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		if (request != NULL)
-		{
-			WdfRequestCancelSentRequest(request);
-			WdfObjectDereference(request);
-		}
-	}
-}
-
-VOID ProcesarComandos(_In_ WDFDEVICE device, _In_ BOOLEAN enDelay)
-{
-	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
-	PNODO			posAccion = devExt->ColaAcciones.principio;
-
-	while (posAccion != NULL)
-	{
-		PCOLA	colaComandos = (PCOLA)posAccion->Datos;
-		PNODO	posComando = colaComandos->principio;
-		BOOLEAN	finProceso = FALSE;
-
-		while (posComando != NULL)
-		{
-#pragma region "Bucle de comandos"
-			PNODO canterior = posComando->anterior;
-			struct
-			{
-				UCHAR tipo;
-				UCHAR dato;
-			} evento;
-			RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
-
-			if (((evento.tipo & 0x1f) > TipoComando_Tecla) && ((evento.tipo & 0x1f) < TipoComando_Delay))
-			{
-				if (ProcesarEventoRaton(device, evento.tipo, evento.dato))
-				{
-					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-				}
-				else
-				{
-					finProceso = TRUE;
-					break;
-				}
-			}
-			else if ((evento.tipo & 0x1f) == TipoComando_Tecla)
-			{
-				if (ProcesarEventoTeclado(device, evento.tipo, evento.dato))
-				{
-					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-				}
-				else
-				{
-					finProceso = TRUE;
-					break;
-				}
-			}
-			else if (((evento.tipo & 0x1f) == TipoComando_DxBoton) || ((evento.tipo & 0x1f) == TipoComando_DxSeta))
-			{
-				ProcesarDirectX(device, enDelay, evento.tipo, evento.dato);
-				if (!enDelay)
-				{
-					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-				}
-				else
-				{
-					finProceso = TRUE;
-					break;
-				}
-			}
-			else if ((evento.tipo == TipoComando_Modo) || (evento.tipo == TipoComando_Pinkie) || ((evento.tipo & 0x1f) >= TipoComando_MfdLuz))
-			{
-				ProcesarEventoX52_Modos(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
-				ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-			}
-			else if (((evento.tipo >= TipoComando_Delay) && (evento.tipo <= TipoComando_RepeatN)) || (evento.tipo == TipoComando_RepeatIni))
-			{
-				if (!ProcesarEventoRepeticiones_Delay(device, (PCOLA)posAccion->Datos, posComando, &evento.tipo, evento.dato))
-					break;
-				else
-				{
-					if ((evento.tipo & 0x1f) == TipoComando_RepeatIni)
-						canterior = posComando;
-				}
-			}
-
-			if (canterior == NULL)
-				posComando = ((PCOLA)posAccion->Datos)->principio;
-			else
-				posComando = canterior->siguiente;
-
-#pragma endregion
-		}
-
-		if (ColaEstaVacia(colaComandos))
-		{ // Fin eventos
-			ColaBorrar(colaComandos); posAccion->Datos = NULL;
-			ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
-		}
-
-		if (finProceso)
-			break;
-		else
-			posAccion = posAccion->siguiente;
-	}
-}
-
-VOID ProcesarDirectX(WDFDEVICE device, BOOLEAN enDelay, UCHAR tipo, UCHAR dato)
+VOID ProcesarDirectX(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
 	BOOLEAN			soltar;
@@ -285,40 +165,257 @@ VOID ProcesarDirectX(WDFDEVICE device, BOOLEAN enDelay, UCHAR tipo, UCHAR dato)
 	{
 	case TipoComando_DxBoton: // Botón DX
 		if (!soltar)
-			devExt->stBotones[dato / 8] |= 1 << (dato % 8);
+			devExt->stDirectX.Botones[dato / 8] |= 1 << (dato % 8);
 		else
-			devExt->stBotones[dato / 8] &= ~(1 << (dato % 8));
+			devExt->stDirectX.Botones[dato / 8] &= ~(1 << (dato % 8));
 
 		break;
 	case TipoComando_DxSeta: // Seta DX
 		if (!soltar)
-			devExt->stSetas[dato / 8] = (dato % 8) + 1;
+			devExt->stDirectX.Setas[dato / 8] = (dato % 8) + 1;
 		else
-			devExt->stSetas[dato / 8] = 0;
+			devExt->stDirectX.Setas[dato / 8] = 0;
 		break;
 	}
+}
+#pragma endregion
 
-	if (enDelay)
+#pragma region "Ratón"
+BOOLEAN PrepararRaton(WDFDEVICE device, WDFREQUEST request)
+{
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	BOOLEAN			vacio = TRUE;
+	WdfSpinLockAcquire(devExt->SpinLockAcciones);
 	{
-		// Cancela una de las request enviadas hacia abajo para que se vuelva a hacer la petición
-		// y se lea el estado nuevo
-		WDFREQUEST request = NULL;
-		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+		PNODO posAccion = devExt->ColaAcciones.principio;
+
+		while (posAccion != NULL)
 		{
-			if (WdfCollectionGetCount(GetDeviceContext(device)->EntradaX52.ListaRequest) > 0)
+			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+			PNODO	posComando = colaComandos->principio;
+
+			if (posComando != NULL)
 			{
-				request = (WDFREQUEST)WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
-				WdfObjectReference(request);
-				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
+				struct
+				{
+					UCHAR tipo;
+					UCHAR dato;
+				} evento;
+				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+
+				if (((evento.tipo & 0x1f) > TipoComando_Tecla) && ((evento.tipo & 0x1f) < TipoComando_Delay))
+				{
+					ProcesarRaton(device, evento.tipo, evento.dato);
+					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+					vacio = FALSE;
+				}
 			}
-		}
-		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		if (request != NULL)
-		{
-			WdfRequestCancelSentRequest(request);
-			WdfObjectDereference(request);
+
+			if (ColaEstaVacia(colaComandos))
+			{ // Fin eventos
+				ColaBorrar(colaComandos); posAccion->Datos = NULL;
+				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
+			}
+
+			posAccion = posAccion->siguiente;
 		}
 	}
+	WdfSpinLockRelease(devExt->SpinLockAcciones);
+
+	if (!vacio)
+		CompletarRequestRaton(device, request);
+
+	return !vacio;
+}
+
+VOID ProcesarRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
+{
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	BOOLEAN			soltar;
+
+	WdfTimerStop(devExt->RatonTimer, FALSE);
+
+	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
+
+	switch (tipo & 0x1f)
+	{
+	case TipoComando_RatonBt1:
+		if (!soltar)
+			devExt->stRaton[0] |= 1;
+		else
+			devExt->stRaton[0] &= 254;
+		break;
+	case TipoComando_RatonBt2:
+		if (!soltar)
+			devExt->stRaton[0] |= 2;
+		else
+			devExt->stRaton[0] &= 253;
+		break;
+	case TipoComando_RatonBt3:
+		if (!soltar)
+			devExt->stRaton[0] |= 4;
+		else
+			devExt->stRaton[0] &= 251;
+		break;
+	case TipoComando_RatonIzq: //Eje -x
+		if (!soltar)
+			devExt->stRaton[1] = -dato;
+		else
+			devExt->stRaton[1] = 0;
+		break;
+	case TipoComando_RatonDer: //Eje x
+		if (!soltar)
+			devExt->stRaton[1] = dato;
+		else
+			devExt->stRaton[1] = 0;
+		break;
+	case TipoComando_RatonArr: //Eje -y
+		if (!soltar)
+			devExt->stRaton[2] = -dato;
+		else
+			devExt->stRaton[2] = 0;
+		break;
+	case TipoComando_RatonAba: //Eje y
+		if (!soltar)
+			devExt->stRaton[2] = dato;
+		else
+			devExt->stRaton[2] = 0;
+		break;
+	case TipoComando_RatonWhArr: // Wheel up
+		if (!soltar)
+			devExt->stRaton[3] = 127;
+		else
+			devExt->stRaton[3] = 0;
+		break;
+	case TipoComando_RatonWhAba: // Wheel down
+		if (!soltar)
+			devExt->stRaton[3] = (UCHAR)-127;
+		else
+			devExt->stRaton[3] = 0;
+		break;
+	}
+}
+#pragma endregion
+
+#pragma region "Teclado"
+BOOLEAN PrepararTeclado(WDFDEVICE device, WDFREQUEST request)
+{
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	BOOLEAN			vacio = TRUE;
+	WdfSpinLockAcquire(devExt->SpinLockAcciones);
+	{
+		PNODO posAccion = devExt->ColaAcciones.principio;
+
+		while (posAccion != NULL)
+		{
+			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+			PNODO	posComando = colaComandos->principio;
+
+			if (posComando != NULL)
+			{
+				struct
+				{
+					UCHAR tipo;
+					UCHAR dato;
+				} evento;
+				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+
+				if ((evento.tipo & 0x1f) == TipoComando_Tecla)
+				{
+					ProcesarTeclado(device, evento.tipo, evento.dato);
+					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+					vacio = FALSE;
+				}
+			}
+
+			if (ColaEstaVacia(colaComandos))
+			{ // Fin eventos
+				ColaBorrar(colaComandos); posAccion->Datos = NULL;
+				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
+			}
+
+			posAccion = posAccion->siguiente;
+		}
+	}
+	WdfSpinLockRelease(devExt->SpinLockAcciones);
+
+	if (!vacio)
+		CompletarRequestTeclado(device, request);
+
+	return !vacio;
+}
+
+VOID ProcesarTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)
+{
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	BOOLEAN			soltar;
+
+	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
+	tipo &= 0x1f;
+
+	if (!soltar)
+		devExt->stTeclado[dato / 8] |= 1 << (dato % 8);
+	else
+		devExt->stTeclado[dato / 8] &= ~(1 << (dato % 8));
+}
+#pragma endregion
+
+VOID ProcesarComandos(_In_ WDFDEVICE device)
+{
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	WdfSpinLockAcquire(devExt->SpinLockAcciones);
+	{
+		PNODO			posAccion = devExt->ColaAcciones.principio;
+
+		while (posAccion != NULL)
+		{
+			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+			PNODO	posComando = colaComandos->principio;
+
+			while (posComando != NULL)
+			{
+				PNODO canterior = posComando->anterior;
+				struct
+				{
+					UCHAR tipo;
+					UCHAR dato;
+				} evento;
+				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+
+				if ((evento.tipo == TipoComando_Modo) || (evento.tipo == TipoComando_Pinkie) || (((evento.tipo & 0x1f) >= TipoComando_MfdLuz) && ((evento.tipo & 0x1f) <= TipoComando_MfdFecha)))
+				{
+					ProcesarEventoX52_Modos(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
+					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+				}
+				else if (((evento.tipo >= TipoComando_Delay) && (evento.tipo <= TipoComando_RepeatN)) || (evento.tipo == TipoComando_RepeatIni))
+				{
+					UCHAR ret = ProcesarEventoRepeticiones_Delay(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
+					if (ret == 0)
+						break;
+					else if (ret == 2)
+					{
+						canterior = posComando;
+					}
+				}
+				else
+					break;
+
+				if (canterior == NULL)
+					posComando = ((PCOLA)posAccion->Datos)->principio;
+				else
+					posComando = canterior->siguiente;
+			}
+
+			if (ColaEstaVacia(colaComandos))
+			{ // Fin eventos
+				ColaBorrar(colaComandos); posAccion->Datos = NULL;
+				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
+			}
+
+			posAccion = posAccion->siguiente;
+		}
+	}
+	WdfSpinLockRelease(devExt->SpinLockAcciones);
 }
 
 VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tipo, UCHAR dato)
@@ -411,13 +508,13 @@ VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tip
 
 #pragma region "Repeticiones y retardo"
 
-BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR* tipo, UCHAR dato)
+UCHAR ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tipo, UCHAR dato)
 /**** return TRUE; continua en la misma cola
 **** return FALSE; salta a la siguiente accion */
 {
 	HID_CONTEXT* devExt = &GetDeviceContext(device)->HID;
 
-	switch (*tipo & 0x1f)
+	switch (tipo & 0x1f)
 	{
 		case 10: // Delay
 		{
@@ -530,7 +627,6 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 #pragma region "Autorepeat N"
 	case TipoComando_RepeatN:
 		if (dato == 0)
-			limpiar13 :
 		{
 			ColaBorrarNodo(cola, nodo);
 		}
@@ -541,7 +637,9 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 			*((PUCHAR)nodo->Datos + 1) -= 1; //Reduce la cuenta (evento.dato)
 
 			if (!ReservarMemoriaRepeticiones(&nodosNuevos, nodo, TipoComando_RepeatNFin))
-				goto limpiar13;
+			{
+				ColaBorrarNodo(cola, nodo);
+			}
 			else
 			{
 				//--------------------------------------------------------------------
@@ -600,7 +698,7 @@ BOOLEAN ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nod
 				pos = pos->siguiente;
 			}
 
-			*tipo = 0xff; // hace que canterior funcione normal en vez hacer el saltar el 17
+			return 2; // hace que canterior funcione normal en vez hacer el saltar el 17
 		}
 		break;
 	}
@@ -699,7 +797,7 @@ VOID TimerDelay(IN  WDFTIMER Timer)
 		WdfSpinLockRelease(devExt->SpinLockAcciones);
 		if (ok)
 		{
-			ProcesarAcciones(WdfTimerGetParentObject(Timer), TRUE);
+			ProcesarRequest(WdfTimerGetParentObject(Timer));
 		}
 	}
 	WdfObjectDelete(Timer);

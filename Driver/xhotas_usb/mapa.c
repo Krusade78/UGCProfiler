@@ -155,8 +155,7 @@ VOID LimpiarMapa(WDFDEVICE device)
 
 			RtlZeroMemory(devExt->stTeclado, sizeof(devExt->stTeclado));
 			RtlZeroMemory(devExt->stRaton, sizeof(devExt->stRaton));
-			RtlZeroMemory(devExt->stBotones, sizeof(devExt->stBotones));
-			RtlZeroMemory(devExt->stSetas, sizeof(devExt->stSetas));
+			RtlZeroMemory(&devExt->stDirectX, sizeof(HID_INPUT_DATA));
 			devExt->EstadoPinkie = FALSE;
 			devExt->EstadoModos = 0;
 		}

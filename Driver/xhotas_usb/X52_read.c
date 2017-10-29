@@ -24,6 +24,7 @@ User-mode Driver Framework 2
 #include "context.h"
 #include "X52_write.h"
 #include "ProcesarHID.h"
+#include "RequestHID_read.h"
 #define _PRIVATE_
 #include "x52_read.h"
 #undef _PRIVATE_
@@ -273,6 +274,7 @@ void EvtCompletionX52Data(
 			if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
 			{
 				ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, repetirUltimo);
+				ProcesarRequest(device);
 				status = WdfRequestForwardToIoQueue(Request, GetDeviceContext(device)->ColaRequest);
 				if (NT_SUCCESS(status))
 				{

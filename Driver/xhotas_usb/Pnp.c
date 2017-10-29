@@ -75,8 +75,7 @@ NTSTATUS EvtDeviceD0Exit(
 
 	RtlZeroMemory(GetDeviceContext(device)->HID.stTeclado, sizeof(GetDeviceContext(device)->HID.stTeclado));
 	RtlZeroMemory(GetDeviceContext(device)->HID.stRaton, sizeof(GetDeviceContext(device)->HID.stRaton));
-	RtlZeroMemory(GetDeviceContext(device)->HID.stBotones, sizeof(GetDeviceContext(device)->HID.stBotones));
-	RtlZeroMemory(GetDeviceContext(device)->HID.stSetas, sizeof(GetDeviceContext(device)->HID.stSetas));
+	RtlZeroMemory(&GetDeviceContext(device)->HID.stDirectX, sizeof(HID_INPUT_DATA));
 
 	GetDeviceContext(device)->HID.RatonActivado = FALSE;
 	WdfTimerStop(GetDeviceContext(device)->HID.RatonTimer, TRUE);

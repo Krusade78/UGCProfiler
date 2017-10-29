@@ -174,8 +174,6 @@ VOID ProcesarX52(WDFDEVICE device, _In_ PVOID inputData)
 	ConvertirEjesA2048(hidData.Ejes);
 
 	ProcesarHID(device, &hidData);
-
-	RtlCopyMemory((PVOID)((PUCHAR)inputData + 1), &hidData, sizeof(HID_INPUT_DATA));
 }
 
 //DISPATCH
@@ -260,5 +258,5 @@ VOID ProcesarHID(WDFDEVICE device, _In_ PHID_INPUT_DATA hidData)
 		RtlCopyMemory(hidData, &outputData, sizeof(HID_INPUT_DATA));
 	}
 
-	GenerarDirectX(device, &hidData);
+	GenerarDirectX(device, hidData);
 }

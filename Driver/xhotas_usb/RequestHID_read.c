@@ -16,13 +16,21 @@ Pasar datos del teclado al HID.
 #include <wdf.h>
 #include "Context.h"
 #include "AccionesProcesar.h"
+#include "AccionesGenerar.h"
+#define _PRIVATE_
 #include "RequestHID_read.h"
+#undef _PRIVATE_
 
 VOID EvtRequestHIDLista(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 {
 	UNREFERENCED_PARAMETER(Context);
 
-	PDEVICE_CONTEXT devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
+	ProcesarRequest(WdfIoQueueGetDevice(Queue));
+}
+
+VOID ProcesarRequest(WDFDEVICE device)
+{
+	PDEVICE_CONTEXT devExt = GetDeviceContext(device);
 
 	while (TRUE)
 	{
@@ -51,11 +59,11 @@ VOID EvtRequestHIDLista(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 		if (!vacia)
 		{
 			WDFREQUEST	request = NULL;
-			NTSTATUS	status = WdfIoQueueRetrieveNextRequest(Queue, &request);
+			NTSTATUS	status = WdfIoQueueRetrieveNextRequest(devExt->ColaRequest, &request);
 
 			if (NT_SUCCESS(status))
 			{
-				ProcesarAcciones(WdfIoQueueGetDevice(Queue), request);
+				ProcesarAcciones(device, request);
 			}
 			else if (status == STATUS_NO_MORE_ENTRIES)
 			{
@@ -71,31 +79,27 @@ VOID EvtRequestHIDLista(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
 	}
 }
 
-#pragma region "Teclado"
-BOOLEAN ProcesarEventoTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)
+VOID CompletarRequestDirectX(WDFDEVICE device, WDFREQUEST request)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
-	WDFREQUEST		request;
-	BOOLEAN			soltar;
 	NTSTATUS		status;
 	PVOID			buffer;
 
-	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
-	tipo &= 0x1f;
-
-	if (!soltar)
-		devExt->stTeclado[dato / 8] |= 1 << (dato % 8);
-	else
-		devExt->stTeclado[dato / 8] &= ~(1 << (dato % 8));
-
-	status = WdfIoQueueRetrieveNextRequest(GetDeviceContext(device)->ColaRequest, &request);
-	if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
+	status = WdfRequestRetrieveOutputBuffer(request, sizeof(HID_INPUT_DATA) + 1, &buffer, NULL);
+	if (NT_SUCCESS(status))
 	{
-		if (request == NULL)
-			return FALSE;
+		*((PUCHAR)buffer) = 1;
+		RtlCopyMemory((PUCHAR)buffer + 1, &devExt->stDirectX, sizeof(HID_INPUT_DATA));
+		WdfRequestSetInformation(request, sizeof(HID_INPUT_DATA) + 1);
 	}
-	if (!NT_SUCCESS(status))
-		return FALSE;
+	WdfRequestComplete(request, status);
+}
+
+VOID CompletarRequestTeclado(WDFDEVICE device, WDFREQUEST request)
+{
+	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
+	NTSTATUS		status;
+	PVOID			buffer;
 
 	status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt->stTeclado) + 1, &buffer, NULL);
 	if (NT_SUCCESS(status))
@@ -105,89 +109,16 @@ BOOLEAN ProcesarEventoTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 		WdfRequestSetInformation(request, sizeof(devExt->stTeclado) + 1);
 	}
 	WdfRequestComplete(request, status);
-	return TRUE;
 }
-#pragma endregion
 
 #pragma region "Ratón"
-BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
+VOID CompletarRequestRaton(WDFDEVICE device, WDFREQUEST request)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
-	WDFREQUEST		request;
-	BOOLEAN			soltar;
 	NTSTATUS		status;
 	PVOID			buffer;
 
 	WdfTimerStop(devExt->RatonTimer, FALSE);
-
-	soltar = ((tipo & 32) == 32) ? TRUE : FALSE;
-
-	switch (tipo & 0x1f)
-	{
-	case TipoComando_RatonBt1:
-		if (!soltar)
-			devExt->stRaton[0] |= 1;
-		else
-			devExt->stRaton[0] &= 254;
-		break;
-	case TipoComando_RatonBt2:
-		if (!soltar)
-			devExt->stRaton[0] |= 2;
-		else
-			devExt->stRaton[0] &= 253;
-		break;
-	case TipoComando_RatonBt3:
-		if (!soltar)
-			devExt->stRaton[0] |= 4;
-		else
-			devExt->stRaton[0] &= 251;
-		break;
-	case TipoComando_RatonIzq: //Eje -x
-		if (!soltar)
-			devExt->stRaton[1] = -dato;
-		else
-			devExt->stRaton[1] = 0;
-		break;
-	case TipoComando_RatonDer: //Eje x
-		if (!soltar)
-			devExt->stRaton[1] = dato;
-		else
-			devExt->stRaton[1] = 0;
-		break;
-	case TipoComando_RatonArr: //Eje -y
-		if (!soltar)
-			devExt->stRaton[2] = -dato;
-		else
-			devExt->stRaton[2] = 0;
-		break;
-	case TipoComando_RatonAba: //Eje y
-		if (!soltar)
-			devExt->stRaton[2] = dato;
-		else
-			devExt->stRaton[2] = 0;
-		break;
-	case TipoComando_RatonWhArr: // Wheel up
-		if (!soltar)
-			devExt->stRaton[3] = 127;
-		else
-			devExt->stRaton[3] = 0;
-		break;
-	case TipoComando_RatonWhAba: // Wheel down
-		if (!soltar)
-			devExt->stRaton[3] = (UCHAR)-127;
-		else
-			devExt->stRaton[3] = 0;
-		break;
-	}
-
-	status = WdfIoQueueRetrieveNextRequest(GetDeviceContext(device)->ColaRequest, &request);
-	if (((status == STATUS_NO_MORE_ENTRIES) || NT_SUCCESS(status)))
-	{
-		if (request == NULL)
-			return FALSE;
-	}
-	if (!NT_SUCCESS(status))
-		return FALSE;
 
 	status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt->stRaton) + 1, &buffer, NULL);
 	if (NT_SUCCESS(status))
@@ -207,7 +138,6 @@ BOOLEAN ProcesarEventoRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 		devExt->RatonActivado = TRUE;
 		WdfTimerStart(devExt->RatonTimer, WDF_REL_TIMEOUT_IN_MS(GetDeviceContext(device)->Programacion.TickRaton));
 	}
-	return TRUE;
 }
 
 VOID EvtTickRaton(_In_ WDFTIMER Timer)
@@ -236,7 +166,7 @@ VOID EvtTickRaton(_In_ WDFTIMER Timer)
 	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
 	if (accion[0] != 0)
 	{
-		AccionarRaton(device, accion, TRUE);
+		AccionarRaton(device, accion);
 	}
 
 	accion[0] = 0;
@@ -258,10 +188,8 @@ VOID EvtTickRaton(_In_ WDFTIMER Timer)
 	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
 	if (accion[0] != 0)
 	{
-		AccionarRaton(device, accion, TRUE);
+		AccionarRaton(device, accion);
 	}
 }
 #pragma endregion
 
-#pragma region "DirectX"
-#pragma endregion

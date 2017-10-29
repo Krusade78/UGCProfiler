@@ -7,7 +7,7 @@
 #undef _PRIVATE_
 
 
-VOID AccionarRaton(WDFDEVICE device, PUCHAR accion, BOOLEAN enDelay)
+VOID AccionarRaton(WDFDEVICE device, PUCHAR accion)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
 	PCOLA			eventos = ColaAllocate();
@@ -24,7 +24,6 @@ VOID AccionarRaton(WDFDEVICE device, PUCHAR accion, BOOLEAN enDelay)
 			}
 			else
 			{
-				BOOLEAN ok = FALSE;
 				WdfSpinLockAcquire(devExt->SpinLockAcciones);
 				{
 					if (!ColaPush(&devExt->ColaAcciones, eventos))
