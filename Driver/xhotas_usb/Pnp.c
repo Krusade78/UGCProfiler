@@ -66,6 +66,8 @@ NTSTATUS EvtDeviceD0Exit(
 	UNREFERENCED_PARAMETER(device);
 	UNREFERENCED_PARAMETER(TargetState);
 
+	WDFREQUEST request = NULL;
+
 	PAGED_CODE();
 
 	//WdfWaitLockAcquire(GetDeviceExtension(Device)->WaitLockCierre, NULL);
@@ -80,16 +82,22 @@ NTSTATUS EvtDeviceD0Exit(
 	GetDeviceContext(device)->HID.RatonActivado = FALSE;
 	WdfTimerStop(GetDeviceContext(device)->HID.RatonTimer, TRUE);
 
-	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+	do
 	{
-		WDFREQUEST request = WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
-		while (request != NULL)
+		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+		{
+			request = WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
+			if (request != NULL)
+			{
+				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
+			}
+		}
+		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+		if (request != NULL)
 		{
 			WdfCompleteRequest(request, STATUS_UNSUCCESSFUL);
-			WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
-		}
-	}
-	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+		}		
+	} while(request != NULL)
 
 	return STATUS_SUCCESS;
 }
