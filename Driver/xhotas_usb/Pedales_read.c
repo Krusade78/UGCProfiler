@@ -110,12 +110,16 @@ NTSTATUS CerrarIoTarget(_In_ WDFDEVICE device)
 NTSTATUS IniciarPedales(_In_ WDFDEVICE device)
 {
 	NTSTATUS status;
+	WDF_OBJECT_ATTRIBUTES	attributes;
 
 	PAGED_CODE();
 
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Pedales.SpinLockPosicion);
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	attributes.ParentObject = device;
+
+	status = WdfSpinLockCreate(&attributes, &GetDeviceContext(device)->Pedales.SpinLockPosicion);
 	if (!NT_SUCCESS(status)) return status;
-	status = WdfWaitLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->Pedales.WaitLockIoTarget);
+	status = WdfWaitLockCreate(&attributes, &GetDeviceContext(device)->Pedales.WaitLockIoTarget);
 	if (!NT_SUCCESS(status)) return status;
 
 	GetDeviceContext(device)->Pedales.IoTarget = NULL;
@@ -390,7 +394,7 @@ VOID ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 		eje = 512;
 	else if ((izq < 80) && (der < 80)) // zona con los dos pedales
 		eje = (der >= izq) ? (0x100 + der - izq) * 2 : (0xff - izq + der) * 2;
-	else // sólo un pedal
+	else // sï¿½lo un pedal
 		eje *= 2;
 	if (eje == 1024) eje = 1023;
 
