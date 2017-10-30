@@ -203,6 +203,7 @@ EvtDevicePrepareHardware(
 VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
 {
 	WDFDEVICE device = (WDFDEVICE)Object;
+	WDFREQUEST request = NULL;
 
 	PAGED_CODE();
 
@@ -215,4 +216,21 @@ VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
 	}
 
 	LimpiarMapa(device);
+
+	do
+	{
+		WdfSpinLockAcquire(device->EntradaX52.SpinLockRequest);
+		{
+			request = WdfCollectionGetFirstItem(device->EntradaX52.ListaRequest);
+			if (request != NULL)
+			{
+				WdfCollectionRemoveItem(device->EntradaX52.ListaRequest, 0);
+			}
+		}
+		WdfSpinLockRelease(device->EntradaX52.SpinLockRequest);
+		if (request != NULL)
+		{
+			WdfCompleteRequest(request, STATUS_UNSUCCESSFUL);
+		}		
+	} while(request != NULL)
 }
