@@ -43,8 +43,8 @@ NTSTATUS IniciarX52(_In_ WDFDEVICE device)
 	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 	if (!NT_SUCCESS(status)) return status;
 	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-	//if (!NT_SUCCESS(status)) return status;
-	//status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.ListaRequest);
+	if (!NT_SUCCESS(status)) return status;
+	status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.ListaRequest);
 	
 	return status;
 }
@@ -81,45 +81,41 @@ VOID EvtX52InternalIOCtl(
 		{
 			if (purb->UrbBulkOrInterruptTransfer.TransferBufferLength >= (29 + 1))
 			{
-				PDEVICE_CONTEXT devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
-				WDFREQUEST requestEnCola = NULL;
+				PDEVICE_CONTEXT	devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
+				BOOLEAN			pasarAUSB = TRUE;
 
 				WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
 				{
-					requestEnCola = devExt->EntradaX52.Request;
-					if (requestEnCola == NULL)
+					if (devExt->EntradaX52.RequestEnUSB)
 					{
-						devExt->EntradaX52.Request = Request;
+						status = WdfCollectionAdd(devExt->EntradaX52.ListaRequest, Request);
+						if (!NT_SUCCESS(status))
+						{
+							WdfRequestComplete(Request, status);
+							return;
+						}
+						else
+						{
+							ProcesarRequest(WdfIoQueueGetDevice(Queue));
+							pasarAUSB = FALSE;
+						}
 					}
 				}
 				WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
-				if (requestEnCola == NULL) //pasar request hacia abajo
+				if (pasarAUSB) //pasar request hacia abajo
 				{
-					
+					devExt->EntradaX52.RequestEnUSB = TRUE;
 					WdfRequestFormatRequestUsingCurrentType(Request);
 					WdfRequestSetCompletionRoutine(Request, EvtCompletionX52Data, NULL);
 					purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
 					ret = WdfRequestSend(Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), NULL);
 					{
-						if (ret == FALSE)
+						if (!ret)
 						{
-							devExt->EntradaX52.Request = NULL;
+							devExt->EntradaX52.RequestEnUSB = FALSE;
 							status = WdfRequestGetStatus(Request);
 							WdfRequestComplete(Request, status);
 						}
-					}
-				}
-				else //procesar acciones pendientes
-				{
-					status = WdfRequestForwardToIoQueue(Request, devExt->ColaRequest);
-					if (NT_SUCCESS(status))
-					{
-						return;
-					}
-					else
-					{
-						WdfRequestComplete(Request, status);
-						return;
 					}
 				}
 
@@ -233,17 +229,17 @@ void EvtCompletionX52Data(
 
 	WDFDEVICE	device = WdfIoTargetGetDevice(Target);
 	NTSTATUS	status;
-	BOOLEAN		cancelada = TRUE;
+	//BOOLEAN		cancelada = TRUE;
 	WDF_REQUEST_PARAMETERS params;
 	PURB purb;
 
 	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 	{
-		if (GetDeviceContext(device)->EntradaX52.Request != NULL)
-		{
-			GetDeviceContext(device)->EntradaX52.Request = NULL;
-			cancelada = FALSE;
-		}
+		GetDeviceContext(device)->EntradaX52.RequestEnUSB = FALSE;
+		//{
+		//	GetDeviceContext(device)->EntradaX52.Request = NULL;
+		//	cancelada = FALSE;
+		//}
 	}
 	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 
@@ -253,38 +249,38 @@ void EvtCompletionX52Data(
 
 	status = WdfRequestGetStatus(Request);
 
-	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
+
+	//BOOLEAN repetirUltimo = FALSE;
+	//if ((status == STATUS_CANCELLED) && cancelada)
+	//	//La llamada viene por la cancelación de Request. Si !cancelada es una cancelación desde fuera del driver
+	//	// y no se toca nada
+	//{
+	//	if (purb->UrbHeader.Status == USBD_STATUS_CANCELED)
+	//	{
+	//		purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
+	//		status = STATUS_SUCCESS;
+	//		repetirUltimo = TRUE;
+	//	}
+	//}
+	if (NT_SUCCESS(status))
+		//La llamada no viene de WdfRequestCancelSentRequest. Aunque ya esté fuera de la lista de request todavía no
+		// se ha activado la cancelación y se pueden usar los datos
 	{
-		BOOLEAN repetirUltimo = FALSE;
-		if ((status == STATUS_CANCELLED) && cancelada)
-			//La llamada viene por la cancelación de Request. Si !cancelada es una cancelación desde fuera del driver
-			// y no se toca nada
+		if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
 		{
-			if (purb->UrbHeader.Status == USBD_STATUS_CANCELED)
+			ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, FALSE); // repetirUltimo);
+			WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 			{
-				purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
-				status = STATUS_SUCCESS;
-				repetirUltimo = TRUE;
+				status = WdfCollectionAdd(GetDeviceContext(device)->EntradaX52.ListaRequest, Request);
 			}
-		}
-		if (NT_SUCCESS(status))
-			//La llamada no viene de WdfRequestCancelSentRequest. Aunque ya esté fuera de la lista de request todavía no
-			// se ha activado la cancelación y se pueden usar los datos
-		{
-			if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
+			WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+			if (NT_SUCCESS(status))
 			{
-				ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, repetirUltimo);
 				ProcesarRequest(device);
-				status = WdfRequestForwardToIoQueue(Request, GetDeviceContext(device)->ColaRequest);
-				if (NT_SUCCESS(status))
-				{
-					WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
-					return;
-				}
+				return;
 			}
 		}
 	}
-	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 
     WdfRequestSetInformation(Request, sizeof(HID_INPUT_DATA) + 1);
 	WdfRequestComplete(Request, status);
@@ -292,24 +288,28 @@ void EvtCompletionX52Data(
 #pragma endregion
 
 //DISPATCH
-VOID LeerX52ConPedales(PDEVICE_CONTEXT devExt)
+VOID LeerX52ConPedales(WDFDEVICE device)
 {
-	// Cancela una de las request enviadas hacia abajo para que se vuelva a hacer la petición
-	// con la posición de los pedales actualizada
-	WDFREQUEST request = NULL;
-	WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
-	{
-		if (devExt->EntradaX52.Request != NULL)
-		{
-			request = devExt->EntradaX52.Request;
-			devExt->EntradaX52.Request = NULL;
-			WdfObjectReference(request);
-		}
-	}
-	WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
-	if (request != NULL)
-	{
-		WdfRequestCancelSentRequest(request);
-		WdfObjectDereference(request);
-	}
+	//// Cancela una de las request enviadas hacia abajo para que se vuelva a hacer la petición
+	//// con la posición de los pedales actualizada
+	//WDFREQUEST request = NULL;
+	//WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
+	//{
+	//	if (devExt->EntradaX52.Request != NULL)
+	//	{
+	//		request = devExt->EntradaX52.Request;
+	//		devExt->EntradaX52.Request = NULL;
+	//		WdfObjectReference(request);
+	//	}
+	//}
+	//WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
+	//if (request != NULL)
+	//{
+	//	WdfRequestCancelSentRequest(request);
+	//	WdfObjectDereference(request);
+	//}
+	HIDX52_INPUT_DATA input;
+	RtlZeroMemory(&input, sizeof(HIDX52_INPUT_DATA));
+	ProcesarInputX52(device, &input, TRUE);
+	ProcesarRequest(device);
 }

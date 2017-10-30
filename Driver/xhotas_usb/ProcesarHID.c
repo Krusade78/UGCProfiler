@@ -82,13 +82,17 @@ VOID ConvertirEjesA2048(PUCHAR ejes)
 //DISPATCH
 VOID ProcesarInputX52(WDFDEVICE device, _In_ PVOID inputData, BOOLEAN repetirUltimo)
 {
-	if (repetirUltimo)
-		RtlCopyMemory(inputData, &GetDeviceContext(device)->EntradaX52.UltimaPosicion, sizeof(HIDX52_INPUT_DATA));
-	else
+	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 	{
-		PreProcesarModos(device, inputData);
-		RtlCopyMemory(&GetDeviceContext(device)->EntradaX52.UltimaPosicion, inputData, sizeof(HIDX52_INPUT_DATA));
+		if (repetirUltimo)
+			RtlCopyMemory(inputData, &GetDeviceContext(device)->EntradaX52.UltimaPosicion, sizeof(HIDX52_INPUT_DATA));
+		else
+		{
+			PreProcesarModos(device, inputData);
+			RtlCopyMemory(&GetDeviceContext(device)->EntradaX52.UltimaPosicion, inputData, sizeof(HIDX52_INPUT_DATA));
+		}
 	}
+	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 
 	ProcesarX52(device, inputData);
 }

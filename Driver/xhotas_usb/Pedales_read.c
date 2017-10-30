@@ -401,5 +401,5 @@ VOID ProcesarEntradaPedales(_In_ WDFDEVICE device, _In_ PVOID buffer)
 	WdfSpinLockRelease(devExt->Pedales.SpinLockPosicion);
 
 	if (devExt->Pedales.Activado)
-		LeerX52ConPedales(devExt);
+		LeerX52ConPedales(device);
 }

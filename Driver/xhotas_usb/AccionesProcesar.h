@@ -35,7 +35,7 @@ enum
 	TipoComando_MfdTextoFin = 56
 };
 
-VOID ProcesarAcciones(WDFDEVICE device, WDFREQUEST request);
+BOOLEAN ProcesarAcciones(WDFDEVICE device, WDFREQUEST request);
 VOID LimpiarAcciones(WDFDEVICE device);
 
 #ifdef _PRIVATE_

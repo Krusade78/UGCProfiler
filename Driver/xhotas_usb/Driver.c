@@ -64,7 +64,7 @@ NTSTATUS EvtAddDevice(
 	WDF_OBJECT_ATTRIBUTES			attributes;
 	WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
-	WDFQUEUE						cola;
+	//WDFQUEUE						cola;
 	PDEVICE_CONTEXT					dc;
 
 	UNREFERENCED_PARAMETER(Driver);
@@ -102,14 +102,14 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 
-	WDF_IO_QUEUE_CONFIG_INIT(&ioQConfig, WdfIoQueueDispatchManual);
-	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
-	if (!NT_SUCCESS(status))
-		return status;
-	status = WdfIoQueueReadyNotify(cola, EvtRequestHIDLista, NULL);
-	if (!NT_SUCCESS(status))
-		return status;
-	GetDeviceContext(device)->ColaRequest = cola;
+	//WDF_IO_QUEUE_CONFIG_INIT(&ioQConfig, WdfIoQueueDispatchManual);
+	//status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
+	//if (!NT_SUCCESS(status))
+	//	return status;
+	//status = WdfIoQueueReadyNotify(cola, EvtRequestHIDLista, NULL);
+	//if (!NT_SUCCESS(status))
+	//	return status;
+	//GetDeviceContext(device)->ColaRequest = cola;
 
 	status = IniciarIoCtlAplicacion(device);
 

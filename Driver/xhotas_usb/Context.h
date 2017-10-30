@@ -24,10 +24,11 @@ typedef struct _HIDX52_INPUT_DATA
 
 typedef struct _X52READ_CONTEXT
 {
-	WDFREQUEST			Request;
 	WDFSPINLOCK			SpinLockRequest;
-	WDFSPINLOCK			SpinLockPosicion;
+	WDFCOLLECTION		ListaRequest;
+	BOOLEAN				RequestEnUSB;
 
+	WDFSPINLOCK			SpinLockPosicion;
 	HIDX52_INPUT_DATA	UltimaPosicion;
 } X52READ_CONTEXT;
 #pragma endregion
@@ -157,7 +158,7 @@ typedef struct _PEDALES_CONTEXT
 typedef struct _DEVICE_CONTEXT
 {
 	WDFDEVICE			ControlDevice;
-	WDFQUEUE			ColaRequest;
+	//WDFQUEUE			ColaRequest;
 	X52READ_CONTEXT		EntradaX52;
 	X52WRITE_CONTEXT	SalidaX52;
 	PEDALES_CONTEXT		Pedales;

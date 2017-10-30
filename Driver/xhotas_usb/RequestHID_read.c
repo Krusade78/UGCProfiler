@@ -21,13 +21,6 @@ Pasar datos del teclado al HID.
 #include "RequestHID_read.h"
 #undef _PRIVATE_
 
-VOID EvtRequestHIDLista(_In_ WDFQUEUE Queue, _In_ WDFCONTEXT Context)
-{
-	UNREFERENCED_PARAMETER(Context);
-
-	ProcesarRequest(WdfIoQueueGetDevice(Queue));
-}
-
 VOID ProcesarRequest(WDFDEVICE device)
 {
 	PDEVICE_CONTEXT devExt = GetDeviceContext(device);
@@ -58,20 +51,36 @@ VOID ProcesarRequest(WDFDEVICE device)
 		WdfSpinLockRelease(devExt->HID.SpinLockAcciones);
 		if (!vacia)
 		{
-			WDFREQUEST	request = NULL;
-			NTSTATUS	status = WdfIoQueueRetrieveNextRequest(devExt->ColaRequest, &request);
+			WDFREQUEST request = NULL;
 
-			if (NT_SUCCESS(status))
+			WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
 			{
-				ProcesarAcciones(device, request);
+				request = WdfCollectionGetFirstItem(devExt->EntradaX52.ListaRequest);
+				if (request != NULL)
+				{
+					WdfCollectionRemoveItem(devExt->EntradaX52.ListaRequest, 0);
+				}
 			}
-			else if (status == STATUS_NO_MORE_ENTRIES)
+			WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
+			if (request != NULL)
+			{
+				if (!ProcesarAcciones(device, request))
+				{
+					NTSTATUS status;
+					WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
+					{
+						 status = WdfCollectionAdd(devExt->EntradaX52.ListaRequest, request);
+					}
+					WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
+					if (!NT_SUCCESS(status))
+					{
+						WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
+					}
+				}
+			}
+			else
 			{
 				break;
-			}
-			else if (request != NULL)
-			{
-				WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
 			}
 		}
 		else

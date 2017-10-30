@@ -35,7 +35,7 @@ VOID LimpiarAcciones(WDFDEVICE device)
 	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
 }
 
-VOID ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
+BOOLEAN ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
 {
 	BOOLEAN procesado = FALSE;
 	UCHAR max = 3; //por si se vacia la cola
@@ -61,6 +61,8 @@ VOID ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
 		max--;
 	} while (!procesado && (max > 0));
 	ProcesarComandos(device);
+
+	return (max > 0);
 }
 
 #pragma region "DirectX"

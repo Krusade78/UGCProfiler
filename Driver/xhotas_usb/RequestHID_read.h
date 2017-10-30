@@ -1,6 +1,5 @@
 EXTERN_C_START
 
-EVT_WDF_IO_QUEUE_STATE EvtRequestHIDLista;
 EVT_WDF_TIMER EvtTickRaton;
 
 VOID ProcesarRequest(WDFDEVICE device);

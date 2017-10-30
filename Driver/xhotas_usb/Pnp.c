@@ -5,7 +5,7 @@
 #include <hidclass.h>
 #include "Context.h"
 #include "Pedales_read.h"
-#include "acciones.h"
+#include "AccionesProcesar.h"
 #include "PnP.h"
 
 #ifdef ALLOC_PRAGMA
