@@ -37,14 +37,18 @@ User-mode Driver Framework 2
 NTSTATUS IniciarX52(_In_ WDFDEVICE device)
 {
 	NTSTATUS status;
+	WDF_OBJECT_ATTRIBUTES	attributes;
 
 	PAGED_CODE();
 
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	attributes.ParentObject = device;
+
+	status = WdfSpinLockCreate(&attributes, &GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
 	if (!NT_SUCCESS(status)) return status;
-	status = WdfSpinLockCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+	status = WdfSpinLockCreate(&attributes, &GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 	if (!NT_SUCCESS(status)) return status;
-	status = WdfCollectionCreate(WDF_NO_OBJECT_ATTRIBUTES, &GetDeviceContext(device)->EntradaX52.ListaRequest);
+	status = WdfCollectionCreate(&attributes, &GetDeviceContext(device)->EntradaX52.ListaRequest);
 	
 	return status;
 }
