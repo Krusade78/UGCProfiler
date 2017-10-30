@@ -80,5 +80,16 @@ NTSTATUS EvtDeviceD0Exit(
 	GetDeviceContext(device)->HID.RatonActivado = FALSE;
 	WdfTimerStop(GetDeviceContext(device)->HID.RatonTimer, TRUE);
 
+	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+	{
+		WDFREQUEST request = WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
+		while (request != NULL)
+		{
+			WdfCompleteRequest(request, STATUS_UNSUCCESSFUL);
+			WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
+		}
+	}
+	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+
 	return STATUS_SUCCESS;
 }
