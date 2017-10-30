@@ -717,7 +717,10 @@ namespace Editor
                 if (k > -1) macro.Insert(idc + i, (ushort)(k << 8));
             }
             if (mantener)
+            {
                 macro.Insert(idc + i, (ushort)TipoC.TipoComando_Hold);
+                i++;
+            }
             for (int j = teclas.Count - 1; j >= 0; j--)
             {
                 int k = MapKey(teclas[j]);
