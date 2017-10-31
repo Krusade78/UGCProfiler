@@ -21,70 +21,98 @@ Pasar datos del teclado al HID.
 #include "RequestHID_read.h"
 #undef _PRIVATE_
 
-VOID ProcesarRequest(WDFDEVICE device)
+VOID EvtRequestHID(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request)
 {
-	PDEVICE_CONTEXT devExt = GetDeviceContext(device);
+	ProcesarRequest(WdfIoQueueGetDevice(Queue), Request);
+}
+
+VOID ForzarProcesarRequest(WDFDEVICE device)
+{
+	ProcesarRequest(device, NULL);
+}
+
+VOID ProcesarRequest(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request)
+{
+	PDEVICE_CONTEXT	devExt = GetDeviceContext(Device);
+	BOOLEAN			forzada = FALSE;
 
 	while (TRUE)
 	{
 		BOOLEAN vacia;
 		WdfSpinLockAcquire(devExt->HID.SpinLockAcciones);
-		{
-			vacia = ColaEstaVacia(&devExt->HID.ColaAcciones);
-			if (!vacia)
-			{
-				BOOLEAN soloHolds = TRUE;
-				PNODO	nsiguiente = devExt->HID.ColaAcciones.principio;
-				while (nsiguiente != NULL)
-				{
-					PCOLA cola = (PCOLA)nsiguiente->Datos;
-					if ((((PUCHAR)cola->principio->Datos)[0]) != TipoComando_Hold) //tipo
-					{
-						soloHolds = FALSE;
-						break;
-					}
-					nsiguiente = nsiguiente->siguiente;
-				}
-				vacia = soloHolds;
-			}
-		}
-		WdfSpinLockRelease(devExt->HID.SpinLockAcciones);
+
+		vacia = ColaEstaVacia(&devExt->HID.ColaAcciones);
 		if (!vacia)
 		{
-			WDFREQUEST request = NULL;
-
-			WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
+			BOOLEAN soloHolds = TRUE;
+			PNODO	nsiguiente = devExt->HID.ColaAcciones.principio;
+			while (nsiguiente != NULL)
 			{
-				request = WdfCollectionGetFirstItem(devExt->EntradaX52.ListaRequest);
-				if (request != NULL)
+				PCOLA cola = (PCOLA)nsiguiente->Datos;
+				if ((((PUCHAR)cola->principio->Datos)[0]) != TipoComando_Hold) //tipo
 				{
-					WdfCollectionRemoveItem(devExt->EntradaX52.ListaRequest, 0);
+					soloHolds = FALSE;
+					break;
+				}
+				nsiguiente = nsiguiente->siguiente;
+			}
+			vacia = soloHolds;
+		}
+
+		if (vacia)
+		{
+			WdfSpinLockRelease(devExt->HID.SpinLockAcciones);
+			if (Request != NULL)
+			{
+				NTSTATUS status = WdfRequestForwardToIoQueue(Request, devExt->EntradaX52.ColaRequest);
+				if (!NT_SUCCESS(status))
+				{
+					WdfRequestComplete(Request, status);
 				}
 			}
-			WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
-			if (request != NULL)
+			return;
+		}
+		else
+		{
+			if (Request == NULL)
 			{
-				if (!ProcesarAcciones(device, request))
-				{
-					NTSTATUS status;
-					WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
-					{
-						 status = WdfCollectionAdd(devExt->EntradaX52.ListaRequest, request);
-					}
-					WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
-					if (!NT_SUCCESS(status))
-					{
-						WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
-					}
-				}
+				forzada = TRUE;
+				WdfIoQueueRetrieveNextRequest(devExt->EntradaX52.ColaRequest, &Request);
+			}
+			if (Request == NULL)
+			{
+				WdfSpinLockRelease(devExt->HID.SpinLockAcciones);
+				return;
 			}
 			else
 			{
-				break;
+				UCHAR procesado = ProcesarAcciones(Device);
+				WdfSpinLockRelease(devExt->HID.SpinLockAcciones);
+
+				switch (procesado)
+				{
+					case 1:
+						CompletarRequestDirectX(Device, Request);
+						break;
+					case 2:
+						CompletarRequestRaton(Device, Request);
+						break;
+					case 3:
+						CompletarRequestTeclado(Device, Request);
+						break;
+					default:
+					{
+						NTSTATUS status = (forzada) ? WdfRequestRequeue(Request) : WdfRequestForwardToIoQueue(Request, devExt->EntradaX52.ColaRequest);
+						if (!NT_SUCCESS(status))
+						{
+							WdfRequestComplete(Request, status);
+						}
+					}
+					break;
+				}
+				Request = NULL;
 			}
 		}
-		else
-			break;
 	}
 }
 
@@ -199,6 +227,8 @@ VOID EvtTickRaton(_In_ WDFTIMER Timer)
 	{
 		AccionarRaton(device, accion);
 	}
+
+	ForzarProcesarRequest(device);
 }
 #pragma endregion
 

@@ -24,9 +24,9 @@ typedef struct _HIDX52_INPUT_DATA
 
 typedef struct _X52READ_CONTEXT
 {
-	WDFSPINLOCK			SpinLockRequest;
-	WDFCOLLECTION		ListaRequest;
-	BOOLEAN				RequestEnUSB;
+	WDFQUEUE			ColaRequest;
+	WDFQUEUE			ColaRequestSinUsar;
+	SHORT				RequestEnUSB;
 
 	WDFSPINLOCK			SpinLockPosicion;
 	HIDX52_INPUT_DATA	UltimaPosicion;
@@ -158,7 +158,6 @@ typedef struct _PEDALES_CONTEXT
 typedef struct _DEVICE_CONTEXT
 {
 	WDFDEVICE			ControlDevice;
-	//WDFQUEUE			ColaRequest;
 	X52READ_CONTEXT		EntradaX52;
 	X52WRITE_CONTEXT	SalidaX52;
 	PEDALES_CONTEXT		Pedales;

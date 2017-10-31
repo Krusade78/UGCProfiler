@@ -45,10 +45,10 @@ NTSTATUS IniciarX52(_In_ WDFDEVICE device)
 	attributes.ParentObject = device;
 
 	status = WdfSpinLockCreate(&attributes, &GetDeviceContext(device)->EntradaX52.SpinLockPosicion);
-	if (!NT_SUCCESS(status)) return status;
-	status = WdfSpinLockCreate(&attributes, &GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-	if (!NT_SUCCESS(status)) return status;
-	status = WdfCollectionCreate(&attributes, &GetDeviceContext(device)->EntradaX52.ListaRequest);
+	//if (!NT_SUCCESS(status)) return status;
+	//status = WdfSpinLockCreate(&attributes, &GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+	//if (!NT_SUCCESS(status)) return status;
+	//status = WdfCollectionCreate(&attributes, &GetDeviceContext(device)->EntradaX52.ListaRequest);
 	
 	return status;
 }
@@ -86,34 +86,18 @@ VOID EvtX52InternalIOCtl(
 			if (purb->UrbBulkOrInterruptTransfer.TransferBufferLength >= (29 + 1))
 			{
 				PDEVICE_CONTEXT	devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
-				BOOLEAN			pasarAUSB = TRUE;
 
-				WdfSpinLockAcquire(devExt->EntradaX52.SpinLockRequest);
+				if (InterlockedCompareExchange16(&devExt->EntradaX52.RequestEnUSB, 1, 0))
 				{
-					if (devExt->EntradaX52.RequestEnUSB)
+					status = WdfRequestForwardToIoQueue(Request, devExt->EntradaX52.ColaRequest);
+					if (!NT_SUCCESS(status))
 					{
-						status = WdfCollectionAdd(devExt->EntradaX52.ListaRequest, Request);
-						WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
-						if (!NT_SUCCESS(status))
-						{
-							WdfRequestComplete(Request, status);
-							return;
-						}
-						else
-						{
-							ProcesarRequest(WdfIoQueueGetDevice(Queue));
-							pasarAUSB = FALSE;
-						}
+						WdfRequestComplete(Request, status);
 					}
-					else
-					{
-						WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
-					}
+					return;
 				}
-
-				if (pasarAUSB) //pasar request hacia abajo
+				else //pasar request hacia abajo
 				{
-					devExt->EntradaX52.RequestEnUSB = TRUE;
 					WdfRequestFormatRequestUsingCurrentType(Request);
 					WdfRequestSetCompletionRoutine(Request, EvtCompletionX52Data, NULL);
 					purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
@@ -121,7 +105,7 @@ VOID EvtX52InternalIOCtl(
 					{
 						if (!ret)
 						{
-							devExt->EntradaX52.RequestEnUSB = FALSE;
+							InterlockedDecrement16(&devExt->EntradaX52.RequestEnUSB);
 							status = WdfRequestGetStatus(Request);
 							WdfRequestComplete(Request, status);
 						}
@@ -237,61 +221,26 @@ void EvtCompletionX52Data(
 	UNREFERENCED_PARAMETER(Params);
 
 	WDFDEVICE	device = WdfIoTargetGetDevice(Target);
-	NTSTATUS	status;
-	//BOOLEAN		cancelada = TRUE;
+	NTSTATUS	status = WdfRequestGetStatus(Request);
 	WDF_REQUEST_PARAMETERS params;
 	PURB purb;
 
-	WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-	{
-		GetDeviceContext(device)->EntradaX52.RequestEnUSB = FALSE;
-		//{
-		//	GetDeviceContext(device)->EntradaX52.Request = NULL;
-		//	cancelada = FALSE;
-		//}
-	}
-	WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
+	InterlockedDecrement16(&GetDeviceContext(device)->EntradaX52.RequestEnUSB);
 
 	WDF_REQUEST_PARAMETERS_INIT(&params);
 	WdfRequestGetParameters(Request, &params);
 	purb = (PURB)params.Parameters.Others.Arg1;
 
-	status = WdfRequestGetStatus(Request);
-
-
-	//BOOLEAN repetirUltimo = FALSE;
-	//if ((status == STATUS_CANCELLED) && cancelada)
-	//	//La llamada viene por la cancelación de Request. Si !cancelada es una cancelación desde fuera del driver
-	//	// y no se toca nada
-	//{
-	//	if (purb->UrbHeader.Status == USBD_STATUS_CANCELED)
-	//	{
-	//		purb->UrbHeader.Status = USBD_STATUS_SUCCESS;
-	//		status = STATUS_SUCCESS;
-	//		repetirUltimo = TRUE;
-	//	}
-	//}
 	if (NT_SUCCESS(status))
-		//La llamada no viene de WdfRequestCancelSentRequest. Aunque ya esté fuera de la lista de request todavía no
-		// se ha activado la cancelación y se pueden usar los datos
 	{
-		if (purb->UrbHeader.Status == USBD_STATUS_SUCCESS)
+		ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, FALSE); // repetirUltimo);
+		status = WdfRequestForwardToIoQueue(Request, GetDeviceContext(device)->EntradaX52.ColaRequest);
+		if (NT_SUCCESS(status))
 		{
-			ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, FALSE); // repetirUltimo);
-			WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-			{
-				status = WdfCollectionAdd(GetDeviceContext(device)->EntradaX52.ListaRequest, Request);
-			}
-			WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-			if (NT_SUCCESS(status))
-			{
-				ProcesarRequest(device);
-				return;
-			}
+			return;
 		}
 	}
 
-    WdfRequestSetInformation(Request, sizeof(HID_INPUT_DATA) + 1);
 	WdfRequestComplete(Request, status);
 }
 #pragma endregion
@@ -320,5 +269,5 @@ VOID LeerX52ConPedales(WDFDEVICE device)
 	HIDX52_INPUT_DATA input;
 	RtlZeroMemory(&input, sizeof(HIDX52_INPUT_DATA));
 	ProcesarInputX52(device, &input, TRUE);
-	ProcesarRequest(device);
+	ForzarProcesarRequest(device);
 }

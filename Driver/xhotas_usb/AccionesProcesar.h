@@ -35,7 +35,7 @@ enum
 	TipoComando_MfdTextoFin = 56
 };
 
-BOOLEAN ProcesarAcciones(WDFDEVICE device, WDFREQUEST request);
+BOOLEAN ProcesarAcciones(WDFDEVICE device);
 VOID LimpiarAcciones(WDFDEVICE device);
 
 #ifdef _PRIVATE_
@@ -45,13 +45,13 @@ EVT_WDF_TIMER TimerDelay;
 
 VOID ProcesarComandos(WDFDEVICE device);
 
-BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request);
+BOOLEAN PrepararDirectX(WDFDEVICE device);
 VOID ProcesarDirectX(WDFDEVICE device, UCHAR tipo, UCHAR dato);
 
-BOOLEAN PrepararRaton(WDFDEVICE device, WDFREQUEST request);
+BOOLEAN PrepararRaton(WDFDEVICE device);
 VOID ProcesarRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato);
 
-BOOLEAN PrepararTeclado(WDFDEVICE device, WDFREQUEST request);
+BOOLEAN PrepararTeclado(WDFDEVICE device);
 VOID ProcesarTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato);
 
 VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tipo, UCHAR dato);

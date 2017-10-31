@@ -12,7 +12,7 @@
 #pragma alloc_text (PAGE, EvtDeviceSelfManagedIoInit)
 #pragma alloc_text (PAGE, EvtDeviceSelfManagedIoCleanup)
 #pragma alloc_text (PAGE, EvtDeviceD0Entry)
-//#pragma alloc_text (PAGE, EvtDeviceD0Exit)
+#pragma alloc_text (PAGE, EvtDeviceD0Exit)
 #endif
 
 //PASSIVE_LEVEL
@@ -63,10 +63,9 @@ NTSTATUS EvtDeviceD0Exit(
 	_In_  WDF_POWER_DEVICE_STATE TargetState
 )
 {
-	UNREFERENCED_PARAMETER(device);
 	UNREFERENCED_PARAMETER(TargetState);
 
-	WDFREQUEST request = NULL;
+	PAGED_CODE();
 
 	//WdfWaitLockAcquire(GetDeviceExtension(Device)->WaitLockCierre, NULL);
 	//GetDeviceExtension(Device)->D0Apagado = TRUE;
@@ -79,23 +78,6 @@ NTSTATUS EvtDeviceD0Exit(
 
 	GetDeviceContext(device)->HID.RatonActivado = FALSE;
 	WdfTimerStop(GetDeviceContext(device)->HID.RatonTimer, TRUE);
-
-	do
-	{
-		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		{
-			request = WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
-			if (request != NULL)
-			{
-				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
-			}
-		}
-		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		if (request != NULL)
-		{
-			WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
-		}		
-	} while (request != NULL);
 
 	return STATUS_SUCCESS;
 }

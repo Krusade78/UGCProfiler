@@ -36,6 +36,7 @@ Kernel-mode Driver Framework
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text (PAGE, EvtAddDevice)
 #pragma alloc_text (PAGE, IniciarContext)
+#pragma alloc_text (PAGE, EvtCleanupCallback)
 #endif
 
 
@@ -63,7 +64,7 @@ NTSTATUS EvtAddDevice(
 	WDF_OBJECT_ATTRIBUTES			attributes;
 	WDF_PNPPOWER_EVENT_CALLBACKS    pnpPowerCallbacks;
 	WDF_IO_QUEUE_CONFIG				ioQConfig;
-	//WDFQUEUE						cola;
+	WDFQUEUE						cola;
 	PDEVICE_CONTEXT					dc;
 
 	UNREFERENCED_PARAMETER(Driver);
@@ -101,14 +102,18 @@ NTSTATUS EvtAddDevice(
 	if (!NT_SUCCESS(status))
 		return status;
 
-	//WDF_IO_QUEUE_CONFIG_INIT(&ioQConfig, WdfIoQueueDispatchManual);
-	//status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
-	//if (!NT_SUCCESS(status))
-	//	return status;
-	//status = WdfIoQueueReadyNotify(cola, EvtRequestHIDLista, NULL);
-	//if (!NT_SUCCESS(status))
-	//	return status;
-	//GetDeviceContext(device)->ColaRequest = cola;
+	WDF_IO_QUEUE_CONFIG_INIT(&ioQConfig, WdfIoQueueDispatchSequential);
+	ioQConfig.EvtIoDefault = EvtRequestHID;
+	status = WdfIoQueueCreate(device, &ioQConfig, &attributes, &cola);
+	if (!NT_SUCCESS(status))
+		return status;
+	GetDeviceContext(device)->EntradaX52.ColaRequest = cola;
+
+	WDF_IO_QUEUE_CONFIG_INIT(&ioQConfig, WdfIoQueueDispatchManual);
+	status = WdfIoQueueCreate(device, &ioQConfig, WDF_NO_OBJECT_ATTRIBUTES, &cola);
+	if (!NT_SUCCESS(status))
+		return status;
+	GetDeviceContext(device)->EntradaX52.ColaRequestSinUsar = cola;
 
 	status = IniciarIoCtlAplicacion(device);
 
@@ -202,7 +207,8 @@ EvtDevicePrepareHardware(
 VOID EvtCleanupCallback(WDFOBJECT  Object)
 {
 	WDFDEVICE device = (WDFDEVICE)Object;
-	WDFREQUEST request = NULL;
+
+	PAGED_CODE();
 
 	CerrarPedales(device);
 
@@ -213,21 +219,4 @@ VOID EvtCleanupCallback(WDFOBJECT  Object)
 	}
 
 	LimpiarMapa(device);
-
-	do
-	{
-		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		{
-			request = WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
-			if (request != NULL)
-			{
-				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
-			}
-		}
-		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
-		if (request != NULL)
-		{
-			WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
-		}		
-	} while (request != NULL);
 }

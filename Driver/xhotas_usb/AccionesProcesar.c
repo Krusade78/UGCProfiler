@@ -37,9 +37,9 @@ VOID LimpiarAcciones(WDFDEVICE device)
 	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
 }
 
-BOOLEAN ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
+UCHAR ProcesarAcciones(WDFDEVICE device)
 {
-	BOOLEAN procesado = FALSE;
+	UCHAR procesado = 0;
 	UCHAR max = 3; //por si se vacia la cola
 
 	ProcesarComandos(device);
@@ -49,110 +49,111 @@ BOOLEAN ProcesarAcciones(WDFDEVICE device, WDFREQUEST request)
 		{
 		case 0:
 			GetDeviceContext(device)->HID.TurnoReport = 1;
-			procesado = PrepararDirectX(device, request);
+			if (PrepararDirectX(device))
+			{
+				procesado = 1;
+			}
 			break;
 		case 1:
 			GetDeviceContext(device)->HID.TurnoReport = 2;
-			procesado =	PrepararRaton(device, request);
+			if (PrepararRaton(device))
+			{
+				procesado = 2;
+			}
 			break;
 		case 2:
 			GetDeviceContext(device)->HID.TurnoReport = 0;
-			procesado = PrepararTeclado(device, request);
+			if (PrepararTeclado(device))
+			{
+				procesado = 3;
+			}
 			break;
 		}
 		max--;
 	} while (!procesado && (max > 0));
 	ProcesarComandos(device);
 
-	return (max > 0);
+	return procesado;
 }
 
 #pragma region "DirectX"
-BOOLEAN PrepararDirectX(WDFDEVICE device, WDFREQUEST request)
+BOOLEAN PrepararDirectX(WDFDEVICE device)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
 	BOOLEAN			vacio = TRUE;
+	PNODO			posAccion = devExt->ColaAcciones.principio;
+	BOOLEAN			dxPosCambiada = FALSE;
 
-	WdfSpinLockAcquire(devExt->SpinLockAcciones);
+	while (posAccion != NULL)
 	{
-		PNODO	posAccion = devExt->ColaAcciones.principio;
-		BOOLEAN	dxPosCambiada = FALSE;
+		PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+		PNODO	posComando = colaComandos->principio;
+		BOOLEAN setaCambiada = FALSE;
+		BOOLEAN botonCambiado = FALSE;
 
-		while (posAccion != NULL)
+		while (posComando != NULL)
 		{
-			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
-			PNODO	posComando = colaComandos->principio;
-			BOOLEAN setaCambiada = FALSE;
-			BOOLEAN botonCambiado = FALSE;
-
-			while (posComando != NULL)
+			PNODO posAnterior = posComando->anterior;
+			struct
 			{
-				PNODO posAnterior = posComando->anterior;
-				struct
-				{
-					UCHAR tipo;
-					UCHAR dato;
-				} evento;
-				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+				UCHAR tipo;
+				UCHAR dato;
+			} evento;
+			RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
 
-				if (evento.tipo == TipoComando_DxPosicion)
+			if (evento.tipo == TipoComando_DxPosicion)
+			{
+				if (!dxPosCambiada)
 				{
-					if (!dxPosCambiada)
-					{
-						PHID_INPUT_DATA dato = (PHID_INPUT_DATA)((PUCHAR)posComando->Datos + 1);
-						RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
-						devExt->stDirectX.MiniStick = dato->MiniStick;
-						ColaBorrarNodo(colaComandos, posComando);
-						dxPosCambiada = TRUE;
-						vacio = FALSE;
-						break;
-					}
-				}
-				else if ((evento.tipo & 0x1f) == TipoComando_DxBoton)
-				{
-					if (!botonCambiado)
-					{
-						botonCambiado = TRUE;
-						ProcesarDirectX(device, evento.tipo, evento.dato);
-						ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-					}
-				}
-				if ((evento.tipo & 0x1f) == TipoComando_DxSeta)
-				{
-					if (!setaCambiada)
-					{
-						setaCambiada = TRUE;
-						ProcesarDirectX(device, evento.tipo, evento.dato);
-						ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-					}
-				}
-				else
-				{
+					PHID_INPUT_DATA dato = (PHID_INPUT_DATA)((PUCHAR)posComando->Datos + 1);
+					RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
+					devExt->stDirectX.MiniStick = dato->MiniStick;
+					ColaBorrarNodo(colaComandos, posComando);
+					dxPosCambiada = TRUE;
+					vacio = FALSE;
 					break;
 				}
-
-				if (botonCambiado && setaCambiada && botonCambiado)
-					break;
-
-				if (posAnterior == NULL)
-					posComando = ((PCOLA)posAccion->Datos)->principio;
-				else
-					posComando = posAnterior->siguiente;
+			}
+			else if ((evento.tipo & 0x1f) == TipoComando_DxBoton)
+			{
+				if (!botonCambiado)
+				{
+					botonCambiado = TRUE;
+					ProcesarDirectX(device, evento.tipo, evento.dato);
+					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+				}
+			}
+			if ((evento.tipo & 0x1f) == TipoComando_DxSeta)
+			{
+				if (!setaCambiada)
+				{
+					setaCambiada = TRUE;
+					ProcesarDirectX(device, evento.tipo, evento.dato);
+					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+				}
+			}
+			else
+			{
+				break;
 			}
 
-			if (ColaEstaVacia(colaComandos))
-			{ // Fin eventos
-				ColaBorrar(colaComandos); posAccion->Datos = NULL;
-				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
-			}
+			if (botonCambiado && setaCambiada && botonCambiado)
+				break;
 
-			posAccion = posAccion->siguiente;
+			if (posAnterior == NULL)
+				posComando = ((PCOLA)posAccion->Datos)->principio;
+			else
+				posComando = posAnterior->siguiente;
 		}
-	}
-	WdfSpinLockRelease(devExt->SpinLockAcciones);
 
-	if (!vacio)
-		CompletarRequestDirectX(device, request);
+		if (ColaEstaVacia(colaComandos))
+		{ // Fin eventos
+			ColaBorrar(colaComandos); posAccion->Datos = NULL;
+			ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
+		}
+
+		posAccion = posAccion->siguiente;
+	}
 
 	return !vacio;
 }
@@ -185,49 +186,42 @@ VOID ProcesarDirectX(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 #pragma endregion
 
 #pragma region "Ratón"
-BOOLEAN PrepararRaton(WDFDEVICE device, WDFREQUEST request)
+BOOLEAN PrepararRaton(WDFDEVICE device)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
 	BOOLEAN			vacio = TRUE;
-	WdfSpinLockAcquire(devExt->SpinLockAcciones);
+	PNODO			posAccion = devExt->ColaAcciones.principio;
+
+	while (posAccion != NULL)
 	{
-		PNODO posAccion = devExt->ColaAcciones.principio;
+		PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+		PNODO	posComando = colaComandos->principio;
 
-		while (posAccion != NULL)
+		if (posComando != NULL)
 		{
-			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
-			PNODO	posComando = colaComandos->principio;
-
-			if (posComando != NULL)
+			struct
 			{
-				struct
-				{
-					UCHAR tipo;
-					UCHAR dato;
-				} evento;
-				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+				UCHAR tipo;
+				UCHAR dato;
+			} evento;
+			RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
 
-				if (((evento.tipo & 0x1f) > TipoComando_Tecla) && ((evento.tipo & 0x1f) < TipoComando_Delay))
-				{
-					ProcesarRaton(device, evento.tipo, evento.dato);
-					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-					vacio = FALSE;
-				}
+			if (((evento.tipo & 0x1f) > TipoComando_Tecla) && ((evento.tipo & 0x1f) < TipoComando_Delay))
+			{
+				ProcesarRaton(device, evento.tipo, evento.dato);
+				ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+				vacio = FALSE;
 			}
-
-			if (ColaEstaVacia(colaComandos))
-			{ // Fin eventos
-				ColaBorrar(colaComandos); posAccion->Datos = NULL;
-				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
-			}
-
-			posAccion = posAccion->siguiente;
 		}
-	}
-	WdfSpinLockRelease(devExt->SpinLockAcciones);
 
-	if (!vacio)
-		CompletarRequestRaton(device, request);
+		if (ColaEstaVacia(colaComandos))
+		{ // Fin eventos
+			ColaBorrar(colaComandos); posAccion->Datos = NULL;
+			ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
+		}
+
+		posAccion = posAccion->siguiente;
+	}
 
 	return !vacio;
 }
@@ -302,49 +296,42 @@ VOID ProcesarRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 #pragma endregion
 
 #pragma region "Teclado"
-BOOLEAN PrepararTeclado(WDFDEVICE device, WDFREQUEST request)
+BOOLEAN PrepararTeclado(WDFDEVICE device)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
 	BOOLEAN			vacio = TRUE;
-	WdfSpinLockAcquire(devExt->SpinLockAcciones);
+	PNODO			posAccion = devExt->ColaAcciones.principio;
+
+	while (posAccion != NULL)
 	{
-		PNODO posAccion = devExt->ColaAcciones.principio;
+		PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+		PNODO	posComando = colaComandos->principio;
 
-		while (posAccion != NULL)
+		if (posComando != NULL)
 		{
-			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
-			PNODO	posComando = colaComandos->principio;
-
-			if (posComando != NULL)
+			struct
 			{
-				struct
-				{
-					UCHAR tipo;
-					UCHAR dato;
-				} evento;
-				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+				UCHAR tipo;
+				UCHAR dato;
+			} evento;
+			RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
 
-				if ((evento.tipo & 0x1f) == TipoComando_Tecla)
-				{
-					ProcesarTeclado(device, evento.tipo, evento.dato);
-					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-					vacio = FALSE;
-				}
+			if ((evento.tipo & 0x1f) == TipoComando_Tecla)
+			{
+				ProcesarTeclado(device, evento.tipo, evento.dato);
+				ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+				vacio = FALSE;
 			}
-
-			if (ColaEstaVacia(colaComandos))
-			{ // Fin eventos
-				ColaBorrar(colaComandos); posAccion->Datos = NULL;
-				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
-			}
-
-			posAccion = posAccion->siguiente;
 		}
-	}
-	WdfSpinLockRelease(devExt->SpinLockAcciones);
 
-	if (!vacio)
-		CompletarRequestTeclado(device, request);
+		if (ColaEstaVacia(colaComandos))
+		{ // Fin eventos
+			ColaBorrar(colaComandos); posAccion->Datos = NULL;
+			ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
+		}
+
+		posAccion = posAccion->siguiente;
+	}
 
 	return !vacio;
 }
@@ -367,59 +354,55 @@ VOID ProcesarTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 VOID ProcesarComandos(WDFDEVICE device)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
-	WdfSpinLockAcquire(devExt->SpinLockAcciones);
+	PNODO			posAccion = devExt->ColaAcciones.principio;
+
+	while (posAccion != NULL)
 	{
-		PNODO			posAccion = devExt->ColaAcciones.principio;
+		PCOLA	colaComandos = (PCOLA)posAccion->Datos;
+		PNODO	posComando = colaComandos->principio;
 
-		while (posAccion != NULL)
+		while (posComando != NULL)
 		{
-			PCOLA	colaComandos = (PCOLA)posAccion->Datos;
-			PNODO	posComando = colaComandos->principio;
-
-			while (posComando != NULL)
+			PNODO canterior = posComando->anterior;
+			struct
 			{
-				PNODO canterior = posComando->anterior;
-				struct
-				{
-					UCHAR tipo;
-					UCHAR dato;
-				} evento;
-				RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
+				UCHAR tipo;
+				UCHAR dato;
+			} evento;
+			RtlCopyMemory(&evento, (PUCHAR)posComando->Datos, sizeof(UCHAR) * 2);
 
-				if ((evento.tipo == TipoComando_Modo) || (evento.tipo == TipoComando_Pinkie) || (((evento.tipo & 0x1f) >= TipoComando_MfdLuz) && ((evento.tipo & 0x1f) <= TipoComando_MfdFecha)))
-				{
-					ProcesarEventoX52_Modos(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
-					ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
-				}
-				else if (((evento.tipo >= TipoComando_Delay) && (evento.tipo <= TipoComando_RepeatN)) || (evento.tipo == TipoComando_RepeatIni))
-				{
-					UCHAR ret = ProcesarEventoRepeticiones_Delay(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
-					if (ret == 0)
-						break;
-					else if (ret == 2)
-					{
-						canterior = posComando;
-					}
-				}
-				else
+			if ((evento.tipo == TipoComando_Modo) || (evento.tipo == TipoComando_Pinkie) || (((evento.tipo & 0x1f) >= TipoComando_MfdLuz) && ((evento.tipo & 0x1f) <= TipoComando_MfdFecha)))
+			{
+				ProcesarEventoX52_Modos(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
+				ColaBorrarNodo((PCOLA)posAccion->Datos, posComando);
+			}
+			else if (((evento.tipo >= TipoComando_Delay) && (evento.tipo <= TipoComando_RepeatN)) || (evento.tipo == TipoComando_RepeatIni))
+			{
+				UCHAR ret = ProcesarEventoRepeticiones_Delay(device, (PCOLA)posAccion->Datos, posComando, evento.tipo, evento.dato);
+				if (ret == 0)
 					break;
-
-				if (canterior == NULL)
-					posComando = ((PCOLA)posAccion->Datos)->principio;
-				else
-					posComando = canterior->siguiente;
+				else if (ret == 2)
+				{
+					canterior = posComando;
+				}
 			}
+			else
+				break;
 
-			if (ColaEstaVacia(colaComandos))
-			{ // Fin eventos
-				ColaBorrar(colaComandos); posAccion->Datos = NULL;
-				ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
-			}
-
-			posAccion = posAccion->siguiente;
+			if (canterior == NULL)
+				posComando = ((PCOLA)posAccion->Datos)->principio;
+			else
+				posComando = canterior->siguiente;
 		}
+
+		if (ColaEstaVacia(colaComandos))
+		{ // Fin eventos
+			ColaBorrar(colaComandos); posAccion->Datos = NULL;
+			ColaBorrarNodo(&devExt->ColaAcciones, posAccion);
+		}
+
+		posAccion = posAccion->siguiente;
 	}
-	WdfSpinLockRelease(devExt->SpinLockAcciones);
 }
 
 VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tipo, UCHAR dato)
@@ -801,7 +784,7 @@ VOID TimerDelay(IN  WDFTIMER Timer)
 		WdfSpinLockRelease(devExt->SpinLockAcciones);
 		if (ok)
 		{
-			ProcesarRequest(WdfTimerGetParentObject(Timer));
+			ForzarProcesarRequest(WdfTimerGetParentObject(Timer));
 		}
 	}
 	WdfObjectDelete(Timer);
