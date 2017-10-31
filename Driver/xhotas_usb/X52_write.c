@@ -26,15 +26,8 @@ User-mode Driver Framework 2
 #undef _PRIVATE_
 
 #ifdef ALLOC_PRAGMA
-#pragma alloc_text(PAGE, Luz_MFD)
-#pragma alloc_text(PAGE, Luz_Global)
-#pragma alloc_text(PAGE, Luz_Info)
-#pragma alloc_text(PAGE, Set_Pinkie)
-#pragma alloc_text(PAGE, Set_Texto)
-#pragma alloc_text(PAGE, Set_Hora)
-#pragma alloc_text(PAGE, Set_Hora24)
-#pragma alloc_text(PAGE, Set_Fecha)
-#pragma alloc_text(PAGE, EnviarOrden)
+#pragma alloc_text(PAGE, EnviarOrdenesPassive)
+#pragma alloc_text(PAGE, EnviarOrdenWI)
 #endif
 
 //DISPATCH_LEVEL
@@ -217,6 +210,8 @@ NTSTATUS EnviarOrdenesPassive(_In_ WDFDEVICE DeviceObject, _In_ USHORT* valor, U
 //PASSIVE_LEVEL
 VOID EnviarOrdenWI(_In_ WDFWORKITEM workItem)
 {
+	PAGED_CODE();
+
 	EnviarOrdenesPassive((WDFDEVICE)WdfWorkItemGetParentObject(workItem), GetWIContext(workItem)->valor, GetWIContext(workItem)->idx, GetWIContext(workItem)->nordenes);
 	WdfObjectDelete(workItem);
 }

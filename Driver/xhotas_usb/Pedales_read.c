@@ -36,6 +36,7 @@ Kernel-mode Driver Framework 2
 #pragma alloc_text (PAGE, CerrarIoTargetPassive)
 #pragma alloc_text (PAGE, CerrarIoTargetWI)
 #pragma alloc_text (PAGE, IniciarPedales)
+#pragma alloc_text (PAGE, IniciarReports)
 #pragma alloc_text (PAGE, IniciarIoTargetPassive)
 #pragma alloc_text (PAGE, IniciarIoTargetWI)
 #pragma alloc_text (PAGE, PnPCallbackPedales)
@@ -45,6 +46,8 @@ Kernel-mode Driver Framework 2
 //PASSIVE_LEVEL
 VOID CerrarPedales(_In_ WDFDEVICE device)
 {
+	PAGED_CODE();
+
 	if (GetDeviceContext(device)->Pedales.PnPNotifyHandle != NULL)
 	{
 		PVOID p = GetDeviceContext(device)->Pedales.PnPNotifyHandle;
@@ -62,6 +65,8 @@ VOID CerrarPedales(_In_ WDFDEVICE device)
 //PASSIVE_LEVEL
 VOID CerrarIoTargetPassive(_In_ WDFDEVICE device)
 {
+	PAGED_CODE();
+
 	WDFIOTARGET ioTarget = NULL;
 
 	WdfWaitLockAcquire(GetDeviceContext(device)->Pedales.WaitLockIoTarget, NULL);
@@ -80,6 +85,8 @@ VOID CerrarIoTargetPassive(_In_ WDFDEVICE device)
 //PASSIVE_LEVEL
 VOID CerrarIoTargetWI(_In_ WDFWORKITEM workItem)
 {
+	PAGED_CODE();
+
 	CerrarIoTargetPassive((WDFDEVICE)WdfWorkItemGetParentObject(workItem));
 	WdfObjectDelete(workItem);
 }
@@ -136,6 +143,8 @@ NTSTATUS IniciarReports(WDFIOTARGET ioTarget)
 	WDFREQUEST				newRequest;
 	WDFMEMORY				writeBufferMemHandle;
 	NTSTATUS				status;
+
+	PAGED_CODE();
 
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
 	attributes.ParentObject = ioTarget;

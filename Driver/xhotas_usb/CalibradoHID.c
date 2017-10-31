@@ -46,8 +46,10 @@ VOID Calibrar(WDFDEVICE device, PHID_INPUT_DATA datosHID)
 	STJITTER	jitter[4];
 
 	WdfSpinLockAcquire(GetDeviceContext(device)->Programacion.slCalibrado);
-	RtlCopyMemory(limites, GetDeviceContext(device)->Programacion.limites, sizeof(STLIMITES) * 4);
-	RtlCopyMemory(jitter, GetDeviceContext(device)->Programacion.jitter, sizeof(STJITTER) * 4);
+	{
+		RtlCopyMemory(limites, GetDeviceContext(device)->Programacion.limites, sizeof(STLIMITES) * 4);
+		RtlCopyMemory(jitter, GetDeviceContext(device)->Programacion.jitter, sizeof(STJITTER) * 4);
+	}
 	WdfSpinLockRelease(GetDeviceContext(device)->Programacion.slCalibrado);
 
 	// Filtrado de ejes

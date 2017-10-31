@@ -36,7 +36,6 @@ Kernel-mode Driver Framework
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text (PAGE, EvtAddDevice)
 #pragma alloc_text (PAGE, IniciarContext)
-#pragma alloc_text (PAGE, EvtCleanupCallback)
 #endif
 
 
@@ -200,12 +199,10 @@ EvtDevicePrepareHardware(
     return status;
 }
 
-VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
+VOID EvtCleanupCallback(WDFOBJECT  Object)
 {
 	WDFDEVICE device = (WDFDEVICE)Object;
 	WDFREQUEST request = NULL;
-
-	PAGED_CODE();
 
 	CerrarPedales(device);
 
@@ -219,18 +216,18 @@ VOID EvtCleanupCallback(_In_ WDFOBJECT  Object)
 
 	do
 	{
-		WdfSpinLockAcquire(device->EntradaX52.SpinLockRequest);
+		WdfSpinLockAcquire(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 		{
-			request = WdfCollectionGetFirstItem(device->EntradaX52.ListaRequest);
+			request = WdfCollectionGetFirstItem(GetDeviceContext(device)->EntradaX52.ListaRequest);
 			if (request != NULL)
 			{
-				WdfCollectionRemoveItem(device->EntradaX52.ListaRequest, 0);
+				WdfCollectionRemoveItem(GetDeviceContext(device)->EntradaX52.ListaRequest, 0);
 			}
 		}
-		WdfSpinLockRelease(device->EntradaX52.SpinLockRequest);
+		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 		if (request != NULL)
 		{
-			WdfCompleteRequest(request, STATUS_UNSUCCESSFUL);
+			WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
 		}		
-	} while(request != NULL)
+	} while (request != NULL);
 }

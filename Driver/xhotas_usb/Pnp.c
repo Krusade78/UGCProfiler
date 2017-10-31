@@ -12,7 +12,7 @@
 #pragma alloc_text (PAGE, EvtDeviceSelfManagedIoInit)
 #pragma alloc_text (PAGE, EvtDeviceSelfManagedIoCleanup)
 #pragma alloc_text (PAGE, EvtDeviceD0Entry)
-#pragma alloc_text (PAGE, EvtDeviceD0Exit)
+//#pragma alloc_text (PAGE, EvtDeviceD0Exit)
 #endif
 
 //PASSIVE_LEVEL
@@ -68,8 +68,6 @@ NTSTATUS EvtDeviceD0Exit(
 
 	WDFREQUEST request = NULL;
 
-	PAGED_CODE();
-
 	//WdfWaitLockAcquire(GetDeviceExtension(Device)->WaitLockCierre, NULL);
 	//GetDeviceExtension(Device)->D0Apagado = TRUE;
 	//WdfWaitLockRelease(GetDeviceExtension(Device)->WaitLockCierre);
@@ -95,9 +93,9 @@ NTSTATUS EvtDeviceD0Exit(
 		WdfSpinLockRelease(GetDeviceContext(device)->EntradaX52.SpinLockRequest);
 		if (request != NULL)
 		{
-			WdfCompleteRequest(request, STATUS_UNSUCCESSFUL);
+			WdfRequestComplete(request, STATUS_UNSUCCESSFUL);
 		}		
-	} while(request != NULL)
+	} while (request != NULL);
 
 	return STATUS_SUCCESS;
 }

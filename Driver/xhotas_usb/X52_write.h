@@ -18,6 +18,9 @@ typedef struct _WI_CONTEXT
 } WI_CONTEXT, *PWI_CONTEXT;
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(WI_CONTEXT, GetWIContext);
 
+NTSTATUS EnviarOrdenesPassive(_In_ WDFDEVICE DeviceObject, _In_ USHORT* valor, UCHAR* idx, UCHAR nordenes);
+VOID EnviarOrdenWI(_In_ WDFWORKITEM workItem);
+
 NTSTATUS EnviarOrden(_In_ WDFDEVICE DeviceObject, _In_ UCHAR* params, _In_ UCHAR nparams);
 #endif
 

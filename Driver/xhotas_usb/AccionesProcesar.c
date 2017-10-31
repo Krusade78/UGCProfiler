@@ -10,26 +10,28 @@
 VOID LimpiarAcciones(WDFDEVICE device)
 {
 	WdfSpinLockAcquire(GetDeviceContext(device)->HID.SpinLockAcciones);
-	if (!ColaEstaVacia(&GetDeviceContext(device)->HID.ColaAcciones))
 	{
-		PNODO siguiente = GetDeviceContext(device)->HID.ColaAcciones.principio;
-		while (siguiente != NULL)
+		if (!ColaEstaVacia(&GetDeviceContext(device)->HID.ColaAcciones))
 		{
-			ColaBorrar((PCOLA)siguiente->Datos); siguiente->Datos = NULL;
-			siguiente = siguiente->siguiente;
-			ColaBorrarNodo(&GetDeviceContext(device)->HID.ColaAcciones, GetDeviceContext(device)->HID.ColaAcciones.principio);
-		}
-
-		for (ULONG i = 0; i < WdfCollectionGetCount(GetDeviceContext(device)->HID.ListaTimersDelay); i++)
-		{
-			WDFTIMER timer = (WDFTIMER)WdfCollectionGetItem(GetDeviceContext(device)->HID.ListaTimersDelay, i);
-			DELAY_CONTEXT* ctx = WdfObjectGet_DELAY_CONTEXT(timer);
-			WdfCollectionRemoveItem(GetDeviceContext(device)->HID.ListaTimersDelay, i);
-			if (ctx->principio != NULL)
+			PNODO siguiente = GetDeviceContext(device)->HID.ColaAcciones.principio;
+			while (siguiente != NULL)
 			{
-				while (!ColaBorrarNodo(ctx, ctx->principio));
+				ColaBorrar((PCOLA)siguiente->Datos); siguiente->Datos = NULL;
+				siguiente = siguiente->siguiente;
+				ColaBorrarNodo(&GetDeviceContext(device)->HID.ColaAcciones, GetDeviceContext(device)->HID.ColaAcciones.principio);
 			}
-			WdfObjectDelete(timer);
+
+			for (ULONG i = 0; i < WdfCollectionGetCount(GetDeviceContext(device)->HID.ListaTimersDelay); i++)
+			{
+				WDFTIMER timer = (WDFTIMER)WdfCollectionGetItem(GetDeviceContext(device)->HID.ListaTimersDelay, i);
+				DELAY_CONTEXT* ctx = WdfObjectGet_DELAY_CONTEXT(timer);
+				WdfCollectionRemoveItem(GetDeviceContext(device)->HID.ListaTimersDelay, i);
+				if (ctx->principio != NULL)
+				{
+					while (!ColaBorrarNodo(ctx, ctx->principio));
+				}
+				WdfObjectDelete(timer);
+			}
 		}
 	}
 	WdfSpinLockRelease(GetDeviceContext(device)->HID.SpinLockAcciones);
@@ -362,7 +364,7 @@ VOID ProcesarTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 }
 #pragma endregion
 
-VOID ProcesarComandos(_In_ WDFDEVICE device)
+VOID ProcesarComandos(WDFDEVICE device)
 {
 	HID_CONTEXT*	devExt = &GetDeviceContext(device)->HID;
 	WdfSpinLockAcquire(devExt->SpinLockAcciones);

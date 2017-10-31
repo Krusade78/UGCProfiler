@@ -54,7 +54,7 @@ VOID ProcesarRaton(WDFDEVICE device, UCHAR tipo, UCHAR dato);
 BOOLEAN PrepararTeclado(WDFDEVICE device, WDFREQUEST request);
 VOID ProcesarTeclado(WDFDEVICE device, UCHAR tipo, UCHAR dato);
 
-VOID ProcesarEventoX52_Modos(_In_ WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tipo, UCHAR dato);
+VOID ProcesarEventoX52_Modos(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tipo, UCHAR dato);
 
 UCHAR ProcesarEventoRepeticiones_Delay(WDFDEVICE device, PCOLA cola, PNODO nodo, UCHAR tipo, UCHAR dato);
 BOOLEAN ReservarMemoriaRepeticiones(PCOLA cola, PNODO nodo, UCHAR eof);

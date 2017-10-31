@@ -12,6 +12,7 @@ VOID CerrarIoTargetWI(_In_ WDFWORKITEM workItem);
 
 NTSTATUS IniciarIoTargetPassive(_In_ WDFDEVICE device);
 VOID IniciarIoTargetWI(_In_ WDFWORKITEM workItem);
+NTSTATUS IniciarReports(WDFIOTARGET ioTarget);
 
 VOID EvIoTargetRemoveComplete(_In_ WDFIOTARGET ioTarget);
 VOID EvIoTargetRemoveCanceled(_In_ WDFIOTARGET ioTarget);

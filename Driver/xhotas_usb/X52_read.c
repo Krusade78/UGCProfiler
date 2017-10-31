@@ -93,6 +93,7 @@ VOID EvtX52InternalIOCtl(
 					if (devExt->EntradaX52.RequestEnUSB)
 					{
 						status = WdfCollectionAdd(devExt->EntradaX52.ListaRequest, Request);
+						WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
 						if (!NT_SUCCESS(status))
 						{
 							WdfRequestComplete(Request, status);
@@ -104,8 +105,12 @@ VOID EvtX52InternalIOCtl(
 							pasarAUSB = FALSE;
 						}
 					}
+					else
+					{
+						WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
+					}
 				}
-				WdfSpinLockRelease(devExt->EntradaX52.SpinLockRequest);
+
 				if (pasarAUSB) //pasar request hacia abajo
 				{
 					devExt->EntradaX52.RequestEnUSB = TRUE;
