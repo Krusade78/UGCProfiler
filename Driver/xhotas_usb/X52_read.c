@@ -83,7 +83,7 @@ VOID EvtX52InternalIOCtl(
 		{
 		case URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER:
 		{
-			if (purb->UrbBulkOrInterruptTransfer.TransferBufferLength >= (29 + 1))
+			if (purb->UrbBulkOrInterruptTransfer.TransferBufferLength == (29 + 1))
 			{
 				PDEVICE_CONTEXT	devExt = GetDeviceContext(WdfIoQueueGetDevice(Queue));
 
@@ -100,7 +100,6 @@ VOID EvtX52InternalIOCtl(
 				{
 					WdfRequestFormatRequestUsingCurrentType(Request);
 					WdfRequestSetCompletionRoutine(Request, EvtCompletionX52Data, NULL);
-					purb->UrbBulkOrInterruptTransfer.TransferBufferLength = sizeof(HID_INPUT_DATA) + 1;
 					ret = WdfRequestSend(Request, WdfDeviceGetIoTarget(WdfIoQueueGetDevice(Queue)), NULL);
 					{
 						if (!ret)
@@ -116,9 +115,7 @@ VOID EvtX52InternalIOCtl(
 			}
 			else
 			{
-				purb->UrbBulkOrInterruptTransfer.TransferBufferLength = 29 + 1;
-				purb->UrbHeader.Status = USBD_STATUS_BUFFER_TOO_SMALL;
-				WdfRequestComplete(Request, status);
+				WdfRequestCompleteWithInformation(Request, STATUS_INVALID_BUFFER_SIZE, 29 + 1);
 				return;
 			}
 		}
@@ -234,6 +231,7 @@ void EvtCompletionX52Data(
 	if (NT_SUCCESS(status))
 	{
 		ProcesarInputX52(device, purb->UrbBulkOrInterruptTransfer.TransferBuffer, FALSE); // repetirUltimo);
+		purb->UrbBulkOrInterruptTransfer.TransferBufferLength = 29 + 1;
 		status = WdfRequestForwardToIoQueue(Request, GetDeviceContext(device)->EntradaX52.ColaRequest);
 		if (NT_SUCCESS(status))
 		{

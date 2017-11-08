@@ -65,7 +65,7 @@ namespace Launcher
                 {
                     while (!cerrarPipe.Token.IsCancellationRequested)
                     {
-                        using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("LauncherPipe", PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+                        using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("LauncherPipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
                         {
                             try { pipeServer.WaitForConnectionAsync(cerrarPipe.Token).Wait(); } catch { break; }
                             if (cerrarPipe.Token.IsCancellationRequested)

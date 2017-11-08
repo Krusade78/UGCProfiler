@@ -66,7 +66,7 @@ namespace Launcher
 
         private void MenuItemEditar_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("Editor.exe", (String)((MenuItem)sender).Header);
+            Process.Start("Editor.exe", "\"" + (String)((MenuItem)sender).Header + ".xhp\"");
         }
 
         private void MenuEditor_Click(object sender, RoutedEventArgs e)

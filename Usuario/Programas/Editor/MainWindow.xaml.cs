@@ -16,7 +16,6 @@ namespace Editor
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("a");
             if (Environment.GetCommandLineArgs().Length == 2)
                 Abrir(Environment.GetCommandLineArgs()[1]);
         }

@@ -64,7 +64,7 @@ VOID ProcesarRequest(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request)
 			WdfSpinLockRelease(devExt->HID.SpinLockAcciones);
 			if (Request != NULL)
 			{
-				NTSTATUS status = WdfRequestForwardToIoQueue(Request, devExt->EntradaX52.ColaRequest);
+				NTSTATUS status = WdfRequestForwardToIoQueue(Request, devExt->EntradaX52.ColaRequestSinUsar);
 				if (!NT_SUCCESS(status))
 				{
 					WdfRequestComplete(Request, status);
@@ -77,7 +77,7 @@ VOID ProcesarRequest(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request)
 			if (Request == NULL)
 			{
 				forzada = TRUE;
-				WdfIoQueueRetrieveNextRequest(devExt->EntradaX52.ColaRequest, &Request);
+				WdfIoQueueRetrieveNextRequest(devExt->EntradaX52.ColaRequestSinUsar, &Request);
 			}
 			if (Request == NULL)
 			{
@@ -102,7 +102,7 @@ VOID ProcesarRequest(_In_ WDFDEVICE Device, _In_ WDFREQUEST Request)
 						break;
 					default:
 					{
-						NTSTATUS status = (forzada) ? WdfRequestRequeue(Request) : WdfRequestForwardToIoQueue(Request, devExt->EntradaX52.ColaRequest);
+						NTSTATUS status = (forzada) ? WdfRequestRequeue(Request) : WdfRequestForwardToIoQueue(Request, devExt->EntradaX52.ColaRequestSinUsar);
 						if (!NT_SUCCESS(status))
 						{
 							WdfRequestComplete(Request, status);

@@ -131,8 +131,6 @@ namespace Editor
                         return;
                 }
             }
-            else
-                return;
 
             using (System.IO.Pipes.NamedPipeClientStream pipeClient = new System.IO.Pipes.NamedPipeClientStream("LauncherPipe"))
             {

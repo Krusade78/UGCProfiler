@@ -106,8 +106,15 @@ BOOLEAN PrepararDirectX(WDFDEVICE device)
 				if (!dxPosCambiada)
 				{
 					PHID_INPUT_DATA dato = (PHID_INPUT_DATA)((PUCHAR)posComando->Datos + 1);
-					RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
-					devExt->stDirectX.MiniStick = dato->MiniStick;
+					if (devExt->ModoRaw)
+					{
+						RtlCopyMemory(&devExt->stDirectX, dato, sizeof(HID_INPUT_DATA));
+					}
+					else
+					{
+						RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
+						devExt->stDirectX.MiniStick = dato->MiniStick;
+					}
 					ColaBorrarNodo(colaComandos, posComando);
 					dxPosCambiada = TRUE;
 					vacio = FALSE;
@@ -177,9 +184,9 @@ VOID ProcesarDirectX(WDFDEVICE device, UCHAR tipo, UCHAR dato)
 		break;
 	case TipoComando_DxSeta: // Seta DX
 		if (!soltar)
-			devExt->stDirectX.Setas[dato / 8] = (dato % 8) + 1;
+			devExt->stDirectX.Setas[3 - (dato / 8)] = (dato % 8) + 1;
 		else
-			devExt->stDirectX.Setas[dato / 8] = 0;
+			devExt->stDirectX.Setas[3 - (dato / 8)] = 0;
 		break;
 	}
 }

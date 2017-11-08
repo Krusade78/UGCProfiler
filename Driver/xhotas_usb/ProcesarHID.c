@@ -117,7 +117,7 @@ VOID ProcesarX52(WDFDEVICE device, _In_ PVOID inputData)
 	hidData.Ejes[3] = (hidGameData->EjesXYR[2] >> 3) & 0x7;
 	hidData.Ejes[4] = (hidGameData->EjesXYR[2] >> 6) | ((hidGameData->EjesXYR[3] & 0x3f) << 2);
 	hidData.Ejes[5] = hidGameData->EjesXYR[3] >> 6;
-	hidData.Ejes[6] = 255 - hidGameData->Ejes[0]; //Z
+	hidData.Ejes[6] = hidGameData->Ejes[0]; //Z
 	hidData.Ejes[8] = hidGameData->Ejes[2];
 	hidData.Ejes[10] = hidGameData->Ejes[1];
 	hidData.Ejes[12] = hidGameData->Ejes[3];
