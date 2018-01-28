@@ -66,13 +66,12 @@ namespace Calibrator
                 for (int i = 0; i < 4; i++)
                 {
                     byte[] buf = new byte[Marshal.SizeOf(typeof(CALIBRADO))];
-                    archivo.Read(buf, i * buf.Length, buf.Length);
+                    archivo.Read(buf, 0, buf.Length);
 
-                    CALIBRADO bufCal = new CALIBRADO();
 
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CALIBRADO)));
                     Marshal.Copy(buf, 0, ptr, buf.Length);
-                    Marshal.PtrToStructure(ptr, bufCal);
+                    CALIBRADO bufCal = (CALIBRADO)Marshal.PtrToStructure(ptr, typeof(CALIBRADO));
                     Marshal.FreeHGlobal(ptr);
 
                     limites[i].c = bufCal.c;

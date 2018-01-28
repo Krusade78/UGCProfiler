@@ -46,8 +46,8 @@ namespace Editor
                         Perfil.MAPAEJESPEQUE.AddMAPAEJESPEQUERow(p, m, e, 1, 0, new byte[15], 0, 0);
                         for (byte i = 0; i < 16; i++)
                         {
-                            Perfil.INDICESEJES.AddINDICESEJESRow((UInt32)((p << 16) | (m << 8) | e), i, accionVacia);
-                            Perfil.INDICESEJESPEQUE.AddINDICESEJESPEQUERow((UInt32)((p << 16) | (m << 8) | e), i, accionVacia);
+                            Perfil.INDICESEJES.AddINDICESEJESRow(p, m, e, i, accionVacia);
+                            Perfil.INDICESEJESPEQUE.AddINDICESEJESPEQUERow(p, m, e, i, accionVacia);
                         }
                     }
                     for (byte e = 0; e < 2; e++)
@@ -58,13 +58,13 @@ namespace Editor
                     {
                         Perfil.MAPABOTONES.AddMAPABOTONESRow(p, m, b, 0);
                         for (byte i = 0; i < 15; i++)
-                            Perfil.INDICESBOTONES.AddINDICESBOTONESRow((UInt32)((p << 16) | (m << 8) | b), i, accionVacia);
+                            Perfil.INDICESBOTONES.AddINDICESBOTONESRow(p, m, b, i, accionVacia);
                     }
                     for (byte s = 0; s < 32; s++)
                     {
                         Perfil.MAPASETAS.AddMAPASETASRow(p, m, s, 0);
                         for (byte i = 0; i < 15; i++)
-                            Perfil.INDICESSETAS.AddINDICESSETASRow((UInt32)((p << 16) | (m << 8) | s), i, accionVacia);
+                            Perfil.INDICESSETAS.AddINDICESSETASRow(p, m, s, i, accionVacia);
                     }
                 }
             }
@@ -92,29 +92,27 @@ namespace Editor
         public bool Guardar(String archivo)
         {
             //Reordenar ids acciones
-            ushort idmax = 0;
-            foreach (DSPerfil.ACCIONESRow ar in Perfil.ACCIONES.Rows)
-                if (ar.idAccion > idmax)
-                    idmax = ar.idAccion;
-
             ushort id = 0;
-            while (id < Perfil.ACCIONES.Rows.Count)
+            foreach (DSPerfil.ACCIONESRow ar in Perfil.ACCIONES.Rows)
             {
-                if (Perfil.ACCIONES.FindByidAccion(id) == null)
+                if (ar.idAccion != id)
                 {
-                    for (ushort i = idmax; i > id; i--)
+                    DSPerfil.ACCIONESRow reemplazada = Perfil.ACCIONES.FindByidAccion(id);
+                    if (reemplazada != null)
                     {
-                        DSPerfil.ACCIONESRow recolocar = Perfil.ACCIONES.FindByidAccion(idmax);
-                        if (recolocar != null)
-                        {
-                            recolocar.idAccion = id;
-                            idmax = (ushort)(i - 1);
-                            break;
-                        }
+                        ushort antigua = ar.idAccion;
+                        reemplazada.idAccion = ushort.MaxValue;
+                        ar.idAccion = id;
+                        reemplazada.idAccion = antigua;
+                    }
+                    else
+                    {
+                        ar.idAccion = id;
                     }
                 }
                 id++;
             }
+
             try
             {
                 Perfil.WriteXml(archivo);

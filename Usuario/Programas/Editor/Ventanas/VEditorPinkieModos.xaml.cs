@@ -52,17 +52,22 @@ namespace Editor
 
             if (idAccion == 0)
             {
+                foreach (DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                    if (aar.idAccion > idAccion)
+                        idAccion = aar.idAccion;
+                idAccion++;
+
                 DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
+                ar.idAccion = idAccion;
                 ar.Nombre = "<Pinkie On>";
                 ar.Comandos = new ushort[] { (byte)CEnums.TipoC.TipoComando_Pinkie + (1 << 8), (byte)CEnums.TipoC.TipoComando_MfdPinkie + (1 << 8) };
                 padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
-                idAccion = ar.idAccion;
             }
             for (byte m = 0; m < 3; m++)
             {
                 padre.GetDatos().Perfil.MAPABOTONES.FindByidBotonidModoidPinkie(6, m, 0).Estado = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((0 << 16) | (m << 8) | 6), 0).Indice = idAccion;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((0 << 16) | (m << 8) | 6), 1).Indice = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(6, m, 0, 0).Indice = idAccion;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(6, m, 0, 1).Indice = 0;
             }
 
             //'off
@@ -76,7 +81,6 @@ namespace Editor
 
             if (idAccion == 0)
             {
-                idAccion = 0;
                 foreach (DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
                     if (aar.idAccion > idAccion)
                         idAccion = aar.idAccion;
@@ -87,13 +91,12 @@ namespace Editor
                 ar.Nombre = "<Pinkie Off>";
                 ar.Comandos = new ushort[] { (byte)CEnums.TipoC.TipoComando_Pinkie, (byte)CEnums.TipoC.TipoComando_MfdPinkie };
                 padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
-                idAccion = ar.idAccion;
             }
             for (byte m = 0; m < 3; m++)
             {
                 padre.GetDatos().Perfil.MAPABOTONES.FindByidBotonidModoidPinkie(6, m, 1).Estado = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((1 << 16) | (m << 8) | 6), 0).Indice = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((1 << 16) | (m << 8) | 6), 1).Indice = idAccion;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(6, m, 1, 0).Indice = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(6, m, 1, 1).Indice = idAccion;
             }
         }
 
@@ -114,7 +117,6 @@ namespace Editor
 
                 if (idAccion == 0)
                 {
-                    idAccion = 0;
                     foreach (DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
                         if (aar.idAccion > idAccion)
                             idAccion = aar.idAccion;
@@ -131,8 +133,8 @@ namespace Editor
                     for (byte m = 0; m < 3; m++)
                     {
                         padre.GetDatos().Perfil.MAPABOTONES.FindByidBotonidModoidPinkie((byte)(7 + modo), m, p).Estado = 0;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | (7 + modo)), 0).Indice = idAccion;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | (7 + modo)), 1).Indice = 0;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid((uint)(7 + modo), m, p, 0).Indice = idAccion;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid((uint)(7 + modo), m, p, 1).Indice = 0;
                     }
                 }
             }

@@ -798,7 +798,7 @@ namespace Editor
                 s += ((s == "") ? "" : " + ") + "WinD";
                 teclas.Add(0x5c);
             }
-            for (ushort i = 0; i < 256; i++)
+            for (ushort i = 1; i < 256; i++)
             {
                 if (((i < 0x10) || (i > 0x12)) && (i != 0x5B) && (i != 0x5C) && ((i < 0xA0) || (i > 0xA5)))
                 {
@@ -807,7 +807,6 @@ namespace Editor
                         s += ((s == "") ? "" : " + ") + KeyInterop.KeyFromVirtualKey(i).ToString();
                         teclas.Add((byte)i);
                         ButtonNormal.Focus();
-                        break;
                     }
                 }
             }

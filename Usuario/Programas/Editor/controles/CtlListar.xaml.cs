@@ -156,16 +156,16 @@ namespace Editor
                 {
                     for (byte i = 0; i < rm.Estado; i++)
                     {
-                        ri = padre.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | b), i);
+                        ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(i, b, m, p);
                         n = n + ", " + ri.ACCIONESRow.Nombre;
                     }
                 }
                 else
                 {
-                    ri = padre.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | b), 0);
+                    ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(0, b, m, p);
                     if (ri.Indice > 0)
                         n = ri.ACCIONESRow.Nombre;
-                    ri = padre.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | b), 1);
+                    ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(1, b, m, p);
                     if (ri.Indice > 0)
                         n = n + " / " + ri.ACCIONESRow.Nombre;
                 }
@@ -178,16 +178,16 @@ namespace Editor
                 {
                     for (byte i = 0; i < rm.Estado; i++)
                     {
-                        ri = padre.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | b), i);
+                        ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, i);
                         n = n + ", " + ri.ACCIONESRow.Nombre;
                     }
                 }
                 else
                 {
-                    ri = padre.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | b), 0);
+                    ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, 0);
                     if (ri.Indice > 0)
                         n = ri.ACCIONESRow.Nombre;
-                    ri = padre.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | b), 1);
+                    ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, 1);
                     if (ri.Indice > 0)
                         n = n + " / " + ri.ACCIONESRow.Nombre;
                 }
@@ -212,16 +212,16 @@ namespace Editor
             {
                 if (peque)
                 {
-                    DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 0);
+                    DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, e, m, p);
                     if (ri.Indice > 0) n = n + "+" + ri.ACCIONESRow.Nombre; else n = n + " ";
-                    ri = padre.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 1);
+                    ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, e, m, p);
                     if (ri.Indice > 0) n = n + "/-" + ri.ACCIONESRow.Nombre; else n = n + "/ ";
                 }
                 else
                 {
-                    DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 0);
+                    DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(0, e, m, p);
                     if (ri.Indice > 0) n = n + "+" + ri.ACCIONESRow.Nombre; else n = n + " ";
-                    ri = padre.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 1);
+                    ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(1, e, m, p);
                     if (ri.Indice > 0) n = n + "/-" + ri.ACCIONESRow.Nombre; else n = n + "/ ";
                 }
             }
@@ -240,7 +240,7 @@ namespace Editor
                     }
                     for (byte i = 0; i < nBandas; i++)
                     {
-                        DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i);
+                        DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(i, e, m, p);
                         n = n + ", " + ri.ACCIONESRow.Nombre;
                     }
                 }
@@ -257,7 +257,7 @@ namespace Editor
                     }
                     for (byte i = 0; i < nBandas; i++)
                     {
-                        DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i);
+                        DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(i, e, m, p);
                         n = n + ", " + ri.ACCIONESRow.Nombre;
                     }
                 }

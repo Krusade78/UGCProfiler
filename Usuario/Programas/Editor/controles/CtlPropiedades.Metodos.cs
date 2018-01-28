@@ -150,8 +150,8 @@ namespace Editor
                 RadioButtonIncremental.IsChecked = true;
                 ButtonEditBands.Visibility = System.Windows.Visibility.Hidden;
                 PanelIncremental.Visibility = System.Windows.Visibility.Visible;
-                NumericUpDownResistanceInc.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 2).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 2).Indice;
-                NumericUpDownResistanceDec.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 3).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), 3).Indice;
+                NumericUpDownResistanceInc.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(2, e, m, p).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(2, e, m, p).Indice;
+                NumericUpDownResistanceDec.Value = (!peque) ? padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(3, e, m, p).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(3, e, m, p).Indice;
                 //'macros
                 LabelPosition.Visibility = System.Windows.Visibility.Hidden;
                 NumericUpDownPosition.Visibility = System.Windows.Visibility.Hidden;
@@ -231,30 +231,30 @@ namespace Editor
             if (tipoActual == Tipo.Seta)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, idActual, m, p).Indice : padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, idActual, m, p).Indice;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Indice;
             }
             else if (tipoActual == Tipo.Boton)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 0).Indice : padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 1).Indice;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, (byte)(NumericUpDownPosition.Value - 1)).Indice;
             }
             else if (tipoActual == Tipo.Eje)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(0, idActual, m, p).Indice : padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(1, idActual, m, p).Indice;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1),idActual, m, p).Indice;
             }
             else if (tipoActual == Tipo.EjePeque)
             {
                 if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice;
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, idActual, m, p).Indice : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, idActual, m, p).Indice;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Indice;
             }
 
             eventos = true;
@@ -327,19 +327,19 @@ namespace Editor
             {
                 padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).nEje &= 127;
                 padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).nEje |= inc;
-                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = 0;
-                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = 0;
-                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 2).Indice = 0;
-                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 3).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(0, idActual, m, p).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(1, idActual, m, p).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(2, idActual, m, p).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(3, idActual, m, p).Indice = 0;
             }
             else
             {
                 padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje &= 127;
                 padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).nEje |= inc;
-                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = 0;
-                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = 0;
-                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 2).Indice = 0;
-                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 3).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, idActual, m, p).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, idActual, m, p).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(2, idActual, m, p).Indice = 0;
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(3, idActual, m, p).Indice = 0;
             }
 
             padre.GetDatos().Modificado = true;
@@ -350,9 +350,9 @@ namespace Editor
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
             if (tipoActual == Tipo.Eje)
-                padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)((inc) ? 2 : 3)).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
+                padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie((byte)((inc) ? 2 : 3), idActual, m, p).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
             else
-                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)((inc) ? 2 : 3)).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
+                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie((byte)((inc) ? 2 : 3), idActual, m, p).Indice = (byte)((inc) ? NumericUpDownResistanceInc.Value : NumericUpDownResistanceDec.Value);
 
             padre.GetDatos().Modificado = true;
         }
@@ -385,46 +385,46 @@ namespace Editor
                     if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
                     {
                         if (RadioButton1.IsChecked == true)
-                            padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, idActual, m, p).Indice = idc;
                         else
-                            padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, idActual, m, p).Indice = idc;
                     }
                     else
-                        padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
+                        padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Indice = idc;
                     break;
                 case Tipo.Boton:
                     if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
                     {
                         if (RadioButton1.IsChecked == true)
-                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 0).Indice = idc;
                         else
-                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 1).Indice = idc;
                     }
                     else
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
                     break;
                 case Tipo.Eje:
                     if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
                     {
                         if (RadioButton1.IsChecked == true)
-                            padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(0, idActual, m, p).Indice = idc;
                         else
-                            padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(1, idActual, m, p).Indice = idc;
                     }
                     else
-                        padre.GetDatos().Perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
+                        padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Indice = idc;
 
                     break;
                 case Tipo.EjePeque:
                     if (RadioButton1.Visibility == System.Windows.Visibility.Visible)
                     {
                         if (RadioButton1.IsChecked == true)
-                            padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 0).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, idActual, m, p).Indice = idc;
                         else
-                            padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), 1).Indice = idc;
+                            padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, idActual, m, p).Indice = idc;
                     }
                     else
-                        padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | idActual), (byte)(NumericUpDownPosition.Value - 1)).Indice = idc;
+                        padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Indice = idc;
 
                     break;
             }

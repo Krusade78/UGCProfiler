@@ -74,8 +74,8 @@ namespace Editor
                 }
 
                 padre.GetDatos().Perfil.MAPASETAS.FindByidSetaidModoidPinkie((byte)(i + (pov * 8)), m, p).Estado = 0;
-                padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | (i + (pov * 8))), 0).Indice = idx;
-                padre.GetDatos().Perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | (i + (pov * 8))), 1).Indice = 0;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, (uint)(i + (pov * 8)), m, p).Indice = idx;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, (uint)(i + (pov * 8)), m, p).Indice = 0;
             }
         }
     }

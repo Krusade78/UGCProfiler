@@ -104,7 +104,7 @@ namespace Launcher
                             pos++;
                             for (byte i = 0; i < 16; i++)
                             {
-                                UInt16 indice = perfil.INDICESEJES.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i).Indice;
+                                UInt16 indice = perfil.INDICESEJES.FindByididEjeidModoidPinkie(i, e, m, p).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);
@@ -137,7 +137,7 @@ namespace Launcher
                             pos++;
                             for (byte i = 0; i < 16; i++)
                             {
-                                UInt16 indice = perfil.INDICESEJESPEQUE.FindByidEjeid((UInt32)((p << 16) | (m << 8) | e), i).Indice;
+                                UInt16 indice = perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(i, e, m, p).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);
@@ -181,7 +181,7 @@ namespace Launcher
                             pos++;
                             for (byte i = 0; i < 15; i++)
                             {
-                                UInt16 indice = perfil.INDICESBOTONES.FindByidBotonid((UInt32)((p << 16) | (m << 8) | b), i).Indice;
+                                UInt16 indice = perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, i).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);
@@ -203,7 +203,7 @@ namespace Launcher
                             pos++;
                             for (byte i = 0; i < 15; i++)
                             {
-                                UInt16 indice = perfil.INDICESSETAS.FindByidSetaid((UInt32)((p << 16) | (m << 8) | s), i).Indice;
+                                UInt16 indice = perfil.INDICESSETAS.FindByididSetaidModoidPinkie(i, s, m, p).Indice;
                                 bufferMapa[pos] = (byte)(indice & 0xff);
                                 pos++;
                                 bufferMapa[pos] = (byte)(indice >> 8);

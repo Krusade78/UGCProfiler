@@ -110,6 +110,11 @@ BOOLEAN PrepararDirectX(WDFDEVICE device)
 					{
 						RtlCopyMemory(&devExt->stDirectX, dato, sizeof(HID_INPUT_DATA));
 					}
+					else if (devExt->MenuActivado)
+					{
+						RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));
+						RtlCopyMemory(devExt->stDirectX.Botones, dato->Botones, sizeof(devExt->stDirectX.Botones));
+					}
 					else
 					{
 						RtlCopyMemory(devExt->stDirectX.Ejes, dato->Ejes, sizeof(devExt->stDirectX.Ejes));

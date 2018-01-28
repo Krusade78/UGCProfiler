@@ -177,12 +177,12 @@ namespace Editor
        #region "ejes"
         private void ButtonRy_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(0, CEnums.Tipo.EjePeque, (String)ButtonRy.Content);
+            Vista.Ver(1, CEnums.Tipo.EjePeque, (String)ButtonRy.Content);
         }
 
         private void ButtonRx_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(1, CEnums.Tipo.EjePeque, (String)ButtonRx.Content);
+            Vista.Ver(0, CEnums.Tipo.EjePeque, (String)ButtonRx.Content);
         }
 
         private void Buttonsl_Click(object sender, RoutedEventArgs e)

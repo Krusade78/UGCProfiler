@@ -484,28 +484,28 @@ namespace Editor {
                         this.tableINDICESEJES.IndiceColumn});
             this.tableINDICESEJES.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.DeleteRule = global::System.Data.Rule.SetDefault;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJESPEQUE", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESEJESPEQUE.IndiceColumn});
             this.tableINDICESEJESPEQUE.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.DeleteRule = global::System.Data.Rule.SetDefault;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESSETAS", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESSETAS.IndiceColumn});
             this.tableINDICESSETAS.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.DeleteRule = global::System.Data.Rule.SetDefault;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESBOTONES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
                         this.tableINDICESBOTONES.IndiceColumn});
             this.tableINDICESBOTONES.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.DeleteRule = global::System.Data.Rule.SetDefault;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             this.relationFK_ACCIONES_INDICESEJES = new global::System.Data.DataRelation("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
@@ -2913,6 +2913,10 @@ namespace Editor {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class INDICESEJESDataTable : global::System.Data.TypedTableBase<INDICESEJESRow> {
             
+            private global::System.Data.DataColumn columnidPinkie;
+            
+            private global::System.Data.DataColumn columnidModo;
+            
             private global::System.Data.DataColumn columnidEje;
             
             private global::System.Data.DataColumn columnid;
@@ -2950,6 +2954,22 @@ namespace Editor {
             protected INDICESEJESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idPinkieColumn {
+                get {
+                    return this.columnidPinkie;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idModoColumn {
+                get {
+                    return this.columnidModo;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3013,14 +3033,16 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESEJESRow AddINDICESEJESRow(uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJES) {
+            public INDICESEJESRow AddINDICESEJESRow(byte idPinkie, byte idModo, uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJES) {
                 INDICESEJESRow rowINDICESEJESRow = ((INDICESEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idPinkie,
+                        idModo,
                         idEje,
                         id,
                         null};
                 if ((parentACCIONESRowByFK_ACCIONES_INDICESEJES != null)) {
-                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESEJES[0];
+                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESEJES[0];
                 }
                 rowINDICESEJESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowINDICESEJESRow);
@@ -3029,10 +3051,12 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESEJESRow FindByidEjeid(uint idEje, byte id) {
+            public INDICESEJESRow FindByididEjeidModoidPinkie(byte id, uint idEje, byte idModo, byte idPinkie) {
                 return ((INDICESEJESRow)(this.Rows.Find(new object[] {
+                            id,
                             idEje,
-                            id})));
+                            idModo,
+                            idPinkie})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3052,6 +3076,8 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             internal void InitVars() {
+                this.columnidPinkie = base.Columns["idPinkie"];
+                this.columnidModo = base.Columns["idModo"];
                 this.columnidEje = base.Columns["idEje"];
                 this.columnid = base.Columns["id"];
                 this.columnIndice = base.Columns["Indice"];
@@ -3060,6 +3086,10 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             private void InitClass() {
+                this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidPinkie);
+                this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidModo);
                 this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidEje);
                 this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -3067,8 +3097,12 @@ namespace Editor {
                 this.columnIndice = new global::System.Data.DataColumn("Indice", typeof(ushort), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIndice);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnid,
                                 this.columnidEje,
-                                this.columnid}, true));
+                                this.columnidModo,
+                                this.columnidPinkie}, true));
+                this.columnidPinkie.AllowDBNull = false;
+                this.columnidModo.AllowDBNull = false;
                 this.columnidEje.AllowDBNull = false;
                 this.columnid.AllowDBNull = false;
                 this.columnid.Caption = "Mouse";
@@ -3208,6 +3242,10 @@ namespace Editor {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class INDICESEJESPEQUEDataTable : global::System.Data.TypedTableBase<INDICESEJESPEQUERow> {
             
+            private global::System.Data.DataColumn columnidPinkie;
+            
+            private global::System.Data.DataColumn columnidModo;
+            
             private global::System.Data.DataColumn columnidEje;
             
             private global::System.Data.DataColumn columnid;
@@ -3245,6 +3283,22 @@ namespace Editor {
             protected INDICESEJESPEQUEDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idPinkieColumn {
+                get {
+                    return this.columnidPinkie;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idModoColumn {
+                get {
+                    return this.columnidModo;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3308,14 +3362,16 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESEJESPEQUERow AddINDICESEJESPEQUERow(uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE) {
+            public INDICESEJESPEQUERow AddINDICESEJESPEQUERow(byte idPinkie, byte idModo, uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE) {
                 INDICESEJESPEQUERow rowINDICESEJESPEQUERow = ((INDICESEJESPEQUERow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idPinkie,
+                        idModo,
                         idEje,
                         id,
                         null};
                 if ((parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE != null)) {
-                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE[0];
+                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE[0];
                 }
                 rowINDICESEJESPEQUERow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowINDICESEJESPEQUERow);
@@ -3324,10 +3380,12 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESEJESPEQUERow FindByidEjeid(uint idEje, byte id) {
+            public INDICESEJESPEQUERow FindByididEjeidModoidPinkie(byte id, uint idEje, byte idModo, byte idPinkie) {
                 return ((INDICESEJESPEQUERow)(this.Rows.Find(new object[] {
+                            id,
                             idEje,
-                            id})));
+                            idModo,
+                            idPinkie})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3347,6 +3405,8 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             internal void InitVars() {
+                this.columnidPinkie = base.Columns["idPinkie"];
+                this.columnidModo = base.Columns["idModo"];
                 this.columnidEje = base.Columns["idEje"];
                 this.columnid = base.Columns["id"];
                 this.columnIndice = base.Columns["Indice"];
@@ -3355,6 +3415,10 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             private void InitClass() {
+                this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidPinkie);
+                this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidModo);
                 this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidEje);
                 this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -3362,8 +3426,12 @@ namespace Editor {
                 this.columnIndice = new global::System.Data.DataColumn("Indice", typeof(ushort), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIndice);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnid,
                                 this.columnidEje,
-                                this.columnid}, true));
+                                this.columnidModo,
+                                this.columnidPinkie}, true));
+                this.columnidPinkie.AllowDBNull = false;
+                this.columnidModo.AllowDBNull = false;
                 this.columnidEje.AllowDBNull = false;
                 this.columnid.AllowDBNull = false;
                 this.columnid.Caption = "Mouse";
@@ -3503,6 +3571,10 @@ namespace Editor {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class INDICESSETASDataTable : global::System.Data.TypedTableBase<INDICESSETASRow> {
             
+            private global::System.Data.DataColumn columnidPinkie;
+            
+            private global::System.Data.DataColumn columnidModo;
+            
             private global::System.Data.DataColumn columnidSeta;
             
             private global::System.Data.DataColumn columnid;
@@ -3540,6 +3612,22 @@ namespace Editor {
             protected INDICESSETASDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idPinkieColumn {
+                get {
+                    return this.columnidPinkie;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idModoColumn {
+                get {
+                    return this.columnidModo;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3603,14 +3691,16 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESSETASRow AddINDICESSETASRow(uint idSeta, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESSETAS) {
+            public INDICESSETASRow AddINDICESSETASRow(byte idPinkie, byte idModo, uint idSeta, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESSETAS) {
                 INDICESSETASRow rowINDICESSETASRow = ((INDICESSETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idPinkie,
+                        idModo,
                         idSeta,
                         id,
                         null};
                 if ((parentACCIONESRowByFK_ACCIONES_INDICESSETAS != null)) {
-                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESSETAS[0];
+                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESSETAS[0];
                 }
                 rowINDICESSETASRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowINDICESSETASRow);
@@ -3619,10 +3709,12 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESSETASRow FindByidSetaid(uint idSeta, byte id) {
+            public INDICESSETASRow FindByididSetaidModoidPinkie(byte id, uint idSeta, byte idModo, byte idPinkie) {
                 return ((INDICESSETASRow)(this.Rows.Find(new object[] {
+                            id,
                             idSeta,
-                            id})));
+                            idModo,
+                            idPinkie})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3642,6 +3734,8 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             internal void InitVars() {
+                this.columnidPinkie = base.Columns["idPinkie"];
+                this.columnidModo = base.Columns["idModo"];
                 this.columnidSeta = base.Columns["idSeta"];
                 this.columnid = base.Columns["id"];
                 this.columnIndice = base.Columns["Indice"];
@@ -3650,6 +3744,10 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             private void InitClass() {
+                this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidPinkie);
+                this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidModo);
                 this.columnidSeta = new global::System.Data.DataColumn("idSeta", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidSeta);
                 this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -3657,8 +3755,12 @@ namespace Editor {
                 this.columnIndice = new global::System.Data.DataColumn("Indice", typeof(ushort), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIndice);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnid,
                                 this.columnidSeta,
-                                this.columnid}, true));
+                                this.columnidModo,
+                                this.columnidPinkie}, true));
+                this.columnidPinkie.AllowDBNull = false;
+                this.columnidModo.AllowDBNull = false;
                 this.columnidSeta.AllowDBNull = false;
                 this.columnidSeta.Caption = "idEje";
                 this.columnid.AllowDBNull = false;
@@ -3799,6 +3901,10 @@ namespace Editor {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class INDICESBOTONESDataTable : global::System.Data.TypedTableBase<INDICESBOTONESRow> {
             
+            private global::System.Data.DataColumn columnidPinkie;
+            
+            private global::System.Data.DataColumn columnidModo;
+            
             private global::System.Data.DataColumn columnidBoton;
             
             private global::System.Data.DataColumn columnid;
@@ -3836,6 +3942,22 @@ namespace Editor {
             protected INDICESBOTONESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idPinkieColumn {
+                get {
+                    return this.columnidPinkie;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn idModoColumn {
+                get {
+                    return this.columnidModo;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3899,14 +4021,16 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESBOTONESRow AddINDICESBOTONESRow(uint idBoton, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESBOTONES) {
+            public INDICESBOTONESRow AddINDICESBOTONESRow(byte idPinkie, byte idModo, uint idBoton, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESBOTONES) {
                 INDICESBOTONESRow rowINDICESBOTONESRow = ((INDICESBOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idPinkie,
+                        idModo,
                         idBoton,
                         id,
                         null};
                 if ((parentACCIONESRowByFK_ACCIONES_INDICESBOTONES != null)) {
-                    columnValuesArray[2] = parentACCIONESRowByFK_ACCIONES_INDICESBOTONES[0];
+                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESBOTONES[0];
                 }
                 rowINDICESBOTONESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowINDICESBOTONESRow);
@@ -3915,9 +4039,11 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public INDICESBOTONESRow FindByidBotonid(uint idBoton, byte id) {
+            public INDICESBOTONESRow FindByidBotonidModoidPinkieid(uint idBoton, byte idModo, byte idPinkie, byte id) {
                 return ((INDICESBOTONESRow)(this.Rows.Find(new object[] {
                             idBoton,
+                            idModo,
+                            idPinkie,
                             id})));
             }
             
@@ -3938,6 +4064,8 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             internal void InitVars() {
+                this.columnidPinkie = base.Columns["idPinkie"];
+                this.columnidModo = base.Columns["idModo"];
                 this.columnidBoton = base.Columns["idBoton"];
                 this.columnid = base.Columns["id"];
                 this.columnIndice = base.Columns["Indice"];
@@ -3946,6 +4074,10 @@ namespace Editor {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             private void InitClass() {
+                this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidPinkie);
+                this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidModo);
                 this.columnidBoton = new global::System.Data.DataColumn("idBoton", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidBoton);
                 this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -3954,7 +4086,11 @@ namespace Editor {
                 base.Columns.Add(this.columnIndice);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnidBoton,
+                                this.columnidModo,
+                                this.columnidPinkie,
                                 this.columnid}, true));
+                this.columnidPinkie.AllowDBNull = false;
+                this.columnidModo.AllowDBNull = false;
                 this.columnidBoton.AllowDBNull = false;
                 this.columnidBoton.Caption = "idEje";
                 this.columnid.AllowDBNull = false;
@@ -4644,6 +4780,28 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idPinkie {
+                get {
+                    return ((byte)(this[this.tableINDICESEJES.idPinkieColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJES.idPinkieColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idModo {
+                get {
+                    return ((byte)(this[this.tableINDICESEJES.idModoColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJES.idModoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public uint idEje {
                 get {
                     return ((uint)(this[this.tableINDICESEJES.idEjeColumn]));
@@ -4699,6 +4857,28 @@ namespace Editor {
             internal INDICESEJESPEQUERow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
                 this.tableINDICESEJESPEQUE = ((INDICESEJESPEQUEDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idPinkie {
+                get {
+                    return ((byte)(this[this.tableINDICESEJESPEQUE.idPinkieColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJESPEQUE.idPinkieColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idModo {
+                get {
+                    return ((byte)(this[this.tableINDICESEJESPEQUE.idModoColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJESPEQUE.idModoColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4762,6 +4942,28 @@ namespace Editor {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idPinkie {
+                get {
+                    return ((byte)(this[this.tableINDICESSETAS.idPinkieColumn]));
+                }
+                set {
+                    this[this.tableINDICESSETAS.idPinkieColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idModo {
+                get {
+                    return ((byte)(this[this.tableINDICESSETAS.idModoColumn]));
+                }
+                set {
+                    this[this.tableINDICESSETAS.idModoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public uint idSeta {
                 get {
                     return ((uint)(this[this.tableINDICESSETAS.idSetaColumn]));
@@ -4817,6 +5019,28 @@ namespace Editor {
             internal INDICESBOTONESRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
                 this.tableINDICESBOTONES = ((INDICESBOTONESDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idPinkie {
+                get {
+                    return ((byte)(this[this.tableINDICESBOTONES.idPinkieColumn]));
+                }
+                set {
+                    this[this.tableINDICESBOTONES.idPinkieColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public byte idModo {
+                get {
+                    return ((byte)(this[this.tableINDICESBOTONES.idModoColumn]));
+                }
+                set {
+                    this[this.tableINDICESBOTONES.idModoColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

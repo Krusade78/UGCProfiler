@@ -30,7 +30,6 @@ namespace Editor
             datos.Nuevo();
             if (gridVista.Children.Count != 0)
             {
-                ((IDisposable)gridVista.Children[0]).Dispose();
                 gridVista.Children.Clear();
             }
 
@@ -68,7 +67,6 @@ namespace Editor
                 {
                     if (gridVista.Children.Count != 0)
                     {
-                        ((IDisposable)gridVista.Children[0]).Dispose();
                         gridVista.Children.Clear();
                     }
 
