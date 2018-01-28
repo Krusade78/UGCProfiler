@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infs", "Infs", "{83B33AB6-544E-49B8-B6B0-A16FF14F6CD4}"
 	ProjectSection(SolutionItems) = preProject
@@ -72,8 +72,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Comsbn", "Usuario\Programas
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Editor", "Usuario\Programas\antiguos\Editor\Editor.vbproj", "{663E9E41-D328-4A5E-A55D-88669B34CF6E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Usuario\Programas\antiguos\Launcher\Launcher.vcxproj", "{8D378DEC-E15F-4973-8603-41661FEC55E9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Usuario\Programas\Launcher\Launcher.csproj", "{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "antiguos", "antiguos", "{F5B35366-EFA7-4259-907C-A063856E12A3}"
@@ -83,6 +81,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xh_vmdf", "Driver\antiguo\xh_vmdf\xh_vmdf.vcxproj", "{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xusb_hid", "Driver\antiguo\xusb_hid\xusb_hid.vcxproj", "{9D5713AD-838B-4DB5-A289-9AF71CC199EA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LauncherC", "Usuario\Programas\antiguos\LauncherC\LauncherC.vcxproj", "{8D378DEC-E15F-4973-8603-41661FEC55E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,20 +229,6 @@ Global
 		{663E9E41-D328-4A5E-A55D-88669B34CF6E}.Release|x64.Build.0 = Release|x64
 		{663E9E41-D328-4A5E-A55D-88669B34CF6E}.Release|x86.ActiveCfg = Release|Any CPU
 		{663E9E41-D328-4A5E-A55D-88669B34CF6E}.Release|x86.Build.0 = Release|Any CPU
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|ARM.ActiveCfg = Debug|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|ARM64.ActiveCfg = Debug|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x64.ActiveCfg = Debug|x64
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x64.Build.0 = Debug|x64
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x86.ActiveCfg = Debug|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x86.Build.0 = Debug|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|Any CPU.ActiveCfg = Release|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|ARM.ActiveCfg = Release|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|ARM64.ActiveCfg = Release|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x64.ActiveCfg = Release|x64
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x64.Build.0 = Release|x64
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x86.ActiveCfg = Release|Win32
-		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x86.Build.0 = Release|Win32
 		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}.Debug|ARM.ActiveCfg = Debug|x64
 		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}.Debug|ARM64.ActiveCfg = Debug|x64
@@ -333,6 +319,20 @@ Global
 		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x86.ActiveCfg = Release|Win32
 		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x86.Build.0 = Release|Win32
 		{9D5713AD-838B-4DB5-A289-9AF71CC199EA}.Release|x86.Deploy.0 = Release|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|ARM.ActiveCfg = Debug|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x64.ActiveCfg = Debug|x64
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x64.Build.0 = Debug|x64
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x86.ActiveCfg = Debug|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Debug|x86.Build.0 = Debug|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|Any CPU.ActiveCfg = Release|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|ARM.ActiveCfg = Release|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|ARM64.ActiveCfg = Release|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x64.ActiveCfg = Release|x64
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x64.Build.0 = Release|x64
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x86.ActiveCfg = Release|Win32
+		{8D378DEC-E15F-4973-8603-41661FEC55E9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -351,12 +351,12 @@ Global
 		{833CC367-EC70-4C04-9CD3-53157CBEEBD2} = {8F346773-D285-4F08-8C5C-41AE23A5F355}
 		{591CC2E3-614F-41B5-A0C4-979644465A48} = {8F346773-D285-4F08-8C5C-41AE23A5F355}
 		{663E9E41-D328-4A5E-A55D-88669B34CF6E} = {8F346773-D285-4F08-8C5C-41AE23A5F355}
-		{8D378DEC-E15F-4973-8603-41661FEC55E9} = {8F346773-D285-4F08-8C5C-41AE23A5F355}
 		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683} = {F81F58AE-4EDA-406C-8F3A-646885EB0D20}
 		{F5B35366-EFA7-4259-907C-A063856E12A3} = {98460BE7-533F-4AD8-B8A9-2D086C5693F1}
 		{AAE5EA45-13A6-4201-A588-8545CE091369} = {F5B35366-EFA7-4259-907C-A063856E12A3}
 		{A5D6E927-C000-45E1-B1B9-F0EA6ECEB5D2} = {F5B35366-EFA7-4259-907C-A063856E12A3}
 		{9D5713AD-838B-4DB5-A289-9AF71CC199EA} = {F5B35366-EFA7-4259-907C-A063856E12A3}
+		{8D378DEC-E15F-4973-8603-41661FEC55E9} = {8F346773-D285-4F08-8C5C-41AE23A5F355}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92C35703-B89E-4F01-B7CD-259D00B377F4}
@@ -394,29 +394,29 @@ Global
 		SccProjectTopLevelParentUniqueName7 = XHOTAS\u0020Driver.sln
 		SccProjectName7 = Usuario/Programas/antiguos/Editor
 		SccLocalPath7 = Usuario\\Programas\\antiguos\\Editor
-		SccProjectUniqueName8 = Usuario\\Programas\\antiguos\\Launcher\\Launcher.vcxproj
+		SccProjectUniqueName8 = Usuario\\Programas\\Launcher\\Launcher.csproj
 		SccProjectTopLevelParentUniqueName8 = XHOTAS\u0020Driver.sln
-		SccProjectName8 = Usuario/Programas/antiguos/Launcher
-		SccLocalPath8 = Usuario\\Programas\\antiguos\\Launcher
-		SccProjectUniqueName9 = Usuario\\Programas\\Launcher\\Launcher.csproj
+		SccProjectName8 = Usuario/Programas/Launcher
+		SccLocalPath8 = Usuario\\Programas\\Launcher
+		SccProjectUniqueName9 = Driver\\xhotas_usb\\xhotas_usb.vcxproj
 		SccProjectTopLevelParentUniqueName9 = XHOTAS\u0020Driver.sln
-		SccProjectName9 = Usuario/Programas/Launcher
-		SccLocalPath9 = Usuario\\Programas\\Launcher
-		SccProjectUniqueName10 = Driver\\xhotas_usb\\xhotas_usb.vcxproj
+		SccProjectName9 = Driver/xhotas_usb
+		SccLocalPath9 = Driver\\xhotas_usb
+		SccProjectUniqueName10 = Driver\\antiguo\\xh_vmd\\xh_vmd.vcxproj
 		SccProjectTopLevelParentUniqueName10 = XHOTAS\u0020Driver.sln
-		SccProjectName10 = Driver/xhotas_usb
-		SccLocalPath10 = Driver\\xhotas_usb
-		SccProjectUniqueName11 = Driver\\antiguo\\xh_vmd\\xh_vmd.vcxproj
+		SccProjectName10 = Driver/antiguo/xh_vmd
+		SccLocalPath10 = Driver\\antiguo\\xh_vmd
+		SccProjectUniqueName11 = Driver\\antiguo\\xh_vmdf\\xh_vmdf.vcxproj
 		SccProjectTopLevelParentUniqueName11 = XHOTAS\u0020Driver.sln
-		SccProjectName11 = Driver/antiguo/xh_vmd
-		SccLocalPath11 = Driver\\antiguo\\xh_vmd
-		SccProjectUniqueName12 = Driver\\antiguo\\xh_vmdf\\xh_vmdf.vcxproj
+		SccProjectName11 = Driver/antiguo/xh_vmdf
+		SccLocalPath11 = Driver\\antiguo\\xh_vmdf
+		SccProjectUniqueName12 = Driver\\antiguo\\xusb_hid\\xusb_hid.vcxproj
 		SccProjectTopLevelParentUniqueName12 = XHOTAS\u0020Driver.sln
-		SccProjectName12 = Driver/antiguo/xh_vmdf
-		SccLocalPath12 = Driver\\antiguo\\xh_vmdf
-		SccProjectUniqueName13 = Driver\\antiguo\\xusb_hid\\xusb_hid.vcxproj
+		SccProjectName12 = Driver/antiguo/xusb_hid
+		SccLocalPath12 = Driver\\antiguo\\xusb_hid
+		SccProjectUniqueName13 = Usuario\\Programas\\antiguos\\LauncherC\\LauncherC.vcxproj
 		SccProjectTopLevelParentUniqueName13 = XHOTAS\u0020Driver.sln
-		SccProjectName13 = Driver/antiguo/xusb_hid
-		SccLocalPath13 = Driver\\antiguo\\xusb_hid
+		SccProjectName13 = Usuario/Programas/antiguos/LauncherC
+		SccLocalPath13 = Usuario\\Programas\\antiguos\\LauncherC
 	EndGlobalSection
 EndGlobal
