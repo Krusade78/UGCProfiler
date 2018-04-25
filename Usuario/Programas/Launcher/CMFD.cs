@@ -58,7 +58,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[CMFD][2.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[CMFD][2.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -78,7 +78,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(ioctl, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[CMFD][3.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[CMFD][3.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -110,7 +110,7 @@ namespace Launcher
                 if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
                 {
                     CSystem32.CerrarDriver();
-                    MessageBox.Show("Error de acceso al dispositivo", "[CMFD][4.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MainWindow.MessageBox("Error de acceso al dispositivo", "[CMFD][4.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
@@ -119,7 +119,7 @@ namespace Launcher
                 if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
                 {
                     CSystem32.CerrarDriver();
-                    MessageBox.Show("Error de acceso al dispositivo", "[CMFD][4.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MainWindow.MessageBox("Error de acceso al dispositivo", "[CMFD][4.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
@@ -145,7 +145,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_GET_MENU, null, 0, buf, 1, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][5.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("No se puede enviar la orden al driver", "[CMFD][5.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 semActivado.Release();
                 return false;
             }
@@ -189,7 +189,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_DESACTIVAR_MENU, null, 0, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("No se puede enviar la orden al driver", "[CMFD][7.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -200,7 +200,7 @@ namespace Launcher
             CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
             fila[0] = 3;
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero))
-                MessageBox.Show("No se puede enviar la orden al driver", "[CMFD][7.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("No se puede enviar la orden al driver", "[CMFD][7.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             CSystem32.CerrarDriver();
 
@@ -211,7 +211,7 @@ namespace Launcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "[CMFD][7.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox(ex.Message, "[CMFD][7.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             semActivado.Release();
@@ -376,7 +376,7 @@ namespace Launcher
 
                 if (!CRawInput.RegisterRawInputDevices(rdev, 1, (uint)Marshal.SizeOf(typeof(CRawInput.RAWINPUTDEVICE))))
                 {
-                    MessageBox.Show("No se pudo registrar la entrada de datos HID", "[CMFD][7.1]", MessageBoxButton.OK, MessageBoxImage.Stop);
+                    MainWindow.MessageBox("No se pudo registrar la entrada de datos HID", "[CMFD][7.1]", MessageBoxButton.OK, MessageBoxImage.Stop);
                     return false;
                 }
                 else

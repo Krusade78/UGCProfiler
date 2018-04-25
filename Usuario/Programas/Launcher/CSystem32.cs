@@ -94,7 +94,7 @@ namespace Launcher
                 {
                     driver = null;
                     driverRefs--;
-                    System.Windows.MessageBox.Show("No se puede abrir el driver", "[CSystem32][1.1]", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                    MainWindow.MessageBox("No se puede abrir el driver", "[CSystem32][1.1]", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
                     driverMutex.Release();
                     return false;
                 }

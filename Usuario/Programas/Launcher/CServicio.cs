@@ -97,7 +97,7 @@ namespace Launcher
             catch (System.IO.FileNotFoundException) { }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "[X52-Service][0.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox(ex.Message, "[X52-Service][0.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             finally
@@ -112,7 +112,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_USR_CALIBRADO, buf, (uint)buf.Length, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("No se puede enviar la orden al driver", "[X52-Service][0.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("No se puede enviar la orden al driver", "[X52-Service][0.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -130,7 +130,7 @@ namespace Launcher
                     dsc.ReadXml("configuracion.dat");
                 } catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MainWindow.MessageBox(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
             }
@@ -148,7 +148,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_MFD_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             
@@ -156,7 +156,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_GLOBAL_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -166,21 +166,21 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.4]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.4]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             buffer[0] = 2; buffer[1] = (byte)fecha.Month;
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             buffer[0] = 3; buffer[1] = (byte)(fecha.Year % 100);
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.6]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.6]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -215,7 +215,7 @@ namespace Launcher
                     if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
                     {
                         CSystem32.CerrarDriver();
-                        MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.7]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.7]", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return false;
                     }
                 }
@@ -224,7 +224,7 @@ namespace Launcher
                     if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
                     {
                         CSystem32.CerrarDriver();
-                        MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.8]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.8]", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return false;
                     }
                 }
@@ -234,7 +234,7 @@ namespace Launcher
             if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
             {
                 CSystem32.CerrarDriver();
-                MessageBox.Show("Error de acceso al dispositivo", "[X52-Service][1.9]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.9]", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -331,13 +331,20 @@ namespace Launcher
 
         public void CargarPerfil(String archivo)
         {
+            byte ret = 0;
             lock (this)
             {
                 bool horaModificada = false;
                 bool fechaModificada = false;
-                CPerfil.CargarMapa(archivo, ref horaModificada, ref fechaModificada);
+                ret = CPerfil.CargarMapa(archivo, ref horaModificada, ref fechaModificada);
                 horaActiva = !horaModificada;
                 fechaActiva = !fechaModificada;
+            }
+
+            if (ret == 0)
+            {
+                String nombre = System.IO.Path.GetFileNameWithoutExtension(archivo);
+                MainWindow.MessageBox("Perfil cargado correctamente.", nombre, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

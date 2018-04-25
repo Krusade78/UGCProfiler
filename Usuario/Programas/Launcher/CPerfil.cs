@@ -14,7 +14,7 @@ namespace Launcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MainWindow.MessageBox(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 perfil.Dispose();
                 return 1;
             }
@@ -62,7 +62,7 @@ namespace Launcher
                 if (!CSystem32.DeviceIoControl(IOCTL_USR_COMANDOS, bufferComandos, (uint)bufferComandos.Length, null, 0, out ret, IntPtr.Zero))
                 {
                     CSystem32.CerrarDriver();
-                    MessageBox.Show("No se puede enviar la orden al driver", "[CPerfil][0.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MainWindow.MessageBox("No se puede enviar la orden al driver", "[CPerfil][0.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return 4;
                 }
             }
@@ -218,7 +218,7 @@ namespace Launcher
                 if (!CSystem32.DeviceIoControl(IOCTL_USR_MAPA, bufferMapa, (uint)bufferMapa.Length, null, 0, out ret, IntPtr.Zero))
                 {
                     CSystem32.CerrarDriver();
-                    MessageBox.Show("No se puede enviar la orden al driver", "[CPerfil][0.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MainWindow.MessageBox("No se puede enviar la orden al driver", "[CPerfil][0.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return 4;
                 }
             }

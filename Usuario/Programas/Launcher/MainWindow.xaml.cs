@@ -11,7 +11,7 @@ namespace Launcher
     /// </summary>
     public partial class MainWindow : Window
     {
-        private NotifyIcon notifyIcon;
+        private static NotifyIcon notifyIcon = null;
         private CServicio servicio;
 
         public MainWindow()
@@ -27,6 +27,32 @@ namespace Launcher
                 notifyIcon.Dispose(); notifyIcon = null;
                 servicio.Dispose();
                 this.Close();
+            }               
+        }
+
+        internal static void MessageBox(String msj, String titulo, MessageBoxButton bt, MessageBoxImage img)
+        {
+            if (notifyIcon == null)
+                System.Windows.MessageBox.Show(msj, titulo, MessageBoxButton.OK, img);
+            else
+            {
+                ToolTipIcon tti;
+                switch (img)
+                {
+                    case MessageBoxImage.Error:
+                        tti = ToolTipIcon.Error;
+                        break;
+                    case MessageBoxImage.Warning:
+                        tti = ToolTipIcon.Warning;
+                        break;
+                    case MessageBoxImage.Information:
+                        tti = ToolTipIcon.Info;
+                        break;
+                    default:
+                        tti = ToolTipIcon.None;
+                        break;
+                }
+                notifyIcon.ShowBalloonTip(3000, titulo, msj, tti);
             }
         }
 
@@ -36,10 +62,10 @@ namespace Launcher
             if (servicio.Iniciar())
             {
                 this.Visibility = Visibility.Hidden;
-                notifyIcon = new NotifyIcon();
-                notifyIcon.Icon = new System.Drawing.Icon(App.GetResourceStream(new Uri("/res/Launcher.ico", UriKind.Relative)).Stream);
-                notifyIcon.Visible = true;
-                notifyIcon.Click += NotifyIcon_Click;
+            notifyIcon = new NotifyIcon();
+            notifyIcon.Icon = new System.Drawing.Icon(App.GetResourceStream(new Uri("/res/Launcher.ico", UriKind.Relative)).Stream);
+            notifyIcon.Visible = true;
+            notifyIcon.Click += NotifyIcon_Click;
             }
             else
                 this.Close();
