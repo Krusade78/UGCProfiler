@@ -65,12 +65,15 @@ namespace Editor
             if (datos.Perfil.GENERAL.Rows.Count != 0)
                 Lanzar();
         }
+
         //private void RibbonButtonModos_Click(object sender, RoutedEventArgs e)
         //{
-        //    VEditorModos v = new VEditorModos();
-        //    v.Owner = this;
-        //    if (v.ShowDialog();
-        //    RefrescarModos();
+        //    VEditorModos v = new VEditorModos
+        //    {
+        //        Owner = this
+        //    };
+        //    if (v.ShowDialog())
+        //        RefrescarModos();
         //}
         private void RibbonButtonRaton_Click(object sender, RoutedEventArgs e)
         {
@@ -85,7 +88,7 @@ namespace Editor
         #endregion
 
         #region "Vista"
-        private void rtbEdicion_Checked(object sender, RoutedEventArgs e)
+        private void FrtbEdicion_Checked(object sender, RoutedEventArgs e)
         {
             if (this.IsLoaded)
             {
@@ -101,7 +104,7 @@ namespace Editor
                 }
             }
         }
-        private void rtbListado_Checked(object sender, RoutedEventArgs e)
+        private void FrtbListado_Checked(object sender, RoutedEventArgs e)
         {
             rtbEdicion.IsChecked = false;
             if (datos.Perfil.GENERAL.Rows.Count != 0)
@@ -116,7 +119,7 @@ namespace Editor
         }
         #endregion
 
-        private void cbModo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FcbModo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.IsLoaded)
                 SetModos();

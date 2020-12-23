@@ -17,6 +17,7 @@ namespace Editor
         {
             tabAcel.Content = new CtlAcelerador(this);
             tabJoy.Content = new CtlJoystick(this);
+            tabPedales.Content = new CtlPedales(this);
         }
     }
 }

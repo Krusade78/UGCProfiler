@@ -29,14 +29,14 @@ namespace Calibrator
             rdev[0].Flags = CRawInput.RawInputDeviceFlags.None;
             rdev[1].UsagePage = 0x01;
             rdev[1].Usage = 0x02;
-            rdev[1].Flags = CRawInput.RawInputDeviceFlags.NoLegacy;   // adds HID mouse and also ignores legacy mouse messages
+            rdev[1].Flags = CRawInput.RawInputDeviceFlags.None;   // adds HID mouse and also ignores legacy mouse messages
             rdev[1].WindowHandle = hWnd.Handle;
             rdev[2].UsagePage = 0x01;
             rdev[2].Usage = 0x06;
-            rdev[2].Flags = CRawInput.RawInputDeviceFlags.NoLegacy;   // adds HID keyboard and also ignores legacy keyboard messages
+            rdev[2].Flags = CRawInput.RawInputDeviceFlags.NoHotKeys;   // adds HID keyboard and also ignores legacy keyboard messages
             rdev[2].WindowHandle = hWnd.Handle;
 
-            if (!CRawInput.RegisterRawInputDevices(rdev, 1, (uint)Marshal.SizeOf(typeof(CRawInput.RAWINPUTDEVICE))))
+            if (!CRawInput.RegisterRawInputDevices(rdev, 3, (uint)Marshal.SizeOf(typeof(CRawInput.RAWINPUTDEVICE))))
             {
                 MessageBox.Show("No se pudo registrar la entrada de datos HID", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 hWnd = null;
@@ -59,13 +59,13 @@ namespace Calibrator
                     byte[] buff = new byte[size];
 
                     outSize = CRawInput.GetRawInputData(lParam, 0x10000003, buff, ref size, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
-                    if (outSize != -1)
+                    if (outSize == size)
                     {
-                        CRawInput.RAWINPUTHEADER header = new CRawInput.RAWINPUTHEADER();
+                        //CRawInput.RAWINPUTHEADER header = new CRawInput.RAWINPUTHEADER();
 
                         IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
                         Marshal.Copy(buff, 0, ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
-                        header = Marshal.PtrToStructure<CRawInput.RAWINPUTHEADER>(ptr);
+                        CRawInput.RAWINPUTHEADER header = Marshal.PtrToStructure<CRawInput.RAWINPUTHEADER>(ptr);
                         Marshal.FreeHGlobal(ptr);
                         switch (header.dwType)
                         {
@@ -78,11 +78,9 @@ namespace Calibrator
                                     Marshal.FreeHGlobal(pNombre);
                                     if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
                                     {
-                                        CRawInput.RAWINPUTHID hid = new CRawInput.RAWINPUTHID();
-
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
-                                        hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
+                                        CRawInput.RAWINPUTHID hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
                                         Marshal.FreeHGlobal(ptr);
 
                                         byte[] hidData = new byte[hid.Size - 1];
@@ -103,11 +101,9 @@ namespace Calibrator
                                     Marshal.FreeHGlobal(pNombre);
                                     if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
                                     {
-                                        CRawInput.RAWINPUTKEYBOARD keyb = new CRawInput.RAWINPUTKEYBOARD();
-
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTKEYBOARD)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTKEYBOARD)));
-                                        keyb = Marshal.PtrToStructure<CRawInput.RAWINPUTKEYBOARD>(ptr);
+                                        CRawInput.RAWINPUTKEYBOARD keyb = Marshal.PtrToStructure<CRawInput.RAWINPUTKEYBOARD>(ptr);
                                         Marshal.FreeHGlobal(ptr);
 
                                         ucInfo.ActualizarTeclado(keyb);
@@ -123,11 +119,9 @@ namespace Calibrator
                                     Marshal.FreeHGlobal(pNombre);
                                     if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
                                     {
-                                        CRawInput.RAWINPUTMOUSE mouse = new CRawInput.RAWINPUTMOUSE();
-
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
-                                        mouse = Marshal.PtrToStructure<CRawInput.RAWINPUTMOUSE>(ptr);
+                                        CRawInput.RAWINPUTMOUSE mouse = Marshal.PtrToStructure<CRawInput.RAWINPUTMOUSE>(ptr);
                                         Marshal.FreeHGlobal(ptr);
 
                                         ucInfo.ActualizarRaton(mouse);
@@ -142,7 +136,7 @@ namespace Calibrator
             return IntPtr.Zero;
         }
 
-        private void toggleButton_Checked(object sender, RoutedEventArgs e)
+        private void PestañaPruebas_Checked(object sender, RoutedEventArgs e)
         {
             if (this.IsLoaded)
             {
@@ -151,7 +145,7 @@ namespace Calibrator
             }
         }
 
-        private void toggleButton1_Checked(object sender, RoutedEventArgs e)
+        private void PestañaCalibrar_Checked(object sender, RoutedEventArgs e)
         {
             tbPrueba.IsChecked = false;
             SetRawMode(true);
@@ -176,31 +170,12 @@ namespace Calibrator
 
         private void SetRawMode(bool on)
         {
-            Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
-                    "\\\\.\\XUSBInterface",
-                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-                    IntPtr.Zero,
-                    3,//OPEN_EXISTING,
-                    0,
-                    IntPtr.Zero);
-            if (driver.IsInvalid)
+            if (Comunes.CIoCtl.AbrirDriver())
             {
-                MessageBox.Show("No se puede abrir el driver", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                byte[] buff = (on) ? new byte[] { 1 } : new byte[] { 0 };
+                Comunes.CIoCtl.DeviceIoControl(Comunes.CIoCtl.IOCTL_USR_RAW, buff, 1, null, 0, out _, IntPtr.Zero);
+                Comunes.CIoCtl.CerrarDriver();
             }
-
-            UInt32 ret = 0;
-            UInt32 IOCTL_USR_RAW = ((0x22) << 16) | ((2) << 14) | ((0x0808) << 2) | (0);
-            byte[] buff = (on) ? new byte[] { 1 } : new byte[] { 0 };
-            if (!CSystem32.DeviceIoControl(driver, IOCTL_USR_RAW, buff, 1, null, 0, out ret, IntPtr.Zero))
-            {
-                driver.Close();
-                MessageBox.Show("No se puede enviar la orden al driver", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            driver.Close();
         }
         #endregion
     }

@@ -51,6 +51,30 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+            <TabItem x:Name="tabPedal" BorderBrush="{x:Null}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Width="150">
+                        <Image Source="/Editor;component/res/pedales.png" Height="18" />
+                        <TextBlock Text="Acelerador" />
+                    </StackPanel>
+                </TabItem.Header>
+                <DataGrid x:Name="ListView3" ItemsSource="{Binding}" CanUserResizeRows="False" AutoGenerateColumns="False" CanUserSortColumns="False" Background="{x:Null}" IsReadOnly="True" GridLinesVisibility="Vertical" VerticalGridLinesBrush="#FFCDCDCD" AlternatingRowBackground="#7F00172E" AlternationCount="2" RowBackground="#7F002059">
+                    <DataGrid.Resources>
+                        <Style x:Key="pad" TargetType="TextBlock">
+                            <Setter Property="Padding" Value="5,2" />
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Elementos" Binding="{Binding Elementos}" Foreground="Yellow" ElementStyle="{StaticResource pad}" />
+                        <DataGridTextColumn Header="Modo 1 + Pinkie Off" Binding="{Binding m1}" Foreground="GreenYellow" ElementStyle="{StaticResource pad}"/>
+                        <DataGridTextColumn Header="Modo 1 + Pinkie On" Binding="{Binding m1p}" Foreground="GreenYellow" ElementStyle="{StaticResource pad}" />
+                        <DataGridTextColumn Header="Modo 2 + Pinkie Off" Binding="{Binding m2}" Foreground="GreenYellow" ElementStyle="{StaticResource pad}" />
+                        <DataGridTextColumn Header="Modo 2 + Pinkie On" Binding="{Binding m2p}" Foreground="GreenYellow" ElementStyle="{StaticResource pad}" />
+                        <DataGridTextColumn Header="Modo 3 + Pinkie Off" Binding="{Binding m3}" Foreground="GreenYellow" ElementStyle="{StaticResource pad}" />
+                        <DataGridTextColumn Header="Modo 3 + Pinkie On" Binding="{Binding m3p}" Foreground="GreenYellow" ElementStyle="{StaticResource pad}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

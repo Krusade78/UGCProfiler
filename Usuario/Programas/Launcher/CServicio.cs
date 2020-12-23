@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Runtime.InteropServices;
-using System.Timers;
 using System.IO.Pipes;
 using System.Threading.Tasks;
 
@@ -9,20 +8,11 @@ namespace Launcher
 {
     class CServicio : IDisposable
     {
-        //Nota: Los datos de horas están en minutos
-        private CMFD mfd = null;
-
-        private DataSetConfiguracion dsc = new DataSetConfiguracion();
-        private Timer timer = new Timer(2000);
+        private Comunes.DataSetConfiguracion dsc = new Comunes.DataSetConfiguracion();
         private System.Threading.CancellationTokenSource cerrarPipe = new System.Threading.CancellationTokenSource();
 
-        private bool fechaActiva = true;
-        private bool horaActiva = true;
-        private bool timerMenu = false;
-
-        public CServicio(Window wnd)
+        public CServicio()
         {
-            mfd = new CMFD((System.Windows.Interop.HwndSource)PresentationSource.FromVisual(wnd), ref dsc);
         }
 
         #region IDisposable Support
@@ -36,9 +26,6 @@ namespace Launcher
                 {
                     cerrarPipe.Cancel();
                     while (cerrarPipe != null) { System.Threading.Thread.Sleep(100); }
-                    timer.Stop();
-                    timer.Close(); timer = null;
-                    if (mfd != null) { mfd.Dispose(); mfd = null; }
                     dsc.Dispose(); dsc = null;
                 }
                 disposedValue = true;
@@ -52,22 +39,15 @@ namespace Launcher
         #endregion
         public bool Iniciar()
         {
-            if (!CargarCalibrado())
-                return false;
-            if (!CargarConfiguracion())
-                return false;
-
             SetTextoInicio();
-            timer.Elapsed += Tick;
-            timer.Start();
 
             Task.Run(() =>
                 {
                     while (!cerrarPipe.Token.IsCancellationRequested)
                     {
-                        using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("LauncherPipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+                        using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("LauncherPipe", PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.None))
                         {
-                            try { pipeServer.WaitForConnectionAsync(cerrarPipe.Token).Wait(); } catch { break; }
+                            try { pipeServer.WaitForConnectionAsync(cerrarPipe.Token).Wait(cerrarPipe.Token); } catch { break; }
                             if (cerrarPipe.Token.IsCancellationRequested)
                                 break;
                             using (System.IO.StreamReader r = new System.IO.StreamReader(pipeServer))
@@ -83,177 +63,79 @@ namespace Launcher
             return true;
         }
 
-        private bool CargarCalibrado()
+        private void CargarCalibrado()
         {
-            byte[] buf = new byte[Marshal.SizeOf(typeof(CSystem32.CALIBRADO)) * 4];
-
-            System.IO.FileStream archivo = null;
+            dsc.Clear();
             try
             {
-                archivo = new System.IO.FileStream("calibrado.dat", System.IO.FileMode.Open);
-                if (archivo.Read(buf, 0, buf.Length) != buf.Length)
-                    throw new Exception("Error de lectura del archivo de calibrado");
+                dsc.ReadXml("configuracion.dat");
             }
-            catch (System.IO.FileNotFoundException) { }
-            catch (Exception ex)
+            catch
             {
-                MainWindow.MessageBox(ex.Message, "[X52-Service][0.1]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-            finally
-            {
-                if (archivo != null) { try { archivo.Close(); archivo = null; } catch { } }
+                return;
             }
 
-            if (!CSystem32.AbrirDriver())
-                return false;
-
-            UInt32 ret = 0;
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_USR_CALIBRADO, buf, (uint)buf.Length, null, 0, out ret, IntPtr.Zero))
+            Comunes.CTipos.STJITTER[] jitter = new Comunes.CTipos.STJITTER[4];
+            Comunes.CTipos.STLIMITES[] limites = new Comunes.CTipos.STLIMITES[4];
+            for (int i = 0; i < 4; i++)
             {
-                CSystem32.CerrarDriver();
-                MainWindow.MessageBox("No se puede enviar la orden al driver", "[X52-Service][0.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+                limites[i].Cal = 0;
+                limites[i].Cen = 1024;
+                limites[i].Izq = 0;
+                limites[i].Der = 2048;
+                jitter[i].Antiv = 0;
+                jitter[i].Margen = 0;
+                jitter[i].Resistencia = 0;
             }
-
-            CSystem32.CerrarDriver();
-
-            return true;
-        }
-
-        private bool CargarConfiguracion()
-        {
-            if (System.IO.File.Exists("configuracion.dat"))
+            if ((dsc.CALIBRADO_LIMITES.Count == 4) && (dsc.CALIBRADO_JITTER.Count == 4))
             {
-                try
+                for (int i = 0; i < 4; i++)
                 {
-                    dsc.ReadXml("configuracion.dat");
-                } catch (Exception ex)
-                {
-                    MainWindow.MessageBox(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return false;
+                    limites[i].Cen = dsc.CALIBRADO_LIMITES[i].Cen;
+                    limites[i].Izq = dsc.CALIBRADO_LIMITES[i].Izq;
+                    limites[i].Der = dsc.CALIBRADO_LIMITES[i].Der;
+                    limites[i].Nulo = dsc.CALIBRADO_LIMITES[i].Nulo;
+                    limites[i].Cal = dsc.CALIBRADO_LIMITES[i].Cal;
+                    jitter[i].Margen = dsc.CALIBRADO_JITTER[i].Margen;
+                    jitter[i].Resistencia = dsc.CALIBRADO_JITTER[i].Resistencia;
+                    jitter[i].Antiv = dsc.CALIBRADO_JITTER[i].Antiv;
                 }
-            }
-            else
-            {
-                dsc.CONFIGURACION.AddCONFIGURACIONRow(dsc.CONFIGURACION.NewCONFIGURACIONRow());
-            }
 
-            if (!CSystem32.AbrirDriver())
-                return false;
-
-            UInt32 ret = 0;
-
-            byte[] buffer = new byte[1] { dsc.CONFIGURACION[0].LuzMfd };
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_MFD_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
-            {
-                CSystem32.CerrarDriver();
-                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.2]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-            
-            buffer[0] = dsc.CONFIGURACION[0].LuzGlobal;
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_GLOBAL_LUZ, buffer, 1, null, 0, out ret, IntPtr.Zero))
-            {
-                CSystem32.CerrarDriver();
-                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.3]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            DateTime fecha = DateTime.Now;
-            buffer = new byte[2] { 1, (byte)fecha.Day };
-
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
-            {
-                CSystem32.CerrarDriver();
-                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.4]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-            buffer[0] = 2; buffer[1] = (byte)fecha.Month;
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
-            {
-                CSystem32.CerrarDriver();
-                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.5]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-            buffer[0] = 3; buffer[1] = (byte)(fecha.Year % 100);
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, buffer, 2, null, 0, out ret, IntPtr.Zero))
-            {
-                CSystem32.CerrarDriver();
-                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.6]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            buffer = new byte[3];
-            Int16[] horas = new Int16[] { dsc.CONFIGURACION[0].hora1, dsc.CONFIGURACION[0].hora2, dsc.CONFIGURACION[0].hora3 };
-            bool[] horas24 = new bool[] { dsc.CONFIGURACION[0].hora1_24h, dsc.CONFIGURACION[0].hora2_24h, dsc.CONFIGURACION[0].hora3_24h };
-
-            fecha = fecha.AddMinutes(dsc.CONFIGURACION[0].hora1);
-            for (byte i = 0; i < 3; i++)
-            {
-                buffer[0] = (byte)(i + 1);
-                if (i == 0)
+                if (Comunes.CIoCtl.AbrirDriver())
                 {
-                    buffer[1] = (byte)(fecha.Hour);
-                    buffer[2] = (byte)(fecha.Minute);
-                }
-                else
-                {
-                    if (horas[i] < 0)
+                    byte[] bufCal = new byte[Marshal.SizeOf(typeof(Comunes.CTipos.STLIMITES)) * 4];
+                    byte[] bufJit = new byte[Marshal.SizeOf(typeof(Comunes.CTipos.STJITTER)) * 4];
+                    for (int i = 0; i < 4; i++)
                     {
-                        buffer[1] = (byte)(((-horas[i]) >> 8) + 4);
-                        buffer[2] = (byte)((-horas[i]) & 0xff);
+                        IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Comunes.CTipos.STLIMITES)));
+                        Marshal.StructureToPtr(limites[i], ptr, true);
+                        Marshal.Copy(ptr, bufCal, Marshal.SizeOf(typeof(Comunes.CTipos.STLIMITES)) * i, Marshal.SizeOf(typeof(Comunes.CTipos.STLIMITES)));
+                        Marshal.FreeHGlobal(ptr);
+                        ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Comunes.CTipos.STJITTER)));
+                        Marshal.StructureToPtr(jitter[i], ptr, true);
+                        Marshal.Copy(ptr, bufJit, Marshal.SizeOf(typeof(Comunes.CTipos.STJITTER)) * i, Marshal.SizeOf(typeof(Comunes.CTipos.STJITTER)));
+                        Marshal.FreeHGlobal(ptr);
                     }
-                    else
+                    if (Comunes.CIoCtl.DeviceIoControl(Comunes.CIoCtl.IOCTL_USR_CALIBRADO, bufCal, (uint)bufCal.Length, null, 0, out _, IntPtr.Zero))
                     {
-                        buffer[1] = (byte)(horas[i] >> 8);
-                        buffer[2] = (byte)(horas[i] & 0xff);
+                        Comunes.CIoCtl.DeviceIoControl(Comunes.CIoCtl.IOCTL_USR_ANTIVIBRACION, bufJit, (uint)bufJit.Length, null, 0, out _, IntPtr.Zero);
                     }
-                }
-                if (horas24[i])
-                {
-                    if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA24, buffer, 3, null, 0, out ret, IntPtr.Zero))
-                    {
-                        CSystem32.CerrarDriver();
-                        MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.7]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA, buffer, 3, null, 0, out ret, IntPtr.Zero))
-                    {
-                        CSystem32.CerrarDriver();
-                        MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.8]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return false;
-                    }
+
+                    Comunes.CIoCtl.CerrarDriver();
                 }
             }
-
-            buffer[0] = (dsc.CONFIGURACION[0].Pedales) ? (byte)1 : (byte)0;
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_PEDALES, buffer, 1, null, 0, out ret, IntPtr.Zero))
-            {
-                CSystem32.CerrarDriver();
-                MainWindow.MessageBox("Error de acceso al dispositivo", "[X52-Service][1.9]", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            CSystem32.CerrarDriver();
-
-            return true;
         }
 
         private bool SetTextoInicio()
         {
             String[] filas = new String[] { "  Saitek X-52",
-                                            "  Driver v7.0"
-                                            };
+                                            "  Driver v8.0",
+                                            "\0"};
 
-            if (!CSystem32.AbrirDriver())
+            if (!Comunes.CIoCtl.AbrirDriver())
                 return false;
 
-            UInt32 ret = 0;
-            for (byte i = 0; i < 2; i++)
+            for (byte i = 0; i < 3; i++)
             {
                 String fila = filas[i];
                 byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(fila));
@@ -261,120 +143,34 @@ namespace Launcher
                 for (byte c = 0; c < texto.Length; c++)
                     buffer[c + 1] = texto[c];
 
-                uint tamBuffer = (uint)(texto.Length + 1 + (((texto.Length % 2) == 1) ? 1 : 0));
                 buffer[0] = (byte)(i + 1);
-
-                ret = 0;
-                if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out ret, IntPtr.Zero))
+                if (!Comunes.CIoCtl.DeviceIoControl(Comunes.CIoCtl.IOCTL_TEXTO, buffer, (uint)texto.Length + 1, null, 0, out _, IntPtr.Zero))
                 {
-                    CSystem32.CerrarDriver();
+                    Comunes.CIoCtl.CerrarDriver();
                     return false;
                 }
             }
-            //siguientes lineas en blanco
-            byte[] fila3 = new byte[3] { 3, 0, 0 };
-            if (!CSystem32.DeviceIoControl(CSystem32.IOCTL_TEXTO, fila3, 17, null, 0, out ret, IntPtr.Zero))
-            {
-                CSystem32.CerrarDriver();
-                return false;
-            }
 
-            CSystem32.CerrarDriver();
+            Comunes.CIoCtl.CerrarDriver();
 
             return true;
         }
 
-        private void Tick(object sender, ElapsedEventArgs e)
-        {
-            if (timerMenu) //cada dos salto comprueba (4 segundos)
-            {
-                mfd.ComprobarEstado();
-                timerMenu = false;
-            }
-            else
-                timerMenu = true;
-
-            if (!this.fechaActiva && !this.horaActiva)
-                return;
-
-            UInt32 ret = 0;
-            if (!CSystem32.AbrirDriver())
-                return;
-
-            byte[] bf = new byte[3];
-            DateTime t = DateTime.Now;
-
-            if (this.fechaActiva)
-            {
-                bf[0] = 1; bf[1] = (byte)t.Day;
-                CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
-                bf[0] = 2; bf[1] = (byte)t.Month;
-                CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
-                bf[0] = 3; bf[1] = (byte)(t.Year % 100);
-                CSystem32.DeviceIoControl(CSystem32.IOCTL_FECHA, bf, 2, null, 0, out ret, IntPtr.Zero);
-            }
-
-            if (this.horaActiva)
-            {
-                t = t.AddMinutes(dsc.CONFIGURACION[0].hora1);
-                bf[0] = 1;
-                bf[1] = (byte)(t.Hour);
-                bf[2] = (byte)(t.Minute);
-                if (dsc.CONFIGURACION[0].hora1_24h)
-                    CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA24, bf, 3, null, 0, out ret, IntPtr.Zero);
-                else
-                    CSystem32.DeviceIoControl(CSystem32.IOCTL_HORA, bf, 3, null, 0, out ret, IntPtr.Zero);
-            }
-
-            CSystem32.CerrarDriver();
-        }
-
         public void CargarPerfil(String archivo)
         {
+            CargarCalibrado();
+
             byte ret = 0;
             lock (this)
             {
-                bool horaModificada = false;
-                bool fechaModificada = false;
-                ret = CPerfil.CargarMapa(archivo, ref horaModificada, ref fechaModificada);
-                horaActiva = !horaModificada;
-                fechaActiva = !fechaModificada;
+                ret = CPerfil.CargarMapa(archivo);
             }
 
             if (ret == 0)
             {
                 String nombre = System.IO.Path.GetFileNameWithoutExtension(archivo);
-                MainWindow.MessageBox("Perfil cargado correctamente.", nombre, MessageBoxButton.OK, MessageBoxImage.Information);
+                CMain.MessageBox("Perfil cargado correctamente.", nombre, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
-        //private void ReiniciarX52()
-        //{
-        //    CargarConfiguracion();
-
-        //    String[] filas = new String[] { "  Saitek X-52",
-        //                                    "  Driver v7.0" };
-
-        //    Microsoft.Win32.SafeHandles.SafeFileHandle driver = CSystem32.CreateFile(
-        //                    "\\\\.\\XUSBInterface",
-        //                    0x80000000 | 0x40000000,//GENERIC_WRITE | GENERIC_READ,
-        //                    0x00000002 | 0x00000001, //FILE_SHARE_WRITE | FILE_SHARE_READ,
-        //                    IntPtr.Zero,
-        //                    3,//OPEN_EXISTING,
-        //                    0,
-        //                    IntPtr.Zero);
-        //    if (driver.IsInvalid)
-        //        return;
-
-        //    UInt32 ret = 0;
-        //    byte[] fila = new byte[2] { 1, 0 };
-        //    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
-        //    fila[0] = 2;
-        //    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
-        //    fila[0] = 3;
-        //    CSystem32.DeviceIoControl(driver, CSystem32.IOCTL_TEXTO, fila, 2, null, 0, out ret, IntPtr.Zero);
-
-        //    driver.Close();
-        //}
     }
 }

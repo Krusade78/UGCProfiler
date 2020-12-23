@@ -24,7 +24,7 @@ namespace Editor
             padre = (MainWindow)this.Owner;
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
-            DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
+            Comunes.DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
             TrackBar1.Value = r.Sensibilidad[0];
             TrackBar2.Value = r.Sensibilidad[1];
             TrackBar3.Value = r.Sensibilidad[2];
@@ -41,7 +41,7 @@ namespace Editor
         {
             byte p = 0, m = 0;
             padre.GetModos(ref p, ref m);
-            DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
+            Comunes.DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
             r.Sensibilidad[0] = (byte)TrackBar1.Value;
             r.Sensibilidad[1] = (byte)TrackBar2.Value;
             r.Sensibilidad[2] = (byte)TrackBar3.Value;

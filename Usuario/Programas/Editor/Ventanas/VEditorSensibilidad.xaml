@@ -1,8 +1,6 @@
 ﻿<Window x:Class="Editor.VEditorSensibilidad" x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Editor"
         Title="Curva de sensibilidad" SizeToContent="WidthAndHeight" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" FontFamily="OCR A Extended" Loaded="Window_Loaded">
     <Window.Background>
         <ImageBrush ImageSource="/Editor;component/res/CalibrationGrid.JPG"/>

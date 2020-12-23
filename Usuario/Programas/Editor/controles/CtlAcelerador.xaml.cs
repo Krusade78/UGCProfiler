@@ -9,7 +9,7 @@ namespace Editor
     /// </summary>
     internal partial class CtlAcelerador : UserControl
     {
-        private CtlPropiedades Vista;
+        private readonly CtlPropiedades Vista;
 
         public CtlAcelerador(CtlEditar padre)
         {
@@ -174,7 +174,7 @@ namespace Editor
         }
         #endregion
 
-       #region "ejes"
+        #region "ejes"
         private void ButtonRy_Click(object sender, RoutedEventArgs e)
         {
             Vista.Ver(1, CEnums.Tipo.EjePeque, (String)ButtonRy.Content);

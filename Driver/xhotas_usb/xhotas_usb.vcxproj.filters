@@ -19,110 +19,110 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Driver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Context.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pedales_read.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="X52_read.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="X52_write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PnP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="botones_setas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CalibradoHID.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cola.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ejes_raton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProcesarHID.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UserModeIO_read.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mapa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="directx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AccionesGenerar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AccionesProcesar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RequestHID_read.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="PnPPedales.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LeerUSBX52.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LeerUSBPedales.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventosGenerar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EscribirUSBX52.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcesarUSBs_Botones-Setas.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcesarUSBs_Calibrado.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcesarUSBs_Ejes.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventosProcesar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuMFD.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Driver.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pedales_read.c">
+    <ClCompile Include="ProcesarUSBs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="X52_read.c">
+    <ClCompile Include="Perfil.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="X52_write.c">
+    <ClCompile Include="IoCtlAplicacion.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pnp.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="botones_setas.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CalibradoHID.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cola.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ejes_raton.c">
+    <ClCompile Include="PnPPower.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProcesarHID.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UserModeIO_read.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mapa.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="directx.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AccionesGenerar.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AccionesProcesar.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RequestHID_read.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="xhotas_usb.inx">
+    <ClInclude Include="Context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PnPPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PnPPedales.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeerUSBX52.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeerUSBPedales.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcesarUSBs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcesarHID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventosGenerar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventosProcesar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcesarUSBs_Botones-Setas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcesarUSBs_Calibrado.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Perfil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IoCtlAplicacion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EscribirUSBX52.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcesarUSBs_Ejes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuMFD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Inf Include="xhotas_usb.inf">
       <Filter>Driver Files</Filter>
     </Inf>
   </ItemGroup>

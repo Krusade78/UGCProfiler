@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using static Editor.CEnums;
+using static Comunes.CTipos;
 
 namespace Editor
 {
@@ -36,17 +36,17 @@ namespace Editor
 
         private void ButtonBorrar_Click(object sender, RoutedEventArgs e)
         {
-            BorrarMacroLista(ListBox1.SelectedIndex, false);
+            BorrarMacroLista();
         }
 
         private void ButtonSubir_Click(object sender, RoutedEventArgs e)
         {
-            SubirMacroLista(ListBox1.SelectedIndex);
+            SubirMacroLista();
         }
 
         private void ButtonBajar_Click(object sender, RoutedEventArgs e)
         {
-            BajarMacroLista(ListBox1.SelectedIndex);
+            BajarMacroLista();
         }
 
         private void RadioButtonBasico_Checked(object sender, RoutedEventArgs e)
@@ -61,30 +61,28 @@ namespace Editor
         }
 
         #region "teclas"
-        private void vtSelPlantilla_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FvtSelPlantilla_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CargarPlantilla(vtSelPlantilla.SelectedIndex);
+            CargarPlantilla();
         }
 
         private void ButtonPresionar_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237)
+            if (GetCuenta() > 237)
                 return;
             else
             {
-                macro.Insert(GetIndice(), (ushort)(ComboBox1.SelectedIndex << 8));
-                CargarLista();
+                Insertar(new ushort[] {(ushort)((byte)TipoComando.TipoComando_Tecla + (ushort)(ComboBox1.SelectedIndex << 8)) }, false);
             }
         }
 
         private void ButtonSoltar_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237)
+            if (GetCuenta() > 237)
                 return;
             else
             {
-                macro.Insert(GetIndice(), (ushort)(32 + (ComboBox1.SelectedIndex << 8)));
-                CargarLista();
+                Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_Tecla | (byte)TipoComando.TipoComando_Soltar) + (ushort)(ComboBox1.SelectedIndex << 8)) }, false);
             }
         }
 
@@ -139,37 +137,32 @@ namespace Editor
         #region "Modos"
         private void ButtonModo1_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)TipoC.TipoComando_Modo);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)TipoComando.TipoComando_Modo }, false);
         }
 
         private void ButtonModo2_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)TipoC.TipoComando_Modo + (1 << 8));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)TipoComando.TipoComando_Modo + (1 << 8) } ,false);
         }
 
         private void ButtonModo3_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)TipoC.TipoComando_Modo + (2 << 8));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)TipoComando.TipoComando_Modo + (2 << 8) }, false);
         }
 
         private void ButtonPinkieOn_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)TipoC.TipoComando_Pinkie + (1 << 8));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)TipoComando.TipoComando_Pinkie + (1 << 8) }, false);
         }
 
         private void ButtonPinkieOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)TipoC.TipoComando_Pinkie);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)TipoComando.TipoComando_Pinkie }, false);
         }
         #endregion
 
@@ -186,18 +179,17 @@ namespace Editor
 
         private void ButtonPausa_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_Delay + ((ushort)NumericUpDown6.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_Delay + ((ushort)NumericUpDown6.Value << 8)) }, false);
         }
 
         private void ButtonRepetirN_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 236) return;
-            int idc = GetIndice();
-            macro.Insert(idc, (ushort)((byte)TipoC.TipoComando_RepeatN +((ushort)NumericUpDown4.Value << 8)));
-            macro.Insert(idc + 1, (byte)TipoC.TipoComando_RepeatNFin);
-            CargarLista();
+            if (GetCuenta() > 236) return;
+            ushort[] bloque = new ushort[2];
+            bloque[0] = (ushort)((byte)TipoComando.TipoComando_RepeatN +((ushort)NumericUpDown4.Value << 8));
+            bloque[1] = (byte)TipoComando.TipoComando_RepeatN | (byte)TipoComando.TipoComando_Soltar;
+            Insertar(bloque, true);
         }
         #endregion
 
@@ -206,151 +198,142 @@ namespace Editor
         {
             if (RadioButtonBasico.IsChecked == true)
             {
-                macro.Clear();
-                ListBox1.Items.Clear();
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt1);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_Hold);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt1 + 32);
+                dsMacros.MACROS.Clear();
+                ushort[] bloque = new ushort[3];
+                bloque[0] = (byte)TipoComando.TipoComando_RatonBt1;
+                bloque[1] = (byte)TipoComando.TipoComando_Hold;
+                bloque[2] = (byte)TipoComando.TipoComando_RatonBt1 | (byte)TipoComando.TipoComando_Soltar;
+                Insertar(bloque, true);
             }
             else
             {
-                if (macro.Count > 237) return;
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt1);
+                if (GetCuenta() > 237) return;
+                Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonBt1 }, false);
             }
-            CargarLista();
         }
 
         private void ButtonIzquierdoOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt1 + 32);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonBt1 | (byte)TipoComando.TipoComando_Soltar }, false);
         }
 
         private void ButtonCentroOn_Click(object sender, RoutedEventArgs e)
         {
             if (RadioButtonBasico.IsChecked == true)
             {
-                macro.Clear();
-                ListBox1.Items.Clear();
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt2);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_Hold);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt2 + 32);
+                dsMacros.MACROS.Clear();
+                ushort[] bloque = new ushort[3];
+                bloque[0] = (byte)TipoComando.TipoComando_RatonBt2;
+                bloque[1] = (byte)TipoComando.TipoComando_Hold;
+                bloque[2] = (byte)TipoComando.TipoComando_RatonBt2 | (byte)TipoComando.TipoComando_Soltar;
+                Insertar(bloque, true);
             }
             else
             {
-                if (macro.Count > 237) return;
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt2 + 32);
+                if (GetCuenta() > 237) return;
+                Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonBt2}, false);
             }
-            CargarLista();
         }
 
         private void ButtonCentroOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt2 + 32);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonBt2 | (byte)TipoComando.TipoComando_Soltar } ,false);
         }
 
         private void ButtonDerechoOn_Click(object sender, RoutedEventArgs e)
         {
             if (RadioButtonBasico.IsChecked == true)
             {
-                macro.Clear();
-                ListBox1.Items.Clear();
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt3);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_Hold);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt3 + 32);
+                dsMacros.MACROS.Clear();
+                ushort[] bloque = new ushort[3];
+                bloque[0] = (byte)TipoComando.TipoComando_RatonBt3;
+                bloque[1] = (byte)TipoComando.TipoComando_Hold;
+                bloque[2] = (byte)TipoComando.TipoComando_RatonBt3 | (byte)TipoComando.TipoComando_Soltar;
+                Insertar(bloque, true);
             }
             else
             {
-                if (macro.Count > 237) return;
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt3);
+                if (GetCuenta() > 237) return;
+                Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonBt3 }, false);
             }
-            CargarLista();
         }
 
         private void ButtonDerechoOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonBt3 + 32);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonBt3 | (byte)TipoComando.TipoComando_Soltar }, false);
         }
 
         private void ButtonArribaOn_Click(object sender, RoutedEventArgs e)
         {
             if (RadioButtonBasico.IsChecked == true)
             {
-                macro.Clear();
-                ListBox1.Items.Clear();
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhArr);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhArr + 32);
+                dsMacros.MACROS.Clear();
+                ushort[] bloque = new ushort[2];
+                bloque[0] = (byte)TipoComando.TipoComando_RatonWhArr;
+                bloque[1] = (byte)TipoComando.TipoComando_RatonWhArr | (byte)TipoComando.TipoComando_Soltar;
+                Insertar(bloque, true);
             }
             else
             {
-                if (macro.Count > 237) return;
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhArr);
+                if (GetCuenta() > 237) return;
+                Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonWhArr }, false);
             }
-            CargarLista();
         }
 
         private void ButtonArribaOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhArr + 32);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonWhArr | (byte)TipoComando.TipoComando_Soltar }, false);
         }
 
         private void ButtonAbajoOn_Click(object sender, RoutedEventArgs e)
         {
             if (RadioButtonBasico.IsChecked == true)
             {
-                macro.Clear();
-                ListBox1.Items.Clear();
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhAba);
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhAba + 32);
+                dsMacros.MACROS.Clear();
+                ushort[] bloque = new ushort[2];
+                bloque[0] = (byte)TipoComando.TipoComando_RatonWhAba;
+                bloque[1] = (byte)TipoComando.TipoComando_RatonWhAba | (byte)TipoComando.TipoComando_Soltar;
+                Insertar(bloque, true);
             }
             else
             {
-                if (macro.Count > 237) return;
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhAba);
+                if (GetCuenta() > 237) return;
+                Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonWhAba }, false);
             }
-            CargarLista();
         }
 
         private void ButtonAbajoOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (byte)TipoC.TipoComando_RatonWhAba + 32);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_RatonWhAba | (byte)TipoComando.TipoComando_Soltar }, false);
         }
 
         private void ButtonMovIzquierda_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_RatonIzq + ((ushort)NumericUpDownSensibilidad.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonIzq + ((ushort)NumericUpDownSensibilidad.Value << 8)) }, false);
         }
 
         private void ButtonMovArriba_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_RatonArr + ((ushort)NumericUpDownSensibilidad.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonArr + ((ushort)NumericUpDownSensibilidad.Value << 8)) }, false);
         }
 
         private void ButtonMovDerecha_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_RatonDer + ((ushort)NumericUpDownSensibilidad.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonDer + ((ushort)NumericUpDownSensibilidad.Value << 8)) }, false);
         }
 
         private void ButtonMovAbajo_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_RatonAba + ((ushort)NumericUpDownSensibilidad.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonAba + ((ushort)NumericUpDownSensibilidad.Value << 8)) } , false);
         }
         #endregion
 
@@ -359,39 +342,36 @@ namespace Editor
         {
             if (RadioButtonBasico.IsChecked == true)
             {
-                macro.Clear();
-                ListBox1.Items.Clear();
-                macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_DxBoton + ((ushort)(NumericUpDown1.Value - 1) << 8)));
-                macro.Insert(GetIndice(), (byte)TipoC.TipoComando_Hold);
-                macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_DxBoton + 32 + ((ushort)(NumericUpDown1.Value - 1) << 8)));
+                dsMacros.MACROS.Clear();
+                ushort[] bloque = new ushort[3];
+                bloque[0] = (ushort)((byte)TipoComando.TipoComando_DxBoton + ((ushort)(NumericUpDown1.Value - 1) << 8));
+                bloque[1] = (byte)TipoComando.TipoComando_Hold;
+                bloque[2] = (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + ((ushort)(NumericUpDown1.Value - 1) << 8));
+                Insertar(bloque, true);
             }
             else
             {
-                if (macro.Count > 237) return;
-                macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_DxBoton + ((ushort)(NumericUpDown1.Value - 1) << 8)));
+                if (GetCuenta() > 237) return;
+                Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxBoton + ((ushort)(NumericUpDown1.Value - 1) << 8)) }, false);
             }
-            CargarLista();
         }
 
         private void ButtonDXOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_DxBoton + 32 + ((ushort)(NumericUpDown1.Value - 1) << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + ((ushort)(NumericUpDown1.Value - 1) << 8)) }, false);
         }
 
         private void ButtonPovOn_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_DxSeta + ((ushort)(NumericUpDownPov.Value - 1) << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)((((NumericUpDownPov.Value - 1) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
         }
 
         private void ButtonPovOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_DxSeta + 32 + ((ushort)(NumericUpDownPov.Value - 1) << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxSeta | (byte)TipoComando.TipoComando_Soltar) + (ushort)((((NumericUpDownPov.Value - 1) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
         }
 
         #endregion
@@ -414,16 +394,14 @@ namespace Editor
 
         private void ButtonX52PinkieOn_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (byte)TipoC.TipoComando_MfdPinkie);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_MfdPinkie }, false);
         }
 
         private void ButtonX52PinkieOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_MfdPinkie + (1 << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_MfdPinkie + (1 << 8)) }, false);
         }
 
         private void ButtonFecha1_Click(object sender, RoutedEventArgs e)
@@ -443,30 +421,26 @@ namespace Editor
 
         private void ButtonInfoOn_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (byte)TipoC.TipoComando_InfoLuz);
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_InfoLuz }, false);
         }
 
         private void ButtonInfoOff_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_InfoLuz + (1 << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_InfoLuz + (1 << 8)) }, false);
         }
 
         private void ButtonLuzMfd_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_MfdLuz + ((ushort)NumericUpDownLuzMfd.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_MfdLuz + ((ushort)NumericUpDownLuzMfd.Value << 8)) }, false);
         }
 
         private void ButtonLuzBotones_Click(object sender, RoutedEventArgs e)
         {
-            if (macro.Count > 237) return;
-            macro.Insert(GetIndice(), (ushort)((byte)TipoC.TipoComando_Luz + ((ushort)NumericUpDownLuzMfd.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 237) return;
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_Luz + ((ushort)NumericUpDownLuzMfd.Value << 8)) }, false);
         }
         #endregion
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using System.Data;
+using Comunes;
 
 
 namespace Editor
@@ -10,8 +11,8 @@ namespace Editor
     /// </summary>
     internal partial class CtlListar : UserControl
     {
-        private DataTable datos = new DataTable();
-        private DSPerfil padre;
+        private readonly DataTable datos = new DataTable();
+        private readonly DSPerfil padre;
 
 
         public CtlListar()
@@ -20,7 +21,8 @@ namespace Editor
             padre = ((MainWindow)App.Current.MainWindow).GetDatos().Perfil;
             Iniciar();
             ListView1.DataContext = new DataView(datos) { RowFilter = "(id < 36) And (id > 0)" };
-            ListView2.DataContext = new DataView(datos) { RowFilter = "id > 36" };
+            ListView2.DataContext = new DataView(datos) { RowFilter = "(id > 36) And (id < 69)" };
+            ListView3.DataContext = new DataView(datos) { RowFilter = "id > 69" };
         }
 
         private void UserControl_Unloaded(object sender, System.Windows.RoutedEventArgs e)
@@ -110,170 +112,175 @@ namespace Editor
             datos.Rows.Add(new object[] { 67, "Botón MFD 2", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 68, "Botón MFD 3", "", "", "", "", "", "" });
 
-            int col = 1;
-            for (int i = 1; i < datos.Rows.Count; i++)
-            {
-                for (byte m = 0; m < 3; m++)
-                {
-                    CogerDatos(col, 0, m, i);
-                    col++;
-                    CogerDatos(col, 1, m, i);
-                    col++;
-                }
-            }
+            datos.Rows.Add(new object[] { 69, "Acelerador", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 70, "Eje R", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 71, "Freno Izquierdo", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 72, "Freno Derecho", "", "", "", "", "", "" });
+
+            //int col = 1;
+            //for (int i = 1; i < datos.Rows.Count; i++)
+            //{
+            //    for (byte m = 0; m < 3; m++)
+            //    {
+            //        CogerDatos(col, 0, m, i);
+            //        col++;
+            //        CogerDatos(col, 1, m, i);
+            //        col++;
+            //    }
+            //}
         }
 
-        private void CogerDatos(int col, byte p, byte m, int idc)
-        {
-            byte id = Mapear(idc);
-            if (id == 255)
-                return;
+        //    private void CogerDatos(int col, byte p, byte m, int idc)
+        //    {
+        //        byte id = Mapear(idc);
+        //        if (id == 255)
+        //            return;
 
-            if (id > 99)
-                datos.Rows[idc][2 + (m * 2) + p] = Boton(p, m, (byte)(id - 100), true);
-            else if (id < 64)
-                datos.Rows[idc][2 + (m * 2) + p] = Boton(p, m, id, false);
-            else if (id < 71)
-                datos.Rows[idc][2 + (m * 2) + p] = Eje(p, m, (byte)(id - 64));
-            else
-                datos.Rows[idc][2 + (m * 2) + p] = MiniStick(p, m, (byte)(id - 71));
-        }
+        //        if (id > 99)
+        //            datos.Rows[idc][2 + (m * 2) + p] = Boton(p, m, (byte)(id - 100), true);
+        //        else if (id < 64)
+        //            datos.Rows[idc][2 + (m * 2) + p] = Boton(p, m, id, false);
+        //        else if (id < 71)
+        //            datos.Rows[idc][2 + (m * 2) + p] = Eje(p, m, (byte)(id - 64));
+        //        else
+        //            datos.Rows[idc][2 + (m * 2) + p] = MiniStick(p, m, (byte)(id - 71));
+        //    }
 
-        private byte Mapear(int idc)
-        {
-            byte[] m = new byte[] { 255, 64, 65, 66, 22, 0, 3, 1, 2, 7, 6, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 16, 17, 18, 19, 20, 21, 8, 9, 10, 255, 67, 70, 68, 69, 71, 72, 4, 15, 14, 5, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 23, 24, 25, 11, 12, 13 };
-            return m[idc];
-        }
+        //    private byte Mapear(int idc)
+        //    {
+        //        byte[] m = new byte[] { 255, 64, 65, 66, 22, 0, 3, 1, 2, 7, 6, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 16, 17, 18, 19, 20, 21, 8, 9, 10, 255, 67, 70, 68, 69, 71, 72, 4, 15, 14, 5, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 23, 24, 25, 11, 12, 13 };
+        //        return m[idc];
+        //    }
 
-        private String Boton(byte p, byte m, byte b, bool seta)
-        {
-            String n = "";
-            if (seta)
-            {
-                DSPerfil.INDICESSETASRow ri;
-                DSPerfil.MAPASETASRow rm = padre.MAPASETAS.FindByidSetaidModoidPinkie(b, m, p);
-                if (rm.Estado > 0)
-                {
-                    for (byte i = 0; i < rm.Estado; i++)
-                    {
-                        ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(i, b, m, p);
-                        n = n + ", " + ri.ACCIONESRow.Nombre;
-                    }
-                }
-                else
-                {
-                    ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(0, b, m, p);
-                    if (ri.Indice > 0)
-                        n = ri.ACCIONESRow.Nombre;
-                    ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(1, b, m, p);
-                    if (ri.Indice > 0)
-                        n = n + " / " + ri.ACCIONESRow.Nombre;
-                }
-            }
-            else
-            {
-                DSPerfil.INDICESBOTONESRow ri;
-                DSPerfil.MAPABOTONESRow rm = padre.MAPABOTONES.FindByidBotonidModoidPinkie(b, m, p);
-                if (rm.Estado > 0)
-                {
-                    for (byte i = 0; i < rm.Estado; i++)
-                    {
-                        ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, i);
-                        n = n + ", " + ri.ACCIONESRow.Nombre;
-                    }
-                }
-                else
-                {
-                    ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, 0);
-                    if (ri.Indice > 0)
-                        n = ri.ACCIONESRow.Nombre;
-                    ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, 1);
-                    if (ri.Indice > 0)
-                        n = n + " / " + ri.ACCIONESRow.Nombre;
-                }
-            }
-            return n;
-        }
+        //    private String Boton(byte p, byte m, byte b, bool seta)
+        //    {
+        //        String n = "";
+        //        if (seta)
+        //        {
+        //            DSPerfil.INDICESSETASRow ri;
+        //            DSPerfil.MAPASETASRow rm = padre.MAPASETAS.FindByidSetaidModoidPinkie(b, m, p);
+        //            if (rm.Estado > 0)
+        //            {
+        //                for (byte i = 0; i < rm.Estado; i++)
+        //                {
+        //                    ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(i, b, m, p);
+        //                    n = n + ", " + ri.ACCIONESRow.Nombre;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(0, b, m, p);
+        //                if (ri.Indice > 0)
+        //                    n = ri.ACCIONESRow.Nombre;
+        //                ri = padre.INDICESSETAS.FindByididSetaidModoidPinkie(1, b, m, p);
+        //                if (ri.Indice > 0)
+        //                    n = n + " / " + ri.ACCIONESRow.Nombre;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            DSPerfil.INDICESBOTONESRow ri;
+        //            DSPerfil.MAPABOTONESRow rm = padre.MAPABOTONES.FindByidBotonidModoidPinkie(b, m, p);
+        //            if (rm.Estado > 0)
+        //            {
+        //                for (byte i = 0; i < rm.Estado; i++)
+        //                {
+        //                    ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, i);
+        //                    n = n + ", " + ri.ACCIONESRow.Nombre;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, 0);
+        //                if (ri.Indice > 0)
+        //                    n = ri.ACCIONESRow.Nombre;
+        //                ri = padre.INDICESBOTONES.FindByidBotonidModoidPinkieid(b, m, p, 1);
+        //                if (ri.Indice > 0)
+        //                    n = n + " / " + ri.ACCIONESRow.Nombre;
+        //            }
+        //        }
+        //        return n;
+        //    }
 
-        private String Eje(byte p, byte m, byte e)
-        {
-            String n = "";
-            bool peque = (e > 3);
-            if (peque) e -= 4;
-            byte neje = (!peque) ? padre.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).nEje : padre.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).nEje;
-            bool incremental = ((neje & 128) == 128);
-            neje &= 127;
-            if (neje > 19) { n = "-"; neje -= 20; }
+        //    private String Eje(byte p, byte m, byte e)
+        //    {
+        //        String n = "";
+        //        bool peque = (e > 3);
+        //        if (peque) e -= 4;
+        //        byte neje = (!peque) ? padre.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).nEje : padre.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).nEje;
+        //        bool incremental = ((neje & 128) == 128);
+        //        neje &= 127;
+        //        if (neje > 19) { n = "-"; neje -= 20; }
 
-            String[] nombreEje = new String[] { "[Ninguno]", "[X]", "[Y]", "[R]", "[Z]", "[Rx]", "[Ry]", "[Sl 1]", "[Sl 2]", "[MiniStick X]", "[MiniStick Y]", "[Ratón X]", "[Ratón Y]" };
-            n = n + nombreEje[neje] + " ";
+        //        String[] nombreEje = new String[] { "[Ninguno]", "[X]", "[Y]", "[R]", "[Z]", "[Rx]", "[Ry]", "[Sl 1]", "[Sl 2]", "[MiniStick X]", "[MiniStick Y]", "[Ratón X]", "[Ratón Y]" };
+        //        n = n + nombreEje[neje] + " ";
 
-            if (incremental)
-            {
-                if (peque)
-                {
-                    DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, e, m, p);
-                    if (ri.Indice > 0) n = n + "+" + ri.ACCIONESRow.Nombre; else n = n + " ";
-                    ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, e, m, p);
-                    if (ri.Indice > 0) n = n + "/-" + ri.ACCIONESRow.Nombre; else n = n + "/ ";
-                }
-                else
-                {
-                    DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(0, e, m, p);
-                    if (ri.Indice > 0) n = n + "+" + ri.ACCIONESRow.Nombre; else n = n + " ";
-                    ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(1, e, m, p);
-                    if (ri.Indice > 0) n = n + "/-" + ri.ACCIONESRow.Nombre; else n = n + "/ ";
-                }
-            }
-            else
-            {
-                if (peque)
-                {
-                    byte[] bandas = padre.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).Bandas;
-                    byte nBandas = 0;
-                    foreach (byte b in bandas)
-                    {
-                        if (b == 0)
-                            break;
-                        else
-                            nBandas++;
-                    }
-                    for (byte i = 0; i < nBandas; i++)
-                    {
-                        DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(i, e, m, p);
-                        n = n + ", " + ri.ACCIONESRow.Nombre;
-                    }
-                }
-                else
-                {
-                    byte[] bandas = padre.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).Bandas;
-                    byte nBandas = 0;
-                    foreach (byte b in bandas)
-                    {
-                        if (b == 0)
-                            break;
-                        else
-                            nBandas++;
-                    }
-                    for (byte i = 0; i < nBandas; i++)
-                    {
-                        DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(i, e, m, p);
-                        n = n + ", " + ri.ACCIONESRow.Nombre;
-                    }
-                }
-            }
+        //        if (incremental)
+        //        {
+        //            if (peque)
+        //            {
+        //                DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, e, m, p);
+        //                if (ri.Indice > 0) n = n + "+" + ri.ACCIONESRow.Nombre; else n = n + " ";
+        //                ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, e, m, p);
+        //                if (ri.Indice > 0) n = n + "/-" + ri.ACCIONESRow.Nombre; else n = n + "/ ";
+        //            }
+        //            else
+        //            {
+        //                DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(0, e, m, p);
+        //                if (ri.Indice > 0) n = n + "+" + ri.ACCIONESRow.Nombre; else n = n + " ";
+        //                ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(1, e, m, p);
+        //                if (ri.Indice > 0) n = n + "/-" + ri.ACCIONESRow.Nombre; else n = n + "/ ";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (peque)
+        //            {
+        //                byte[] bandas = padre.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).Bandas;
+        //                byte nBandas = 0;
+        //                foreach (byte b in bandas)
+        //                {
+        //                    if (b == 0)
+        //                        break;
+        //                    else
+        //                        nBandas++;
+        //                }
+        //                for (byte i = 0; i < nBandas; i++)
+        //                {
+        //                    DSPerfil.INDICESEJESPEQUERow ri = padre.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(i, e, m, p);
+        //                    n = n + ", " + ri.ACCIONESRow.Nombre;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                byte[] bandas = padre.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).Bandas;
+        //                byte nBandas = 0;
+        //                foreach (byte b in bandas)
+        //                {
+        //                    if (b == 0)
+        //                        break;
+        //                    else
+        //                        nBandas++;
+        //                }
+        //                for (byte i = 0; i < nBandas; i++)
+        //                {
+        //                    DSPerfil.INDICESEJESRow ri = padre.INDICESEJES.FindByididEjeidModoidPinkie(i, e, m, p);
+        //                    n = n + ", " + ri.ACCIONESRow.Nombre;
+        //                }
+        //            }
+        //        }
 
-            return n;
-        }
+        //        return n;
+        //    }
 
-        private String MiniStick(byte p, byte m, byte id)
-        {
-            String n = "";
-            byte neje = padre.MAPAEJESMINI.FindByidEjeidModoidPinkie(id, m, p).nEje;
-            if (neje > 19) { n = "-"; neje -= 20; }
+        //    private String MiniStick(byte p, byte m, byte id)
+        //    {
+        //        String n = "";
+        //        byte neje = padre.MAPAEJESMINI.FindByidEjeidModoidPinkie(id, m, p).nEje;
+        //        if (neje > 19) { n = "-"; neje -= 20; }
 
-            String[] nombreEje = new String[] { "[Ninguno]", "[X]", "[Y]", "[R]", "[Z]", "[Rx]", "[Ry]", "[Sl 1]", "[Sl 2]", "[MiniStick X]", "[MiniStick Y]", "[Ratón X]", "[Ratón Y]" };
-            return n + nombreEje[neje];
-        }
+        //        String[] nombreEje = new String[] { "[Ninguno]", "[X]", "[Y]", "[R]", "[Z]", "[Rx]", "[Ry]", "[Sl 1]", "[Sl 2]", "[MiniStick X]", "[MiniStick Y]", "[Ratón X]", "[Ratón Y]" };
+        //        return n + nombreEje[neje];
+        //    }
     }
 }

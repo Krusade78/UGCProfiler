@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -17,59 +9,43 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|ARM">
-      <Configuration>Debug</Configuration>
-      <Platform>ARM</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|ARM">
-      <Configuration>Release</Configuration>
-      <Platform>ARM</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|ARM64">
-      <Configuration>Debug</Configuration>
-      <Platform>ARM64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|ARM64">
-      <Configuration>Release</Configuration>
-      <Platform>ARM64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AccionesGenerar.c" />
-    <ClCompile Include="AccionesProcesar.c" />
-    <ClCompile Include="botones_setas.c" />
-    <ClCompile Include="CalibradoHID.c" />
-    <ClCompile Include="cola.c" />
-    <ClCompile Include="directx.c" />
+    <ClCompile Include="EventosProcesar.c" />
+    <ClCompile Include="MenuMFD.c" />
+    <ClCompile Include="Perfil.c" />
+    <ClCompile Include="ProcesarUSBs_Ejes.c" />
+    <ClCompile Include="ProcesarUSBs_Calibrado.c" />
     <ClCompile Include="Driver.c" />
-    <ClCompile Include="ejes_raton.c" />
-    <ClCompile Include="mapa.c" />
-    <ClCompile Include="Pedales_read.c" />
-    <ClCompile Include="Pnp.c" />
+    <ClCompile Include="ProcesarUSBs_Botones-Setas.c" />
+    <ClCompile Include="EventosGenerar.c" />
+    <ClCompile Include="LeerUSBPedales.c" />
+    <ClCompile Include="PnPPedales.c" />
+    <ClCompile Include="PnPPower.c" />
+    <ClCompile Include="LeerUSBX52.c" />
+    <ClCompile Include="ProcesarUSBs.c" />
     <ClCompile Include="ProcesarHID.c" />
-    <ClCompile Include="RequestHID_read.c" />
-    <ClCompile Include="UserModeIO_read.c" />
-    <ClCompile Include="X52_read.c" />
-    <ClCompile Include="X52_write.c" />
+    <ClCompile Include="IoCtlAplicacion.c" />
+    <ClCompile Include="EscribirUSBX52.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AccionesGenerar.h" />
-    <ClInclude Include="AccionesProcesar.h" />
-    <ClInclude Include="botones_setas.h" />
-    <ClInclude Include="CalibradoHID.h" />
-    <ClInclude Include="cola.h" />
+    <ClInclude Include="MenuMFD.h" />
+    <ClInclude Include="ProcesarUSBs_Ejes.h" />
+    <ClInclude Include="Perfil.h" />
+    <ClInclude Include="ProcesarUSBs_Calibrado.h" />
+    <ClInclude Include="ProcesarUSBs_Botones-Setas.h" />
+    <ClInclude Include="EventosProcesar.h" />
     <ClInclude Include="Context.h" />
-    <ClInclude Include="directx.h" />
     <ClInclude Include="Driver.h" />
-    <ClInclude Include="ejes_raton.h" />
-    <ClInclude Include="mapa.h" />
-    <ClInclude Include="Pedales_read.h" />
-    <ClInclude Include="PnP.h" />
+    <ClInclude Include="EventosGenerar.h" />
+    <ClInclude Include="LeerUSBPedales.h" />
+    <ClInclude Include="PnPPedales.h" />
+    <ClInclude Include="PnPPower.h" />
+    <ClInclude Include="LeerUSBX52.h" />
+    <ClInclude Include="ProcesarUSBs.h" />
     <ClInclude Include="ProcesarHID.h" />
-    <ClInclude Include="RequestHID_read.h" />
-    <ClInclude Include="UserModeIO_read.h" />
-    <ClInclude Include="X52_read.h" />
-    <ClInclude Include="X52_write.h" />
+    <ClInclude Include="IoCtlAplicacion.h" />
+    <ClInclude Include="EscribirUSBX52.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{203E69E3-C0B6-41BC-A809-57E68E3BF0C8}</ProjectGuid>
@@ -79,41 +55,21 @@
     <Configuration>Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
     <RootNamespace>xhotas_usb</RootNamespace>
-    <SccProjectName>SAK</SccProjectName>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccProvider>SAK</SccProvider>
+    <ProjectName>xhotas_usb</ProjectName>
     <WindowsTargetPlatformVersion>$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+    <SccProjectName>$/Driver joystick/Driver/xhotas_usb</SccProjectName>
+    <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
+    <SccLocalPath>.</SccLocalPath>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <TargetVersion>Windows10</TargetVersion>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <ConfigurationType>Driver</ConfigurationType>
-    <DriverType>KMDF</DriverType>
-    <DriverTargetPlatform>Universal</DriverTargetPlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <TargetVersion>Windows10</TargetVersion>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <ConfigurationType>Driver</ConfigurationType>
-    <DriverType>KMDF</DriverType>
-    <DriverTargetPlatform>Universal</DriverTargetPlatform>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <TargetVersion>
-    </TargetVersion>
+    <TargetVersion>Windows10</TargetVersion>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <ConfigurationType>Driver</ConfigurationType>
     <DriverType>KMDF</DriverType>
     <DriverTargetPlatform>Universal</DriverTargetPlatform>
-    <KMDF_VERSION_MAJOR>
-    </KMDF_VERSION_MAJOR>
-    <KMDF_VERSION_MINOR>
-    </KMDF_VERSION_MINOR>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <TargetVersion>Windows10</TargetVersion>
@@ -122,38 +78,9 @@
     <ConfigurationType>Driver</ConfigurationType>
     <DriverType>KMDF</DriverType>
     <DriverTargetPlatform>Universal</DriverTargetPlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
-    <TargetVersion>Windows10</TargetVersion>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <ConfigurationType>Driver</ConfigurationType>
-    <DriverType>KMDF</DriverType>
-    <DriverTargetPlatform>Universal</DriverTargetPlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
-    <TargetVersion>Windows10</TargetVersion>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <ConfigurationType>Driver</ConfigurationType>
-    <DriverType>KMDF</DriverType>
-    <DriverTargetPlatform>Universal</DriverTargetPlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
-    <TargetVersion>Windows10</TargetVersion>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <ConfigurationType>Driver</ConfigurationType>
-    <DriverType>KMDF</DriverType>
-    <DriverTargetPlatform>Universal</DriverTargetPlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
-    <TargetVersion>Windows10</TargetVersion>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-    <ConfigurationType>Driver</ConfigurationType>
-    <DriverType>KMDF</DriverType>
-    <DriverTargetPlatform>Universal</DriverTargetPlatform>
+    <KMDF_VERSION_MAJOR>1</KMDF_VERSION_MAJOR>
+    <KMDF_VERSION_MINOR>31</KMDF_VERSION_MINOR>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -163,47 +90,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(ProjectDir)$(Platform)\$(ConfigurationName)\</OutDir>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <OutDir>$(ProjectDir)$(Platform)\$(ConfigurationName)\</OutDir>
+    <Inf2CatUseLocalTime>true</Inf2CatUseLocalTime>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WppEnabled>false</WppEnabled>
-      <WppRecorderEnabled>true</WppRecorderEnabled>
-      <WppScanConfigurationData Condition="'%(ClCompile.ScanConfigurationData)' == ''">trace.h</WppScanConfigurationData>
-      <WppKernelMode>true</WppKernelMode>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WppEnabled>true</WppEnabled>
-      <WppRecorderEnabled>true</WppRecorderEnabled>
-      <WppScanConfigurationData Condition="'%(ClCompile.ScanConfigurationData)' == ''">trace.h</WppScanConfigurationData>
-      <WppKernelMode>true</WppKernelMode>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WppEnabled>false</WppEnabled>
@@ -212,54 +108,28 @@
       <WppKernelMode>true</WppKernelMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(DDK_LIB_PATH)wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(DDK_LIB_PATH)\wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WppEnabled>true</WppEnabled>
+      <WppEnabled>false</WppEnabled>
       <WppRecorderEnabled>true</WppRecorderEnabled>
       <WppScanConfigurationData Condition="'%(ClCompile.ScanConfigurationData)' == ''">trace.h</WppScanConfigurationData>
       <WppKernelMode>true</WppKernelMode>
     </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <ClCompile>
-      <WppEnabled>true</WppEnabled>
-      <WppRecorderEnabled>true</WppRecorderEnabled>
-      <WppScanConfigurationData Condition="'%(ClCompile.ScanConfigurationData)' == ''">trace.h</WppScanConfigurationData>
-      <WppKernelMode>true</WppKernelMode>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <ClCompile>
-      <WppEnabled>true</WppEnabled>
-      <WppRecorderEnabled>true</WppRecorderEnabled>
-      <WppScanConfigurationData Condition="'%(ClCompile.ScanConfigurationData)' == ''">trace.h</WppScanConfigurationData>
-      <WppKernelMode>true</WppKernelMode>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <ClCompile>
-      <WppEnabled>true</WppEnabled>
-      <WppRecorderEnabled>true</WppRecorderEnabled>
-      <WppScanConfigurationData Condition="'%(ClCompile.ScanConfigurationData)' == ''">trace.h</WppScanConfigurationData>
-      <WppKernelMode>true</WppKernelMode>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <ClCompile>
-      <WppEnabled>true</WppEnabled>
-      <WppRecorderEnabled>true</WppRecorderEnabled>
-      <WppScanConfigurationData Condition="'%(ClCompile.ScanConfigurationData)' == ''">trace.h</WppScanConfigurationData>
-      <WppKernelMode>true</WppKernelMode>
-    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(DDK_LIB_PATH)\wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Inf>
+      <TimeStamp>8.0.0.4</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemGroup>
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="xhotas_usb.inx" />
+    <Inf Include="xhotas_usb.inf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,9 +1,0 @@
-makecert -r -pe -n "CN=Alfredo CA" -ss CA -a sha256 -cy authority -sky signature -sv CA.pvk -sr LocalMachine CA.cer
-makecert -pe -n "CN=Alfredo Code-Signing" -a sha256 -cy end -sky signature -ic ca.cer -iv CA.pvk -sv CodeSigning.pvk CodeSigning.cer
-pvk2pfx -pvk CodeSigning.pvk -spc CodeSigning.cer -pfx CodeSigning.pfx
-
-signtool sign /v /f CodeSigning.pfx /t http://timestamp.verisign.com/scripts/timestamp.dll archivo
-
-certmgr -add -c ca.cer -r localmachine -s root
-certmgr -add -c CodeSigning.cer -r localmachine -s TrustedPublisher
-inf2cat /drv:. /os:7_x64

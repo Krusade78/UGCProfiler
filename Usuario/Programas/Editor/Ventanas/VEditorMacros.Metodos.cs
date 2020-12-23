@@ -2,17 +2,17 @@
 using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Input;
-using static Editor.CEnums;
+using static Comunes.CTipos;
 
 namespace Editor
 {
     internal partial class VEditorMacros
     {
         private MainWindow padre;
-        private int indicep;
-        private static int ultimaPlantilla = -1;
-        private List<ushort> macro = new List<ushort>();
-        private List<byte> teclas = new List<byte>();
+        private readonly int indicep;
+        private static readonly int ultimaPlantilla = -1;
+        private readonly List<byte> teclas = new List<byte>();
+        private readonly DataSetMacros dsMacros = new DataSetMacros();
 
         private void Iniciar()
         {
@@ -23,18 +23,25 @@ namespace Editor
                 return;
             }
 
+            dsMacros.MACROS.DefaultView.Sort = "id";
+            ListBox1.DataContext = dsMacros.MACROS.DefaultView;
+
             if (indicep > -1)
             {
-                DSPerfil.ACCIONESRow r = padre.GetDatos().Perfil.ACCIONES.FindByidAccion((ushort)indicep);
+                Comunes.DSPerfil.ACCIONESRow r = padre.GetDatos().Perfil.ACCIONES.FindByidAccion((ushort)indicep);
                 TextBoxNombre.Text = r.Nombre;
+
+                List<ushort> macro = new List<ushort>();
                 foreach (ushort c in r.Comandos)
+                {
                     macro.Add(c);
+                }
 
                 // Comprobar el check de enviar el nombre al mfd
                 bool idc = false;
                 if (macro.Count >= 2)
                 {
-                    if (macro[0] == ((byte)TipoC.TipoComando_MfdTexto + (3 << 8)))
+                    if (macro[0] == ((byte)TipoComando.TipoComando_MfdTextoIni + (3 << 8)))
                         idc = true;
                 }
                 if (idc)
@@ -42,30 +49,33 @@ namespace Editor
                     bool nombreOk = true;
                     string st = r.Nombre;
                     if (st.Length > 16)
+                    {
                         st = st.Substring(0, 16);
+                    }
+                    st = st.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
                     byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st));
 
                     if (macro.Count >= (st.Length + 2))
                     {
                         for (int i = 0; i < st.Length; i++)
                         {
-                            ushort comando = (ushort)((byte)TipoC.TipoComando_MfdTexto + (stb[i] << 8));
+                            ushort comando = (ushort)((byte)TipoComando.TipoComando_MfdTexto + (stb[i] << 8));
                             if (comando != macro[i + 1])
                             {
                                 nombreOk = false;
                                 break;
                             }
                         }
-                        if ((macro[st.Length + 1] == (byte)TipoC.TipoComando_MfdTextoFin) && nombreOk)
+                        if ((macro[st.Length + 1] == (byte)TipoComando.TipoComando_MfdTextoFin) && nombreOk)
                         {
-                            for (byte i = 0; i <= st.Length + 1; i++)
+                            for (byte i = 0; i <= (st.Length + 1); i++)
                                 macro.RemoveAt(0);
 
                             CheckBox1.IsChecked = true;
                         }
                     }
                 }
-                CargarLista();
+                CargarLista(ref macro);
             }
             else
             {
@@ -74,16 +84,62 @@ namespace Editor
             PasarABasico();
         }
 
+        private void CargarLista(ref List<ushort> macros)
+        {
+            byte mtr = 0;
+
+            List<ushort> bloque = new List<ushort>();
+            for (int i = 0; i < macros.Count; i++)
+            {
+                byte tipo = (byte)(macros[i] & 0x7f);
+
+                if (tipo == (byte)TipoComando.TipoComando_MfdTextoIni)
+                {
+                    bloque.Add(macros[i]);
+                }
+                else if (tipo  == (byte)TipoComando.TipoComando_MfdTexto)
+                {
+                    bloque.Add(macros[i]);
+                }
+                else if (tipo == (byte)TipoComando.TipoComando_MfdTextoFin)
+                {
+                    bloque.Add(macros[i]);
+                    dsMacros.MACROS.AddMACROSRow(mtr++, "", bloque.ToArray());
+                    bloque.Clear();
+
+                }
+                else if (tipo == (byte)TipoComando.TipoComando_MfdHora)
+                {
+                    dsMacros.MACROS.AddMACROSRow(mtr++, "", new ushort[] { macros[i], macros[i + 1], macros[i + 2] });
+                    i += 2;
+                }
+                else if (tipo == (byte)TipoComando.TipoComando_MfdHora24)
+                {
+                    dsMacros.MACROS.AddMACROSRow(mtr++, "", new ushort[] { macros[i], macros[i + 1], macros[i + 2] });
+                    i += 2;
+                }
+                else if (tipo == (byte)TipoComando.TipoComando_MfdFecha)
+                {
+                    dsMacros.MACROS.AddMACROSRow(mtr++, "", new ushort[] { macros[i], macros[i + 1] });
+                    i++;
+                }
+                else
+                {
+                    dsMacros.MACROS.AddMACROSRow(mtr++, "", new ushort[] { macros[i] });
+                }
+            }
+        }
+
         private void PasarABasico()
         {
-            PanelX52.Visibility = System.Windows.Visibility.Visible;
-            PanelSetas.Visibility = System.Windows.Visibility.Visible;
-            PanelRatonOff.Visibility = System.Windows.Visibility.Visible;
-            PanelMovimiento.Visibility = System.Windows.Visibility.Visible;
-            PanelEspecial.Visibility = System.Windows.Visibility.Visible;
-            PanelModos.Visibility = System.Windows.Visibility.Visible;
-            PanelPlantilla.Visibility = System.Windows.Visibility.Visible;
-            PanelTecla.Visibility = System.Windows.Visibility.Visible;
+            PanelX52.Visibility = Visibility.Visible;
+            PanelSetas.Visibility = Visibility.Visible;
+            PanelRatonOff.Visibility = Visibility.Visible;
+            PanelMovimiento.Visibility = Visibility.Visible;
+            PanelEspecial.Visibility = Visibility.Visible;
+            PanelModos.Visibility = Visibility.Visible;
+            PanelPlantilla.Visibility = Visibility.Visible;
+            PanelTecla.Visibility = Visibility.Visible;
 
             ButtonDXOff.IsEnabled = false;
             ButtonSubir.IsEnabled = false;
@@ -92,14 +148,14 @@ namespace Editor
 
         private void PasarAAvanzado()
         {
-            PanelX52.Visibility = System.Windows.Visibility.Collapsed;
-            PanelSetas.Visibility = System.Windows.Visibility.Collapsed;
-            PanelRatonOff.Visibility = System.Windows.Visibility.Collapsed;
-            PanelMovimiento.Visibility = System.Windows.Visibility.Collapsed;
-            PanelEspecial.Visibility = System.Windows.Visibility.Collapsed;
-            PanelModos.Visibility = System.Windows.Visibility.Collapsed;
-            PanelPlantilla.Visibility = System.Windows.Visibility.Collapsed;
-            PanelTecla.Visibility = System.Windows.Visibility.Collapsed;
+            PanelX52.Visibility = Visibility.Collapsed;
+            PanelSetas.Visibility = Visibility.Collapsed;
+            PanelRatonOff.Visibility = Visibility.Collapsed;
+            PanelMovimiento.Visibility = Visibility.Collapsed;
+            PanelEspecial.Visibility = Visibility.Collapsed;
+            PanelModos.Visibility = Visibility.Collapsed;
+            PanelPlantilla.Visibility = Visibility.Collapsed;
+            PanelTecla.Visibility = Visibility.Collapsed;
 
             ButtonDXOff.IsEnabled = true;
             ButtonSubir.IsEnabled = true;
@@ -117,7 +173,7 @@ namespace Editor
                 if (VEditorMacros.ultimaPlantilla != -1)
                 {
                     vtSelPlantilla.SelectedIndex = VEditorMacros.ultimaPlantilla;
-                    CargarPlantilla(VEditorMacros.ultimaPlantilla);
+                    CargarPlantilla();
                 }
                 else
                 {
@@ -146,7 +202,7 @@ namespace Editor
                             break;
                     }
                     vtSelPlantilla.SelectedIndex = idx;
-                    CargarPlantilla(idx);
+                    CargarPlantilla();
                 }
             }
             else
@@ -159,14 +215,17 @@ namespace Editor
 
         }
 
-        private void CargarPlantilla(int idx)
+        private void CargarPlantilla()
         {
             ComboBox1.Items.Clear();
+            dsMacros.TECLAS.Clear();
             using (System.IO.StreamReader f = new System.IO.StreamReader(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Editor.Plantillas." + vtSelPlantilla.SelectedItem + ".kbp")))
             {
                 while (f.Peek() >= 0)
                 {
-                    ComboBox1.Items.Add(f.ReadLine());
+                    string linea = f.ReadLine();
+                    ComboBox1.Items.Add(linea);
+                    dsMacros.TECLAS.AddTECLASRow(linea);
                 }
                 ComboBox1.SelectedIndex = 0;
             }
@@ -174,474 +233,267 @@ namespace Editor
         #endregion
 
         #region "Lista"
-        private void CargarLista()
+        private int GetCuenta()
         {
-            bool soltar;
-            byte tipo;
-            byte dato;
-            ListBox1.Items.Clear();
-            for (int i = 0; i < macro.Count; i++)
+            int n = 0;
+            foreach (System.Data.DataRowView rv in dsMacros.MACROS.DefaultView)
             {
-                tipo = (byte)(macro[i] & 0xff);
-                dato = (byte)(macro[i] >> 8);
-                if (tipo >= 32)
+                foreach (ushort c in ((DataSetMacros.MACROSRow)rv.Row).comando)
                 {
-                    soltar = true;
-                    tipo = (byte)(tipo - 32);
-                }
-                else
-                    soltar = false;
-                switch ((TipoC)tipo)
-                {
-                    case TipoC.TipoComando_Tecla:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Soltar " + Convert.ToString(ComboBox1.Items[dato]).Remove(0, Convert.ToString(ComboBox1.Items[dato]).IndexOf(" ")));
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Presionar " + Convert.ToString(ComboBox1.Items[dato]).Remove(0, Convert.ToString(ComboBox1.Items[dato]).IndexOf(" ")));
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonBt1:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Botón 1 Off");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Botón 1 On");
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonBt2:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Botón 2 Off");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Botón 2 On");
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonBt3:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Botón 3 Off");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Botón 3 On");
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonIzq:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Izquierda 0");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Izquierda " + dato);
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonDer:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Derecha 0");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Derecha " + dato);
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonAba:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Abajo 0");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Abajo " + dato);
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonArr:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Arriba 0");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Arriba " + dato);
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonWhArr:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Rueda arriba Off");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Rueda arriba On");
-                        }
-                        break;
-                    case TipoC.TipoComando_RatonWhAba:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Ratón->Rueba abajo Off");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Ratón->Rueda abajo On");
-                        }
-                        break;
-                    case TipoC.TipoComando_Delay:
-                        ListBox1.Items.Add("Pausa " + dato);
-                        break;
-                    case TipoC.TipoComando_Hold:
-                        ListBox1.Items.Add("Mantener");
-                        break;
-                    case TipoC.TipoComando_Repeat:
-                        if (soltar)
-                            ListBox1.Items.Add("/-- Repetir Fin");
-                        else
-                            ListBox1.Items.Add("/-- Repetir Inicio");
-                        break;
-                    case TipoC.TipoComando_RepeatN:
-                        if (soltar)
-                            ListBox1.Items.Add("/-- Repetir N Fin");
-                        else
-                            ListBox1.Items.Add("/-- Repetir N[" + dato + "] Inicio");
-                        break;
-                    case TipoC.TipoComando_Modo:
-                        ListBox1.Items.Add("Modo " + (dato + 1));
-                        break;
-                    case TipoC.TipoComando_Pinkie:
-                        if (dato == 0)
-                            ListBox1.Items.Add("Pinkie Off");
-                        else
-                            ListBox1.Items.Add("Pinkie On");
-                        break;
-                    case TipoC.TipoComando_DxBoton:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Botón DX " + (dato + 1) + " Off");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Botón DX " + (dato + 1) + " On");
-                        }
-                        break;
-                    case TipoC.TipoComando_DxSeta:
-                        if (soltar)
-                        {
-                            ListBox1.Items.Add("Seta DX " + ((dato / 8) + 1) + ((dato % 8) + 1) + " Off");
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("Seta DX " + ((dato / 8) + 1) + ((dato % 8) + 1) + " On");
-                        }
-                        break;
-                    case TipoC.TipoComando_MfdLuz:
-                        ListBox1.Items.Add("Luz MFD " + dato);
-                        break;
-                    case TipoC.TipoComando_Luz:
-                        ListBox1.Items.Add("Luz Botones " + dato);
-                        break;
-                    case TipoC.TipoComando_InfoLuz:
-                        if (dato == 0)
-                            ListBox1.Items.Add("Luz Info Off");
-                        else
-                            ListBox1.Items.Add("Luz Info On");
-                        break;
-                    case TipoC.TipoComando_MfdPinkie:
-                        if (dato == 0)
-                            ListBox1.Items.Add("MFD Pinkie Off");
-                        else
-                            ListBox1.Items.Add("MFD Pinkie On");
-                        break;
-                    case TipoC.TipoComando_MfdTexto:
-                        string texto = "Línea de texto " + dato;
-                        byte[] ascii = new byte[16];
-                        byte j = 0;
-                        while (macro[i + 1] != (ushort)TipoC.TipoComando_MfdTextoFin)
-                        {
-                            i++;
-                            ascii[j] = (byte)(macro[i] >> 8);
-                            j++;
-                        }
-                        i++;
-                        texto += "  " + System.Text.Encoding.Convert(System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode, ascii);
-                        texto = texto.Replace('ø', 'ñ').Replace('Ó', 'á').Replace('ß', 'í').Replace('Ô', 'ó').Replace('Ò', 'ú').Replace('£', 'Ñ').Replace('Ø', 'ª').Replace('×', 'º').Replace('ƒ', '¿').Replace('Ú', '¡');
-                        ListBox1.Items.Add(texto);
-                        break;
-                    case TipoC.TipoComando_MfdHora:
-                        if (dato == 1)
-                        {
-                            ListBox1.Items.Add("MFD Hora " + dato + "(AM/PM)" + (macro[i + 1] >> 8) + ":" + (macro[i + 2] >> 8));
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("MFD Hora " + dato + "(AM/PM)" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) / 60) + ":" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) % 60));
-                        }
-                        i += 2;
-                        break;
-                    case TipoC.TipoComando_MfdHora24:
-                        if (dato == 1)
-                        {
-                            ListBox1.Items.Add("MFD Hora " + dato + "(24H)" + (macro[i + 1] >> 8) + ":" + (macro[i + 2] >> 8));
-                        }
-                        else
-                        {
-                            ListBox1.Items.Add("MFD Hora " + dato + "(24H)" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) / 60) + ":" + ((((macro[i + 1] >> 8) * 256) + (macro[i + 2] >> 8)) % 60));
-                        }
-                        i = i + 2;
-                        break;
-                    case TipoC.TipoComando_MfdFecha:
-                        ListBox1.Items.Add("MFD Fecha " + dato + " " + (macro[i + 1] >> 8));
-                        i = i + 1;
-                        break;
+                    n++;
                 }
             }
-
+            return n;
         }
 
-        private int GetIndice()
+        /// <summary>
+        /// Se inserta por encima de la selección
+        /// </summary>
+        /// <returns>Devuelve la posición de inserción</returns>
+        private byte GetIndice()
         {
-            if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == (ListBox1.Items.Count - 1)))
-                return macro.Count;
+            if (dsMacros.MACROS.DefaultView.Count == 0)
+            {
+                return 0;
+            }
+            if (ListBox1.SelectedIndex == -1) //al final
+            {              
+                return (byte)(((DataSetMacros.MACROSRow)dsMacros.MACROS.DefaultView[dsMacros.MACROS.DefaultView.Count - 1].Row).id + 1);
+            }
             else
             {
-                int real = 0;
-                int ficticio = 0;
-                TipoC tipo;
-                for (real = 0; real < macro.Count; real++)
+                return ((DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row).id;
+            }
+        }
+
+        private void Insertar(ushort[] bloque, bool separados)
+        {
+            byte idInicio = GetIndice();
+
+            //hacer hueco
+            for (int i = dsMacros.MACROS.Count - 1; i >= 0; i--)
+            {
+                System.Data.DataRowView rvBusca = dsMacros.MACROS.DefaultView[i];
+                if (((DataSetMacros.MACROSRow)rvBusca.Row).id >= idInicio)
                 {
-                    if (ficticio == ListBox1.SelectedIndex)
-                        break;
-                    tipo = (TipoC)(macro[real] & 0xFF);
-                    if (tipo > (TipoC)31) tipo -= 32; //quitar el soltar
-                    if (tipo < TipoC.TipoComando_MfdTexto)
-                        ficticio++;
-                    else if (tipo == TipoC.TipoComando_MfdTexto)
+                    if (separados)
                     {
-                        if ((TipoC)macro[real] == TipoC.TipoComando_MfdTextoFin)
-                            ficticio++;
-                    }
-                    else if (tipo < TipoC.TipoComando_MfdFecha)
-                    {
-                        ficticio++;
-                        real += 2;
+                        ((DataSetMacros.MACROSRow)rvBusca.Row).id += (byte)bloque.Length;
                     }
                     else
                     {
-                        ficticio++;
-                        real++;
+                        ((DataSetMacros.MACROSRow)rvBusca.Row).id++;
                     }
                 }
-                return real;
+                else
+                    break;
+            }
+
+            if (separados)
+            {
+                byte c = 0;
+                foreach (ushort comando in bloque)
+                {
+                    dsMacros.MACROS.AddMACROSRow((byte)(idInicio + c++), "", new ushort[] { comando });
+                }
+            }
+            else
+            {
+                dsMacros.MACROS.AddMACROSRow(idInicio, "", bloque);
             }
         }
 
-        private void BorrarMacroLista(int idx, bool noRepeats)
+        private void BorrarMacroLista()
         {
-            if (idx == -1)
+            if (ListBox1.SelectedIndex == -1)
                 return;
 
             if (RadioButtonAvanzado.IsChecked != true)
             {
                 if (RadioButtonBasico.IsChecked == true)
                 {
-                    macro.Clear();
-                    ListBox1.Items.Clear();
+                    dsMacros.MACROS.Clear();
                 }
             }
             else
             {
-                int idc = GetIndice();
-                if (ListBox1.SelectedIndex == (ListBox1.Items.Count - 1))
+                DataSetMacros.MACROSRow rsel = (DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row;
+                byte tipo = (byte)(rsel.comando[0] & 0x7F);
+                if (tipo == (byte)TipoComando.TipoComando_Repeat)
                 {
-                    idc--;
-                    if ((TipoC)macro[idc] == TipoC.TipoComando_MfdTextoFin)
+                    if (((byte)(rsel.comando[0] & 0xff) & (byte)TipoComando.TipoComando_Soltar) == 0) //inicio repeat
                     {
-                        int i;
-                        for (i = idc - 1; i >= 0; i--)
+                        foreach (DataSetMacros.MACROSRow rBusca in dsMacros.MACROS)
                         {
-                            if ((TipoC)(macro[i] & 0xFF) != TipoC.TipoComando_MfdTexto)
+                            if ((rBusca.id > rsel.id) &&  
+                                ((byte)(rBusca.comando[0] & 0x7F) == (byte)TipoComando.TipoComando_Repeat))
                             {
-                                idc = i + 1;
+                                rBusca.Delete();
                                 break;
                             }
                         }
-                        if (i == -1)
-                            idc = 0;
-                        else if ((idc - 1) > -1)
+                        rsel.Delete();
+                    }
+                    else //fin repeat
+                    {
+                        foreach (DataSetMacros.MACROSRow rBusca in dsMacros.MACROS)
                         {
-                            if ((TipoC)(macro[idc - 1] & 0xFF) == TipoC.TipoComando_MfdFecha)
-                                idc--;
-                            else if ((idc - 2) > -1)
+                            if ((rBusca.id < rsel.id) && //hace falta porque en la tabla puede estar desordenado
+                                ((byte)(rBusca.comando[0] & 0x7F) == (byte)TipoComando.TipoComando_Repeat))
                             {
-                                if (((TipoC)(macro[idc - 2] & 0xFF) == TipoC.TipoComando_MfdHora24) || ((TipoC)(macro[idc - 2] & 0xFF) == TipoC.TipoComando_MfdHora))
-                                    idc -= 2;
+                                rBusca.Delete();
+                                break;
                             }
                         }
+                        rsel.Delete();
                     }
-                    TipoC tipo = (TipoC)(macro[idc] & 0xFF);
-                    if (!noRepeats)
+                }
+                else if (tipo == (byte)TipoComando.TipoComando_RepeatN)
+                {
+                    if ((byte)(rsel.comando[0] & 0xff & (byte)TipoComando.TipoComando_Soltar) == 0)
                     {
-                        switch (tipo)
+                        byte anidado = 1;
+                        foreach (System.Data.DataRowView rvBusca in dsMacros.MACROS.DefaultView)
                         {
-                            case TipoC.TipoComando_Repeat:
-                                for (int i = idc; i < macro.Count; i++)
+                            DataSetMacros.MACROSRow rBusca = (DataSetMacros.MACROSRow)rvBusca.Row;
+                            if (rBusca.id > rsel.id)
+                            {
+                                if ((byte)(rBusca.comando[0] & 0x7F) == (byte)TipoComando.TipoComando_RepeatN)
                                 {
-                                    if ((TipoC)macro[i] == TipoC.TipoComando_RepeatFin)
-                                    {
-                                        macro.RemoveAt(i);
-                                        break;
-                                    }
+                                    if ((rBusca.comando[0] & 0xff & (byte)TipoComando.TipoComando_Soltar) != 0)
+                                        anidado--;
+                                    else
+                                        anidado++;
                                 }
-                                break;
-                            case TipoC.TipoComando_RepeatN:
-                                for (int i = idc; i < macro.Count; i++)
+                                if ((anidado == 0) &&
+                                        ((byte)(rBusca.comando[0] & 0x7F) == (byte)TipoComando.TipoComando_RepeatN) &&
+                                        ((byte)(rBusca.comando[0] & (byte)TipoComando.TipoComando_Soltar) != 0)) //fin repeatn
                                 {
-                                    if ((TipoC)macro[i] == TipoC.TipoComando_RepeatNFin)
-                                    {
-                                        macro.RemoveAt(i);
-                                        break;
-                                    }
+                                    rBusca.Delete();
+                                    break;
                                 }
-                                break;
-                            case TipoC.TipoComando_RepeatFin:
-                                macro.RemoveAt(idc);
-                                for (int i = idc - 1; i >= 0; i--)
-                                {
-                                    if ((TipoC)macro[i] == TipoC.TipoComando_Repeat)
-                                    {
-                                        macro.RemoveAt(i);
-                                        break;
-                                    }
-                                }
-                                CargarLista();
-                                return;
-                            case TipoC.TipoComando_RepeatNFin:
-                                macro.RemoveAt(idc);
-                                for (int i = idc - 1; i >= 0; i--)
-                                {
-                                    if ((TipoC)macro[i] == TipoC.TipoComando_RepeatN)
-                                    {
-                                        macro.RemoveAt(i);
-                                        break;
-                                    }
-                                }
-                                CargarLista();
-                                return;
+                            }
                         }
-                    }
-                    if (tipo > (TipoC)31) tipo -= 32;
-                    if (tipo < TipoC.TipoComando_MfdTexto)
-                        macro.RemoveAt(idc);
-                    else if (tipo == TipoC.TipoComando_MfdTexto)
-                    {
-                        macro.RemoveAt(idc);
-                        for (byte i = 0; i <= 16; i++)
-                        {
-                            if ((TipoC)macro[idc] == TipoC.TipoComando_MfdTextoFin)
-                                break;
-
-                            macro.RemoveAt(idc);
-                        }
-                        macro.RemoveAt(idc);
-                    }
-                    else if (tipo < TipoC.TipoComando_MfdFecha)
-                    {
-                        macro.RemoveAt(idc);
-                        macro.RemoveAt(idc);
-                        macro.RemoveAt(idc);
+                        rsel.Delete();
                     }
                     else
                     {
-                        macro.RemoveAt(idc);
-                        macro.RemoveAt(idc);
+                        byte anidado = 1;
+                        DataSetMacros.MACROSRow rUltima = null;
+                        for (int i = rsel.id - 1; i >= 0; i--)
+                        {
+                            System.Data.DataRowView rvBusca = dsMacros.MACROS.DefaultView[i];
+                            DataSetMacros.MACROSRow rBusca = (DataSetMacros.MACROSRow)rvBusca.Row;
+                            {
+                                if ((byte)(rBusca.comando[0] & 0x7F) == (byte)TipoComando.TipoComando_RepeatN)
+                                {
+                                    if ((rBusca.comando[0] & 0xff & (byte)TipoComando.TipoComando_Soltar) != 0)
+                                        anidado++;
+                                    else
+                                        anidado--;
+                                }
+                                if ((anidado == 0) &&
+                                    ((byte)(rBusca.comando[0] & 0x7F) == (byte)TipoComando.TipoComando_RepeatN) &&
+                                    ((rBusca.comando[0] & 0xff & (byte)TipoComando.TipoComando_Soltar) == 0))
+                                {
+                                    rUltima = rBusca;
+                                    break;
+                                }
+                            }
+                        }
+                        rUltima.Delete();
+                        rsel.Delete();
                     }
-                    CargarLista();
                 }
                 else
                 {
-                    macro.Clear();
-                    ListBox1.Items.Clear();
+                    rsel.Delete();
+                }
+
+                //reordenar
+                byte id = 0;
+                foreach (System.Data.DataRowView rvBusca in dsMacros.MACROS.DefaultView)
+                {
+                    DataSetMacros.MACROSRow rBusca = (DataSetMacros.MACROSRow)rvBusca.Row;
+                    if (rBusca.id != id)
+                    {
+                        rBusca.id = id;
+                    }
+                    id++;
                 }
             }
         }
 
-        private void SubirMacroLista(int idx)
+        private void SubirMacroLista()
         {
-            if ((idx == -1) || (ListBox1.SelectedIndex == 0))
+            if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == 0))
                 return;
 
-            int idc1 = GetIndice();
-            int sel = idx;
-            if (idx == (ListBox1.Items.Count - 1))
+            DataSetMacros.MACROSRow rSel = (DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row;
+            DataSetMacros.MACROSRow rAnterior = dsMacros.MACROS.FindByid((byte)(rSel.id - 1));
+            byte tipoSel = (byte)(rSel.comando[0] & 0x7f);
+            byte tipoAnterior = (byte)(rAnterior.comando[0] & 0x7f);
+
+            if ((tipoSel  == (byte)TipoComando.TipoComando_Hold) && 
+                (tipoAnterior == (byte)TipoComando.TipoComando_RepeatN) && ((byte)(rAnterior.comando[0] & (byte)TipoComando.TipoComando_Soltar) != 0)) //fin repeatn
             {
-                idc1--;
-                if ((TipoC)macro[idc1] == TipoC.TipoComando_MfdTextoFin)
-                {
-                    for (int i = idc1 - 1; i >= 0; i--)
-                    {
-                        if ((TipoC)(macro[i] & 0xFF) != TipoC.TipoComando_MfdTexto)
-                        {
-                            idc1 = i + 1;
-                            break;
-                        }
-                    }
-                }
-                else if ((idc1 - 1) > -1)
-                {
-                    if ((TipoC)(macro[idc1 - 1] & 0xFF) == TipoC.TipoComando_MfdFecha)
-                        idc1--;
-                    else if ((idc1 - 2) > -1)
-                    {
-                        if (((TipoC)(macro[idc1 - 2] & 0xFF) == TipoC.TipoComando_MfdHora24) || ((TipoC)(macro[idc1 - 2] & 0xFF) == TipoC.TipoComando_MfdHora))
-                            idc1 -= 2;
-                    }
-                }
+                return;
             }
+            if ((tipoSel == (byte)TipoComando.TipoComando_Repeat) &&   //cualquier repeat
+                ((tipoAnterior == (byte)TipoComando.TipoComando_RepeatN) || (tipoAnterior == (byte)TipoComando.TipoComando_Repeat)))
+            {
+                return;
+            }
+            if ((tipoSel == (byte)TipoComando.TipoComando_RepeatN) && //inicio repeat
+                ((tipoAnterior == (byte)TipoComando.TipoComando_RepeatN) || (tipoAnterior == (byte)TipoComando.TipoComando_Repeat)))
+            {
+                return;
+            }
+
+
+            int sel = ListBox1.SelectedIndex;
+
+            byte idAnterior = rAnterior.id;
+            rAnterior.id = 255;
+            rSel.id = idAnterior;
+            rAnterior.id = (byte)(idAnterior + 1);
+
             ListBox1.SelectedIndex = sel - 1;
-            int idc2 = GetIndice();
-            if ((((TipoC)macro[idc1] == TipoC.TipoComando_Hold) && ((TipoC)macro[idc2] == TipoC.TipoComando_RepeatNFin)) || (((TipoC)macro[idc1] == TipoC.TipoComando_Repeat) && ((TipoC)macro[idc2] == TipoC.TipoComando_RepeatNFin)) ||
-                 (((TipoC)macro[idc1] == TipoC.TipoComando_RepeatN) && ((TipoC)macro[idc2] == TipoC.TipoComando_Hold)) || (((TipoC)macro[idc1] == TipoC.TipoComando_RepeatN) && ((TipoC)macro[idc2] == TipoC.TipoComando_Repeat)))
-                return;
-
-            if ((TipoC)(macro[idc1] & 31) < TipoC.TipoComando_MfdTexto)
-                macro.Insert(idc2, macro[idc1]);
-            else if ((TipoC)(macro[idc1] & 31) == TipoC.TipoComando_MfdTexto)
-            {
-                for (byte i = 0; i <= 17; i++)
-                {
-                    macro.Insert(idc2 + i, macro[idc1 + (i * 2)]);
-                    if ((TipoC)macro[idc2 + i] == TipoC.TipoComando_MfdTextoFin) break;
-                }
-            }
-            else if ((TipoC)(macro[idc1] & 31) < TipoC.TipoComando_MfdFecha)
-            {
-                macro.Insert(idc2, macro[idc1]);
-                macro.Insert(idc2 + 1, macro[idc1 + 2]);
-                macro.Insert(idc2 + 2, macro[idc1 + 4]);
-            }
-            else
-            {
-                macro.Insert(idc2, macro[idc1]);
-                macro.Insert(idc2 + 1, macro[idc1 + 2]);
-            }
-            CargarLista();
-            ListBox1.SelectedIndex = sel + 1;
-            BorrarMacroLista(sel + 1, true);
         }
 
-        private void BajarMacroLista(int idx)
+        private void BajarMacroLista()
         {
-            if ((idx > -1) && (idx < ListBox1.Items.Count - 1))
+            if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == (ListBox1.Items.Count - 1)))
+                return;
+
+            DataSetMacros.MACROSRow rSel = (DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row;
+            DataSetMacros.MACROSRow rSiguiente = dsMacros.MACROS.FindByid((byte)(rSel.id + 1));
+            byte tipoSel = (byte)(rSel.comando[0] & 0x7f);
+            byte tipoSiguiente = (byte)(rSiguiente.comando[0] & 0x7f);
+
+            if ((tipoSel == (byte)TipoComando.TipoComando_Hold) && (tipoSiguiente == (byte)TipoComando.TipoComando_RepeatN))
             {
-                ListBox1.SelectedIndex = ListBox1.SelectedIndex + 1;
-                SubirMacroLista(ListBox1.SelectedIndex);
+                return;
             }
+            if ((tipoSel == (byte)TipoComando.TipoComando_Repeat) &&
+                ((tipoSiguiente == (byte)TipoComando.TipoComando_RepeatN) || (tipoSiguiente == (byte)TipoComando.TipoComando_Repeat)))
+            {
+                return;
+            }
+            if ((tipoSel == (byte)TipoComando.TipoComando_RepeatN) &&
+                ((tipoSiguiente == (byte)TipoComando.TipoComando_RepeatN) || (tipoSiguiente == (byte)TipoComando.TipoComando_Repeat)))
+            {
+                return;
+            }
+
+            int sel = ListBox1.SelectedIndex;
+
+            byte idSiguiente = rSiguiente.id;
+            rSiguiente.id = 255;
+            rSel.id = idSiguiente;
+            rSiguiente.id = (byte)(idSiguiente - 1);
+
+            ListBox1.SelectedIndex = sel + 1;
         }
         #endregion
 
@@ -651,7 +503,7 @@ namespace Editor
                 return;
             else
             {
-                foreach (DSPerfil.ACCIONESRow r in padre.GetDatos().Perfil.ACCIONES.Rows)
+                foreach (Comunes.DSPerfil.ACCIONESRow r in padre.GetDatos().Perfil.ACCIONES.Rows)
                 {
                     if ((r.Nombre == TextBoxNombre.Text.Trim()) && (r.idAccion != indicep))
                     {
@@ -661,34 +513,50 @@ namespace Editor
                 }
             }
 
+            List<ushort> macro = new List<ushort>();
+
             if (CheckBox1.IsChecked == true) //texto x52
             {
                 String st = TextBoxNombre.Text.Trim();
                 if (st.Length > 16)
+                {
                     st = st.Substring(0, 16);
+                }
                 st = st.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
                 byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st));
-                macro.Insert(0, (byte)TipoC.TipoComando_MfdTextoFin);
-                for (int i = (texto.Length - 1); i >= 0; i--)
-                    macro.Insert(0, (ushort)((byte)TipoC.TipoComando_MfdTexto + (texto[i] << 8)));
-                macro.Insert(0, (byte)TipoC.TipoComando_MfdTexto + (3 << 8));
+
+                macro.Add((byte)TipoComando.TipoComando_MfdTextoIni + (3 << 8));
+                for (int i = 0; i < texto.Length; i++)
+                {
+                    macro.Add((ushort)((byte)TipoComando.TipoComando_MfdTexto + (texto[i] << 8)));
+                }
+                macro.Add((byte)TipoComando.TipoComando_MfdTextoFin);
+            }
+
+            foreach (System.Data.DataRowView rv in dsMacros.MACROS.DefaultView)
+            {
+                foreach (ushort c in ((DataSetMacros.MACROSRow)rv.Row).comando)
+                {
+                    macro.Add(c);
+                }
             }
 
             if (indicep == -1)
             {
                 ushort idnuevo = 0;
-                foreach (DSPerfil.ACCIONESRow r in padre.GetDatos().Perfil.ACCIONES.Rows)
+                foreach (Comunes.DSPerfil.ACCIONESRow r in padre.GetDatos().Perfil.ACCIONES.Rows)
                 {
                     if (r.idAccion > idnuevo)
                         idnuevo = r.idAccion;
                 }
                 idnuevo++;
+
                 padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(idnuevo, TextBoxNombre.Text.Trim(), macro.ToArray());
                 this.DialogResult = null;
             }
             else
             {
-                DSPerfil.ACCIONESRow nr = padre.GetDatos().Perfil.ACCIONES.FindByidAccion((ushort)indicep);
+                Comunes.DSPerfil.ACCIONESRow nr = padre.GetDatos().Perfil.ACCIONES.FindByidAccion((ushort)indicep);
                 nr.Nombre = TextBoxNombre.Text.Trim();
                 nr.Comandos = macro.ToArray();
                 this.DialogResult = true;
@@ -700,37 +568,33 @@ namespace Editor
         {
             if (teclas.Count == 0)
                 return;
-            if ((macro.Count + ((mantener) ? 1 : 0) + (teclas.Count * 2)) > 237)
+            if ((GetCuenta() + ((mantener) ? 1 : 0) + (teclas.Count * 2)) > 237)
                 return;
 
             if (RadioButtonBasico.IsChecked == true)
             {
-                macro.Clear();
-                ListBox1.Items.Clear();
+                dsMacros.MACROS.Clear();
             }
 
-            int idc = GetIndice();
-            byte i;
-            for (i = 0; i < teclas.Count; i++)
+            List<ushort> bloque = new List<ushort>();
+            for (byte i = 0; i < teclas.Count; i++)
             {
                 int k = MapKey(teclas[i]);
-                if (k > -1) macro.Insert(idc + i, (ushort)(k << 8));
+                if (k > -1) bloque.Add((ushort)((byte)TipoComando.TipoComando_Tecla + (k << 8)));
             }
             if (mantener)
             {
-                macro.Insert(idc + i, (ushort)TipoC.TipoComando_Hold);
-                i++;
+                bloque.Add((ushort)TipoComando.TipoComando_Hold);
             }
             for (int j = teclas.Count - 1; j >= 0; j--)
             {
                 int k = MapKey(teclas[j]);
                 if (k > -1)
                 {
-                    macro.Insert(idc + i, (ushort)(32 + (k << 8)));
-                    i++;
+                    bloque.Add((ushort)((byte)(TipoComando.TipoComando_Soltar | TipoComando.TipoComando_Tecla) + (k << 8)));
                 }
             }
-            CargarLista();
+            Insertar(bloque.ToArray(), true);
         }
 
         private void LeerTeclado()
@@ -1208,81 +1072,92 @@ namespace Editor
         #region "comandos estado"
         private void Mantener()
         {
-            if (macro.Count > 237)
+            if (GetCuenta() > 237)
                 return;
 
-            int idc = GetIndice();
-            int reps = 0;
-            for (int i = 0; i <= (idc - 1); i++)
+            if (dsMacros.MACROS.DefaultView.Count > 0)
             {
-                if (((TipoC)macro[i] == TipoC.TipoComando_Repeat) || ((TipoC)macro[i] == TipoC.TipoComando_Hold))
-                {
-                    MessageBox.Show("Mantener y Repetir no pueden producirse a la vez", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatN)
-                    reps++;
-                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatNFin)
-                    reps--;
+                if (!ComprobarManternerConRepetir()) return;
             }
-            if (reps == 0)
-            {
-                macro.Insert(idc, (byte)TipoC.TipoComando_Hold);
-                CargarLista();
-            }
-            else
-                MessageBox.Show("Mantener no puede estar dentro de Repetir N.", "Advertencias", MessageBoxButton.OK, MessageBoxImage.Information);
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_Hold }, false);
         }
-
         private void Repetir()
         {
-            if (macro.Count > 236)
+            if (GetCuenta() > 236)
                 return;
 
-            int idc = GetIndice();
-            int reps = 0;
-            for (int i = 0; i <= (idc - 1); i++)
+            if (dsMacros.MACROS.DefaultView.Count > 0)
             {
-                if (((TipoC)macro[i] == TipoC.TipoComando_Repeat) || ((TipoC)macro[i] == TipoC.TipoComando_Hold))
+                if (!ComprobarManternerConRepetir()) return;
+            }
+            Insertar(new ushort[] { (byte)TipoComando.TipoComando_Repeat, (byte)TipoComando.TipoComando_Repeat | (byte)TipoComando.TipoComando_Soltar }, true);
+        }
+
+        private bool ComprobarManternerConRepetir()
+        {
+            foreach (DataSetMacros.MACROSRow r in dsMacros.MACROS)
+            {
+                byte tipo = (byte)(r.comando[0] & 0x7f);
+                if ((tipo == (byte)TipoComando.TipoComando_Repeat) || (tipo == (byte)TipoComando.TipoComando_Hold))
                 {
-                    MessageBox.Show("Mantener y Repetir no pueden producirse a la vez", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
+                    MessageBox.Show("Repetir y Mantener deben ser únicos", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return false;
                 }
-                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatN)
-                    reps++;
-                if ((TipoC)macro[i] == TipoC.TipoComando_RepeatNFin)
-                    reps--;
             }
-            if (reps == 0)
+
+            if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == 0))
             {
-                macro.Insert(idc, (byte)TipoC.TipoComando_Repeat);
-                macro.Insert(idc + 1, (byte)TipoC.TipoComando_RepeatFin);
-                CargarLista();
+                return true;
             }
-            else
-                MessageBox.Show("repetir no puede estar dentro de Repetir N.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            int reps = 0;
+            foreach (System.Data.DataRowView rv in dsMacros.MACROS.DefaultView)
+            {
+                if (rv == (System.Data.DataRowView)ListBox1.SelectedItem)
+                {
+                    break;
+                }
+                byte tipo = (byte)(((DataSetMacros.MACROSRow)rv.Row).comando[0] & 0xff);
+                if ((TipoComando)(tipo & 0x7f) == TipoComando.TipoComando_RepeatN)
+                {
+                    if ((tipo & (byte)TipoComando.TipoComando_Soltar) != 0)
+                    reps--;
+                else
+                    reps++;
+                }
+            }
+            if (reps != 0)
+            {
+                MessageBox.Show("Repetir y Mantener no pueden estar dentro de Repetir N.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                return false;
+            }
+            return true;
         }
         #endregion
 
         #region "MFD"
         private void Linea()
         {
-            if ((macro.Count + 2 + TextBox3.Text.Length) > 237)
+            if ((GetCuenta() + 2 + TextBox3.Text.Length) > 237)
                 return;
 
-            int idc = GetIndice();
-            macro.Insert(idc, (ushort)((byte)TipoC.TipoComando_MfdTexto + ((ushort)NumericUpDown9.Value << 8)));
-            byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(TextBox3.Text));
-            for (byte i = 0; i < TextBox3.Text.Length; i++)
-                macro.Insert(idc + i + 1, (ushort)((byte)TipoC.TipoComando_MfdTexto + (stb[i] << 8)));
-
-            macro.Insert(idc + stb.Length, (byte)TipoC.TipoComando_MfdTextoFin);
-            CargarLista();
+            List<ushort> bloque = new List<ushort>
+            {
+                (ushort)((byte)TipoComando.TipoComando_MfdTextoIni + ((ushort)NumericUpDown9.Value << 8))
+            };
+            String st = TextBox3.Text.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
+            byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st));
+            for (byte i = 0; i < st.Length; i++)
+            {
+                bloque.Add((ushort)((byte)TipoComando.TipoComando_MfdTexto + (stb[i] << 8)));
+            }
+            bloque.Add((byte)TipoComando.TipoComando_MfdTextoFin);
+            Insertar(bloque.ToArray(), false);
         }
 
         private void Hora(bool f24h)
         {
-            if (macro.Count > 235)
+            if (GetCuenta() > 235)
                 return;
             if ((NumericUpDown10.Value < 0) && (NumericUpDown7.Value == 1))
             {
@@ -1290,38 +1165,38 @@ namespace Editor
                 return;
             }
 
-            int idc = GetIndice();
-            TipoC tipo = (f24h) ? TipoC.TipoComando_MfdHora24 : TipoC.TipoComando_MfdHora;
-            macro.Insert(idc, (ushort)((byte)tipo + ((ushort)NumericUpDown7.Value << 8)));
+            ushort[] bloque = new ushort[3];
+            TipoComando tipo = (f24h) ? TipoComando.TipoComando_MfdHora24 : TipoComando.TipoComando_MfdHora;
+            bloque[0] =(ushort)((byte)tipo + ((ushort)NumericUpDown7.Value << 8));
             if (NumericUpDown7.Value == 1)
             {
-                macro.Insert(idc + 1, (ushort)((byte)tipo + ((ushort)NumericUpDown10.Value << 8)));
-                macro.Insert(idc + 2, (ushort)((byte)tipo + ((ushort)NumericUpDown11.Value << 8)));
+                bloque[1] = (ushort)((byte)tipo + ((ushort)NumericUpDown10.Value << 8));
+                bloque[2] = (ushort)((byte)tipo + ((ushort)NumericUpDown11.Value << 8));
             }
             else
             {
                 int minutos = (int)((NumericUpDown10.Value * 60) + NumericUpDown11.Value);
                 if (minutos < 0)
                 {
-                    macro.Insert(idc + 1, (ushort)((byte)tipo + ((((ushort)-minutos >> 8) + 4) << 8) ));
-                    macro.Insert(idc + 2, (ushort)((byte)tipo + (((ushort)-minutos & 0xff) << 8) ));
+                    bloque[1] = (ushort)((byte)tipo + ((((ushort)-minutos >> 8) + 4) << 8) );
+                    bloque[2] = (ushort)((byte)tipo + (((ushort)-minutos & 0xff) << 8) );
                 }
                 else
                 {
-                    macro.Insert(idc + 1, (ushort)((byte)tipo + ((((ushort)minutos >> 8)) << 8)));
-                    macro.Insert(idc + 2, (ushort)((byte)tipo + (((ushort)minutos & 0xff) << 8)));
+                    bloque[1] = (ushort)((byte)tipo + ((((ushort)minutos >> 8)) << 8));
+                    bloque[2] = (ushort)((byte)tipo + (((ushort)minutos & 0xff) << 8));
                 }
             }
-            CargarLista();
+            Insertar(bloque, false);
         }
 
         private void Fecha(ushort f)
         {
-            if (macro.Count > 236) return;
-            int idc = GetIndice();
-            macro.Insert(idc, (ushort)((byte)TipoC.TipoComando_MfdFecha + (f << 8)));
-            macro.Insert(idc + 1, (ushort)((byte)TipoC.TipoComando_MfdFecha + ((ushort)NumericUpDown13.Value << 8)));
-            CargarLista();
+            if (GetCuenta() > 236) return;
+            ushort[] bloque = new ushort[2];
+            bloque[0] = (ushort)((byte)TipoComando.TipoComando_MfdFecha + (f << 8));
+            bloque[1] = (ushort)((byte)TipoComando.TipoComando_MfdFecha + ((ushort)NumericUpDown13.Value << 8));
+            Insertar(bloque, false);
         }
         #endregion
     }

@@ -35,14 +35,16 @@ namespace Editor
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
-            bind.Source = this;
+            System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value")
+            {
+                Source = this
+            };
             base.SetBinding(TextProperty, bind);
             base.KeyUp += TextBox1_KeyPress;
             base.KeyDown += TextBox1_KeyPress;
             base.PreviewKeyDown += TextBox1_KeyPress;
             base.PreviewKeyUp += TextBox1_KeyPress;
-            base.PreviewTextInput += txtBox1_PreviewTextInput;
+            base.PreviewTextInput += FtxtBox1_PreviewTextInput;
             base.TextChanged += CtlNumUpDown_TextChanged;
             ((RepeatButton)base.GetTemplateChild("btUp")).Click += CtlNumUp_Click;
             ((RepeatButton)base.GetTemplateChild("btDown")).Click += CtlNumDown_Click;
@@ -71,7 +73,7 @@ namespace Editor
         #endregion
 
         #region "Eventos TextBox"
-        private void txtBox1_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void FtxtBox1_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             foreach (char c in e.Text)
             {

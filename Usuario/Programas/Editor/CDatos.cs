@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Comunes;
 
 namespace Editor
 {
@@ -34,7 +35,7 @@ namespace Editor
         {
             Perfil.Clear();
 
-            Perfil.GENERAL.AddGENERALRow(Perfil.GENERAL.NewGENERALRow());
+            Perfil.GENERAL.AddGENERALRow(1);
             DSPerfil.ACCIONESRow accionVacia = Perfil.ACCIONES.AddACCIONESRow(0, "</------- Ninguna -------/>", new ushort[0]);
             for (byte p = 0; p < 2; p++)
             {
@@ -42,17 +43,23 @@ namespace Editor
                 {
                     for (byte e = 0; e < 4; e++)
                     {
-                        Perfil.MAPAEJES.AddMAPAEJESRow(p, m, e, 1, 0, new byte[10] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100}, new byte[15], 0, 0);
-                        Perfil.MAPAEJESPEQUE.AddMAPAEJESPEQUERow(p, m, e, 1, 0, new byte[15], 0, 0);
+                        Perfil.MAPAEJES.AddMAPAEJESRow(p, m, e, 1, 0b1, e, new byte[10] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100}, new byte[15], 0, 0);
                         for (byte i = 0; i < 16; i++)
                         {
                             Perfil.INDICESEJES.AddINDICESEJESRow(p, m, e, i, accionVacia);
+                        }
+                    }
+                    for (byte e = 0; e < 5; e++)
+                    {
+                        Perfil.MAPAEJESPEQUE.AddMAPAEJESPEQUERow(p, m, e, 1, 0b1, (byte)(e + 4), new byte[15], 0, 0);
+                        for (byte i = 0; i < 16; i++)
+                        {
                             Perfil.INDICESEJESPEQUE.AddINDICESEJESPEQUERow(p, m, e, i, accionVacia);
                         }
                     }
                     for (byte e = 0; e < 2; e++)
                     {
-                        Perfil.MAPAEJESMINI.AddMAPAEJESMINIRow(p, m, e, 1, 0);
+                        Perfil.MAPAEJESMINI.AddMAPAEJESMINIRow(p, m, e, 1, 0b100 ,e);
                     }
                     for (byte b = 0; b < 26; b++)
                     {

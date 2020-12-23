@@ -1,5 +1,0 @@
-EXTERN_C_START
-
-VOID GenerarDirectX(WDFDEVICE device, _In_ PHID_INPUT_DATA inputData);
-
-EXTERN_C_END

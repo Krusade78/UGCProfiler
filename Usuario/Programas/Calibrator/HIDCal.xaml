@@ -49,19 +49,19 @@
 
                         <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores de calibración" Foreground="GreenYellow" Margin="0,0,0,18" FontFamily="Orator Std" FontSize="14" />
 
-                        <CheckBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="chkCalActiva" Content="Activada" Margin="0,0,0,6" HorizontalAlignment="Center" Foreground="Yellow" Checked="chk_Cambiado" Unchecked="chk_Cambiado" />
+                        <CheckBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="chkCalActiva" Content="Activada" Margin="0,0,0,6" HorizontalAlignment="Center" Foreground="Yellow" Checked="Fchk_Cambiado" Unchecked="Fchk_Cambiado" />
 
                         <TextBlock Grid.Row="2" Text="Límite inferior:" Foreground="Yellow" />
-                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtI" TextAlignment="Center" Text="0000" Width="50" Padding="0,2" MaxLength="4" TextChanged="txt_TextChanged"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtI" TextAlignment="Center" Text="0000" Width="50" Padding="0,2" MaxLength="4" TextChanged="Ftxt_TextChanged"/>
 
                         <TextBlock Grid.Row="3" Text="Posición central:" Foreground="Yellow" />
-                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtC" TextAlignment="Center" Text="0000" Width="50"  Padding="0,2" MaxLength="4" TextChanged="txt_TextChanged"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtC" TextAlignment="Center" Text="0000" Width="50"  Padding="0,2" MaxLength="4" TextChanged="Ftxt_TextChanged"/>
 
                         <TextBlock Grid.Row="4" Text="Zona nula:" Foreground="Yellow" />
-                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtN" TextAlignment="Center" Text="000" Width="50" Padding="0,2" MaxLength="3" TextChanged="txt_TextChanged"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtN" TextAlignment="Center" Text="000" Width="50" Padding="0,2" MaxLength="3" TextChanged="Ftxt_TextChanged"/>
 
                         <TextBlock Grid.Row="5" Text="Límite superior:" Foreground="Yellow" />
-                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="txtD" TextAlignment="Center"  Text="0000" Width="50" Padding="0,2" MaxLength="4" TextChanged="txt_TextChanged"/>
+                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="txtD" TextAlignment="Center"  Text="0000" Width="50" Padding="0,2" MaxLength="4" TextChanged="Ftxt_TextChanged"/>
                     </Grid>
                 </Grid>
 
@@ -80,13 +80,13 @@
 
                         <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="Valores antivibración" Margin="0,0,0,18" Foreground="GreenYellow" VerticalAlignment="Top" FontFamily="Orator Std" FontSize="14" />
 
-                        <CheckBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="chkAntivActiva" Content="Activada" Margin="0,0,0,6" HorizontalAlignment="Center" Foreground="Yellow" Checked="chk_Cambiado" Unchecked="chk_Cambiado" />
+                        <CheckBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="chkAntivActiva" Content="Activada" Margin="0,0,0,6" HorizontalAlignment="Center" Foreground="Yellow" Checked="Fchk_Cambiado" Unchecked="Fchk_Cambiado" />
 
                         <TextBlock Grid.Row="2" Text="Márgen:" Foreground="Yellow" />
-                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtMargen" TextAlignment="Center" Text="000" Width="50" Padding="0,2" MaxLength="3" TextChanged="txt_TextChanged" />
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtMargen" TextAlignment="Center" Text="000" Width="50" Padding="0,2" MaxLength="3" TextChanged="Ftxt_TextChanged" />
 
                         <TextBlock Grid.Row="3" Text="Resistencia:" Foreground="Yellow" />
-                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtResistencia" TextAlignment="Center" Text="000" Width="50"  Padding="0,2" MaxLength="3" TextChanged="txt_TextChanged"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtResistencia" TextAlignment="Center" Text="000" Width="50"  Padding="0,2" MaxLength="3" TextChanged="Ftxt_TextChanged"/>
                     </Grid>
                 </Grid>
             </Grid>
@@ -142,16 +142,16 @@
                         </Setter>
                     </Style>
                 </StackPanel.Resources>
-                <ToggleButton x:Name="tbX" Width="100" Height="100" BorderBrush="{x:Null}" Background="{x:Null}" IsChecked="True" Style="{StaticResource tgb}" Checked="tbX_Checked">
+                <ToggleButton x:Name="tbX" Width="100" Height="100" BorderBrush="{x:Null}" Background="{x:Null}" IsChecked="True" Style="{StaticResource tgb}" Checked="FtbX_Checked">
                     <Image Source="res/x52jx.png" />
                 </ToggleButton>
-                <ToggleButton x:Name="tbY" Width="100"  BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}"  Checked="tbY_Checked" >
+                <ToggleButton x:Name="tbY" Width="100"  BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}"  Checked="FtbY_Checked" >
                     <Image Source="res/x52jy.png" />
                 </ToggleButton>
-                <ToggleButton x:Name="tbR" Width="100"  BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}" Checked="tbR_Checked" >
+                <ToggleButton x:Name="tbR" Width="100"  BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}" Checked="FtbR_Checked" >
                     <Image Source="res/x52tr.png" />
                 </ToggleButton>
-                <ToggleButton x:Name="tbZ" Width="100" Height="100" BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}" Checked="tbZ_Checked" >
+                <ToggleButton x:Name="tbZ" Width="100" Height="100" BorderBrush="{x:Null}" Background="{x:Null}" Style="{StaticResource tgb}" Checked="FtbZ_Checked" >
                     <Image Source="res/x52tz.png" />
                 </ToggleButton>
             </StackPanel>
@@ -162,7 +162,7 @@
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btAplicar" Content="Probar límites nuevos" HorizontalAlignment="Left" Width="140" Click="btAplicar_Click" Height="45" Foreground="GreenYellow" FontFamily="Calibri">
+                <Button x:Name="btAplicar" Content="Probar límites nuevos" HorizontalAlignment="Left" Width="140" Click="FbtAplicar_Click" Height="45" Foreground="GreenYellow" FontFamily="Calibri">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF043304" Offset="0"/>
@@ -170,7 +170,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button Grid.Column="2" Content="Guardar y activar" Width="140" Height="45" Foreground="GreenYellow" Click="btGuardar_Click" FontFamily="Calibri">
+                <Button Grid.Column="2" Content="Guardar y activar" Width="140" Height="45" Foreground="GreenYellow" Click="FbtGuardar_Click" FontFamily="Calibri">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF043304" Offset="0"/>

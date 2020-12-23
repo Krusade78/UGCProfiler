@@ -10,7 +10,7 @@ namespace Editor
     /// </summary>
     internal partial class CtlJoystick : UserControl
     {
-        private CtlPropiedades Vista;
+        private readonly CtlPropiedades Vista;
 
         public CtlJoystick(CtlEditar padre)
         {

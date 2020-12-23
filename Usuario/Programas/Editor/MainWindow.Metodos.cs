@@ -5,8 +5,8 @@ namespace Editor
 {
     internal partial class MainWindow
     {
-        private CDatos datos = new CDatos();
-        private String nombrePerfil = "";
+        private readonly CDatos datos = new CDatos();
+        private string nombrePerfil = "";
 
         internal CDatos GetDatos()
         {
@@ -56,8 +56,10 @@ namespace Editor
                             return;
                     }
                 }
-                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-                dlg.Filter = "Perfil (.xhp)|*.xhp";
+                Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog
+                {
+                    Filter = "Perfil (.xhp)|*.xhp"
+                };
                 if (dlg.ShowDialog(this) == true)
                     archivo = dlg.FileName;
             }
@@ -95,9 +97,11 @@ namespace Editor
         {
             if (datos.Perfil.GENERAL.Rows.Count != 0)
             {
-                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-                dlg.Filter = "Perfil (.xhp)|*.xhp";
-                dlg.FileName = "nombre_perfil";
+                Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "Perfil (.xhp)|*.xhp",
+                    FileName = "nombre_perfil"
+                };
                 if (dlg.ShowDialog() == true)
                 {
                     if (datos.Guardar(dlg.FileName))
@@ -154,8 +158,10 @@ namespace Editor
         {
             if (gridVista.Children.Count == 1)
             {
-                if (gridVista.Children[0] is CtlEditar)
-                    ((CtlEditar)gridVista.Children[0]).ctlPropiedades.Refrescar();
+                if (gridVista.Children[0] is CtlEditar ctlEditar)
+                {
+                    ctlEditar.ctlPropiedades.Refrescar();
+                }
             }
         }
 

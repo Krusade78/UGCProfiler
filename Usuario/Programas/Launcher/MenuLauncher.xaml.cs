@@ -66,17 +66,29 @@ namespace Launcher
 
         private void MenuItemEditar_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("Editor.exe", "\"" + (String)((MenuItem)sender).Header + ".xhp\"");
+            try
+            {
+                Process.Start("Editor.exe", "\"" + (String)((MenuItem)sender).Header + ".xhp\"");
+            }
+            catch { }
         }
 
         private void MenuEditor_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("Editor.exe");
+            try
+            {
+                Process.Start("Editor.exe");
+            }
+            catch { }
         }
 
         private void MenuCalibrador_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("Calibrator.exe");
+            try
+            {
+                Process.Start("Calibrator.exe");
+            }
+            catch { }
         }
     }
 }

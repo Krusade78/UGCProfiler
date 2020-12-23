@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using static Comunes.CTipos;
 
 namespace Editor
 {
@@ -39,43 +40,48 @@ namespace Editor
             for (byte i = 0; i < 8; i++)
             {
                 ushort idx = 0;
-                foreach (DSPerfil.ACCIONESRow ar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                foreach (Comunes.DSPerfil.ACCIONESRow ar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                {
                     if (ar.Nombre == st[i])
                     {
                         idx = ar.idAccion;
                         break;
                     }
+                }
 
                 if (idx == 0)
                 {
                     idx = 0;
-                    foreach (DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                    foreach (Comunes.DSPerfil.ACCIONESRow aar in padre.GetDatos().Perfil.ACCIONES.Rows)
+                    {
                         if (aar.idAccion > idx)
                             idx = aar.idAccion;
+                    }
                     idx++;
 
-                    DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
+                    Comunes.DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
                     ar.idAccion = idx;
                     ar.Nombre = st[i];
                     ar.Comandos = new ushort[1 + st[i].Length + 1 + 3];
                     //'texto x52
-                    ar.Comandos[0] = (byte)CEnums.TipoC.TipoComando_MfdTexto + (3 << 8);
+                    ar.Comandos[0] = (byte)TipoComando.TipoComando_MfdTextoIni + (3 << 8); //línea
                     byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st[i]));
                     for (byte j = 0; j < texto.Length; j++)
-                        ar.Comandos[1 + j] = (ushort)((byte)CEnums.TipoC.TipoComando_MfdTexto + (texto[j] << 8));
-
-                    ar.Comandos[1 + texto.Length] = (byte)CEnums.TipoC.TipoComando_MfdTextoFin;
+                    {
+                        ar.Comandos[1 + j] = (ushort)((byte)TipoComando.TipoComando_MfdTexto + (texto[j] << 8));
+                    }
+                    ar.Comandos[1 + texto.Length] = (byte)TipoComando.TipoComando_MfdTextoFin;
                     //Resto
-                    ar.Comandos[1 + texto.Length + 1] = (ushort)((byte)CEnums.TipoC.TipoComando_DxSeta + ((((NumericUpDown1.Value - 1) * 8) + i) << 8));
-                    ar.Comandos[1 + texto.Length + 2] = (byte)CEnums.TipoC.TipoComando_Hold;
-                    ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)CEnums.TipoC.TipoComando_DxSeta + 32 + ((((NumericUpDown1.Value - 1) * 8) + i) << 8));
+                    ar.Comandos[1 + texto.Length + 1] = (ushort)((byte)TipoComando.TipoComando_DxSeta + ((((NumericUpDown1.Value - 1) * 8) + i) << 8));
+                    ar.Comandos[1 + texto.Length + 2] = (byte)TipoComando.TipoComando_Hold;
+                    ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)(TipoComando.TipoComando_DxSeta | TipoComando.TipoComando_Soltar) + ((((NumericUpDown1.Value - 1) * 8) + i) << 8));
 
                     padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
                 }
 
-                padre.GetDatos().Perfil.MAPASETAS.FindByidSetaidModoidPinkie((byte)(i + (pov * 8)), m, p).Estado = 0;
-                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, (uint)(i + (pov * 8)), m, p).Indice = idx;
-                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, (uint)(i + (pov * 8)), m, p).Indice = 0;
+                padre.GetDatos().Perfil.MAPASETAS.FindByidPinkieidModoIdSeta(p, m, (byte)(i + (pov * 8))).TamIndices = 0;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, (uint)(i + (pov * 8)), m, p).Accion = idx;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, (uint)(i + (pov * 8)), m, p).Accion = 0;
             }
         }
     }

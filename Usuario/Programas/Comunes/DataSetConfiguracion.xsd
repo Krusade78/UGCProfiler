@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSetConfiguracion" targetNamespace="http://tempuri.org/DataSetConfiguracion.xsd" xmlns:mstns="http://tempuri.org/DataSetConfiguracion.xsd" xmlns="http://tempuri.org/DataSetConfiguracion.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSetConfiguracion" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSetConfiguracion" msprop:Generator_UserDSName="DataSetConfiguracion">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="CALIBRADO_LIMITES" msprop:Generator_TableClassName="CALIBRADO_LIMITESDataTable" msprop:Generator_TableVarName="tableCALIBRADO_LIMITES" msprop:Generator_TablePropName="CALIBRADO_LIMITES" msprop:Generator_RowDeletingName="CALIBRADO_LIMITESRowDeleting" msprop:Generator_RowChangingName="CALIBRADO_LIMITESRowChanging" msprop:Generator_RowEvHandlerName="CALIBRADO_LIMITESRowChangeEventHandler" msprop:Generator_RowDeletedName="CALIBRADO_LIMITESRowDeleted" msprop:Generator_UserTableName="CALIBRADO_LIMITES" msprop:Generator_RowChangedName="CALIBRADO_LIMITESRowChanged" msprop:Generator_RowEvArgName="CALIBRADO_LIMITESRowChangeEvent" msprop:Generator_RowClassName="CALIBRADO_LIMITESRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Cal" msprop:Generator_ColumnVarNameInTable="columnCal" msprop:Generator_ColumnPropNameInRow="Cal" msprop:Generator_ColumnPropNameInTable="CalColumn" msprop:Generator_UserColumnName="Cal" type="xs:unsignedByte" />
+              <xs:element name="Nulo" msprop:Generator_ColumnVarNameInTable="columnNulo" msprop:Generator_ColumnPropNameInRow="Nulo" msprop:Generator_ColumnPropNameInTable="NuloColumn" msprop:Generator_UserColumnName="Nulo" type="xs:unsignedByte" />
+              <xs:element name="Izq" msprop:Generator_ColumnVarNameInTable="columnIzq" msprop:Generator_ColumnPropNameInRow="Izq" msprop:Generator_ColumnPropNameInTable="IzqColumn" msprop:Generator_UserColumnName="Izq" type="xs:unsignedShort" />
+              <xs:element name="Cen" msprop:Generator_ColumnVarNameInTable="columnCen" msprop:Generator_ColumnPropNameInRow="Cen" msprop:Generator_ColumnPropNameInTable="CenColumn" msprop:Generator_UserColumnName="Cen" type="xs:unsignedShort" />
+              <xs:element name="Der" msprop:Generator_ColumnVarNameInTable="columnDer" msprop:Generator_ColumnPropNameInRow="Der" msprop:Generator_ColumnPropNameInTable="DerColumn" msprop:Generator_UserColumnName="Der" type="xs:unsignedShort" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="CALIBRADO_JITTER" msprop:Generator_TableClassName="CALIBRADO_JITTERDataTable" msprop:Generator_TableVarName="tableCALIBRADO_JITTER" msprop:Generator_TablePropName="CALIBRADO_JITTER" msprop:Generator_RowDeletingName="CALIBRADO_JITTERRowDeleting" msprop:Generator_RowChangingName="CALIBRADO_JITTERRowChanging" msprop:Generator_RowEvHandlerName="CALIBRADO_JITTERRowChangeEventHandler" msprop:Generator_RowDeletedName="CALIBRADO_JITTERRowDeleted" msprop:Generator_UserTableName="CALIBRADO_JITTER" msprop:Generator_RowChangedName="CALIBRADO_JITTERRowChanged" msprop:Generator_RowEvArgName="CALIBRADO_JITTERRowChangeEvent" msprop:Generator_RowClassName="CALIBRADO_JITTERRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Antiv" msprop:Generator_ColumnVarNameInTable="columnAntiv" msprop:Generator_ColumnPropNameInRow="Antiv" msprop:Generator_ColumnPropNameInTable="AntivColumn" msprop:Generator_UserColumnName="Antiv" type="xs:unsignedByte" />
+              <xs:element name="PosRepetida" msprop:Generator_ColumnVarNameInTable="columnPosRepetida" msprop:Generator_ColumnPropNameInRow="PosRepetida" msprop:Generator_ColumnPropNameInTable="PosRepetidaColumn" msprop:Generator_UserColumnName="PosRepetida" type="xs:unsignedByte" />
+              <xs:element name="Margen" msprop:Generator_ColumnVarNameInTable="columnMargen" msprop:Generator_ColumnPropNameInRow="Margen" msprop:Generator_ColumnPropNameInTable="MargenColumn" msprop:Generator_UserColumnName="Margen" type="xs:unsignedByte" />
+              <xs:element name="Resistencia" msprop:Generator_ColumnVarNameInTable="columnResistencia" msprop:Generator_ColumnPropNameInRow="Resistencia" msprop:Generator_ColumnPropNameInTable="ResistenciaColumn" msprop:Generator_UserColumnName="Resistencia" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

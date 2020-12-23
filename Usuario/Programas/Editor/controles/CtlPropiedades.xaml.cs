@@ -25,7 +25,7 @@ namespace Editor
             ComboBoxAssigned.DataContext = padre.GetDatos().Perfil.ACCIONES;
             ComboBoxAssigned.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("Nombre", System.ComponentModel.ListSortDirection.Ascending));
             ComboBoxAssigned.SelectedIndex = 0;
-            ComboBoxMacro.DataContext = new System.Data.DataView( padre.GetDatos().Perfil.ACCIONES);
+            ComboBoxMacro.DataContext = new System.Data.DataView(padre.GetDatos().Perfil.ACCIONES);
             ((System.Data.DataView)ComboBoxMacro.DataContext).RowFilter = "idAccion <> 0";
             ((System.Data.DataView)ComboBoxMacro.DataContext).Sort = "Nombre";
             ComboBoxMacro.SelectedIndex = 0;
@@ -57,8 +57,10 @@ namespace Editor
 
         private void ButtonSensibility_Click(object sender, RoutedEventArgs e)
         {
-            VEditorSensibilidad dlg = new VEditorSensibilidad(idActual);
-            dlg.Owner = App.Current.MainWindow;
+            VEditorSensibilidad dlg = new VEditorSensibilidad(idActual)
+            {
+                Owner = App.Current.MainWindow
+            };
             if (dlg.ShowDialog() == true)
                 padre.GetDatos().Modificado = true;
         }
@@ -73,7 +75,9 @@ namespace Editor
         {
             if (eventos)
             {
+                eventos = false;
                 RadioButtonBands.IsChecked = false;
+                eventos = true;
                 SetModoEje();
             }
         }
@@ -81,7 +85,9 @@ namespace Editor
         {
             if (eventos)
             {
+                eventos = false;
                 RadioButtonIncremental.IsChecked = false;
+                eventos = true;
                 SetModoEje();
             }
         }
@@ -100,10 +106,15 @@ namespace Editor
 
         private void ButtonEditBands_Click(object sender, RoutedEventArgs e)
         {
-            VEditorBandas dlg = new VEditorBandas(idActual, tipoActual);
-            dlg.Owner = App.Current.MainWindow;
+            VEditorBandas dlg = new VEditorBandas(idActual, tipoActual)
+            {
+                Owner = App.Current.MainWindow
+            };
             if (dlg.ShowDialog() == true)
+            {
                 padre.GetDatos().Modificado = true;
+                NumericUpDownPosition.Value = 1;
+            }
         }
         #endregion
 
@@ -117,7 +128,7 @@ namespace Editor
         private void RadioButtonToggle_Checked(object sender, RoutedEventArgs e)
         {
             if (eventos)
-                SetModoBoton(1);        
+                SetModoBoton(1);
         }
 
         private void NumericUpDownPositions_TextChanged(object sender, EventArgs e)
@@ -128,8 +139,10 @@ namespace Editor
 
         private void ButtonAssignModes_Click(object sender, RoutedEventArgs e)
         {
-            VEditorPinkieModos dlg = new VEditorPinkieModos(true);
-            dlg.Owner = App.Current.MainWindow;
+            VEditorPinkieModos dlg = new VEditorPinkieModos(true)
+            {
+                Owner = App.Current.MainWindow
+            };
             if (dlg.ShowDialog() == true)
             {
                 padre.GetDatos().Modificado = true;
@@ -139,8 +152,10 @@ namespace Editor
 
         private void ButtonAssignPinkie_Click(object sender, RoutedEventArgs e)
         {
-            VEditorPinkieModos dlg = new VEditorPinkieModos(false);
-            dlg.Owner = App.Current.MainWindow;
+            VEditorPinkieModos dlg = new VEditorPinkieModos(false)
+            {
+                Owner = App.Current.MainWindow
+            };
             if (dlg.ShowDialog() == true)
             {
                 padre.GetDatos().Modificado = true;
@@ -150,8 +165,10 @@ namespace Editor
 
         private void ButtonAssignPOV_Click(object sender, RoutedEventArgs e)
         {
-            VEditorPOV dlg = new VEditorPOV(idActual);
-            dlg.Owner = App.Current.MainWindow;
+            VEditorPOV dlg = new VEditorPOV(idActual)
+            {
+                Owner = App.Current.MainWindow
+            };
             if (dlg.ShowDialog() == true)
             {
                 padre.GetDatos().Modificado = true;
@@ -163,22 +180,29 @@ namespace Editor
         #region "Macros"
         private void RadioButton2_Checked(object sender, RoutedEventArgs e)
         {
-            RadioButton1.IsChecked = false;
-            Refrescar();
+            if (eventos)
+            {
+                eventos = false;
+                RadioButton1.IsChecked = false;
+                eventos = true;
+                Refrescar();
+            }
         }
 
         private void RadioButton1_Checked(object sender, RoutedEventArgs e)
         {
             if (eventos)
             {
+                eventos = false;
                 RadioButton2.IsChecked = false;
+                eventos = true;
                 Refrescar();
             }
         }
 
         private void NumericUpDownPosition_TextChanged(object sender, EventArgs e)
         {
-            if (this.IsLoaded)
+            if (this.IsLoaded && eventos)
                 Refrescar();
         }
 
@@ -190,8 +214,10 @@ namespace Editor
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            VEditorMacros dlg = new VEditorMacros(-1);
-            dlg.Owner = App.Current.MainWindow;
+            VEditorMacros dlg = new VEditorMacros(-1)
+            {
+                Owner = App.Current.MainWindow
+            };
             if (dlg.ShowDialog() == true)
                 padre.GetDatos().Modificado = true;
         }
@@ -200,8 +226,10 @@ namespace Editor
         {
             if (ComboBoxMacro.SelectedIndex != -1)
             {
-                VEditorMacros dlg = new VEditorMacros((int)(ushort)ComboBoxMacro.SelectedValue);
-                dlg.Owner = App.Current.MainWindow;
+                VEditorMacros dlg = new VEditorMacros((int)(ushort)ComboBoxMacro.SelectedValue)
+                {
+                    Owner = App.Current.MainWindow
+                };
                 if (dlg.ShowDialog() == true)
                     padre.GetDatos().Modificado = true;
             }

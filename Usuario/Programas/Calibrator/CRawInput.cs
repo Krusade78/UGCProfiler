@@ -26,7 +26,9 @@ namespace Calibrator
             /// <summary>If set, the application-defined keyboard device hotkeys are not handled. However, the system hotkeys; for example, ALT+TAB and CTRL+ALT+DEL, are still handled. By default, all keyboard hotkeys are handled. NoHotKeys can be specified even if NoLegacy is not specified and WindowHandle is NULL.</summary>
             NoHotKeys = 0x00000200,
             /// <summary>If set, application keys are handled.  NoLegacy must be specified.  Keyboard only.</summary>
-            AppKeys = 0x00000400
+            AppKeys = 0x00000400,
+            RIDEV_EXINPUTSINK = 0x00001000
+            /// <summary>If set, this enables the caller to receive input in the background only if the foreground application does not process it.</summary>
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -58,36 +60,53 @@ namespace Calibrator
             ///// <summary>Data for the HID.</summary>
             //public IntPtr Data;
         }
+
+        [Flags()]
+        public enum RawKeyboardFlags : ushort
+        {
+            /// <summary></summary>
+            KeyMake = 0,
+            /// <summary></summary>
+            KeyBreak = 1,
+            /// <summary></summary>
+            KeyE0 = 2,
+            /// <summary></summary>
+            KeyE1 = 4,
+            /// <summary></summary>
+            TerminalServerSetLED = 8,
+            /// <summary></summary>
+            TerminalServerShadow = 0x10,
+            /// <summary></summary>
+            TerminalServerVKPACKET = 0x20
+        }
         [StructLayout(LayoutKind.Sequential)]
         public struct RAWINPUTKEYBOARD
         {
             public ushort MakeCode;
-            public ushort Flags;
+            public RawKeyboardFlags Flags;
             public ushort Reserved;
             public ushort VKey;
             public uint Message;
-            public ulong ExtraInformation;
+            public uint ExtraInformation;
         }
-        [StructLayout(LayoutKind.Sequential)]
+
+        [StructLayout(LayoutKind.Explicit)]
         public struct RAWINPUTMOUSE
         {
+            [FieldOffset(0)]
             public ushort usFlags;
-
-            [StructLayout(LayoutKind.Explicit)]
-            public struct Data
-            {
-                [FieldOffset(0)]
-                public ulong ulButtons;
-                [FieldOffset(0)]
-                public ushort usButtonFlags;
-                [FieldOffset(2)]
-                public ushort usButtonData;
-            }
-            public Data data;
-            public ulong ulRawButtons;
-            public long lLastX;
-            public long lLastY;
-            public ulong ulExtraInformation;
+            [FieldOffset(4)]
+            public ushort usButtonFlags;
+            [FieldOffset(6)]
+            public short usButtonData;
+            [FieldOffset(8)]
+            public uint ulRawButtons;
+            [FieldOffset(12)]
+            public int lLastX;
+            [FieldOffset(16)]
+            public int lLastY;
+            [FieldOffset(20)]
+            public uint ulExtraInformation;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -98,9 +117,9 @@ namespace Calibrator
             public IntPtr hDevice;                  // A handle to the device generating the raw input data. 
             public IntPtr wParam;                   // RIM_INPUT 0 if input occurred while application was in the foreground else RIM_INPUTSINK 1 if it was not.
         }
+
         [DllImport("user32.dll")]
         public static extern int GetRawInputData(IntPtr hRawInput, int uiCommand, byte[] pData, ref int pcbSize, int cbSizeHeader);
-
 
         public enum RawInputDeviceInfoCommand : uint
         {

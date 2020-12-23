@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Comunes;
 
 
 namespace Editor
@@ -10,9 +11,9 @@ namespace Editor
     /// </summary>
     internal partial class VEditorBandas : Window
     {
-        private MainWindow padre;
-        private byte eje;
-        private CEnums.Tipo tipo;
+        private readonly MainWindow padre;
+        private readonly byte eje;
+        private readonly CEnums.Tipo tipo;
         private byte[] bandas;
         private bool eventos = true;
 
@@ -51,7 +52,7 @@ namespace Editor
             CambiarBandas();
         }
 
-        private void numBandas_TextChanged(object sender, EventArgs e)
+        private void FnumBandas_TextChanged(object sender, EventArgs e)
         {
             if (eventos)
                 CambiarBandas();
@@ -81,7 +82,7 @@ namespace Editor
             this.Close();
         }
 
-        private void lbl_TextChanged(object sender, EventArgs e)
+        private void Flbl_TextChanged(object sender, EventArgs e)
         {
             if (eventos & this.IsLoaded)
             {
@@ -95,7 +96,7 @@ namespace Editor
             }
         }
 
-        private void gs1_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        private void Fgs1_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
         {
             if (!CambiarSplitter(Grid.GetRow((GridSplitter)sender)))
                 e.Handled = true;
@@ -179,7 +180,7 @@ namespace Editor
 
                     tam = bandas[i];
                 }
-                ctls[i].IsEnabled = (bandas[i] != 0) ? true : false;
+                ctls[i].IsEnabled = (bandas[i] != 0);
                 if (bandas[i] != 0) grb.Height += 1;
                 gs[i].Visibility = (bandas[i] != 0) ? Visibility.Visible : Visibility.Collapsed;
                 gr[i].Visibility = (bandas[i] != 0) ? Visibility.Visible : Visibility.Collapsed;
