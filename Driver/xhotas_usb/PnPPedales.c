@@ -55,7 +55,6 @@ VOID CerrarPedales(_In_ WDFDEVICE device)
 	if (GetDeviceContext(device)->PedalesPnP.WaitLockIoTarget != NULL)
 	{
 		CerrarIoTargetPassive(device);
-		GetDeviceContext(device)->PedalesPnP.WaitLockIoTarget = NULL;
 	}
 }
 

@@ -27,8 +27,8 @@
                     <ComboBoxItem Content="Rx" />
                     <ComboBoxItem Content="Ry" />
                     <ComboBoxItem Content="Sl 1" />
-                    <ComboBoxItem Content="Freno Izq." />
                     <ComboBoxItem Content="Freno Der." />
+                    <ComboBoxItem Content="Freno Izq." />
                     <Separator />
                     <ComboBoxItem Content="Ratón X" />
                     <ComboBoxItem Content="Ratón Y" />
@@ -52,8 +52,8 @@
                 <CheckBox Content="Bandas" x:Name="RadioButtonBands" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,140,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" Checked="RadioButtonBands_Checked" Unchecked="RadioButtonBands_Checked" />
                 <CheckBox Content="Incremental" x:Name="RadioButtonIncremental" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,140,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" Checked="RadioButtonIncremental_Checked" Unchecked="RadioButtonIncremental_Checked" />
                 <Grid x:Name="PanelIncremental" VerticalAlignment="Top" Margin="0,160,0,10" Visibility="{Binding IsChecked, Converter={StaticResource b2v}, ElementName=RadioButtonIncremental}">
-                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceInc" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,2,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownResistanceInc_TextChanged" />
-                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceDec" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,31,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="16" Minimum="0" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownResistanceDec_TextChanged" />
+                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceInc" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,2,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="255" Minimum="0" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownResistanceInc_TextChanged" />
+                    <local:CtlNumUpDown x:Name="NumericUpDownResistanceDec" IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,31,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="255" Minimum="0" Value="1" Width="49" Height="21" ValueChanged="NumericUpDownResistanceDec_TextChanged" />
 
                     <Label x:Name="LabelResistanceInc" Content="Resistencia inc.:" HorizontalAlignment="Left" Margin="20,1,0,29" Foreground="Gainsboro" />
                     <Label x:Name="LabelResistanceDec" Content="Resistencia dec.:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,29,0,0" Foreground="Gainsboro" />

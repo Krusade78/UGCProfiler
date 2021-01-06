@@ -286,6 +286,7 @@ VOID EvtCleanupCallback(WDFOBJECT  Object)
 
 	PAGED_CODE();
 
+	GetDeviceContext(device)->USBaHID.ModoRaw = TRUE;
 	CerrarIoCtlAplicacion(device);
 	CerrarPedales(device);
 

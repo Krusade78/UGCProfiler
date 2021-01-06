@@ -186,11 +186,11 @@ namespace Editor
                 {
                     if (soltar)
                     {
-                        return "Seta DX " + ((dato / 8) + 1) + ((dato % 8) + 1) + " Off";
+                        return "Seta DX " + (4 - (dato / 8)) + ((dato % 8) + 1) + " Off";
                     }
                     else
                     {
-                        return "Seta DX " + ((dato / 8) + 1) + ((dato % 8) + 1) + " On";
+                        return "Seta DX " + (4 - (dato / 8)) + ((dato % 8) + 1) + " On";
                     }
                 }
                 else if (tipo == (byte)TipoComando.TipoComando_MfdLuz)

@@ -72,9 +72,9 @@ namespace Editor
                     }
                     ar.Comandos[1 + texto.Length] = (byte)TipoComando.TipoComando_MfdTextoFin;
                     //Resto
-                    ar.Comandos[1 + texto.Length + 1] = (ushort)((byte)TipoComando.TipoComando_DxSeta + ((((NumericUpDown1.Value - 1) * 8) + i) << 8));
+                    ar.Comandos[1 + texto.Length + 1] = (ushort)((byte)TipoComando.TipoComando_DxSeta + ((((4 - NumericUpDown1.Value) * 8) + i) << 8));
                     ar.Comandos[1 + texto.Length + 2] = (byte)TipoComando.TipoComando_Hold;
-                    ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)(TipoComando.TipoComando_DxSeta | TipoComando.TipoComando_Soltar) + ((((NumericUpDown1.Value - 1) * 8) + i) << 8));
+                    ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)(TipoComando.TipoComando_DxSeta | TipoComando.TipoComando_Soltar) + ((((4 - NumericUpDown1.Value) * 8) + i) << 8));
 
                     padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
                 }

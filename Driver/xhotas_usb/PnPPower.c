@@ -67,6 +67,7 @@ NTSTATUS EvtDeviceD0Entry(
 		Luz_MFD(device, &GetDeviceContext(device)->MenuMFD.LuzMFD);
 	}
 	WdfTimerStart(GetDeviceContext(device)->MenuMFD.TimerHora, WDF_REL_TIMEOUT_IN_MS(4000));
+	GetDeviceContext(device)->USBaHID.ModoRaw = FALSE;
 
 	return STATUS_SUCCESS;
 }
@@ -84,11 +85,12 @@ NTSTATUS EvtDeviceD0Exit(
 
 	PAGED_CODE();
 
-	LimpiarEventos(device);
-
+	GetDeviceContext(device)->USBaHID.ModoRaw = TRUE;
 	//GetDeviceContext(device)->HID.RatonActivado = FALSE;
 	WdfTimerStop(GetDeviceContext(device)->HID.RatonTimer, TRUE);
 	WdfTimerStop(GetDeviceContext(device)->MenuMFD.TimerHora, TRUE);
+
+	LimpiarEventos(device);
 
 	return STATUS_SUCCESS;
 }

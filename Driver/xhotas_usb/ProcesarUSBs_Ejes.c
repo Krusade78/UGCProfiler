@@ -31,7 +31,7 @@ VOID SensibilidadYMapeado(
 	UCHAR				pos;
 	UCHAR				sy1;
 	UCHAR				sy2;
-	UINT16				stope;
+	UINT16				stope = (2048 / 2);
 
 	UCHAR pinkie;
 	UCHAR modos;
@@ -52,30 +52,17 @@ VOID SensibilidadYMapeado(
 		}
 		else
 		{
-			pos = (UCHAR)((x * 20) / 2048);
-			if (pos == 20) pos = 19;
-			if ((UINT16)x < (2048 / 2))
+			BOOLEAN izq = ((UINT16)x < stope);
+			x = (izq) ? stope - 1 - x : x - stope - 1;
+			pos = (UCHAR)((x * 10) / stope);
+			WdfWaitLockAcquire(prCtx->WaitLockMapas, NULL);
 			{
-				WdfWaitLockAcquire(prCtx->WaitLockMapas, NULL);
-				{
-					sy1 = 100 - prCtx->MapaEjes[pinkie][modos][idx].Sensibilidad[9 - pos];
-					sy2 = ((pos == 9) ? 100 : 100) - prCtx->MapaEjes[pinkie][modos][idx].Sensibilidad[8 - pos];
-				}
-				WdfWaitLockRelease(prCtx->WaitLockMapas);
-				stope = (2048 / 2) + 1;
-				x = (((sy2 - sy1) * ((20 * x) - (pos * 2048))) + (2 * sy1 * stope)) / 200;
+				sy1 = (pos == 0) ? 0 : prCtx->MapaEjes[pinkie][modos][idx].Sensibilidad[pos - 1];
+				sy2 = prCtx->MapaEjes[pinkie][modos][idx].Sensibilidad[pos];
 			}
-			else
-			{
-				WdfWaitLockAcquire(prCtx->WaitLockMapas, NULL);
-				{
-					sy1 = (pos == 10) ? 0 : prCtx->MapaEjes[pinkie][modos][idx].Sensibilidad[pos - 11];
-					sy2 = prCtx->MapaEjes[pinkie][modos][idx].Sensibilidad[pos - 10];
-				}
-				WdfWaitLockRelease(prCtx->WaitLockMapas);
-				stope = (2048 / 2) + 1;
-				x = stope + ((((sy2 - sy1) * ((20 * x) - (pos * 2048))) + (2 * sy1 * stope)) / 200);
-			}
+			WdfWaitLockRelease(prCtx->WaitLockMapas);
+			x = ((((sy2 - sy1) * ((10 * x) - (pos * stope))) + (sy1 * stope))) / 100;
+			x = (izq) ? stope - 1 - x : x + stope + 1;
 			entrada->Ejes[idx] = (UINT16)x;
 		}
 	}
@@ -97,7 +84,7 @@ VOID SensibilidadYMapeado(
 			}
 			else
 			{
-				tipoEje = prCtx->MapaEjes[pinkie][modos][idx - 4].TipoEje;
+				tipoEje = prCtx->MapaEjesPeque[pinkie][modos][idx - 4].TipoEje;
 				nEje = prCtx->MapaEjesPeque[pinkie][modos][idx - 4].Eje;
 				sRaton = prCtx->MapaEjesPeque[pinkie][modos][idx - 4].SensibilidadRaton;
 			}

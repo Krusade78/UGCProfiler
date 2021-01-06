@@ -365,13 +365,13 @@ namespace Editor
         private void ButtonPovOn_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)((((NumericUpDownPov.Value - 1) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)((((4 - NumericUpDownPov.Value) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
         }
 
         private void ButtonPovOff_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxSeta | (byte)TipoComando.TipoComando_Soltar) + (ushort)((((NumericUpDownPov.Value - 1) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
+            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxSeta | (byte)TipoComando.TipoComando_Soltar) + (ushort)((((4 - NumericUpDownPov.Value) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
         }
 
         #endregion
