@@ -41,69 +41,74 @@ namespace Calibrator
             borradoRueda.Tick -= BorradoRueda_Tick;
         }
 
-        public void ActualizarEstado(byte[] hidData)
+        public void ActualizarEstado(byte[] hidData, bool pedales)
         {
-            int x = (hidData[1] << 8) | hidData[0];
-            int y = (hidData[3] << 8) | hidData[2];
-            Labelxy.Text =  x + " # " + y;
-            ejeXY.Margin = new Thickness(x, y, 0, 0);
+            if (!pedales)
+            {
+                int x = (hidData[1] << 8) | hidData[0];
+                int y = (hidData[3] << 8) | hidData[2];
+                Labelxy.Text = x + " # " + y;
+                ejeXY.Margin = new Thickness(x, y, 0, 0);
 
-            int r = (hidData[5] << 8) | hidData[4];
-            Labelr.Text = r.ToString();
-            ejeR.Width = r;
+                int z = (hidData[5] << 8) | hidData[4];
+                Labelz.Text = z.ToString();
+                ejeZ.Height = z;
 
-            int z = (hidData[7] << 8) | hidData[6];
-            Labelz.Text = z.ToString();
-            ejeZ.Height = z;
+                int rx = (hidData[7] << 8) | hidData[6];
+                Labelrx.Text = rx.ToString();
+                double angulo = (Math.PI * (((double)360 / 2048) * rx)) / 180;
+                String ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+                String ax = (rx == 2048) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+                ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1" : "0") + " 1 " + ax + "," + ay + " Z");
 
-            int rx = (hidData[9] << 8) | hidData[8];
-            Labelrx.Text = rx.ToString();
-            double angulo = (Math.PI * (((double)360 / 2048) * rx)) / 180;
-            String ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
-            String ax = (rx == 2048) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
-            ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1": "0") + " 1 " + ax + "," + ay + " Z");
+                int ry = (hidData[9] << 8) | hidData[8];
+                Labelry.Text = ry.ToString();
+                angulo = (Math.PI * (((double)360 / 2048) * ry)) / 180;
+                ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+                ax = (ry == 2048) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
+                ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1" : "0") + " 1 " + ax + "," + ay + " Z");
 
-            int ry = (hidData[11] << 8) | hidData[10];
-            Labelry.Text = ry.ToString();
-            angulo = (Math.PI * (((double)360 / 2048) * ry)) / 180;
-            ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
-            ax = (ry == 2048) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
-            ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1" : "0") + " 1 " + ax + "," + ay + " Z");
+                int sl1 = (hidData[11] << 8) | hidData[10];
+                Labelsl1.Text = sl1.ToString();
+                ejeSl1.Width = sl1;
 
-            int sl1 = (hidData[13] << 8) | hidData[12];
-            Labelsl1.Text = sl1.ToString();
-            ejeSl1.Width = sl1;
-
-            int sl2 = (hidData[15] << 8) | hidData[14];
-            Labelsl2.Text = sl2.ToString();
-            ejeSl2.Width = sl2;
-
-            int sl3 = (hidData[17] << 8) | hidData[16];
-            Labelsl3.Text = sl3.ToString();
-            ejeSl3.Width = sl3;
-
-            int my = hidData[26] >> 4;
-            int mx = hidData[26] & 0xf;
-            Labelmxy.Text = "mX: " + mx + "\n" + "mY: " + my;
-            ejeMXY.Margin = new Thickness(mx, my, 0, 0);
-
-            System.Windows.Shapes.Ellipse[] bts = new System.Windows.Shapes.Ellipse[] { bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8,
+                System.Windows.Shapes.Ellipse[] bts = new System.Windows.Shapes.Ellipse[] { bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8,
                                                                                         bt9, bt10, bt11, bt12, bt13, bt14, bt15, bt16,
                                                                                         bt17, bt18, bt19, bt20, bt21, bt22, bt23, bt24,
                                                                                         bt25, bt26, bt27, bt28, bt29, bt30, bt31, bt32};
-            for (int i = 0; i < 32; i++)
-            {
-                bts[i].Visibility = ((hidData[22 + (i / 8)] & (1 << (i % 8))) != 0) ? Visibility.Visible : Visibility.Hidden;
-            }
+                for (int i = 0; i < 32; i++)
+                {
+                    bts[i].Visibility = ((hidData[16 + (i / 8)] & (1 << (i % 8))) != 0) ? Visibility.Visible : Visibility.Hidden;
+                }
 
-            pathP1.Visibility = (hidData[18] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP1.RenderTransform = new System.Windows.Media.RotateTransform((hidData[18] > 5) ? (hidData[18] - 9) * 45 : (hidData[18] - 1) * 45);
-            pathP2.Visibility = (hidData[19] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP2.RenderTransform = new System.Windows.Media.RotateTransform((hidData[19] > 5) ? (hidData[19] - 9) * 45 : (hidData[19] - 1) * 45);
-            pathP3.Visibility = (hidData[20] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP3.RenderTransform = new System.Windows.Media.RotateTransform((hidData[20] > 5) ? (hidData[20] - 9) * 45 : (hidData[20] - 1) * 45);
-            pathP4.Visibility = (hidData[21] == 0) ? Visibility.Hidden : Visibility.Visible;
-            pathP4.RenderTransform = new System.Windows.Media.RotateTransform((hidData[21] > 5) ? (hidData[21] - 9) * 45 : (hidData[21] - 1) * 45);
+                pathP1.Visibility = (hidData[12] == 0) ? Visibility.Hidden : Visibility.Visible;
+                pathP1.RenderTransform = new System.Windows.Media.RotateTransform((hidData[12] > 5) ? (hidData[12] - 9) * 45 : (hidData[12] - 1) * 45);
+                pathP2.Visibility = (hidData[13] == 0) ? Visibility.Hidden : Visibility.Visible;
+                pathP2.RenderTransform = new System.Windows.Media.RotateTransform((hidData[13] > 5) ? (hidData[13] - 9) * 45 : (hidData[13] - 1) * 45);
+                pathP3.Visibility = (hidData[14] == 0) ? Visibility.Hidden : Visibility.Visible;
+                pathP3.RenderTransform = new System.Windows.Media.RotateTransform((hidData[14] > 5) ? (hidData[14] - 9) * 45 : (hidData[14] - 1) * 45);
+                pathP4.Visibility = (hidData[15] == 0) ? Visibility.Hidden : Visibility.Visible;
+                pathP4.RenderTransform = new System.Windows.Media.RotateTransform((hidData[15] > 5) ? (hidData[15] - 9) * 45 : (hidData[15] - 1) * 45);
+            }
+            else
+            {
+                int r = (hidData[1] << 8) | hidData[0];
+                Labelr.Text = r.ToString();
+                ejeR.Width = r;
+
+                int sl2 = (hidData[3] << 8) | hidData[2];
+                Labelsl2.Text = sl2.ToString();
+                ejeSl2.Width = sl2;
+
+                int sl3 = (hidData[5] << 8) | hidData[4];
+                Labelsl3.Text = sl3.ToString();
+                ejeSl3.Width = sl3;
+
+                int my = hidData[6] >> 4;
+                int mx = hidData[6] & 0xf;
+                Labelmxy.Text = "mX: " + mx + "\n" + "mY: " + my;
+                ejeMXY.Margin = new Thickness(mx, my, 0, 0);
+            }
         }
 
         public void ActualizarTeclado(CRawInput.RAWINPUTKEYBOARD data)

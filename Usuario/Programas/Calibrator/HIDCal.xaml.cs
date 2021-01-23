@@ -57,9 +57,25 @@ namespace Calibrator
             CargarTextosEje(0);
         }
 
-        public void ActualizarEstado(byte[] hidData)
+        private byte[] hidReport = new byte[8];
+        public void ActualizarEstado(byte[] hidData, bool pedales)
         {
-            int posr = (hidData[(ejeSel * 2) + 1] << 8) | hidData[(ejeSel * 2)];
+            if (pedales)
+            {
+                hidReport[4] = hidData[0];
+                hidReport[5] = hidData[1];
+            }
+            else
+            {
+                hidReport[0] = hidData[0];
+                hidReport[1] = hidData[1];
+                hidReport[2] = hidData[2];
+                hidReport[3] = hidData[3];
+                hidReport[6] = hidData[4];
+                hidReport[7] = hidData[5];
+
+            }
+            int posr = (hidReport[(ejeSel * 2) + 1] << 8) | hidReport[(ejeSel * 2)];
             txtPosReal.Text = posr.ToString();
             posReal.Margin = new Thickness(posr - 5, 0, 0, 0);
 

@@ -72,7 +72,7 @@ WDF_DECLARE_CONTEXT_TYPE(DELAY_CONTEXT)
 EVT_WDF_TIMER TimerDelay;
 EVT_WDF_WORKITEM TimerDelayWI;
 
-BOOLEAN PrepararDirectX(WDFDEVICE device);
+BOOLEAN PrepararDirectX(WDFDEVICE device, BOOLEAN report2);
 VOID ProcesarDirectX(WDFDEVICE device, PEV_COMANDO comando);
 //
 BOOLEAN PrepararRaton(WDFDEVICE device);

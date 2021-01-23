@@ -70,30 +70,38 @@ UCHAR ProcesarEventos(WDFDEVICE device)
 	UCHAR vueltas;
 	UCHAR procesado = 0;
 
-	ProcesarComandos(device);
-	for (vueltas = 0; vueltas < 3; vueltas++) //por si se vacia la cola
+	if (GetDeviceContext(device)->HID.TurnoReport != 1)
+	{
+		ProcesarComandos(device);
+	}
+	for (vueltas = 0; vueltas < 4; vueltas++) //por si se vacia la cola
 	{
 		switch (GetDeviceContext(device)->HID.TurnoReport)
 		{
 		case 0:
 			GetDeviceContext(device)->HID.TurnoReport = 1;
-			if (PrepararDirectX(device))
+			if (PrepararDirectX(device, FALSE))
 			{
 				procesado = 1;
 			}
 			break;
 		case 1:
 			GetDeviceContext(device)->HID.TurnoReport = 2;
-			if (PrepararRaton(device))
-			{
-				procesado = 2;
-			}
+			PrepararDirectX(device, TRUE);
+			procesado = 2;
 			break;
 		case 2:
+			GetDeviceContext(device)->HID.TurnoReport = 3;
+			if (PrepararRaton(device))
+			{
+				procesado = 3;
+			}
+			break;
+		case 3:
 			GetDeviceContext(device)->HID.TurnoReport = 0;
 			if (PrepararTeclado(device))
 			{
-				procesado = 3;
+				procesado = 4;
 			}
 			break;
 		}
@@ -102,13 +110,16 @@ UCHAR ProcesarEventos(WDFDEVICE device)
 			break;
 		}
 	}
-	ProcesarComandos(device);
+	if (GetDeviceContext(device)->HID.TurnoReport != 1)
+	{
+		ProcesarComandos(device);
+	}
 
 	return procesado;
 }
 
 #pragma region "DirectX"
-BOOLEAN PrepararDirectX(WDFDEVICE device)
+BOOLEAN PrepararDirectX(WDFDEVICE device, BOOLEAN report2)
 {
 	PAGED_CODE();
 
@@ -137,22 +148,28 @@ BOOLEAN PrepararDirectX(WDFDEVICE device)
 				//Se genera en el driver y sólo tiene un comando
 				if (!dxPosCambiada)
 				{
-					PHID_INPUT_DATA dato = (PHID_INPUT_DATA)((PUCHAR)WdfMemoryGetBuffer(WdfCollectionGetItem(colaComandos, posComando), NULL) + 1);
-					WdfWaitLockAcquire(devExt->Estado.WaitLockEstado, NULL);
+					if (!report2)
 					{
-						if (GetDeviceContext(device)->USBaHID.ModoRaw)
+						PHID_INPUT_DATA dato = (PHID_INPUT_DATA)((PUCHAR)WdfMemoryGetBuffer(WdfCollectionGetItem(colaComandos, posComando), NULL) + 1);
+						WdfWaitLockAcquire(devExt->Estado.WaitLockEstado, NULL);
 						{
-							RtlCopyMemory(&devExt->Estado.DirectX, dato, sizeof(HID_INPUT_DATA));
+							if (GetDeviceContext(device)->USBaHID.ModoRaw)
+							{
+								RtlCopyMemory(&devExt->Estado.DirectX, dato, sizeof(HID_INPUT_DATA));
+							}
+							else
+							{
+								RtlCopyMemory(devExt->Estado.DirectX.Ejes, dato->Ejes, sizeof(devExt->Estado.DirectX.Ejes));
+								devExt->Estado.DirectX.MiniStick = dato->MiniStick;
+							}
 						}
-						else
-						{
-							RtlCopyMemory(devExt->Estado.DirectX.Ejes, dato->Ejes, sizeof(devExt->Estado.DirectX.Ejes));
-							devExt->Estado.DirectX.MiniStick = dato->MiniStick;
-						}
+						WdfWaitLockRelease(devExt->Estado.WaitLockEstado);
 					}
-					WdfWaitLockRelease(devExt->Estado.WaitLockEstado);
-					WdfObjectDelete(WdfCollectionGetItem(colaComandos, posComando));
-					WdfCollectionRemoveItem(colaComandos, posComando);
+					else
+					{
+						WdfObjectDelete(WdfCollectionGetItem(colaComandos, posComando));
+						WdfCollectionRemoveItem(colaComandos, posComando);
+					}
 					dxPosCambiada = TRUE;
 					vacio = FALSE;
 					break;

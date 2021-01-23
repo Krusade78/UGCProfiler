@@ -87,8 +87,8 @@ namespace Calibrator
                                         for (int i = 0; i < hidData.Length; i++)
                                             hidData[i] = buff[i + 1 + size - hid.Size];
 
-                                        ucInfo.ActualizarEstado(hidData);
-                                        ucCalibrar.ActualizarEstado(hidData);
+                                        ucInfo.ActualizarEstado(hidData, (hid.Size == 8));
+                                        ucCalibrar.ActualizarEstado(hidData, (hid.Size == 8));
                                     }
                                 }
                                 break;

@@ -30,7 +30,8 @@ Todas la funciones PASSIVE_LEVEL
 #pragma alloc_text (PAGE, EvtTickRaton)
 #pragma alloc_text (PAGE, ProcesarRequestHIDForzada)
 #pragma alloc_text (PAGE, ProcesarRequest)
-#pragma alloc_text (PAGE, CompletarRequestDirectX)
+#pragma alloc_text (PAGE, CompletarRequestDirectX1)
+#pragma alloc_text (PAGE, CompletarRequestDirectX2)
 #pragma alloc_text (PAGE, CompletarRequestTeclado)
 #pragma alloc_text (PAGE, CompletarRequestRaton)
 
@@ -183,12 +184,15 @@ VOID ProcesarRequest(_In_ WDFDEVICE Device, WDFREQUEST Request)
 				switch (procesado)
 				{
 					case 1:
-						CompletarRequestDirectX(Device, Request);
+						CompletarRequestDirectX1(Device, Request);
 						break;
 					case 2:
-						CompletarRequestRaton(Device, Request);
+						CompletarRequestDirectX2(Device, Request);
 						break;
 					case 3:
+						CompletarRequestRaton(Device, Request);
+						break;
+					case 4:
 						CompletarRequestTeclado(Device, Request);
 						break;
 					default:
@@ -207,7 +211,7 @@ VOID ProcesarRequest(_In_ WDFDEVICE Device, WDFREQUEST Request)
 	}
 }
 
-VOID CompletarRequestDirectX(WDFDEVICE device, WDFREQUEST request)
+VOID CompletarRequestDirectX1(WDFDEVICE device, WDFREQUEST request)
 {
 	PAGED_CODE();
 
@@ -215,14 +219,48 @@ VOID CompletarRequestDirectX(WDFDEVICE device, WDFREQUEST request)
 	NTSTATUS		status;
 	PVOID			buffer;
 
-	status = WdfRequestRetrieveOutputBuffer(request, sizeof(HID_INPUT_DATA) + 1, &buffer, NULL);
+	status = WdfRequestRetrieveOutputBuffer(request, sizeof(HID_REPORT1) + 1, &buffer, NULL);
 	if (NT_SUCCESS(status))
 	{
+		HID_REPORT1 report;
 		*((PUCHAR)buffer) = 1;
 		WdfWaitLockAcquire(devExt->Estado.WaitLockEstado, NULL);
-		RtlCopyMemory((PUCHAR)buffer + 1, &devExt->Estado.DirectX, sizeof(HID_INPUT_DATA));
+			report.Ejes[0] = devExt->Estado.DirectX.Ejes[0];
+			report.Ejes[1] = devExt->Estado.DirectX.Ejes[1];
+			report.Ejes[2] = devExt->Estado.DirectX.Ejes[3];
+			report.Ejes[3] = devExt->Estado.DirectX.Ejes[4];
+			report.Ejes[4] = devExt->Estado.DirectX.Ejes[5];
+			report.Ejes[5] = devExt->Estado.DirectX.Ejes[6];
+			RtlCopyMemory(report.Botones, devExt->Estado.DirectX.Botones, sizeof(report.Botones));
+			RtlCopyMemory(report.Setas, devExt->Estado.DirectX.Setas, sizeof(report.Setas));
+			RtlCopyMemory((PUCHAR)buffer + 1, &report, sizeof(HID_REPORT1));
 		WdfWaitLockRelease(devExt->Estado.WaitLockEstado);
-		WdfRequestSetInformation(request, sizeof(HID_INPUT_DATA) + 1);
+		WdfRequestSetInformation(request, sizeof(HID_REPORT1) + 1);
+	}
+	WdfRequestComplete(request, status);
+}
+
+VOID CompletarRequestDirectX2(WDFDEVICE device, WDFREQUEST request)
+{
+	PAGED_CODE();
+
+	HID_CONTEXT* devExt = &GetDeviceContext(device)->HID;
+	NTSTATUS		status;
+	PVOID			buffer;
+
+	status = WdfRequestRetrieveOutputBuffer(request, sizeof(HID_REPORT2) + 1, &buffer, NULL);
+	if (NT_SUCCESS(status))
+	{
+		HID_REPORT2 report;
+		*((PUCHAR)buffer) = 2;
+		WdfWaitLockAcquire(devExt->Estado.WaitLockEstado, NULL);
+			report.MiniStick = devExt->Estado.DirectX.MiniStick;
+			report.Ejes[0] = devExt->Estado.DirectX.Ejes[2];
+			report.Ejes[1] = devExt->Estado.DirectX.Ejes[7];
+			report.Ejes[2] = devExt->Estado.DirectX.Ejes[8];
+			RtlCopyMemory((PUCHAR)buffer + 1, &report, sizeof(HID_REPORT2));
+		WdfWaitLockRelease(devExt->Estado.WaitLockEstado);
+		WdfRequestSetInformation(request, sizeof(HID_REPORT2) + 1);
 	}
 	WdfRequestComplete(request, status);
 }
@@ -238,7 +276,7 @@ VOID CompletarRequestTeclado(WDFDEVICE device, WDFREQUEST request)
 	status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt->Estado.Teclado) + 1, &buffer, NULL);
 	if (NT_SUCCESS(status))
 	{
-		*((PUCHAR)buffer) = 3;
+		*((PUCHAR)buffer) = 4;
 		WdfWaitLockAcquire(devExt->Estado.WaitLockEstado, NULL);
 		RtlCopyMemory((PUCHAR)buffer + 1, devExt->Estado.Teclado, sizeof(devExt->Estado.Teclado));
 		WdfWaitLockRelease(devExt->Estado.WaitLockEstado);
@@ -261,7 +299,7 @@ VOID CompletarRequestRaton(WDFDEVICE device, WDFREQUEST request)
 	status = WdfRequestRetrieveOutputBuffer(request, sizeof(devExt->Estado.Raton) + 1, &buffer, NULL);
 	if (NT_SUCCESS(status))
 	{
-		*((PUCHAR)buffer) = 2;
+		*((PUCHAR)buffer) = 3;
 		WdfWaitLockAcquire(devExt->Estado.WaitLockEstado, NULL);
 		{
 			RtlCopyMemory((PUCHAR)buffer + 1, devExt->Estado.Raton, sizeof(devExt->Estado.Raton));
