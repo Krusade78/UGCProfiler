@@ -1,9 +1,0 @@
-#ifdef _PUBLIC_
-EVT_WDF_DEVICE_SELF_MANAGED_IO_INIT EvtDeviceSelfManagedIoInit;
-EVT_WDF_DEVICE_SELF_MANAGED_IO_CLEANUP EvtDeviceSelfManagedIoCleanup;
-EVT_WDF_DEVICE_D0_ENTRY EvtDeviceD0Entry;
-EVT_WDF_DEVICE_D0_EXIT EvtDeviceD0Exit;
-#endif // _PUBLIC_
-
-
-

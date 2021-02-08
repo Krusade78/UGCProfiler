@@ -20,16 +20,14 @@ Todas la funciones PASSIVE_LEVEL
 #include <wdf.h>
 #include "context.h"
 #define _PUBLIC_
-#include "ProcesarUSBs_Calibrado.h"
 #include "EscribirUSBX52.h"
-#include "Perfil.h"
 #define _PRIVATE_
 #include "IoCtlAplicacion.h"
 #undef _PRIVATE_
 #undef _PUBLIC_
 
-DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\XHOTAS_Control");
-DECLARE_CONST_UNICODE_STRING(dosDeviceName, L"\\??\\XHOTASControl");
+DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\X52_XHOTAS_Control");
+DECLARE_CONST_UNICODE_STRING(dosDeviceName, L"\\??\\X52_XHOTASControl");
 
 #ifdef ALLOC_PRAGMA
     #pragma alloc_text( PAGE, IniciarIoCtlAplicacion)
@@ -123,7 +121,7 @@ VOID EvtIOCtlAplicacion(
 
 	PAGED_CODE();
 
-	if ((IoControlCode != IOCTL_USR_COMANDOS) || (InputBufferLength > 0))
+	if (InputBufferLength > 0)
 	{
 		status = WdfRequestRetrieveInputBuffer(Request, 0, (PVOID*)&SystemBuffer, NULL);
 		if (!NT_SUCCESS(status))
@@ -135,7 +133,9 @@ VOID EvtIOCtlAplicacion(
 	}
 	switch (IoControlCode)
 	{
-		case IOCTL_USR_RAW:
+		case IOCTL_MFD_LUZ:
+		case IOCTL_GLOBAL_LUZ:
+		case IOCTL_INFO_LUZ:
 			if (InputBufferLength != 1)
 			{
 				WdfRequestSetInformation(Request, 1);
@@ -170,42 +170,31 @@ VOID EvtIOCtlAplicacion(
 
 	switch (IoControlCode)
 	{
-	case IOCTL_USR_RAW:
-	{
-		GetDeviceContext(device)->USBaHID.ModoRaw = SystemBuffer[0];
-		WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, STATUS_SUCCESS);
-	}
-		break;
-	//------------------- ProcesarUSBs_Calibrado.c ---------------------------------
-	case IOCTL_USR_CALIBRADO:
-		status = ConfigurarCalibrado(device, Request);
-		WdfRequestComplete(Request, status);
-		break;
-	case IOCTL_USR_ANTIVIBRACION:
-		status = ConfigurarAntivibracion(device, Request);
-		WdfRequestComplete(Request, status);
-		break;
-	//-------------------- Mapa.c -----------------------------------
-	case IOCTL_USR_MAPA:
-		status = HF_IoEscribirMapa(device, Request);
-		WdfRequestComplete(Request, status);
-		break;
-	case IOCTL_USR_COMANDOS:
-		status = HF_IoEscribirComandos(device, Request, (InputBufferLength == 0));
-		WdfRequestComplete(Request, status);
-		break;
 	//------------------- X52_write.c -----------------------------------------
+	case IOCTL_MFD_LUZ:
+	{
+		status = Luz_MFD(device, SystemBuffer);
+		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		WdfRequestComplete(Request, status);
+		break;
+	}
+	case IOCTL_GLOBAL_LUZ:
+	{
+		status = Luz_Global(device, SystemBuffer);
+		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		WdfRequestComplete(Request, status);
+		break;
+	}
+	case IOCTL_INFO_LUZ:
+	{
+		status = Luz_Info(device, SystemBuffer);
+		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		WdfRequestComplete(Request, status);
+		break;
+	}
 	case IOCTL_TEXTO:
 	{
-		if (GetDeviceContext(device)->MenuMFD.Activado)
-		{
-			status = STATUS_SUCCESS;
-		}
-		else
-		{
-			status = Set_Texto(device, SystemBuffer, InputBufferLength);
-		}
+		status = Set_Texto(device, SystemBuffer, InputBufferLength);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, InputBufferLength);
 		WdfRequestComplete(Request, status);
 		break;

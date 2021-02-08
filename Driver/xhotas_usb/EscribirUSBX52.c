@@ -35,8 +35,6 @@ Todas la funciones PASSIVE_LEVEL
 #pragma alloc_text(PAGE, Set_Hora24)
 #pragma alloc_text(PAGE, Set_Fecha)
 #pragma alloc_text(PAGE, EnviarOrden)
-//#pragma alloc_text(PAGE, EnviarOrdenWI)
-//#pragma alloc_text(PAGE, EnviarOrdenUSB)
 #pragma alloc_text(PAGE, EnviarOrdenHilo)
 #pragma alloc_text(PAGE, LimpiarSalidaX52)
 #endif
@@ -312,68 +310,3 @@ VOID LimpiarSalidaX52(WDFOBJECT  Object)
 		ObDereferenceObject(philo);
 	}
 }
-//NTSTATUS EnviarOrdenUSB(_In_ WDFDEVICE DeviceObject, _In_ USHORT* valor, UCHAR* idx, UCHAR nordenes)
-//{
-//	NTSTATUS                        status = STATUS_SUCCESS;
-//	WDF_USB_CONTROL_SETUP_PACKET    controlSetupPacket;
-//	WDF_REQUEST_SEND_OPTIONS		sendOptions;
-//	WDF_OBJECT_ATTRIBUTES			attributes;
-//	LONGLONG						timeOut = WDF_REL_TIMEOUT_IN_MS(3000);
-//
-//	PAGED_CODE();
-//
-//	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-//	attributes.ParentObject = DeviceObject;
-//	
-//	WdfWaitLockAcquire(GetDeviceContext(DeviceObject)->SalidaX52.WaitLockX52, &timeOut);
-//	{
-//		for (UCHAR i = 0; i < nordenes; i++)
-//		{
-//			//WDFREQUEST request;
-//			//if (NT_SUCCESS(WdfRequestCreate(&attributes, NULL, &request)))
-//			//{
-//				WDF_USB_CONTROL_SETUP_PACKET_INIT_VENDOR(&controlSetupPacket,
-//					BmRequestHostToDevice,
-//					BmRequestToDevice,
-//					0x91, // Request
-//					valor[i], // Value
-//					idx[i]); // Index  
-//
-//				//status = WdfUsbTargetDeviceFormatRequestForControlTransfer(
-//				//	GetDeviceContext(DeviceObject)->UsbDevice,
-//				//	request,
-//				//	&controlSetupPacket,
-//				//	NULL,
-//				//	NULL);
-//				//if (NT_SUCCESS(status))
-//				//{
-//				//	if (!WdfRequestSend(request, WdfUsbTargetDeviceGetIoTarget(GetDeviceContext(DeviceObject)->UsbDevice), NULL))
-//				//	{
-//				//		WdfObjectDelete(request);
-//				//		break;
-//				//	}
-//				//}
-//				//else
-//				//{
-//				//	WdfObjectDelete(request);
-//				//	break;
-//				//}
-//			//}
-//			WDF_REQUEST_SEND_OPTIONS_INIT(&sendOptions, WDF_REQUEST_SEND_OPTION_TIMEOUT);
-//			WDF_REQUEST_SEND_OPTIONS_SET_TIMEOUT(&sendOptions, WDF_REL_TIMEOUT_IN_MS(500));
-//
-//			status = WdfUsbTargetDeviceSendControlTransferSynchronously(
-//				GetDeviceContext(DeviceObject)->UsbDevice,
-//				NULL, // Optional WDFREQUEST
-//				&sendOptions, // PWDF_REQUEST_SEND_OPTIONS
-//				&controlSetupPacket,
-//				NULL,
-//				NULL);
-//			if (!NT_SUCCESS(status))
-//				break;
-//		}
-//	}
-//	WdfWaitLockRelease(GetDeviceContext(DeviceObject)->SalidaX52.WaitLockX52);
-//
-//	return status;
-//}

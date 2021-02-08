@@ -19,32 +19,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EscribirUSBX52.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Driver.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IoCtlAplicacion.c">
+    <ClCompile Include="ColaHID.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Context.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IoCtlAplicacion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EscribirUSBX52.h">
+    <ClInclude Include="ColaHID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="xhotas_usb.inf">
+    <Inf Include="xhotas_vhid.inf">
       <Filter>Driver Files</Filter>
     </Inf>
   </ItemGroup>
