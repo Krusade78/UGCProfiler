@@ -14,9 +14,14 @@
             </RadialGradientBrush>
         </Grid.Background>
         <TextBlock Text="Esto asignará la seta actual a la seta DirectX seleccionada (sólo para el modo actual). Se añadirá cualquier macro que sea necesaria y se sobreescribirá cualquier configuración de las 8 posiciones de la seta con las posiciones del DirectX." Height="72" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10" Foreground="Gainsboro" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="53,0,0,0">
+            <Label Content="vJoy" Foreground="Gainsboro" Margin="0,0,12,0" />
+            <Label Content="Seta" Foreground="Gainsboro" />
+        </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,94,0,0">
-            <Label Content="Asignar a seta:" Foreground="Gainsboro" />
-            <local:CtlNumUpDown x:Name="NumericUpDown1"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="4" Minimum="1" Value="1" Width="50" Height="21" />
+            <Label Content="Asignar:" Foreground="Gainsboro" />
+            <local:CtlNumUpDown x:Name="NumericUpDownJ" Margin="0,0,5,0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="3" Minimum="1" Value="1" Width="40" Height="21" />
+            <local:CtlNumUpDown x:Name="NumericUpDown1"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="4" Minimum="1" Value="1" Width="40" Height="21" />
         </StackPanel>
         <Button Margin="67,132,243,10" Width="120" Content="Aceptar" Click="Button1_Click" Background="Linen" Foreground="#FF762626" />
         <Button Width="120" Content="Cancelar" Margin="241,132,69,10" IsCancel="True" Background="Linen" Foreground="#FF762626" />

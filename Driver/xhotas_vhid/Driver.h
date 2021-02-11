@@ -1,5 +1,5 @@
 #pragma once
-#include <initguid.h>
+//#include <initguid.h>
 
 DRIVER_INITIALIZE DriverEntry;
 EVT_WDF_DRIVER_DEVICE_ADD EvtAddDevice;
@@ -16,7 +16,7 @@ WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_CONTEXT, GetDeviceContext);
 
 #define DOS_DEVICE_NAME  L"\\DosDevices\\XHOTAS_VHID_Interface"
 // {59819B74-F102-469A-9009-3CAF35FD4687}
-DEFINE_GUID(GUID_DEVINTERFACE, 0x59819b74, 0xf102, 0x469a, 0x90, 0x9, 0x3c, 0xaf, 0x35, 0xfd, 0x46, 0x87);
+//DEFINE_GUID(GUID_DEVINTERFACE, 0x59819b74, 0xf102, 0x469a, 0x90, 0x9, 0x3c, 0xaf, 0x35, 0xfd, 0x46, 0x87);
 
 //
 // This is the default report descriptor for the virtual Hid device returned

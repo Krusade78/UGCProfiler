@@ -38,20 +38,11 @@ namespace Editor
                 SetEje();
         }
 
-        private void ComboBoxAxesMini_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.IsLoaded && eventos)
-                SetEjeMini();
-        }
-
         private void CheckBoxInverted_Checked(object sender, RoutedEventArgs e)
         {
             if (eventos)
             {
-                if (ComboBoxAxesMini.Visibility == Visibility.Visible)
-                    SetEjeMini();
-                else
-                    SetEje();
+                SetEje();
             }
         }
 
@@ -106,7 +97,7 @@ namespace Editor
 
         private void ButtonEditBands_Click(object sender, RoutedEventArgs e)
         {
-            VEditorBandas dlg = new VEditorBandas(idActual, tipoActual)
+            VEditorBandas dlg = new VEditorBandas(idActual)
             {
                 Owner = App.Current.MainWindow
             };

@@ -62,10 +62,6 @@ CPaqueteEvento* CColaEventos::Leer()
 		return paq;
 	}
 
-	if (WAIT_OBJECT_0 != WaitForSingleObject(evCola, 0))
-	{
-		return paq;
-	}
 	if (InterlockedCompareExchange16(&tamCola, 0, 0) < 2)
 	{
 		espera = true;

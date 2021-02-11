@@ -51,9 +51,16 @@ DWORD WINAPI CSalidaHID::HiloLectura(LPVOID param)
     while (!local->salir)
     {
 
-        WaitForMultipleObjects(3, eventos, FALSE, INFINITE);
-        CPaqueteEvento* paq = local->colaEv->Leer();
-        local->salida->Procesar(paq);
+        DWORD ev = WaitForMultipleObjects(3, eventos, FALSE, INFINITE);
+        if ((ev - WAIT_OBJECT_0) != 0)
+        {
+            CPaqueteEvento* paq = nullptr;
+            if ((ev - WAIT_OBJECT_0) == 1)
+            {
+                paq = local->colaEv->Leer();
+            }
+            local->salida->Procesar(paq);
+        }
     }
 
     InterlockedExchange16(&local->hiloCerrado, TRUE);

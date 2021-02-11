@@ -76,8 +76,9 @@ namespace Calibrator
                                     uint ret = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
                                     String nombre = Marshal.PtrToStringAnsi(pNombre);
                                     Marshal.FreeHGlobal(pNombre);
-                                    if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
+                                    if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
                                     {
+                                        nombre = nombre.Remove(0, 34).Substring(0, 1);
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
                                         CRawInput.RAWINPUTHID hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
@@ -87,8 +88,9 @@ namespace Calibrator
                                         for (int i = 0; i < hidData.Length; i++)
                                             hidData[i] = buff[i + 1 + size - hid.Size];
 
-                                        ucInfo.ActualizarEstado(hidData, (hid.Size == 8));
-                                        ucCalibrar.ActualizarEstado(hidData, (hid.Size == 8));
+                                        byte[] mapa = { 0, 0, 0, 1, 2, 3 };
+                                        ucInfo.ActualizarEstado(hidData, mapa[byte.Parse(nombre)], false);
+                                        ucCalibrar.ActualizarEstado(hidData, mapa[byte.Parse(nombre)], false);
                                     }
                                 }
                                 break;
@@ -99,7 +101,7 @@ namespace Calibrator
                                     uint ret = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
                                     String nombre = Marshal.PtrToStringAnsi(pNombre);
                                     Marshal.FreeHGlobal(pNombre);
-                                    if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
+                                    if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
                                     {
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTKEYBOARD)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTKEYBOARD)));
@@ -117,7 +119,7 @@ namespace Calibrator
                                     uint ret = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
                                     String nombre = Marshal.PtrToStringAnsi(pNombre);
                                     Marshal.FreeHGlobal(pNombre);
-                                    if (nombre.StartsWith("\\\\?\\HID#VID_06A3&PID_0255"))
+                                    if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
                                     {
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
@@ -141,14 +143,14 @@ namespace Calibrator
             if (this.IsLoaded)
             {
                 tbCalibrar.IsChecked = false;
-                SetRawMode(modoRaw);
+                SetModoCalibrado(false);
             }
         }
 
         private void PestañaCalibrar_Checked(object sender, RoutedEventArgs e)
         {
             tbPrueba.IsChecked = false;
-            SetRawMode(true);
+            SetModoCalibrado(true);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -158,6 +160,7 @@ namespace Calibrator
                 hWnd.RemoveHook(WndProc);
                 hWnd = null;
             }
+            SetModoCalibrado(false);
             SetRawMode(false);
         }
 
@@ -168,13 +171,33 @@ namespace Calibrator
             SetRawMode(modoRaw);
         }
 
+        private void SetModoCalibrado(bool on)
+        {
+            EnviarAlLauncher("CAL:" + on.ToString());
+        }
         private void SetRawMode(bool on)
         {
-            if (Comunes.CIoCtl.AbrirDriver())
+            EnviarAlLauncher("RAW:" + on.ToString());
+        }
+
+        private void EnviarAlLauncher(string msj)
+        {
+            using (System.IO.Pipes.NamedPipeClientStream pipeClient = new System.IO.Pipes.NamedPipeClientStream("LauncherPipe"))
             {
-                byte[] buff = (on) ? new byte[] { 1 } : new byte[] { 0 };
-                Comunes.CIoCtl.DeviceIoControl(Comunes.CIoCtl.IOCTL_USR_RAW, buff, 1, null, 0, out _, IntPtr.Zero);
-                Comunes.CIoCtl.CerrarDriver();
+                try
+                {
+                    pipeClient.Connect(1000);
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(pipeClient))
+                    {
+                        sw.WriteLine(msj);
+                        sw.Flush();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
             }
         }
         #endregion

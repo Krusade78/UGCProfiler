@@ -36,12 +36,8 @@ namespace Editor
             else if (tipo == Tipo.Boton)
                 Boton(idc, false);
             else if (tipo == Tipo.Eje)
-                Eje(idc, false);
-            else if (tipo == Tipo.EjePeque)
-                Eje(idc, true);
-            else
-                MiniStick(idc);
-
+                Eje(idc);
+ 
             eventos = true;
         }
 
@@ -52,14 +48,14 @@ namespace Editor
             NumericUpDownPosition.IsEnabled = true;
             //'/--------
 
-            byte p = 0, m = 0;
+            byte idJ = 0, p = 0, m = 0;
             byte st;
 
-            padre.GetModos(ref p, ref m);
+            padre.GetModos(ref idJ, ref p, ref m);
             if (seta)
-                st = padre.GetDatos().Perfil.MAPASETAS.FindByidPinkieidModoIdSeta(p, m, b).TamIndices;
+                st = padre.GetDatos().Perfil.MAPASETAS.FindByidJoyidPinkieidModoIdSeta(idJ, p, m, b).TamIndices;
             else
-                st = padre.GetDatos().Perfil.MAPABOTONES.FindByidPinkieidModoidBoton(p, m, b).TamIndices;
+                st = padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(idJ, p, m, b).TamIndices;
 
             ButtonAssignPOV.Visibility = System.Windows.Visibility.Hidden;
             ButtonAssignPinkie.Visibility = System.Windows.Visibility.Hidden;
@@ -86,11 +82,11 @@ namespace Editor
                     ButtonAssignPOV.Visibility = System.Windows.Visibility.Visible;
                 else
                 {
-                    if (b == 6)
+                    if ((b == 3) && (idJ == 1))
                         ButtonAssignPinkie.Visibility = System.Windows.Visibility.Visible;
                     else
                     {
-                        if ((b > 7) && (b < 11))
+                        if ((b > 4) && (b < 8) && (idJ == 1))
                             ButtonAssignModes.Visibility = System.Windows.Visibility.Visible;
                     }
                 }
@@ -109,29 +105,28 @@ namespace Editor
             CargarIndexMacro();
         }
 
-        private void Eje(byte e, bool peque)
+        private void Eje(byte e)
         {
-            ComboBoxAxes.Visibility = System.Windows.Visibility.Visible;
-            ComboBoxAxesMini.Visibility = System.Windows.Visibility.Hidden;
             NumericUpDownPosition.Maximum = 16;
             NumericUpDownPosition.IsEnabled = true;
 
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-            byte neje = (!peque) ? padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).Eje : padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).Eje;
-            byte tipoEje = (!peque) ? padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).TipoEje : padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).TipoEje;
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
+            byte neje = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m , e).Eje;
+            byte tipoEje = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m , e).TipoEje;
 
             CheckBoxInverted.IsChecked = ((tipoEje & 0b10) == 0b10); //invertido
 
+            nudJoy.Value = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, e).JoySalida + 1;
             ComboBoxAxes.SelectedIndex = ((tipoEje & 0b1) == 0) ? 0 : neje + 1;
-            ButtonSensibility.IsEnabled = (!peque);
+            ButtonSensibility.IsEnabled = true;
 
             if ((tipoEje & 0b1000) == 0b1000) //ratón
             {
                 ComboBoxAxes.SelectedIndex = neje + 12;
                 LabelMSensibility.IsEnabled = true;
                 NumericUpDownMSensibility.IsEnabled = true;
-                NumericUpDownMSensibility.Value = (!peque) ? padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).Mouse : padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).Mouse;
+                NumericUpDownMSensibility.Value = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, e).Mouse;
             }
             else
             {
@@ -147,8 +142,8 @@ namespace Editor
             if ((tipoEje & 0b10000) == 0b10000) //incremental
             {
                 RadioButtonIncremental.IsChecked = true;
-                NumericUpDownResistanceInc.Value = (!peque) ? padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).ResistenciaInc : padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).ResistenciaInc;
-                NumericUpDownResistanceDec.Value = (!peque) ? padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).ResistenciaDec : padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).ResistenciaDec;
+                NumericUpDownResistanceInc.Value = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, e).ResistenciaInc;
+                NumericUpDownResistanceDec.Value = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, e).ResistenciaDec;
                 //'macros
                 PanelMacro.Visibility = System.Windows.Visibility.Collapsed;
                 RadioButton1.Content = "Incrementar";
@@ -158,14 +153,7 @@ namespace Editor
             {
                 RadioButtonBands.IsChecked = true;
                 byte[] bandas;
-                if (!peque)
-                {
-                    bandas = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(e, m, p).Bandas;
-                }
-                else
-                {
-                    bandas = padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(e, m, p).Bandas;
-                }
+                bandas = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, e).Bandas;
                 NumericUpDownPosition.Maximum = 1;
                 foreach (byte b in bandas)
                 {
@@ -188,75 +176,32 @@ namespace Editor
             CargarIndexMacro();
         }
 
-        private void MiniStick(byte id)
-        {
-            ComboBoxAxes.Visibility = System.Windows.Visibility.Hidden;
-            ComboBoxAxesMini.Visibility = System.Windows.Visibility.Visible;
-            NumericUpDownPosition.Maximum = 16;
-
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-            byte neje = padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(id, m, p).Eje;
-            byte tipoEje = padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(id, m, p).TipoEje;
-
-            CheckBoxInverted.IsChecked = ((tipoEje & 0b10) == 0b10); //invertido
-
-            ComboBoxAxesMini.SelectedIndex = ((tipoEje & 0b100) == 0b100) ? neje + 1 : 0;
-
-            if ((padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(id, m, p).TipoEje & 0b1000) == 0b1000) //ratón
-            {
-                ComboBoxAxesMini.SelectedIndex = neje + 4;
-                LabelMSensibility.IsEnabled = true;
-                NumericUpDownMSensibility.IsEnabled = true;
-                NumericUpDownMSensibility.Value = padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(id, m, p).Mouse;
-            }
-            else
-            {
-                LabelMSensibility.IsEnabled = false;
-                NumericUpDownMSensibility.IsEnabled = false;
-            }
-
-            PanelMapaEjes.Visibility = System.Windows.Visibility.Collapsed;
-            PanelButton.Visibility = System.Windows.Visibility.Visible;
-            PanelDigital.Visibility = System.Windows.Visibility.Visible;
-            panelPos.Visibility = System.Windows.Visibility.Hidden;
-            panelPS.Visibility = System.Windows.Visibility.Visible;
-            PanelMacro.Visibility = System.Windows.Visibility.Visible;
-        }
-
         private void CargarIndexMacro()
         {
             eventos = false;
 
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
             if (tipoActual == Tipo.Seta)
             {
-                if (padre.GetDatos().Perfil.MAPASETAS.FindByidPinkieidModoIdSeta(p, m, idActual).TamIndices == 0)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, idActual, m, p).Accion : padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, idActual, m, p).Accion;
+                if (padre.GetDatos().Perfil.MAPASETAS.FindByidJoyidPinkieidModoIdSeta(idJ, p, m, idActual).TamIndices == 0)
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, idActual, 0).idAccion : padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, idActual, 1).idAccion;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Accion;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, idActual, (byte)(NumericUpDownPosition.Value - 1)).idAccion;
             }
             else if (tipoActual == Tipo.Boton)
             {
-                if (padre.GetDatos().Perfil.MAPABOTONES.FindByidPinkieidModoidBoton(p, m, idActual).TamIndices == 0)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 0).Accion : padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 1).Accion;
+                if (padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(idJ, p, m, idActual).TamIndices == 0)
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(idJ, p, m, idActual, 0).idAccion : padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(idJ, p, m, idActual, 1).idAccion;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, (byte)(NumericUpDownPosition.Value - 1)).Accion;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(idJ, p, m, idActual, (byte)(NumericUpDownPosition.Value - 1)).idAccion;
             }
             else if (tipoActual == Tipo.Eje)
             {
-                if ((padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje & 0b10000) == 0b10000)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(0, idActual, m, p).Accion : padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(1, idActual, m, p).Accion;
+                if ((padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje & 0b10000) == 0b10000)
+                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJES.FindByidJoyidPinkieidModoidEjeid(idJ, p, m, idActual, 0).idAccion : padre.GetDatos().Perfil.INDICESEJES.FindByidJoyidPinkieidModoidEjeid(idJ, p, m, idActual, 1).idAccion;
                 else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Accion;
-            }
-            else if (tipoActual == Tipo.EjePeque)
-            {
-                if ((padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje & 0b10000) == 0b10000)
-                    ComboBoxAssigned.SelectedValue = (RadioButton1.IsChecked == true) ? padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, idActual, m, p).Accion : padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, idActual, m, p).Accion;
-                else
-                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Accion;
+                    ComboBoxAssigned.SelectedValue = padre.GetDatos().Perfil.INDICESEJES.FindByidJoyidPinkieidModoidEjeid(idJ, p, m, idActual, (byte)(NumericUpDownPosition.Value - 1)).idAccion;
             }
 
             eventos = true;
@@ -268,67 +213,26 @@ namespace Editor
         #region "Ejes"
         private void SetEje()
         {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-            if (tipoActual == Tipo.Eje)
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
+
+            padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje &= 0b1111_0000; //tipos a 0
+            padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).Eje = 0; //X por defecto
+            padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).JoySalida = (byte)(nudJoy.Value - 1);
+            if (ComboBoxAxes.SelectedIndex > 9) //raton
             {
-                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje &= 0b1111_0000; //tipos a 0
-                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).Eje = 0; //X por defecto
-                if (ComboBoxAxes.SelectedIndex > 9) //raton
-                {
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b1000;
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).Eje = (byte)(ComboBoxAxes.SelectedIndex - 11);
-                }
-                else if (ComboBoxAxes.SelectedIndex > 0)
-                {
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b1;
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).Eje = (byte)(ComboBoxAxes.SelectedIndex - 1);
-                }
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje |= (byte)0b1000;
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).Eje = (byte)(ComboBoxAxes.SelectedIndex - 11);
                 if (CheckBoxInverted.IsChecked == true)
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b10; //invertido
+                    padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje |= (byte)0b10; //invertido
             }
-            else if (tipoActual == Tipo.EjePeque)
+            else if (ComboBoxAxes.SelectedIndex > 0)
             {
-                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje &= 0b1111_0000; // tipos a 0
-                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).Eje = 0; //X por defecto
-                if (ComboBoxAxes.SelectedIndex > 9) //raton
-                {
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b1000;
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).Eje = (byte)(ComboBoxAxes.SelectedIndex - 11);
-                }
-                else if (ComboBoxAxes.SelectedIndex > 0)
-                {
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b1;
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).Eje = (byte)(ComboBoxAxes.SelectedIndex - 1);
-                }
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje |= (byte)0b1;
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).Eje = (byte)(ComboBoxAxes.SelectedIndex - 1);
                 if (CheckBoxInverted.IsChecked == true)
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b10; //invertido
-
+                    padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje |= (byte)0b10; //invertido
             }
-            padre.GetDatos().Modificado = true;
-            Refrescar();
-        }
-
-        private void SetEjeMini()
-        {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-
-            padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje &= 0b1111_0000; //ninguno, sin invertir
-            padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).Eje = 0; //X por defecto
-
-            if (ComboBoxAxesMini.SelectedIndex > 2) //ratón
-            {
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b1000;
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).Eje = (byte)(ComboBoxAxesMini.SelectedIndex - 4);
-            }
-            else if (ComboBoxAxesMini.SelectedIndex > 0)
-            {
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= (byte)0b100;
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).Eje = (byte)(ComboBoxAxesMini.SelectedIndex - 1);
-            }
-            if (CheckBoxInverted.IsChecked == true)
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje = (byte)0b10; //invertido
 
             padre.GetDatos().Modificado = true;
             Refrescar();
@@ -336,42 +240,24 @@ namespace Editor
 
         private void SetSensibilidadRaton()
         {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-            if (tipoActual == Tipo.Eje)
-                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
-            else if (tipoActual == Tipo.EjePeque)
-                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
-            else
-                padre.GetDatos().Perfil.MAPAEJESMINI.FindByidEjeidModoidPinkie(idActual, m, p).Mouse = (byte)NumericUpDownMSensibility.Value;
-
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
+            padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).Mouse = (byte)NumericUpDownMSensibility.Value;
             padre.GetDatos().Modificado = true;
         }
 
         private void SetModoEje()
         {
-            byte p = 0, m = 0;
+            byte idJ = 0, p = 0, m = 0;
             byte inc = 0b10000;
             byte bandas = 0b100000;
-            padre.GetModos(ref p, ref m);
-            if (tipoActual == Tipo.Eje)
-            {
-                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje &= (byte)~inc;
-                padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje &= (byte)~bandas;
-                if (RadioButtonBands.IsChecked == true)
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= bandas;
-                else if (RadioButtonIncremental.IsChecked == true)
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= inc;
-            }
-            else
-            {
-                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje &= (byte)~inc;
-                padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje &= (byte)~bandas;
-                if (RadioButtonBands.IsChecked == true)
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= bandas;
-                else if (RadioButtonIncremental.IsChecked == true)
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje |= inc;
-            }
+            padre.GetModos(ref idJ, ref p, ref m);
+            padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje &= (byte)~inc;
+            padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje &= (byte)~bandas;
+            if (RadioButtonBands.IsChecked == true)
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje |= bandas;
+            else if (RadioButtonIncremental.IsChecked == true)
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje |= inc;
 
             padre.GetDatos().Modificado = true;
             Refrescar();
@@ -379,22 +265,12 @@ namespace Editor
 
         private void SetResistencia(bool inc)
         {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-            if (tipoActual == Tipo.Eje)
-            {
-                if (inc)
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).ResistenciaInc = (byte)NumericUpDownResistanceInc.Value;
-                else
-                    padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).ResistenciaDec = (byte)NumericUpDownResistanceDec.Value;
-            }
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
+            if (inc)
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).ResistenciaInc = (byte)NumericUpDownResistanceInc.Value;
             else
-            {
-                if (inc)
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).ResistenciaInc = (byte)NumericUpDownResistanceInc.Value;
-                else
-                    padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).ResistenciaDec = (byte)NumericUpDownResistanceDec.Value;
-            }
+                padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).ResistenciaDec = (byte)NumericUpDownResistanceDec.Value;
 
             padre.GetDatos().Modificado = true;
         }
@@ -403,13 +279,13 @@ namespace Editor
         #region "Botones"
         private void SetModoBoton(byte posiciones)
         {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
 
             if (tipoActual == CEnums.Tipo.Seta)
-                padre.GetDatos().Perfil.MAPASETAS.FindByidPinkieidModoIdSeta(p, m, idActual).TamIndices = posiciones;
+                padre.GetDatos().Perfil.MAPASETAS.FindByidJoyidPinkieidModoIdSeta(idJ, p, m, idActual).TamIndices = posiciones;
             else
-                padre.GetDatos().Perfil.MAPABOTONES.FindByidPinkieidModoidBoton(p, m, idActual).TamIndices = posiciones;
+                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(idJ, p, m, idActual).TamIndices = posiciones;
 
             padre.GetDatos().Modificado = true;
             Refrescar();
@@ -419,61 +295,47 @@ namespace Editor
         #region "Macros"
         private void AsignarMacro(ushort idc)
         {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
             switch (tipoActual)
             {
                 case Tipo.Seta:
                     {
-                        if (padre.GetDatos().Perfil.MAPASETAS.FindByidPinkieidModoIdSeta(p, m, idActual).TamIndices == 0)
+                        if (padre.GetDatos().Perfil.MAPASETAS.FindByidJoyidPinkieidModoIdSeta(idJ, p, m, idActual).TamIndices == 0)
                         {
                             if (RadioButton1.IsChecked == true)
-                                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, idActual, m, p).Accion = idc;
+                                padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, idActual, 0).idAccion = idc;
                             else
-                                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, idActual, m, p).Accion = idc;
+                                padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p , m, idActual, 1).idAccion = idc;
                         }
                         else
-                            padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Accion = idc;
+                            padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, idActual, (byte)(NumericUpDownPosition.Value - 1)).idAccion = idc;
                         break;
                     }
                 case Tipo.Boton:
                     {
-                        if (padre.GetDatos().Perfil.MAPABOTONES.FindByidPinkieidModoidBoton(p, m, idActual).TamIndices == 0)
+                        if (padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(idJ, p, m, idActual).TamIndices == 0)
                         {
                             if (RadioButton1.IsChecked == true)
-                                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 0).Accion = idc;
+                                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(idJ, p, m, idActual, 0).idAccion = idc;
                             else
-                                padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, 1).Accion = idc;
+                                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(idJ, p, m, idActual, 1).idAccion = idc;
                         }
                         else
-                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidBotonidModoidPinkieid(idActual, m, p, (byte)(NumericUpDownPosition.Value - 1)).Accion = idc;
+                            padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(idJ, p, m, idActual, (byte)(NumericUpDownPosition.Value - 1)).idAccion = idc;
                         break;
                     }
                 case Tipo.Eje:
                     {
-                        if ((padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje & 0b10000) == 0b10000) // incremental
+                        if ((padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje & 0b10000) == 0b10000) // incremental
                         {
                             if (RadioButton1.IsChecked == true)
-                                padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(0, idActual, m, p).Accion = idc;
+                                padre.GetDatos().Perfil.INDICESEJES.FindByidJoyidPinkieidModoidEjeid(idJ, p, m, idActual, 0).idAccion = idc;
                             else
-                                padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie(1, idActual, m, p).Accion = idc;
+                                padre.GetDatos().Perfil.INDICESEJES.FindByidJoyidPinkieidModoidEjeid(idJ, p, m, idActual, 1).idAccion = idc;
                         }
-                        else if ((padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje & 0b100000) == 0b100000) // bandas
-                            padre.GetDatos().Perfil.INDICESEJES.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Accion = idc;
-
-                        break;
-                    }
-                case Tipo.EjePeque:
-                    {
-                        if ((padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje & 0b10000) == 0b10000) // incremental
-                        {
-                            if (RadioButton1.IsChecked == true)
-                                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(0, idActual, m, p).Accion = idc;
-                            else
-                                padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie(1, idActual, m, p).Accion = idc;
-                        }
-                        else if ((padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(idActual, m, p).TipoEje & 0b100000) == 0b100000) // bandas
-                            padre.GetDatos().Perfil.INDICESEJESPEQUE.FindByididEjeidModoidPinkie((byte)(NumericUpDownPosition.Value - 1), idActual, m, p).Accion = idc;
+                        else if ((padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, idActual).TipoEje & 0b100000) == 0b100000) // bandas
+                            padre.GetDatos().Perfil.INDICESEJES.FindByidJoyidPinkieidModoidEjeid(idJ, p, m, idActual, (byte)(NumericUpDownPosition.Value - 1)).idAccion = idc;
 
                         break;
                     }

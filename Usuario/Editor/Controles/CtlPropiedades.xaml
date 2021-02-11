@@ -18,31 +18,31 @@
             </Label>
             <Grid>
                 <Label Content="Configuración de eje" x:Name="LabelAxis" VerticalAlignment="Top" Margin="3,0" HorizontalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" />
-                <ComboBox x:Name="ComboBoxAxes" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,32,0,0" Height="23" Width="90" SelectionChanged="ComboBoxAxes_SelectionChanged">
-                    <ComboBoxItem Content="Ninguno" />
-                    <ComboBoxItem Content="X" />
-                    <ComboBoxItem Content="Y" />
-                    <ComboBoxItem Content="R" />
-                    <ComboBoxItem Content="Z" />
-                    <ComboBoxItem Content="Rx" />
-                    <ComboBoxItem Content="Ry" />
-                    <ComboBoxItem Content="Sl 1" />
-                    <ComboBoxItem Content="Freno Der." />
-                    <ComboBoxItem Content="Freno Izq." />
-                    <Separator />
-                    <ComboBoxItem Content="Ratón X" />
-                    <ComboBoxItem Content="Ratón Y" />
-                </ComboBox>
-                <ComboBox x:Name="ComboBoxAxesMini" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,32,0,0" Height="23" Width="90" Visibility="Hidden" SelectionChanged="ComboBoxAxesMini_SelectionChanged">
-                    <ComboBoxItem Content="Ninguno" />
-                    <ComboBoxItem Content="MiniStick X" />
-                    <ComboBoxItem Content="MiniStick Y" />
-                    <Separator />
-                    <ComboBoxItem Content="Ratón X" />
-                    <ComboBoxItem Content="Ratón Y" />
-                </ComboBox>
-                <Label x:Name="LabelWorkAs" Content="Asignar a:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,31,0,0" Foreground="Gainsboro" />
-                <CheckBox x:Name="CheckBoxInverted" Content="Invertido" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="162,36,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" Checked="CheckBoxInverted_Checked" Unchecked="CheckBoxInverted_Checked" />
+                <Grid VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="ComboBoxAxes" SelectedIndex="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,32,0,0" Height="23" Width="70" SelectionChanged="ComboBoxAxes_SelectionChanged">
+                        <ComboBoxItem Content="Ninguno" />
+                        <ComboBoxItem Content="X" />
+                        <ComboBoxItem Content="Y" />
+                        <ComboBoxItem Content="Z" />
+                        <ComboBoxItem Content="Rx" />
+                        <ComboBoxItem Content="Ry" />
+                        <ComboBoxItem Content="Rz" />
+                        <ComboBoxItem Content="Sl 1" />
+                        <ComboBoxItem Content="Sl 2" />
+                        <Separator />
+                        <ComboBoxItem Content="Ratón X" />
+                        <ComboBoxItem Content="Ratón Y" />
+                    </ComboBox>
+                    <Label x:Name="LabelWorkAs" Content="Asignar a:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,31,0,0" Foreground="Gainsboro" />
+                    <local:CtlNumUpDown x:Name="nudJoy" Maximum="3" Minimum="1" Value="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,32,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="35" Height="23" />
+                    <CheckBox x:Name="CheckBoxInverted" Content="Invertido" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" Checked="CheckBoxInverted_Checked" Unchecked="CheckBoxInverted_Checked" />
+                </Grid>
                 <Button x:Name="ButtonSensibility" Content="Curva sensibilidad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,61,0,0" Padding="10,2" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonSensibility_Click" />
 
                 <Label x:Name="LabelMSensibility" Content="Sensibilidad ratón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,87,0,0" Foreground="Gainsboro" />

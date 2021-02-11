@@ -67,7 +67,11 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 		}
 		pPerfil->FinLecturaPr();
 
-		if ((tipoEje & 1) == 1) // eje normal
+		if (tipoEje == 0)
+		{
+			continue;
+		}
+		else if ((tipoEje & 1) == 1) // eje normal
 		{
 			salida[joy].Ejes[nEje] = entrada->Ejes[idx];
 			if ((tipoEje & 0x2) == 2) //invertido normal

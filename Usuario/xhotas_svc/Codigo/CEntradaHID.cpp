@@ -6,24 +6,22 @@
 
 CEntradaHID::CEntradaHID(CPerfil* perfil, CColaEventos* colaEv)
 {
-    colaHID = new CColaHID();
-    procesarHID = new CPreprocesar(perfil, colaEv, colaHID);
+    procesarHID = new CPreprocesar(perfil, colaEv);
 }
 
 CEntradaHID::~CEntradaHID()
 {
     if (pnpHdn != NULL) UnregisterDeviceNotification(pnpHdn);
     if (pnpHWnd != NULL) DestroyWindow(pnpHWnd);
+    salir = true;
+    CerrarDevices();
     delete[] rutaPedales; rutaPedales = NULL;
     delete[] rutaX52; rutaX52 = NULL;
     delete[] rutaNXT; rutaNXT = NULL;
-    CerrarDevices();
-    salir = true;
     while (InterlockedCompareExchange16(&hiloCerrado[0], 0, 0) == FALSE) Sleep(1000);
     while (InterlockedCompareExchange16(&hiloCerrado[1], 0, 0) == FALSE) Sleep(1000);
     while (InterlockedCompareExchange16(&hiloCerrado[2], 0, 0) == FALSE) Sleep(1000);
     delete procesarHID;
-    delete colaHID;
 }
 
 bool CEntradaHID::Iniciar(HINSTANCE hInst)
@@ -257,7 +255,6 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
             return 0;
         }
         case WM_DESTROY:
-        case WM_CLOSE:
             PostQuitMessage(0);
             break;
         default:
@@ -269,7 +266,12 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
 void CEntradaHID::LoopWnd()
 {
     MSG msg;
-    while (GetMessage(&msg, pnpHWnd, 0, 0) != 0);
+    BOOL ok = 1;
+    do
+    {
+        ok = GetMessage(&msg, pnpHWnd, 0, 0);
+    }
+    while (ok != 0);
 }
 
 bool CEntradaHID::AbrirDevices()
@@ -317,17 +319,23 @@ bool CEntradaHID::AbrirDevices()
 
 void CEntradaHID::CerrarDevices()
 {
-    if ((rutaPedales == NULL) && (InterlockedCompareExchangePointer(&hdevPedales, NULL, NULL) != NULL))
+    if ((rutaPedales != NULL) && (InterlockedCompareExchangePointer(&hdevPedales, NULL, NULL) != NULL))
     {
-        CloseHandle(InterlockedExchangePointer(&hdevPedales, NULL));
+        HANDLE h = InterlockedExchangePointer(&hdevPedales, NULL);
+        CancelIoEx(h, NULL);
+        CloseHandle(h);
     }
-    if ((rutaX52 != NULL) && (InterlockedCompareExchangePointer(&hdevX52, NULL, NULL) == NULL))
+    if ((rutaX52 != NULL) && (InterlockedCompareExchangePointer(&hdevX52, NULL, NULL) != NULL))
     {
-        CloseHandle(InterlockedExchangePointer(&hdevX52, NULL));
+        HANDLE h = InterlockedExchangePointer(&hdevX52, NULL);
+        CancelIoEx(h, NULL);
+        CloseHandle(h);
     }
-    if ((rutaNXT != NULL) && (InterlockedCompareExchangePointer(&hdevNXT, NULL, NULL) == NULL))
+    if ((rutaNXT != NULL) && (InterlockedCompareExchangePointer(&hdevNXT, NULL, NULL) != NULL))
     {
-        CloseHandle(InterlockedExchangePointer(&hdevNXT, NULL));
+        HANDLE h = InterlockedExchangePointer(&hdevNXT, NULL);
+        CancelIoEx(h, NULL);
+        CloseHandle(h);
     }
 }
 
@@ -370,7 +378,7 @@ DWORD WINAPI CEntradaHID::HiloLectura(LPVOID param)
             }
             else
             {
-                local->colaHID->Añadir(buff, tam);
+                local->procesarHID->AñadirACola(&buff[1], tam - 1);
             }
         }
     }

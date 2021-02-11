@@ -56,6 +56,7 @@ private:
 };
 enum class TipoJoy : unsigned char { Pedales, X52_Joy, X52_Ace, NXT, RawPedales = 100, RawX52_Joy, RawX52_Ace, RawNXT};
 
+#pragma warning (disable: 26495)
 typedef struct
 {
 	TipoComando Tipo;
@@ -79,6 +80,7 @@ typedef struct
 		} Extendido;
 	};
 } EV_COMANDO, *PEV_COMANDO;
+#pragma warning (default: 26495)
 
 class CPaqueteEvento
 {

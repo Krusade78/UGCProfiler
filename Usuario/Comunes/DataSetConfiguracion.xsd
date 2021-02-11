@@ -17,9 +17,9 @@
             <xs:sequence>
               <xs:element name="Cal" msprop:Generator_ColumnVarNameInTable="columnCal" msprop:Generator_ColumnPropNameInRow="Cal" msprop:Generator_ColumnPropNameInTable="CalColumn" msprop:Generator_UserColumnName="Cal" type="xs:unsignedByte" />
               <xs:element name="Nulo" msprop:Generator_ColumnVarNameInTable="columnNulo" msprop:Generator_ColumnPropNameInRow="Nulo" msprop:Generator_ColumnPropNameInTable="NuloColumn" msprop:Generator_UserColumnName="Nulo" type="xs:unsignedByte" />
-              <xs:element name="Izq" msprop:Generator_ColumnVarNameInTable="columnIzq" msprop:Generator_ColumnPropNameInRow="Izq" msprop:Generator_ColumnPropNameInTable="IzqColumn" msprop:Generator_UserColumnName="Izq" type="xs:unsignedShort" />
-              <xs:element name="Cen" msprop:Generator_ColumnVarNameInTable="columnCen" msprop:Generator_ColumnPropNameInRow="Cen" msprop:Generator_ColumnPropNameInTable="CenColumn" msprop:Generator_UserColumnName="Cen" type="xs:unsignedShort" />
-              <xs:element name="Der" msprop:Generator_ColumnVarNameInTable="columnDer" msprop:Generator_ColumnPropNameInRow="Der" msprop:Generator_ColumnPropNameInTable="DerColumn" msprop:Generator_UserColumnName="Der" type="xs:unsignedShort" />
+              <xs:element name="Izq" msprop:Generator_ColumnVarNameInTable="columnIzq" msprop:Generator_ColumnPropNameInRow="Izq" msprop:Generator_ColumnPropNameInTable="IzqColumn" msprop:Generator_UserColumnName="Izq" type="xs:short" />
+              <xs:element name="Cen" msprop:Generator_ColumnVarNameInTable="columnCen" msprop:Generator_ColumnPropNameInRow="Cen" msprop:Generator_ColumnPropNameInTable="CenColumn" msprop:Generator_UserColumnName="Cen" type="xs:short" />
+              <xs:element name="Der" msprop:Generator_ColumnVarNameInTable="columnDer" msprop:Generator_ColumnPropNameInRow="Der" msprop:Generator_ColumnPropNameInTable="DerColumn" msprop:Generator_UserColumnName="Der" type="xs:short" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -27,7 +27,6 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Antiv" msprop:Generator_ColumnVarNameInTable="columnAntiv" msprop:Generator_ColumnPropNameInRow="Antiv" msprop:Generator_ColumnPropNameInTable="AntivColumn" msprop:Generator_UserColumnName="Antiv" type="xs:unsignedByte" />
-              <xs:element name="PosRepetida" msprop:Generator_ColumnVarNameInTable="columnPosRepetida" msprop:Generator_ColumnPropNameInRow="PosRepetida" msprop:Generator_ColumnPropNameInTable="PosRepetidaColumn" msprop:Generator_UserColumnName="PosRepetida" type="xs:unsignedByte" />
               <xs:element name="Margen" msprop:Generator_ColumnVarNameInTable="columnMargen" msprop:Generator_ColumnPropNameInRow="Margen" msprop:Generator_ColumnPropNameInTable="MargenColumn" msprop:Generator_UserColumnName="Margen" type="xs:unsignedByte" />
               <xs:element name="Resistencia" msprop:Generator_ColumnVarNameInTable="columnResistencia" msprop:Generator_ColumnPropNameInRow="Resistencia" msprop:Generator_ColumnPropNameInTable="ResistenciaColumn" msprop:Generator_UserColumnName="Resistencia" type="xs:unsignedByte" />
             </xs:sequence>

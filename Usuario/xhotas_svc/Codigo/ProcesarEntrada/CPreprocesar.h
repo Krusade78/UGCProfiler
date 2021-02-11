@@ -10,10 +10,11 @@
 class CPreprocesar
 {
 public:
-	CPreprocesar(CPerfil* pPerfil, CColaEventos* colaEv, CColaHID* cola);
+	CPreprocesar(CPerfil* pPerfil, CColaEventos* colaEv);
 	~CPreprocesar();
 
 	bool Iniciar();
+	void AñadirACola(UCHAR* buff, DWORD tam) { colaHID->Añadir(buff, tam); };
 
 private:
 	//HID original X52
@@ -44,6 +45,6 @@ private:
 
 	UCHAR Switch4To8(UCHAR in);
 	void ConvertirEjeCentro0(UINT16* pos, UINT16 rango, UINT16 centro);
-	void ConvertirEjeRango(UINT32 nuevoRango, INT16* pos, UINT16 rango);
+	void ConvertirEjeRango(INT32 nuevoRango, INT16* pos, INT16 rango);
 };
 

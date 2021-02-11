@@ -47,7 +47,7 @@
         </ControlTemplate>
     </Window.Resources>
     <Grid>
-        <TextBlock Text="Saitek X52 - XHOTAS Driver v8.0" VerticalAlignment="Top" Margin="50,9,0,0" Foreground="White" FontStyle="Italic" FontWeight="SemiBold" HorizontalAlignment="Left" FontSize="18" />
+        <TextBlock Text="Saitek X52 - XHOTAS Driver v9.0" VerticalAlignment="Top" Margin="50,9,0,0" Foreground="White" FontStyle="Italic" FontWeight="SemiBold" HorizontalAlignment="Left" FontSize="18" />
 
         <Grid Margin="10,40,10,10">
             <Grid  HorizontalAlignment="Left" Width="30">

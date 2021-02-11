@@ -25,17 +25,17 @@ namespace Editor
         #region "ejes"
         private void PedalDer_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(4, CEnums.Tipo.EjePeque, (string)((Button)sender).Content);
+            Vista.Ver(7, CEnums.Tipo.Eje, (string)((Button)sender).Content);
         }
 
         private void PedalIzq_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(3, CEnums.Tipo.EjePeque, (string)((Button)sender).Content);
+            Vista.Ver(6, CEnums.Tipo.Eje, (string)((Button)sender).Content);
         }
 
         private void EjeR_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(2, CEnums.Tipo.Eje, (string)EjeR.Content);
+            Vista.Ver(3, CEnums.Tipo.Eje, (string)EjeR.Content);
         }
         #endregion
     }

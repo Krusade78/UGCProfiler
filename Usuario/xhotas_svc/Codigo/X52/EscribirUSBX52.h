@@ -1,44 +1,49 @@
 #pragma once
+#include <winioctl.h>
+#include <queue>
+
+#define IOCTL_MFD_LUZ		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0800, METHOD_BUFFERED, FILE_WRITE_ACCESS)
+#define IOCTL_GLOBAL_LUZ	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0801, METHOD_BUFFERED, FILE_WRITE_ACCESS)
+#define IOCTL_INFO_LUZ		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0802, METHOD_BUFFERED, FILE_WRITE_ACCESS)
+#define IOCTL_PEDALES		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0803, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_TEXTO			CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0804, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_HORA			CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0805, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_HORA24		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0806, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_FECHA			CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0807, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-#define IOCTL_USR_RAW		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0808, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-#define IOCTL_USR_CALIBRADO	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0809, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-#define IOCTL_USR_ANTIVIBRACION	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x080e, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-#define IOCTL_USR_MAPA		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x080a, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-#define IOCTL_USR_COMANDOS	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x080b, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-//typedef struct _X52WRITE_CONTEXT
-//{
-//	WDFWAITLOCK		WaitLockX52;
-//	USHORT			Fecha;
-//
-//	WDFCOLLECTION	Ordenes;
-//	WDFWAITLOCK		WaitLockOrdenes;
-//	PETHREAD		Hilo;
-//} X52WRITE_CONTEXT;
+#define IOCTL_PINKIE		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0808, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 class CX52Salida
 {
 public:
-	static void Luz_MFD(PUCHAR SystemBuffer);
-	static void Luz_Global(PUCHAR SystemBuffer);
-	static void Luz_Info(PUCHAR SystemBuffer);
-	static void Set_Pinkie(PUCHAR SystemBuffer);
-	static void Set_Texto(PUCHAR SystemBuffer, __in size_t tamBuffer);
-	static void Set_Hora(PUCHAR SystemBuffer);
-	static void Set_Hora24(PUCHAR SystemBuffer);
-	static void Set_Fecha(PUCHAR SystemBuffer);
-	//VOID LimpiarSalidaX52(WDFOBJECT  Object);
+	CX52Salida();
+	~CX52Salida();
+	static CX52Salida* Get() { return pLocal; }
+
+	void Luz_MFD(PUCHAR SystemBuffer);
+	void Luz_Global(PUCHAR SystemBuffer);
+	void Luz_Info(PUCHAR SystemBuffer);
+	void Set_Pinkie(PUCHAR SystemBuffer);
+	void Set_Texto(PUCHAR SystemBuffer, BYTE tamBuffer);
+	void Set_Hora(PUCHAR SystemBuffer);
+	void Set_Hora24(PUCHAR SystemBuffer);
+	void Set_Fecha(PUCHAR SystemBuffer);
 private:
 	typedef struct
 	{
-		USHORT valor;
-		UCHAR idx;
-	} ORDEN_X52, * PORDEN_X52;
+		DWORD ioCtl;
+		PUCHAR buff;
+		BYTE tam;
+	} ORDEN, *PORDEN;
 
-	static void EnviarOrden(UCHAR* params, UCHAR nparams);
-	////NTSTATUS EnviarOrdenUSB(_In_ WDFDEVICE DeviceObject, _In_ USHORT* valor, UCHAR* idx, UCHAR nordenes);
-	////EVT_WDF_WORKITEM EnviarOrdenWI;
-	//KSTART_ROUTINE EnviarOrdenHilo;
+	static CX52Salida* pLocal;
+
+	HANDLE semCola = nullptr;
+	HANDLE semDriver = nullptr;
+	PTP_WORK wkPool = nullptr;
+	HANDLE hDriver = nullptr;
+	std::queue<PORDEN> cola;
+
+	bool AbrirDriver();
+	void EnviarOrden(DWORD ioctl, UCHAR* params, BYTE tam);
+	static VOID CALLBACK WkEnviar(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_WORK Work);
 };

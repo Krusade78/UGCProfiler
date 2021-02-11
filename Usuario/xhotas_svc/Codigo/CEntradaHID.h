@@ -20,7 +20,6 @@ public:
 	void LoopWnd();
 
 private:
-	CColaHID* colaHID = nullptr;
 	CPreprocesar* procesarHID = nullptr;
 	wchar_t* rutaPedales = nullptr;
 	wchar_t* rutaX52 = nullptr;

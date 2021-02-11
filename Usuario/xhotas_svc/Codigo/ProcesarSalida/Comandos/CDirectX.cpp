@@ -15,6 +15,7 @@ void CDirectX::Posicion(PEV_COMANDO pComando, CVirtualHID* pVHid)
 	}
 	else
 	{
+		pComando->VHid.JoyId -= 100;
 		RtlCopyMemory(&pVHid->Estado.DirectX[pComando->VHid.JoyId], &pComando->VHid.Datos, sizeof(VHID_INPUT_DATA));
 	}
 	pVHid->EnviarRequestJoystick(pComando->VHid.JoyId, &pVHid->Estado.DirectX[pComando->VHid.JoyId]);

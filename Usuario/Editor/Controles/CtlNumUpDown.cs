@@ -12,13 +12,16 @@ namespace Editor
         #region "Propiedades"
         public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(int), typeof(CtlNumUpDown));
 
-        public int Value {
+        public int Value
+        {
             get { return (int)GetValue(ValueProperty); }
-            set {
+            set
+            {
                 this.Background = System.Windows.Media.Brushes.Black;
+                SetValue(TextProperty, value.ToString());
                 SetValue(ValueProperty, value);
                 ValueChanged?.Invoke(this, null);
-                }
+            }
         }
         public double Minimum { get; set; } = int.MinValue;
         public double Maximum { get; set; } = int.MaxValue;
@@ -35,11 +38,6 @@ namespace Editor
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value")
-            {
-                Source = this
-            };
-            base.SetBinding(TextProperty, bind);
             base.KeyUp += TextBox1_KeyPress;
             base.KeyDown += TextBox1_KeyPress;
             base.PreviewKeyDown += TextBox1_KeyPress;
@@ -87,7 +85,7 @@ namespace Editor
         private void TextBox1_KeyPress(Object sender, KeyEventArgs e)
         {
             //'sólo números, signos, y borrar
-            if ((e.KeyboardDevice.Modifiers != ModifierKeys.None) ||(e.Key == Key.Space))
+            if ((e.KeyboardDevice.Modifiers != ModifierKeys.None) || (e.Key == Key.Space))
             {
                 e.Handled = true;
                 return;

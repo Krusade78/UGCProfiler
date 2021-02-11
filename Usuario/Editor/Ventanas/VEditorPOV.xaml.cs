@@ -27,16 +27,15 @@ namespace Editor
         {
             MainWindow padre = (MainWindow)App.Current.MainWindow;
             String[] st = new String[] { "<DX Seta 1 N>", "<DX Seta 1 NO>", "<DX Seta 1 O>", "<DX Seta 1 SO>", "<DX Seta 1 S>", "<DX Seta 1 SE>", "<DX Seta 1 E>", "<DX Seta 1 NE>" };
-            byte p = 0, m = 0;
+            byte idJ = 0,p = 0, m = 0;
 
-            padre.GetModos(ref p, ref m);
+            padre.GetModos(ref idJ, ref p, ref m);
             pov /= 8;
 
-            if (NumericUpDown1.Value != 1)
-            {
-                for (byte i = 0; i < 8; i++)
-                    st[i] = st[i].Replace("1", NumericUpDown1.Value.ToString());
-            }
+
+            for (byte i = 0; i < 8; i++)
+                st[i] = st[i].Replace("1", NumericUpDownJ.Value.ToString() + "-" + NumericUpDown1.Value.ToString());
+
             for (byte i = 0; i < 8; i++)
             {
                 ushort idx = 0;
@@ -72,16 +71,17 @@ namespace Editor
                     }
                     ar.Comandos[1 + texto.Length] = (byte)TipoComando.TipoComando_MfdTextoFin;
                     //Resto
-                    ar.Comandos[1 + texto.Length + 1] = (ushort)((byte)TipoComando.TipoComando_DxSeta + ((((4 - NumericUpDown1.Value) * 8) + i) << 8));
+                    int v = (((((4 - NumericUpDown1.Value) * 8) + i) << 3) + (NumericUpDownJ.Value - 1)) << 8;
+                    ar.Comandos[1 + texto.Length + 1] = (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)v);
                     ar.Comandos[1 + texto.Length + 2] = (byte)TipoComando.TipoComando_Hold;
-                    ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)(TipoComando.TipoComando_DxSeta | TipoComando.TipoComando_Soltar) + ((((4 - NumericUpDown1.Value) * 8) + i) << 8));
+                    ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)(TipoComando.TipoComando_DxSeta | TipoComando.TipoComando_Soltar) + (ushort)v);
 
                     padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
                 }
 
-                padre.GetDatos().Perfil.MAPASETAS.FindByidPinkieidModoIdSeta(p, m, (byte)(i + (pov * 8))).TamIndices = 0;
-                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(0, (uint)(i + (pov * 8)), m, p).Accion = idx;
-                padre.GetDatos().Perfil.INDICESSETAS.FindByididSetaidModoidPinkie(1, (uint)(i + (pov * 8)), m, p).Accion = 0;
+                padre.GetDatos().Perfil.MAPASETAS.FindByidJoyidPinkieidModoIdSeta(idJ, p, m, (byte)(i + (pov * 8))).TamIndices = 0;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, (uint)(i + (pov * 8)), 0).idAccion = idx;
+                padre.GetDatos().Perfil.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, (uint)(i + (pov * 8)), 1).idAccion = 0;
             }
         }
     }

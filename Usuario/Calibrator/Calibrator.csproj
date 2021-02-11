@@ -92,6 +92,7 @@
     <Compile Include="HIDCal.xaml.cs">
       <DependentUpon>HIDCal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImagenDisabled.cs" />
     <Compile Include="Info.xaml.cs">
       <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
@@ -130,6 +131,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\combo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Comunes\Comunes.csproj">
+      <Project>{65972c42-1dbc-41a9-a537-4e7baeca2396}</Project>
+      <Name>Comunes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\ry.png" />
+    <Resource Include="res\rz.png" />
+    <Resource Include="res\sl1.png" />
+    <Resource Include="res\sl2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

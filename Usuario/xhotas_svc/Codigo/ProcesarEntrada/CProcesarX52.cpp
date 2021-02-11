@@ -3,6 +3,7 @@
 #include "GenerarEventos/CGenerarEventos.h"
 #include "GenerarEventos/ProcesarUSBs_Botones-Setas.h"
 #include "GenerarEventos/ProcesarUSBs_Ejes.h"
+#include "../X52/MenuMFD.h"
 
 CProcesarX52::CProcesarX52(CPerfil* perfil)
 {
@@ -29,11 +30,15 @@ void CProcesarX52::Procesar_Joy(PVHID_INPUT_DATA p_hidData)
 	USB_HIDX52_CONTEXT* devExt = &USBaHID;
 	VHID_INPUT_DATA viejohidData;
 
+	if (!CMenuMFD::Get()->X52Joy())
+	{
+		return;
+	}
 
 	RtlCopyMemory(&viejohidData, &devExt->UltimoEstadoJ.DeltaHidData, sizeof(VHID_INPUT_DATA));
 	RtlCopyMemory(&devExt->UltimoEstadoJ.DeltaHidData, p_hidData, sizeof(VHID_INPUT_DATA));
 
-	if (!devExt->Perfil->GetModoRaw())
+	if (!devExt->Perfil->GetModoRaw() && !devExt->Perfil->GetModoCalibrado())
 	{
 		UCHAR idx;
 
@@ -97,21 +102,21 @@ void CProcesarX52::Procesar_Ace(PVHID_INPUT_DATA p_hidData)
 	RtlCopyMemory(&viejohidData, &devExt->UltimoEstadoA.DeltaHidData, sizeof(VHID_INPUT_DATA));
 	RtlCopyMemory(&devExt->UltimoEstadoA.DeltaHidData, p_hidData, sizeof(VHID_INPUT_DATA));
 
-	if (devExt->Perfil->GetModoRaw() && !devExt->Perfil->GetModoCalibrado())
+	if (!devExt->Perfil->GetModoCalibrado())
 	{
 		//	Botones menu
-		UCHAR cambios = p_hidData->Botones[1] ^ viejohidData.Botones[1];
+		UCHAR cambios = p_hidData->Botones[0] ^ viejohidData.Botones[0];
 		if (cambios != 0)
 		{
 			UCHAR exp;
-			for (exp = 3; exp < 6; exp++)
+			for (exp = 2; exp < 5; exp++)
 			{
 				if ((cambios >> exp) & 1)
 				{ // Si ha cambiado
-					//if ((hidData->Botones[1] >> exp) & 1)
-					//	PulsarBoton(device, 8 + exp);
-					//else
-					//	SoltarBoton(device, 8 + exp);
+					if ((p_hidData->Botones[0] >> exp) & 1)
+						CMenuMFD::Get()->MenuPulsarBoton(exp - 2);
+					else
+						CMenuMFD::Get()->MenuSoltarBoton(exp - 2);
 				}
 			}
 		}
@@ -132,10 +137,21 @@ void CProcesarX52::Procesar_Ace(PVHID_INPUT_DATA p_hidData)
 				{
 					if ((cambios >> exp) & 1)
 					{ // Si ha cambiado
+						UCHAR bt = (idx * 8) + exp;
 						if ((p_hidData->Botones[idx] >> exp) & 1)
-							CBotonesSetas::PulsarBoton(devExt->Perfil, TipoJoy::X52_Ace, (idx * 8) + exp);
+						{
+							if (CMenuMFD::Get()->EstaActivado() && ((bt == 2) || (bt == 3) || (bt == 4)))
+								continue;
+							else
+								CBotonesSetas::PulsarBoton(devExt->Perfil, TipoJoy::X52_Ace, bt);
+						}
 						else
-							CBotonesSetas::SoltarBoton(devExt->Perfil, TipoJoy::X52_Ace, (idx * 8) + exp);
+						{
+							if (CMenuMFD::Get()->EstaActivado() && ((bt == 2) || (bt == 3) || (bt == 4)))
+								continue;
+							else
+								CBotonesSetas::SoltarBoton(devExt->Perfil, TipoJoy::X52_Ace, bt);
+						}
 					}
 				}
 			}

@@ -40,6 +40,9 @@
     <Filter Include="Base\X52">
       <UniqueIdentifier>{85c991b5-7eb8-45ac-9ac9-27e1a33d20b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Base\CalibradoDx">
+      <UniqueIdentifier>{6a0fd1cc-6352-4441-b79e-d680ba5a1c59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xhotas_svc.h">
@@ -126,6 +129,12 @@
     <ClInclude Include="Codigo\X52\EscribirUSBX52.h">
       <Filter>Base\X52</Filter>
     </ClInclude>
+    <ClInclude Include="Codigo\CalibradoDx\CDirectInput.h">
+      <Filter>Base\CalibradoDx</Filter>
+    </ClInclude>
+    <ClInclude Include="Codigo\X52\MenuMFD.h">
+      <Filter>Base\X52</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xhotas_svc.cpp">
@@ -204,6 +213,12 @@
       <Filter>Base\ProcesarEntrada\GenerarEventos</Filter>
     </ClCompile>
     <ClCompile Include="Codigo\X52\EscribirUSBX52.cpp">
+      <Filter>Base\X52</Filter>
+    </ClCompile>
+    <ClCompile Include="Codigo\CalibradoDx\cdirectinput.cpp">
+      <Filter>Base\CalibradoDx</Filter>
+    </ClCompile>
+    <ClCompile Include="Codigo\X52\MenuMFD.cpp">
       <Filter>Base\X52</Filter>
     </ClCompile>
   </ItemGroup>

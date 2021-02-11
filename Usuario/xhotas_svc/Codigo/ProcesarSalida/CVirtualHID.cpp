@@ -53,7 +53,7 @@ void CVirtualHID::EnviarRequestJoystick(UCHAR joyId, PVHID_INPUT_DATA inputData)
 {
     DWORD tam = 0;
     UCHAR* buff = new UCHAR[sizeof(VHID_INPUT_DATA) + 1];
-    buff[0] = joyId + 2;
+    buff[0] = joyId + 3;
     RtlCopyMemory(&buff[1], inputData, sizeof(VHID_INPUT_DATA));
     WriteFile(hVHid, buff, sizeof(VHID_INPUT_DATA) + 1, &tam, NULL);
     //DWORD err = GetLastError();

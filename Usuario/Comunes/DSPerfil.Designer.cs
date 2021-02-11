@@ -26,17 +26,11 @@ namespace Comunes {
         
         private MAPAEJESDataTable tableMAPAEJES;
         
-        private MAPAEJESPEQUEDataTable tableMAPAEJESPEQUE;
-        
-        private MAPAEJESMINIDataTable tableMAPAEJESMINI;
-        
         private GENERALDataTable tableGENERAL;
         
         private ACCIONESDataTable tableACCIONES;
         
         private INDICESEJESDataTable tableINDICESEJES;
-        
-        private INDICESEJESPEQUEDataTable tableINDICESEJESPEQUE;
         
         private INDICESSETASDataTable tableINDICESSETAS;
         
@@ -47,8 +41,6 @@ namespace Comunes {
         private MAPASETASDataTable tableMAPASETAS;
         
         private global::System.Data.DataRelation relationFK_ACCIONES_INDICESEJES;
-        
-        private global::System.Data.DataRelation relationFK_ACCIONES_INDICESEJESPEQUE;
         
         private global::System.Data.DataRelation relationFK_ACCIONES_INDICESSETAS;
         
@@ -85,12 +77,6 @@ namespace Comunes {
                 if ((ds.Tables["MAPAEJES"] != null)) {
                     base.Tables.Add(new MAPAEJESDataTable(ds.Tables["MAPAEJES"]));
                 }
-                if ((ds.Tables["MAPAEJESPEQUE"] != null)) {
-                    base.Tables.Add(new MAPAEJESPEQUEDataTable(ds.Tables["MAPAEJESPEQUE"]));
-                }
-                if ((ds.Tables["MAPAEJESMINI"] != null)) {
-                    base.Tables.Add(new MAPAEJESMINIDataTable(ds.Tables["MAPAEJESMINI"]));
-                }
                 if ((ds.Tables["GENERAL"] != null)) {
                     base.Tables.Add(new GENERALDataTable(ds.Tables["GENERAL"]));
                 }
@@ -99,9 +85,6 @@ namespace Comunes {
                 }
                 if ((ds.Tables["INDICESEJES"] != null)) {
                     base.Tables.Add(new INDICESEJESDataTable(ds.Tables["INDICESEJES"]));
-                }
-                if ((ds.Tables["INDICESEJESPEQUE"] != null)) {
-                    base.Tables.Add(new INDICESEJESPEQUEDataTable(ds.Tables["INDICESEJESPEQUE"]));
                 }
                 if ((ds.Tables["INDICESSETAS"] != null)) {
                     base.Tables.Add(new INDICESSETASDataTable(ds.Tables["INDICESSETAS"]));
@@ -147,26 +130,6 @@ namespace Comunes {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         [global::System.ComponentModel.Browsable(false)]
         [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public MAPAEJESPEQUEDataTable MAPAEJESPEQUE {
-            get {
-                return this.tableMAPAEJESPEQUE;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public MAPAEJESMINIDataTable MAPAEJESMINI {
-            get {
-                return this.tableMAPAEJESMINI;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
         public GENERALDataTable GENERAL {
             get {
                 return this.tableGENERAL;
@@ -190,16 +153,6 @@ namespace Comunes {
         public INDICESEJESDataTable INDICESEJES {
             get {
                 return this.tableINDICESEJES;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public INDICESEJESPEQUEDataTable INDICESEJESPEQUE {
-            get {
-                return this.tableINDICESEJESPEQUE;
             }
         }
         
@@ -313,12 +266,6 @@ namespace Comunes {
                 if ((ds.Tables["MAPAEJES"] != null)) {
                     base.Tables.Add(new MAPAEJESDataTable(ds.Tables["MAPAEJES"]));
                 }
-                if ((ds.Tables["MAPAEJESPEQUE"] != null)) {
-                    base.Tables.Add(new MAPAEJESPEQUEDataTable(ds.Tables["MAPAEJESPEQUE"]));
-                }
-                if ((ds.Tables["MAPAEJESMINI"] != null)) {
-                    base.Tables.Add(new MAPAEJESMINIDataTable(ds.Tables["MAPAEJESMINI"]));
-                }
                 if ((ds.Tables["GENERAL"] != null)) {
                     base.Tables.Add(new GENERALDataTable(ds.Tables["GENERAL"]));
                 }
@@ -327,9 +274,6 @@ namespace Comunes {
                 }
                 if ((ds.Tables["INDICESEJES"] != null)) {
                     base.Tables.Add(new INDICESEJESDataTable(ds.Tables["INDICESEJES"]));
-                }
-                if ((ds.Tables["INDICESEJESPEQUE"] != null)) {
-                    base.Tables.Add(new INDICESEJESPEQUEDataTable(ds.Tables["INDICESEJESPEQUE"]));
                 }
                 if ((ds.Tables["INDICESSETAS"] != null)) {
                     base.Tables.Add(new INDICESSETASDataTable(ds.Tables["INDICESSETAS"]));
@@ -382,18 +326,6 @@ namespace Comunes {
                     this.tableMAPAEJES.InitVars();
                 }
             }
-            this.tableMAPAEJESPEQUE = ((MAPAEJESPEQUEDataTable)(base.Tables["MAPAEJESPEQUE"]));
-            if ((initTable == true)) {
-                if ((this.tableMAPAEJESPEQUE != null)) {
-                    this.tableMAPAEJESPEQUE.InitVars();
-                }
-            }
-            this.tableMAPAEJESMINI = ((MAPAEJESMINIDataTable)(base.Tables["MAPAEJESMINI"]));
-            if ((initTable == true)) {
-                if ((this.tableMAPAEJESMINI != null)) {
-                    this.tableMAPAEJESMINI.InitVars();
-                }
-            }
             this.tableGENERAL = ((GENERALDataTable)(base.Tables["GENERAL"]));
             if ((initTable == true)) {
                 if ((this.tableGENERAL != null)) {
@@ -410,12 +342,6 @@ namespace Comunes {
             if ((initTable == true)) {
                 if ((this.tableINDICESEJES != null)) {
                     this.tableINDICESEJES.InitVars();
-                }
-            }
-            this.tableINDICESEJESPEQUE = ((INDICESEJESPEQUEDataTable)(base.Tables["INDICESEJESPEQUE"]));
-            if ((initTable == true)) {
-                if ((this.tableINDICESEJESPEQUE != null)) {
-                    this.tableINDICESEJESPEQUE.InitVars();
                 }
             }
             this.tableINDICESSETAS = ((INDICESSETASDataTable)(base.Tables["INDICESSETAS"]));
@@ -443,7 +369,6 @@ namespace Comunes {
                 }
             }
             this.relationFK_ACCIONES_INDICESEJES = this.Relations["FK_ACCIONES_INDICESEJES"];
-            this.relationFK_ACCIONES_INDICESEJESPEQUE = this.Relations["FK_ACCIONES_INDICESEJESPEQUE"];
             this.relationFK_ACCIONES_INDICESSETAS = this.Relations["FK_ACCIONES_INDICESSETAS"];
             this.relationFK_ACCIONES_INDICESBOTONES = this.Relations["FK_ACCIONES_INDICESBOTONES"];
         }
@@ -458,18 +383,12 @@ namespace Comunes {
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableMAPAEJES = new MAPAEJESDataTable();
             base.Tables.Add(this.tableMAPAEJES);
-            this.tableMAPAEJESPEQUE = new MAPAEJESPEQUEDataTable();
-            base.Tables.Add(this.tableMAPAEJESPEQUE);
-            this.tableMAPAEJESMINI = new MAPAEJESMINIDataTable();
-            base.Tables.Add(this.tableMAPAEJESMINI);
             this.tableGENERAL = new GENERALDataTable();
             base.Tables.Add(this.tableGENERAL);
             this.tableACCIONES = new ACCIONESDataTable();
             base.Tables.Add(this.tableACCIONES);
             this.tableINDICESEJES = new INDICESEJESDataTable();
             base.Tables.Add(this.tableINDICESEJES);
-            this.tableINDICESEJESPEQUE = new INDICESEJESPEQUEDataTable();
-            base.Tables.Add(this.tableINDICESEJESPEQUE);
             this.tableINDICESSETAS = new INDICESSETASDataTable();
             base.Tables.Add(this.tableINDICESSETAS);
             this.tableINDICESBOTONES = new INDICESBOTONESDataTable();
@@ -481,65 +400,42 @@ namespace Comunes {
             global::System.Data.ForeignKeyConstraint fkc;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESEJES.AccionColumn});
+                        this.tableINDICESEJES.idAccionColumn});
             this.tableINDICESEJES.Constraints.Add(fkc);
-            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.SetDefault;
-            fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJESPEQUE", new global::System.Data.DataColumn[] {
-                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESEJESPEQUE.AccionColumn});
-            this.tableINDICESEJESPEQUE.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.SetDefault;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESSETAS", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESSETAS.AccionColumn});
+                        this.tableINDICESSETAS.idAccionColumn});
             this.tableINDICESSETAS.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.SetDefault;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESBOTONES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESBOTONES.AccionColumn});
+                        this.tableINDICESBOTONES.idAccionColumn});
             this.tableINDICESBOTONES.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.SetDefault;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             this.relationFK_ACCIONES_INDICESEJES = new global::System.Data.DataRelation("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESEJES.AccionColumn}, false);
+                        this.tableINDICESEJES.idAccionColumn}, false);
             this.Relations.Add(this.relationFK_ACCIONES_INDICESEJES);
-            this.relationFK_ACCIONES_INDICESEJESPEQUE = new global::System.Data.DataRelation("FK_ACCIONES_INDICESEJESPEQUE", new global::System.Data.DataColumn[] {
-                        this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESEJESPEQUE.AccionColumn}, false);
-            this.Relations.Add(this.relationFK_ACCIONES_INDICESEJESPEQUE);
             this.relationFK_ACCIONES_INDICESSETAS = new global::System.Data.DataRelation("FK_ACCIONES_INDICESSETAS", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESSETAS.AccionColumn}, false);
+                        this.tableINDICESSETAS.idAccionColumn}, false);
             this.Relations.Add(this.relationFK_ACCIONES_INDICESSETAS);
             this.relationFK_ACCIONES_INDICESBOTONES = new global::System.Data.DataRelation("FK_ACCIONES_INDICESBOTONES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
-                        this.tableINDICESBOTONES.AccionColumn}, false);
+                        this.tableINDICESBOTONES.idAccionColumn}, false);
             this.Relations.Add(this.relationFK_ACCIONES_INDICESBOTONES);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private bool ShouldSerializeMAPAEJES() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private bool ShouldSerializeMAPAEJESPEQUE() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private bool ShouldSerializeMAPAEJESMINI() {
             return false;
         }
         
@@ -558,12 +454,6 @@ namespace Comunes {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         private bool ShouldSerializeINDICESEJES() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        private bool ShouldSerializeINDICESEJESPEQUE() {
             return false;
         }
         
@@ -650,12 +540,6 @@ namespace Comunes {
         public delegate void MAPAEJESRowChangeEventHandler(object sender, MAPAEJESRowChangeEvent e);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public delegate void MAPAEJESPEQUERowChangeEventHandler(object sender, MAPAEJESPEQUERowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public delegate void MAPAEJESMINIRowChangeEventHandler(object sender, MAPAEJESMINIRowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public delegate void GENERALRowChangeEventHandler(object sender, GENERALRowChangeEvent e);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -663,9 +547,6 @@ namespace Comunes {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public delegate void INDICESEJESRowChangeEventHandler(object sender, INDICESEJESRowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public delegate void INDICESEJESPEQUERowChangeEventHandler(object sender, INDICESEJESPEQUERowChangeEvent e);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public delegate void INDICESSETASRowChangeEventHandler(object sender, INDICESSETASRowChangeEvent e);
@@ -686,6 +567,8 @@ namespace Comunes {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class MAPAEJESDataTable : global::System.Data.TypedTableBase<MAPAEJESRow> {
             
+            private global::System.Data.DataColumn columnidJoy;
+            
             private global::System.Data.DataColumn columnidPinkie;
             
             private global::System.Data.DataColumn columnidModo;
@@ -693,6 +576,8 @@ namespace Comunes {
             private global::System.Data.DataColumn columnidEje;
             
             private global::System.Data.DataColumn columnMouse;
+            
+            private global::System.Data.DataColumn columnJoySalida;
             
             private global::System.Data.DataColumn columnTipoEje;
             
@@ -741,6 +626,14 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn idJoyColumn {
+                get {
+                    return this.columnidJoy;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn idPinkieColumn {
                 get {
                     return this.columnidPinkie;
@@ -768,6 +661,14 @@ namespace Comunes {
             public global::System.Data.DataColumn MouseColumn {
                 get {
                     return this.columnMouse;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn JoySalidaColumn {
+                get {
+                    return this.columnJoySalida;
                 }
             }
             
@@ -856,13 +757,15 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESRow AddMAPAEJESRow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte TipoEje, byte Eje, byte[] Sensibilidad, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
+            public MAPAEJESRow AddMAPAEJESRow(byte idJoy, byte idPinkie, byte idModo, byte idEje, byte Mouse, byte JoySalida, byte TipoEje, byte Eje, byte[] Sensibilidad, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
                 MAPAEJESRow rowMAPAEJESRow = ((MAPAEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idJoy,
                         idPinkie,
                         idModo,
                         idEje,
                         Mouse,
+                        JoySalida,
                         TipoEje,
                         Eje,
                         Sensibilidad,
@@ -876,11 +779,12 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESRow FindByidEjeidModoidPinkie(byte idEje, byte idModo, byte idPinkie) {
+            public MAPAEJESRow FindByidJoyidPinkieidModoidEje(byte idJoy, byte idPinkie, byte idModo, byte idEje) {
                 return ((MAPAEJESRow)(this.Rows.Find(new object[] {
-                            idEje,
+                            idJoy,
+                            idPinkie,
                             idModo,
-                            idPinkie})));
+                            idEje})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -900,10 +804,12 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
+                this.columnidJoy = base.Columns["idJoy"];
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
                 this.columnidEje = base.Columns["idEje"];
                 this.columnMouse = base.Columns["Mouse"];
+                this.columnJoySalida = base.Columns["JoySalida"];
                 this.columnTipoEje = base.Columns["TipoEje"];
                 this.columnEje = base.Columns["Eje"];
                 this.columnSensibilidad = base.Columns["Sensibilidad"];
@@ -915,6 +821,8 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -923,6 +831,8 @@ namespace Comunes {
                 base.Columns.Add(this.columnidEje);
                 this.columnMouse = new global::System.Data.DataColumn("Mouse", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnMouse);
+                this.columnJoySalida = new global::System.Data.DataColumn("JoySalida", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnJoySalida);
                 this.columnTipoEje = new global::System.Data.DataColumn("TipoEje", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTipoEje);
                 this.columnEje = new global::System.Data.DataColumn("Eje", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -936,9 +846,11 @@ namespace Comunes {
                 this.columnResistenciaDec = new global::System.Data.DataColumn("ResistenciaDec", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnResistenciaDec);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidEje,
+                                this.columnidJoy,
+                                this.columnidPinkie,
                                 this.columnidModo,
-                                this.columnidPinkie}, true));
+                                this.columnidEje}, true));
+                this.columnidJoy.AllowDBNull = false;
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
                 this.columnidEje.AllowDBNull = false;
@@ -1037,725 +949,6 @@ namespace Comunes {
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
                 attribute2.FixedValue = "MAPAEJESDataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class MAPAEJESPEQUEDataTable : global::System.Data.TypedTableBase<MAPAEJESPEQUERow> {
-            
-            private global::System.Data.DataColumn columnidPinkie;
-            
-            private global::System.Data.DataColumn columnidModo;
-            
-            private global::System.Data.DataColumn columnidEje;
-            
-            private global::System.Data.DataColumn columnMouse;
-            
-            private global::System.Data.DataColumn columnTipoEje;
-            
-            private global::System.Data.DataColumn columnEje;
-            
-            private global::System.Data.DataColumn columnBandas;
-            
-            private global::System.Data.DataColumn columnResistenciaInc;
-            
-            private global::System.Data.DataColumn columnResistenciaDec;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESPEQUEDataTable() {
-                this.TableName = "MAPAEJESPEQUE";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal MAPAEJESPEQUEDataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected MAPAEJESPEQUEDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idPinkieColumn {
-                get {
-                    return this.columnidPinkie;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idModoColumn {
-                get {
-                    return this.columnidModo;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
-                get {
-                    return this.columnidEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MouseColumn {
-                get {
-                    return this.columnMouse;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn TipoEjeColumn {
-                get {
-                    return this.columnTipoEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn EjeColumn {
-                get {
-                    return this.columnEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn BandasColumn {
-                get {
-                    return this.columnBandas;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ResistenciaIncColumn {
-                get {
-                    return this.columnResistenciaInc;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn ResistenciaDecColumn {
-                get {
-                    return this.columnResistenciaDec;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESPEQUERow this[int index] {
-                get {
-                    return ((MAPAEJESPEQUERow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESPEQUERowChangeEventHandler MAPAEJESPEQUERowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESPEQUERowChangeEventHandler MAPAEJESPEQUERowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESPEQUERowChangeEventHandler MAPAEJESPEQUERowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESPEQUERowChangeEventHandler MAPAEJESPEQUERowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void AddMAPAEJESPEQUERow(MAPAEJESPEQUERow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESPEQUERow AddMAPAEJESPEQUERow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte TipoEje, byte Eje, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
-                MAPAEJESPEQUERow rowMAPAEJESPEQUERow = ((MAPAEJESPEQUERow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        idPinkie,
-                        idModo,
-                        idEje,
-                        Mouse,
-                        TipoEje,
-                        Eje,
-                        Bandas,
-                        ResistenciaInc,
-                        ResistenciaDec};
-                rowMAPAEJESPEQUERow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowMAPAEJESPEQUERow);
-                return rowMAPAEJESPEQUERow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESPEQUERow FindByidEjeidModoidPinkie(byte idEje, byte idModo, byte idPinkie) {
-                return ((MAPAEJESPEQUERow)(this.Rows.Find(new object[] {
-                            idEje,
-                            idModo,
-                            idPinkie})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                MAPAEJESPEQUEDataTable cln = ((MAPAEJESPEQUEDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new MAPAEJESPEQUEDataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal void InitVars() {
-                this.columnidPinkie = base.Columns["idPinkie"];
-                this.columnidModo = base.Columns["idModo"];
-                this.columnidEje = base.Columns["idEje"];
-                this.columnMouse = base.Columns["Mouse"];
-                this.columnTipoEje = base.Columns["TipoEje"];
-                this.columnEje = base.Columns["Eje"];
-                this.columnBandas = base.Columns["Bandas"];
-                this.columnResistenciaInc = base.Columns["ResistenciaInc"];
-                this.columnResistenciaDec = base.Columns["ResistenciaDec"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            private void InitClass() {
-                this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidPinkie);
-                this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidModo);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
-                this.columnMouse = new global::System.Data.DataColumn("Mouse", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMouse);
-                this.columnTipoEje = new global::System.Data.DataColumn("TipoEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoEje);
-                this.columnEje = new global::System.Data.DataColumn("Eje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEje);
-                this.columnBandas = new global::System.Data.DataColumn("Bandas", typeof(byte[]), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnBandas);
-                this.columnResistenciaInc = new global::System.Data.DataColumn("ResistenciaInc", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnResistenciaInc);
-                this.columnResistenciaDec = new global::System.Data.DataColumn("ResistenciaDec", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnResistenciaDec);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidEje,
-                                this.columnidModo,
-                                this.columnidPinkie}, true));
-                this.columnidPinkie.AllowDBNull = false;
-                this.columnidModo.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
-                this.columnMouse.AllowDBNull = false;
-                this.columnMouse.DefaultValue = ((byte)(1));
-                this.columnEje.AllowDBNull = false;
-                this.columnBandas.AllowDBNull = false;
-                this.columnResistenciaInc.AllowDBNull = false;
-                this.columnResistenciaInc.DefaultValue = ((byte)(0));
-                this.columnResistenciaDec.AllowDBNull = false;
-                this.columnResistenciaDec.DefaultValue = ((byte)(0));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESPEQUERow NewMAPAEJESPEQUERow() {
-                return ((MAPAEJESPEQUERow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new MAPAEJESPEQUERow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(MAPAEJESPEQUERow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.MAPAEJESPEQUERowChanged != null)) {
-                    this.MAPAEJESPEQUERowChanged(this, new MAPAEJESPEQUERowChangeEvent(((MAPAEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.MAPAEJESPEQUERowChanging != null)) {
-                    this.MAPAEJESPEQUERowChanging(this, new MAPAEJESPEQUERowChangeEvent(((MAPAEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.MAPAEJESPEQUERowDeleted != null)) {
-                    this.MAPAEJESPEQUERowDeleted(this, new MAPAEJESPEQUERowChangeEvent(((MAPAEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.MAPAEJESPEQUERowDeleting != null)) {
-                    this.MAPAEJESPEQUERowDeleting(this, new MAPAEJESPEQUERowChangeEvent(((MAPAEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void RemoveMAPAEJESPEQUERow(MAPAEJESPEQUERow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DSPerfil ds = new DSPerfil();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "MAPAEJESPEQUEDataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class MAPAEJESMINIDataTable : global::System.Data.TypedTableBase<MAPAEJESMINIRow> {
-            
-            private global::System.Data.DataColumn columnidPinkie;
-            
-            private global::System.Data.DataColumn columnidModo;
-            
-            private global::System.Data.DataColumn columnidEje;
-            
-            private global::System.Data.DataColumn columnMouse;
-            
-            private global::System.Data.DataColumn columnTipoEje;
-            
-            private global::System.Data.DataColumn columnEje;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESMINIDataTable() {
-                this.TableName = "MAPAEJESMINI";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal MAPAEJESMINIDataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected MAPAEJESMINIDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idPinkieColumn {
-                get {
-                    return this.columnidPinkie;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idModoColumn {
-                get {
-                    return this.columnidModo;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
-                get {
-                    return this.columnidEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn MouseColumn {
-                get {
-                    return this.columnMouse;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn TipoEjeColumn {
-                get {
-                    return this.columnTipoEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn EjeColumn {
-                get {
-                    return this.columnEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESMINIRow this[int index] {
-                get {
-                    return ((MAPAEJESMINIRow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESMINIRowChangeEventHandler MAPAEJESMINIRowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESMINIRowChangeEventHandler MAPAEJESMINIRowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESMINIRowChangeEventHandler MAPAEJESMINIRowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event MAPAEJESMINIRowChangeEventHandler MAPAEJESMINIRowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void AddMAPAEJESMINIRow(MAPAEJESMINIRow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESMINIRow AddMAPAEJESMINIRow(byte idPinkie, byte idModo, byte idEje, byte Mouse, byte TipoEje, byte Eje) {
-                MAPAEJESMINIRow rowMAPAEJESMINIRow = ((MAPAEJESMINIRow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        idPinkie,
-                        idModo,
-                        idEje,
-                        Mouse,
-                        TipoEje,
-                        Eje};
-                rowMAPAEJESMINIRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowMAPAEJESMINIRow);
-                return rowMAPAEJESMINIRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESMINIRow FindByidEjeidModoidPinkie(byte idEje, byte idModo, byte idPinkie) {
-                return ((MAPAEJESMINIRow)(this.Rows.Find(new object[] {
-                            idEje,
-                            idModo,
-                            idPinkie})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                MAPAEJESMINIDataTable cln = ((MAPAEJESMINIDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new MAPAEJESMINIDataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal void InitVars() {
-                this.columnidPinkie = base.Columns["idPinkie"];
-                this.columnidModo = base.Columns["idModo"];
-                this.columnidEje = base.Columns["idEje"];
-                this.columnMouse = base.Columns["Mouse"];
-                this.columnTipoEje = base.Columns["TipoEje"];
-                this.columnEje = base.Columns["Eje"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            private void InitClass() {
-                this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidPinkie);
-                this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidModo);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
-                this.columnMouse = new global::System.Data.DataColumn("Mouse", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMouse);
-                this.columnTipoEje = new global::System.Data.DataColumn("TipoEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTipoEje);
-                this.columnEje = new global::System.Data.DataColumn("Eje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEje);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidEje,
-                                this.columnidModo,
-                                this.columnidPinkie}, true));
-                this.columnidPinkie.AllowDBNull = false;
-                this.columnidModo.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
-                this.columnMouse.AllowDBNull = false;
-                this.columnMouse.DefaultValue = ((byte)(1));
-                this.columnEje.AllowDBNull = false;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESMINIRow NewMAPAEJESMINIRow() {
-                return ((MAPAEJESMINIRow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new MAPAEJESMINIRow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(MAPAEJESMINIRow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.MAPAEJESMINIRowChanged != null)) {
-                    this.MAPAEJESMINIRowChanged(this, new MAPAEJESMINIRowChangeEvent(((MAPAEJESMINIRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.MAPAEJESMINIRowChanging != null)) {
-                    this.MAPAEJESMINIRowChanging(this, new MAPAEJESMINIRowChangeEvent(((MAPAEJESMINIRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.MAPAEJESMINIRowDeleted != null)) {
-                    this.MAPAEJESMINIRowDeleted(this, new MAPAEJESMINIRowChangeEvent(((MAPAEJESMINIRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.MAPAEJESMINIRowDeleting != null)) {
-                    this.MAPAEJESMINIRowDeleting(this, new MAPAEJESMINIRowChangeEvent(((MAPAEJESMINIRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void RemoveMAPAEJESMINIRow(MAPAEJESMINIRow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DSPerfil ds = new DSPerfil();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "MAPAEJESMINIDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -2341,6 +1534,8 @@ namespace Comunes {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class INDICESEJESDataTable : global::System.Data.TypedTableBase<INDICESEJESRow> {
             
+            private global::System.Data.DataColumn columnidJoy;
+            
             private global::System.Data.DataColumn columnidPinkie;
             
             private global::System.Data.DataColumn columnidModo;
@@ -2349,7 +1544,7 @@ namespace Comunes {
             
             private global::System.Data.DataColumn columnid;
             
-            private global::System.Data.DataColumn columnAccion;
+            private global::System.Data.DataColumn columnidAccion;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -2386,6 +1581,14 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn idJoyColumn {
+                get {
+                    return this.columnidJoy;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn idPinkieColumn {
                 get {
                     return this.columnidPinkie;
@@ -2418,9 +1621,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn AccionColumn {
+            public global::System.Data.DataColumn idAccionColumn {
                 get {
-                    return this.columnAccion;
+                    return this.columnidAccion;
                 }
             }
             
@@ -2461,16 +1664,17 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESRow AddINDICESEJESRow(byte idPinkie, byte idModo, uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJES) {
+            public INDICESEJESRow AddINDICESEJESRow(byte idJoy, byte idPinkie, byte idModo, uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJES) {
                 INDICESEJESRow rowINDICESEJESRow = ((INDICESEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idJoy,
                         idPinkie,
                         idModo,
                         idEje,
                         id,
                         null};
                 if ((parentACCIONESRowByFK_ACCIONES_INDICESEJES != null)) {
-                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESEJES[0];
+                    columnValuesArray[5] = parentACCIONESRowByFK_ACCIONES_INDICESEJES[0];
                 }
                 rowINDICESEJESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowINDICESEJESRow);
@@ -2479,12 +1683,13 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESRow FindByididEjeidModoidPinkie(byte id, uint idEje, byte idModo, byte idPinkie) {
+            public INDICESEJESRow FindByidJoyidPinkieidModoidEjeid(byte idJoy, byte idPinkie, byte idModo, uint idEje, byte id) {
                 return ((INDICESEJESRow)(this.Rows.Find(new object[] {
-                            id,
-                            idEje,
+                            idJoy,
+                            idPinkie,
                             idModo,
-                            idPinkie})));
+                            idEje,
+                            id})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2504,16 +1709,19 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
+                this.columnidJoy = base.Columns["idJoy"];
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
                 this.columnidEje = base.Columns["idEje"];
                 this.columnid = base.Columns["id"];
-                this.columnAccion = base.Columns["Accion"];
+                this.columnidAccion = base.Columns["idAccion"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -2522,21 +1730,23 @@ namespace Comunes {
                 base.Columns.Add(this.columnidEje);
                 this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnid);
-                this.columnAccion = new global::System.Data.DataColumn("Accion", typeof(ushort), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAccion);
+                this.columnidAccion = new global::System.Data.DataColumn("idAccion", typeof(ushort), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidAccion);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnid,
-                                this.columnidEje,
+                                this.columnidJoy,
+                                this.columnidPinkie,
                                 this.columnidModo,
-                                this.columnidPinkie}, true));
+                                this.columnidEje,
+                                this.columnid}, true));
+                this.columnidJoy.AllowDBNull = false;
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
                 this.columnidEje.AllowDBNull = false;
                 this.columnid.AllowDBNull = false;
                 this.columnid.Caption = "Mouse";
-                this.columnAccion.AllowDBNull = false;
-                this.columnAccion.Caption = "Indices";
-                this.columnAccion.DefaultValue = ((ushort)(0));
+                this.columnidAccion.AllowDBNull = false;
+                this.columnidAccion.Caption = "Indices";
+                this.columnidAccion.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2668,336 +1878,9 @@ namespace Comunes {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class INDICESEJESPEQUEDataTable : global::System.Data.TypedTableBase<INDICESEJESPEQUERow> {
-            
-            private global::System.Data.DataColumn columnidPinkie;
-            
-            private global::System.Data.DataColumn columnidModo;
-            
-            private global::System.Data.DataColumn columnidEje;
-            
-            private global::System.Data.DataColumn columnid;
-            
-            private global::System.Data.DataColumn columnAccion;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUEDataTable() {
-                this.TableName = "INDICESEJESPEQUE";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal INDICESEJESPEQUEDataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected INDICESEJESPEQUEDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idPinkieColumn {
-                get {
-                    return this.columnidPinkie;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idModoColumn {
-                get {
-                    return this.columnidModo;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
-                get {
-                    return this.columnidEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn idColumn {
-                get {
-                    return this.columnid;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn AccionColumn {
-                get {
-                    return this.columnAccion;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUERow this[int index] {
-                get {
-                    return ((INDICESEJESPEQUERow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public event INDICESEJESPEQUERowChangeEventHandler INDICESEJESPEQUERowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void AddINDICESEJESPEQUERow(INDICESEJESPEQUERow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUERow AddINDICESEJESPEQUERow(byte idPinkie, byte idModo, uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE) {
-                INDICESEJESPEQUERow rowINDICESEJESPEQUERow = ((INDICESEJESPEQUERow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        idPinkie,
-                        idModo,
-                        idEje,
-                        id,
-                        null};
-                if ((parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE != null)) {
-                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESEJESPEQUE[0];
-                }
-                rowINDICESEJESPEQUERow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowINDICESEJESPEQUERow);
-                return rowINDICESEJESPEQUERow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUERow FindByididEjeidModoidPinkie(byte id, uint idEje, byte idModo, byte idPinkie) {
-                return ((INDICESEJESPEQUERow)(this.Rows.Find(new object[] {
-                            id,
-                            idEje,
-                            idModo,
-                            idPinkie})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                INDICESEJESPEQUEDataTable cln = ((INDICESEJESPEQUEDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new INDICESEJESPEQUEDataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal void InitVars() {
-                this.columnidPinkie = base.Columns["idPinkie"];
-                this.columnidModo = base.Columns["idModo"];
-                this.columnidEje = base.Columns["idEje"];
-                this.columnid = base.Columns["id"];
-                this.columnAccion = base.Columns["Accion"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            private void InitClass() {
-                this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidPinkie);
-                this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidModo);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(uint), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
-                this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnid);
-                this.columnAccion = new global::System.Data.DataColumn("Accion", typeof(ushort), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAccion);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnid,
-                                this.columnidEje,
-                                this.columnidModo,
-                                this.columnidPinkie}, true));
-                this.columnidPinkie.AllowDBNull = false;
-                this.columnidModo.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
-                this.columnid.AllowDBNull = false;
-                this.columnid.Caption = "Mouse";
-                this.columnAccion.AllowDBNull = false;
-                this.columnAccion.Caption = "Indices";
-                this.columnAccion.DefaultValue = ((ushort)(0));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUERow NewINDICESEJESPEQUERow() {
-                return ((INDICESEJESPEQUERow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new INDICESEJESPEQUERow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(INDICESEJESPEQUERow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.INDICESEJESPEQUERowChanged != null)) {
-                    this.INDICESEJESPEQUERowChanged(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.INDICESEJESPEQUERowChanging != null)) {
-                    this.INDICESEJESPEQUERowChanging(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.INDICESEJESPEQUERowDeleted != null)) {
-                    this.INDICESEJESPEQUERowDeleted(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.INDICESEJESPEQUERowDeleting != null)) {
-                    this.INDICESEJESPEQUERowDeleting(this, new INDICESEJESPEQUERowChangeEvent(((INDICESEJESPEQUERow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void RemoveINDICESEJESPEQUERow(INDICESEJESPEQUERow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DSPerfil ds = new DSPerfil();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "INDICESEJESPEQUEDataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class INDICESSETASDataTable : global::System.Data.TypedTableBase<INDICESSETASRow> {
+            
+            private global::System.Data.DataColumn columnidJoy;
             
             private global::System.Data.DataColumn columnidPinkie;
             
@@ -3007,7 +1890,7 @@ namespace Comunes {
             
             private global::System.Data.DataColumn columnid;
             
-            private global::System.Data.DataColumn columnAccion;
+            private global::System.Data.DataColumn columnidAccion;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -3044,6 +1927,14 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn idJoyColumn {
+                get {
+                    return this.columnidJoy;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn idPinkieColumn {
                 get {
                     return this.columnidPinkie;
@@ -3076,9 +1967,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn AccionColumn {
+            public global::System.Data.DataColumn idAccionColumn {
                 get {
-                    return this.columnAccion;
+                    return this.columnidAccion;
                 }
             }
             
@@ -3119,16 +2010,17 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESSETASRow AddINDICESSETASRow(byte idPinkie, byte idModo, uint idSeta, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESSETAS) {
+            public INDICESSETASRow AddINDICESSETASRow(byte idJoy, byte idPinkie, byte idModo, uint idSeta, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESSETAS) {
                 INDICESSETASRow rowINDICESSETASRow = ((INDICESSETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idJoy,
                         idPinkie,
                         idModo,
                         idSeta,
                         id,
                         null};
                 if ((parentACCIONESRowByFK_ACCIONES_INDICESSETAS != null)) {
-                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESSETAS[0];
+                    columnValuesArray[5] = parentACCIONESRowByFK_ACCIONES_INDICESSETAS[0];
                 }
                 rowINDICESSETASRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowINDICESSETASRow);
@@ -3137,12 +2029,13 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESSETASRow FindByididSetaidModoidPinkie(byte id, uint idSeta, byte idModo, byte idPinkie) {
+            public INDICESSETASRow FindByidJoyidPinkieidModoidSetaid(byte idJoy, byte idPinkie, byte idModo, uint idSeta, byte id) {
                 return ((INDICESSETASRow)(this.Rows.Find(new object[] {
-                            id,
-                            idSeta,
+                            idJoy,
+                            idPinkie,
                             idModo,
-                            idPinkie})));
+                            idSeta,
+                            id})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3162,16 +2055,19 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
+                this.columnidJoy = base.Columns["idJoy"];
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
                 this.columnidSeta = base.Columns["idSeta"];
                 this.columnid = base.Columns["id"];
-                this.columnAccion = base.Columns["Accion"];
+                this.columnidAccion = base.Columns["idAccion"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -3180,22 +2076,24 @@ namespace Comunes {
                 base.Columns.Add(this.columnidSeta);
                 this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnid);
-                this.columnAccion = new global::System.Data.DataColumn("Accion", typeof(ushort), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAccion);
+                this.columnidAccion = new global::System.Data.DataColumn("idAccion", typeof(ushort), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidAccion);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnid,
-                                this.columnidSeta,
+                                this.columnidJoy,
+                                this.columnidPinkie,
                                 this.columnidModo,
-                                this.columnidPinkie}, true));
+                                this.columnidSeta,
+                                this.columnid}, true));
+                this.columnidJoy.AllowDBNull = false;
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
                 this.columnidSeta.AllowDBNull = false;
                 this.columnidSeta.Caption = "idEje";
                 this.columnid.AllowDBNull = false;
                 this.columnid.Caption = "Mouse";
-                this.columnAccion.AllowDBNull = false;
-                this.columnAccion.Caption = "Indices";
-                this.columnAccion.DefaultValue = ((ushort)(0));
+                this.columnidAccion.AllowDBNull = false;
+                this.columnidAccion.Caption = "Indices";
+                this.columnidAccion.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3329,6 +2227,8 @@ namespace Comunes {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class INDICESBOTONESDataTable : global::System.Data.TypedTableBase<INDICESBOTONESRow> {
             
+            private global::System.Data.DataColumn columnidJoy;
+            
             private global::System.Data.DataColumn columnidPinkie;
             
             private global::System.Data.DataColumn columnidModo;
@@ -3337,7 +2237,7 @@ namespace Comunes {
             
             private global::System.Data.DataColumn columnid;
             
-            private global::System.Data.DataColumn columnAccion;
+            private global::System.Data.DataColumn columnidAccion;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
@@ -3374,6 +2274,14 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn idJoyColumn {
+                get {
+                    return this.columnidJoy;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn idPinkieColumn {
                 get {
                     return this.columnidPinkie;
@@ -3406,9 +2314,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn AccionColumn {
+            public global::System.Data.DataColumn idAccionColumn {
                 get {
-                    return this.columnAccion;
+                    return this.columnidAccion;
                 }
             }
             
@@ -3449,16 +2357,17 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESBOTONESRow AddINDICESBOTONESRow(byte idPinkie, byte idModo, uint idBoton, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESBOTONES) {
+            public INDICESBOTONESRow AddINDICESBOTONESRow(byte idJoy, byte idPinkie, byte idModo, uint idBoton, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESBOTONES) {
                 INDICESBOTONESRow rowINDICESBOTONESRow = ((INDICESBOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idJoy,
                         idPinkie,
                         idModo,
                         idBoton,
                         id,
                         null};
                 if ((parentACCIONESRowByFK_ACCIONES_INDICESBOTONES != null)) {
-                    columnValuesArray[4] = parentACCIONESRowByFK_ACCIONES_INDICESBOTONES[0];
+                    columnValuesArray[5] = parentACCIONESRowByFK_ACCIONES_INDICESBOTONES[0];
                 }
                 rowINDICESBOTONESRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowINDICESBOTONESRow);
@@ -3467,11 +2376,12 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESBOTONESRow FindByidBotonidModoidPinkieid(uint idBoton, byte idModo, byte idPinkie, byte id) {
+            public INDICESBOTONESRow FindByidJoyidPinkieidModoidBotonid(byte idJoy, byte idPinkie, byte idModo, uint idBoton, byte id) {
                 return ((INDICESBOTONESRow)(this.Rows.Find(new object[] {
-                            idBoton,
-                            idModo,
+                            idJoy,
                             idPinkie,
+                            idModo,
+                            idBoton,
                             id})));
             }
             
@@ -3492,16 +2402,19 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
+                this.columnidJoy = base.Columns["idJoy"];
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
                 this.columnidBoton = base.Columns["idBoton"];
                 this.columnid = base.Columns["id"];
-                this.columnAccion = base.Columns["Accion"];
+                this.columnidAccion = base.Columns["idAccion"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -3510,22 +2423,24 @@ namespace Comunes {
                 base.Columns.Add(this.columnidBoton);
                 this.columnid = new global::System.Data.DataColumn("id", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnid);
-                this.columnAccion = new global::System.Data.DataColumn("Accion", typeof(ushort), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAccion);
+                this.columnidAccion = new global::System.Data.DataColumn("idAccion", typeof(ushort), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidAccion);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidBoton,
-                                this.columnidModo,
+                                this.columnidJoy,
                                 this.columnidPinkie,
+                                this.columnidModo,
+                                this.columnidBoton,
                                 this.columnid}, true));
+                this.columnidJoy.AllowDBNull = false;
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
                 this.columnidBoton.AllowDBNull = false;
                 this.columnidBoton.Caption = "idEje";
                 this.columnid.AllowDBNull = false;
                 this.columnid.Caption = "Mouse";
-                this.columnAccion.AllowDBNull = false;
-                this.columnAccion.Caption = "Indices";
-                this.columnAccion.DefaultValue = ((ushort)(0));
+                this.columnidAccion.AllowDBNull = false;
+                this.columnidAccion.Caption = "Indices";
+                this.columnidAccion.DefaultValue = ((ushort)(0));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3659,6 +2574,8 @@ namespace Comunes {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class MAPABOTONESDataTable : global::System.Data.TypedTableBase<MAPABOTONESRow> {
             
+            private global::System.Data.DataColumn columnidJoy;
+            
             private global::System.Data.DataColumn columnidPinkie;
             
             private global::System.Data.DataColumn columnidModo;
@@ -3698,6 +2615,14 @@ namespace Comunes {
             protected MAPABOTONESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn idJoyColumn {
+                get {
+                    return this.columnidJoy;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3769,9 +2694,10 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPABOTONESRow AddMAPABOTONESRow(byte idPinkie, byte idModo, byte idBoton, byte TamIndices) {
+            public MAPABOTONESRow AddMAPABOTONESRow(byte idJoy, byte idPinkie, byte idModo, byte idBoton, byte TamIndices) {
                 MAPABOTONESRow rowMAPABOTONESRow = ((MAPABOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idJoy,
                         idPinkie,
                         idModo,
                         idBoton,
@@ -3783,8 +2709,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPABOTONESRow FindByidPinkieidModoidBoton(byte idPinkie, byte idModo, byte idBoton) {
+            public MAPABOTONESRow FindByidJoyidPinkieidModoidBoton(byte idJoy, byte idPinkie, byte idModo, byte idBoton) {
                 return ((MAPABOTONESRow)(this.Rows.Find(new object[] {
+                            idJoy,
                             idPinkie,
                             idModo,
                             idBoton})));
@@ -3807,6 +2734,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
+                this.columnidJoy = base.Columns["idJoy"];
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
                 this.columnidBoton = base.Columns["idBoton"];
@@ -3816,6 +2744,8 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -3825,9 +2755,11 @@ namespace Comunes {
                 this.columnTamIndices = new global::System.Data.DataColumn("TamIndices", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTamIndices);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnidJoy,
                                 this.columnidPinkie,
                                 this.columnidModo,
                                 this.columnidBoton}, true));
+                this.columnidJoy.AllowDBNull = false;
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
                 this.columnidBoton.AllowDBNull = false;
@@ -3965,6 +2897,8 @@ namespace Comunes {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class MAPASETASDataTable : global::System.Data.TypedTableBase<MAPASETASRow> {
             
+            private global::System.Data.DataColumn columnidJoy;
+            
             private global::System.Data.DataColumn columnidPinkie;
             
             private global::System.Data.DataColumn columnidModo;
@@ -4004,6 +2938,14 @@ namespace Comunes {
             protected MAPASETASDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn idJoyColumn {
+                get {
+                    return this.columnidJoy;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4075,9 +3017,10 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPASETASRow AddMAPASETASRow(byte idPinkie, byte idModo, byte IdSeta, byte TamIndices) {
+            public MAPASETASRow AddMAPASETASRow(byte idJoy, byte idPinkie, byte idModo, byte IdSeta, byte TamIndices) {
                 MAPASETASRow rowMAPASETASRow = ((MAPASETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
+                        idJoy,
                         idPinkie,
                         idModo,
                         IdSeta,
@@ -4089,8 +3032,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPASETASRow FindByidPinkieidModoIdSeta(byte idPinkie, byte idModo, byte IdSeta) {
+            public MAPASETASRow FindByidJoyidPinkieidModoIdSeta(byte idJoy, byte idPinkie, byte idModo, byte IdSeta) {
                 return ((MAPASETASRow)(this.Rows.Find(new object[] {
+                            idJoy,
                             idPinkie,
                             idModo,
                             IdSeta})));
@@ -4113,6 +3057,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
+                this.columnidJoy = base.Columns["idJoy"];
                 this.columnidPinkie = base.Columns["idPinkie"];
                 this.columnidModo = base.Columns["idModo"];
                 this.columnIdSeta = base.Columns["IdSeta"];
@@ -4122,6 +3067,8 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             private void InitClass() {
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
                 this.columnidModo = new global::System.Data.DataColumn("idModo", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -4131,9 +3078,11 @@ namespace Comunes {
                 this.columnTamIndices = new global::System.Data.DataColumn("TamIndices", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTamIndices);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
+                                this.columnidJoy,
                                 this.columnidPinkie,
                                 this.columnidModo,
                                 this.columnIdSeta}, true));
+                this.columnidJoy.AllowDBNull = false;
                 this.columnidPinkie.AllowDBNull = false;
                 this.columnidModo.AllowDBNull = false;
                 this.columnIdSeta.AllowDBNull = false;
@@ -4280,6 +3229,17 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte idJoy {
+                get {
+                    return ((byte)(this[this.tableMAPAEJES.idJoyColumn]));
+                }
+                set {
+                    this[this.tableMAPAEJES.idJoyColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public byte idPinkie {
                 get {
                     return ((byte)(this[this.tableMAPAEJES.idPinkieColumn]));
@@ -4319,6 +3279,22 @@ namespace Comunes {
                 }
                 set {
                     this[this.tableMAPAEJES.MouseColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte JoySalida {
+                get {
+                    try {
+                        return ((byte)(this[this.tableMAPAEJES.JoySalidaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'JoySalida\' de la tabla \'MAPAEJES\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableMAPAEJES.JoySalidaColumn] = value;
                 }
             }
             
@@ -4395,6 +3371,18 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsJoySalidaNull() {
+                return this.IsNull(this.tableMAPAEJES.JoySalidaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetJoySalidaNull() {
+                this[this.tableMAPAEJES.JoySalidaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsTipoEjeNull() {
                 return this.IsNull(this.tableMAPAEJES.TipoEjeColumn);
             }
@@ -4403,235 +3391,6 @@ namespace Comunes {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetTipoEjeNull() {
                 this[this.tableMAPAEJES.TipoEjeColumn] = global::System.Convert.DBNull;
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
-        public partial class MAPAEJESPEQUERow : global::System.Data.DataRow {
-            
-            private MAPAEJESPEQUEDataTable tableMAPAEJESPEQUE;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal MAPAEJESPEQUERow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableMAPAEJESPEQUE = ((MAPAEJESPEQUEDataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idPinkie {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESPEQUE.idPinkieColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.idPinkieColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idModo {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESPEQUE.idModoColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.idModoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idEje {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESPEQUE.idEjeColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.idEjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte Mouse {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESPEQUE.MouseColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.MouseColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte TipoEje {
-                get {
-                    try {
-                        return ((byte)(this[this.tableMAPAEJESPEQUE.TipoEjeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoEje\' de la tabla \'MAPAEJESPEQUE\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.TipoEjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte Eje {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESPEQUE.EjeColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.EjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte[] Bandas {
-                get {
-                    return ((byte[])(this[this.tableMAPAEJESPEQUE.BandasColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.BandasColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte ResistenciaInc {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESPEQUE.ResistenciaIncColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.ResistenciaIncColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte ResistenciaDec {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESPEQUE.ResistenciaDecColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESPEQUE.ResistenciaDecColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsTipoEjeNull() {
-                return this.IsNull(this.tableMAPAEJESPEQUE.TipoEjeColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetTipoEjeNull() {
-                this[this.tableMAPAEJESPEQUE.TipoEjeColumn] = global::System.Convert.DBNull;
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
-        public partial class MAPAEJESMINIRow : global::System.Data.DataRow {
-            
-            private MAPAEJESMINIDataTable tableMAPAEJESMINI;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal MAPAEJESMINIRow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableMAPAEJESMINI = ((MAPAEJESMINIDataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idPinkie {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESMINI.idPinkieColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESMINI.idPinkieColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idModo {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESMINI.idModoColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESMINI.idModoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idEje {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESMINI.idEjeColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESMINI.idEjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte Mouse {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESMINI.MouseColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESMINI.MouseColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte TipoEje {
-                get {
-                    try {
-                        return ((byte)(this[this.tableMAPAEJESMINI.TipoEjeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'TipoEje\' de la tabla \'MAPAEJESMINI\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableMAPAEJESMINI.TipoEjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte Eje {
-                get {
-                    return ((byte)(this[this.tableMAPAEJESMINI.EjeColumn]));
-                }
-                set {
-                    this[this.tableMAPAEJESMINI.EjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public bool IsTipoEjeNull() {
-                return this.IsNull(this.tableMAPAEJESMINI.TipoEjeColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public void SetTipoEjeNull() {
-                this[this.tableMAPAEJESMINI.TipoEjeColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -4749,17 +3508,6 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUERow[] GetINDICESEJESPEQUERows() {
-                if ((this.Table.ChildRelations["FK_ACCIONES_INDICESEJESPEQUE"] == null)) {
-                    return new INDICESEJESPEQUERow[0];
-                }
-                else {
-                    return ((INDICESEJESPEQUERow[])(base.GetChildRows(this.Table.ChildRelations["FK_ACCIONES_INDICESEJESPEQUE"])));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public INDICESEJESRow[] GetINDICESEJESRows() {
                 if ((this.Table.ChildRelations["FK_ACCIONES_INDICESEJES"] == null)) {
                     return new INDICESEJESRow[0];
@@ -4782,6 +3530,17 @@ namespace Comunes {
             internal INDICESEJESRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
                 this.tableINDICESEJES = ((INDICESEJESDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte idJoy {
+                get {
+                    return ((byte)(this[this.tableINDICESEJES.idJoyColumn]));
+                }
+                set {
+                    this[this.tableINDICESEJES.idJoyColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4830,12 +3589,12 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ushort Accion {
+            public ushort idAccion {
                 get {
-                    return ((ushort)(this[this.tableINDICESEJES.AccionColumn]));
+                    return ((ushort)(this[this.tableINDICESEJES.idAccionColumn]));
                 }
                 set {
-                    this[this.tableINDICESEJES.AccionColumn] = value;
+                    this[this.tableINDICESEJES.idAccionColumn] = value;
                 }
             }
             
@@ -4854,87 +3613,6 @@ namespace Comunes {
         /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
-        public partial class INDICESEJESPEQUERow : global::System.Data.DataRow {
-            
-            private INDICESEJESPEQUEDataTable tableINDICESEJESPEQUE;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            internal INDICESEJESPEQUERow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableINDICESEJESPEQUE = ((INDICESEJESPEQUEDataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idPinkie {
-                get {
-                    return ((byte)(this[this.tableINDICESEJESPEQUE.idPinkieColumn]));
-                }
-                set {
-                    this[this.tableINDICESEJESPEQUE.idPinkieColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte idModo {
-                get {
-                    return ((byte)(this[this.tableINDICESEJESPEQUE.idModoColumn]));
-                }
-                set {
-                    this[this.tableINDICESEJESPEQUE.idModoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public uint idEje {
-                get {
-                    return ((uint)(this[this.tableINDICESEJESPEQUE.idEjeColumn]));
-                }
-                set {
-                    this[this.tableINDICESEJESPEQUE.idEjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte id {
-                get {
-                    return ((byte)(this[this.tableINDICESEJESPEQUE.idColumn]));
-                }
-                set {
-                    this[this.tableINDICESEJESPEQUE.idColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ushort Accion {
-                get {
-                    return ((ushort)(this[this.tableINDICESEJESPEQUE.AccionColumn]));
-                }
-                set {
-                    this[this.tableINDICESEJESPEQUE.AccionColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ACCIONESRow ACCIONESRow {
-                get {
-                    return ((ACCIONESRow)(this.GetParentRow(this.Table.ParentRelations["FK_ACCIONES_INDICESEJESPEQUE"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_ACCIONES_INDICESEJESPEQUE"]);
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
         public partial class INDICESSETASRow : global::System.Data.DataRow {
             
             private INDICESSETASDataTable tableINDICESSETAS;
@@ -4944,6 +3622,17 @@ namespace Comunes {
             internal INDICESSETASRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
                 this.tableINDICESSETAS = ((INDICESSETASDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte idJoy {
+                get {
+                    return ((byte)(this[this.tableINDICESSETAS.idJoyColumn]));
+                }
+                set {
+                    this[this.tableINDICESSETAS.idJoyColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4992,12 +3681,12 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ushort Accion {
+            public ushort idAccion {
                 get {
-                    return ((ushort)(this[this.tableINDICESSETAS.AccionColumn]));
+                    return ((ushort)(this[this.tableINDICESSETAS.idAccionColumn]));
                 }
                 set {
-                    this[this.tableINDICESSETAS.AccionColumn] = value;
+                    this[this.tableINDICESSETAS.idAccionColumn] = value;
                 }
             }
             
@@ -5025,6 +3714,17 @@ namespace Comunes {
             internal INDICESBOTONESRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
                 this.tableINDICESBOTONES = ((INDICESBOTONESDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte idJoy {
+                get {
+                    return ((byte)(this[this.tableINDICESBOTONES.idJoyColumn]));
+                }
+                set {
+                    this[this.tableINDICESBOTONES.idJoyColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5073,12 +3773,12 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ushort Accion {
+            public ushort idAccion {
                 get {
-                    return ((ushort)(this[this.tableINDICESBOTONES.AccionColumn]));
+                    return ((ushort)(this[this.tableINDICESBOTONES.idAccionColumn]));
                 }
                 set {
-                    this[this.tableINDICESBOTONES.AccionColumn] = value;
+                    this[this.tableINDICESBOTONES.idAccionColumn] = value;
                 }
             }
             
@@ -5106,6 +3806,17 @@ namespace Comunes {
             internal MAPABOTONESRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
                 this.tableMAPABOTONES = ((MAPABOTONESDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte idJoy {
+                get {
+                    return ((byte)(this[this.tableMAPABOTONES.idJoyColumn]));
+                }
+                set {
+                    this[this.tableMAPABOTONES.idJoyColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5182,6 +3893,17 @@ namespace Comunes {
             internal MAPASETASRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
                 this.tableMAPASETAS = ((MAPASETASDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte idJoy {
+                get {
+                    return ((byte)(this[this.tableMAPASETAS.idJoyColumn]));
+                }
+                set {
+                    this[this.tableMAPASETAS.idJoyColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5284,74 +4006,6 @@ namespace Comunes {
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public class MAPAEJESPEQUERowChangeEvent : global::System.EventArgs {
-            
-            private MAPAEJESPEQUERow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESPEQUERowChangeEvent(MAPAEJESPEQUERow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESPEQUERow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public class MAPAEJESMINIRowChangeEvent : global::System.EventArgs {
-            
-            private MAPAEJESMINIRow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESMINIRowChangeEvent(MAPAEJESMINIRow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESMINIRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
         public class GENERALRowChangeEvent : global::System.EventArgs {
             
             private GENERALRow eventRow;
@@ -5436,40 +4090,6 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public INDICESEJESRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-        public class INDICESEJESPEQUERowChangeEvent : global::System.EventArgs {
-            
-            private INDICESEJESPEQUERow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUERowChangeEvent(INDICESEJESPEQUERow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public INDICESEJESPEQUERow Row {
                 get {
                     return this.eventRow;
                 }

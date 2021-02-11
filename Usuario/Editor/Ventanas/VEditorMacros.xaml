@@ -100,22 +100,29 @@
 
         <Border x:Name="Panel3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,323,0,0" Width="237" Height="167" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
-                <Label Content="Botón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="71,57,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11" />
-                <Label Content="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="48,26,9,0" Width="178" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,1,5,2" FontSize="10"/>
                 <Label Content="DirectX" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFD8E4D7" Padding="10,2,5,2" FontWeight="Bold" Width="229" FontSize="11"/>
-                <local:CtlNumUpDown x:Name="NumericUpDown1" Maximum="56" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="113,58,0,0" Width="49" Height="21" />
+                <local:CtlNumUpDown x:Name="NumericUpDownJoy" Maximum="3" Minimum="1" Value="1" HorizontalAlignment="Left" Height="22" Margin="8,26,0,0" VerticalAlignment="Center" Width="28" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <Label Content="vJoy:" HorizontalAlignment="Left" Height="26" Margin="6,0,0,26" VerticalAlignment="Center" Width="33" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
+                <Path Data="M4,0 L2,2 2,64 0,66 2,68 2,130 4,132" HorizontalAlignment="Left" Margin="40,26,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"  Stroke="Gainsboro">
+                </Path>
+                <Grid Margin="48,26,0,0" Height="58" VerticalAlignment="Top">
+                    <Label Content="Botón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,22,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11" />
+                    <Label Content="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,9,0" Width="178" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,1,5,2" FontSize="10"/>
+                    <local:CtlNumUpDown x:Name="NumericUpDown1" Maximum="56" Minimum="1" Value="1"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="84,24,0,0" Width="49" Height="21" />
+                    <Button Content="Off" x:Name="ButtonDXOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,25,0,0" Width="35" Height="21" Click="ButtonDXOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                    <Button Content="On" x:Name="ButtonDXOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,25,0,0" Width="35" Height="21" RenderTransformOrigin="0.442,0.762" Click="ButtonDXOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                </Grid>
+                <Grid HorizontalAlignment="Right" Width="187" Margin="0,86,0,8">
+                    <Label Content="Setas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,9,0" Width="178" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,1,5,2" FontSize="10"/>
+                    <Label Content="Posición:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="84,22,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
+                    <Label Content="Seta:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,22,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
+                    <local:CtlNumUpDown x:Name="NumericUpDownPosicion" Maximum="8" Minimum="1" Value="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="141,24,0,0" Width="37" Height="21" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                    <local:CtlNumUpDown x:Name="NumericUpDownPov" Maximum="4" Minimum="1" Value="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="43,24,0,0" Width="37" Height="21" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Button Content="Off" x:Name="ButtonPovOff" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="49,41,0,0" Width="44" Height="21" Click="ButtonPovOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                    <Button Content="On" x:Name="ButtonPovOn" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,41,49,0" Width="44" Height="21" Click="ButtonPovOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                </Grid>
 
-                <Label Content="Posición:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="119,112,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
-                <Label Content="Seta:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,112,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
-                <Label Content="Setas" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="48,89,9,0" Width="178" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,1,5,2" FontSize="10"/>
-                <local:CtlNumUpDown x:Name="NumericUpDownPosicion" Maximum="8" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="171,114,0,0" Width="37" Height="21" />
-                <local:CtlNumUpDown x:Name="NumericUpDownPov" Maximum="4" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="65,114,0,0" Width="37" Height="21" />
-
-                <Button Content="Off" x:Name="ButtonPovOff" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,141,9,0" Width="43" Height="21" Click="ButtonPovOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button Content="On" x:Name="ButtonPovOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,141,0,0" Width="43" Height="21" Click="ButtonPovOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button Content="Off" x:Name="ButtonDXOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="183,58,0,0" Width="43" Height="21" Click="ButtonDXOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button Content="On" x:Name="ButtonDXOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,58,0,0" Width="43" Height="21" RenderTransformOrigin="0.442,0.762" Click="ButtonDXOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Grid x:Name="PanelSetas" Visibility="Collapsed" HorizontalAlignment="Center" Background="#7F808080" Width="216" Height="73" Margin="0,89,0,0" VerticalAlignment="Top" />
+                <Grid x:Name="PanelSetas" Visibility="Collapsed" HorizontalAlignment="Center" Background="#7F808080" Width="178" Height="73" Margin="48,89,9,0" VerticalAlignment="Top" />
             </Grid>
         </Border>
 

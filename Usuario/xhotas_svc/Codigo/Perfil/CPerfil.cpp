@@ -2,6 +2,8 @@
 #include "CPerfil.h"
 #include "../ColaEventos/CColaEventos.h"
 #include "../ProcesarSalida/CProcesarSalida.h"
+#include "../X52/EscribirUSBX52.h"
+#include "../X52/MenuMFD.h"
 
 CPerfil::CPerfil()
 {
@@ -10,6 +12,9 @@ CPerfil::CPerfil()
 	hMutexEstado = CreateMutex(NULL, FALSE, NULL);
 	RtlZeroMemory(&perfil, sizeof(PROGRAMADO));
 	RtlZeroMemory(&calibrado, sizeof(CALIBRADO));
+	RtlZeroMemory(&estado, sizeof(ESTADO));
+	modoRaw = TRUE;
+	modoCalibrado = FALSE;
 }
 
 CPerfil::~CPerfil()
@@ -70,14 +75,17 @@ bool  CPerfil::HF_IoEscribirMapa(BYTE* SystemBuffer, DWORD tam)
 		return false;
 	}
 	resetComandos = false;
-	if (tam == (1 + sizeof(perfil.MapaEjes) + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas)))
+	if (tam == (17 + 1 + sizeof(perfil.MapaEjes) + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas)))
 	{
+		BYTE txt[17];
+		RtlCopyMemory(txt, SystemBuffer, 17);
+		CX52Salida::Get()->Set_Texto(txt, 17);
 		WaitForSingleObject(hMutexPrograma, INFINITE);
 		{
-			RtlCopyMemory(&perfil.TickRaton, SystemBuffer, 1);
-			RtlCopyMemory(perfil.MapaBotones, SystemBuffer + 1, sizeof(perfil.MapaBotones));
-			RtlCopyMemory(perfil.MapaSetas, SystemBuffer + 1 + sizeof(perfil.MapaBotones), sizeof(perfil.MapaSetas));
-			RtlCopyMemory(perfil.MapaEjes, SystemBuffer + 1 + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas), sizeof(perfil.MapaEjes));
+			RtlCopyMemory(&perfil.TickRaton, SystemBuffer + 17 , 1);
+			RtlCopyMemory(perfil.MapaBotones, SystemBuffer + 17 + 1, sizeof(perfil.MapaBotones));
+			RtlCopyMemory(perfil.MapaSetas, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones), sizeof(perfil.MapaSetas));
+			RtlCopyMemory(perfil.MapaEjes, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas), sizeof(perfil.MapaEjes));
 		}
 		ReleaseMutex(hMutexPrograma);
 	}
@@ -113,8 +121,8 @@ bool  CPerfil::HF_IoEscribirComandos(BYTE* SystemBuffer, DWORD InputBufferLength
 	LimpiarPerfil();
 	resetComandos = true;
 
-	//GetDeviceContext(device)->MenuMFD.HoraActivada = TRUE;
-	//GetDeviceContext(device)->MenuMFD.FechaActivada = TRUE;
+	CMenuMFD::Get()->SetHoraActivada(true);
+	CMenuMFD::Get()->SetFechaActivada(true);
 
 	WaitForSingleObject(hMutexPrograma, INFINITE);
 	{
@@ -138,11 +146,11 @@ bool  CPerfil::HF_IoEscribirComandos(BYTE* SystemBuffer, DWORD InputBufferLength
 				{
 					if ((((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdHora) || (((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdHora24))
 					{
-						//GetDeviceContext(device)->MenuMFD.HoraActivada = FALSE;
+						CMenuMFD::Get()->SetHoraActivada(false);
 					}
 					else if (((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdFecha)
 					{
-						//GetDeviceContext(device)->MenuMFD.FechaActivada = FALSE;
+						CMenuMFD::Get()->SetFechaActivada(false);
 					}
 					bufIn += 2;
 					tamPrevisto += 2;

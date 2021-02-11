@@ -11,19 +11,29 @@ CColaHID::CColaHID()
 
 CColaHID::~CColaHID()
 {
-	HANDLE old = mutexColaW;
+	HANDLE old1 = mutexColaW;
 	InterlockedExchangePointer(&mutexColaW, nullptr);
-	WaitForSingleObject(old, INFINITE);
+	WaitForSingleObject(old1, INFINITE);
 	WaitForSingleObject(mutexColaL, INFINITE);
+	HANDLE old2 = mutexColaL;
+	mutexColaL = nullptr;
 	while (!cola.empty())
 	{
 		delete cola.front();
 		cola.pop_front();
 	}
-	CloseHandle(old);
-	CloseHandle(mutexColaL);
-	CloseHandle(semCola);
-	CloseHandle(evCola);
+	ReleaseMutex(old1);
+	ReleaseMutex(old2);
+	CloseHandle(old1);
+	CloseHandle(old2);
+	WaitForSingleObject(semCola, INFINITE);
+	old1 = semCola;
+	semCola = nullptr;
+	CloseHandle(old1);
+	old1 = evCola;
+	evCola = nullptr;
+	SetEvent(old1);
+	CloseHandle(old1);
 }
 
 bool CColaHID::Añadir(UCHAR* buff, DWORD tam)

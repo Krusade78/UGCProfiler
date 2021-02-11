@@ -16,25 +16,25 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 		case TipoComando::MfdLuz: //mfd_luz
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Luz_MFD(&params);
+			CX52Salida::Get()->Luz_MFD(&params);
 			break;
 		}
 		case TipoComando::Luz: // luz
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Luz_Global(&params);
+			CX52Salida::Get()->Luz_Global(&params);
 			break;
 		}
 		case TipoComando::InfoLuz: // info luz
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Luz_Info(&params);
+			CX52Salida::Get()->Luz_Info(&params);
 			break;
 		}
 		case TipoComando::MfdPinkie: // pinkie;
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Set_Pinkie(&params);
+			CX52Salida::Get()->Set_Pinkie(&params);
 			break;
 		}
 		case TipoComando::MfdTextoIni: // texto
@@ -65,7 +65,7 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 					throw new std::exception("Error buffer de texto");
 				}
 			}
-			CX52Salida::Set_Texto(texto, tam);
+			CX52Salida::Get()->Set_Texto(texto, tam);
 			break;
 		}
 		case TipoComando::MfdHora: // hora
@@ -83,7 +83,7 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
-			CX52Salida::Set_Hora(params);
+			CX52Salida::Get()->Set_Hora(params);
 			break;
 		}
 		case TipoComando::MfdHora24: // hora 24
@@ -101,7 +101,7 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
-			CX52Salida::Set_Hora24(params);
+			CX52Salida::Get()->Set_Hora24(params);
 			break;
 		}
 		case TipoComando::MfdFecha: // fecha
@@ -114,7 +114,7 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
-			CX52Salida::Set_Fecha(params);
+			CX52Salida::Get()->Set_Fecha(params);
 			break;
 		}
 		default:

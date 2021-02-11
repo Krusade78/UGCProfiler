@@ -21,12 +21,63 @@
                     <GradientStop Color="#F0666666"/>
                 </RadialGradientBrush>
             </Grid.Background>
-            <Grid Width="190" HorizontalAlignment="Left" Margin="15,10">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" TextBlock.FontFamily="Segoe UI" TextBlock.FontWeight="Bold" TextBlock.FontStyle="Italic" TextBlock.FontSize="14">
+                <StackPanel.Resources>
+                    <Style x:Key="tgb" TargetType="ToggleButton">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Grid>
+                                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF50A6E6"/>
+                                            <Setter Property="Background" TargetName="border">
+                                                <Setter.Value>
+                                                    <RadialGradientBrush>
+                                                        <GradientStop Color="#30FFFFFF" Offset="0"/>
+                                                        <GradientStop Color="#30D3D3D3" Offset="0.996"/>
+                                                    </RadialGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                            <Setter Property="Background" TargetName="border">
+                                                <Setter.Value>
+                                                    <RadialGradientBrush>
+                                                        <GradientStop Color="#4FAAAAAA" Offset="0"/>
+                                                        <GradientStop Color="#4F939393" Offset="0.996"/>
+                                                    </RadialGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF84BCEA"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </StackPanel.Resources>
+                <StackPanel.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF434551" Offset="0"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </StackPanel.Background>
+                <ToggleButton x:Name="tbJ1" Content="vJoystick #1" IsChecked="True" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked"/>
+                <ToggleButton x:Name="tbJ2" Content="vJoystick #2" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked_1"/>
+                <ToggleButton x:Name="tbJ3" Content="vJoystick #3" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked_2"/>
+            </StackPanel>
+            <Grid Width="190" HorizontalAlignment="Left" Margin="15,30,0,0">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                     <TextBlock Text="Ejes X,Y" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" />
                     <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" Height="128" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                        <Grid Height="2148" Width="2148" Background="#EF003200">
-                            <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="{DynamicResource colorCirculo}" Width="100" Height="100"/>
+                        <Grid Height="65535" Width="65535" Background="#EF003200">
+                            <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="{DynamicResource colorCirculo}" Width="2048" Height="2048"/>
                         </Grid>
                     </Viewbox>
                     <TextBlock x:Name="Labelxy" Text="0000 # 0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,154,0,0" VerticalAlignment="Top"/>
@@ -34,7 +85,7 @@
                 <Grid HorizontalAlignment="Left" Margin="148,0,0,0" VerticalAlignment="Top">
                     <TextBlock Text="Eje Z" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" />
                     <Viewbox HorizontalAlignment="Center"  VerticalAlignment="Top" Height="128" Width="20" Stretch="Fill" Margin="0,20,0,0">
-                        <Grid Height="2049" Width="40" Background="#EF003200">
+                        <Grid Height="65536" Width="40" Background="#EF003200">
                             <Rectangle x:Name="ejeZ" VerticalAlignment="Bottom" Fill="{StaticResource colorBarra}" />
                         </Grid>
                     </Viewbox>
@@ -42,9 +93,9 @@
                 </Grid>
 
                 <Grid VerticalAlignment="Top" Margin="0,188,0,0">
-                    <TextBlock Text="Eje R" Foreground="GreenYellow" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="14" />
+                    <TextBlock Text="Eje Rx" Foreground="GreenYellow" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="14" />
                     <Viewbox VerticalAlignment="Top" Height="20" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                        <Grid Height="80" Width="2049" Background="#EF003200">
+                        <Grid Height="80" Width="65536" Background="#EF003200">
                             <Rectangle x:Name="ejeR" HorizontalAlignment="Left" Margin="0,0,0,0" Fill="{StaticResource colorBarra}" />
                         </Grid>
                     </Viewbox>
@@ -57,66 +108,56 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid>
-                        <TextBlock Text="Eje Rx" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
+                        <TextBlock Text="Eje Ry" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
                         <Ellipse HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Height="50" Fill="#EF003200" Margin="0,20,0,0"/>
                         <Path x:Name="ejeRX" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="50" Width="50" Fill="{DynamicResource colorCirculo}"/>
                         <TextBlock x:Name="Labelrx" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,76,0,0" VerticalAlignment="Top" />
                     </Grid>
                     <Grid Grid.Column="1">
-                        <TextBlock Text="Eje Ry" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
+                        <TextBlock Text="Eje Rz" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
                         <Ellipse HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50" Fill="#EF003200"/>
                         <Path x:Name="ejeRY" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="50" Height="50" Fill="{DynamicResource colorCirculo}"/>
                         <TextBlock x:Name="Labelry" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,76,0,0" VerticalAlignment="Top" />
                     </Grid>
                 </Grid>
 
-                <Grid VerticalAlignment="Top" Margin="0,378,0,0">
-                    <TextBlock Text="Eje Sl1" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
-                    <Viewbox HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Height="20" Width="160" Stretch="Fill">
-                        <Grid Height="40" Width="2049" Background="#EF003200">
-                            <Rectangle x:Name="ejeSl1" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
-                        </Grid>
-                    </Viewbox>
-                    <TextBlock x:Name="Labelsl1" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,23,0,0" />
-                </Grid>
-
-                <Grid VerticalAlignment="Top" Margin="0,438,0,0">
+                <Grid VerticalAlignment="Top" Margin="0,400,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Eje Sl2" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
+                    <TextBlock Text="Eje Sl1" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
                     <Viewbox HorizontalAlignment="Center" Margin="2,20,2,0" VerticalAlignment="Top" Height="20" Width="80" Stretch="Fill">
-                        <Grid Height="40" Width="2048" Background="#EF003200">
+                        <Grid Height="40" Width="65535" Background="#EF003200">
                             <Rectangle x:Name="ejeSl2" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                         </Grid>
                     </Viewbox>
                     <TextBlock x:Name="Labelsl2" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,23,0,0"/>
 
-                    <TextBlock Grid.Column="1" Text="Eje Sl3" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
+                    <TextBlock Grid.Column="1" Text="Eje Sl2" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
                     <Viewbox Grid.Column="1" HorizontalAlignment="Center" Margin="2,20,2,0" VerticalAlignment="Top" Height="20" Width="80" Stretch="Fill">
-                        <Grid Height="40" Width="2048" Background="#EF003200">
+                        <Grid Height="40" Width="65535" Background="#EF003200">
                             <Rectangle x:Name="ejeSl3" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                         </Grid>
                     </Viewbox>
                     <TextBlock Grid.Column="1" x:Name="Labelsl3" Text="0000" Foreground="Yellow" HorizontalAlignment="Center" Margin="0,23,0,0"/>
                 </Grid>
 
-                <Grid VerticalAlignment="Top" Margin="0,498,0,0">
+                <Grid VerticalAlignment="Top" Margin="0,470,0,0">
                     <TextBlock Text="MiniStick" HorizontalAlignment="Center" Foreground="GreenYellow" FontSize="14"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <Viewbox Height="80" Width="80" Stretch="Fill">
-                            <Grid Height="16" Width="16" Background="#EF003200">
-                                <Ellipse x:Name="ejeMXY" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Fill="{DynamicResource colorCirculo}" Width="1" Height="1"/>
+                            <Grid Height="69631" Width="65535" Background="#EF003200">
+                                <Ellipse x:Name="ejeMXY" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Fill="{DynamicResource colorCirculo}" Width="4096" Height="4096"/>
                             </Grid>
                         </Viewbox>
-                        <TextBlock x:Name="Labelmxy" Text="X: 00&#x0a;Y: 00" Foreground="Yellow" Margin="10,0"  HorizontalAlignment="Left"  VerticalAlignment="Center"/>
+                        <TextBlock x:Name="Labelmxy" Text="X: 00000&#x0a;Y: 00000" Width="56" Foreground="Yellow" Margin="10,0"  HorizontalAlignment="Left"  VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </Grid>
 
-            <Grid HorizontalAlignment="Left" Margin="215,0,0,0">
-                <Grid HorizontalAlignment="Center" Height="178" Margin="0,10,0,0" VerticalAlignment="Top" Width="300" TextElement.FontFamily="Calibri">
+            <Grid HorizontalAlignment="Left" Margin="215,30,0,0">
+                <Grid HorizontalAlignment="Center" Height="178" VerticalAlignment="Top" Width="300" TextElement.FontFamily="Calibri">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                         <RowDefinition />
@@ -556,7 +597,7 @@
                     </StackPanel>
                 </Grid>
 
-                <Grid HorizontalAlignment="Center" Margin="0,500,0,0" VerticalAlignment="Top" >
+                <Grid HorizontalAlignment="Center" Margin="0,480,0,0" VerticalAlignment="Top" >
                     <TextBlock HorizontalAlignment="Center" Text="Ver datos en bruto" VerticalAlignment="Top" Foreground="GreenYellow" FontSize="14"/>
                     <ToggleButton HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Checked="FcheckBox_Checked" Unchecked="FcheckBox_Unchecked" Foreground="#FF999999" Width="100" Height="50" BorderBrush="#FF707070" Background="{x:Null}">
                         <ToggleButton.Style>

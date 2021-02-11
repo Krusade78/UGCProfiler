@@ -340,38 +340,56 @@ namespace Editor
         #region "DirectX"
         private void ButtonDXOn_Click(object sender, RoutedEventArgs e)
         {
+            int v = (((NumericUpDown1.Value - 1) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
             if (RadioButtonBasico.IsChecked == true)
             {
+                if (GetCuenta() > 235) return;
                 dsMacros.MACROS.Clear();
-                ushort[] bloque = new ushort[3];
-                bloque[0] = (ushort)((byte)TipoComando.TipoComando_DxBoton + ((ushort)(NumericUpDown1.Value - 1) << 8));
+                ushort[] bloque = new ushort[3];                
+                bloque[0] = (ushort)((byte)TipoComando.TipoComando_DxBoton + (ushort)v);
                 bloque[1] = (byte)TipoComando.TipoComando_Hold;
-                bloque[2] = (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + ((ushort)(NumericUpDown1.Value - 1) << 8));
+                bloque[2] = (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + (ushort)v);
                 Insertar(bloque, true);
             }
             else
             {
                 if (GetCuenta() > 237) return;
-                Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxBoton + ((ushort)(NumericUpDown1.Value - 1) << 8)) }, false);
+                Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxBoton + (ushort)v) }, false);
             }
         }
 
         private void ButtonDXOff_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + ((ushort)(NumericUpDown1.Value - 1) << 8)) }, false);
+            int v = (((NumericUpDown1.Value - 1) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
+            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + (ushort)v) }, false);
         }
 
         private void ButtonPovOn_Click(object sender, RoutedEventArgs e)
         {
-            if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)((((4 - NumericUpDownPov.Value) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
+            int v = (((((4 - NumericUpDownPov.Value) * 8) + (NumericUpDownPosicion.Value - 1)) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
+            if (RadioButtonBasico.IsChecked == true)
+            {
+                if (GetCuenta() > 235) return;
+                dsMacros.MACROS.Clear();
+                ushort[] bloque = new ushort[3];
+                bloque[0] = (ushort)((byte)TipoComando.TipoComando_DxBoton + (ushort)v);
+                bloque[1] = (byte)TipoComando.TipoComando_Hold;
+                bloque[2] = (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + (ushort)v);
+                Insertar(bloque, true);
+            }
+            else
+            {
+                if (GetCuenta() > 237) return;
+                Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)v) }, false);
+            }
         }
 
         private void ButtonPovOff_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxSeta | (byte)TipoComando.TipoComando_Soltar) + (ushort)((((4 - NumericUpDownPov.Value) * 8) + NumericUpDownPosicion.Value - 1) << 8)) }, false);
+            int v = (((((4 - NumericUpDownPov.Value) * 8) + (NumericUpDownPosicion.Value - 1)) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
+            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxSeta | (byte)TipoComando.TipoComando_Soltar) + (ushort)v) }, false);
         }
 
         #endregion

@@ -165,8 +165,12 @@ namespace Editor
             }
         }
 
-        public void GetModos(ref byte pinkie, ref byte modo)
+        public void GetModos(ref byte joy, ref byte pinkie, ref byte modo)
         {
+            if (gridVista.Children[0] is CtlEditar ctlEditar)
+            {
+                joy = (byte)ctlEditar.GetTipoJoy();
+            }
             pinkie = (byte)cbPinkie.SelectedIndex;
             modo = (byte)cbModo.SelectedIndex;
         }

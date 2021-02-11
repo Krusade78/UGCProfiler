@@ -16,13 +16,13 @@ bool CEspeciales::Procesar(CPerfil* pPerfil, std::deque<CPaqueteEvento*>::iterat
 
 	if (comando->Tipo == TipoComando::Delay) // Delay
 	{
-		CProcesarSalida::TIMER_CTX* ctx = new CProcesarSalida::TIMER_CTX;
-		PTP_TIMER timerHandle = CreateThreadpoolTimer(EvtDelay, ctx, NULL);;
+		CProcesarSalida::TIMER_CTX* ctx = new CProcesarSalida::TIMER_CTX{};
+		PTP_TIMER timerHandle = CreateThreadpoolTimer(EvtDelay, ctx, NULL);
 		if (timerHandle != NULL)
 		{
-			LARGE_INTEGER t;
+			LARGE_INTEGER t{};
 			t.QuadPart = (-1000000LL * comando->Dato); //10 * 1000 * 100
-			FILETIME timeout;
+			FILETIME timeout{};
 			timeout.dwHighDateTime = t.HighPart;
 			timeout.dwLowDateTime = t.LowPart;
 
@@ -54,7 +54,7 @@ bool CEspeciales::Procesar(CPerfil* pPerfil, std::deque<CPaqueteEvento*>::iterat
 		}
 		else
 		{
-			*posEvento++; //pasa a la siguiente acción
+			(*posEvento)++; //pasa a la siguiente acción
 		}
 	}
 	else if (comando->Tipo == TipoComando::Repeat)
@@ -86,8 +86,11 @@ bool CEspeciales::Procesar(CPerfil* pPerfil, std::deque<CPaqueteEvento*>::iterat
 
 void CALLBACK CEspeciales::EvtDelay(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_TIMER Timer)
 {
-	CProcesarSalida::TIMER_CTX* ctx = static_cast<CProcesarSalida::TIMER_CTX*>(Context);
-	ctx->Padre->ProcesarDelay(ctx);
+	if (Context != NULL)
+	{
+		CProcesarSalida::TIMER_CTX* ctx = static_cast<CProcesarSalida::TIMER_CTX*>(Context);
+		ctx->Padre->ProcesarDelay(ctx);
+	}
 }
 
 bool CEspeciales::EstaHold(CPerfil* pPerfil, PEV_COMANDO comando)

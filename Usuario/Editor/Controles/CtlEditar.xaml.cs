@@ -15,9 +15,22 @@ namespace Editor
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            tabAcel.Content = new CtlAcelerador(this);
-            tabJoy.Content = new CtlJoystick(this);
             tabPedales.Content = new CtlPedales(this);
+            tabX52Joy.Content = new CtlX52Joystick(this);
+            tabAcel.Content = new CtlAcelerador(this);
+            tabNXTJoy.Content = new CtlNXTJoystick(this);
+        }
+
+        public Comunes.CTipos.TipoJoy GetTipoJoy()
+        {
+            if (tabPedales.IsSelected)
+                return Comunes.CTipos.TipoJoy.Pedales;
+            else if (tabX52Joy.IsSelected)
+                return Comunes.CTipos.TipoJoy.X52_Joy;
+            else if (tabAcel.IsSelected)
+                return Comunes.CTipos.TipoJoy.X52_Ace;
+            else
+                return Comunes.CTipos.TipoJoy.NXT;
         }
     }
 }

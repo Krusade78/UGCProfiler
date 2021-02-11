@@ -19,7 +19,7 @@ void CProcesarPedales::Procesar(PVHID_INPUT_DATA p_hidData)
 
 	RtlCopyMemory(&devExt->UltimoEstado.DeltaHidData, p_hidData, sizeof(VHID_INPUT_DATA));
 
-	if (!devExt->Perfil->GetModoRaw())
+	if (!devExt->Perfil->GetModoRaw() && !devExt->Perfil->GetModoCalibrado())
 	{
 		// Ejes
 

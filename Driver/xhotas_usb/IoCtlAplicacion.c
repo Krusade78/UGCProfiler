@@ -131,11 +131,18 @@ VOID EvtIOCtlAplicacion(
 			return;
 		}
 	}
+	if (SystemBuffer == NULL)
+	{
+		WdfRequestSetInformation(Request, 0);
+		WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
+		return;
+	}
 	switch (IoControlCode)
 	{
 		case IOCTL_MFD_LUZ:
 		case IOCTL_GLOBAL_LUZ:
 		case IOCTL_INFO_LUZ:
+		case IOCTL_PINKIE:
 			if (InputBufferLength != 1)
 			{
 				WdfRequestSetInformation(Request, 1);
@@ -188,6 +195,13 @@ VOID EvtIOCtlAplicacion(
 	case IOCTL_INFO_LUZ:
 	{
 		status = Luz_Info(device, SystemBuffer);
+		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
+		WdfRequestComplete(Request, status);
+		break;
+	}
+	case IOCTL_PINKIE:
+	{
+		status = Set_Pinkie(device, SystemBuffer);
 		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
 		WdfRequestComplete(Request, status);
 		break;

@@ -12,16 +12,14 @@ CProcesarSalida::CProcesarSalida(CPerfil* pPerfil, CVirtualHID* pVhid)
 	this->pPerfil = pPerfil;
 	this->pVhid = pVhid;
 	hEvColaVacia_SoloHolds = CreateEvent(NULL, TRUE, FALSE, NULL);
-	hWaitLockEventos = CreateMutex(NULL, FALSE, NULL);
+	hWaitLockEventos = CreateSemaphore(NULL, 1, 1, NULL);
 	hRatonTimer = CreateThreadpoolTimer(EvtTickRaton, this, NULL);
 }
 
 CProcesarSalida::~CProcesarSalida()
 {
-	SetThreadpoolTimer(hRatonTimer, NULL, 0, 0);
-	WaitForThreadpoolTimerCallbacks(hRatonTimer, TRUE);
-	CloseThreadpoolTimer(hRatonTimer);
 	LimpiarEventos();
+	CloseThreadpoolTimer(hRatonTimer);
 	CloseHandle(hWaitLockEventos);
 	CloseHandle(hEvColaVacia_SoloHolds);
 }
@@ -30,6 +28,8 @@ void CProcesarSalida::LimpiarEventos()
 {
 	WaitForSingleObject(hWaitLockEventos, INFINITE);
 	{
+		SetThreadpoolTimer(hRatonTimer, NULL, 0, 0);
+		WaitForThreadpoolTimerCallbacks(hRatonTimer, TRUE);
 		while (!colaEventos.empty())
 		{
 			delete colaEventos.front();
@@ -59,15 +59,10 @@ void CProcesarSalida::LimpiarEventos()
 		}
 
 		RtlZeroMemory(pVhid->Estado.Teclado, sizeof(pVhid->Estado.Teclado));
-		pVhid->LockRaton();
-		{
-			RtlZeroMemory(&pVhid->Estado.Raton, sizeof(pVhid->Estado.Raton));
-			SetThreadpoolTimer(hRatonTimer, NULL, 0, 0);
-		}
-		pVhid->UnlockRaton();
+		RtlZeroMemory(&pVhid->Estado.Raton, sizeof(pVhid->Estado.Raton)); //no hace falta lock aquí
 		RtlZeroMemory(pVhid->Estado.DirectX, sizeof(VHID_INPUT_DATA));
 	}
-	ReleaseMutex(hWaitLockEventos);
+	ReleaseSemaphore(hWaitLockEventos, 1, NULL);
 }
 
 void CProcesarSalida::Procesar(CPaqueteEvento* paq)
@@ -77,7 +72,7 @@ void CProcesarSalida::Procesar(CPaqueteEvento* paq)
 		WaitForSingleObject(hWaitLockEventos, INFINITE);
 		colaEventos.push_back(paq);
 		SetEvent(hEvColaVacia_SoloHolds);
-		ReleaseMutex(hWaitLockEventos);
+		ReleaseSemaphore(hWaitLockEventos, 1, NULL);
 	}
 	ProcesarRequest();
 }
@@ -101,13 +96,6 @@ void CProcesarSalida::ProcesarRequest()
 					break;
 				}
 				CPaqueteEvento* colaComandos = *posEvento;
-				if (colaComandos->GetColaComandos()->empty())
-				{
-					delete colaComandos;
-					posEvento = colaEventos.erase(posEvento);
-					continue;
-				}
-
 				bool borrado = false;
 				PEV_COMANDO comando = colaComandos->GetColaComandos()->front();
 				if (comando->Tipo != TipoComando::Hold)
@@ -121,6 +109,11 @@ void CProcesarSalida::ProcesarRequest()
 					{
 						if (CEspeciales::Procesar(pPerfil, &posEvento, this))
 						{
+							if (colaComandos->GetColaComandos()->empty())
+							{
+								delete colaComandos;
+								posEvento = colaEventos.erase(posEvento);
+							}
 							continue;
 						}
 						else
@@ -194,9 +187,9 @@ void CProcesarSalida::ProcesarRequest()
 									tick = pPerfil->GetPr()->TickRaton;
 								}
 								pPerfil->FinLecturaPr();
-								LARGE_INTEGER lit;
+								LARGE_INTEGER lit{};
 								lit.QuadPart = -10000LL * tick;
-								FILETIME ft;
+								FILETIME ft{};
 								ft.dwHighDateTime = lit.HighPart;
 								ft.dwLowDateTime = lit.LowPart;
 								SetThreadpoolTimer(hRatonTimer, &ft, 0, 0);
@@ -229,7 +222,7 @@ void CProcesarSalida::ProcesarRequest()
 			vacia = soloHolds;
 		}
 	}
-	ReleaseMutex(hWaitLockEventos);
+	ReleaseSemaphore(hWaitLockEventos, 1, NULL);
 
 	if (vacia)
 	{
@@ -239,6 +232,11 @@ void CProcesarSalida::ProcesarRequest()
 
 void APIENTRY CProcesarSalida::EvtTickRaton(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_TIMER Timer)
 {
+	if (Context == NULL)
+	{
+		return;
+	}
+
 	CProcesarSalida* local = static_cast<CProcesarSalida*>(Context);
 	bool enviar = false;
 	EV_COMANDO comando;
@@ -312,7 +310,7 @@ void CProcesarSalida::ProcesarDelay(TIMER_CTX* ctx)
 			pos++;
 		}
 	}
-	ReleaseMutex(hWaitLockEventos);
+	ReleaseSemaphore(hWaitLockEventos, 1, NULL);
 	CloseThreadpoolTimer(ctx->Timer);
 	delete ctx;
 }

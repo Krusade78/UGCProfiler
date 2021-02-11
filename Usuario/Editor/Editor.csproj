@@ -71,14 +71,17 @@
     <Compile Include="CDatos.cs" />
     <Compile Include="CEnums.cs" />
     <Compile Include="Controles\CConvertersVisible.cs" />
+    <Compile Include="Controles\CtlNXTJoystick.xaml.cs">
+      <DependentUpon>CtlNXTJoystick.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controles\CtlPedales.xaml.cs">
       <DependentUpon>CtlPedales.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controles\CtlAcelerador.xaml.cs">
       <DependentUpon>CtlAcelerador.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controles\CtlJoystick.xaml.cs">
-      <DependentUpon>CtlJoystick.xaml</DependentUpon>
+    <Compile Include="Controles\CtlX52Joystick.xaml.cs">
+      <DependentUpon>CtlX52Joystick.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controles\CtlPropiedades.Metodos.cs" />
     <Compile Include="Controles\CtlPropiedades.xaml.cs">
@@ -123,6 +126,10 @@
     <Compile Include="Ventanas\VEditorSensibilidad.xaml.cs">
       <DependentUpon>VEditorSensibilidad.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controles\CtlNXTJoystick.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controles\CtlPedales.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,7 +138,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controles\CtlJoystick.xaml">
+    <Page Include="Controles\CtlX52Joystick.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

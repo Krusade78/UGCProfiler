@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CIoCtl.cs" />
     <Compile Include="CTipos.cs" />
     <Compile Include="DataSetConfiguracion.Designer.cs">
       <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>

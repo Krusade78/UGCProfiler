@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Codigo\CalibradoDx\CDirectInput.h" />
     <ClInclude Include="Codigo\CComs.h" />
     <ClInclude Include="Codigo\CEntradaHID.h" />
     <ClInclude Include="Codigo\ColaEntrada\CColaHID.h" />
@@ -115,9 +116,11 @@
     <ClInclude Include="Codigo\ProcesarSalida\CVirtualHID.h" />
     <ClInclude Include="Codigo\targetver.h" />
     <ClInclude Include="Codigo\X52\EscribirUSBX52.h" />
+    <ClInclude Include="Codigo\X52\MenuMFD.h" />
     <ClInclude Include="xhotas_svc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Codigo\CalibradoDx\cdirectinput.cpp" />
     <ClCompile Include="Codigo\CComs.cpp" />
     <ClCompile Include="Codigo\CEntradaHID.cpp" />
     <ClCompile Include="Codigo\ColaEntrada\CColaHID.cpp" />
@@ -143,6 +146,7 @@
     <ClCompile Include="Codigo\ProcesarSalida\CProcesarSalida.cpp" />
     <ClCompile Include="Codigo\ProcesarSalida\CVirtualHID.cpp" />
     <ClCompile Include="Codigo\X52\EscribirUSBX52.cpp" />
+    <ClCompile Include="Codigo\X52\MenuMFD.cpp" />
     <ClCompile Include="xhotas_svc.cpp" />
   </ItemGroup>
   <ItemGroup>

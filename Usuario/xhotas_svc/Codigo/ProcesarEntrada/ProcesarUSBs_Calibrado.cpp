@@ -7,12 +7,12 @@ void CCalibrado::Calibrar(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DATA dato
 	const INT16 mapaRangos[4][8] = {
 		{0,0,0,255,0,0,63,63},
 		{1023,1023,0,511,0,0,0,0},
-		{7,7,127,127,127,0,127,0},
+		{0,0,127,127,127,127,7,7},
 		{32767,32767,32767,32767,32767,32767,127,127} };
 
 	UCHAR tipo = static_cast<UCHAR>(tipoJ);
 	CPerfil::ST_LIMITES	limites[8];
-	CPerfil::ST_JITTER	jitter[6];
+	CPerfil::ST_JITTER	jitter[8];
 
 	pPerfil->InicioLecturaCal();
 	{

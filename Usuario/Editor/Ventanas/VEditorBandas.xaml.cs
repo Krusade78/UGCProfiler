@@ -13,32 +13,23 @@ namespace Editor
     {
         private readonly MainWindow padre;
         private readonly byte eje;
-        private readonly CEnums.Tipo tipo;
         private byte[] bandas;
         private bool eventos = true;
 
-        public VEditorBandas(byte eje, CEnums.Tipo tipo)
+        public VEditorBandas(byte eje)
         {
             InitializeComponent();
             this.eje = eje;
-            this.tipo = tipo;
             padre = (MainWindow)App.Current.MainWindow;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-            if (tipo == CEnums.Tipo.Eje)
-            {
-                DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
-                bandas = (byte[])r.Bandas.Clone();
-            }
-            else
-            {
-                DSPerfil.MAPAEJESPEQUERow r = padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(eje, m, p);
-                bandas = (byte[])r.Bandas.Clone();
-            }
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
+
+            DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, eje);
+            bandas = (byte[])r.Bandas.Clone();
 
             eventos = false;
             foreach (byte b in bandas)
@@ -60,18 +51,11 @@ namespace Editor
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            byte p = 0, m = 0;
-            padre.GetModos(ref p, ref m);
-            if (tipo == CEnums.Tipo.Eje)
-            {
-                DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidEjeidModoidPinkie(eje, m, p);
-                r.Bandas = (byte[])bandas.Clone();
-            }
-            else
-            {
-                DSPerfil.MAPAEJESPEQUERow r = padre.GetDatos().Perfil.MAPAEJESPEQUE.FindByidEjeidModoidPinkie(eje, m, p);
-                r.Bandas = (byte[])bandas.Clone();
-            }
+            byte idJ = 0, p = 0, m = 0;
+            padre.GetModos(ref idJ, ref p, ref m);
+
+            DSPerfil.MAPAEJESRow r = padre.GetDatos().Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(idJ, p, m, eje);
+            r.Bandas = (byte[])bandas.Clone();
 
             this.DialogResult = true;
             this.Close();

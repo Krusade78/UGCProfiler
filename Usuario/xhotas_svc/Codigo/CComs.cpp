@@ -60,7 +60,8 @@ DWORD WINAPI CComs::HiloLectura(LPVOID param)
 
 	SetThreadPriority(GetCurrentThread(), THREAD_MODE_BACKGROUND_BEGIN);
 
-	while (!local->salir)
+	char intentos = 5;
+	while (!local->salir && (intentos >= 0))
 	{
 		BOOL ok = FALSE;
 		DWORD tamMsj = 0;
@@ -69,7 +70,7 @@ DWORD WINAPI CComs::HiloLectura(LPVOID param)
 		{
 			DWORD tam = 0;
 			BYTE* buff = new BYTE[1024];
-			BOOL ok = ReadFile(local->hPipe, buff, 1024, &tam, NULL);
+			ok = ReadFile(local->hPipe, buff, 1024, &tam, NULL);
 			tamMsj += tam;
 			if (!ok && GetLastError() != ERROR_MORE_DATA)
 				break;
@@ -90,6 +91,12 @@ DWORD WINAPI CComs::HiloLectura(LPVOID param)
 			}
 			local->ProcesarMensaje(buff, tamMsj);
 			delete[] buff;
+
+			intentos = 5;
+		}
+		else
+		{
+			intentos--;
 		}
 		while (!msj.empty())
 		{
@@ -99,6 +106,7 @@ DWORD WINAPI CComs::HiloLectura(LPVOID param)
 	}
 
 	InterlockedExchange16(&local->hiloCerrado, TRUE);
+	SendMessage(local->hWndMensajes, WM_CLOSE, 0, 0);
 	return 0;
 }
 

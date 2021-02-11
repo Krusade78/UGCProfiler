@@ -434,7 +434,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public CALIBRADO_LIMITESRow AddCALIBRADO_LIMITESRow(byte Cal, byte Nulo, ushort Izq, ushort Cen, ushort Der) {
+            public CALIBRADO_LIMITESRow AddCALIBRADO_LIMITESRow(byte Cal, byte Nulo, short Izq, short Cen, short Der) {
                 CALIBRADO_LIMITESRow rowCALIBRADO_LIMITESRow = ((CALIBRADO_LIMITESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Cal,
@@ -478,11 +478,11 @@ namespace Comunes {
                 base.Columns.Add(this.columnCal);
                 this.columnNulo = new global::System.Data.DataColumn("Nulo", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNulo);
-                this.columnIzq = new global::System.Data.DataColumn("Izq", typeof(ushort), null, global::System.Data.MappingType.Element);
+                this.columnIzq = new global::System.Data.DataColumn("Izq", typeof(short), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIzq);
-                this.columnCen = new global::System.Data.DataColumn("Cen", typeof(ushort), null, global::System.Data.MappingType.Element);
+                this.columnCen = new global::System.Data.DataColumn("Cen", typeof(short), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCen);
-                this.columnDer = new global::System.Data.DataColumn("Der", typeof(ushort), null, global::System.Data.MappingType.Element);
+                this.columnDer = new global::System.Data.DataColumn("Der", typeof(short), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDer);
                 this.columnCal.AllowDBNull = false;
                 this.columnNulo.AllowDBNull = false;
@@ -624,8 +624,6 @@ namespace Comunes {
             
             private global::System.Data.DataColumn columnAntiv;
             
-            private global::System.Data.DataColumn columnPosRepetida;
-            
             private global::System.Data.DataColumn columnMargen;
             
             private global::System.Data.DataColumn columnResistencia;
@@ -668,14 +666,6 @@ namespace Comunes {
             public global::System.Data.DataColumn AntivColumn {
                 get {
                     return this.columnAntiv;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public global::System.Data.DataColumn PosRepetidaColumn {
-                get {
-                    return this.columnPosRepetida;
                 }
             }
             
@@ -732,11 +722,10 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public CALIBRADO_JITTERRow AddCALIBRADO_JITTERRow(byte Antiv, byte PosRepetida, byte Margen, byte Resistencia) {
+            public CALIBRADO_JITTERRow AddCALIBRADO_JITTERRow(byte Antiv, byte Margen, byte Resistencia) {
                 CALIBRADO_JITTERRow rowCALIBRADO_JITTERRow = ((CALIBRADO_JITTERRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Antiv,
-                        PosRepetida,
                         Margen,
                         Resistencia};
                 rowCALIBRADO_JITTERRow.ItemArray = columnValuesArray;
@@ -762,7 +751,6 @@ namespace Comunes {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             internal void InitVars() {
                 this.columnAntiv = base.Columns["Antiv"];
-                this.columnPosRepetida = base.Columns["PosRepetida"];
                 this.columnMargen = base.Columns["Margen"];
                 this.columnResistencia = base.Columns["Resistencia"];
             }
@@ -772,14 +760,11 @@ namespace Comunes {
             private void InitClass() {
                 this.columnAntiv = new global::System.Data.DataColumn("Antiv", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAntiv);
-                this.columnPosRepetida = new global::System.Data.DataColumn("PosRepetida", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPosRepetida);
                 this.columnMargen = new global::System.Data.DataColumn("Margen", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnMargen);
                 this.columnResistencia = new global::System.Data.DataColumn("Resistencia", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnResistencia);
                 this.columnAntiv.AllowDBNull = false;
-                this.columnPosRepetida.AllowDBNull = false;
                 this.columnMargen.AllowDBNull = false;
                 this.columnResistencia.AllowDBNull = false;
             }
@@ -946,9 +931,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ushort Izq {
+            public short Izq {
                 get {
-                    return ((ushort)(this[this.tableCALIBRADO_LIMITES.IzqColumn]));
+                    return ((short)(this[this.tableCALIBRADO_LIMITES.IzqColumn]));
                 }
                 set {
                     this[this.tableCALIBRADO_LIMITES.IzqColumn] = value;
@@ -957,9 +942,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ushort Cen {
+            public short Cen {
                 get {
-                    return ((ushort)(this[this.tableCALIBRADO_LIMITES.CenColumn]));
+                    return ((short)(this[this.tableCALIBRADO_LIMITES.CenColumn]));
                 }
                 set {
                     this[this.tableCALIBRADO_LIMITES.CenColumn] = value;
@@ -968,9 +953,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ushort Der {
+            public short Der {
                 get {
-                    return ((ushort)(this[this.tableCALIBRADO_LIMITES.DerColumn]));
+                    return ((short)(this[this.tableCALIBRADO_LIMITES.DerColumn]));
                 }
                 set {
                     this[this.tableCALIBRADO_LIMITES.DerColumn] = value;
@@ -1000,17 +985,6 @@ namespace Comunes {
                 }
                 set {
                     this[this.tableCALIBRADO_JITTER.AntivColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public byte PosRepetida {
-                get {
-                    return ((byte)(this[this.tableCALIBRADO_JITTER.PosRepetidaColumn]));
-                }
-                set {
-                    this[this.tableCALIBRADO_JITTER.PosRepetidaColumn] = value;
                 }
             }
             

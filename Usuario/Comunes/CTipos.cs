@@ -9,9 +9,9 @@ namespace Comunes
         {
             public byte Cal; //bool
             public byte Nulo;
-            public ushort Izq;
-            public ushort Cen;
-            public ushort Der;
+            public short Izq;
+            public short Cen;
+            public short Der;
         };
 
         [StructLayout(LayoutKind.Sequential)]
@@ -21,7 +21,7 @@ namespace Comunes
             public byte PosRepetida;
             public byte Margen;
             public byte Resistencia;
-            public ushort PosElegida;
+            public short PosElegida;
         };
 
         public enum TipoComando : byte
@@ -64,5 +64,13 @@ namespace Comunes
 
             TipoComando_Soltar = 128,
         };
+
+        public enum TipoJoy
+        {
+            Pedales,
+            X52_Joy,
+            X52_Ace,
+            NXT
+        }
     }
 }

@@ -22,7 +22,7 @@ public:
 	typedef struct
 	{
 		ST_LIMITES Limites[4][8];
-		ST_JITTER Jitter[4][6];
+		ST_JITTER Jitter[4][8];
 	} CALIBRADO;
 	typedef struct
 	{

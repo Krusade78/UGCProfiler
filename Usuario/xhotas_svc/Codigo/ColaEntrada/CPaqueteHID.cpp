@@ -4,7 +4,7 @@
 CPaqueteHID::CPaqueteHID(UCHAR* buff, DWORD tam)
 {
 	datos = new UCHAR[tam];
-	if (tam == 4)
+	if (tam == 3)
 	{
 		tipo = TipoPaquete::Pedales;
 	}

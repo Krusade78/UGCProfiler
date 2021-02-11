@@ -175,22 +175,22 @@ namespace Editor
                 {
                     if (soltar)
                     {
-                        return "Botón DX " + (dato + 1) + " Off";
+                        return "Botón DX " + ((dato & 7) + 1) + " - " + ((dato >> 3) + 1) + " Off";
                     }
                     else
                     {
-                        return "Botón DX " + (dato + 1) + " On";
+                        return "Botón DX " + ((dato & 7) + 1) + " - " + ((dato >> 3) + 1) + " On";
                     }
                 }
                 else if (tipo == (byte)TipoComando.TipoComando_DxSeta)
                 {
                     if (soltar)
                     {
-                        return "Seta DX " + (4 - (dato / 8)) + ((dato % 8) + 1) + " Off";
+                        return "Seta DX " + ((dato & 7) + 1) + " - " + (4 - ((dato >> 3)/ 8)) + "@" + (((dato >> 3) % 8) + 1) + " Off";
                     }
                     else
                     {
-                        return "Seta DX " + (4 - (dato / 8)) + ((dato % 8) + 1) + " On";
+                        return "Seta DX " + ((dato & 7) + 1) + " - " + (4 - ((dato >> 3) / 8)) + "@" + (((dato >> 3) % 8) + 1) + " On";
                     }
                 }
                 else if (tipo == (byte)TipoComando.TipoComando_MfdLuz)

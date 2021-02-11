@@ -2,10 +2,10 @@
 #include "CPreprocesar.h"
 #include "GenerarEventos/CGenerarEventos.h" //iniciar
 
-CPreprocesar::CPreprocesar(CPerfil* pPerfil, CColaEventos* pColaEv, CColaHID* pCola)
+CPreprocesar::CPreprocesar(CPerfil* pPerfil, CColaEventos* pColaEv)
 {
 	this->pPerfil = pPerfil;
-	this->colaHID = pCola;
+	this->colaHID = new CColaHID();
 	CGenerarEventos::Iniciar(pPerfil, pColaEv);
 	pedales = new CProcesarPedales(pPerfil);
 	x52 = new CProcesarX52(pPerfil);
@@ -15,6 +15,7 @@ CPreprocesar::CPreprocesar(CPerfil* pPerfil, CColaEventos* pColaEv, CColaHID* pC
 CPreprocesar::~CPreprocesar()
 {
 	salir = true;
+	delete colaHID;
 	while (InterlockedCompareExchange16(&hiloCerrado, 0, 0) == FALSE) Sleep(1000);
 	delete nxt;
 	delete x52;
@@ -71,9 +72,9 @@ void CPreprocesar::HIDPedales(UCHAR* datos)
 	VHID_INPUT_DATA hidData;
 	RtlZeroMemory(&hidData, sizeof(VHID_INPUT_DATA));
 
-	hidData.Ejes[3] = (UINT16)((((PUCHAR)datos)[2] >> 6) + (((PUCHAR)datos)[3] << 2)); //R
-	hidData.Ejes[6] = (UCHAR)(((PUCHAR)datos)[1] & 0x7F); //frenoI
-	hidData.Ejes[7] = (UCHAR)((((PUCHAR)datos)[1] >> 7) + ((((PUCHAR)datos)[2] & 0x3f) << 1)); //frenoD
+	hidData.Ejes[3] = (UINT16)((((PUCHAR)datos)[1] >> 6) + (((PUCHAR)datos)[2] << 2)); //R
+	hidData.Ejes[7] = (UCHAR)(((PUCHAR)datos)[0] & 0x7F); //frenoI
+	hidData.Ejes[6] = (UCHAR)((((PUCHAR)datos)[0] >> 7) + ((((PUCHAR)datos)[1] & 0x3f) << 1)); //frenoD
 
 	ConvertirEjeCentro0((UINT16*)&hidData.Ejes[3], 512, 256);
 	ConvertirEjeCentro0((UINT16*)&hidData.Ejes[6], 128, 64);
@@ -83,9 +84,9 @@ void CPreprocesar::HIDPedales(UCHAR* datos)
 	if (!pPerfil->GetModoCalibrado())
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::Pedales, &hidData);
-		ConvertirEjeRango(65536, &hidData.Ejes[3], 512);
-		ConvertirEjeRango(256, &hidData.Ejes[6], 128);
-		ConvertirEjeRango(256, &hidData.Ejes[7], 128);
+		ConvertirEjeRango(32767, &hidData.Ejes[3], 255);
+		ConvertirEjeRango(32767, &hidData.Ejes[6], 63);
+		ConvertirEjeRango(32767, &hidData.Ejes[7], 63);
 	}
 
 	pedales->Procesar(&hidData);
@@ -108,38 +109,34 @@ void CPreprocesar::HIDX52(PHIDX52_INPUT_DATA hidGameData)
 	hidData_Ace.Ejes[2] = hidGameData->Ejes[0]; //Z
 	hidData_Ace.Ejes[3] = hidGameData->Ejes[2];
 	hidData_Ace.Ejes[4] = hidGameData->Ejes[1];
-	hidData_Ace.Ejes[6] = hidGameData->Ejes[3];
+	hidData_Ace.Ejes[5] = hidGameData->Ejes[3];
 	hidData_Joy.Botones[0] = ((hidGameData->Botones[1] >> 6) & 1) | ((hidGameData->Botones[0] << 1) & 4) | ((hidGameData->Botones[0] >> 2) & 8) | (hidGameData->Botones[0] & 16);
 	hidData_Joy.Botones[0] |= ((hidGameData->Botones[0] & 1) << 1) |((hidGameData->Botones[2] & 0x80) >> 2) | ((hidGameData->Botones[3] & 3) << 6) ; //trg 1, modos
 	hidData_Joy.Botones[1] = ((hidGameData->Botones[1] & 0x3f) << 2) | ((hidGameData->Botones[0] >> 2) & 3); //a,b, toggles
-	hidData_Ace.Botones[0] = ((hidGameData->Botones[0] & 128) >> 6) | ((hidGameData->Botones[0] >> 5) & 2) | (hidGameData->Botones[3] & 252);
+	hidData_Ace.Botones[0] = ((hidGameData->Botones[0] & 192) >> 6) | (hidGameData->Botones[3] & 252);
 	hidData_Ace.Botones[1] = hidGameData->Seta & 0x3; //wheel
-	RtlCopyMemory(hidData_Ace.Botones, hidData_Joy.Botones, sizeof(hidData_Joy.Botones));
-	hidData_Ace.Setas[0] = hidGameData->Seta >> 4;
-	hidData_Joy.Setas[0] = Switch4To8((hidGameData->Botones[1] >> 7) + ((hidGameData->Botones[2] << 1) & 0xf));
-	hidData_Joy.Setas[1] = Switch4To8((hidGameData->Botones[2] >> 3) & 0xf);
-	switch (hidGameData->Ministick & 0xf)
+	hidData_Joy.Setas[3] = hidGameData->Seta >> 4;
+	hidData_Joy.Setas[2] = Switch4To8((hidGameData->Botones[1] >> 7) + ((hidGameData->Botones[2] << 1) & 0xf));
+	hidData_Ace.Setas[3] = Switch4To8((hidGameData->Botones[2] >> 3) & 0xf);
+	if ((hidGameData->Ministick & 0xf) < 2)
 	{
-	case 0:
-		hidData_Ace.Setas[1] = 8;
-		break;
-	case 0xf:
-		hidData_Ace.Setas[1] = 2;
-		break;
-	default: hidData_Ace.Setas[1] = 0;
+		hidData_Ace.Setas[2] = 8;
 	}
-	switch (hidGameData->Ministick >> 4)
+	else if ((hidGameData->Ministick & 0xf) > 0xd)
 	{
-	case 0:
-		hidData_Ace.Setas[1] |= 1;
-		break;
-	case 0xf:
-		hidData_Ace.Setas[1] |= 4;
-		break;
+		hidData_Ace.Setas[2] = 2;
 	}
-	hidData_Ace.Setas[1] = Switch4To8(hidData_Ace.Setas[1]);
-	hidData_Ace.Ejes[0] = hidGameData->Ministick & 0xf;
-	hidData_Ace.Ejes[1] = hidGameData->Ministick >> 4;
+	if ((hidGameData->Ministick >> 4) < 2)
+	{
+		hidData_Ace.Setas[2] |= 1;
+	}
+	else if ((hidGameData->Ministick >> 4) > 0xd)
+	{
+		hidData_Ace.Setas[2] |= 4;
+	}
+	hidData_Ace.Setas[2] = Switch4To8(hidData_Ace.Setas[2]);
+	hidData_Ace.Ejes[7] = hidGameData->Ministick & 0xf; //x
+	hidData_Ace.Ejes[6] = hidGameData->Ministick >> 4; //y
 
 	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[0], 2048, 1024); //X
 	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[1], 2048, 1024); //Y
@@ -156,15 +153,15 @@ void CPreprocesar::HIDX52(PHIDX52_INPUT_DATA hidGameData)
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::X52_Joy, &hidData_Joy);
 		CCalibrado::Calibrar(pPerfil, TipoJoy::X52_Ace, &hidData_Ace);
-		ConvertirEjeRango(65536, &hidData_Joy.Ejes[0], 2048); //X
-		ConvertirEjeRango(65536, &hidData_Joy.Ejes[1], 2048); //Y
-		ConvertirEjeRango(65536, &hidData_Joy.Ejes[3], 1024); //Rx
-		ConvertirEjeRango(65536, &hidData_Ace.Ejes[2], 256); //Z
-		ConvertirEjeRango(65536, &hidData_Ace.Ejes[5], 256); //Sl
-		ConvertirEjeRango(65536, &hidData_Ace.Ejes[3], 256); //Rx
-		ConvertirEjeRango(65536, &hidData_Ace.Ejes[4], 256); //Ry
-		ConvertirEjeRango(256, &hidData_Ace.Ejes[6], 16); //mX
-		ConvertirEjeRango(256, &hidData_Ace.Ejes[7], 16); //mY
+		ConvertirEjeRango(32767, &hidData_Joy.Ejes[0], 1023); //X
+		ConvertirEjeRango(32767, &hidData_Joy.Ejes[1], 1023); //Y
+		ConvertirEjeRango(32767, &hidData_Joy.Ejes[3], 511); //Rx
+		ConvertirEjeRango(32767, &hidData_Ace.Ejes[2], 127); //Z
+		ConvertirEjeRango(32767, &hidData_Ace.Ejes[5], 127); //Sl
+		ConvertirEjeRango(32767, &hidData_Ace.Ejes[3], 127); //Rx
+		ConvertirEjeRango(32767, &hidData_Ace.Ejes[4], 127); //Ry
+		ConvertirEjeRango(32767, &hidData_Ace.Ejes[6], 7); //mX
+		ConvertirEjeRango(32767, &hidData_Ace.Ejes[7], 7); //mY
 	}
 
 	x52->Procesar_Joy(&hidData_Joy);
@@ -223,11 +220,11 @@ void CPreprocesar::ConvertirEjeCentro0(UINT16* pos, UINT16 rango, UINT16 centro)
 
 	if (negativo)
 	{
-		*pos = (rango - *pos);
+		*pos = (65535 - *pos) + 1;
 	}
 }
 
-void CPreprocesar::ConvertirEjeRango(UINT32 nuevoRango, INT16* pos, UINT16 rango)
+void CPreprocesar::ConvertirEjeRango(INT32 nuevoRango, INT16* pos, INT16 rango)
 {
-	*pos *= nuevoRango / rango;
+	*pos = (*pos * nuevoRango) / rango;
 }
