@@ -37,7 +37,7 @@ namespace Editor
                 if (b == 0)
                     break;
                 else
-                    numBandas.Value++;
+                    numBandas.Valor++;
             }
             eventos = true;
             CambiarBandas();
@@ -70,10 +70,10 @@ namespace Editor
         {
             if (eventos & this.IsLoaded)
             {
-                double d1 = (double)((CtlNumUpDown)sender).Value;
+                double d1 = (double)((CtlNumUpDown)sender).Valor;
                 int idc = lbls.Children.IndexOf((UIElement)sender);
                 double d2 = Math.Round(grb.RowDefinitions[idc * 2].Height.Value) - d1;
-                d2 += (idc != 14) ? ((CtlNumUpDown)lbls.Children[idc + 1]).Value : int.Parse(lbl16.Text);
+                d2 += (idc != 14) ? ((CtlNumUpDown)lbls.Children[idc + 1]).Valor : int.Parse(lbl16.Text);
                 grb.RowDefinitions[idc * 2].Height = new GridLength(d1, GridUnitType.Star);
                 grb.RowDefinitions[(idc * 2) + 2].Height = new GridLength(d2, GridUnitType.Star);
                 CambiarSplitter((idc * 2) + 1);
@@ -88,7 +88,7 @@ namespace Editor
 
         private bool CambiarSplitter(int idc)
         {
-            if (numBandas.Value == 1)
+            if (numBandas.Valor == 1)
                 return true;
 
             bool ok = true;
@@ -107,12 +107,12 @@ namespace Editor
                 grb.RowDefinitions[idc - 1].Height = new GridLength(grb.RowDefinitions[idc - 1].Height.Value - 1, GridUnitType.Star);
                 ok = false;
             }
-            ctls[(idc - 1) / 2].Value = (int)Math.Round(grb.RowDefinitions[idc - 1].Height.Value);
+            ctls[(idc - 1) / 2].Valor = (int)Math.Round(grb.RowDefinitions[idc - 1].Height.Value);
             if (idc != 1)
-                ctls[((idc - 1) / 2) - 1].Maximum = ctls[(idc - 1) / 2].Value - 1;
-            bandas[(idc - 1) / 2] = (byte)(((idc == 1) ? 0 : bandas[((idc - 1) / 2) - 1]) + ctls[(idc - 1) / 2].Value);
+                ctls[((idc - 1) / 2) - 1].Maximum = ctls[(idc - 1) / 2].Valor - 1;
+            bandas[(idc - 1) / 2] = (byte)(((idc == 1) ? 0 : bandas[((idc - 1) / 2) - 1]) + ctls[(idc - 1) / 2].Valor);
             if (idc != 29)
-                ctls[(idc + 1) / 2].Value = (int)Math.Round(grb.RowDefinitions[idc + 1].Height.Value);
+                ctls[(idc + 1) / 2].Valor = (int)Math.Round(grb.RowDefinitions[idc + 1].Height.Value);
             else
                 lbl16.Text = ((int)Math.Round(grb.RowDefinitions[idc + 1].Height.Value)).ToString();
 
@@ -130,12 +130,12 @@ namespace Editor
 
             for (int i = 0; i < 15; i++)
             {
-                if (i >= (numBandas.Value - 1))
+                if (i >= (numBandas.Valor - 1))
                     bandas[i] = 0;
                 else
                 {
                     if (bandas[i] == 99)
-                        numBandas.Value = i + 2;
+                        numBandas.Valor = i + 2;
                     else if (bandas[i] == 0)
                         bandas[i] = (i == 0) ? (byte)50 : (byte)(bandas[i - 1] + ((100 - bandas[i - 1]) / 2));
                 }
@@ -144,7 +144,7 @@ namespace Editor
             grb.Height = 100;
             grb.RowDefinitions.Clear();
             grb.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-            lbl1.Value = 100;
+            lbl1.Valor = 100;
             int tam = 0;
             for (int i = 0; i < 15; i++)
             {
@@ -154,11 +154,11 @@ namespace Editor
                     grb.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0, GridUnitType.Auto) });
                     grb.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(100 - bandas[i], GridUnitType.Star) });
 
-                    ctls[i].Value = bandas[i] - tam;
+                    ctls[i].Valor = bandas[i] - tam;
                     if (i > 0)
-                        ctls[i - 1].Maximum = ctls[i - 1].Value + ctls[i].Value - 1;
+                        ctls[i - 1].Maximum = ctls[i - 1].Valor + ctls[i].Valor - 1;
                     if (grb.RowDefinitions.Count != 31)
-                        ctls[i + 1].Value = 100 - bandas[i];
+                        ctls[i + 1].Valor = 100 - bandas[i];
                     else
                         lbl16.Text = (100 - bandas[i]).ToString();
 

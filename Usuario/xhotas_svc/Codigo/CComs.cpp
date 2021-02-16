@@ -12,6 +12,7 @@ CComs::~CComs()
 	salir = true;
 	if (hPipe != nullptr)
 	{
+		CancelIo(hPipe);
 		CloseHandle(hPipe);
 	}
 	while (InterlockedCompareExchange16(&hiloCerrado, 0, 0) == FALSE) Sleep(500);
@@ -129,7 +130,9 @@ bool CComs::ProcesarMensaje(BYTE* msj, DWORD tam)
 		case TipoMsj::Mapa:
 			return pPerfil->HF_IoEscribirMapa(&msj[1], tam - 1);
 		case TipoMsj::Comandos:
-			return pPerfil->HF_IoEscribirComandos(&msj[1], tam - 1);
+		{
+			return pPerfil->HF_IoEscribirComandos((tam > 1) ? &msj[1] : msj, tam - 1);
+		}
 		default:
 			break;
 	}

@@ -2,10 +2,8 @@
 #include <deque>
 #include "CGenerarEventos.h"
 
-#ifdef _DEBUG
-CPerfil* CGenerarEventos::pPerfil;
-CColaEventos* CGenerarEventos::pColaEv;
-#endif
+CPerfil* CGenerarEventos::pPerfil = nullptr;
+CColaEventos* CGenerarEventos::pColaEv = nullptr;
 
 void CGenerarEventos::Iniciar(CPerfil* pPerfil, CColaEventos* pColaEv)
 {
@@ -46,9 +44,9 @@ void CGenerarEventos::Comando(TipoJoy idJoy, UINT16 accionId, UCHAR origen, Orig
 			}
 			else
 			{
-				std::deque<PEV_COMANDO>*& comandos = pPerfil->GetPr()->Acciones->at(accionId - 1);
-				std::deque<PEV_COMANDO>::iterator idx = comandos->begin();
-				while(idx != comandos->end())
+				CPaqueteEvento*& comandos = pPerfil->GetPr()->Acciones->at(accionId - 1);
+				std::deque<PEV_COMANDO>::iterator idx = comandos->GetColaComandos()->begin();
+				while(idx != comandos->GetColaComandos()->end())
 				{
 					PEV_COMANDO pEvt = new EV_COMANDO;
 					RtlCopyMemory(pEvt, *idx, sizeof(EV_COMANDO));
@@ -84,6 +82,16 @@ void CGenerarEventos::DirectX(UCHAR joyId, UCHAR mapa, PVHID_INPUT_DATA inputDat
 	comando->VHid.JoyId = joyId;
 	comando->VHid.Mapa = mapa;
 	RtlCopyMemory(&comando->VHid.Datos, inputData, sizeof(VHID_INPUT_DATA));
+	pEvento->AñadirComando(comando);
+	pColaEv->Añadir(pEvento);
+}
+
+void CGenerarEventos::CheckHolds()
+{
+	CPaqueteEvento* pEvento = new CPaqueteEvento();
+	PEV_COMANDO comando = new EV_COMANDO;
+	RtlZeroMemory(comando, sizeof(EV_COMANDO));
+	comando->Tipo = TipoComando::Reservado_CheckHold;
 	pEvento->AñadirComando(comando);
 	pColaEv->Añadir(pEvento);
 }

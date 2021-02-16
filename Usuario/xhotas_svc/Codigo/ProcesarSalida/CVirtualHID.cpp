@@ -37,12 +37,12 @@ void CVirtualHID::EnviarRequestRaton(BYTE* inputData)
 
 }
 
-void CVirtualHID::EnviarRequestTeclado(BYTE* inputData)
+void CVirtualHID::EnviarRequestTeclado()
 {
     DWORD tam = 0;
     UCHAR* buff = new UCHAR[30];
     buff[0] = 1;
-    RtlCopyMemory(&buff[1], inputData, 29);
+    RtlCopyMemory(&buff[1], Estado.Teclado, 29);
     WriteFile(hVHid, buff, 30, &tam, NULL);
     //DWORD err = GetLastError();
     delete[] buff;

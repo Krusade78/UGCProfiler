@@ -30,9 +30,12 @@ void CProcesarX52::Procesar_Joy(PVHID_INPUT_DATA p_hidData)
 	USB_HIDX52_CONTEXT* devExt = &USBaHID;
 	VHID_INPUT_DATA viejohidData;
 
-	if (!CMenuMFD::Get()->X52Joy())
+	if (CMenuMFD::Get() != nullptr)
 	{
-		return;
+		if (!CMenuMFD::Get()->X52Joy())
+		{
+			return;
+		}
 	}
 
 	RtlCopyMemory(&viejohidData, &devExt->UltimoEstadoJ.DeltaHidData, sizeof(VHID_INPUT_DATA));
@@ -114,9 +117,13 @@ void CProcesarX52::Procesar_Ace(PVHID_INPUT_DATA p_hidData)
 				if ((cambios >> exp) & 1)
 				{ // Si ha cambiado
 					if ((p_hidData->Botones[0] >> exp) & 1)
-						CMenuMFD::Get()->MenuPulsarBoton(exp - 2);
+					{
+						if (CMenuMFD::Get() != nullptr) CMenuMFD::Get()->MenuPulsarBoton(exp - 2);
+					}
 					else
-						CMenuMFD::Get()->MenuSoltarBoton(exp - 2);
+					{
+						if (CMenuMFD::Get() != nullptr) CMenuMFD::Get()->MenuSoltarBoton(exp - 2);
+					}
 				}
 			}
 		}
@@ -140,17 +147,21 @@ void CProcesarX52::Procesar_Ace(PVHID_INPUT_DATA p_hidData)
 						UCHAR bt = (idx * 8) + exp;
 						if ((p_hidData->Botones[idx] >> exp) & 1)
 						{
-							if (CMenuMFD::Get()->EstaActivado() && ((bt == 2) || (bt == 3) || (bt == 4)))
-								continue;
-							else
-								CBotonesSetas::PulsarBoton(devExt->Perfil, TipoJoy::X52_Ace, bt);
+							if (CMenuMFD::Get() != nullptr)
+							{
+								if (CMenuMFD::Get()->EstaActivado() && ((bt == 2) || (bt == 3) || (bt == 4)))
+									continue;
+							}
+							CBotonesSetas::PulsarBoton(devExt->Perfil, TipoJoy::X52_Ace, bt);
 						}
 						else
 						{
-							if (CMenuMFD::Get()->EstaActivado() && ((bt == 2) || (bt == 3) || (bt == 4)))
-								continue;
-							else
-								CBotonesSetas::SoltarBoton(devExt->Perfil, TipoJoy::X52_Ace, bt);
+							if (CMenuMFD::Get() != nullptr)
+							{
+								if (CMenuMFD::Get()->EstaActivado() && ((bt == 2) || (bt == 3) || (bt == 4)))
+									continue;
+							}
+							CBotonesSetas::SoltarBoton(devExt->Perfil, TipoJoy::X52_Ace, bt);
 						}
 					}
 				}

@@ -13,7 +13,7 @@ namespace Launcher
     internal partial class MenuLauncher : Window
     {
         private bool salir = false;
-        private CServicio svc;
+        private readonly CServicio svc;
 
         public MenuLauncher(CServicio svc)
         {
@@ -48,12 +48,16 @@ namespace Launcher
         {
             foreach (String f in Directory.GetFiles(".", "*.xhp"))
             {
-                MenuItem miL = new MenuItem();
-                miL.Header = Path.GetFileName(f).Remove(Path.GetFileName(f).Length - 4, 4);
+                MenuItem miL = new MenuItem
+                {
+                    Header = Path.GetFileName(f).Remove(Path.GetFileName(f).Length - 4, 4)
+                };
                 miL.Click += MenuItemLanzar_Click;
                 mnLanzar.Items.Add(miL);
-                MenuItem miE = new MenuItem();
-                miE.Header = Path.GetFileName(f).Remove(Path.GetFileName(f).Length - 4, 4);
+                MenuItem miE = new MenuItem
+                {
+                    Header = Path.GetFileName(f).Remove(Path.GetFileName(f).Length - 4, 4)
+                };
                 miE.Click += MenuItemEditar_Click;
                 mnEditar.Items.Add(miE);
             }

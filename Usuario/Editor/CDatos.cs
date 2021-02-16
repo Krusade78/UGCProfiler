@@ -45,7 +45,7 @@ namespace Editor
                     {
                         for (byte e = 0; e < 8; e++)
                         {
-                            Perfil.MAPAEJES.AddMAPAEJESRow(j, p, m, e, 1, (j == 3) ? (byte)1 : j, 0b1, e, new byte[10] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 }, new byte[15], 0, 0);
+                            Perfil.MAPAEJES.AddMAPAEJESRow(j, p, m, e, 1, (j == 3) ? (byte)1 : j, 0, e, new byte[10] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 }, new byte[15], 0, 0);
                             for (byte i = 0; i < 16; i++)
                             {
                                 Perfil.INDICESEJES.AddINDICESEJESRow(j, p, m, e, i, accionVacia);
@@ -66,6 +66,26 @@ namespace Editor
                     }
                 }
             }
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(0, 0, 0, 3).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(0, 0, 0, 6).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(0, 0, 0, 7).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(1, 0, 0, 0).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(1, 0, 0, 1).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(1, 0, 0, 3).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(2, 0, 0, 2).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(2, 0, 0, 3).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(2, 0, 0, 4).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(2, 0, 0, 5).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(2, 0, 0, 6).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(2, 0, 0, 7).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 0).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 1).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 2).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 3).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 4).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 5).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 6).TipoEje = 1;
+            Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(3, 0, 0, 7).TipoEje = 1;
 
             Modificado = true;
         }

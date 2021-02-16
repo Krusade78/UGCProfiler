@@ -26,7 +26,7 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 	//Sensibilidad
 	for (idx = 0; idx < 8; idx++)
 	{
-		INT16 stope = (idx < 6) ? 32767 : 127;
+		const INT16 stope = 32767;
 
 		x = entrada->Ejes[idx];
 		if (x == 0)
@@ -90,7 +90,7 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 				}
 				else
 				{
-					INT16 stope = (idx < 6) ? 32767 : 127;
+					INT16 stope = 32767;
 
 					if ((tipoEje & 0x2) == 0x2) //invertido
 					{
@@ -195,7 +195,14 @@ void CEjes::MoverEje(CPerfil* pPerfil, TipoJoy tipoJ, UCHAR idx, INT16 nuevo)
 
 	if (cambio != 255)
 	{
-		CGenerarEventos::Comando(tipoJ, accionID, idx, CGenerarEventos::Origen::Eje, &datosEje);
+		if (accionID == 0)
+		{
+			CGenerarEventos::CheckHolds();
+		}
+		else
+		{
+			CGenerarEventos::Comando(tipoJ, accionID, idx, CGenerarEventos::Origen::Eje, &datosEje);
+		}
 	}
 }
 
@@ -204,10 +211,10 @@ void CEjes::MoverEje(CPerfil* pPerfil, TipoJoy tipoJ, UCHAR idx, INT16 nuevo)
 /// </summary>
 UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 nueva, UCHAR pinkie, UCHAR modos)
 {
-	UCHAR	idn = 255;
+	UCHAR idn = 255;
 	bool incremental;
 	bool bandas;
-	INT16 rango = (eje < 6) ? 32767 : 127;
+	INT16 rango = 32767;
 
 	incremental = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 16) == 16;
 	bandas = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 32) == 32;

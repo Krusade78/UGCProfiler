@@ -73,8 +73,8 @@ void CPreprocesar::HIDPedales(UCHAR* datos)
 	RtlZeroMemory(&hidData, sizeof(VHID_INPUT_DATA));
 
 	hidData.Ejes[3] = (UINT16)((((PUCHAR)datos)[1] >> 6) + (((PUCHAR)datos)[2] << 2)); //R
-	hidData.Ejes[7] = (UCHAR)(((PUCHAR)datos)[0] & 0x7F); //frenoI
-	hidData.Ejes[6] = (UCHAR)((((PUCHAR)datos)[0] >> 7) + ((((PUCHAR)datos)[1] & 0x3f) << 1)); //frenoD
+	hidData.Ejes[6] = (UCHAR)(((PUCHAR)datos)[0] & 0x7F); //frenoI
+	hidData.Ejes[7] = (UCHAR)((((PUCHAR)datos)[0] >> 7) + ((((PUCHAR)datos)[1] & 0x3f) << 1)); //frenoD
 
 	ConvertirEjeCentro0((UINT16*)&hidData.Ejes[3], 512, 256);
 	ConvertirEjeCentro0((UINT16*)&hidData.Ejes[6], 128, 64);
@@ -115,28 +115,28 @@ void CPreprocesar::HIDX52(PHIDX52_INPUT_DATA hidGameData)
 	hidData_Joy.Botones[1] = ((hidGameData->Botones[1] & 0x3f) << 2) | ((hidGameData->Botones[0] >> 2) & 3); //a,b, toggles
 	hidData_Ace.Botones[0] = ((hidGameData->Botones[0] & 192) >> 6) | (hidGameData->Botones[3] & 252);
 	hidData_Ace.Botones[1] = hidGameData->Seta & 0x3; //wheel
-	hidData_Joy.Setas[3] = hidGameData->Seta >> 4;
-	hidData_Joy.Setas[2] = Switch4To8((hidGameData->Botones[1] >> 7) + ((hidGameData->Botones[2] << 1) & 0xf));
-	hidData_Ace.Setas[3] = Switch4To8((hidGameData->Botones[2] >> 3) & 0xf);
+	hidData_Joy.Setas[0] = hidGameData->Seta >> 4;
+	hidData_Joy.Setas[1] = Switch4To8((hidGameData->Botones[1] >> 7) + ((hidGameData->Botones[2] << 1) & 0xf));
+	hidData_Ace.Setas[0] = Switch4To8((hidGameData->Botones[2] >> 3) & 0xf);
 	if ((hidGameData->Ministick & 0xf) < 2)
 	{
-		hidData_Ace.Setas[2] = 8;
+		hidData_Ace.Setas[1] = 8;
 	}
 	else if ((hidGameData->Ministick & 0xf) > 0xd)
 	{
-		hidData_Ace.Setas[2] = 2;
+		hidData_Ace.Setas[1] = 2;
 	}
 	if ((hidGameData->Ministick >> 4) < 2)
 	{
-		hidData_Ace.Setas[2] |= 1;
+		hidData_Ace.Setas[1] |= 1;
 	}
 	else if ((hidGameData->Ministick >> 4) > 0xd)
 	{
-		hidData_Ace.Setas[2] |= 4;
+		hidData_Ace.Setas[1] |= 4;
 	}
-	hidData_Ace.Setas[2] = Switch4To8(hidData_Ace.Setas[2]);
-	hidData_Ace.Ejes[7] = hidGameData->Ministick & 0xf; //x
-	hidData_Ace.Ejes[6] = hidGameData->Ministick >> 4; //y
+	hidData_Ace.Setas[1] = Switch4To8(hidData_Ace.Setas[1]);
+	hidData_Ace.Ejes[6] = hidGameData->Ministick & 0xf; //x
+	hidData_Ace.Ejes[7] = hidGameData->Ministick >> 4; //y
 
 	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[0], 2048, 1024); //X
 	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[1], 2048, 1024); //Y

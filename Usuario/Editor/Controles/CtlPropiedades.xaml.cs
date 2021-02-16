@@ -104,7 +104,7 @@ namespace Editor
             if (dlg.ShowDialog() == true)
             {
                 padre.GetDatos().Modificado = true;
-                NumericUpDownPosition.Value = 1;
+                NumericUpDownPosition.Valor = 1;
             }
         }
         #endregion
@@ -125,7 +125,7 @@ namespace Editor
         private void NumericUpDownPositions_TextChanged(object sender, EventArgs e)
         {
             if (eventos)
-                SetModoBoton((byte)NumericUpDownPositions.Value);
+                SetModoBoton((byte)NumericUpDownPositions.Valor);
         }
 
         private void ButtonAssignModes_Click(object sender, RoutedEventArgs e)

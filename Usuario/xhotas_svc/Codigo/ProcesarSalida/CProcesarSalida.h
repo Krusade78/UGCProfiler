@@ -12,6 +12,8 @@ public:
 	~CProcesarSalida();
 	void LimpiarEventos();
 
+	static CProcesarSalida* Get() {	return pNotificaciones; }
+
 	void Procesar(CPaqueteEvento* paquete);
 	HANDLE GetEvCola() { return hEvColaVacia_SoloHolds; }
 
@@ -26,6 +28,8 @@ public:
 	std::deque<TIMER_CTX*>* GetListaTimersDelay() { return &listaTimersDelay; }
 	void ProcesarDelay(TIMER_CTX* ctx);
 private:
+	static CProcesarSalida* pNotificaciones;
+
 	CPerfil* pPerfil = nullptr;
 	CVirtualHID* pVhid = nullptr;
 	HANDLE hWaitLockEventos = nullptr;

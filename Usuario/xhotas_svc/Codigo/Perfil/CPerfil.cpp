@@ -13,7 +13,7 @@ CPerfil::CPerfil()
 	RtlZeroMemory(&perfil, sizeof(PROGRAMADO));
 	RtlZeroMemory(&calibrado, sizeof(CALIBRADO));
 	RtlZeroMemory(&estado, sizeof(ESTADO));
-	modoRaw = TRUE;
+	modoRaw = FALSE;
 	modoCalibrado = FALSE;
 }
 
@@ -31,29 +31,24 @@ void CPerfil::LimpiarPerfil()
 {
 	WaitForSingleObject(hMutexPrograma, INFINITE);
 	{
-		if (pColaEv != nullptr)
+		if (CColaEventos::Get() != nullptr)
 		{
-			static_cast<CColaEventos*>(pColaEv)->Vaciar();
+			CColaEventos::Get()->Vaciar();
 		}
-		if (pColaSalida != nullptr)
+		if (CProcesarSalida::Get() != nullptr)
 		{
-			static_cast<CProcesarSalida*>(pColaSalida)->LimpiarEventos();
+			CProcesarSalida::Get()->LimpiarEventos();
 		}
 
 		if (perfil.Acciones != nullptr)
 		{
 			while (!perfil.Acciones->empty())
 			{
-				std::deque<PEV_COMANDO>* cola = perfil.Acciones->front();
+				delete perfil.Acciones->front();
 				perfil.Acciones->pop_front();
-				while (!cola->empty())
-				{
-					delete cola->front();
-					cola->pop_front();
-				}
-				delete cola;
 			}
 			delete perfil.Acciones;
+			perfil.Acciones = nullptr;
 		}
 		RtlZeroMemory(&perfil, sizeof(PROGRAMADO));
 
@@ -79,7 +74,12 @@ bool  CPerfil::HF_IoEscribirMapa(BYTE* SystemBuffer, DWORD tam)
 	{
 		BYTE txt[17];
 		RtlCopyMemory(txt, SystemBuffer, 17);
-		CX52Salida::Get()->Set_Texto(txt, 17);
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(txt, 17);
+		RtlZeroMemory(txt, 17);
+		txt[0] = 2;
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(txt, 2);
+		txt[0] = 3;
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(txt, 2);
 		WaitForSingleObject(hMutexPrograma, INFINITE);
 		{
 			RtlCopyMemory(&perfil.TickRaton, SystemBuffer + 17 , 1);
@@ -103,6 +103,8 @@ bool  CPerfil::HF_IoEscribirComandos(BYTE* SystemBuffer, DWORD InputBufferLength
 	BYTE* bufIn;
 	size_t tamPrevisto = 0;
 
+	LimpiarPerfil();
+
 	if (InputBufferLength != 0)
 	{
 		//Comprobar OK
@@ -118,20 +120,24 @@ bool  CPerfil::HF_IoEscribirComandos(BYTE* SystemBuffer, DWORD InputBufferLength
 		}
 	}
 
-	LimpiarPerfil();
 	resetComandos = true;
 
-	CMenuMFD::Get()->SetHoraActivada(true);
-	CMenuMFD::Get()->SetFechaActivada(true);
+	if (CMenuMFD::Get() != nullptr) CMenuMFD::Get()->SetHoraActivada(true);
+	if (CMenuMFD::Get() != nullptr) CMenuMFD::Get()->SetFechaActivada(true);
+
+	if (InputBufferLength == 0)
+	{
+		return true;
+	}
 
 	WaitForSingleObject(hMutexPrograma, INFINITE);
 	{
-		perfil.Acciones = new std::deque<std::deque<PEV_COMANDO>*>();
+		perfil.Acciones = new std::deque<CPaqueteEvento*>();
 		bufIn = SystemBuffer;
 		tamPrevisto = 0;
 		while (tamPrevisto < InputBufferLength)
 		{
-			std::deque<PEV_COMANDO>* colaComandos = new std::deque<PEV_COMANDO>();
+			CPaqueteEvento* colaComandos = new CPaqueteEvento();
 			UCHAR tamAccion = *bufIn;
 			UCHAR i = 0;
 
@@ -142,20 +148,19 @@ bool  CPerfil::HF_IoEscribirComandos(BYTE* SystemBuffer, DWORD InputBufferLength
 			{
 				PEV_COMANDO mem = new EV_COMANDO;
 				RtlZeroMemory(mem, sizeof(EV_COMANDO));
-				RtlCopyMemory(mem, bufIn, 2);
+				mem->Tipo = *bufIn;
+				mem->Dato = *(bufIn + 1);
+				if ((((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdHora) || (((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdHora24))
 				{
-					if ((((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdHora) || (((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdHora24))
-					{
-						CMenuMFD::Get()->SetHoraActivada(false);
-					}
-					else if (((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdFecha)
-					{
-						CMenuMFD::Get()->SetFechaActivada(false);
-					}
-					bufIn += 2;
-					tamPrevisto += 2;
-					colaComandos->push_back(mem);
+					if (CMenuMFD::Get() != nullptr) CMenuMFD::Get()->SetHoraActivada(false);
 				}
+				else if (((PEV_COMANDO)bufIn)->Tipo == TipoComando::MfdFecha)
+				{
+					if (CMenuMFD::Get() != nullptr) CMenuMFD::Get()->SetFechaActivada(false);
+				}
+				bufIn += 2;
+				tamPrevisto += 2;
+				colaComandos->AñadirComando(mem);
 			}
 			perfil.Acciones->push_back(colaComandos);
 		}

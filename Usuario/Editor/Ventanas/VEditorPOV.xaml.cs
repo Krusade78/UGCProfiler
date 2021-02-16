@@ -34,7 +34,7 @@ namespace Editor
 
 
             for (byte i = 0; i < 8; i++)
-                st[i] = st[i].Replace("1", NumericUpDownJ.Value.ToString() + "-" + NumericUpDown1.Value.ToString());
+                st[i] = st[i].Replace("1", NumericUpDownJ.Valor.ToString() + "-" + NumericUpDown1.Valor.ToString());
 
             for (byte i = 0; i < 8; i++)
             {
@@ -71,7 +71,7 @@ namespace Editor
                     }
                     ar.Comandos[1 + texto.Length] = (byte)TipoComando.TipoComando_MfdTextoFin;
                     //Resto
-                    int v = (((((4 - NumericUpDown1.Value) * 8) + i) << 3) + (NumericUpDownJ.Value - 1)) << 8;
+                    int v = (((((4 - NumericUpDown1.Valor) * 8) + i) << 3) + (NumericUpDownJ.Valor - 1)) << 8;
                     ar.Comandos[1 + texto.Length + 1] = (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)v);
                     ar.Comandos[1 + texto.Length + 2] = (byte)TipoComando.TipoComando_Hold;
                     ar.Comandos[1 + texto.Length + 3] = (ushort)((byte)(TipoComando.TipoComando_DxSeta | TipoComando.TipoComando_Soltar) + (ushort)v);

@@ -25,7 +25,7 @@ public :
 	} Estado;
 
 	bool Iniciar();
-	void EnviarRequestTeclado(BYTE* inputData);
+	void EnviarRequestTeclado();
 	void EnviarRequestRaton(BYTE* inputData);
 	void EnviarRequestJoystick(UCHAR joyId, PVHID_INPUT_DATA inputData);
 

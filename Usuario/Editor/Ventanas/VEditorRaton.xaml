@@ -14,7 +14,7 @@
             </RadialGradientBrush>
         </Grid.Background>
         <TextBlock Text="Este control sirve para ralentizar el movimiento del ratón. Valores altos moverán el ratón más despacio y valores más bajos lo moverán más rápido. La forma recomendada de hacer esto es usando el control de sensibilidad del eje, pero si necesitas más precisión podrías necesitar modificar este valor." Height="72" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10" Foreground="Gainsboro" />
-        <local:CtlNumUpDown x:Name="NumericUpDown1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,94,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="125" Minimum="1" Value="1" Width="50" Height="21" />
+        <local:CtlNumUpDown x:Name="NumericUpDown1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,94,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="125" Minimum="1" Width="50" Height="21" />
         <Button Margin="67,132,243,10" Width="120" Content="Aceptar" Click="Button1_Click" Background="Linen" Foreground="#FF762626" />
         <Button Width="120" Content="Cancelar" Margin="241,132,69,10" IsCancel="True" Background="Linen" Foreground="#FF762626" />
     </Grid>

@@ -180,14 +180,14 @@ namespace Editor
         private void ButtonPausa_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_Delay + ((ushort)NumericUpDown6.Value << 8)) }, false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_Delay + ((ushort)NumericUpDown6.Valor << 8)) }, false);
         }
 
         private void ButtonRepetirN_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 236) return;
             ushort[] bloque = new ushort[2];
-            bloque[0] = (ushort)((byte)TipoComando.TipoComando_RepeatN +((ushort)NumericUpDown4.Value << 8));
+            bloque[0] = (ushort)((byte)TipoComando.TipoComando_RepeatN +((ushort)NumericUpDown4.Valor << 8));
             bloque[1] = (byte)TipoComando.TipoComando_RepeatN | (byte)TipoComando.TipoComando_Soltar;
             Insertar(bloque, true);
         }
@@ -315,32 +315,32 @@ namespace Editor
         private void ButtonMovIzquierda_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonIzq + ((ushort)NumericUpDownSensibilidad.Value << 8)) }, false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonIzq + ((ushort)NumericUpDownSensibilidad.Valor << 8)) }, false);
         }
 
         private void ButtonMovArriba_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonArr + ((ushort)NumericUpDownSensibilidad.Value << 8)) }, false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonArr + ((ushort)NumericUpDownSensibilidad.Valor << 8)) }, false);
         }
 
         private void ButtonMovDerecha_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonDer + ((ushort)NumericUpDownSensibilidad.Value << 8)) }, false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonDer + ((ushort)NumericUpDownSensibilidad.Valor << 8)) }, false);
         }
 
         private void ButtonMovAbajo_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonAba + ((ushort)NumericUpDownSensibilidad.Value << 8)) } , false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_RatonAba + ((ushort)NumericUpDownSensibilidad.Valor << 8)) } , false);
         }
         #endregion
 
         #region "DirectX"
         private void ButtonDXOn_Click(object sender, RoutedEventArgs e)
         {
-            int v = (((NumericUpDown1.Value - 1) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
+            int v = (((NumericUpDown1.Valor - 1) << 3) + (NumericUpDownJoy.Valor - 1)) << 8;
             if (RadioButtonBasico.IsChecked == true)
             {
                 if (GetCuenta() > 235) return;
@@ -361,21 +361,21 @@ namespace Editor
         private void ButtonDXOff_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            int v = (((NumericUpDown1.Value - 1) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
+            int v = (((NumericUpDown1.Valor - 1) << 3) + (NumericUpDownJoy.Valor - 1)) << 8;
             Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + (ushort)v) }, false);
         }
 
         private void ButtonPovOn_Click(object sender, RoutedEventArgs e)
         {
-            int v = (((((4 - NumericUpDownPov.Value) * 8) + (NumericUpDownPosicion.Value - 1)) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
+            int v = (((((4 - NumericUpDownPov.Valor) * 8) + (NumericUpDownPosicion.Valor - 1)) << 3) + (NumericUpDownJoy.Valor - 1)) << 8;
             if (RadioButtonBasico.IsChecked == true)
             {
                 if (GetCuenta() > 235) return;
                 dsMacros.MACROS.Clear();
                 ushort[] bloque = new ushort[3];
-                bloque[0] = (ushort)((byte)TipoComando.TipoComando_DxBoton + (ushort)v);
+                bloque[0] = (ushort)((byte)TipoComando.TipoComando_DxSeta + (ushort)v);
                 bloque[1] = (byte)TipoComando.TipoComando_Hold;
-                bloque[2] = (ushort)(((byte)TipoComando.TipoComando_DxBoton | (byte)TipoComando.TipoComando_Soltar) + (ushort)v);
+                bloque[2] = (ushort)(((byte)TipoComando.TipoComando_DxSeta | (byte)TipoComando.TipoComando_Soltar) + (ushort)v);
                 Insertar(bloque, true);
             }
             else
@@ -388,7 +388,7 @@ namespace Editor
         private void ButtonPovOff_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            int v = (((((4 - NumericUpDownPov.Value) * 8) + (NumericUpDownPosicion.Value - 1)) << 3) + (NumericUpDownJoy.Value - 1)) << 8;
+            int v = (((((4 - NumericUpDownPov.Valor) * 8) + (NumericUpDownPosicion.Valor - 1)) << 3) + (NumericUpDownJoy.Valor - 1)) << 8;
             Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_DxSeta | (byte)TipoComando.TipoComando_Soltar) + (ushort)v) }, false);
         }
 
@@ -452,13 +452,13 @@ namespace Editor
         private void ButtonLuzMfd_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_MfdLuz + ((ushort)NumericUpDownLuzMfd.Value << 8)) }, false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_MfdLuz + ((ushort)NumericUpDownLuzMfd.Valor << 8)) }, false);
         }
 
         private void ButtonLuzBotones_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_Luz + ((ushort)NumericUpDownLuzMfd.Value << 8)) }, false);
+            Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_Luz + ((ushort)NumericUpDownLuzMfd.Valor << 8)) }, false);
         }
         #endregion
     }

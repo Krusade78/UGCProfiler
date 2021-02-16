@@ -16,56 +16,53 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 		case TipoComando::MfdLuz: //mfd_luz
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Get()->Luz_MFD(&params);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_MFD(&params);
 			break;
 		}
 		case TipoComando::Luz: // luz
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Get()->Luz_Global(&params);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Global(&params);
 			break;
 		}
 		case TipoComando::InfoLuz: // info luz
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Get()->Luz_Info(&params);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Info(&params);
 			break;
 		}
 		case TipoComando::MfdPinkie: // pinkie;
 		{
 			UCHAR params = comando->Dato;
-			CX52Salida::Get()->Set_Pinkie(&params);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Pinkie(&params);
 			break;
 		}
 		case TipoComando::MfdTextoIni: // texto
 		{
 			UCHAR texto[17];
-			UCHAR tam = 0;
+			UCHAR tam = 1;
 			RtlZeroMemory(texto, 17);
 
 			texto[0] = comando->Dato; //linea
-			delete comando;
-			cola->GetColaComandos()->pop_front();
-
 			while (cola->GetColaComandos()->size() != 1)
 			{
 				std::deque<PEV_COMANDO>::iterator pos = cola->GetColaComandos()->begin();
-				PEV_COMANDO comTxt = *++pos;
+				PEV_COMANDO comTxt = *(++pos);
 				if (comTxt->Tipo == TipoComando::MfdTextoFin) // fin texto
 				{
+					delete comTxt;
+					cola->GetColaComandos()->erase(pos);
 					break;
 				}
-				texto[tam] = comTxt->Dato;
-				delete comTxt;
-				cola->GetColaComandos()->erase(pos);
-
-				tam++;
-				if (tam == 18)
+				if (tam == 17)
 				{
 					throw new std::exception("Error buffer de texto");
 				}
+				texto[tam++] = comTxt->Dato;
+				delete comTxt;
+				cola->GetColaComandos()->erase(pos);
 			}
-			CX52Salida::Get()->Set_Texto(texto, tam);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(texto, tam);
 			break;
 		}
 		case TipoComando::MfdHora: // hora
@@ -74,16 +71,16 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 			params[0] = comando->Dato;
 
 			std::deque<PEV_COMANDO>::iterator pos = cola->GetColaComandos()->begin();
-			params[1] = (*++pos)->Dato;
+			params[1] = (*(++pos))->Dato;
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
 			pos = cola->GetColaComandos()->begin();
-			params[2] = (*++pos)->Dato;
+			params[2] = (*(++pos))->Dato;
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
-			CX52Salida::Get()->Set_Hora(params);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora(params);
 			break;
 		}
 		case TipoComando::MfdHora24: // hora 24
@@ -92,16 +89,16 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 			params[0] = comando->Dato;
 
 			std::deque<PEV_COMANDO>::iterator pos = cola->GetColaComandos()->begin();
-			params[1] = (*++pos)->Dato;
+			params[1] = (*(++pos))->Dato;
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
 			pos = cola->GetColaComandos()->begin();
-			params[2] = (*++pos)->Dato;
+			params[2] = (*(++pos))->Dato;
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
-			CX52Salida::Get()->Set_Hora24(params);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora24(params);
 			break;
 		}
 		case TipoComando::MfdFecha: // fecha
@@ -110,11 +107,11 @@ bool CX52::Procesar(CPaqueteEvento* cola)
 			params[0] = comando->Dato;
 
 			std::deque<PEV_COMANDO>::iterator pos = cola->GetColaComandos()->begin();
-			params[1] = (*++pos)->Dato;
+			params[1] = (*(++pos))->Dato;
 			delete (*pos);
 			cola->GetColaComandos()->erase(pos);
 
-			CX52Salida::Get()->Set_Fecha(params);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Fecha(params);
 			break;
 		}
 		default:

@@ -10,16 +10,15 @@ namespace Editor
     internal class CtlNumUpDown : TextBox
     {
         #region "Propiedades"
-        public static DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(int), typeof(CtlNumUpDown));
-
-        public int Value
+        private int _Valor = 1;
+        public int Valor
         {
-            get { return (int)GetValue(ValueProperty); }
+            get { return _Valor; }
             set
             {
                 this.Background = System.Windows.Media.Brushes.Black;
-                SetValue(TextProperty, value.ToString());
-                SetValue(ValueProperty, value);
+                _Valor = value;
+                this.Text = _Valor.ToString(); //SetValue(TextProperty, value.ToString());
                 ValueChanged?.Invoke(this, null);
             }
         }
@@ -38,6 +37,7 @@ namespace Editor
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+            base.Text = _Valor.ToString();
             base.KeyUp += TextBox1_KeyPress;
             base.KeyDown += TextBox1_KeyPress;
             base.PreviewKeyDown += TextBox1_KeyPress;
@@ -51,20 +51,20 @@ namespace Editor
         #region "eventos botones"
         private void CtlNumUp_Click(object sender, RoutedEventArgs e)
         {
-            if (Value < Maximum)
+            if (Valor < Maximum)
             {
                 eventosOn = false;
-                Value++;
+                Valor++;
                 eventosOn = true;
             }
         }
 
         private void CtlNumDown_Click(object sender, RoutedEventArgs e)
         {
-            if (Value > Minimum)
+            if (Valor > Minimum)
             {
                 eventosOn = false;
-                Value--;
+                Valor--;
                 eventosOn = true;
             }
         }
@@ -112,7 +112,7 @@ namespace Editor
 
             if ((int.Parse(((TextBox)e.OriginalSource).Text) >= Minimum) && (int.Parse(((TextBox)e.OriginalSource).Text) <= Maximum))
             {
-                Value = int.Parse(((TextBox)e.OriginalSource).Text);
+                Valor = int.Parse(((TextBox)e.OriginalSource).Text);
             }
             else
                 this.Background = System.Windows.Media.Brushes.DarkRed;

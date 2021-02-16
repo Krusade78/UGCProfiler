@@ -12,6 +12,8 @@ namespace Launcher
 		private System.Threading.CancellationTokenSource cerrarPipe = new System.Threading.CancellationTokenSource();
 		private System.Threading.CancellationTokenSource cerrarPipeSvc = new System.Threading.CancellationTokenSource();
 		private System.IO.BinaryWriter salidaPipeSvc = null;
+
+		public event EventHandler<ResolveEventArgs> EvtSalir;
 		public enum TipoMsj : byte { ModoRaw, ModoCalibrado, Calibrado, Antiv, Mapa, Comandos };
 
 		public CServicio()
@@ -30,7 +32,7 @@ namespace Launcher
 					cerrarPipe.Cancel();
 					while (cerrarPipe != null) { System.Threading.Thread.Sleep(100); }
 					dsc.Dispose(); dsc = null;
-					cerrarPipeSvc.Cancel();
+					cerrarPipeSvc?.Cancel();
 					while (cerrarPipeSvc != null) { System.Threading.Thread.Sleep(100); }
 				}
 				disposedValue = true;
@@ -81,26 +83,33 @@ namespace Launcher
 						try { pipeServerSvc.WaitForConnectionAsync(cerrarPipeSvc.Token).Wait(cerrarPipeSvc.Token); } catch { cerrarPipeSvc.Cancel(); }
 						if (!cerrarPipeSvc.Token.IsCancellationRequested)
 						{
-							using (System.IO.StreamReader r = new System.IO.StreamReader(pipeServerSvc))
+							try
 							{
-								using (System.IO.BinaryWriter w = new System.IO.BinaryWriter(pipeServerSvc))
+								using (System.IO.StreamReader r = new System.IO.StreamReader(pipeServerSvc))
 								{
-									while (!cerrarPipeSvc.Token.IsCancellationRequested)
+									using (System.IO.BinaryWriter w = new System.IO.BinaryWriter(pipeServerSvc))
 									{
-										if (r.ReadLine() == "OK")
+										while (!cerrarPipeSvc.Token.IsCancellationRequested)
 										{
-											salidaPipeSvc = w;
-											CargarCalibrado();
-											cerrarPipeSvc.Token.WaitHandle.WaitOne();
-										}
-										else
-										{
-											break;
+											if (r.ReadLine() == "OK")
+											{
+												salidaPipeSvc = w;
+												CargarCalibrado();
+												throw new NotImplementedException();
+												cerrarPipeSvc.Token.WaitHandle.WaitOne();
+											}
+											else
+											{
+												break;
+											}
 										}
 									}
 								}
 							}
-							
+							catch
+							{
+								cerrarPipeSvc.Cancel();
+							}
 							if (salidaPipeSvc != null)
 							{
 								salidaPipeSvc.Close();
@@ -111,7 +120,7 @@ namespace Launcher
 				}
 				cerrarPipeSvc.Dispose();
 				cerrarPipeSvc = null;
-			});
+			}).ContinueWith((ret) => EvtSalir.Invoke(null, null), TaskScheduler.FromCurrentSynchronizationContext());
 
 			return true;
 		}
@@ -202,7 +211,7 @@ namespace Launcher
 			{
 				if (salidaPipeSvc != null)
 				{
-					byte[] buff = { (byte)TipoMsj.Calibrado, (msj.IndexOf("True") != -1) ? (byte)1 : (byte)0 };
+					byte[] buff = { (byte)TipoMsj.ModoCalibrado, (msj.IndexOf("True") != -1) ? (byte)1 : (byte)0 };
 					salidaPipeSvc.Write(buff, 0, 2);
 					salidaPipeSvc.Flush();
 				}

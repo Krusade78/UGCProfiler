@@ -28,28 +28,31 @@ public:
 	{
 		struct
 		{
-			UCHAR TamIndices;
 			UINT16 Indices[15];
+			UCHAR TamIndices;
+			UCHAR Reservado;//padding
 		} MapaBotones[4][2][3][16]; // el ultimo es la rueda
 		struct
 		{
-			UCHAR TamIndices;
 			UINT16 Indices[15];
+			UCHAR TamIndices;
+			UCHAR Reservado;//padding
 		} MapaSetas[4][2][3][32];
 		struct
 		{
+			UINT16 Indices[16];
 			UCHAR SensibilidadRaton;
 			UCHAR JoySalida;
 			UCHAR TipoEje; 				//Mapeado en bits 0:ninguno, 1:Normal, 10:Invertido, 100:Mini, 1000:Raton, 10000:Incremental, 100000: Bandas
 			UCHAR Eje;					//0:X, Y, Z, Rx, Ry, Rz, Sl1, Sl2
 			UCHAR Sensibilidad[10];     // Curva de sernsibilidad
 			UCHAR Bandas[15];
-			UINT16 Indices[16];
+			UCHAR Reservado; //padding
 			UCHAR ResistenciaInc;
 			UCHAR ResistenciaDec;
 		} MapaEjes[4][2][3][8];
 
-		std::deque<std::deque<PEV_COMANDO>*>* Acciones;
+		std::deque<CPaqueteEvento*>* Acciones;
 
 		UCHAR TickRaton;
 
@@ -101,8 +104,6 @@ public:
 	ESTADO* GetEstado() { return &estado; }
 	void UnlockEstado() { ReleaseMutex(hMutexEstado); }
 
-	void RegistarNotificacion(void* ev, bool colaEv) { colaEv ? pColaEv = ev : pColaSalida = ev; }
-
 private:
 	HANDLE hMutexPrograma = nullptr;
 	HANDLE hMutexCalibrado = nullptr;
@@ -116,9 +117,6 @@ private:
 	bool perfilNuevoIn = false;
 	bool resetComandos = false;
 	
-	void* pColaEv = nullptr;
-	void* pColaSalida = nullptr;
-
 	void LimpiarPerfil();
 };
 

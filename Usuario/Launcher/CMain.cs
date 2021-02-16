@@ -15,6 +15,7 @@ namespace Launcher
             servicio = new CServicio();
             if (servicio.Iniciar())
             {
+                servicio.EvtSalir += Servicio_EvtSalir;
                 notifyIcon = new NotifyIcon
                 {
                     Icon = new Icon(App.GetResourceStream(new Uri("/res/Launcher.ico", UriKind.Relative)).Stream),
@@ -22,6 +23,13 @@ namespace Launcher
                 };
                 notifyIcon.Click += NotifyIcon_Click;
             }
+        }
+
+        private static void Servicio_EvtSalir(object sender, ResolveEventArgs e)
+        {
+            notifyIcon?.Dispose();
+            servicio?.Dispose();
+            App.Current.Shutdown();
         }
 
         private static void NotifyIcon_Click(object sender, EventArgs e)

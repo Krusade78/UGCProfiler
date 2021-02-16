@@ -40,8 +40,7 @@ public:
 	static const unsigned char MfdFecha = 49;
 
 	static const unsigned char Reservado_DxPosicion = 100;
-	static const unsigned char Reservado_EstadoHoldNormal = 101;
-	static const unsigned char Reservado_EstadoHoldEje = 102;
+	static const unsigned char Reservado_CheckHold = 101;
 	//Reservado_RepeatIni;
 
 	static const unsigned char Soltar = 128;

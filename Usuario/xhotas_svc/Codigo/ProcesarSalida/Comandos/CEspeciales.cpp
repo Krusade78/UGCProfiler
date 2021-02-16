@@ -99,7 +99,7 @@ bool CEspeciales::EstaHold(CPerfil* pPerfil, PEV_COMANDO comando)
 
 	pPerfil->LockEstado(); 
 	{
-		if ((comando->Dato & 128) == 128) //eje
+		if ((comando->Extendido.Origen & 128) == 128) //eje
 		{
 			UCHAR modo = pPerfil->GetEstado()->Modos;
 			UCHAR pinkie = pPerfil->GetEstado()->Pinkie;
@@ -109,7 +109,7 @@ bool CEspeciales::EstaHold(CPerfil* pPerfil, PEV_COMANDO comando)
 		}
 		else
 		{
-			if ((comando->Dato & 64) == 64) //seta
+			if ((comando->Extendido.Origen & 64) == 64) //seta
 			{
 				pulsado = pPerfil->GetEstado()->SetasDx[comando->Extendido.JoyId][(comando->Extendido.Origen & 63) / 8] != 0;
 			}

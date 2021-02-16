@@ -71,9 +71,9 @@ namespace Editor
             }
             for (byte m = 0; m < 3; m++)
             {
-                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, 0, m, 6).TamIndices = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 0, m, 6, 0).idAccion = idAccion;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 0, m, 6, 1).idAccion = 0;
+                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, 0, m, 3).TamIndices = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 0, m, 3, 0).idAccion = idAccion;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 0, m, 3, 1).idAccion = 0;
             }
 
             //'off
@@ -104,9 +104,9 @@ namespace Editor
             }
             for (byte m = 0; m < 3; m++)
             {
-                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, 1, m, 6).TamIndices = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 1, m, 6, 0).idAccion = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 1, m, 6, 1).idAccion = idAccion;
+                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, 1, m, 3).TamIndices = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 1, m, 3, 0).idAccion = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 1, m, 3, 1).idAccion = idAccion;
             }
         }
 
@@ -146,9 +146,9 @@ namespace Editor
                 {
                     for (byte m = 0; m < 3; m++)
                     {
-                        padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, p, m, (byte)(7 + modo)).TamIndices = 0;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(7 + modo), 0).idAccion = idAccion;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(7 + modo), 1).idAccion = 0;
+                        padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, p, m, (byte)(5 + modo)).TamIndices = 0;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(5 + modo), 0).idAccion = idAccion;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(5 + modo), 1).idAccion = 0;
                     }
                 }
             }

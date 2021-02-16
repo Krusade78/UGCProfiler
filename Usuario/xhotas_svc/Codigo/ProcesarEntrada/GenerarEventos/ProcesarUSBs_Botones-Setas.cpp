@@ -54,12 +54,19 @@ void CBotonesSetas::SoltarBoton(CPerfil* pPerfil, TipoJoy tipo, UCHAR idx)
 		{
 			UINT16 accionId = pdevExt->MapaBotones[joy][pinkie][modos][idx].Indices[1];
 			pPerfil->FinLecturaPr();
-
-			CGenerarEventos::Comando(tipo, accionId, idx, CGenerarEventos::Origen::Boton, nullptr);
+			if (accionId == 0)
+			{
+				CGenerarEventos::CheckHolds();
+			}
+			else
+			{
+				CGenerarEventos::Comando(tipo, accionId, idx, CGenerarEventos::Origen::Boton, nullptr);
+			}
 		}
 		else
 		{
 			pPerfil->FinLecturaPr();
+			CGenerarEventos::CheckHolds();
 		}
 	}
 }
@@ -116,12 +123,19 @@ void CBotonesSetas::SoltarSeta(CPerfil* pPerfil, TipoJoy tipo, UCHAR idx)
 		{
 			UINT16 accionId = pdevExt->MapaSetas[joy][pinkie][modos][idx].Indices[1];
 			pPerfil->FinLecturaPr();
-
-			CGenerarEventos::Comando(tipo, accionId, idx, CGenerarEventos::Origen::Seta, nullptr);
+			if (accionId == 0)
+			{
+				CGenerarEventos::CheckHolds();
+			}
+			else
+			{
+				CGenerarEventos::Comando(tipo, accionId, idx, CGenerarEventos::Origen::Seta, nullptr);
+			}
 		}
 		else
 		{
 			pPerfil->FinLecturaPr();
+			CGenerarEventos::CheckHolds();
 		}
 	}
 }

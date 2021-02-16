@@ -32,8 +32,8 @@ namespace Calibrator
                 {
                     limites[j,i].Cal = 0;
                     limites[j,i].Cen = 0;
-                    limites[j,i].Izq = -32767;
-                    limites[j,i].Der = 32767;
+                    limites[j,i].Izq = -7;
+                    limites[j,i].Der = 7;
                     jitter[j,i].Antiv = 0;
                     jitter[j,i].Margen = 0;
                     jitter[j,i].Resistencia = 0;

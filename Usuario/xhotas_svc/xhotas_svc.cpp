@@ -50,11 +50,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	if (coms->Iniciar())
 	{
 		CColaEventos* colaEv = new CColaEventos();
-		perfil->RegistarNotificacion(colaEv, true);
 		CSalidaHID* salida = new CSalidaHID(perfil, colaEv);
 		if (salida->Iniciar())
 		{
-			perfil->RegistarNotificacion(salida, false);
 			CEntradaHID* entrada = new CEntradaHID(perfil, colaEv);
 			if (entrada->Iniciar(hInstance))
 			{
@@ -66,9 +64,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		delete coms;
 		delete salida;
-		perfil->RegistarNotificacion(nullptr, false);
 		delete colaEv;
-		perfil->RegistarNotificacion(nullptr, true);
 	}
 	else
 	{

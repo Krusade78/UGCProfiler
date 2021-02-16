@@ -1,7 +1,7 @@
 #include "../framework.h"
 #include "EscribirUSBX52.h"
 
-CX52Salida* CX52Salida::pLocal;
+CX52Salida* CX52Salida::pLocal = nullptr;
 
 CX52Salida::CX52Salida()
 {
@@ -14,6 +14,7 @@ CX52Salida::CX52Salida()
 
 CX52Salida::~CX52Salida()
 {
+	pLocal = nullptr;
 	WaitForSingleObject(semCola, INFINITE);
 	{
 		while (!cola.empty())

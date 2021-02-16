@@ -2,7 +2,7 @@
 #include "MenuMFD.h"
 #include "EscribirUSBX52.h"
 
-CMenuMFD* CMenuMFD::pLocal;
+CMenuMFD* CMenuMFD::pLocal = nullptr;
 
 CMenuMFD::CMenuMFD()
 {
@@ -11,6 +11,9 @@ CMenuMFD::CMenuMFD()
 	LeerConfiguracion();
 	menuMFD.TimerMenu = CreateThreadpoolTimer(EvtTickMenu, this, NULL);
 	menuMFD.TimerHora = CreateThreadpoolTimer(EvtTickHora, this, NULL);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Global(&menuMFD.LuzGlobal);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_MFD(&menuMFD.LuzMFD);
+
 
 	LARGE_INTEGER t{};
 	t.QuadPart = -40000000LL; //4 segundos
@@ -22,6 +25,7 @@ CMenuMFD::CMenuMFD()
 
 CMenuMFD::~CMenuMFD()
 {
+	pLocal = nullptr;
 	SetThreadpoolTimer(menuMFD.TimerHora, NULL, 0, 0);
 	CloseThreadpoolTimer(menuMFD.TimerHora);
 	SetThreadpoolTimer(menuMFD.TimerMenu, NULL, 0, 0);
@@ -35,11 +39,11 @@ CMenuMFD::~CMenuMFD()
 void CMenuMFD::SetTextoInicio()
 {
 	UCHAR fila1[] = "\x01  Saitek X-52";
-	CX52Salida::Get()->Set_Texto(fila1, static_cast<BYTE>(strnlen_s((char*)fila1, 17)));
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila1, static_cast<BYTE>(strnlen_s((char*)fila1, 17)));
 	UCHAR fila2[] = "\x02  Driver v9.0";
-	CX52Salida::Get()->Set_Texto(fila2, static_cast<BYTE>(strnlen_s((char*)fila2, 17)));
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila2, static_cast<BYTE>(strnlen_s((char*)fila2, 17)));
 	UCHAR fila3[] = "\x03 ";
-	CX52Salida::Get()->Set_Texto(fila3, static_cast<BYTE>(strnlen_s((char*)fila3, 17)));
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila3, static_cast<BYTE>(strnlen_s((char*)fila3, 17)));
 }
 
 #pragma region "Configuración"
@@ -149,11 +153,11 @@ void CALLBACK CMenuMFD::EvtTickHora(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Ino
 		if (local->menuMFD.FechaActivada)
 		{
 			bf[0] = 1; bf[1] = (UCHAR)ahora.wDay;
-			CX52Salida::Get()->Set_Fecha(bf);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Fecha(bf);
 			bf[0] = 2; bf[1] = (UCHAR)ahora.wMonth;
-			CX52Salida::Get()->Set_Fecha(bf);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Fecha(bf);
 			bf[0] = 3; bf[1] = (UCHAR)(ahora.wYear % 100);
-			CX52Salida::Get()->Set_Fecha(bf);
+			if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Fecha(bf);
 		}
 
 		if (local->menuMFD.HoraActivada)
@@ -175,11 +179,11 @@ void CALLBACK CMenuMFD::EvtTickHora(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Ino
 			bf[2] = (UCHAR)ahora.wMinute;
 			if (local->menuMFD.Hora[0]._24h)
 			{
-				CX52Salida::Get()->Set_Hora24(bf);
+				if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora24(bf);
 			}
 			else
 			{
-				CX52Salida::Get()->Set_Hora(bf);
+				if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora(bf);
 			}
 		}
 	}
@@ -194,9 +198,9 @@ void CALLBACK CMenuMFD::EvtTickMenu(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Ino
 
 		local->menuMFD.Activado = true;
 		local->menuMFD.TimerEsperando = false;
-		CX52Salida::Get()->Luz_Info(&param);
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Info(&param);
 		param = 2;
-		CX52Salida::Get()->Luz_MFD(&param);
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_MFD(&param);
 		local->menuMFD.EstadoBotones = 0;
 		local->menuMFD.EstadoCursor = 0;
 		local->menuMFD.EstadoPagina = 0;
@@ -300,7 +304,7 @@ void CMenuMFD::CambiarEstado(UCHAR boton)
 				break;
 			case 2: // luz global
 				menuMFD.LuzGlobal = menuMFD.EstadoCursor;
-				CX52Salida::Get()->Luz_Global(&menuMFD.LuzGlobal);
+				if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Global(&menuMFD.LuzGlobal);
 				menuMFD.EstadoCursor = 1;
 				menuMFD.EstadoPagina = 0;
 				VerPantalla1();
@@ -349,11 +353,11 @@ void CMenuMFD::CambiarEstado(UCHAR boton)
 					}
 					if (menuMFD.Hora[1]._24h)
 					{
-						CX52Salida::Get()->Set_Hora24(buffer);
+						if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora24(buffer);
 					}
 					else
 					{
-						CX52Salida::Get()->Set_Hora24(buffer);
+						if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora24(buffer);
 					}
 
 					menuMFD.EstadoPagina = 5;
@@ -377,11 +381,11 @@ void CMenuMFD::CambiarEstado(UCHAR boton)
 					}
 					if (menuMFD.Hora[2]._24h)
 					{
-						CX52Salida::Get()->Set_Hora24(buffer);
+						if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora24(buffer);
 					}
 					else
 					{
-						CX52Salida::Get()->Set_Hora24(buffer);
+						if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Hora24(buffer);
 					}
 					menuMFD.EstadoPagina = 6;
 					VerPantallaHora(false, (CHAR)(menuMFD.Hora[2].Minutos / 60), (((menuMFD.Hora[2].Minutos < 0) ? -1 : 1) * menuMFD.Hora[2].Minutos) % 60, menuMFD.Hora[2]._24h);
@@ -542,17 +546,17 @@ void CMenuMFD::MenuCerrar()
 {
 	//Limpiar pantalla
 	UCHAR fila[2] = { 1, 0 };
-	CX52Salida::Get()->Set_Texto(fila, 2);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila, 2);
 	fila[0] = 2;
-	CX52Salida::Get()->Set_Texto(fila, 2);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila, 2);
 	fila[0] = 3;
-	CX52Salida::Get()->Set_Texto(fila, 2);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila, 2);
 
 	//Apagar luz
 	fila[0] = 0;
-	CX52Salida::Get()->Luz_Info(&fila[0]);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Info(&fila[0]);
 
-	CX52Salida::Get()->Luz_MFD(&menuMFD.LuzMFD);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_MFD(&menuMFD.LuzMFD);
 
 	GuardarConfiguracion();
 	menuMFD.Activado = false;
@@ -589,7 +593,7 @@ void  CMenuMFD::VerPantalla1()
 
 		buffer[0] = i + 1;
 
-		CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 17);
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 17);
 	}
 }
 
@@ -617,10 +621,10 @@ void CMenuMFD::VerPantallaOnOff()
 			buffer[c + 1] = texto[c];
 		}
 		buffer[0] = i + 1;
-		CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 9);
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 9);
 	}
 	f1[0] = 3; //file 3 vacía
-	CX52Salida::Get()->Set_Texto((UCHAR*)f1, 1);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto((UCHAR*)f1, 1);
 }
 
 void CMenuMFD::VerPantallaLuz(UCHAR estado)
@@ -649,7 +653,7 @@ void CMenuMFD::VerPantallaLuz(UCHAR estado)
 		}
 		buffer[0] = (i + 1);
 
-		CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 11);
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 11);
 	}
 }
 
@@ -683,7 +687,7 @@ void CMenuMFD::VerPantallaHora(bool sel, CHAR hora, UCHAR minuto, bool h24)
 			buffer[c + 1] = texto[c];
 		}
 
-		CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 12);
+		if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto((UCHAR*)buffer, 12);
 	}
 }
 #pragma endregion

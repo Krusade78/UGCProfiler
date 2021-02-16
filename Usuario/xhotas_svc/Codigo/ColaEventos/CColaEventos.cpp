@@ -1,6 +1,8 @@
 #include "../framework.h"
 #include "CColaEventos.h"
 
+CColaEventos* CColaEventos::pNotificaciones = nullptr;
+
 CColaEventos::CColaEventos()
 {
 	mutexCola = CreateMutex(NULL, false, NULL);
@@ -9,6 +11,7 @@ CColaEventos::CColaEventos()
 
 CColaEventos::~CColaEventos()
 {
+	pNotificaciones = nullptr;
 	HANDLE old = mutexCola;
 	InterlockedExchangePointer(&mutexCola, nullptr);
 	WaitForSingleObject(old, INFINITE);

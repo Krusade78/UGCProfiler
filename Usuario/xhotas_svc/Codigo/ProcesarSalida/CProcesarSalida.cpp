@@ -7,8 +7,11 @@
 #include "Comandos/CX52.h"
 #include "Comandos/CEspeciales.h"
 
+CProcesarSalida* CProcesarSalida::pNotificaciones = nullptr;
+
 CProcesarSalida::CProcesarSalida(CPerfil* pPerfil, CVirtualHID* pVhid)
 {
+	pNotificaciones = this;
 	this->pPerfil = pPerfil;
 	this->pVhid = pVhid;
 	hEvColaVacia_SoloHolds = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -18,6 +21,7 @@ CProcesarSalida::CProcesarSalida(CPerfil* pPerfil, CVirtualHID* pVhid)
 
 CProcesarSalida::~CProcesarSalida()
 {
+	pNotificaciones = nullptr;
 	LimpiarEventos();
 	CloseThreadpoolTimer(hRatonTimer);
 	CloseHandle(hWaitLockEventos);
@@ -131,6 +135,10 @@ void CProcesarSalida::ProcesarRequest()
 						CDirectX::Posicion(comando, pVhid);
 						borrado = true;
 					}
+					if (comando->Tipo == TipoComando::Reservado_CheckHold)
+					{
+						borrado = true;
+					}
 					else if ((comando->Tipo & 0x7f) == TipoComando::DxBoton)
 					{
 						ncmds = true;
@@ -151,7 +159,6 @@ void CProcesarSalida::ProcesarRequest()
 					}
 					else if (comando->Tipo == TipoComando::Modo) //Cambio modo
 					{
-						ncmds = true;
 						pPerfil->LockEstado();
 						{
 							pPerfil->GetEstado()->Modos = comando->Dato;
@@ -161,7 +168,6 @@ void CProcesarSalida::ProcesarRequest()
 					}
 					else if (comando->Tipo == TipoComando::Pinkie) //Cambio modo Pinkie
 					{
-						ncmds = true;
 						pPerfil->LockEstado();
 						{
 							pPerfil->GetEstado()->Pinkie = comando->Dato;
@@ -249,12 +255,13 @@ void APIENTRY CProcesarSalida::EvtTickRaton(_Inout_ PTP_CALLBACK_INSTANCE Instan
 			if (local->pVhid->Estado.Raton.X < 0)
 			{
 				comando.Tipo = TipoComando::RatonIzq;
+				comando.Dato = -local->pVhid->Estado.Raton.X;
 			}
 			else
 			{
 				comando.Tipo = TipoComando::RatonDer;
+				comando.Dato = local->pVhid->Estado.Raton.X;
 			}
-			comando.Dato = local->pVhid->Estado.Raton.X;
 			enviar = true;
 		}
 	}
@@ -272,12 +279,13 @@ void APIENTRY CProcesarSalida::EvtTickRaton(_Inout_ PTP_CALLBACK_INSTANCE Instan
 			if (local->pVhid->Estado.Raton.Y < 0)
 			{
 				comando.Tipo = TipoComando::RatonArr;
+				comando.Dato = -local->pVhid->Estado.Raton.Y;
 			}
 			else
 			{
 				comando.Tipo = TipoComando::RatonAba;
+				comando.Dato = local->pVhid->Estado.Raton.Y;
 			}
-			comando.Dato = local->pVhid->Estado.Raton.Y;
 			enviar = true;
 		}
 	}

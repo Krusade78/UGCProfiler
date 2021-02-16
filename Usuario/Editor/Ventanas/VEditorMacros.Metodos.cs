@@ -1143,7 +1143,7 @@ namespace Editor
 
             List<ushort> bloque = new List<ushort>
             {
-                (ushort)((byte)TipoComando.TipoComando_MfdTextoIni + ((ushort)NumericUpDown9.Value << 8))
+                (ushort)((byte)TipoComando.TipoComando_MfdTextoIni + ((ushort)NumericUpDown9.Valor << 8))
             };
             String st = TextBox3.Text.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
             byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st));
@@ -1159,7 +1159,7 @@ namespace Editor
         {
             if (GetCuenta() > 235)
                 return;
-            if ((NumericUpDown10.Value < 0) && (NumericUpDown7.Value == 1))
+            if ((NumericUpDown10.Valor < 0) && (NumericUpDown7.Valor == 1))
             {
                 MessageBox.Show("El reloj 1 no puede tener horas negativas.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
@@ -1167,15 +1167,15 @@ namespace Editor
 
             ushort[] bloque = new ushort[3];
             TipoComando tipo = (f24h) ? TipoComando.TipoComando_MfdHora24 : TipoComando.TipoComando_MfdHora;
-            bloque[0] =(ushort)((byte)tipo + ((ushort)NumericUpDown7.Value << 8));
-            if (NumericUpDown7.Value == 1)
+            bloque[0] =(ushort)((byte)tipo + ((ushort)NumericUpDown7.Valor << 8));
+            if (NumericUpDown7.Valor == 1)
             {
-                bloque[1] = (ushort)((byte)tipo + ((ushort)NumericUpDown10.Value << 8));
-                bloque[2] = (ushort)((byte)tipo + ((ushort)NumericUpDown11.Value << 8));
+                bloque[1] = (ushort)((byte)tipo + ((ushort)NumericUpDown10.Valor << 8));
+                bloque[2] = (ushort)((byte)tipo + ((ushort)NumericUpDown11.Valor << 8));
             }
             else
             {
-                int minutos = (int)((NumericUpDown10.Value * 60) + NumericUpDown11.Value);
+                int minutos = (int)((NumericUpDown10.Valor * 60) + NumericUpDown11.Valor);
                 if (minutos < 0)
                 {
                     bloque[1] = (ushort)((byte)tipo + ((((ushort)-minutos >> 8) + 4) << 8) );
@@ -1195,7 +1195,7 @@ namespace Editor
             if (GetCuenta() > 236) return;
             ushort[] bloque = new ushort[2];
             bloque[0] = (ushort)((byte)TipoComando.TipoComando_MfdFecha + (f << 8));
-            bloque[1] = (ushort)((byte)TipoComando.TipoComando_MfdFecha + ((ushort)NumericUpDown13.Value << 8));
+            bloque[1] = (ushort)((byte)TipoComando.TipoComando_MfdFecha + ((ushort)NumericUpDown13.Valor << 8));
             Insertar(bloque, false);
         }
         #endregion
