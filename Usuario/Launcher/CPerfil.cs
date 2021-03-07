@@ -60,7 +60,7 @@ namespace Launcher
             #region "Mapeado"
             {
                 const int TAM_TEXTO_MFD = 17;
-                const int TAM_MAPAEJES = ((16 * 2) + 1 + 1 + 1 + 1 + 10 + 15 + (1) + 1 + 1) * (4 * 2 * 3 * 8);
+                const int TAM_MAPAEJES = ((16 * 2) + 1 + 1 + 1 + 1 + 10 + 1 + 15 + 1 + 1) * (4 * 2 * 3 * 8);
                 const int TAM_MAPABOTONES = ((15 * 2) + 1 + (1)) * (4 * 2 * 3 * 16);
                 const int TAM_MAPASETAS = ((15 * 2) + 1 + (1)) * (4 * 2 * 3 * 32);
                 byte[] bufferMapa = new byte[1 + TAM_TEXTO_MFD + 1 + TAM_MAPAEJES + TAM_MAPABOTONES + TAM_MAPASETAS];
@@ -172,12 +172,13 @@ namespace Launcher
                                     bufferMapa[pos] = sens;
                                     pos++;
                                 }
+                                bufferMapa[pos] = datos.Slider;
+                                pos++;
                                 foreach (byte banda in datos.Bandas)
                                 {
                                     bufferMapa[pos] = banda;
                                     pos++;
                                 }
-                                pos++; //reservado
                                 bufferMapa[pos] = datos.ResistenciaInc;
                                 pos++;
                                 bufferMapa[pos] = datos.ResistenciaDec;

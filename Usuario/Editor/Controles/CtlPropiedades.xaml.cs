@@ -56,6 +56,16 @@ namespace Editor
                 padre.GetDatos().Modificado = true;
         }
 
+        private void ButtonCopiaDe_Click(object sender, RoutedEventArgs e)
+        {
+            VCopiaDe dlg = new VCopiaDe(idActual)
+            {
+                Owner = App.Current.MainWindow
+            };
+            if (dlg.ShowDialog() == true)
+                padre.GetDatos().Modificado = true;
+        }
+
         private void NumericUpDownMSensibility_TextChanged(object sender, EventArgs e)
         {
             if (this.IsLoaded && eventos)

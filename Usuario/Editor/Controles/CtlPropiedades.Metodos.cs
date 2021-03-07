@@ -6,7 +6,7 @@ namespace Editor
 {
     internal partial class CtlPropiedades : UserControl
     {
-        private MainWindow padre;
+        private readonly MainWindow padre;
         private byte idActual = 0;
         private Tipo tipoActual;
         private bool eventos = true;

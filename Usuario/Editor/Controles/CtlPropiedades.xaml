@@ -43,8 +43,14 @@
                     <local:CtlNumUpDown x:Name="nudJoy" Maximum="3" Minimum="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,32,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="35" Height="23" />
                     <CheckBox x:Name="CheckBoxInverted" Content="Invertido" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" VerticalContentAlignment="Center" Foreground="Gainsboro" Checked="CheckBoxInverted_Checked" Unchecked="CheckBoxInverted_Checked" />
                 </Grid>
-                <Button x:Name="ButtonSensibility" Content="Curva sensibilidad" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,61,0,0" Padding="10,2" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonSensibility_Click" />
-
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,61,0,0" >
+                    <Button x:Name="ButtonSensibility" Content="Curva sensibilidad" Padding="10,2" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonSensibility_Click" />
+                    <Button x:Name="ButtonCopiarDe" ToolTip="Copiar de..." Margin="5,0,0,0" Background="#FFFFDB7A" Click="ButtonCopiaDe_Click" VerticalAlignment="Top">
+                        <Viewbox Height="12" Width="12">
+                            <Path Stroke="#FF762626" Data="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                        </Viewbox>
+                    </Button>
+                </StackPanel>
                 <Label x:Name="LabelMSensibility" Content="Sensibilidad ratón:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,87,0,0" Foreground="Gainsboro" />
                 <local:CtlNumUpDown x:Name="NumericUpDownMSensibility" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,88,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Maximum="250" Minimum="1" Width="49" Height="21" ValueChanged="NumericUpDownMSensibility_TextChanged" />
 

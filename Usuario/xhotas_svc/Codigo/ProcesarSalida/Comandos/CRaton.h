@@ -7,6 +7,6 @@ class CRaton
 public:
 	static bool Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer);
 private:
-	static bool EnviarSalida(CVirtualHID* pVHid);
+	static bool EnviarSalida(CVirtualHID* pVHid, bool ejeX, bool ejeY);
 };
 

@@ -146,9 +146,9 @@ namespace Editor
                 {
                     for (byte m = 0; m < 3; m++)
                     {
-                        padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, p, m, (byte)(5 + modo)).TamIndices = 0;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(5 + modo), 0).idAccion = idAccion;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(5 + modo), 1).idAccion = 0;
+                        padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, p, m, (byte)(4 + modo)).TamIndices = 0;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(4 + modo), 0).idAccion = idAccion;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(4 + modo), 1).idAccion = 0;
                     }
                 }
             }

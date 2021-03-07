@@ -186,11 +186,11 @@ NTSTATUS EnviarOrden(_In_ WDFDEVICE device, _In_ UCHAR* params, _In_ UCHAR npara
 
 	PAGED_CODE();
 
-	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-	attributes.ParentObject = GetDeviceContext(device)->SalidaX52.Ordenes;
-
 	WdfWaitLockAcquire(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes, NULL);
 	{
+		WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+		attributes.ParentObject = GetDeviceContext(device)->SalidaX52.Ordenes;
+
 		UCHAR procesados = 0;
 		BOOLEAN crearHilo = (WdfCollectionGetCount(GetDeviceContext(device)->SalidaX52.Ordenes) == 0);
 		for (procesados = 0; procesados < nparams; procesados++)
@@ -218,6 +218,15 @@ NTSTATUS EnviarOrden(_In_ WDFDEVICE device, _In_ UCHAR* params, _In_ UCHAR npara
 		if (crearHilo && NT_SUCCESS(status))
 		{
 			HANDLE hilo;
+			if (GetDeviceContext(device)->SalidaX52.Hilo != NULL)
+			{
+				PVOID hiloAntiguo = GetDeviceContext(device)->SalidaX52.Hilo;
+				ObReferenceObject(hiloAntiguo);
+				WdfWaitLockRelease(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes);
+				KeWaitForSingleObject(hiloAntiguo, Executive, KernelMode, FALSE, NULL);
+				ObDereferenceObject(hiloAntiguo);
+				WdfWaitLockAcquire(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes, NULL);
+			}
 			status = PsCreateSystemThread(&hilo, (ACCESS_MASK)0, NULL, (HANDLE)NULL, NULL, EnviarOrdenHilo, GetDeviceContext(device));
 			if (NT_SUCCESS(status))
 			{
@@ -260,8 +269,6 @@ VOID EnviarOrdenHilo(PVOID context)
 			if (WdfCollectionGetCount(devExt->SalidaX52.Ordenes) == 0)
 			{
 				salir = TRUE;
-				ObDereferenceObject(devExt->SalidaX52.Hilo);
-				devExt->SalidaX52.Hilo = NULL;
 			}
 		}
 		WdfWaitLockRelease(devExt->SalidaX52.WaitLockOrdenes);
@@ -280,13 +287,19 @@ VOID EnviarOrdenHilo(PVOID context)
 		}
 	}
 
+	WdfWaitLockAcquire(devExt->SalidaX52.WaitLockOrdenes, NULL);
+	{
+		ObDereferenceObject(devExt->SalidaX52.Hilo);
+		devExt->SalidaX52.Hilo = NULL;
+	}
+	WdfWaitLockRelease(devExt->SalidaX52.WaitLockOrdenes);
 	PsTerminateSystemThread(STATUS_SUCCESS);
 }
 
 VOID LimpiarSalidaX52(WDFOBJECT  Object)
 {
 	WDFDEVICE device = (WDFDEVICE)Object;
-	PETHREAD philo = NULL;
+	PVOID philo = NULL;
 
 	PAGED_CODE();
 

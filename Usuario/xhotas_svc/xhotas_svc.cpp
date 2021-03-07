@@ -57,7 +57,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			if (entrada->Iniciar(hInstance))
 			{
 				coms->SetHwnd(entrada->GetHwnd());
-				mfd->SetTextoInicio();
 				entrada->LoopWnd();
 			}
 			delete entrada;

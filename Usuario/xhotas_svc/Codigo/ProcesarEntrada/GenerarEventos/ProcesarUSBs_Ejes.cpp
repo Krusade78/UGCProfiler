@@ -4,13 +4,11 @@
 
 void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DATA viejo, PVHID_INPUT_DATA entrada)
 {
+	const INT16 stope = 32767;
+	const UINT16 stopeSl = 65535;
 	UCHAR tipo = static_cast<UCHAR>(tipoJ);
 	UCHAR idx;
 	LONG x;
-	UCHAR pos;
-	UCHAR sy1;
-	UCHAR sy2;
-
 	UCHAR pinkie;
 	UCHAR modos;
 	pPerfil->LockEstado();
@@ -26,28 +24,40 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 	//Sensibilidad
 	for (idx = 0; idx < 8; idx++)
 	{
-		const INT16 stope = 32767;
-
+		UCHAR sy1;
+		UCHAR sy2;
 		x = entrada->Ejes[idx];
-		if (x == 0)
+
+		bool slider = false;
+		pPerfil->InicioLecturaPr();
+		{
+			slider = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Slider;
+		}
+		pPerfil->FinLecturaPr();
+		if (!slider && (x == 0))
 		{
 			continue;
 		}
+		bool izq = (x < 0);
+		x = slider ? (x + stope) : ((izq) ? - x : x);
+		UCHAR pos = slider ? (UCHAR)((x * 10) / stopeSl) : (UCHAR)((x * 10) / (stope + 1));
+		pPerfil->InicioLecturaPr();
+		{
+			sy1 = (pos == 0) ? 0 : pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Sensibilidad[pos - 1];
+			sy2 = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Sensibilidad[pos];
+		}
+		pPerfil->FinLecturaPr();
+		if (slider)
+		{
+			x = (x == 65534) ? ((sy2 * 65534) / 100) : ((((sy2 - sy1) * ((10 * x) - (pos * stopeSl))) + (sy1 * stopeSl))) / 100;
+			x -= stope ;
+		}
 		else
 		{
-			bool izq = (x < 0);
-			x = (izq) ? - x : x;
-			pos = (UCHAR)((x * 10) / stope);
-			pPerfil->InicioLecturaPr();
-			{
-				sy1 = (pos == 0) ? 0 : pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Sensibilidad[pos - 1];
-				sy2 = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Sensibilidad[pos];
-			}
-			pPerfil->FinLecturaPr();
-			x = ((((sy2 - sy1) * ((10 * x) - (pos * stope))) + (sy1 * stope))) / 100;
-			x = (izq) ? - x : x;
-			entrada->Ejes[idx] = static_cast<INT16>(x);
+			x = (x == stope) ? ((sy2 * stope) / 100) : ((((sy2 - sy1) * ((10 * x) - (pos * stope))) + (sy1 * stope))) / 100;
+			x = (izq) ? -x : x;
 		}
+		entrada->Ejes[idx] = static_cast<INT16>(x);
 	}
 
 	//Mapeado
@@ -76,7 +86,7 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 			salida[joy].Ejes[nEje] = entrada->Ejes[idx];
 			if ((tipoEje & 0x2) == 2) //invertido normal
 			{
-				salida[joy].Ejes[nEje] = -salida->Ejes[nEje];
+				salida[joy].Ejes[nEje] = -salida[joy].Ejes[nEje];
 			}
 			mapa[joy] |= 1 << nEje;
 		}
@@ -214,13 +224,13 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 	UCHAR idn = 255;
 	bool incremental;
 	bool bandas;
-	INT16 rango = 32767;
 
 	incremental = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 16) == 16;
 	bandas = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 32) == 32;
 
 	if (incremental)
 	{
+		const INT16 rango = 32767;
 		UINT16 vieja = pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].PosIncremental;
 		if (nueva > vieja)
 		{
@@ -249,9 +259,11 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 	}
 	else if (bandas)
 	{
+		const UINT16 rango = 65535;
 		UCHAR	bandaAntigua = pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].Banda;
 		UCHAR	bandaActual = 255;
-		INT16	posAnterior = 0;
+		UINT16	posNueva = (nueva < 0) ? static_cast<UINT16>(nueva + 32767) : static_cast<UINT16>(nueva) + 32768;
+		UINT16	posAnterior = 0;
 		UCHAR	idc;
 
 		for (idc = 0; idc < 15; idc++)
@@ -265,7 +277,7 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 				salir = true;
 			}
 
-			if ((nueva >= posAnterior) && (nueva < ((banda * rango) / 100)))
+			if ((posNueva >= posAnterior) && (posNueva < ((banda * rango) / 100)))
 			{
 				bandaActual = idc;
 				break;
@@ -274,7 +286,7 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 			{
 				break;
 			}
-			posAnterior = static_cast<UCHAR>((banda * rango) / 100);
+			posAnterior = static_cast<UINT16>((banda * rango) / 100);
 		}
 		if ((bandaActual != 255) && (bandaActual != bandaAntigua))
 		{

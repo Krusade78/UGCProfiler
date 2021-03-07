@@ -46,8 +46,8 @@ public:
 			UCHAR TipoEje; 				//Mapeado en bits 0:ninguno, 1:Normal, 10:Invertido, 100:Mini, 1000:Raton, 10000:Incremental, 100000: Bandas
 			UCHAR Eje;					//0:X, Y, Z, Rx, Ry, Rz, Sl1, Sl2
 			UCHAR Sensibilidad[10];     // Curva de sernsibilidad
+			UCHAR Slider;
 			UCHAR Bandas[15];
-			UCHAR Reservado; //padding
 			UCHAR ResistenciaInc;
 			UCHAR ResistenciaDec;
 		} MapaEjes[4][2][3][8];

@@ -19,7 +19,9 @@ private:
 
 	HANDLE mutexCola = nullptr;
 	HANDLE evCola = nullptr;
-	short tamCola = 0;
+	HANDLE evLeido = nullptr;
 	std::deque<CPaqueteEvento*> cola;
+
+	short prioridad = 0;
 };
 

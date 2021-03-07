@@ -1,7 +1,7 @@
 #include "../../framework.h"
 #include "CRaton.h"
 
-bool CRaton::EnviarSalida(CVirtualHID* pVHid)
+bool CRaton::EnviarSalida(CVirtualHID* pVHid, bool ejeX, bool ejeY)
 {
 	BYTE buffer[4];
 	bool ratonOn = FALSE;
@@ -9,6 +9,8 @@ bool CRaton::EnviarSalida(CVirtualHID* pVHid)
 	pVHid->LockRaton();
 	{
 		RtlCopyMemory(buffer, &pVHid->Estado.Raton, 4);
+		if (!ejeX) buffer[1] = 0;
+		if (!ejeY) buffer[2] = 0;
 		ratonOn = ((pVHid->Estado.Raton.X != 0) || (pVHid->Estado.Raton.Y != 0));
 	}
 	pVHid->UnlockRaton();
@@ -25,6 +27,7 @@ bool CRaton::Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer)
 {
 	bool soltar = ((comando->Tipo & TipoComando::Soltar) == TipoComando::Soltar);
 	bool procesado = true;
+	bool ejeX = false, ejeY = false;
 
 	pVHid->LockRaton();
 	{
@@ -51,6 +54,7 @@ bool CRaton::Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer)
 		}
 		else if ((comando->Tipo & 0x7f) == TipoComando::RatonIzq) //Eje -x
 		{
+			ejeX = true;
 			if (!soltar)
 				pVHid->Estado.Raton.X = -comando->Dato;
 			else
@@ -58,6 +62,7 @@ bool CRaton::Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer)
 		}
 		else if ((comando->Tipo & 0x7f) == TipoComando::RatonDer) //Eje x
 		{
+			ejeX = true;
 			if (!soltar)
 				pVHid->Estado.Raton.X = comando->Dato;
 			else
@@ -65,6 +70,7 @@ bool CRaton::Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer)
 		}
 		else if ((comando->Tipo & 0x7f) == TipoComando::RatonArr) //Eje -y
 		{
+			ejeY = true;
 			if (!soltar)
 				pVHid->Estado.Raton.Y = -comando->Dato;
 			else
@@ -72,6 +78,7 @@ bool CRaton::Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer)
 		}
 		else if ((comando->Tipo & 0x7f) == TipoComando::RatonAba) //Eje y
 		{
+			ejeY = true;
 			if (!soltar)
 				pVHid->Estado.Raton.Y = comando->Dato;
 			else
@@ -100,7 +107,7 @@ bool CRaton::Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer)
 
 	if (procesado)
 	{
-		*setTimer = EnviarSalida(pVHid);		
+		*setTimer = EnviarSalida(pVHid, ejeX, ejeY);		
 	}
 
 	return procesado;

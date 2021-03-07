@@ -35,6 +35,7 @@ namespace Editor
             TrackBar8.Value = r.Sensibilidad[7];
             TrackBar9.Value = r.Sensibilidad[8];
             TrackBar10.Value = r.Sensibilidad[9];
+            chkSlider.IsChecked = (r.Slider == 1);
         }
 
         private void Button1_Click(object sender, RoutedEventArgs e)
@@ -52,6 +53,7 @@ namespace Editor
             r.Sensibilidad[7] = (byte)TrackBar8.Value;
             r.Sensibilidad[8] = (byte)TrackBar9.Value;
             r.Sensibilidad[9] = (byte)TrackBar10.Value;
+            r.Slider = (byte)((chkSlider.IsChecked == true) ? 1 : 0);
 
             this.DialogResult = true;
             this.Close();

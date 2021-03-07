@@ -40,5 +40,5 @@ void CDirectX::Botones_Setas(PEV_COMANDO comando, CVirtualHID* pVHid)
 			pVHid->Estado.DirectX[comando->Dato & 7].Setas[(comando->Dato >> 3) / 8] = 0;
 	}
 
-	pVHid->EnviarRequestJoystick(comando->Dato & 7, &pVHid->Estado.DirectX[comando->VHid.JoyId]);
+	pVHid->EnviarRequestJoystick(comando->Dato & 7, &pVHid->Estado.DirectX[comando->Dato & 7]);
 }

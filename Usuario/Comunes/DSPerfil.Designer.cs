@@ -585,6 +585,8 @@ namespace Comunes {
             
             private global::System.Data.DataColumn columnSensibilidad;
             
+            private global::System.Data.DataColumn columnSlider;
+            
             private global::System.Data.DataColumn columnBandas;
             
             private global::System.Data.DataColumn columnResistenciaInc;
@@ -698,6 +700,14 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn SliderColumn {
+                get {
+                    return this.columnSlider;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public global::System.Data.DataColumn BandasColumn {
                 get {
                     return this.columnBandas;
@@ -757,7 +767,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public MAPAEJESRow AddMAPAEJESRow(byte idJoy, byte idPinkie, byte idModo, byte idEje, byte Mouse, byte JoySalida, byte TipoEje, byte Eje, byte[] Sensibilidad, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
+            public MAPAEJESRow AddMAPAEJESRow(byte idJoy, byte idPinkie, byte idModo, byte idEje, byte Mouse, byte JoySalida, byte TipoEje, byte Eje, byte[] Sensibilidad, byte Slider, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
                 MAPAEJESRow rowMAPAEJESRow = ((MAPAEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idJoy,
@@ -769,6 +779,7 @@ namespace Comunes {
                         TipoEje,
                         Eje,
                         Sensibilidad,
+                        Slider,
                         Bandas,
                         ResistenciaInc,
                         ResistenciaDec};
@@ -813,6 +824,7 @@ namespace Comunes {
                 this.columnTipoEje = base.Columns["TipoEje"];
                 this.columnEje = base.Columns["Eje"];
                 this.columnSensibilidad = base.Columns["Sensibilidad"];
+                this.columnSlider = base.Columns["Slider"];
                 this.columnBandas = base.Columns["Bandas"];
                 this.columnResistenciaInc = base.Columns["ResistenciaInc"];
                 this.columnResistenciaDec = base.Columns["ResistenciaDec"];
@@ -839,6 +851,8 @@ namespace Comunes {
                 base.Columns.Add(this.columnEje);
                 this.columnSensibilidad = new global::System.Data.DataColumn("Sensibilidad", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSensibilidad);
+                this.columnSlider = new global::System.Data.DataColumn("Slider", typeof(byte), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSlider);
                 this.columnBandas = new global::System.Data.DataColumn("Bandas", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBandas);
                 this.columnResistenciaInc = new global::System.Data.DataColumn("ResistenciaInc", typeof(byte), null, global::System.Data.MappingType.Element);
@@ -858,6 +872,8 @@ namespace Comunes {
                 this.columnMouse.DefaultValue = ((byte)(1));
                 this.columnEje.AllowDBNull = false;
                 this.columnSensibilidad.AllowDBNull = false;
+                this.columnSlider.AllowDBNull = false;
+                this.columnSlider.DefaultValue = ((byte)(0));
                 this.columnBandas.AllowDBNull = false;
                 this.columnResistenciaInc.AllowDBNull = false;
                 this.columnResistenciaInc.DefaultValue = ((byte)(0));
@@ -3333,6 +3349,17 @@ namespace Comunes {
                 }
                 set {
                     this[this.tableMAPAEJES.SensibilidadColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public byte Slider {
+                get {
+                    return ((byte)(this[this.tableMAPAEJES.SliderColumn]));
+                }
+                set {
+                    this[this.tableMAPAEJES.SliderColumn] = value;
                 }
             }
             

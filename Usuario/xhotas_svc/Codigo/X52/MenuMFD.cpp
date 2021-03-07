@@ -11,9 +11,6 @@ CMenuMFD::CMenuMFD()
 	LeerConfiguracion();
 	menuMFD.TimerMenu = CreateThreadpoolTimer(EvtTickMenu, this, NULL);
 	menuMFD.TimerHora = CreateThreadpoolTimer(EvtTickHora, this, NULL);
-	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Global(&menuMFD.LuzGlobal);
-	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_MFD(&menuMFD.LuzMFD);
-
 
 	LARGE_INTEGER t{};
 	t.QuadPart = -40000000LL; //4 segundos
@@ -36,7 +33,7 @@ CMenuMFD::~CMenuMFD()
 	}
 }
 
-void CMenuMFD::SetTextoInicio()
+void CMenuMFD::SetInicio()
 {
 	UCHAR fila1[] = "\x01  Saitek X-52";
 	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila1, static_cast<BYTE>(strnlen_s((char*)fila1, 17)));
@@ -44,6 +41,9 @@ void CMenuMFD::SetTextoInicio()
 	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila2, static_cast<BYTE>(strnlen_s((char*)fila2, 17)));
 	UCHAR fila3[] = "\x03 ";
 	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila3, static_cast<BYTE>(strnlen_s((char*)fila3, 17)));
+
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_Global(&menuMFD.LuzGlobal);
+	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Luz_MFD(&menuMFD.LuzMFD);
 }
 
 #pragma region "Configuración"

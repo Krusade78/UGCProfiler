@@ -37,13 +37,12 @@ bool CEspeciales::Procesar(CPerfil* pPerfil, std::deque<CPaqueteEvento*>::iterat
 			SetThreadpoolTimer(timerHandle, &timeout, 0, 0);
 
 			*posEvento = local->GetColaEventos()->erase(*posEvento);
-			return true;
 		}
 		else
 		{
 			delete ctx;
+			return false;
 		}
-		return false;
 	}
 	else if (comando->Tipo == TipoComando::Hold) // Autorepeat hold
 	{
@@ -103,8 +102,8 @@ bool CEspeciales::EstaHold(CPerfil* pPerfil, PEV_COMANDO comando)
 		{
 			UCHAR modo = pPerfil->GetEstado()->Modos;
 			UCHAR pinkie = pPerfil->GetEstado()->Pinkie;
-			USHORT posIncremental = pPerfil->GetEstado()->Ejes[comando->Extendido.Origen][pinkie][modo][(comando->Extendido.Origen & 127)].PosIncremental;
-			UCHAR banda = pPerfil->GetEstado()->Ejes[comando->Extendido.Origen][pinkie][modo][(comando->Extendido.Origen & 127)].Banda;
+			USHORT posIncremental = pPerfil->GetEstado()->Ejes[comando->Extendido.JoyId][pinkie][modo][(comando->Extendido.Origen & 127)].PosIncremental;
+			UCHAR banda = pPerfil->GetEstado()->Ejes[comando->Extendido.JoyId][pinkie][modo][(comando->Extendido.Origen & 127)].Banda;
 			pulsado = !((comando->Extendido.Modo == modo) && (comando->Extendido.Pinkie == pinkie) && ((comando->Extendido.Incremental != posIncremental) || (comando->Extendido.Banda != banda)));
 		}
 		else

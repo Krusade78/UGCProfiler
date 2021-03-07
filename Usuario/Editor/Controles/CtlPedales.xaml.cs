@@ -19,7 +19,7 @@ namespace Editor
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(2, CEnums.Tipo.Eje, (String)EjeR.Content);
+            Vista.Ver(3, CEnums.Tipo.Eje, (String)EjeR.Content);
         }
 
         #region "ejes"

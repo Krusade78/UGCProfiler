@@ -40,7 +40,7 @@
             <TabItem x:Name="tabNXTJoy" BorderBrush="{x:Null}">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Width="150">
-                        <Image Source="/Editor;component/res/pedales.png" Height="18" />
+                        <Image Source="/Editor;component/res/nxt.png" Height="18" />
                         <TextBlock Text="Gladiator NXT" />
                     </StackPanel>
                 </TabItem.Header>

@@ -3,6 +3,7 @@
 #include <Dbt.h>
 #include <Hidsdi.h>
 #include "CEntradaHID.h"
+#include "X52/MenuMFD.h"
 
 CEntradaHID::CEntradaHID(CPerfil* perfil, CColaEventos* colaEv)
 {
@@ -298,6 +299,7 @@ bool CEntradaHID::AbrirDevices()
         }
         else
         {
+            CMenuMFD::Get()->SetInicio();
             InterlockedExchangePointer(&hdevX52, hdev);
         }
     }

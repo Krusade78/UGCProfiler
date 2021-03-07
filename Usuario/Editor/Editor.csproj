@@ -114,6 +114,9 @@
     <Compile Include="Ventanas\VEditorPinkieModos.xaml.cs">
       <DependentUpon>VEditorPinkieModos.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ventanas\VCopiarDe.xaml.cs">
+      <DependentUpon>VCopiarDe.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ventanas\VEditorPOV.xaml.cs">
       <DependentUpon>VEditorPOV.xaml</DependentUpon>
     </Compile>
@@ -183,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ventanas\VEditorPinkieModos.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ventanas\VCopiarDe.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -270,6 +277,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\pedales.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\nxt.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

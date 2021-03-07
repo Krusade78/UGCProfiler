@@ -8,7 +8,7 @@ public:
 
 	static CMenuMFD* Get() { return pLocal; }
 
-	void SetTextoInicio();
+	void SetInicio();
 	void MenuPulsarBoton(UCHAR boton);
 	void MenuSoltarBoton(UCHAR boton);
 	void SetHoraActivada(bool onoff) { menuMFD.HoraActivada = onoff; }

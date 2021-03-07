@@ -95,7 +95,6 @@ namespace Launcher
 											{
 												salidaPipeSvc = w;
 												CargarCalibrado();
-												throw new NotImplementedException();
 												cerrarPipeSvc.Token.WaitHandle.WaitOne();
 											}
 											else

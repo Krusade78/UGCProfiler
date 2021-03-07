@@ -6,7 +6,7 @@ namespace Editor
     internal partial class MainWindow
     {
         private readonly CDatos datos = new CDatos();
-        private string nombrePerfil = "";
+        private string rutaPerfil = "";
 
         internal CDatos GetDatos()
         {
@@ -38,7 +38,7 @@ namespace Editor
             rtbEdicion.IsChecked = true;
 
             this.Title = "Editor de perfiles - [Sin nombre]";
-            nombrePerfil = "";
+            rutaPerfil = "";
         }
 
         private void Abrir(String archivo = null)
@@ -77,8 +77,8 @@ namespace Editor
                     rtbEdicion.IsChecked = true;
                     cbPinkie.SelectedIndex = 0;
                     cbModo.SelectedIndex = 0;
-                    nombrePerfil = System.IO.Path.GetFileNameWithoutExtension(archivo);
-                    this.Title = "Editor de perfiles - [" + nombrePerfil + "]";
+                    rutaPerfil = archivo;
+                    this.Title = "Editor de perfiles - [" + System.IO.Path.GetFileNameWithoutExtension(archivo) + "]";
                 }
             }
         }
@@ -87,10 +87,10 @@ namespace Editor
         {
             if (datos.Perfil.GENERAL.Rows.Count == 0)
                 return true;
-            else if (nombrePerfil == "")
+            else if (rutaPerfil == "")
                 return GuardarComo();
             else
-                return datos.Guardar(nombrePerfil + ".xhp");
+                return datos.Guardar(rutaPerfil);
         }
 
         private bool GuardarComo()
@@ -106,8 +106,8 @@ namespace Editor
                 {
                     if (datos.Guardar(dlg.FileName))
                     {
-                        nombrePerfil = System.IO.Path.GetFileNameWithoutExtension(dlg.FileName);
-                        this.Title = "Editor de perfiles - [" + nombrePerfil + "]";
+                        rutaPerfil = dlg.FileName;
+                        this.Title = "Editor de perfiles - [" + System.IO.Path.GetFileNameWithoutExtension(dlg.FileName) + "]";
                         return true;
                     }
                     else
@@ -141,7 +141,7 @@ namespace Editor
                     pipeClient.Connect(1000);
                     using (System.IO.StreamWriter sw = new System.IO.StreamWriter(pipeClient))
                     {
-                        sw.Write(nombrePerfil + ".xhp");
+                        sw.Write(rutaPerfil);
                         sw.Flush();
                     }
                 }

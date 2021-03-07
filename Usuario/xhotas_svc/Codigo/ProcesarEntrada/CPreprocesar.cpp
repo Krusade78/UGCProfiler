@@ -106,7 +106,7 @@ void CPreprocesar::HIDX52(PHIDX52_INPUT_DATA hidGameData)
 	((PUCHAR)hidData_Joy.Ejes)[3] = (hidGameData->EjesXYR[2] >> 3) & 0x7;
 	((PUCHAR)hidData_Joy.Ejes)[6] = (hidGameData->EjesXYR[2] >> 6) | ((hidGameData->EjesXYR[3] & 0x3f) << 2);
 	((PUCHAR)hidData_Joy.Ejes)[7] = hidGameData->EjesXYR[3] >> 6;
-	hidData_Ace.Ejes[2] = hidGameData->Ejes[0]; //Z
+	hidData_Ace.Ejes[2] = 255 - hidGameData->Ejes[0]; //Z
 	hidData_Ace.Ejes[3] = hidGameData->Ejes[2];
 	hidData_Ace.Ejes[4] = hidGameData->Ejes[1];
 	hidData_Ace.Ejes[5] = hidGameData->Ejes[3];
