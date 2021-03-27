@@ -160,6 +160,14 @@ namespace Editor
                     else
                         return "/-- Repetir N[" + dato + "] Inicio";
                 }
+                else if (tipo == (byte)TipoComando.TipoComando_ModoPreciso)
+                {
+                    string[] ejes = new string[] { "X", "Y", "Z", "Rx", "Ry", "Rz", "Sl1", "Sl2" };
+                    if (!soltar)
+                        return $"Modo preciso J{((dato & 31) / 8) + 1} {ejes[(dato & 31) % 8]} s{(dato >> 5) + 1} On";
+                    else
+                        return $"Modo preciso J{((dato & 31) / 8) + 1} {ejes[(dato & 31) % 8]} Off";
+                }
                 else if (tipo == (byte)TipoComando.TipoComando_Modo)
                 {
                     return "Modo " + (dato + 1);
@@ -254,6 +262,25 @@ namespace Editor
                 else if (tipo == (byte)TipoComando.TipoComando_MfdFecha)
                 {
                     return "MFD Fecha " + dato + ": " + (comando[1] >> 8);
+                }
+                else if (tipo == (byte)TipoComando.TipoComando_NxtLeds)
+                {
+                    string sled = (dato == 0) ? "B1" : ((dato == 11) ? "J1" : "J2");
+                    string[] sorden = new string[] { "Off", "Cte", "It1", "It2", "It3", "Fl" };
+                    string[] smodo = new string[] { "c1", "c2", "c1c2", "c2c1", "c1+c2", "c1+", "c2+" };
+
+                    byte cmd = (byte)(comando[1] >> 8);
+                    string rgb1 = (cmd & 0x7).ToString();
+                    rgb1 += ((cmd >> 3) & 0x7).ToString();
+                    rgb1 += ((cmd >> 6) | (((comando[2] >> 8) & 0x1) << 2)).ToString();
+
+                    cmd = (byte)(comando[2] >> 8);
+                    string rgb2 = ((cmd >> 1) & 0x7).ToString();
+                    rgb2 += ((cmd >> 4) & 0x7).ToString();
+                    rgb2 += ((((comando[3] >> 8) << 1) & 0x6) | (cmd >> 7)).ToString();
+
+                    cmd = (byte)(comando[3] >> 8);
+                    return $"NXT Led {sled}: {sorden[(cmd >> 2) & 0x7]} {smodo[(cmd >> 5) & 0x7]} {rgb1} {rgb2}";
                 }
 
                 return "";

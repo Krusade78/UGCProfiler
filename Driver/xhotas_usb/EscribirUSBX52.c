@@ -1,5 +1,5 @@
 /*++
-Copyright (c) 2020 Alfredo Costalago
+Copyright (c) 2021 Alfredo Costalago
 
 Module Name:
 
@@ -26,62 +26,11 @@ Todas la funciones PASSIVE_LEVEL
 #undef _PUBLIC_
 
 #ifdef ALLOC_PRAGMA
-#pragma alloc_text(PAGE, Luz_MFD)
-#pragma alloc_text(PAGE, Luz_Global)
-#pragma alloc_text(PAGE, Luz_Info)
-#pragma alloc_text(PAGE, Set_Pinkie)
 #pragma alloc_text(PAGE, Set_Texto)
-#pragma alloc_text(PAGE, Set_Hora)
-#pragma alloc_text(PAGE, Set_Hora24)
-#pragma alloc_text(PAGE, Set_Fecha)
 #pragma alloc_text(PAGE, EnviarOrden)
 #pragma alloc_text(PAGE, EnviarOrdenHilo)
 #pragma alloc_text(PAGE, LimpiarSalidaX52)
 #endif
-
-NTSTATUS Luz_MFD(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
-{
-	UCHAR params[3];
-
-	PAGED_CODE();
-
-	params[0] = *(SystemBuffer); params[1] = 0;
-	params[2] = 0xb1;
-	return EnviarOrden(DeviceObject, params, 1);
-}
-
-NTSTATUS Luz_Global(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
-{
-	UCHAR params[3];
-
-	PAGED_CODE();
-
-	params[0] = *(SystemBuffer); params[1] = 0;
-	params[2] = 0xb2;
-	return EnviarOrden(DeviceObject, params, 1);
-}
-
-NTSTATUS Luz_Info(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
-{
-	UCHAR params[3];
-
-	PAGED_CODE();
-
-	params[0] = *(SystemBuffer)+0x50; params[1] = 0;
-	params[2] = 0xb4;
-	return EnviarOrden(DeviceObject, params, 1);
-}
-
-NTSTATUS Set_Pinkie(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
-{
-	UCHAR params[3];
-
-	PAGED_CODE();
-
-	params[0] = *(SystemBuffer)+0x50; params[1] = 0;
-	params[2] = 0xfd;
-	return EnviarOrden(DeviceObject, params, 1);
-}
 
 NTSTATUS Set_Texto(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer, _In_ size_t tamBuffer)
 {
@@ -125,58 +74,6 @@ NTSTATUS Set_Texto(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer, _In_ s
 	}
 
 	return EnviarOrden(DeviceObject, params, nparams);
-}
-
-NTSTATUS Set_Hora(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
-{
-	UCHAR params[3];
-
-	PAGED_CODE();
-
-	params[0] = (SystemBuffer)[2];
-	params[1] = (SystemBuffer)[1];
-	params[2] = *(SystemBuffer)+0xbf;
-	return EnviarOrden(DeviceObject, params, 1);
-}
-
-NTSTATUS Set_Hora24(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
-{
-	UCHAR params[3];
-
-	PAGED_CODE();
-
-	params[0] = (SystemBuffer)[2];
-	params[1] = (SystemBuffer)[1] + 0x80;
-	params[2] = *(SystemBuffer)+0xbf;
-	return EnviarOrden(DeviceObject, params, 1);
-}
-
-NTSTATUS Set_Fecha(_In_ WDFDEVICE DeviceObject, _In_ PUCHAR SystemBuffer)
-{
-	UCHAR params[3] = { 0, 0, 0 };
-
-	PAGED_CODE();
-
-	switch (SystemBuffer[0]) {
-	case 1:
-		params[2] = 0xc4;
-		params[1] = (UCHAR)(GetDeviceContext(DeviceObject)->SalidaX52.Fecha >> 8);
-		params[0] = SystemBuffer[1];
-		GetDeviceContext(DeviceObject)->SalidaX52.Fecha = *((USHORT*)params);
-		break;
-	case 2:
-		params[2] = 0xc4;
-		params[1] = SystemBuffer[1];
-		params[0] = (UCHAR)(GetDeviceContext(DeviceObject)->SalidaX52.Fecha & 0xff);
-		GetDeviceContext(DeviceObject)->SalidaX52.Fecha = *((USHORT*)params);
-		break;
-	case 3:
-		params[2] = 0xc8;
-		params[1] = 0;
-		params[0] = SystemBuffer[1];
-	}
-
-	return EnviarOrden(DeviceObject, params, 1);
 }
 
 NTSTATUS EnviarOrden(_In_ WDFDEVICE device, _In_ UCHAR* params, _In_ UCHAR nparams)

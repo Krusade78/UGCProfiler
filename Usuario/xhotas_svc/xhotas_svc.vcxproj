@@ -100,6 +100,7 @@
     <ClInclude Include="Codigo\ColaEventos\CPaqueteEventos.h" />
     <ClInclude Include="Codigo\CSalidaHID.h" />
     <ClInclude Include="Codigo\framework.h" />
+    <ClInclude Include="Codigo\NXT\EscribirHIDNXT.h" />
     <ClInclude Include="Codigo\Perfil\CPerfil.h" />
     <ClInclude Include="Codigo\ProcesarEntrada\CPreprocesar.h" />
     <ClInclude Include="Codigo\ProcesarEntrada\CProcesarNXT.h" />
@@ -131,6 +132,7 @@
     <ClCompile Include="Codigo\ColaEventos\CColaEventos.cpp" />
     <ClCompile Include="Codigo\ColaEventos\CPaqueteEventos.cpp" />
     <ClCompile Include="Codigo\CSalidaHID.cpp" />
+    <ClCompile Include="Codigo\NXT\EscribirHIDNXT.cpp" />
     <ClCompile Include="Codigo\Perfil\CPerfil.cpp" />
     <ClCompile Include="Codigo\ProcesarEntrada\CPreprocesar.cpp" />
     <ClCompile Include="Codigo\ProcesarEntrada\CProcesarNXT.cpp" />

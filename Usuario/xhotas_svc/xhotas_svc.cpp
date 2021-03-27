@@ -11,6 +11,7 @@
 #include "Codigo/CEntradaHID.h"
 #include "Codigo/X52/EscribirUSBX52.h"
 #include "Codigo/X52/MenuMFD.h"
+#include "Codigo/NXT/EscribirHIDNXT.h"
 #include <Dbt.h>
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -44,6 +45,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//Iniciar objetos
 
 	CX52Salida* x52Drv = new CX52Salida();
+	CNXTSalida* nxtDrv = new CNXTSalida();
 	CMenuMFD* mfd = new CMenuMFD();
 	CPerfil* perfil = new CPerfil();
 	CComs* coms = new CComs(perfil);
@@ -71,6 +73,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 	delete perfil;
 	delete mfd;
+	delete nxtDrv;
 	delete x52Drv;
 
 	ReleaseSemaphore(mtx, 1, NULL);

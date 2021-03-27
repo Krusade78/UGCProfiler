@@ -43,6 +43,8 @@ namespace Editor
         {
             ushort idAccion = 0;
             MainWindow padre = (MainWindow)this.Owner;
+            byte joy = 0, md = 0, pk = 0;
+            padre.GetModos(ref joy, ref pk, ref md);
 
             //'on
             foreach (DSPerfil.ACCIONESRow ar in padre.GetDatos().Perfil.ACCIONES.Rows)
@@ -66,14 +68,16 @@ namespace Editor
                 DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
                 ar.idAccion = idAccion;
                 ar.Nombre = "<Pinkie On>";
-                ar.Comandos = new ushort[] { (byte)CTipos.TipoComando.TipoComando_Pinkie + (1 << 8), (byte)CTipos.TipoComando.TipoComando_MfdPinkie + (1 << 8) };
+                ar.Comandos = new ushort[] { (byte)CTipos.TipoComando.TipoComando_Pinkie + (1 << 8),
+                                            (byte)CTipos.TipoComando.TipoComando_MfdPinkie + (1 << 8), 
+                                            0x0b32, 0x0732, 0x0032, 0x0432};
                 padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
             }
             for (byte m = 0; m < 3; m++)
             {
-                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, 0, m, 3).TamIndices = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 0, m, 3, 0).idAccion = idAccion;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 0, m, 3, 1).idAccion = 0;
+                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(joy, 0, m, (byte)((joy == 1) ? 3 : 10)).TamIndices = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(joy, 0, m, (byte)((joy == 1) ? 3 : 10), 0).idAccion = idAccion;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(joy, 0, m, (byte)((joy == 1) ? 3 : 10), 1).idAccion = 0;
             }
 
             //'off
@@ -99,20 +103,24 @@ namespace Editor
                 DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
                 ar.idAccion = idAccion;
                 ar.Nombre = "<Pinkie Off>";
-                ar.Comandos = new ushort[] { (byte)CTipos.TipoComando.TipoComando_Pinkie, (byte)CTipos.TipoComando.TipoComando_MfdPinkie };
+                ar.Comandos = new ushort[] { (byte)CTipos.TipoComando.TipoComando_Pinkie,
+                                             (byte)CTipos.TipoComando.TipoComando_MfdPinkie,
+                                             0x0b32, 0x0732, 0x0032, 0x0032};
                 padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
             }
             for (byte m = 0; m < 3; m++)
             {
-                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, 1, m, 3).TamIndices = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 1, m, 3, 0).idAccion = 0;
-                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, 1, m, 3, 1).idAccion = idAccion;
+                padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(joy, 1, m, (byte)((joy == 1) ? 3 : 10)).TamIndices = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(joy, 1, m, (byte)((joy == 1) ? 3 : 10), 0).idAccion = 0;
+                padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(joy, 1, m, (byte)((joy == 1) ? 3 : 10), 1).idAccion = idAccion;
             }
         }
 
         private void GuardarModos()
         {
             MainWindow padre = (MainWindow)this.Owner;
+            byte joy = 0, md = 0, pk = 0;
+            padre.GetModos(ref joy, ref pk, ref md);
 
             for (byte modo = 1; modo <= 3; modo++)
             {
@@ -139,16 +147,28 @@ namespace Editor
                     DSPerfil.ACCIONESRow ar = padre.GetDatos().Perfil.ACCIONES.NewACCIONESRow();
                     ar.idAccion = idAccion;
                     ar.Nombre = "<Modo " + modo.ToString() + ">";
-                    ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)) };
+                    if (modo == 1)
+                    {
+                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)), 0x0a32, 0x3832, 0x0032, 0x0432, 0x0032, 0xc032, 0x0f32, 0x2432 };
+                    }
+                    else if (modo == 2)
+                    {
+                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)), 0x0a32, 0x3f32, 0x0032, 0x0432, 0x0032, 0xc032, 0x0f32, 0x0432 };
+                    }
+                    else
+                    {
+                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)), 0x0a32, 0xf832, 0x0132, 0x0432, 0x0032, 0xc032, 0x0f32, 0x8432 };
+                    }
                     padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
                 }
                 for (byte p = 0; p < 2; p++)
                 {
                     for (byte m = 0; m < 3; m++)
                     {
-                        padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(1, p, m, (byte)(4 + modo)).TamIndices = 0;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(4 + modo), 0).idAccion = idAccion;
-                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(1, p, m, (uint)(4 + modo), 1).idAccion = 0;
+                        byte btBase = (byte)((joy == 1) ? 4 : 3);
+                        padre.GetDatos().Perfil.MAPABOTONES.FindByidJoyidPinkieidModoidBoton(joy, p, m, (byte)(btBase + modo)).TamIndices = 0;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(joy, p, m, (uint)(btBase + modo), 0).idAccion = idAccion;
+                        padre.GetDatos().Perfil.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(joy, p, m, (uint)(btBase + modo), 1).idAccion = 0;
                     }
                 }
             }

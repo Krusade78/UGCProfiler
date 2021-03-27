@@ -18,7 +18,7 @@ public:
 
 private:
 	//HID original X52
-	typedef struct _HIDX52_INPUT_DATA
+	typedef struct
 	{
 		UCHAR   EjesXYR[4];
 		UCHAR	Ejes[4];
@@ -27,11 +27,32 @@ private:
 		UCHAR	Ministick;
 	} HIDX52_INPUT_DATA, * PHIDX52_INPUT_DATA;
 
+	//HID original NXT
+	typedef struct
+	{
+		UCHAR   EjeX[2];
+		UCHAR	EjeY[2];
+		UCHAR	EjeR[2];
+		UCHAR	EjeZ[2];
+		UCHAR	EjeMx[2];
+		UCHAR	EjeMy[2];
+		UCHAR	hidNoUsado1[4];
+		UCHAR	Encoders;
+		UCHAR	hidNoUsado[30];
+		UCHAR	Base[1];
+		UCHAR	Botones[5];
+		UCHAR	sinUso[10];
+
+	} HIDNXT_INPUT_DATA, * PHIDNXT_INPUT_DATA;
+
 	CPerfil* pPerfil = nullptr;
 	CColaHID* colaHID = nullptr;
 
 	short hiloCerrado = TRUE;
 	bool salir = false;
+
+	bool posFijada[4][8];
+	INT16 posFija[4][8];
 
 	CProcesarPedales* pedales = nullptr;
 	CProcesarX52* x52 = nullptr;
@@ -45,6 +66,6 @@ private:
 
 	UCHAR Switch4To8(UCHAR in);
 	void ConvertirEjeCentro0(UINT16* pos, UINT16 rango, UINT16 centro);
-	void ConvertirEjeRango(INT32 nuevoRango, INT16* pos, INT16 rango);
+	void ConvertirEjeRango(TipoJoy joy, char eje, INT32 nuevoRango, INT16* pos, INT16 rango);
 };
 

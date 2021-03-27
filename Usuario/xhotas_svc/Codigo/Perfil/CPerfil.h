@@ -75,6 +75,7 @@ public:
 			UCHAR Banda;
 		} Ejes[4][2][3][8];
 
+		UCHAR ModoPrecisoEje[4][8];
 		char Pinkie;
 		char Modos;
 	} ESTADO;

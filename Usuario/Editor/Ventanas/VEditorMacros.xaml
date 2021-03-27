@@ -6,14 +6,14 @@
     <Window.Background>
         <ImageBrush ImageSource="/Editor;component/res/CalibrationGrid.JPG"/>
     </Window.Background>
-    <Grid Width="847" Height="627">
+    <Grid Width="847" Height="718">
         <Grid.Background>
             <RadialGradientBrush>
                 <GradientStop Color="#E0323232" Offset="1"/>
                 <GradientStop Color="#E0666666"/>
             </RadialGradientBrush>
         </Grid.Background>
-        <Border Width="816" Height="110" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,501,0,0" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
+        <Border Width="816" Height="110" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,535,0,0" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="11">
                 <Label x:Name="Label20" Content="Multi Function Display" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFD8E4D7" Width="806" Padding="10,2,5,2" FontWeight="Bold" FontSize="11"/>
 
@@ -57,7 +57,7 @@
             </Grid>
         </Border>
 
-        <GroupBox Header="Comandos" Foreground="Gold" x:Name="GroupBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="593,11,0,0" Width="235" Height="480" >
+        <GroupBox Header="Comandos" Foreground="Gold" x:Name="GroupBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="593,11,0,0" Width="235" Height="519" >
             <Grid>
                 <Button x:Name="ButtonBajar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,195,0,0" Width="25" Height="25" Click="ButtonBajar_Click">
                     <Image Source="/Editor;component/res/bajar.gif" Stretch="None" />
@@ -68,11 +68,11 @@
                 <Button x:Name="ButtonBorrar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,125,0,0" Width="25" Height="25" Click="ButtonBorrar_Click">
                     <Image Source="/Editor;component/res/DeleteHS.png" Stretch="None" />
                 </Button>
-                <ListBox x:Name="ListBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Width="186" Height="444" Background="#B2000000" Foreground="GreenYellow" ItemsSource="{Binding}" DisplayMemberPath="nombre" />
+                <ListBox x:Name="ListBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Width="186" Height="476" Background="#B2000000" Foreground="GreenYellow" ItemsSource="{Binding}" DisplayMemberPath="nombre" />
             </Grid>
         </GroupBox>
 
-        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,206,0,0" Width="237" Height="110" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,246,0,0" Width="237" Height="110" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
                 <Label Content="x100 ms." HorizontalAlignment="Left" VerticalAlignment="Top" Margin="155,54,0,0" Foreground="Gainsboro" FontFamily="Segoe UI" FontSize="11"/>
                 <Label Content="Comandos de estado" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Width="226" Background="DarkGreen"  Foreground="#FFD8E4D7" Padding="10,2,5,2" FontWeight="Bold" FontSize="11"/>
@@ -86,19 +86,42 @@
             </Grid>
         </Border>
 
-        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,105,0,0" Width="237" Height="89" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,105,0,0" Width="237" Height="134" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
                 <Label Content="Modos" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFD8E4D7" Padding="10,2,5,2" FontWeight="Bold" Width="226" FontSize="11"/>
-                <Button Content="Pinkie On" x:Name="ButtonPinkieOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="157,30,0,0" Width="55" Height="23" Click="ButtonPinkieOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button Content="Pinkie Off" x:Name="ButtonPinkieOff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="157,58,0,0" Width="55" Height="23" Click="ButtonPinkieOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button Content="Modo 1" x:Name="ButtonModo1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,30,0,0" Width="55" Height="23" Click="ButtonModo1_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button Content="Modo 2" x:Name="ButtonModo2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,58,0,0" Width="55" Height="23" Click="ButtonModo2_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
-                <Button Content="Modo 3" x:Name="ButtonModo3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,44,0,0" Width="55" Height="23" Click="ButtonModo3_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Button Content="Pinkie On" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="157,30,0,0" Width="55" Height="23" Click="ButtonPinkieOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Button Content="Pinkie Off" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="157,58,0,0" Width="55" Height="23" Click="ButtonPinkieOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Button Content="Modo 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,30,0,0" Width="55" Height="23" Click="ButtonModo1_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Button Content="Modo 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,58,0,0" Width="55" Height="23" Click="ButtonModo2_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                <Button Content="Modo 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,44,0,0" Width="55" Height="23" Click="ButtonModo3_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+
+                <Label Content="Modo preciso" VerticalAlignment="Top" Margin="5,85,5,0" Background="#FF2F5A85" Foreground="#FFC7E0FF" HorizontalContentAlignment="Center" Padding="5,1,5,2" FontSize="10"/>
+                <StackPanel Orientation="Horizontal"  VerticalAlignment="Top" Margin="0,105,0,0" Height="23">
+                    <ComboBox x:Name="cbJoy" Margin="5,0,0,0" Width="62" SelectedIndex="0" VerticalAlignment="Center">
+                        <ComboBoxItem Content="Pedales" />
+                        <ComboBoxItem Content="X52 Joystick" />
+                        <ComboBoxItem Content="X52 Acelerador" />
+                        <ComboBoxItem Content="Gladiator NXT" />
+                    </ComboBox>
+                    <ComboBox x:Name="cbEje" Margin="5,0,0,0" Width="40" SelectedIndex="0" VerticalAlignment="Center">
+                        <ComboBoxItem Content="X" />
+                        <ComboBoxItem Content="Y" />
+                        <ComboBoxItem Content="Z" />
+                        <ComboBoxItem Content="Rx" />
+                        <ComboBoxItem Content="Ry" />
+                        <ComboBoxItem Content="Rz" />
+                        <ComboBoxItem Content="Sl 1" />
+                        <ComboBoxItem Content="Sl 2" />
+                    </ComboBox>
+                    <local:CtlNumUpDown x:Name="NumericUpDownPr" Maximum="4" Minimum="2" Valor="2" VerticalContentAlignment="Center" Margin="5,3" Width="30" FontSize="9"  />
+                    <Button Content="On"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0,0,0" Width="35" Height="23" Click="ButtonPrecisoOn_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                    <Button Content="Off" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0,0,0" Width="35" Height="23" Click="ButtonPrecisoOff_Click" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626"/>
+                </StackPanel>
                 <Grid x:Name="PanelModos" Visibility="Collapsed" Background="#7F808080" Margin="5,3" />
             </Grid>
         </Border>
 
-        <Border x:Name="Panel3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,323,0,0" Width="237" Height="167" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
+        <Border x:Name="Panel3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,363,0,0" Width="237" Height="167" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
                 <Label Content="DirectX" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFD8E4D7" Padding="10,2,5,2" FontWeight="Bold" Width="229" FontSize="11"/>
                 <local:CtlNumUpDown x:Name="NumericUpDownJoy" Maximum="3" Minimum="1" HorizontalAlignment="Left" Height="22" Margin="6,26,0,0" VerticalAlignment="Center" Width="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
@@ -158,7 +181,7 @@
             </Grid>
         </GroupBox>
 
-        <Border x:Name="Panel1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,292,0,0" Width="324" Height="197" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
+        <Border x:Name="Panel1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,312,0,0" Width="324" Height="197" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
             <Grid TextElement.FontSize="10">
                 <Label Content="Ratón" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0" Background="DarkGreen" Foreground="#FFD8E4D7" Padding="10,2,5,2" FontWeight="Bold" Width="316" FontSize="11" />
 
@@ -188,5 +211,61 @@
                 <Grid x:Name="PanelMovimiento" Visibility="Collapsed" Background="#7F808080" Width="310" Height="75" Margin="0,112,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" />
             </Grid>
         </Border>
+
+        <Border Width="816" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,650,0,0" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1">
+            <Grid TextElement.FontSize="11">
+                <Label Content="Gladiator NXT" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Background="DarkGreen" Foreground="#FFD8E4D7" Width="806" Padding="10,2,5,2" FontWeight="Bold" FontSize="11"/>
+
+                <Label Content="Leds" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,24,0,0" Padding="5,1,5,2" Width="50" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF2F5A85" Foreground="#FFC7E0FF" FontSize="10"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="62,28,0,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                        <Label Content="Led:"  HorizontalContentAlignment="Right" Foreground="Gainsboro" FontSize="11"/>
+                        <ComboBox x:Name="cbLed" HorizontalAlignment="Left" VerticalAlignment="Center" Width="76" SelectedIndex="0" SelectionChanged="FcbLed_SelectionChanged">
+                            <ComboBoxItem Content="Base" />
+                            <ComboBoxItem Content="Joystick 1" />
+                            <ComboBoxItem Content="Joystick 2" />
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"  VerticalAlignment="Top" Margin="10,0,0,0">
+                        <Label Content="Modo:"  HorizontalContentAlignment="Right" Foreground="Gainsboro" FontSize="11"/>
+                        <ComboBox x:Name="cbOrden" HorizontalAlignment="Left" VerticalAlignment="Center" Width="76" SelectedIndex="0">
+                            <ComboBoxItem Content="Off" />
+                            <ComboBoxItem Content="Constante" />
+                            <ComboBoxItem Content="Intermitente lento" />
+                            <ComboBoxItem Content="Intermitente medio" />
+                            <ComboBoxItem Content="Intermitente rápido" />
+                            <ComboBoxItem Content="Flash" />
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"  VerticalAlignment="Top" Margin="10,0,0,0">
+                        <Label Content="Modo color:"  HorizontalContentAlignment="Right" Foreground="Gainsboro" FontSize="11"/>
+                        <ComboBox x:Name="cbModo" HorizontalAlignment="Left" VerticalAlignment="Center" Width="76" SelectedIndex="0">
+                            <ComboBoxItem Content="Color 1" />
+                            <ComboBoxItem Content="Color 2" />
+                            <ComboBoxItem Content="Color 1/2" />
+                            <ComboBoxItem Content="Color 2/1" />
+                            <ComboBoxItem Content="Color 1 y 2" />
+                            <ComboBoxItem Content="Color 1+" />
+                            <ComboBoxItem Content="Color 2+" />
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"  VerticalAlignment="Top" Margin="10,0,0,0">
+                        <Label Content="Color 1:"  HorizontalContentAlignment="Right" Foreground="Gainsboro" FontSize="11"/>
+                        <TextBox x:Name="txtColor1" Text="0;0;7" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Height="21" Background="Black" Foreground="GreenYellow" Padding="0,1,0,0" IsReadOnly="True" PreviewMouseLeftButtonUp="FtxtColor1_PreviewMouseLeftButtonUp" />
+                        <Rectangle x:Name="rColor1" Fill="Blue" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10" Stroke="White" Margin="-12,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"  VerticalAlignment="Top" Margin="10,0,0,0">
+                        <Label Content="Color 2:"  HorizontalContentAlignment="Right" Foreground="Gainsboro" FontSize="11"/>
+                        <TextBox x:Name="txtColor2" Text="7;0;0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Height="21" Background="Black" Foreground="GreenYellow" Padding="0,1,0,0" IsReadOnly="True"  PreviewMouseLeftButtonUp="FtxtColor2_PreviewMouseLeftButtonUp"/>
+                        <Rectangle x:Name="rColor2" Fill="Red" HorizontalAlignment="Left" VerticalAlignment="Center" Width="10" Height="10" Stroke="White" Margin="-12,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Button x:Name="ButtonLed" Content="Led" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="681,28,0,0" Width="50" Height="23" FontSize="9" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonLed_Click"/>
+
+                <Grid x:Name="PanelNXT" Visibility="Collapsed" Background="#7F808080" Margin="4,3" />
+            </Grid>
+        </Border>
+
     </Grid>
 </Window>

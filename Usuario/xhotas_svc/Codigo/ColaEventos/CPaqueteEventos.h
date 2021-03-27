@@ -27,6 +27,7 @@ public:
 
 	static const unsigned char Modo = 30;
 	static const unsigned char Pinkie = 31;
+	static const unsigned char ModoPreciso = 32;
 
 	static const unsigned char MfdLuz = 40;
 	static const unsigned char Luz = 41;
@@ -38,6 +39,8 @@ public:
 	static const unsigned char MfdHora = 47;
 	static const unsigned char MfdHora24 = 48;
 	static const unsigned char MfdFecha = 49;
+
+	static const unsigned char NxtLeds = 50;
 
 	static const unsigned char Reservado_DxPosicion = 100;
 	static const unsigned char Reservado_CheckHold = 101;
@@ -53,7 +56,7 @@ public:
 private:
 	unsigned char valor = 0;
 };
-enum class TipoJoy : unsigned char { Pedales, X52_Joy, X52_Ace, NXT, RawPedales = 100, RawX52_Joy, RawX52_Ace, RawNXT};
+enum class TipoJoy : unsigned char { Pedales, X52_Joy, X52_Ace, NXT, RawPedales = 100, Raw_Joy, RawX52_Ace};
 
 #pragma warning (disable: 26495)
 typedef struct

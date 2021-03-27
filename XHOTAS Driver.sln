@@ -28,13 +28,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xhotas_vhid", "Driver\xhota
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrvSetup", "Driver\SetupDrv\DrvAPI.vcxproj", "{D236D114-9A35-420C-9875-BD6C252A4CDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calibrator", "Usuario\Calibrator\Calibrator.csproj", "{FA55CFB5-5D53-4E10-84D7-C6AAF35FF8B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Editor", "Usuario\Editor\Editor.csproj", "{73115BAE-7AC2-43F3-9052-72D3773E9266}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comunes", "Usuario\Comunes\Comunes.csproj", "{65972C42-1DBC-41A9-A537-4E7BAECA2396}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Launcher", "Usuario\Launcher\Launcher.csproj", "{19E2DF53-6E1E-4812-B33A-5AA0B76347C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Usuario\Editor\Editor.csproj", "{73115BAE-7AC2-43F3-9052-72D3773E9266}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comunes", "Usuario\Comunes\Comunes.csproj", "{E3E06AAD-247D-4927-9F64-359E4AC1D54F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Usuario\Launcher\Launcher.csproj", "{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calibrator", "Usuario\Calibrator\Calibrator.csproj", "{4D9336C8-5E23-4499-802F-F426A4200B7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,22 +62,22 @@ Global
 		{D236D114-9A35-420C-9875-BD6C252A4CDD}.Debug|x64.Build.0 = Debug|x64
 		{D236D114-9A35-420C-9875-BD6C252A4CDD}.Release|x64.ActiveCfg = Release|x64
 		{D236D114-9A35-420C-9875-BD6C252A4CDD}.Release|x64.Build.0 = Release|x64
-		{FA55CFB5-5D53-4E10-84D7-C6AAF35FF8B5}.Debug|x64.ActiveCfg = Debug|x64
-		{FA55CFB5-5D53-4E10-84D7-C6AAF35FF8B5}.Debug|x64.Build.0 = Debug|x64
-		{FA55CFB5-5D53-4E10-84D7-C6AAF35FF8B5}.Release|x64.ActiveCfg = Release|x64
-		{FA55CFB5-5D53-4E10-84D7-C6AAF35FF8B5}.Release|x64.Build.0 = Release|x64
-		{65972C42-1DBC-41A9-A537-4E7BAECA2396}.Debug|x64.ActiveCfg = Debug|x64
-		{65972C42-1DBC-41A9-A537-4E7BAECA2396}.Debug|x64.Build.0 = Debug|x64
-		{65972C42-1DBC-41A9-A537-4E7BAECA2396}.Release|x64.ActiveCfg = Release|x64
-		{65972C42-1DBC-41A9-A537-4E7BAECA2396}.Release|x64.Build.0 = Release|x64
 		{73115BAE-7AC2-43F3-9052-72D3773E9266}.Debug|x64.ActiveCfg = Debug|x64
 		{73115BAE-7AC2-43F3-9052-72D3773E9266}.Debug|x64.Build.0 = Debug|x64
 		{73115BAE-7AC2-43F3-9052-72D3773E9266}.Release|x64.ActiveCfg = Release|x64
 		{73115BAE-7AC2-43F3-9052-72D3773E9266}.Release|x64.Build.0 = Release|x64
-		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}.Debug|x64.ActiveCfg = Debug|x64
-		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}.Debug|x64.Build.0 = Debug|x64
-		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}.Release|x64.ActiveCfg = Release|x64
-		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683}.Release|x64.Build.0 = Release|x64
+		{19E2DF53-6E1E-4812-B33A-5AA0B76347C1}.Debug|x64.ActiveCfg = Debug|x64
+		{19E2DF53-6E1E-4812-B33A-5AA0B76347C1}.Debug|x64.Build.0 = Debug|x64
+		{19E2DF53-6E1E-4812-B33A-5AA0B76347C1}.Release|x64.ActiveCfg = Release|x64
+		{19E2DF53-6E1E-4812-B33A-5AA0B76347C1}.Release|x64.Build.0 = Release|x64
+		{E3E06AAD-247D-4927-9F64-359E4AC1D54F}.Debug|x64.ActiveCfg = Debug|x64
+		{E3E06AAD-247D-4927-9F64-359E4AC1D54F}.Debug|x64.Build.0 = Debug|x64
+		{E3E06AAD-247D-4927-9F64-359E4AC1D54F}.Release|x64.ActiveCfg = Release|x64
+		{E3E06AAD-247D-4927-9F64-359E4AC1D54F}.Release|x64.Build.0 = Release|x64
+		{4D9336C8-5E23-4499-802F-F426A4200B7B}.Debug|x64.ActiveCfg = Debug|x64
+		{4D9336C8-5E23-4499-802F-F426A4200B7B}.Debug|x64.Build.0 = Debug|x64
+		{4D9336C8-5E23-4499-802F-F426A4200B7B}.Release|x64.ActiveCfg = Release|x64
+		{4D9336C8-5E23-4499-802F-F426A4200B7B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,10 +88,10 @@ Global
 		{FB85A669-9A7B-41E3-A150-48CC55E7C785} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
 		{FEB4AA9F-8FCA-4DF6-9037-FCC637936068} = {71C5F194-8161-48BE-BDF9-1EE18393A7C5}
 		{D236D114-9A35-420C-9875-BD6C252A4CDD} = {71C5F194-8161-48BE-BDF9-1EE18393A7C5}
-		{FA55CFB5-5D53-4E10-84D7-C6AAF35FF8B5} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
-		{65972C42-1DBC-41A9-A537-4E7BAECA2396} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
 		{73115BAE-7AC2-43F3-9052-72D3773E9266} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
-		{E0E55D0D-BDE2-4BF9-B86C-D689B2055683} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
+		{19E2DF53-6E1E-4812-B33A-5AA0B76347C1} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
+		{E3E06AAD-247D-4927-9F64-359E4AC1D54F} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
+		{4D9336C8-5E23-4499-802F-F426A4200B7B} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92C35703-B89E-4F01-B7CD-259D00B377F4}
@@ -117,21 +117,21 @@ Global
 		SccProjectTopLevelParentUniqueName4 = XHOTAS\u0020Driver.sln
 		SccProjectName4 = Driver/SetupDrv
 		SccLocalPath4 = Driver\\SetupDrv
-		SccProjectUniqueName5 = Usuario\\Calibrator\\Calibrator.csproj
+		SccProjectUniqueName5 = Usuario\\Editor\\Editor.csproj
 		SccProjectTopLevelParentUniqueName5 = XHOTAS\u0020Driver.sln
-		SccProjectName5 = Usuario/Calibrator
-		SccLocalPath5 = Usuario\\Calibrator
-		SccProjectUniqueName6 = Usuario\\Comunes\\Comunes.csproj
+		SccProjectName5 = Usuario/Editor
+		SccLocalPath5 = Usuario\\Editor
+		SccProjectUniqueName6 = Usuario\\Launcher\\Launcher.csproj
 		SccProjectTopLevelParentUniqueName6 = XHOTAS\u0020Driver.sln
-		SccProjectName6 = Usuario/Comunes
-		SccLocalPath6 = Usuario\\Comunes
-		SccProjectUniqueName7 = Usuario\\Editor\\Editor.csproj
+		SccProjectName6 = Usuario/Launcher
+		SccLocalPath6 = Usuario\\Launcher
+		SccProjectUniqueName7 = Usuario\\Comunes\\Comunes.csproj
 		SccProjectTopLevelParentUniqueName7 = XHOTAS\u0020Driver.sln
-		SccProjectName7 = Usuario/Editor
-		SccLocalPath7 = Usuario\\Editor
-		SccProjectUniqueName8 = Usuario\\Launcher\\Launcher.csproj
+		SccProjectName7 = Usuario/Comunes
+		SccLocalPath7 = Usuario\\Comunes
+		SccProjectUniqueName8 = Usuario\\Calibrator\\Calibrator.csproj
 		SccProjectTopLevelParentUniqueName8 = XHOTAS\u0020Driver.sln
-		SccProjectName8 = Usuario/Launcher
-		SccLocalPath8 = Usuario\\Launcher
+		SccProjectName8 = Usuario/Calibrator
+		SccLocalPath8 = Usuario\\Calibrator
 	EndGlobalSection
 EndGlobal

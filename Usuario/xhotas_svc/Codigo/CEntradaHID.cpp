@@ -4,6 +4,7 @@
 #include <Hidsdi.h>
 #include "CEntradaHID.h"
 #include "X52/MenuMFD.h"
+#include "NXT/EscribirHIDNXT.h"
 
 CEntradaHID::CEntradaHID(CPerfil* perfil, CColaEventos* colaEv)
 {
@@ -241,7 +242,7 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                         {
                             if (local->CompararHardwareId(dbdi->dbcc_name, HARDWARE_ID_NXT))
                             {
-                                delete[] local->rutaNXT;;
+                                delete[] local->rutaNXT;
                                 local->rutaNXT = NULL;
 
                             }
@@ -313,6 +314,7 @@ bool CEntradaHID::AbrirDevices()
         else
         {
             InterlockedExchangePointer(&hdevNXT, hdev);
+            CNXTSalida::Get()->SetRuta(rutaNXT);
         }
     }
 
@@ -335,6 +337,7 @@ void CEntradaHID::CerrarDevices()
     }
     if ((rutaNXT != NULL) && (InterlockedCompareExchangePointer(&hdevNXT, NULL, NULL) != NULL))
     {
+        CNXTSalida::Get()->SetRuta(nullptr);
         HANDLE h = InterlockedExchangePointer(&hdevNXT, NULL);
         CancelIoEx(h, NULL);
         CloseHandle(h);
@@ -364,7 +367,7 @@ DWORD WINAPI CEntradaHID::HiloLectura(LPVOID param)
 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
-    UCHAR buff[16];
+    UCHAR buff[64];
     while (!local->salir)
     {   
         if (*dev == NULL)
@@ -374,13 +377,13 @@ DWORD WINAPI CEntradaHID::HiloLectura(LPVOID param)
         else
         {
             DWORD tam = 0;
-            if (!ReadFile(*dev, buff, 16, &tam, NULL))
+            if (!ReadFile(*dev, buff, 64, &tam, NULL))
             {
                 Sleep(1500);
             }
             else
             {
-                local->procesarHID->AñadirACola(&buff[1], tam - 1);
+                local->procesarHID->AñadirACola(buff, tam);
             }
         }
     }

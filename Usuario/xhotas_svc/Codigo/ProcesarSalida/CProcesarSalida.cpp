@@ -5,6 +5,7 @@
 #include "Comandos/CTeclado.h"
 #include "Comandos/CRaton.h"
 #include "Comandos/CX52.h"
+#include "Comandos/CNXT.h"
 #include "Comandos/CEspeciales.h"
 
 CProcesarSalida* CProcesarSalida::pNotificaciones = nullptr;
@@ -157,6 +158,22 @@ void CProcesarSalida::ProcesarRequest()
 						CTeclado::Procesar(comando, pVhid);
 						borrado = true;
 					}
+					else if ((comando->Tipo & 0x7f) == TipoComando::ModoPreciso) //Cambio modo preciso
+					{
+						pPerfil->LockEstado();
+						{
+							if ((comando->Tipo & 0x80) == TipoComando::Soltar)
+							{
+								pPerfil->GetEstado()->ModoPrecisoEje[(comando->Dato & 31) / 8][(comando->Dato & 31) % 8] = 0;
+							}
+							else
+							{
+								pPerfil->GetEstado()->ModoPrecisoEje[(comando->Dato & 31) / 8][(comando->Dato & 31) % 8] = (comando->Dato >> 5) + 1;
+							}
+						}
+						pPerfil->UnlockEstado();
+						borrado = true;
+					}
 					else if (comando->Tipo == TipoComando::Modo) //Cambio modo
 					{
 						pPerfil->LockEstado();
@@ -176,6 +193,11 @@ void CProcesarSalida::ProcesarRequest()
 						borrado = true;
 					}
 					else if (CX52::Procesar(colaComandos))
+					{
+						ncmds = true;
+						borrado = true;
+					}
+					else if (CNXT::Procesar(colaComandos))
 					{
 						ncmds = true;
 						borrado = true;

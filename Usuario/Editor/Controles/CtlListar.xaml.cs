@@ -120,18 +120,19 @@ namespace Editor
             datos.Rows.Add(new object[] { 3, 0, "Eje Y", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 0, "Eje Z", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 0, "Eje Rx", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 0, "Eje Ry", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 0, "Eje Rz", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Gatillo P.1", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Gatillo P.2", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 1, "Gatillo S.1", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 1, "Gatillo S.2", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 1, "Gatillo S", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Botón Lanzar", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Botón 1", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Pinkie", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Base 1", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Base 2", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Base 3", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 1, "Enc. 1 Arriba", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 1, "Enc. 1 Abajo", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 1, "Enc. 2 Arriba", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 1, "Enc. 2 Abajo", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 1, "Seta 1 Centro", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 1 N", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 1 NE", "", "", "", "", "", "" });
@@ -141,35 +142,21 @@ namespace Editor
             datos.Rows.Add(new object[] { 3, 2, "Seta 1 SO", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 1 O", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 1 NO", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 0, "Eje mini X", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 0, "Eje mini Y", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 0, "Seta 2 Centro", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 0, "Ministick X", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 0, "Ministick Y", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 2 N", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 2 NE", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 2 E", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 2 SE", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 2 S", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 2 SO", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 2 O", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 2 NO", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 0, "Seta 3 Centro", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 3 N", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 3 NE", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 3 E", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 3 SE", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 3 S", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 3 SO", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 3 O", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 3 NO", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 0, "Seta 4 Centro", "", "", "", "", "", "" });
+            datos.Rows.Add(new object[] { 3, 2, "Seta 4 Centro", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 4 N", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 4 NE", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 4 E", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 4 SE", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 4 S", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 4 SO", "", "", "", "", "", "" });
             datos.Rows.Add(new object[] { 3, 2, "Seta 4 O", "", "", "", "", "", "" });
-            datos.Rows.Add(new object[] { 3, 2, "Seta 4 NO", "", "", "", "", "", "" });
 
             byte idx = 0; byte t = 1;
             foreach (DataRow r in datos.Rows)
@@ -206,13 +193,13 @@ namespace Editor
         {
             byte[] m;
             if (idJ == 1)
-                m = new byte[] { 0, 1, 3, 0, 1, 2, 8, 9, 4, 3, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 10, 11, 12, 13, 14, 15, 5, 6, 7 };
+                m = new byte[] { 0, 1, 3, 0, 1, 2, 8, 9, 4, 3, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10, 11, 12, 13, 14, 15, 10, 11, 12, 13, 14, 15, 5, 6, 7 };
             else if (idJ == 2)
                 m = new byte[] { 2, 5, 3, 4, 6, 7, 0, 1, 5, 6, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 7, 8, 9, 2, 3, 4 };
             else if (idJ == 0)
                 m = new byte[] { 3, 6, 7 };
             else
-                m = new byte[] { 0, 1, 2, 3, 4, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 1, 2, 3, 4, 5, 6, 7, 6, 7, 255, 8, 9, 10, 11, 12, 13, 14, 15, 255, 16, 17, 18, 19, 20, 21, 22, 23, 255, 24, 25, 26, 27, 28, 29, 30, 31};
+                m = new byte[] { 0, 1, 2, 3, 9, 8, 14, 11, 15, 10, 4, 5, 6, 0, 1, 2, 3, 12, 0, 1, 2, 3, 4, 5, 6, 7, 6, 7, 8, 10, 12, 14, 16, 18, 20, 22, 13, 24, 26, 28, 30 };
             return m[idc];
         }
 

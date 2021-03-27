@@ -43,6 +43,9 @@
     <Filter Include="Base\CalibradoDx">
       <UniqueIdentifier>{6a0fd1cc-6352-4441-b79e-d680ba5a1c59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Base\NXT">
+      <UniqueIdentifier>{87da078f-9c5f-46ee-8fa3-e5adc532f25d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xhotas_svc.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="Codigo\X52\MenuMFD.h">
       <Filter>Base\X52</Filter>
     </ClInclude>
+    <ClInclude Include="Codigo\NXT\EscribirHIDNXT.h">
+      <Filter>Base\NXT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xhotas_svc.cpp">
@@ -220,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="Codigo\X52\MenuMFD.cpp">
       <Filter>Base\X52</Filter>
+    </ClCompile>
+    <ClCompile Include="Codigo\NXT\EscribirHIDNXT.cpp">
+      <Filter>Base\NXT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

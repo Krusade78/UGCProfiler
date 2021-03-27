@@ -164,6 +164,20 @@ namespace Editor
             if (GetCuenta() > 237) return;
             Insertar(new ushort[] { (ushort)TipoComando.TipoComando_Pinkie }, false);
         }
+
+        private void ButtonPrecisoOn_Click(object sender, RoutedEventArgs e)
+        {
+            if (GetCuenta() > 237) return;
+            ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + (cbEje.SelectedIndex)) | ((NumericUpDownPr.Valor - 1) << 5)) << 8);
+            Insertar(new ushort[] { (ushort)((ushort)TipoComando.TipoComando_ModoPreciso + dato) }, false);
+        }
+
+        private void ButtonPrecisoOff_Click(object sender, RoutedEventArgs e)
+        {
+            if (GetCuenta() > 237) return;
+            ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + (cbEje.SelectedIndex)) | (byte)TipoComando.TipoComando_Soltar) << 8); 
+            Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_ModoPreciso | (byte)TipoComando.TipoComando_Soltar) + dato) }, false);
+        }
         #endregion
 
         #region "comandos de estado"
@@ -459,6 +473,89 @@ namespace Editor
         {
             if (GetCuenta() > 237) return;
             Insertar(new ushort[] { (ushort)((byte)TipoComando.TipoComando_Luz + ((ushort)NumericUpDownLuzMfd.Valor << 8)) }, false);
+        }
+        #endregion
+
+        #region "Leds NXT"
+        private void ButtonLed_Click(object sender, RoutedEventArgs e)
+        {
+            Leds((byte)((cbLed.SelectedIndex == 1) ? 11 : ((cbLed.SelectedIndex == 2) ? 10 : 0)) , (CEnums.OrdenLed)cbOrden.SelectedIndex, (CEnums.ModoColor)cbModo.SelectedIndex, txtColor1.Text, txtColor2.Text);
+        }
+
+        private void FtxtColor1_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Ventanas.VColor vc = new(txtColor1.Text)
+            {
+                Owner = this
+            };
+            if (vc.ShowDialog() == true)
+            {
+                txtColor1.Text = vc.ColorSt;
+                System.Windows.Media.Color c = vc.ColorSB;
+                if (cbLed.SelectedIndex == 0)
+                {
+                    txtColor1.Text = "0;0;" + txtColor1.Text.Remove(0, 4);
+                    c.R = 0;
+                    c.G = 0;
+                }
+                else if (cbLed.SelectedIndex == 1)
+                {
+                    txtColor1.Text = txtColor1.Text.Substring(0, 1) + ";0;0;";
+                    c.B = 0;
+                    c.G = 0;
+                }
+                rColor1.Fill = new System.Windows.Media.SolidColorBrush(c);
+            }
+        }
+
+        private void FtxtColor2_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Ventanas.VColor vc = new (txtColor2.Text)
+            {
+                Owner = this
+            };
+            if (vc.ShowDialog() == true)
+            {
+                txtColor2.Text = vc.ColorSt;
+                System.Windows.Media.Color c = vc.ColorSB;
+                if (cbLed.SelectedIndex == 0)
+                {
+                    txtColor1.Text = txtColor1.Text.Substring(0, 1) + ";0;0;";
+                    c.B = 0;
+                    c.G = 0;
+                }
+                rColor2.Fill = new System.Windows.Media.SolidColorBrush(c);
+            }
+        }
+
+        private void FcbLed_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!this.IsLoaded) return;
+            if (cbLed.SelectedIndex == 0)
+            {
+                txtColor1.Text = "0;0;7";
+                txtColor2.Text = "7;0;0";
+                txtColor2.IsEnabled = true;
+                rColor1.Fill = System.Windows.Media.Brushes.Blue;
+                rColor2.Fill = System.Windows.Media.Brushes.Red;
+            }
+            else if (cbLed.SelectedIndex == 1)
+            {
+                txtColor1.Text = "7;0;0";
+                txtColor2.Text = "0;0;0";
+                txtColor2.IsEnabled = false;
+                rColor1.Fill = System.Windows.Media.Brushes.Red;
+                rColor2.Fill = System.Windows.Media.Brushes.Black;
+            }
+            else
+            {
+                txtColor1.Text = "7;7;7";
+                txtColor2.Text = "7;7;7";
+                txtColor1.IsEnabled = true;
+                txtColor2.IsEnabled = true;
+                rColor1.Fill = System.Windows.Media.Brushes.White;
+                rColor2.Fill = System.Windows.Media.Brushes.White;
+            }
         }
         #endregion
     }

@@ -92,7 +92,7 @@ void CProcesarX52::Procesar_Joy(PVHID_INPUT_DATA p_hidData)
 	}
 	else
 	{
-		CGenerarEventos::DirectX(static_cast<UCHAR>(TipoJoy::RawX52_Joy), 0xff, p_hidData);
+		CGenerarEventos::DirectX(static_cast<UCHAR>(TipoJoy::Raw_Joy), 0xff, p_hidData);
 	}
 }
 

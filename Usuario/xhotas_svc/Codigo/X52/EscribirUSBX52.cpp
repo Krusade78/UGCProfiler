@@ -62,22 +62,26 @@ bool CX52Salida::AbrirDriver()
 #pragma region "Ordenes"
 void CX52Salida::Luz_MFD(PUCHAR SystemBuffer)
 {
-	EnviarOrden(IOCTL_MFD_LUZ, SystemBuffer, 1);
+	UCHAR params[3] = { *(SystemBuffer) ,0 , 0xb1};
+	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Luz_Global(PUCHAR SystemBuffer)
 {
-	EnviarOrden(IOCTL_GLOBAL_LUZ, SystemBuffer, 1);
+	UCHAR params[3] = { *(SystemBuffer),0 ,0xb2 };
+	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Luz_Info(PUCHAR SystemBuffer)
 {
-	EnviarOrden(IOCTL_INFO_LUZ, SystemBuffer, 1);
+	UCHAR params[3] = { *(SystemBuffer) + 0x50 ,0 , 0xb4 };
+	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Set_Pinkie(PUCHAR SystemBuffer)
 {
-	EnviarOrden(IOCTL_PINKIE, SystemBuffer, 1);
+	UCHAR params[3] = { *(SystemBuffer) + 0x50 ,0 , 0xfd };
+	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Set_Texto(PUCHAR SystemBuffer, BYTE tamBuffer)
@@ -87,17 +91,40 @@ void CX52Salida::Set_Texto(PUCHAR SystemBuffer, BYTE tamBuffer)
 
 void CX52Salida::Set_Hora(PUCHAR SystemBuffer)
 {
-	EnviarOrden(IOCTL_HORA, SystemBuffer, 3);
+	UCHAR params[3] = { (SystemBuffer)[2] ,(SystemBuffer)[1] ,*(SystemBuffer) + 0xbf };
+	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Set_Hora24(PUCHAR SystemBuffer)
 {
-	EnviarOrden(IOCTL_HORA24, SystemBuffer, 3);
+	UCHAR params[3] = { (SystemBuffer)[2] ,(SystemBuffer)[1] + 0x80 ,*(SystemBuffer)+0xbf };
+	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Set_Fecha(PUCHAR SystemBuffer)
 {
-	EnviarOrden(IOCTL_FECHA, SystemBuffer, 2);
+	UCHAR params[3] = { 0, 0, 0 };
+
+	switch (SystemBuffer[0])
+	{
+	case 1:
+		params[2] = 0xc4;
+		params[1] = (UCHAR)(Fecha >> 8);
+		params[0] = SystemBuffer[1];
+		Fecha = *((USHORT*)params);
+		break;
+	case 2:
+		params[2] = 0xc4;
+		params[1] = SystemBuffer[1];
+		params[0] = (UCHAR)(Fecha & 0xff);
+		Fecha = *((USHORT*)params);
+		break;
+	case 3:
+		params[2] = 0xc8;
+		params[1] = 0;
+		params[0] = SystemBuffer[1];
+	}
+	EnviarOrden(IOCTL_X52, params, 3);
 }
 #pragma endregion
 

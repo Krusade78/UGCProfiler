@@ -123,6 +123,11 @@ namespace Editor
                     dsMacros.MACROS.AddMACROSRow(mtr++, "", new ushort[] { macros[i], macros[i + 1] });
                     i++;
                 }
+                else if (tipo == (byte)TipoComando.TipoComando_NxtLeds)
+                {
+                    dsMacros.MACROS.AddMACROSRow(mtr++, "", new ushort[] { macros[i], macros[i + 1], macros[i + 2], macros[i + 3] });
+                    i += 3;
+                }
                 else
                 {
                     dsMacros.MACROS.AddMACROSRow(mtr++, "", new ushort[] { macros[i] });
@@ -132,6 +137,7 @@ namespace Editor
 
         private void PasarABasico()
         {
+            PanelNXT.Visibility = Visibility.Visible;
             PanelX52.Visibility = Visibility.Visible;
             PanelSetas.Visibility = Visibility.Visible;
             PanelRatonOff.Visibility = Visibility.Visible;
@@ -148,6 +154,7 @@ namespace Editor
 
         private void PasarAAvanzado()
         {
+            PanelNXT.Visibility = Visibility.Collapsed;
             PanelX52.Visibility = Visibility.Collapsed;
             PanelSetas.Visibility = Visibility.Collapsed;
             PanelRatonOff.Visibility = Visibility.Collapsed;
@@ -1196,6 +1203,44 @@ namespace Editor
             ushort[] bloque = new ushort[2];
             bloque[0] = (ushort)((byte)TipoComando.TipoComando_MfdFecha + (f << 8));
             bloque[1] = (ushort)((byte)TipoComando.TipoComando_MfdFecha + ((ushort)NumericUpDown13.Valor << 8));
+            Insertar(bloque, false);
+        }
+        #endregion
+
+        #region "Gladiator NXT"
+        private void Leds(byte nLed, CEnums.OrdenLed orden, CEnums.ModoColor mColor, string scolor1, string scolor2)
+        {
+            byte[] cmds = new byte[]{ 0, 0, 0, 0 };
+            ushort color1 = (ushort)(byte.Parse(scolor1.Split(';')[0]) << 8);
+            color1 |= (ushort)(byte.Parse(scolor1.Split(';')[1]) << 4);
+            color1 |= byte.Parse(scolor1.Split(';')[2]);
+            ushort color2 = (ushort)(byte.Parse(scolor2.Split(';')[0]) << 8);
+            color2 |= (ushort)(byte.Parse(scolor2.Split(';')[1]) << 4);
+            color2 |= byte.Parse(scolor2.Split(';')[2]);
+
+            cmds[0] = nLed; //base 0, joy1 10, joy2 11
+
+            cmds[1] |= (byte)(color1 >> 8);//r;
+            cmds[1] |= (byte)((color1 & 0x70) >> 1); //g
+            byte color = (byte)(color1 & 0x07); //b
+            cmds[1] |= (byte)((color & 0x3) << 6);
+            cmds[2] |= (byte)(color >> 2);
+
+            cmds[2] |= (byte)(color2 >> 7); //r
+            cmds[2] |= (byte)(color2 & 0x70); //g
+            color = (byte)(color2 & 0x07); //b
+            cmds[2] |= (byte)((color & 1) << 7);
+            cmds[3] |= (byte)(color >> 1);
+
+            cmds[3] = (byte)((byte)orden << 2);
+            cmds[3] |= (byte)((byte)mColor << 5);
+
+            ushort[] bloque = new ushort[4];
+            TipoComando tipo = TipoComando.TipoComando_NxtLeds;
+            bloque[0] = (ushort)((byte)tipo + (cmds[0] << 8));
+            bloque[1] = (ushort)((byte)tipo + (cmds[1] << 8));
+            bloque[2] = (ushort)((byte)tipo + (cmds[2] << 8));
+            bloque[3] = (ushort)((byte)tipo + (cmds[3] << 8));
             Insertar(bloque, false);
         }
         #endregion

@@ -48,8 +48,9 @@ namespace Comunes
 
             TipoComando_Modo = 30,
 			TipoComando_Pinkie,
+            TipoComando_ModoPreciso,
 
-			TipoComando_MfdLuz = 40,
+            TipoComando_MfdLuz = 40,
 			TipoComando_Luz,
 			TipoComando_InfoLuz,
 			TipoComando_MfdPinkie,
@@ -60,7 +61,9 @@ namespace Comunes
 			TipoComando_MfdHora24,
 			TipoComando_MfdFecha,
 
-			TipoComando_Reservado_DxPosicion = 100,
+            TipoComando_NxtLeds = 50,
+
+            TipoComando_Reservado_DxPosicion = 100,
 
             TipoComando_Soltar = 128,
         };

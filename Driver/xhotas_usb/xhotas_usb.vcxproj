@@ -96,7 +96,7 @@
       <AdditionalDependencies>$(DDK_LIB_PATH)\wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Inf>
-      <TimeStamp>9.0.1.0</TimeStamp>
+      <TimeStamp>9.0.2.0</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemGroup>

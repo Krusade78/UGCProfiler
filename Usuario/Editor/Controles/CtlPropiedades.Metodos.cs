@@ -82,11 +82,12 @@ namespace Editor
                     ButtonAssignPOV.Visibility = System.Windows.Visibility.Visible;
                 else
                 {
-                    if ((b == 3) && (idJ == 1))
+                    if (((b == 3) && (idJ == (byte)Comunes.CTipos.TipoJoy.X52_Joy)) || ((b == 10) && (idJ == (byte)Comunes.CTipos.TipoJoy.NXT)))
                         ButtonAssignPinkie.Visibility = System.Windows.Visibility.Visible;
                     else
                     {
-                        if ((b > 4) && (b < 8) && (idJ == 1))
+                        if (((b > 4) && (b < 8) && (idJ == (byte)Comunes.CTipos.TipoJoy.X52_Joy)) ||
+                                ((b > 3) && (b < 7) && (idJ == (byte)Comunes.CTipos.TipoJoy.NXT)))
                             ButtonAssignModes.Visibility = System.Windows.Visibility.Visible;
                     }
                 }

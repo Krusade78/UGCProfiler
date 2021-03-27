@@ -7,7 +7,7 @@
 
 #define HARDWARE_ID_PEDALES  L"\\\\?\\HID#VID_06A3&PID_0763"
 #define HARDWARE_ID_X52 L"\\\\?\\HID#VID_06A3&PID_0255"
-#define HARDWARE_ID_NXT L"\\\\?\\HID#VID_0000&PID_0000"
+#define HARDWARE_ID_NXT L"\\\\?\\HID#VID_231d&PID_0200"
 
 class CEntradaHID
 {

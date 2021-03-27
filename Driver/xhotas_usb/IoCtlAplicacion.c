@@ -1,5 +1,5 @@
 /*++
-Copyright (c) 2020 Alfredo Costalago
+Copyright (c) 2021 Alfredo Costalago
 
 Module Name:
 
@@ -137,75 +137,19 @@ VOID EvtIOCtlAplicacion(
 		WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
 		return;
 	}
-	switch (IoControlCode)
+	if (IoControlCode == IOCTL_X52)
 	{
-		case IOCTL_MFD_LUZ:
-		case IOCTL_GLOBAL_LUZ:
-		case IOCTL_INFO_LUZ:
-		case IOCTL_PINKIE:
-			if (InputBufferLength != 1)
-			{
-				WdfRequestSetInformation(Request, 1);
-				WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
-				return;
-			}
-			break;
-		case IOCTL_FECHA:
+		if (InputBufferLength != 3)
 		{
-			if (InputBufferLength != 2)
-			{
-				WdfRequestSetInformation(Request, 2);
-				WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
-				return;
-			}
-			break;
+			WdfRequestSetInformation(Request, 3);
+			WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
+			return;
 		}
-		case IOCTL_HORA:
-		case IOCTL_HORA24:
-		{
-			if (InputBufferLength != 3)
-			{
-				WdfRequestSetInformation(Request, 2);
-				WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
-				return;
-			}
-			break;
-		}
-		default:
-			break;
 	}
 
 	switch (IoControlCode)
 	{
 	//------------------- X52_write.c -----------------------------------------
-	case IOCTL_MFD_LUZ:
-	{
-		status = Luz_MFD(device, SystemBuffer);
-		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, status);
-		break;
-	}
-	case IOCTL_GLOBAL_LUZ:
-	{
-		status = Luz_Global(device, SystemBuffer);
-		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, status);
-		break;
-	}
-	case IOCTL_INFO_LUZ:
-	{
-		status = Luz_Info(device, SystemBuffer);
-		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, status);
-		break;
-	}
-	case IOCTL_PINKIE:
-	{
-		status = Set_Pinkie(device, SystemBuffer);
-		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, status);
-		break;
-	}
 	case IOCTL_TEXTO:
 	{
 		status = Set_Texto(device, SystemBuffer, InputBufferLength);
@@ -213,24 +157,10 @@ VOID EvtIOCtlAplicacion(
 		WdfRequestComplete(Request, status);
 		break;
 	}
-	case IOCTL_HORA:
+	case IOCTL_X52:
 	{
-		status = Set_Hora(device, SystemBuffer);
-		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, status);
-		break;
-	}
-	case IOCTL_HORA24:
-	{
-		status = Set_Hora24(device, SystemBuffer);
-		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 1);
-		WdfRequestComplete(Request, status);
-		break;
-	}
-	case IOCTL_FECHA:
-	{
-		status = Set_Fecha(device, SystemBuffer);
-		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 2);
+		status = EnviarOrden(device, SystemBuffer, 1);
+		if (NT_SUCCESS(status)) WdfRequestSetInformation(Request, 3);
 		WdfRequestComplete(Request, status);
 		break;
 	}

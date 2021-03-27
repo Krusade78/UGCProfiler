@@ -37,7 +37,7 @@ void CMenuMFD::SetInicio()
 {
 	UCHAR fila1[] = "\x01  Saitek X-52";
 	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila1, static_cast<BYTE>(strnlen_s((char*)fila1, 17)));
-	UCHAR fila2[] = "\x02  Driver v9.0";
+	UCHAR fila2[] = "\x02  Driver v9.1";
 	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila2, static_cast<BYTE>(strnlen_s((char*)fila2, 17)));
 	UCHAR fila3[] = "\x03 ";
 	if (CX52Salida::Get() != nullptr) CX52Salida::Get()->Set_Texto(fila3, static_cast<BYTE>(strnlen_s((char*)fila3, 17)));
