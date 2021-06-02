@@ -64,7 +64,7 @@ namespace Editor
                     ar.Comandos = new ushort[1 + st[i].Length + 1 + 3];
                     //'texto x52
                     ar.Comandos[0] = (byte)TipoComando.TipoComando_MfdTextoIni + (3 << 8); //línea
-                    byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode.GetBytes(st[i]));
+                    byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(st[i]));
                     for (byte j = 0; j < texto.Length; j++)
                     {
                         ar.Comandos[1 + j] = (ushort)((byte)TipoComando.TipoComando_MfdTexto + (texto[j] << 8));

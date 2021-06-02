@@ -74,13 +74,13 @@ void CX52Salida::Luz_Global(PUCHAR SystemBuffer)
 
 void CX52Salida::Luz_Info(PUCHAR SystemBuffer)
 {
-	UCHAR params[3] = { *(SystemBuffer) + 0x50 ,0 , 0xb4 };
+	UCHAR params[3] = { static_cast<UCHAR>(*(SystemBuffer) + 0x50),0 , 0xb4 };
 	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Set_Pinkie(PUCHAR SystemBuffer)
 {
-	UCHAR params[3] = { *(SystemBuffer) + 0x50 ,0 , 0xfd };
+	UCHAR params[3] = { static_cast<UCHAR>(*(SystemBuffer) + 0x50),0 , 0xfd };
 	EnviarOrden(IOCTL_X52, params, 3);
 }
 
@@ -91,13 +91,13 @@ void CX52Salida::Set_Texto(PUCHAR SystemBuffer, BYTE tamBuffer)
 
 void CX52Salida::Set_Hora(PUCHAR SystemBuffer)
 {
-	UCHAR params[3] = { (SystemBuffer)[2] ,(SystemBuffer)[1] ,*(SystemBuffer) + 0xbf };
+	UCHAR params[3] = { (SystemBuffer)[2] ,(SystemBuffer)[1] , static_cast<UCHAR>(*(SystemBuffer) + 0xbf) };
 	EnviarOrden(IOCTL_X52, params, 3);
 }
 
 void CX52Salida::Set_Hora24(PUCHAR SystemBuffer)
 {
-	UCHAR params[3] = { (SystemBuffer)[2] ,(SystemBuffer)[1] + 0x80 ,*(SystemBuffer)+0xbf };
+	UCHAR params[3] = { (SystemBuffer)[2] ,static_cast<UCHAR>((SystemBuffer)[1] + 0x80), static_cast<UCHAR>(*(SystemBuffer) + 0xbf) };
 	EnviarOrden(IOCTL_X52, params, 3);
 }
 

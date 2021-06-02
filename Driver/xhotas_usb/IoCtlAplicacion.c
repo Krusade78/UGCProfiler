@@ -30,7 +30,7 @@ DECLARE_CONST_UNICODE_STRING(MyDeviceName, L"\\Device\\X52_XHOTAS_Control");
 DECLARE_CONST_UNICODE_STRING(dosDeviceName, L"\\??\\X52_XHOTASControl");
 
 #ifdef ALLOC_PRAGMA
-    #pragma alloc_text( PAGE, IniciarIoCtlAplicacion)
+	#pragma alloc_text( PAGE, IniciarIoCtlAplicacion)
 	#pragma alloc_text( PAGE, CerrarIoCtlAplicacion)
 	#pragma alloc_text( PAGE, EvtIOCtlAplicacion)
 #endif /* ALLOC_PRAGMA */
@@ -42,6 +42,7 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 	WDF_IO_QUEUE_CONFIG		ioQConfig;
 	PWDFDEVICE_INIT			devInit;
 	WDFDEVICE				ctlDevice;
+	WDFQUEUE				ioQueue;
 
 	PAGED_CODE();
 
@@ -81,15 +82,17 @@ NTSTATUS IniciarIoCtlAplicacion(_In_ WDFDEVICE device)
 	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
 	attributes.ExecutionLevel = WdfExecutionLevelPassive;
 	attributes.SynchronizationScope = WdfSynchronizationScopeQueue;
-	status = WdfIoQueueCreate(ctlDevice, &ioQConfig, &attributes, WDF_NO_HANDLE);
+	status = WdfIoQueueCreate(ctlDevice, &ioQConfig, &attributes, &ioQueue);
 	if (!NT_SUCCESS(status))
 	{
 		WdfObjectDelete(ctlDevice);
 		return status;
 	}
+	GetControlContext(ctlDevice)->Cola = ioQueue;
 
 	WdfControlFinishInitializing(ctlDevice);
 	GetDeviceContext(device)->ControlDevice = ctlDevice;
+
 
 	return STATUS_SUCCESS;
 }
@@ -100,6 +103,11 @@ VOID CerrarIoCtlAplicacion(_In_ WDFDEVICE device)
 
 	if (GetDeviceContext(device)->ControlDevice != NULL)
 	{
+		WdfObjectAcquireLock(GetControlContext(GetDeviceContext(device)->ControlDevice)->Cola);
+		{
+			GetControlContext(GetDeviceContext(device)->ControlDevice)->Padre = NULL;
+		}
+		WdfObjectReleaseLock(GetControlContext(GetDeviceContext(device)->ControlDevice)->Cola);
 		WdfObjectDelete(GetDeviceContext(device)->ControlDevice);
 		GetDeviceContext(device)->ControlDevice = NULL;
 	}
@@ -115,11 +123,28 @@ VOID EvtIOCtlAplicacion(
 {
 	NTSTATUS	status;
 	PUCHAR		SystemBuffer = NULL;
-	WDFDEVICE	device = GetControlContext(WdfIoQueueGetDevice(Queue))->Padre;
+	WDFDEVICE	device = NULL;
 
 	UNREFERENCED_PARAMETER(OutputBufferLength);
 
 	PAGED_CODE();
+
+	if ((WdfRequestGetIoQueue(Request) != Queue) || (GetControlContext(WdfIoQueueGetDevice(Queue)) == NULL))
+	{
+		WdfRequestSetInformation(Request, 0);
+		WdfRequestComplete(Request, STATUS_INVALID_DEVICE_STATE);
+		return;
+	}
+	else
+	{
+		device = GetControlContext(WdfIoQueueGetDevice(Queue))->Padre;
+		if (device == NULL)
+		{
+			WdfRequestSetInformation(Request, 0);
+			WdfRequestComplete(Request, STATUS_INVALID_DEVICE_STATE);
+			return;
+		}
+	}
 
 	if (InputBufferLength > 0)
 	{

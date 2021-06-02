@@ -228,18 +228,20 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 	incremental = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 16) == 16;
 	bandas = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 32) == 32;
 
+	const UINT16 rango = 65535;
+	UINT16	posNueva = (nueva < 0) ? static_cast<UINT16>(nueva + 32767) : static_cast<UINT16>(nueva) + 32768;
+
 	if (incremental)
 	{
-		const INT16 rango = 32767;
 		UINT16 vieja = pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].PosIncremental;
 		if (nueva > vieja)
 		{
 			UCHAR posiciones = pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].ResistenciaInc;
 			if (vieja < (rango - posiciones))
 			{
-				if (nueva > (vieja + posiciones))
+				if (posNueva > (vieja + posiciones))
 				{
-					pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].PosIncremental = nueva;
+					pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].PosIncremental = posNueva;
 					idn = 0;
 				}
 			}
@@ -249,9 +251,9 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 			UCHAR posiciones = pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].ResistenciaDec;
 			if (vieja > posiciones)
 			{
-				if (nueva < (vieja - posiciones))
+				if (posNueva < (vieja - posiciones))
 				{
-					pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].PosIncremental = nueva;
+					pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].PosIncremental = posNueva;
 					idn = 1;
 				}
 			}
@@ -259,10 +261,9 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 	}
 	else if (bandas)
 	{
-		const UINT16 rango = 65535;
+
 		UCHAR	bandaAntigua = pPerfil->GetEstado()->Ejes[tipoJ][pinkie][modos][eje].Banda;
 		UCHAR	bandaActual = 255;
-		UINT16	posNueva = (nueva < 0) ? static_cast<UINT16>(nueva + 32767) : static_cast<UINT16>(nueva) + 32768;
 		UINT16	posAnterior = 0;
 		UCHAR	idc;
 

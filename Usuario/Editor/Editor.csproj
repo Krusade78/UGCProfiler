@@ -19,7 +19,9 @@
     <Description>Editor de perfiles</Description>
     <Version>9.1.0</Version>
     <Copyright>Copyright 2021</Copyright>
+    <StartupObject>Editor.App</StartupObject>
   </PropertyGroup>
+
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebugType>none</DebugType>

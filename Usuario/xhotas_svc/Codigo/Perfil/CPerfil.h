@@ -71,7 +71,7 @@ public:
 		UCHAR SetasDx[4][4];
 		struct
 		{
-			INT16 PosIncremental;
+			UINT16 PosIncremental;
 			UCHAR Banda;
 		} Ejes[4][2][3][8];
 

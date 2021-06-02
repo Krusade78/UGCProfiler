@@ -233,7 +233,7 @@ namespace Editor
                         ascii[i - 1] = (byte)(comando[i] >> 8);
                         i++;
                     }
-                    string uni = System.Text.Encoding.Unicode.GetString(System.Text.Encoding.Convert(System.Text.Encoding.GetEncoding(850), System.Text.Encoding.Unicode, ascii));
+                    string uni = System.Text.Encoding.Unicode.GetString(System.Text.Encoding.Convert(System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode, ascii));
                     uni = uni.Replace('ø', 'ñ').Replace('Ó', 'á').Replace('ß', 'í').Replace('Ô', 'ó').Replace('Ò', 'ú').Replace('£', 'Ñ').Replace('Ø', 'ª').Replace('×', 'º').Replace('ƒ', '¿').Replace('Ú', '¡');
                     return texto + " " + uni;
                 }

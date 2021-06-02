@@ -10,7 +10,7 @@ public:
 
 	void SetRuta(wchar_t* ruta);
 
-	void SetLed(UCHAR* params) { EnviarOrden(params); }
+	void SetLed(UCHAR* params);
 private:
 	typedef struct
 	{
@@ -27,6 +27,13 @@ private:
 	std::queue<PORDEN> cola;
 
 	UCHAR paqueteHID[0x81];
+
+	struct
+	{
+		UCHAR Base;
+		UCHAR Antiguo1[4];
+		UCHAR Antiguo2[4];
+	} estadoLedBase;
 
 	bool AbrirDriver();
 	void EnviarOrden(UCHAR* params);

@@ -14,6 +14,7 @@ CNXTSalida::CNXTSalida()
 	UCHAR cabeceraPaquete[8] = { 0x59, 0xA5, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x01 };
 	RtlZeroMemory(paqueteHID, 0x81);
 	RtlCopyMemory(paqueteHID, cabeceraPaquete, 8);
+	RtlZeroMemory(&estadoLedBase, sizeof(estadoLedBase));
 }
 
 CNXTSalida::~CNXTSalida()
@@ -99,6 +100,42 @@ bool CNXTSalida::AbrirDriver()
 	return true;
 }
 
+void CNXTSalida::SetLed(UCHAR* params)
+{
+	if (params[0] == 0)
+	{
+		UCHAR modo = (params[3] >> 5) & 0x7;
+		bool led2 = (modo == 0) || (modo == 5); //azul, color1
+		bool led1 = (modo == 1) || (modo == 6); //rojo, color2
+		if ((params[3] & 0b0001'1100) == 0)
+		{
+			if (led1) estadoLedBase.Base &= 0b0010;
+			if (led2) estadoLedBase.Base &= 0b0001;
+			if ((estadoLedBase.Base & 0b0011) != 0)
+			{
+				RtlCopyMemory(params, (estadoLedBase.Base == 1) ? estadoLedBase.Antiguo1 : estadoLedBase.Antiguo2 , 4);
+			}
+		}
+		else
+		{
+			estadoLedBase.Base |= (led1) ? 1 : 0;
+			estadoLedBase.Base |= (led2) ? 2 : 0;
+			if (led1) RtlCopyMemory(estadoLedBase.Antiguo1, params, 4);
+			if (led2) RtlCopyMemory(estadoLedBase.Antiguo2, params, 4);
+		}
+		if ((estadoLedBase.Base & 0b0011) == 3)
+		{
+			params[1] = estadoLedBase.Antiguo2[1];
+			params[2] = estadoLedBase.Antiguo2[2] & 0b1;
+			params[2] |= estadoLedBase.Antiguo1[2] & 0b1111'1110;
+			params[3] &= 0b1111'1100;
+			params[3] |= estadoLedBase.Antiguo1[3] & 0b11;
+			params[3] = (params[3] & 0b0001'1111) | (4 << 5);
+		}
+	}
+	EnviarOrden(params);
+}
+
 void CNXTSalida::EnviarOrden(UCHAR* buffer)
 {
 	PORDEN orden = new ORDEN;
@@ -164,7 +201,7 @@ VOID CALLBACK CNXTSalida::WkEnviar(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inou
 
 WORD CNXTSalida::CalcularCRC(UCHAR* bloque)
 {
-	__int16 result = 0xffff;
+	__int16 result = -1; // 0xffff;
 
 	for (char i = 0; i < 6; i++)
 	{

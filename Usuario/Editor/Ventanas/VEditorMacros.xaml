@@ -242,9 +242,9 @@
                         <ComboBox x:Name="cbModo" HorizontalAlignment="Left" VerticalAlignment="Center" Width="76" SelectedIndex="0">
                             <ComboBoxItem Content="Color 1" />
                             <ComboBoxItem Content="Color 2" />
-                            <ComboBoxItem Content="Color 1/2" />
-                            <ComboBoxItem Content="Color 2/1" />
-                            <ComboBoxItem Content="Color 1 y 2" />
+                            <ComboBoxItem Content="Color 1/2" IsEnabled="False" />
+                            <ComboBoxItem Content="Color 2/1" IsEnabled="False" />
+                            <ComboBoxItem Content="Color 1 y 2" IsEnabled="False" />
                             <ComboBoxItem Content="Color 1+" />
                             <ComboBoxItem Content="Color 2+" />
                         </ComboBox>

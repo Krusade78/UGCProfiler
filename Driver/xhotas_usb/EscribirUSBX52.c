@@ -85,59 +85,67 @@ NTSTATUS EnviarOrden(_In_ WDFDEVICE device, _In_ UCHAR* params, _In_ UCHAR npara
 
 	WdfWaitLockAcquire(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes, NULL);
 	{
-		WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-		attributes.ParentObject = GetDeviceContext(device)->SalidaX52.Ordenes;
-
-		UCHAR procesados = 0;
-		BOOLEAN crearHilo = (WdfCollectionGetCount(GetDeviceContext(device)->SalidaX52.Ordenes) == 0);
-		for (procesados = 0; procesados < nparams; procesados++)
+		if (GetDeviceContext(device)->SalidaX52.Ordenes == NULL)
 		{
-			PORDEN_X52 porden = NULL;
-			WDFMEMORY mem;
-			status = WdfMemoryCreate(&attributes, PagedPool, (ULONG)'ordX', sizeof(ORDEN_X52), &mem, &porden);
-			if (!NT_SUCCESS(status))
+			WdfWaitLockRelease(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes);
+			return status;
+		}
+		else
+		{
+			WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+			attributes.ParentObject = GetDeviceContext(device)->SalidaX52.Ordenes;
+
+			UCHAR procesados = 0;
+			BOOLEAN crearHilo = (WdfCollectionGetCount(GetDeviceContext(device)->SalidaX52.Ordenes) == 0);
+			for (procesados = 0; procesados < nparams; procesados++)
 			{
-				break;
-			}
-			else
-			{
-				porden->valor = *((USHORT*)&params[procesados * 3]);
-				porden->idx = params[2 + (procesados * 3)];
-				status = WdfCollectionAdd(GetDeviceContext(device)->SalidaX52.Ordenes, mem);
+				PORDEN_X52 porden = NULL;
+				WDFMEMORY mem;
+				status = WdfMemoryCreate(&attributes, PagedPool, (ULONG)'ordX', sizeof(ORDEN_X52), &mem, &porden);
 				if (!NT_SUCCESS(status))
 				{
-					WdfObjectDelete(mem);
 					break;
 				}
+				else
+				{
+					porden->valor = *((USHORT*)&params[procesados * 3]);
+					porden->idx = params[2 + (procesados * 3)];
+					status = WdfCollectionAdd(GetDeviceContext(device)->SalidaX52.Ordenes, mem);
+					if (!NT_SUCCESS(status))
+					{
+						WdfObjectDelete(mem);
+						break;
+					}
+				}
 			}
-		}
 
-		if (crearHilo && NT_SUCCESS(status))
-		{
-			HANDLE hilo;
-			if (GetDeviceContext(device)->SalidaX52.Hilo != NULL)
+			if (crearHilo && NT_SUCCESS(status))
 			{
-				PVOID hiloAntiguo = GetDeviceContext(device)->SalidaX52.Hilo;
-				ObReferenceObject(hiloAntiguo);
-				WdfWaitLockRelease(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes);
-				KeWaitForSingleObject(hiloAntiguo, Executive, KernelMode, FALSE, NULL);
-				ObDereferenceObject(hiloAntiguo);
-				WdfWaitLockAcquire(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes, NULL);
+				HANDLE hilo;
+				if (GetDeviceContext(device)->SalidaX52.Hilo != NULL)
+				{
+					PVOID hiloAntiguo = GetDeviceContext(device)->SalidaX52.Hilo;
+					ObReferenceObject(hiloAntiguo);
+					WdfWaitLockRelease(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes);
+					KeWaitForSingleObject(hiloAntiguo, Executive, KernelMode, FALSE, NULL);
+					ObDereferenceObject(hiloAntiguo);
+					WdfWaitLockAcquire(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes, NULL);
+				}
+				status = PsCreateSystemThread(&hilo, (ACCESS_MASK)0, NULL, (HANDLE)NULL, NULL, EnviarOrdenHilo, GetDeviceContext(device));
+				if (NT_SUCCESS(status))
+				{
+					ObReferenceObjectByHandle(hilo, THREAD_ALL_ACCESS, NULL, KernelMode, &GetDeviceContext(device)->SalidaX52.Hilo, NULL);
+					ZwClose(hilo);
+				}
 			}
-			status = PsCreateSystemThread(&hilo, (ACCESS_MASK)0, NULL, (HANDLE)NULL, NULL, EnviarOrdenHilo, GetDeviceContext(device));
-			if (NT_SUCCESS(status))
-			{
-				ObReferenceObjectByHandle(hilo, THREAD_ALL_ACCESS, NULL, KernelMode, &GetDeviceContext(device)->SalidaX52.Hilo, NULL);
-				ZwClose(hilo);
-			}
-		}
 
-		if (!NT_SUCCESS(status))
-		{
-			for (; procesados > 0; procesados--)
+			if (!NT_SUCCESS(status))
 			{
-				WdfObjectDelete(WdfCollectionGetLastItem(GetDeviceContext(device)->SalidaX52.Ordenes));
-				WdfCollectionRemoveItem(GetDeviceContext(device)->SalidaX52.Ordenes, WdfCollectionGetCount(GetDeviceContext(device)->SalidaX52.Ordenes) - 1);
+				for (; procesados > 0; procesados--)
+				{
+					WdfObjectDelete(WdfCollectionGetLastItem(GetDeviceContext(device)->SalidaX52.Ordenes));
+					WdfCollectionRemoveItem(GetDeviceContext(device)->SalidaX52.Ordenes, WdfCollectionGetCount(GetDeviceContext(device)->SalidaX52.Ordenes) - 1);
+				}
 			}
 		}
 	}
@@ -161,9 +169,16 @@ VOID EnviarOrdenHilo(PVOID context)
 		WDFMEMORY mem = NULL;
 		WdfWaitLockAcquire(devExt->SalidaX52.WaitLockOrdenes, NULL);
 		{
-			mem = WdfCollectionGetFirstItem(devExt->SalidaX52.Ordenes);
-			WdfCollectionRemoveItem(devExt->SalidaX52.Ordenes, 0);
-			if (WdfCollectionGetCount(devExt->SalidaX52.Ordenes) == 0)
+			if (devExt->SalidaX52.Ordenes != NULL)
+			{
+				mem = WdfCollectionGetFirstItem(devExt->SalidaX52.Ordenes);
+				WdfCollectionRemoveItem(devExt->SalidaX52.Ordenes, 0);
+				if (WdfCollectionGetCount(devExt->SalidaX52.Ordenes) == 0)
+				{
+					salir = TRUE;
+				}
+			}
+			else
 			{
 				salir = TRUE;
 			}
@@ -202,15 +217,20 @@ VOID LimpiarSalidaX52(WDFOBJECT  Object)
 
 	WdfWaitLockAcquire(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes, NULL);
 	{
-		while (WdfCollectionGetCount(GetDeviceContext(device)->SalidaX52.Ordenes) > 0)
+		if (GetDeviceContext(device)->SalidaX52.Ordenes != NULL)
 		{
-			WdfObjectDelete(WdfCollectionGetFirstItem(GetDeviceContext(device)->SalidaX52.Ordenes));
-			WdfCollectionRemoveItem(GetDeviceContext(device)->SalidaX52.Ordenes, 0);
-		}
-		philo = GetDeviceContext(device)->SalidaX52.Hilo;
-		if (philo != NULL)
-		{
-			ObReferenceObject(philo);
+			while (WdfCollectionGetCount(GetDeviceContext(device)->SalidaX52.Ordenes) > 0)
+			{
+				WdfObjectDelete(WdfCollectionGetFirstItem(GetDeviceContext(device)->SalidaX52.Ordenes));
+				WdfCollectionRemoveItem(GetDeviceContext(device)->SalidaX52.Ordenes, 0);
+			}
+			philo = GetDeviceContext(device)->SalidaX52.Hilo;
+			if (philo != NULL)
+			{
+				ObReferenceObject(philo);
+			}
+			WdfObjectDelete(GetDeviceContext(device)->SalidaX52.Ordenes);
+			GetDeviceContext(device)->SalidaX52.Ordenes = NULL;
 		}
 	}
 	WdfWaitLockRelease(GetDeviceContext(device)->SalidaX52.WaitLockOrdenes);

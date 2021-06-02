@@ -531,6 +531,11 @@ namespace Editor
         private void FcbLed_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!this.IsLoaded) return;
+            ((ComboBoxItem)cbModo.Items[1]).IsEnabled = true;
+            ((ComboBoxItem)cbModo.Items[2]).IsEnabled = true;
+            ((ComboBoxItem)cbModo.Items[3]).IsEnabled = true;
+            ((ComboBoxItem)cbModo.Items[4]).IsEnabled = true;
+            ((ComboBoxItem)cbModo.Items[6]).IsEnabled = true;
             if (cbLed.SelectedIndex == 0)
             {
                 txtColor1.Text = "0;0;7";
@@ -538,6 +543,9 @@ namespace Editor
                 txtColor2.IsEnabled = true;
                 rColor1.Fill = System.Windows.Media.Brushes.Blue;
                 rColor2.Fill = System.Windows.Media.Brushes.Red;
+                ((ComboBoxItem)cbModo.Items[2]).IsEnabled = false;
+                ((ComboBoxItem)cbModo.Items[3]).IsEnabled = false;
+                ((ComboBoxItem)cbModo.Items[4]).IsEnabled = false;
             }
             else if (cbLed.SelectedIndex == 1)
             {
@@ -546,6 +554,11 @@ namespace Editor
                 txtColor2.IsEnabled = false;
                 rColor1.Fill = System.Windows.Media.Brushes.Red;
                 rColor2.Fill = System.Windows.Media.Brushes.Black;
+                ((ComboBoxItem)cbModo.Items[1]).IsEnabled = false;
+                ((ComboBoxItem)cbModo.Items[2]).IsEnabled = false;
+                ((ComboBoxItem)cbModo.Items[3]).IsEnabled = false;
+                ((ComboBoxItem)cbModo.Items[4]).IsEnabled = false;
+                ((ComboBoxItem)cbModo.Items[6]).IsEnabled = false;
             }
             else
             {

@@ -1,5 +1,5 @@
 /*++
-Copyright (c) 2020 Alfredo Costalago
+Copyright (c) 2021 Alfredo Costalago
 
 Module Name:
 
@@ -29,6 +29,7 @@ This file contains the driver entry points and callbacks.
 #pragma alloc_text (PAGE, EvtAddDevice)
 #pragma alloc_text (PAGE, IniciarContextX52)
 #pragma alloc_text (PAGE, EvtDevicePrepareHardware)
+#pragma alloc_text (PAGE, EvtDeviceSurpriseRemoval)
 #pragma alloc_text (PAGE, EvtCleanupCallback)
 #endif
 
@@ -65,6 +66,7 @@ NTSTATUS EvtAddDevice(
 
 	WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
 		pnpPowerCallbacks.EvtDevicePrepareHardware = EvtDevicePrepareHardware;
+		pnpPowerCallbacks.EvtDeviceSurpriseRemoval = EvtDeviceSurpriseRemoval;
 	WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
 	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_CONTEXT);
@@ -127,6 +129,16 @@ NTSTATUS EvtDevicePrepareHardware(
 	}
 
     return status;
+}
+
+/// <summary>
+/// PASSIVE
+/// </summary>
+/// <param name="WDFDEVICE"></param>
+VOID EvtDeviceSurpriseRemoval(WDFDEVICE device)
+{
+	PAGED_CODE();
+	EvtCleanupCallback(device);
 }
 
 /// <summary>

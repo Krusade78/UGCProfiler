@@ -123,22 +123,22 @@ namespace Editor
 
         private void Buttonp41_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(24, CEnums.Tipo.Boton, "Seta 4 Norte");
+            Vista.Ver(24, CEnums.Tipo.Seta, "Seta 4 Norte");
         }
 
         private void Buttonp43_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(26, CEnums.Tipo.Boton, "Seta 4 Este");
+            Vista.Ver(26, CEnums.Tipo.Seta, "Seta 4 Este");
         }
 
         private void Buttonp45_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(28, CEnums.Tipo.Boton, "Seta 4 Sur");
+            Vista.Ver(28, CEnums.Tipo.Seta, "Seta 4 Sur");
         }
 
         private void Buttonp47_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(30, CEnums.Tipo.Boton, "Seta 4 Oeste");
+            Vista.Ver(30, CEnums.Tipo.Seta, "Seta 4 Oeste");
         }
         #endregion
 
