@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>res\editor.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -20,6 +20,7 @@
     <Version>9.1.0</Version>
     <Copyright>Copyright 2021</Copyright>
     <StartupObject>Editor.App</StartupObject>
+    <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
   </PropertyGroup>
 
 

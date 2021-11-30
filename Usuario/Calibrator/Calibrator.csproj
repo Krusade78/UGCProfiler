@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <NoWin32Manifest>true</NoWin32Manifest>
     <StartupObject></StartupObject>
@@ -22,6 +22,7 @@
     <FileVersion>9.1.0.0</FileVersion>
     <ApplicationIcon>res\calibrador.ico</ApplicationIcon>
     <Version>9.1.0</Version>
+    <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
