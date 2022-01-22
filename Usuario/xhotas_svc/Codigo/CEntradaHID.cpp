@@ -5,6 +5,7 @@
 #include "CEntradaHID.h"
 #include "X52/MenuMFD.h"
 #include "NXT/EscribirHIDNXT.h"
+#include "CalibradoDx/CDirectInput.h"
 
 CEntradaHID::CEntradaHID(CPerfil* perfil, CColaEventos* colaEv)
 {
@@ -16,7 +17,7 @@ CEntradaHID::~CEntradaHID()
     if (pnpHdn != NULL) UnregisterDeviceNotification(pnpHdn);
     if (pnpHWnd != NULL) DestroyWindow(pnpHWnd);
     salir = true;
-    CerrarDevices();
+    CerrarDevices(0x0f);
     delete[] rutaPedales; rutaPedales = NULL;
     delete[] rutaX52; rutaX52 = NULL;
     delete[] rutaNXT; rutaNXT = NULL;
@@ -37,7 +38,7 @@ bool CEntradaHID::Iniciar(HINSTANCE hInst)
     {
         if (PnpNotification(hInst))
         {
-            if(AbrirDevices())
+            if(AbrirDevices(0x0f))
             {
                 HANDLE h = CreateThread(NULL, 0, HiloLectura, this, 0, NULL);
                 if (h != NULL)
@@ -186,12 +187,14 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                     {
                         PDEV_BROADCAST_DEVICEINTERFACE dbdi = (PDEV_BROADCAST_DEVICEINTERFACE)lParam;
                         int tam = lstrlen(dbdi->dbcc_name) + 1;
+                        UCHAR abiertos = 0;
                         if (local->rutaPedales == NULL)
                         {
                             if (local->CompararHardwareId(dbdi->dbcc_name, HARDWARE_ID_PEDALES))
                             {
                                 local->rutaPedales = new wchar_t[tam];
                                 StringCchCopy(local->rutaPedales, tam, dbdi->dbcc_name);
+                                abiertos |= 1;
                             }
                         }
                         if (local->rutaX52 == NULL)
@@ -200,6 +203,7 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                             {
                                 local->rutaX52 = new wchar_t[tam];
                                 StringCchCopy(local->rutaX52, tam, dbdi->dbcc_name);
+                                abiertos |= 2;
                             }
                         }
                         if (local->rutaNXT == NULL)
@@ -208,9 +212,10 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                             {
                                 local->rutaNXT = new wchar_t[tam];
                                 StringCchCopy(local->rutaNXT, tam, dbdi->dbcc_name);
+                                abiertos |= 4;
                             }
                         }
-                        local->AbrirDevices();
+                        local->AbrirDevices(abiertos);
                         return TRUE;
                     }
                     break;
@@ -222,12 +227,14 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                     {
                         PDEV_BROADCAST_DEVICEINTERFACE dbdi = (PDEV_BROADCAST_DEVICEINTERFACE)lParam;
                         int tam = lstrlen(dbdi->dbcc_name) + 1;
+                        UCHAR cerrado = 0;
                         if (local->rutaPedales != NULL)
                         {
                             if (local->CompararHardwareId(dbdi->dbcc_name, HARDWARE_ID_PEDALES))
                             {
                                 delete[] local->rutaPedales;
                                 local->rutaPedales = NULL;
+                                cerrado |= 1;
                             }
                         }
                         if (local->rutaX52 != NULL)
@@ -236,6 +243,7 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                             {
                                 delete[] local->rutaX52;
                                 local->rutaX52 = NULL;
+                                cerrado |= 2;
                             }
                         }
                         if (local->rutaNXT != NULL)
@@ -244,10 +252,10 @@ LRESULT CALLBACK CEntradaHID::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
                             {
                                 delete[] local->rutaNXT;
                                 local->rutaNXT = NULL;
-
+                                cerrado |= 4;
                             }
                         }
-                        local->CerrarDevices();
+                        local->CerrarDevices(cerrado);
                     }
                     return TRUE;
                 }
@@ -276,10 +284,10 @@ void CEntradaHID::LoopWnd()
     while (ok != 0);
 }
 
-bool CEntradaHID::AbrirDevices()
+bool CEntradaHID::AbrirDevices(UCHAR abiertos)
 {
     bool ok = true;
-    if ((rutaPedales != NULL) && (InterlockedCompareExchangePointer(&hdevPedales, NULL, NULL) == NULL))
+    if ((rutaPedales != NULL) && (InterlockedCompareExchangePointer(&hdevPedales, NULL, NULL) == NULL) && ((abiertos & 1) == 1))
     {
         HANDLE hdev = CreateFile(rutaPedales, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
         if (INVALID_HANDLE_VALUE == hdev)
@@ -291,7 +299,7 @@ bool CEntradaHID::AbrirDevices()
             InterlockedExchangePointer(&hdevPedales, hdev);
         }
     }
-    if ((rutaX52 != NULL) && (InterlockedCompareExchangePointer(&hdevX52, NULL, NULL) == NULL))
+    if ((rutaX52 != NULL) && (InterlockedCompareExchangePointer(&hdevX52, NULL, NULL) == NULL) && ((abiertos & 2) == 2))
     {
         HANDLE hdev = CreateFile(rutaX52, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
         if (INVALID_HANDLE_VALUE == hdev)
@@ -304,7 +312,7 @@ bool CEntradaHID::AbrirDevices()
             InterlockedExchangePointer(&hdevX52, hdev);
         }
     }
-    if ((rutaNXT != NULL) && (InterlockedCompareExchangePointer(&hdevNXT, NULL, NULL) == NULL))
+    if ((rutaNXT != NULL) && (InterlockedCompareExchangePointer(&hdevNXT, NULL, NULL) == NULL) && ((abiertos & 4) == 4))
     {
         HANDLE hdev = CreateFile(rutaNXT, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
         if (INVALID_HANDLE_VALUE == hdev)
@@ -321,21 +329,21 @@ bool CEntradaHID::AbrirDevices()
     return ok;
 }
 
-void CEntradaHID::CerrarDevices()
+void CEntradaHID::CerrarDevices(UCHAR cerrados)
 {
-    if ((rutaPedales != NULL) && (InterlockedCompareExchangePointer(&hdevPedales, NULL, NULL) != NULL))
+    if ((rutaPedales != NULL) && (InterlockedCompareExchangePointer(&hdevPedales, NULL, NULL) != NULL) && ((cerrados & 1) == 1))
     {
         HANDLE h = InterlockedExchangePointer(&hdevPedales, NULL);
         CancelIoEx(h, NULL);
         CloseHandle(h);
     }
-    if ((rutaX52 != NULL) && (InterlockedCompareExchangePointer(&hdevX52, NULL, NULL) != NULL))
+    if ((rutaX52 != NULL) && (InterlockedCompareExchangePointer(&hdevX52, NULL, NULL) != NULL) && ((cerrados & 2) == 2))
     {
         HANDLE h = InterlockedExchangePointer(&hdevX52, NULL);
         CancelIoEx(h, NULL);
         CloseHandle(h);
     }
-    if ((rutaNXT != NULL) && (InterlockedCompareExchangePointer(&hdevNXT, NULL, NULL) != NULL))
+    if ((rutaNXT != NULL) && (InterlockedCompareExchangePointer(&hdevNXT, NULL, NULL) != NULL) && ((cerrados & 4) == 4))
     {
         CNXTSalida::Get()->SetRuta(nullptr);
         HANDLE h = InterlockedExchangePointer(&hdevNXT, NULL);

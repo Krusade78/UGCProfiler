@@ -16,6 +16,7 @@ Abstract:
 #include <vhf.h>
 #include "Driver.h"
 #include "ColaHID.h"
+#include "ColaVHF.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, CrearColaHID)
@@ -25,14 +26,18 @@ NTSTATUS CrearColaHID(_In_ WDFDEVICE Device, _Out_ WDFQUEUE	*Queue)
 {
     NTSTATUS                status;
     WDF_IO_QUEUE_CONFIG     queueConfig;
+    WDF_OBJECT_ATTRIBUTES   attributes;
     WDFQUEUE                queue;
 
     PAGED_CODE();
 
+    WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+    attributes.ExecutionLevel = WdfExecutionLevelPassive;
+
     WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&queueConfig, WdfIoQueueDispatchSequential);
         queueConfig.EvtIoWrite = EvtIoWriteHID;
 
-    status = WdfIoQueueCreate(Device, &queueConfig, WDF_NO_OBJECT_ATTRIBUTES, &queue);
+    status = WdfIoQueueCreate(Device, &queueConfig, &attributes, &queue);
     if (!NT_SUCCESS(status)) 
     {
         return status;
@@ -50,7 +55,7 @@ VOID EvtIoWriteHID(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request, _In_ size_t Len
     size_t length;
     NTSTATUS status;
 
-    if (Length < 5) 
+    if (Length < 1) 
     {
         WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
         return;
@@ -69,27 +74,38 @@ VOID EvtIoWriteHID(_In_ WDFQUEUE Queue, _In_ WDFREQUEST Request, _In_ size_t Len
         return;
     }
 
-    // 
-    // Complete the input IRP if we have one
-    //
-    VhfSubmitReadReport(WdfIoQueueGetDevice(Queue), pvoid, (ULONG)Length);
+    if (*(PUCHAR)pvoid == 0)
+    {
+        EvtIoWriteVHF(Queue, Request, Length);
+    }
+    else
+    {
+        // 
+        // Complete the input IRP if we have one
+        //
+        status = VhfSubmitReadReport(WdfIoQueueGetDevice(Queue), pvoid, (ULONG)Length);
 
-    //
-    // set status and information
-    //
-    WdfRequestCompleteWithInformation(Request, STATUS_SUCCESS, Length);
+        //
+        // set status and information
+        //
+        WdfRequestCompleteWithInformation(Request, status, Length);
+    }
 }
 
 
-VOID VhfSubmitReadReport(_In_ WDFDEVICE Device,_In_ PUCHAR Report, _In_ ULONG ReportSize)
+NTSTATUS VhfSubmitReadReport(_In_ WDFDEVICE Device,_In_ PUCHAR Report, _In_ ULONG ReportSize)
 {
     HID_XFER_PACKET transferPacket;
+    NTSTATUS status;
 
     transferPacket.reportId = *Report;
     transferPacket.reportBufferLen = ReportSize;
     transferPacket.reportBuffer = Report;
 
-    VhfReadReportSubmit(GetDeviceContext(Device)->VhfHandle, &transferPacket);
+    WdfSpinLockAcquire(GetDeviceContext(Device)->LockHandle);
+    status = VhfReadReportSubmit(GetDeviceContext(Device)->VhfHandle, &transferPacket);
+    WdfSpinLockRelease(GetDeviceContext(Device)->LockHandle);
+    return status;
 }
 
 

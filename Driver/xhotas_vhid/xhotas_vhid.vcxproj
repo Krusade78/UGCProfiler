@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ColaVHF.c" />
     <ClCompile Include="Driver.c" />
     <ClCompile Include="ColaHID.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ColaVHF.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="ColaHID.h" />
   </ItemGroup>
@@ -27,7 +29,7 @@
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
     <RootNamespace>xhotas_vhid</RootNamespace>
     <ProjectName>xhotas_vhid</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
     <SccProjectName>$/Driver joystick/Driver/xhotas_vhid</SccProjectName>
     <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
     <SccLocalPath>.</SccLocalPath>
@@ -93,12 +95,15 @@
       <AdditionalDependencies>$(DDK_LIB_PATH)\VhfKm.lib;$(DDK_LIB_PATH)\wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Inf>
-      <TimeStamp>9.1.0.0</TimeStamp>
+      <TimeStamp>9.2.0.0</TimeStamp>
     </Inf>
     <PostBuildEvent>
-      <Command>"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe" sign /f "..\SolidCert.p12" /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a "$(OutDir)$(TargetName)\*.cat"
-"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe" sign /f "..\SolidCert.p12" /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a "$(OutDir)$(TargetName)\*.sys"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <DriverSign>
+      <FileDigestAlgorithm>SHA256</FileDigestAlgorithm>
+    </DriverSign>
   </ItemDefinitionGroup>
   <ItemGroup>
     <FilesToPackage Include="$(TargetPath)" />

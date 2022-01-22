@@ -77,7 +77,7 @@ typedef struct
 			UCHAR Origen;
 			UCHAR Modo;
 			UCHAR Pinkie;
-			USHORT Incremental;
+			UINT16 Incremental;
 			UCHAR Banda;
 		} Extendido;
 	};

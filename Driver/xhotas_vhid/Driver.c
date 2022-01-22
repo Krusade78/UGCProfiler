@@ -16,13 +16,12 @@ This file contains the driver entry points and callbacks.
 #include <vhf.h>
 #include "driver.h"
 #include "ColaHID.h"
+#include "ColaVHF.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text (PAGE, EvtAddDevice)
-#pragma alloc_text (PAGE, EvtDeviceSelfManagedIoInit)
 #pragma alloc_text (PAGE, EvtDeviceSelfManagedIoCleanup)
-#pragma alloc_text (PAGE, VhfInitialize)
 #endif
 
 
@@ -51,7 +50,6 @@ NTSTATUS EvtAddDevice(_In_ WDFDRIVER Driver,_Inout_ PWDFDEVICE_INIT DeviceInit)
 	PAGED_CODE();
 
 	WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
-		pnpPowerCallbacks.EvtDeviceSelfManagedIoInit = EvtDeviceSelfManagedIoInit;
 		pnpPowerCallbacks.EvtDeviceSelfManagedIoCleanup = EvtDeviceSelfManagedIoCleanup;
 	WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
@@ -62,12 +60,13 @@ NTSTATUS EvtAddDevice(_In_ WDFDRIVER Driver,_Inout_ PWDFDEVICE_INIT DeviceInit)
 
 	RtlZeroMemory(GetDeviceContext(device), sizeof(DEVICE_CONTEXT));
 
-	//
-	// Initialize VHF.  This will talk to HIDCLASS for us.
-	//
-	status = VhfInitialize(device);
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	attributes.ParentObject = device;
+	status = WdfSpinLockCreate(&attributes, &GetDeviceContext(device)->LockHandle);
 	if (!NT_SUCCESS(status))
+	{
 		return status;
+	}
 
 	status = CrearColaHID(device, &GetDeviceContext(device)->ColaHID);
 	if (!NT_SUCCESS(status))
@@ -78,27 +77,9 @@ NTSTATUS EvtAddDevice(_In_ WDFDRIVER Driver,_Inout_ PWDFDEVICE_INIT DeviceInit)
 	return WdfDeviceCreateSymbolicLink(device, &dosDeviceName);
 }
 
-NTSTATUS EvtDeviceSelfManagedIoInit(WDFDEVICE WdfDevice)
-{
-	PAGED_CODE();
-
-	return VhfStart(GetDeviceContext(WdfDevice)->VhfHandle);
-}
-
 VOID EvtDeviceSelfManagedIoCleanup(WDFDEVICE WdfDevice)
 {
 	PAGED_CODE();
 
-	VhfDelete(GetDeviceContext(WdfDevice)->VhfHandle, TRUE);
-}
-
-NTSTATUS VhfInitialize(WDFDEVICE WdfDevice)
-{
-	PDEVICE_CONTEXT	deviceContext = GetDeviceContext(WdfDevice);
-	VHF_CONFIG		vhfConfig;
-
-	PAGED_CODE();
-
-	VHF_CONFIG_INIT(&vhfConfig, WdfDeviceWdmGetDeviceObject(WdfDevice),	sizeof(ReportDescriptor), (PUCHAR)ReportDescriptor);
-	return VhfCreate(&vhfConfig, &deviceContext->VhfHandle);
+	VhfLimpiar(WdfDevice);
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31912.275
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Usuario", "Usuario", "{8967877F-7765-4DC6-B807-BC66E41BE88D}"
 EndProject
@@ -35,6 +35,17 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comunes", "Usuario\Comunes\Comunes.csproj", "{E3E06AAD-247D-4927-9F64-359E4AC1D54F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calibrator", "Usuario\Calibrator\Calibrator.csproj", "{4D9336C8-5E23-4499-802F-F426A4200B7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instalación", "Instalación", "{2441832C-96E5-4604-B079-F96D103882E8}"
+	ProjectSection(SolutionItems) = preProject
+		Driver\Instalación\Setup.exe = Driver\Instalación\Setup.exe
+		Driver\Instalación\xhotas_usb.cat = Driver\Instalación\xhotas_usb.cat
+		Driver\Instalación\xhotas_usb.inf = Driver\Instalación\xhotas_usb.inf
+		Driver\Instalación\xhotas_usb.sys = Driver\Instalación\xhotas_usb.sys
+		Driver\Instalación\xhotas_vhid.cat = Driver\Instalación\xhotas_vhid.cat
+		Driver\Instalación\xhotas_vhid.inf = Driver\Instalación\xhotas_vhid.inf
+		Driver\Instalación\xhotas_vhid.sys = Driver\Instalación\xhotas_vhid.sys
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +103,7 @@ Global
 		{19E2DF53-6E1E-4812-B33A-5AA0B76347C1} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
 		{E3E06AAD-247D-4927-9F64-359E4AC1D54F} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
 		{4D9336C8-5E23-4499-802F-F426A4200B7B} = {8967877F-7765-4DC6-B807-BC66E41BE88D}
+		{2441832C-96E5-4604-B079-F96D103882E8} = {71C5F194-8161-48BE-BDF9-1EE18393A7C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92C35703-B89E-4F01-B7CD-259D00B377F4}

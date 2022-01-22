@@ -77,17 +77,18 @@ void CPreprocesar::HIDPedales(UCHAR* datos)
 	hidData.Ejes[6] = (UCHAR)(((PUCHAR)datos)[1] & 0x7F); //frenoI
 	hidData.Ejes[7] = (UCHAR)((((PUCHAR)datos)[1] >> 7) + ((((PUCHAR)datos)[2] & 0x3f) << 1)); //frenoD
 
-	ConvertirEjeCentro0((UINT16*)&hidData.Ejes[3], 512, 256);
-	ConvertirEjeCentro0((UINT16*)&hidData.Ejes[6], 128, 64);
-	ConvertirEjeCentro0((UINT16*)&hidData.Ejes[7], 128, 64);
-
 	// Calibrar
 	if (!pPerfil->GetModoCalibrado())
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::Pedales, &hidData);
-		ConvertirEjeRango(TipoJoy::Pedales, 3, 32767, &hidData.Ejes[3], 255);
-		ConvertirEjeRango(TipoJoy::Pedales, 6, 32767, &hidData.Ejes[6], 63);
-		ConvertirEjeRango(TipoJoy::Pedales, 7, 32767, &hidData.Ejes[7], 63);
+
+		ConvertirEjeCentroMitad((UINT16*)&hidData.Ejes[3], 511, 255);
+		ConvertirEjeCentroMitad((UINT16*)&hidData.Ejes[6], 127, 63);
+		ConvertirEjeCentroMitad((UINT16*)&hidData.Ejes[7], 127, 63);
+
+		ConvertirEjeRango(TipoJoy::Pedales, 3, &hidData.Ejes[3], 512);
+		ConvertirEjeRango(TipoJoy::Pedales, 6, &hidData.Ejes[6], 128);
+		ConvertirEjeRango(TipoJoy::Pedales, 7, &hidData.Ejes[7], 128);
 	}
 
 	pedales->Procesar(&hidData);
@@ -139,30 +140,31 @@ void CPreprocesar::HIDX52(PHIDX52_INPUT_DATA hidGameData)
 	hidData_Ace.Ejes[6] = hidGameData->Ministick & 0xf; //x
 	hidData_Ace.Ejes[7] = hidGameData->Ministick >> 4; //y
 
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[0], 2048, 1024); //X
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[1], 2048, 1024); //Y
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[3], 1024, 512); //Rx
-	ConvertirEjeCentro0((UINT16*)&hidData_Ace.Ejes[2], 256, 128); //Z
-	ConvertirEjeCentro0((UINT16*)&hidData_Ace.Ejes[5], 256, 128); //Sl
-	ConvertirEjeCentro0((UINT16*)&hidData_Ace.Ejes[3], 256, 128); //Rx
-	ConvertirEjeCentro0((UINT16*)&hidData_Ace.Ejes[4], 256, 128); //Ry
-	ConvertirEjeCentro0((UINT16*)&hidData_Ace.Ejes[6], 16, 8); //mX
-	ConvertirEjeCentro0((UINT16*)&hidData_Ace.Ejes[7], 16, 8); //mY
-
 	// Calibrar
 	if (!pPerfil->GetModoCalibrado())
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::X52_Joy, &hidData_Joy);
 		CCalibrado::Calibrar(pPerfil, TipoJoy::X52_Ace, &hidData_Ace);
-		ConvertirEjeRango(TipoJoy::X52_Joy, 0, 32767, &hidData_Joy.Ejes[0], 1023); //X
-		ConvertirEjeRango(TipoJoy::X52_Joy, 1, 32767, &hidData_Joy.Ejes[1], 1023); //Y
-		ConvertirEjeRango(TipoJoy::X52_Joy, 3, 32767, &hidData_Joy.Ejes[3], 511); //Rx
-		ConvertirEjeRango(TipoJoy::X52_Ace, 2, 32767, &hidData_Ace.Ejes[2], 127); //Z
-		ConvertirEjeRango(TipoJoy::X52_Ace, 5, 32767, &hidData_Ace.Ejes[5], 127); //Sl
-		ConvertirEjeRango(TipoJoy::X52_Ace, 3, 32767, &hidData_Ace.Ejes[3], 127); //Rx
-		ConvertirEjeRango(TipoJoy::X52_Ace, 4, 32767, &hidData_Ace.Ejes[4], 127); //Ry
-		ConvertirEjeRango(TipoJoy::X52_Ace, 6, 32767, &hidData_Ace.Ejes[6], 7); //mX
-		ConvertirEjeRango(TipoJoy::X52_Ace, 7, 32767, &hidData_Ace.Ejes[7], 7); //mY
+
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[0], 2047, 1023); //X
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[1], 2047, 1023); //Y
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[3], 1023, 511); //Rx
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[2], 255, 127); //Z
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[5], 255, 127); //Sl
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[3], 255, 128); //Rx
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[4], 255, 128); //Ry
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[6], 15, 8); //mX
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[7], 15, 8); //mY
+
+		ConvertirEjeRango(TipoJoy::X52_Joy, 0, &hidData_Joy.Ejes[0], 2048); //X
+		ConvertirEjeRango(TipoJoy::X52_Joy, 1, &hidData_Joy.Ejes[1], 2048); //Y
+		ConvertirEjeRango(TipoJoy::X52_Joy, 3, &hidData_Joy.Ejes[3], 1024); //Rx
+		ConvertirEjeRango(TipoJoy::X52_Ace, 2, &hidData_Ace.Ejes[2], 256); //Z
+		ConvertirEjeRango(TipoJoy::X52_Ace, 5, &hidData_Ace.Ejes[5], 256); //Sl
+		ConvertirEjeRango(TipoJoy::X52_Ace, 3, &hidData_Ace.Ejes[3], 256); //Rx
+		ConvertirEjeRango(TipoJoy::X52_Ace, 4, &hidData_Ace.Ejes[4], 256); //Ry
+		ConvertirEjeRango(TipoJoy::X52_Ace, 6, &hidData_Ace.Ejes[6], 16); //mX
+		ConvertirEjeRango(TipoJoy::X52_Ace, 7, &hidData_Ace.Ejes[7], 16); //mY
 	}
 
 	x52->Procesar_Joy(&hidData_Joy);
@@ -209,23 +211,24 @@ void CPreprocesar::HIDNXT(UCHAR* datos)
 	hidData_Joy.Setas[2] = nxt->ConvertirSeta(hidData->Botones[1] >> 4);
 	hidData_Joy.Setas[3] = nxt->ConvertirSeta(hidData->Botones[2] >> 4);
 
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[0], 4096, 2048); //X
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[1], 4096, 2048); //Y
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[2], 2048, 1024); //Z
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[3], 4096, 2048); //Rx
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[6], 1024, 512); //mX
-	ConvertirEjeCentro0((UINT16*)&hidData_Joy.Ejes[7], 1024, 512); //mY
-
-		// Calibrar
+	// Calibrar
 	if (!pPerfil->GetModoCalibrado())
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::NXT, &hidData_Joy);
-		ConvertirEjeRango(TipoJoy::NXT, 0, 32767, &hidData_Joy.Ejes[0], 2047); //X
-		ConvertirEjeRango(TipoJoy::NXT, 1, 32767, &hidData_Joy.Ejes[1], 2047); //Y
-		ConvertirEjeRango(TipoJoy::NXT, 2, 32767, &hidData_Joy.Ejes[2], 1023); //Z
-		ConvertirEjeRango(TipoJoy::NXT, 3, 32767, &hidData_Joy.Ejes[3], 2047); //Rx
-		ConvertirEjeRango(TipoJoy::NXT, 6, 32767, &hidData_Joy.Ejes[6], 511); //mX
-		ConvertirEjeRango(TipoJoy::NXT, 7, 32767, &hidData_Joy.Ejes[7], 511); //mY
+
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[0], 4095, 2048); //X
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[1], 4095, 2048); //Y
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[2], 2047, 1024); //Z
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[3], 4095, 2048); //Rx
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[6], 1023, 512); //mX
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[7], 1023, 512); //mY
+
+		ConvertirEjeRango(TipoJoy::NXT, 0, &hidData_Joy.Ejes[0], 4096); //X
+		ConvertirEjeRango(TipoJoy::NXT, 1, &hidData_Joy.Ejes[1], 4096); //Y
+		ConvertirEjeRango(TipoJoy::NXT, 2, &hidData_Joy.Ejes[2], 2048); //Z
+		ConvertirEjeRango(TipoJoy::NXT, 3, &hidData_Joy.Ejes[3], 4096); //Rx
+		ConvertirEjeRango(TipoJoy::NXT, 6, &hidData_Joy.Ejes[6], 1024); //mX
+		ConvertirEjeRango(TipoJoy::NXT, 7, &hidData_Joy.Ejes[7], 1024); //mY
 	}
 
 	nxt->Procesar(&hidData_Joy);
@@ -248,38 +251,58 @@ UCHAR CPreprocesar::Switch4To8(UCHAR in)
 	}
 }
 
-void CPreprocesar::ConvertirEjeCentro0(UINT16* pos, UINT16 rango, UINT16 centro)
+//void CPreprocesar::ConvertirEjeCentro0(UINT16* pos, UINT16 rango, UINT16 centro)
+//{
+//	UINT16 max = (rango / 2) - 1;
+//	bool negativo = false;
+//
+//	if (*pos > centro)
+//	{
+//		*pos -= centro;
+//	}
+//	else if (*pos < centro)
+//	{
+//		*pos = centro - *pos;
+//		negativo = true;
+//	}
+//	else
+//	{
+//		*pos = 0;
+//	}
+//	if (*pos > max)
+//	{
+//		*pos = max;
+//	}
+//
+//	if (negativo)
+//	{
+//		*pos = (65535 - *pos) + 1;
+//	}
+//}
+void CPreprocesar::ConvertirEjeCentroMitad(UINT16* pos, UINT16 maximo, UINT16 centro)
 {
-	UINT16 max = (rango / 2) - 1;
-	bool negativo = false;
-
-	if (*pos > centro)
+	if ((maximo - centro) > centro)
 	{
-		*pos -= centro;
+		*pos += 1;
+		if (*pos == 1)
+		{
+			*pos = 0;
+		}
 	}
-	else if (*pos < centro)
+	else if (*pos == maximo)
 	{
-		*pos = centro - *pos;
-		negativo = true;
-	}
-	else
-	{
-		*pos = 0;
-	}
-	if (*pos > max)
-	{
-		*pos = max;
-	}
-
-	if (negativo)
-	{
-		*pos = (65535 - *pos) + 1;
+		*pos = maximo + 1;
 	}
 }
 
-void CPreprocesar::ConvertirEjeRango(TipoJoy joy, char eje, INT32 nuevoRango, INT16* pos, INT16 rango)
+void CPreprocesar::ConvertirEjeRango(TipoJoy joy, char eje, UINT16* pos, UINT16 rango)
 {
+	UINT16 nuevoRango;
+	UINT32 npos = *pos;
 	UCHAR preciso = 0;
+	pPerfil->InicioLecturaPr();
+	nuevoRango = pPerfil->GetPr()->RangosEntrada[static_cast<UCHAR>(joy)][eje];
+	pPerfil->FinLecturaPr();
 	pPerfil->LockEstado();
 	preciso = pPerfil->GetEstado()->ModoPrecisoEje[static_cast<UCHAR>(joy)][eje];
 	pPerfil->UnlockEstado();
@@ -288,17 +311,22 @@ void CPreprocesar::ConvertirEjeRango(TipoJoy joy, char eje, INT32 nuevoRango, IN
 		if (!posFijada[static_cast<UCHAR>(joy)][eje])
 		{
 			posFijada[static_cast<UCHAR>(joy)][eje] = true;
-			posFija[static_cast<UCHAR>(joy)][eje] = *pos;
+			posFija[static_cast<UCHAR>(joy)][eje] = npos;
 		}
 		else
 		{
-			INT32 nuevoRangoP = ((((nuevoRango + 1) / (rango + 1)) / preciso) * (rango + 1)) - 1;
-			*pos = ((posFija[static_cast<UCHAR>(joy)][eje] * nuevoRango) / rango) + (((*pos - posFija[static_cast<UCHAR>(joy)][eje]) * nuevoRangoP) / rango);
+			UINT32 nuevoRangoP = (((nuevoRango / rango) / preciso) * rango);
+			npos = ((posFija[static_cast<UCHAR>(joy)][eje] * nuevoRango) / rango) + (((npos - posFija[static_cast<UCHAR>(joy)][eje]) * nuevoRangoP) / rango);
+			*pos = static_cast<UINT16>(npos);
 		}
 	}
 	else
 	{
 		posFijada[static_cast<UCHAR>(joy)][eje] = false;
-		*pos = (*pos * nuevoRango) / rango;
+		if (nuevoRango != rango)
+		{
+			npos = (npos * nuevoRango) / rango;
+			*pos = static_cast<UINT16>(npos);
+		}
 	}
 }

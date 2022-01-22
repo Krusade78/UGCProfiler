@@ -4,11 +4,9 @@
 
 void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DATA viejo, PVHID_INPUT_DATA entrada)
 {
-	const INT16 stope = 32767;
-	const UINT16 stopeSl = 65535;
 	UCHAR tipo = static_cast<UCHAR>(tipoJ);
 	UCHAR idx;
-	LONG x;
+	INT32 x;
 	UCHAR pinkie;
 	UCHAR modos;
 	pPerfil->LockEstado();
@@ -26,21 +24,30 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 	{
 		UCHAR sy1;
 		UCHAR sy2;
-		x = entrada->Ejes[idx];
-
+		pPerfil->InicioLecturaPr();
+		UINT16 stopeSl = pPerfil->GetPr()->RangosEntrada[static_cast<UCHAR>(tipoJ)][idx];
+		pPerfil->FinLecturaPr();
+		INT16 stope = stopeSl / 2;
 		bool slider = false;
 		pPerfil->InicioLecturaPr();
 		{
 			slider = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Slider;
 		}
 		pPerfil->FinLecturaPr();
-		if (!slider && (x == 0))
+
+		x = entrada->Ejes[idx];
+
+		if (!slider && (x == stope))
 		{
 			continue;
 		}
-		bool izq = (x < 0);
-		x = slider ? (x + stope) : ((izq) ? - x : x);
-		UCHAR pos = slider ? (UCHAR)((x * 10) / stopeSl) : (UCHAR)((x * 10) / (stope + 1));
+		bool izq = (x < stope);
+		x = slider ? x : ((izq) ? stope - x : x - stope );
+		UCHAR pos = slider ? (UCHAR)((x * 10) / stopeSl) : (UCHAR)((x * 10) / stope);
+		if (pos == 10)
+		{
+			pos = 9;
+		}
 		pPerfil->InicioLecturaPr();
 		{
 			sy1 = (pos == 0) ? 0 : pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Sensibilidad[pos - 1];
@@ -49,15 +56,14 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 		pPerfil->FinLecturaPr();
 		if (slider)
 		{
-			x = (x == 65534) ? ((sy2 * 65534) / 100) : ((((sy2 - sy1) * ((10 * x) - (pos * stopeSl))) + (sy1 * stopeSl))) / 100;
-			x -= stope ;
+			x = (x == stopeSl) ? ((sy2 * stopeSl) / 100) : ((((sy2 - sy1) * ((10 * x) - (pos * stopeSl))) + (sy1 * stopeSl))) / 100;
 		}
 		else
 		{
 			x = (x == stope) ? ((sy2 * stope) / 100) : ((((sy2 - sy1) * ((10 * x) - (pos * stope))) + (sy1 * stope))) / 100;
-			x = (izq) ? -x : x;
+			x = (izq) ? stope - x : x + stope;
 		}
-		entrada->Ejes[idx] = static_cast<INT16>(x);
+		entrada->Ejes[idx] = static_cast<UINT16>(x);
 	}
 
 	//Mapeado
@@ -67,6 +73,7 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 		UCHAR tipoEje;
 		UCHAR nEje;
 		UCHAR sRaton; //t
+		UINT16 etope, stope;
 
 		pPerfil->InicioLecturaPr();
 		{
@@ -74,6 +81,8 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 			tipoEje = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].TipoEje;
 			nEje = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Eje;
 			sRaton = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].SensibilidadRaton;
+			etope = pPerfil->GetPr()->RangosEntrada[joy][idx];
+			stope = pPerfil->GetPr()->RangosSalida[joy][idx];
 		}
 		pPerfil->FinLecturaPr();
 
@@ -86,7 +95,7 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 			salida[joy].Ejes[nEje] = entrada->Ejes[idx];
 			if ((tipoEje & 0x2) == 2) //invertido normal
 			{
-				salida[joy].Ejes[nEje] = -salida[joy].Ejes[nEje];
+				salida[joy].Ejes[nEje] = stope - salida[joy].Ejes[nEje];
 			}
 			mapa[joy] |= 1 << nEje;
 		}
@@ -94,21 +103,20 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 		{
 			if (entrada->Ejes[idx] != viejo->Ejes[idx])
 			{
-				if (entrada->Ejes[idx] == 0)
+				if (entrada->Ejes[idx] == (etope / 2))
 				{
 					EjeARaton(nEje, 0);
 				}
 				else
 				{
-					INT16 stope = 32767;
-
+					INT32 ejeTransformado = entrada->Ejes[idx] - (etope / 2);
 					if ((tipoEje & 0x2) == 0x2) //invertido
 					{
-						EjeARaton(nEje, static_cast<CHAR>(((-entrada->Ejes[idx]) * sRaton) / stope));
+						EjeARaton(nEje, static_cast<CHAR>(((-ejeTransformado) * sRaton) / (etope / 2)));
 					}
 					else
 					{
-						EjeARaton(nEje, static_cast<CHAR>((entrada->Ejes[idx] * sRaton) / stope));
+						EjeARaton(nEje, static_cast<CHAR>((ejeTransformado * sRaton) / (etope / 2)));
 					}
 
 				}
@@ -174,7 +182,7 @@ void CEjes::EjeARaton(UCHAR eje, CHAR mov)
 	CGenerarEventos::Raton(&evento);
 }
 
-void CEjes::MoverEje(CPerfil* pPerfil, TipoJoy tipoJ, UCHAR idx, INT16 nuevo)
+void CEjes::MoverEje(CPerfil* pPerfil, TipoJoy tipoJ, UCHAR idx, UINT16 nuevo)
 {
 	UCHAR tipo = static_cast<UCHAR>(tipoJ);
 	UINT16 accionID;
@@ -219,7 +227,7 @@ void CEjes::MoverEje(CPerfil* pPerfil, TipoJoy tipoJ, UCHAR idx, INT16 nuevo)
 /// <summary>
 /// En LockEstado
 /// </summary>
-UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 nueva, UCHAR pinkie, UCHAR modos)
+UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, UINT16 nueva, UCHAR pinkie, UCHAR modos)
 {
 	UCHAR idn = 255;
 	bool incremental;
@@ -228,8 +236,8 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, INT16 n
 	incremental = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 16) == 16;
 	bandas = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 32) == 32;
 
-	const UINT16 rango = 65535;
-	UINT16	posNueva = (nueva < 0) ? static_cast<UINT16>(nueva + 32767) : static_cast<UINT16>(nueva) + 32768;
+	UINT16 rango = pPerfil->GetPr()->RangosEntrada[tipoJ][eje];
+	UINT16	posNueva = nueva;
 
 	if (incremental)
 	{

@@ -90,7 +90,7 @@ namespace Editor
             Modificado = true;
         }
 
-        public bool Cargar(String archivo)
+        public bool Cargar(string archivo)
         {
             Perfil.Clear();
             try
@@ -107,12 +107,37 @@ namespace Editor
             return true;
         }
 
-        public bool Guardar(String archivo)
+        public bool Guardar(string archivo)
         {
+            ushort[,] mapaRangosMax = {
+                    { 0,0,0,512,0,0,128,128 },
+                    { 2048,2048,0,1024,0,0,0,0 },
+                    { 0,0,256,256,256,256,16,16 },
+                    { 4096,4096,2048,4096,0,0,1024,1024 }
+                };
+
             //Reordenar ids acciones
             ushort id = 0;
             foreach (DSPerfil.ACCIONESRow ar in Perfil.ACCIONES.Rows)
             {
+                foreach (ushort c in ar.Comandos)
+                {
+                    byte tipo = (byte)(c & 0x7f);
+                    byte dato = (byte)(c >> 8);
+                    bool soltar = ((c & 0xff) & (byte)CTipos.TipoComando.TipoComando_Soltar) == (byte)CTipos.TipoComando.TipoComando_Soltar;
+                    if (tipo == (byte)CTipos.TipoComando.TipoComando_ModoPreciso)
+                    {
+                        if (!soltar)
+                        {
+                            ushort nuevoRango = (ushort)(mapaRangosMax[(dato & 31) / 8, (dato & 31) % 8] * ((dato >> 5) + 1));
+                            if (mapaRangosMax[(dato & 31) / 8, (dato & 31) % 8] < nuevoRango)
+                            {
+                                mapaRangosMax[(dato & 31) / 8, (dato & 31) % 8] = nuevoRango;
+                            }
+                        }
+                    }
+                }
+
                 if (ar.idAccion != id)
                 {
                     DSPerfil.ACCIONESRow reemplazada = Perfil.ACCIONES.FindByidAccion(id);
@@ -129,6 +154,45 @@ namespace Editor
                     }
                 }
                 id++;
+            }
+
+            Perfil.RANGOSENTRADA.Clear();
+            for (byte j = 0; j < 4; j++)
+            {
+                for (byte e = 0; e < 8; e++)
+                {
+                    Perfil.RANGOSENTRADA.AddRANGOSENTRADARow(j, e, mapaRangosMax[j, e]);
+                }
+            }
+
+            Perfil.RANGOSSALIDA.Clear();
+            for (byte e = 0; e < 8; e++)
+            {
+                Perfil.RANGOSSALIDA.AddRANGOSSALIDARow(0, e, 0);
+                Perfil.RANGOSSALIDA.AddRANGOSSALIDARow(1, e, 0);
+                Perfil.RANGOSSALIDA.AddRANGOSSALIDARow(2, e, 0);
+            }
+            for (byte j = 0; j < 4; j++)
+            {
+                for (byte p = 0; p < 2; p++)
+                {
+                    for (byte m = 0; m < 3; m++)
+                    {
+                        for (byte e = 0; e < 8; e++)
+                        {
+                            byte eje = Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(j, p, m, e).Eje;
+                            byte js = Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(j, p, m, e).JoySalida;
+                            byte tipo = Perfil.MAPAEJES.FindByidJoyidPinkieidModoidEje(j, p, m, e).TipoEje;
+                            if ((tipo & 0b1) == 1)
+                            {
+                                if (Perfil.RANGOSSALIDA.FindByidJoyidEje(js, eje).Maximo < Perfil.RANGOSENTRADA.FindByidJoyidEje(j, e).Maximo)
+                                {
+                                    Perfil.RANGOSSALIDA.FindByidJoyidEje(js, eje).Maximo = Perfil.RANGOSENTRADA.FindByidJoyidEje(j, e).Maximo;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             try

@@ -65,7 +65,8 @@ private:
 	void HIDNXT(UCHAR* datos);
 
 	UCHAR Switch4To8(UCHAR in);
-	void ConvertirEjeCentro0(UINT16* pos, UINT16 rango, UINT16 centro);
-	void ConvertirEjeRango(TipoJoy joy, char eje, INT32 nuevoRango, INT16* pos, INT16 rango);
+	//void ConvertirEjeCentro0(UINT16* pos, UINT16 rango, UINT16 centro);
+	void ConvertirEjeCentroMitad(UINT16* pos, UINT16 maximo, UINT16 centro);
+	void ConvertirEjeRango(TipoJoy joy, char eje, UINT16* pos, UINT16 rango);
 };
 

@@ -4,9 +4,11 @@
 #include "../ProcesarSalida/CProcesarSalida.h"
 #include "../X52/EscribirUSBX52.h"
 #include "../X52/MenuMFD.h"
+#include "../ProcesarSalida/CVirtualHID.h"
 
-CPerfil::CPerfil()
+CPerfil::CPerfil(void* pVHID)
 {
+	this->pVHID = pVHID;
 	hMutexPrograma = CreateMutex(NULL, FALSE, NULL);
 	hMutexCalibrado = CreateMutex(NULL, FALSE, NULL);
 	hMutexEstado = CreateMutex(NULL, FALSE, NULL);
@@ -70,7 +72,7 @@ bool  CPerfil::HF_IoEscribirMapa(BYTE* SystemBuffer, DWORD tam)
 		return false;
 	}
 	resetComandos = false;
-	if (tam == (17 + 1 + sizeof(perfil.MapaEjes) + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas)))
+	if (tam == (17 + 1 + sizeof(perfil.MapaEjes) + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas) + sizeof(perfil.RangosEntrada) + sizeof(perfil.RangosSalida)))
 	{
 		BYTE txt[17];
 		RtlCopyMemory(txt, SystemBuffer, 17);
@@ -86,6 +88,15 @@ bool  CPerfil::HF_IoEscribirMapa(BYTE* SystemBuffer, DWORD tam)
 			RtlCopyMemory(perfil.MapaBotones, SystemBuffer + 17 + 1, sizeof(perfil.MapaBotones));
 			RtlCopyMemory(perfil.MapaSetas, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones), sizeof(perfil.MapaSetas));
 			RtlCopyMemory(perfil.MapaEjes, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas), sizeof(perfil.MapaEjes));
+			RtlCopyMemory(perfil.RangosEntrada, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas) + sizeof(perfil.MapaEjes), sizeof(perfil.RangosEntrada));
+			RtlCopyMemory(perfil.RangosSalida, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas) + sizeof(perfil.MapaEjes) + sizeof(perfil.RangosEntrada), sizeof(perfil.RangosSalida));
+			
+			if (!((CVirtualHID*)pVHID)->EnviarReportDescriptor(this))
+			{
+				ReleaseMutex(hMutexPrograma);
+				LimpiarPerfil();
+				return false;
+			}
 		}
 		ReleaseMutex(hMutexPrograma);
 	}

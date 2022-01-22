@@ -14,13 +14,20 @@ namespace Calibrator
         private byte ejeSel = 0;
         private readonly Comunes.CTipos.STJITTER[,] jitter = new Comunes.CTipos.STJITTER[4,8];
         private readonly Comunes.CTipos.STLIMITES[,] limites = new Comunes.CTipos.STLIMITES[4,8];
-        private static readonly short[,] mapaRangos = {
+        private static readonly ushort[,] mapaRangosCen = {
                 { 0,0,0,255,0,0,63,63 },
                 { 1023,1023,0,511,0,0,0,0 },
-                { 0,0,127,127,127,127,7,7 },
-                { 16383,16383,1023,16383,0,0,511,511 }
+                { 0,0,127,128,128,127,8,8 },
+                { 2048,2048,1024,2048,0,0,512,512 }
         };
-        private short[,] hidReport = new short[4, 8];
+
+        private static readonly ushort[,] mapaRangosMax = {
+                { 0,0,0,511,0,0,127,127 },
+                { 2047,2047,0,1023,0,0,0,0 },
+                { 0,0,255,255,255,255,15,15 },
+                { 4095,4095,2047,4095,0,0,1023,1023 }
+        };
+        private ushort[,] hidReport = new ushort[4, 8];
 
         public HIDCal()
         {
@@ -31,16 +38,16 @@ namespace Calibrator
                 for (int i = 0; i < 8; i++)
                 {
                     limites[j,i].Cal = 0;
-                    limites[j,i].Cen = 0;
-                    limites[j,i].Izq = -7;
-                    limites[j,i].Der = 7;
+                    limites[j,i].Cen = mapaRangosCen[j, i];
+                    limites[j,i].Izq = 0;
+                    limites[j,i].Der = mapaRangosMax[j, i];
                     jitter[j,i].Antiv = 0;
                     jitter[j,i].Margen = 0;
                     jitter[j,i].Resistencia = 0;
                 }
             }
 
-            using (Comunes.DataSetConfiguracion dsc = new Comunes.DataSetConfiguracion())
+            using (Comunes.DataSetConfiguracion dsc = new())
             {
                 try
                 {
@@ -77,23 +84,23 @@ namespace Calibrator
             {
                 for (byte i = 0; i < 8; i++)
                 {
-                    hidReport[joy - 1, i] = (short)(((int)hidData[(i * 2) + 1] << 8) | hidData[i * 2]);
+                    hidReport[joy - 1, i] = (ushort)((hidData[(i * 2) + 1] << 8) | hidData[i * 2]);
                 }
                 if (joy == 2)
                 {
                     for (byte i = 0; i < 8; i++)
                     {
-                        hidReport[3, i] = (short)(((int)hidData[(i * 2) + 1] << 8) | hidData[i * 2]);
+                        hidReport[3, i] = (ushort)((hidData[(i * 2) + 1] << 8) | hidData[i * 2]);
                     }
                 }
             }
 
             int posr = hidReport[joySel, ejeSel];
             txtPosReal.Text = posr.ToString();
-            posReal.Margin = new Thickness(posr + mapaRangos[joySel, ejeSel], 0, 0, 0);
+            posReal.Margin = new Thickness(posr, 0, 0, 0);
 
             // Filtrado de ejes
-            long pollEje = hidReport[joySel, ejeSel];
+            ushort pollEje = hidReport[joySel, ejeSel];
 
             if (jitter[joySel, ejeSel].Antiv == 1)
             {
@@ -101,7 +108,7 @@ namespace Calibrator
                 if ((pollEje < (jitter[joySel, ejeSel].PosElegida - jitter[joySel, ejeSel].Margen)) || (pollEje > (jitter[joySel, ejeSel].PosElegida + jitter[joySel, ejeSel].Margen)))
                 {
                     jitter[joySel, ejeSel].PosRepetida = 0;
-                    jitter[joySel, ejeSel].PosElegida = (short)pollEje;
+                    jitter[joySel, ejeSel].PosElegida = pollEje;
                 }
                 else
                 {
@@ -113,7 +120,7 @@ namespace Calibrator
                     else
                     {
                         jitter[joySel, ejeSel].PosRepetida = 0;
-                        jitter[joySel, ejeSel].PosElegida = (short)pollEje;
+                        jitter[joySel, ejeSel].PosElegida = pollEje;
                     }
                 }
             }
@@ -121,13 +128,13 @@ namespace Calibrator
             if (limites[joySel, ejeSel].Cal == 1)
             {
                 // Calibrado
-                short ancho1, ancho2;
-                ancho1 = (short)(-limites[joySel, ejeSel].Izq +(limites[joySel, ejeSel].Cen - limites[joySel, ejeSel].Nulo));
-                ancho2 = (short)(limites[joySel, ejeSel].Der - (limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo));
+                ushort ancho1, ancho2;
+                ancho1 = (ushort)((limites[joySel, ejeSel].Cen - limites[joySel, ejeSel].Nulo) - limites[joySel, ejeSel].Izq);
+                ancho2 = (ushort)(limites[joySel, ejeSel].Der - (limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo));
                 if (((pollEje >= (limites[joySel, ejeSel].Cen - limites[joySel, ejeSel].Nulo)) && (pollEje <= (limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo))))
                 {
                     //Zona nula
-                    pollEje = 0;
+                    pollEje = limites[joySel, ejeSel].Cen;
                 }
                 else
                 {
@@ -138,33 +145,37 @@ namespace Calibrator
 
                     if (pollEje < limites[joySel, ejeSel].Cen)
                     {
-                        pollEje -= (limites[joySel, ejeSel].Cen - limites[joySel, ejeSel].Nulo);
-                        if (ancho1 != mapaRangos[joySel, ejeSel])
+                        if (ancho1 != mapaRangosCen[joySel, ejeSel])
                         {
-                            pollEje = (pollEje * mapaRangos[joySel, ejeSel]) / ancho1;
+                            if (pollEje >= ancho1) { pollEje = ancho1; }
+                            pollEje -= limites[joySel, ejeSel].Izq;
+                            pollEje = (ushort)((pollEje * mapaRangosCen[joySel, ejeSel]) / ancho1);
                         }
                     }
                     else
                     {
-                        pollEje -= (limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo);
-                        if (ancho2 != mapaRangos[joySel, ejeSel])
-                            pollEje = ((pollEje * mapaRangos[joySel, ejeSel]) / ancho2);
+                        if (ancho2 != (mapaRangosMax[joySel, ejeSel] - mapaRangosCen[joySel, ejeSel]))
+                        {
+                            if (pollEje >= limites[joySel, ejeSel].Der) { pollEje = limites[joySel, ejeSel].Der; }
+                            pollEje -= (ushort)(limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo);
+                            pollEje = (ushort)(mapaRangosCen[joySel, ejeSel] + ((pollEje * (mapaRangosMax[joySel, ejeSel] - mapaRangosCen[joySel, ejeSel])) / ancho2));
+                        }
                     }
                 }
             }
 
             txtPosCal.Text = pollEje.ToString();
-            posCal.Margin = new Thickness(pollEje + mapaRangos[joySel, ejeSel], 0, 0, 0);
+            posCal.Margin = new Thickness(pollEje, 0, 0, 0);
         }
 
         private void FbtAplicar_Click(object sender, RoutedEventArgs e)
         {
             limites[joySel, ejeSel].Cal = (chkCalActiva.IsChecked == true) ? (byte)1 : (byte)0;
-            short.TryParse(txtI.Text, out short s);
+            ushort.TryParse(txtI.Text, out ushort s);
             limites[joySel, ejeSel].Izq = s;
-            short.TryParse(txtC.Text, out s);
+            ushort.TryParse(txtC.Text, out s);
             limites[joySel, ejeSel].Cen = s;
-            short.TryParse(txtD.Text, out s);
+            ushort.TryParse(txtD.Text, out s);
             limites[joySel, ejeSel].Der = s;
             byte.TryParse(txtN.Text, out byte b);
             limites[joySel, ejeSel].Nulo = b;
@@ -180,6 +191,7 @@ namespace Calibrator
 
         private void FbtGuardar_Click(object sender, RoutedEventArgs e)
         {
+            FbtAplicar_Click(null, null);
             using (Comunes.DataSetConfiguracion dsc = new Comunes.DataSetConfiguracion())
             {
                 try
@@ -337,7 +349,7 @@ namespace Calibrator
         {
             joySel = joy;
             ejeSel = eje;
-            grBruto.Width = (mapaRangos[joy, eje] * 2) + 1;
+            grBruto.Width = mapaRangosMax[joy, eje] + 1;
             posReal.Width = ((grBruto.Width + 1) * 2) / 1024;
             grCal.Width = grBruto.Width;
             posCal.Width = posReal.Width;
@@ -429,8 +441,8 @@ namespace Calibrator
             tbY.IsEnabled = true;
             tbZ.IsEnabled = true;
             tbR.IsEnabled = true;
-            tbRy.IsEnabled = true;
-            tbRz.IsEnabled = true;
+            tbRy.IsEnabled = false;
+            tbRz.IsEnabled = false;
             tbSl1.IsEnabled = true;
             tbSl2.IsEnabled = true;
             tbX.IsChecked = true;

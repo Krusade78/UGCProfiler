@@ -8,16 +8,16 @@ public:
 	typedef struct {
 		UCHAR Cal;
 		UCHAR Nulo;
-		INT16 Izq;
-		INT16 Cen;
-		INT16 Der;
+		UINT16 Izq;
+		UINT16 Cen;
+		UINT16 Der;
 	} ST_LIMITES;
 	typedef struct {
 		UCHAR Antiv;
 		UCHAR PosRepetida;
 		UCHAR Margen;
 		UCHAR Resistencia;
-		INT16 PosElegida;
+		UINT16 PosElegida;
 	} ST_JITTER;
 	typedef struct
 	{
@@ -52,6 +52,9 @@ public:
 			UCHAR ResistenciaDec;
 		} MapaEjes[4][2][3][8];
 
+		UINT16 RangosEntrada[4][8];
+		UINT16 RangosSalida[3][8];
+
 		std::deque<CPaqueteEvento*>* Acciones;
 
 		UCHAR TickRaton;
@@ -80,7 +83,7 @@ public:
 		char Modos;
 	} ESTADO;
 
-	CPerfil();
+	CPerfil(void* pVHID);
 	~CPerfil();
 
 	void SetModoCalibrado(BYTE modo) { InterlockedExchange16(&modoCalibrado, modo); };
@@ -106,6 +109,7 @@ public:
 	void UnlockEstado() { ReleaseMutex(hMutexEstado); }
 
 private:
+	void* pVHID = nullptr;
 	HANDLE hMutexPrograma = nullptr;
 	HANDLE hMutexCalibrado = nullptr;
 	HANDLE hMutexEstado = nullptr;
@@ -117,6 +121,7 @@ private:
 	bool perfilNuevoOut = false;
 	bool perfilNuevoIn = false;
 	bool resetComandos = false;
+	bool nuevoReport = true;
 	
 	void LimpiarPerfil();
 };

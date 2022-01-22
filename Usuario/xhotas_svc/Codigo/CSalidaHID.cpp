@@ -1,10 +1,11 @@
 #include "framework.h"
 #include "CSalidaHID.h"
 
-CSalidaHID::CSalidaHID(CPerfil* perfil, CColaEventos* colaEv)
+CSalidaHID::CSalidaHID(CPerfil* perfil, CColaEventos* colaEv, CVirtualHID* vhid)
 {
     this->perfil = perfil;
     this->colaEv = colaEv;
+    this->vhid = vhid;
     evSalir = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
 
@@ -15,16 +16,10 @@ CSalidaHID::~CSalidaHID()
     while (InterlockedCompareExchange16(&hiloCerrado, 0, 0) == FALSE) Sleep(500);
     CloseHandle(evSalir);
     if (salida != nullptr) delete salida;
-    if (vhid != nullptr) delete vhid;
 }
 
 bool CSalidaHID::Iniciar()
 {
-    vhid = new CVirtualHID();
-    if (!vhid->Iniciar())
-    {
-        return false;
-    }
     salida = new CProcesarSalida(perfil, vhid);
 
     HANDLE hilo = CreateThread(NULL, 0, HiloLectura, this, 0, NULL);

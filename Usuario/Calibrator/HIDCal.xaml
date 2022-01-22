@@ -67,7 +67,7 @@
                 <ToggleButton x:Name="tbJoy1" Content="Pedales" IsChecked="True" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked" />
                 <ToggleButton x:Name="tbJoy2" Content="X52 Joystick" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked_1"/>
                 <ToggleButton x:Name="tbJoy3" Content="X52 Acelerador" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked_2"/>
-                <ToggleButton x:Name="tbJoy4" Content="Gladiator NXT" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked_2"/>
+                <ToggleButton x:Name="tbJoy4" Content="Gladiator NXT" Height="25" Width="131" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFA1A68F" BorderBrush="#FF4F4F4F" Style="{StaticResource tgb}" Checked="ToggleButton_Checked_3"/>
             </StackPanel>
 
             <Grid VerticalAlignment="Top" Margin="0,35,0,0">
@@ -108,8 +108,8 @@
                         <TextBlock Grid.Row="2" Text="Límite inferior:" Foreground="Yellow" />
                         <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtI" TextAlignment="Center" Text="0000" Width="50" Padding="0,2" MaxLength="4" TextChanged="Ftxt_TextChanged"/>
 
-                        <TextBlock Grid.Row="3" Text="Posición central:" Foreground="Yellow" />
-                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtC" TextAlignment="Center" Text="0000" Width="50"  Padding="0,2" MaxLength="4" TextChanged="Ftxt_TextChanged"/>
+                        <TextBlock Grid.Row="3" Text="Posición central:" Foreground="Yellow" IsEnabled="False" />
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtC" TextAlignment="Center" Text="0000" Width="50"  Padding="0,2" MaxLength="4" TextChanged="Ftxt_TextChanged" IsEnabled="False"/>
 
                         <TextBlock Grid.Row="4" Text="Zona nula:" Foreground="Yellow" />
                         <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtN" TextAlignment="Center" Text="000" Width="50" Padding="0,2" MaxLength="3" TextChanged="Ftxt_TextChanged"/>

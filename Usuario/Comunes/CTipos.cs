@@ -9,9 +9,9 @@ namespace Comunes
         {
             public byte Cal; //bool
             public byte Nulo;
-            public short Izq;
-            public short Cen;
-            public short Der;
+            public ushort Izq;
+            public ushort Cen;
+            public ushort Der;
         };
 
         [StructLayout(LayoutKind.Sequential)]
@@ -21,7 +21,7 @@ namespace Comunes
             public byte PosRepetida;
             public byte Margen;
             public byte Resistencia;
-            public short PosElegida;
+            public ushort PosElegida;
         };
 
         public enum TipoComando : byte

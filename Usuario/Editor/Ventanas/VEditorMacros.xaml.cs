@@ -168,14 +168,14 @@ namespace Editor
         private void ButtonPrecisoOn_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + (cbEje.SelectedIndex)) | ((NumericUpDownPr.Valor - 1) << 5)) << 8);
+            ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + cbEje.SelectedIndex) | ((NumericUpDownPr.Valor - 1) << 5)) << 8);
             Insertar(new ushort[] { (ushort)((ushort)TipoComando.TipoComando_ModoPreciso + dato) }, false);
         }
 
         private void ButtonPrecisoOff_Click(object sender, RoutedEventArgs e)
         {
             if (GetCuenta() > 237) return;
-            ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + (cbEje.SelectedIndex)) | (byte)TipoComando.TipoComando_Soltar) << 8); 
+            ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + cbEje.SelectedIndex) | (byte)TipoComando.TipoComando_Soltar) << 8); 
             Insertar(new ushort[] { (ushort)(((byte)TipoComando.TipoComando_ModoPreciso | (byte)TipoComando.TipoComando_Soltar) + dato) }, false);
         }
         #endregion

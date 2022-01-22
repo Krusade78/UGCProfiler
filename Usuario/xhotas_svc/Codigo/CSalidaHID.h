@@ -7,7 +7,7 @@
 class CSalidaHID
 {
 public:
-	CSalidaHID(CPerfil* perfil, CColaEventos* colaEv);
+	CSalidaHID(CPerfil* perfil, CColaEventos* colaEv, CVirtualHID* vhid);
 	~CSalidaHID();
 
 	bool Iniciar();

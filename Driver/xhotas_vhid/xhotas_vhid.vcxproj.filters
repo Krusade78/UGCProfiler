@@ -25,12 +25,18 @@
     <ClCompile Include="ColaHID.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ColaVHF.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColaHID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColaVHF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,9 +5,9 @@ namespace Launcher
 {
     internal class CPerfil
     {
-        public static byte CargarMapa(String archivo, System.IO.BinaryWriter pipe)
+        public static byte CargarMapa(string archivo, System.IO.BinaryWriter pipe)
         {
-            Comunes.DSPerfil perfil = new Comunes.DSPerfil();
+            Comunes.DSPerfil perfil = new();
             try
             {
                 perfil.ReadXml(archivo);
@@ -63,7 +63,9 @@ namespace Launcher
                 const int TAM_MAPAEJES = ((16 * 2) + 1 + 1 + 1 + 1 + 10 + 1 + 15 + 1 + 1) * (4 * 2 * 3 * 8);
                 const int TAM_MAPABOTONES = ((15 * 2) + 1 + (1)) * (4 * 2 * 3 * 16);
                 const int TAM_MAPASETAS = ((15 * 2) + 1 + (1)) * (4 * 2 * 3 * 32);
-                byte[] bufferMapa = new byte[1 + TAM_TEXTO_MFD + 1 + TAM_MAPAEJES + TAM_MAPABOTONES + TAM_MAPASETAS];
+                const int TAM_RANGOSENTRADA = 2 * (4 * 8);
+                const int TAM_RANGOSSALIDA = 2 * (3 * 8);
+                byte[] bufferMapa = new byte[1 + TAM_TEXTO_MFD + 1 + TAM_MAPAEJES + TAM_MAPABOTONES + TAM_MAPASETAS + TAM_RANGOSENTRADA + TAM_RANGOSSALIDA];
                 int pos = 0;
 
                 bufferMapa[0] = (byte)CServicio.TipoMsj.Mapa;
@@ -71,9 +73,9 @@ namespace Launcher
 
                 #region "Texto MFD"
                 {
-                    String nombre = System.IO.Path.GetFileNameWithoutExtension(archivo);
+                    string nombre = archivo == "perfilbase.dat" ? "" : System.IO.Path.GetFileNameWithoutExtension(archivo);
                     if (nombre.Length > 16)
-                        nombre = nombre.Substring(0, 16);
+                        nombre = nombre[..16];
                     else if (nombre.Length == 0)
                         nombre = "";
                     nombre = nombre.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
@@ -186,6 +188,30 @@ namespace Launcher
 
                             }
                         }
+                    }
+                }
+                //rangos entrada
+                for (byte j = 0; j < 4; j++)
+                {
+                    for (byte e = 0; e < 8; e++)
+                    {
+                        UInt16 rango = perfil.RANGOSENTRADA.FindByidJoyidEje(j, e).Maximo;
+                        bufferMapa[pos] = (byte)(rango & 0xff);
+                        pos++;
+                        bufferMapa[pos] = (byte)(rango >> 8);
+                        pos++;
+                    }
+                }
+                //rangos salida
+                for (byte j = 0; j < 3; j++)
+                {
+                    for (byte e = 0; e < 8; e++)
+                    {
+                        UInt16 rango = perfil.RANGOSSALIDA.FindByidJoyidEje(j, e).Maximo;
+                        bufferMapa[pos] = (byte)(rango & 0xff);
+                        pos++;
+                        bufferMapa[pos] = (byte)(rango >> 8);
+                        pos++;
                     }
                 }
 

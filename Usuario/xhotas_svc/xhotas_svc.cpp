@@ -47,31 +47,36 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	CX52Salida* x52Drv = new CX52Salida();
 	CNXTSalida* nxtDrv = new CNXTSalida();
 	CMenuMFD* mfd = new CMenuMFD();
-	CPerfil* perfil = new CPerfil();
-	CComs* coms = new CComs(perfil);
-	if (coms->Iniciar())
+	CVirtualHID* vhid = new CVirtualHID();
+	if (vhid->Iniciar())
 	{
-		CColaEventos* colaEv = new CColaEventos();
-		CSalidaHID* salida = new CSalidaHID(perfil, colaEv);
-		if (salida->Iniciar())
+		CPerfil* perfil = new CPerfil(vhid);
+		CComs* coms = new CComs(perfil);
+		if (coms->Iniciar())
 		{
-			CEntradaHID* entrada = new CEntradaHID(perfil, colaEv);
-			if (entrada->Iniciar(hInstance))
+			CColaEventos* colaEv = new CColaEventos();
+			CSalidaHID* salida = new CSalidaHID(perfil, colaEv, vhid);
+			if (salida->Iniciar())
 			{
-				coms->SetHwnd(entrada->GetHwnd());
-				entrada->LoopWnd();
+				CEntradaHID* entrada = new CEntradaHID(perfil, colaEv);
+				if (entrada->Iniciar(hInstance))
+				{
+					coms->SetHwnd(entrada->GetHwnd());
+					entrada->LoopWnd();
+				}
+				delete entrada;
 			}
-			delete entrada;
+			delete coms;
+			delete salida;
+			delete colaEv;
 		}
-		delete coms;
-		delete salida;
-		delete colaEv;
+		else
+		{
+			delete coms;
+		}
+		delete perfil;
 	}
-	else
-	{
-		delete coms;
-	}
-	delete perfil;
+	delete vhid;
 	delete mfd;
 	delete nxtDrv;
 	delete x52Drv;

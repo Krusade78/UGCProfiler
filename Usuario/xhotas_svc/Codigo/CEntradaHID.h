@@ -39,7 +39,7 @@ private:
 	bool PnpNotification(HINSTANCE hInst);
 	static LRESULT CALLBACK PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	bool AbrirDevices();
-	void CerrarDevices();
+	bool AbrirDevices(UCHAR abiertos);
+	void CerrarDevices(UCHAR cerrados);
 	static DWORD WINAPI HiloLectura(LPVOID param);
 };
