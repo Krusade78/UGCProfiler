@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{fb85a669-9a7b-41e3-a150-48cc55e7c785}</ProjectGuid>
+    <RootNamespace>xhotassvc</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+    <PublicIncludeDirectories>$(ProjectDir)Codigo;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Hid.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName).dat</OutputFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Setupapi.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Codigo\CalibradoDx\CDirectInput.h" />
+    <ClInclude Include="Codigo\CComs.h" />
+    <ClInclude Include="Codigo\CEntradaHID.h" />
+    <ClInclude Include="Codigo\ColaEntrada\CColaHID.h" />
+    <ClInclude Include="Codigo\ColaEntrada\CPaqueteHID.h" />
+    <ClInclude Include="Codigo\ColaEventos\CColaEventos.h" />
+    <ClInclude Include="Codigo\ColaEventos\CPaqueteEventos.h" />
+    <ClInclude Include="Codigo\CSalidaHID.h" />
+    <ClInclude Include="Codigo\framework.h" />
+    <ClInclude Include="Codigo\NXT\EscribirHIDNXT.h" />
+    <ClInclude Include="Codigo\Perfil\CPerfil.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\CPreprocesar.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\CProcesarNXT.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\CProcesarPedales.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\CProcesarX52.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\GenerarEventos\CGenerarEventos.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\GenerarEventos\ProcesarUSBs_Botones-Setas.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\GenerarEventos\ProcesarUSBs_Ejes.h" />
+    <ClInclude Include="Codigo\ProcesarEntrada\ProcesarUSBs_Calibrado.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\Comandos\CDirectX.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\Comandos\CEspeciales.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\Comandos\CNXT.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\Comandos\CRaton.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\Comandos\CTeclado.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\Comandos\CX52.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\CProcesarSalida.h" />
+    <ClInclude Include="Codigo\ProcesarSalida\CVirtualHID.h" />
+    <ClInclude Include="Codigo\targetver.h" />
+    <ClInclude Include="Codigo\X52\EscribirUSBX52.h" />
+    <ClInclude Include="Codigo\X52\MenuMFD.h" />
+    <ClInclude Include="xhotas_svc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Codigo\CalibradoDx\cdirectinput.cpp" />
+    <ClCompile Include="Codigo\CComs.cpp" />
+    <ClCompile Include="Codigo\CEntradaHID.cpp" />
+    <ClCompile Include="Codigo\ColaEntrada\CColaHID.cpp" />
+    <ClCompile Include="Codigo\ColaEntrada\CPaqueteHID.cpp" />
+    <ClCompile Include="Codigo\ColaEventos\CColaEventos.cpp" />
+    <ClCompile Include="Codigo\ColaEventos\CPaqueteEventos.cpp" />
+    <ClCompile Include="Codigo\CSalidaHID.cpp" />
+    <ClCompile Include="Codigo\NXT\EscribirHIDNXT.cpp" />
+    <ClCompile Include="Codigo\Perfil\CPerfil.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\CPreprocesar.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\CProcesarNXT.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\CProcesarPedales.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\CProcesarX52.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\GenerarEventos\CGenerarEventos.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\GenerarEventos\ProcesarUSBs_Botones-Setas.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\GenerarEventos\ProcesarUSBs_Ejes.cpp" />
+    <ClCompile Include="Codigo\ProcesarEntrada\ProcesarUSBs_Calibrado.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\Comandos\CDirectX.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\Comandos\CEspeciales.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\Comandos\CNXT.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\Comandos\CRaton.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\Comandos\CTeclado.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\Comandos\CX52.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\CProcesarSalida.cpp" />
+    <ClCompile Include="Codigo\ProcesarSalida\CVirtualHID.cpp" />
+    <ClCompile Include="Codigo\X52\EscribirUSBX52.cpp" />
+    <ClCompile Include="Codigo\X52\MenuMFD.cpp" />
+    <ClCompile Include="xhotas_svc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="xhotas_svc.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

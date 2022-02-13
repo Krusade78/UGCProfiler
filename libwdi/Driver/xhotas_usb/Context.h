@@ -1,0 +1,11 @@
+#define _CONTEXT_
+#include "EscribirUSBX52.h"
+#undef _CONTEXT_
+
+typedef struct _DEVICE_CONTEXT
+{
+	WDFUSBDEVICE		UsbDevice;
+	WDFDEVICE			ControlDevice;
+	X52WRITE_CONTEXT	SalidaX52;
+} DEVICE_CONTEXT, *PDEVICE_CONTEXT;
+WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_CONTEXT, GetDeviceContext);

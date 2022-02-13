@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Editor.CtlPedales" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:Editor"
+             Height="462" Width="434">
+    <Grid Loaded="Grid_Loaded">
+        <Image Source="/Editor;component/res/pedales.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,57,0,0" />
+
+        <Button Content="Freno Der." Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="296,72,0,0" Height="25" Width="75" Click="PedalDer_Click"/>
+        <Button Content="Freno Izq." Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="65,72,0,0" Height="25" Width="75" Click="PedalIzq_Click"/>
+
+        <Button x:Name="EjeR" Content="Eje R" Background="GhostWhite" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,363,0,0" Height="25" Width="75" Click="EjeR_Click"/>
+    </Grid>
+</UserControl>

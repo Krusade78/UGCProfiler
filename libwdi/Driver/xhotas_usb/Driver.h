@@ -1,0 +1,10 @@
+#ifdef _PRIVATE_
+
+DRIVER_INITIALIZE DriverEntry;
+EVT_WDF_DRIVER_DEVICE_ADD EvtAddDevice;
+EVT_WDF_DEVICE_PREPARE_HARDWARE  EvtDevicePrepareHardware;
+NTSTATUS IniciarContextX52(_In_ WDFDEVICE device);
+EVT_WDF_DEVICE_SURPRISE_REMOVAL EvtDeviceSurpriseRemoval;
+EVT_WDF_OBJECT_CONTEXT_CLEANUP EvtCleanupCallback;
+
+#endif _PRIVATE_
