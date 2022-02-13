@@ -28,13 +28,13 @@ bool CDesinstalar::VHID()
 {
 	//Borrar del Pnp
 	{
-		CONST GUID guidHid={0x745a17a0,0x74d3,0x11d0,{0xb6,0xfe,0x00,0xa0,0xc9,0x0f,0x57,0xda}};
+		CONST GUID guidHid={0x745a17a0,0x74d3,0x11d0,{0xb6,0xfe,0x00,0xa0,0xc9,0x0f,0x57,0xdb}};
 		SP_DEVINFO_DATA dev;
 			dev.cbSize = sizeof(SP_DEVINFO_DATA);
 		DWORD idx=0;
 		
 		// Mini driver
-		HDEVINFO di=SetupDiGetClassDevs(&guidHid,NULL,NULL,DIGCF_PRESENT);
+		HDEVINFO di=SetupDiGetClassDevs(&guidHid,NULL,NULL,0);
 		if(di==INVALID_HANDLE_VALUE)
 		{
 			Error("Un-VHID[0]");
@@ -56,7 +56,7 @@ bool CDesinstalar::VHID()
 					SetupDiDestroyDeviceInfoList(di);
 					return false;
 				}
-				if (_stricmp((char*)desc, "VHID\\XHOTASVirtualHID") == 0)
+				if (_stricmp((char*)desc, "USB\\Vid_0100&Pid_0001") == 0)
 				{
 					if (!Borrar(di, &dev))
 					{
@@ -79,7 +79,7 @@ bool CDesinstalar::VHID()
 bool CDesinstalar::JoystickUSB()
 {
 	//Borrar del Pnp
-	GUID guidHid={0x745a17a0,0x74d3,0x11d0,{0xb6,0xfe,0x00,0xa0,0xc9,0x0f,0x57,0xda}};
+	GUID guidHid={0x745a17a0,0x74d3,0x11d0,{0xb6,0xfe,0x00,0xa0,0xc9,0x0f,0x57,0xdb}};
 	SP_DEVINFO_DATA dev;
 		dev.cbSize = sizeof(SP_DEVINFO_DATA);
 	DWORD idx = 0;

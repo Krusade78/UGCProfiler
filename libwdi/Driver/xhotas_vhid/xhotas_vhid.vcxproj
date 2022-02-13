@@ -30,7 +30,7 @@
     <RootNamespace>xhotas_vhid</RootNamespace>
     <ProjectName>xhotas_vhid</ProjectName>
     <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
-    <SccProjectName>$/Driver joystick/Driver/xhotas_vhid</SccProjectName>
+    <SccProjectName>$/Driver joystick/libwdi/Driver/xhotas_vhid</SccProjectName>
     <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
     <SccLocalPath>.</SccLocalPath>
     <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
@@ -95,7 +95,8 @@
       <AdditionalDependencies>$(DDK_LIB_PATH)\VhfKm.lib;$(DDK_LIB_PATH)\wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Inf>
-      <TimeStamp>9.2.0.0</TimeStamp>
+      <TimeStamp>9.2.0.1</TimeStamp>
+      <ProviderName>Alfredo Costalago</ProviderName>
     </Inf>
     <PostBuildEvent>
       <Command>

@@ -31,7 +31,7 @@
     <RootNamespace>xhotas_usb</RootNamespace>
     <ProjectName>xhotas_usb</ProjectName>
     <WindowsTargetPlatformVersion>$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
-    <SccProjectName>$/Driver joystick/Driver/xhotas_usb</SccProjectName>
+    <SccProjectName>$/Driver joystick/libwdi/Driver/xhotas_usb</SccProjectName>
     <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
     <SccLocalPath>.</SccLocalPath>
     <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
@@ -96,7 +96,8 @@
       <AdditionalDependencies>$(DDK_LIB_PATH)\wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Inf>
-      <TimeStamp>9.1.0.0</TimeStamp>
+      <TimeStamp>9.2.0.1</TimeStamp>
+      <ProviderName>Alfredo Costalago</ProviderName>
     </Inf>
     <PostBuildEvent>
       <Command>

@@ -3,12 +3,19 @@
 ;
 [Version]
 Signature="$WINDOWS NT$"
-Class=HIDClass
-ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Class="XHOTASHIDClass"
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57db}
 Provider="Alfredo Costalago"
-DriverVer=08/01/2021,7.0.0.0
+DriverVer=08/01/2021,9.2.0.1
 CatalogFile=xhotas_vhid.cat
 PnpLockdown=1
+
+[ClassInstall32]
+Addreg = USBDeviceClassReg      
+
+[USBDeviceClassReg]
+HKR,,,0,"Dispositivos XHOTAS"
+HKR,,Icon,,-20
 
 ;---------  Directorios 
 [SourceDisksNames]
@@ -27,7 +34,7 @@ KMDriverCopy=12
 
 ; Works on Win7 and later because we use inbox HID-KMDF mapper
 [Standard.NT$ARCH$.6.1]
-"XHOTAS Virtual HID"=xhotas_vhid, VHID\XHOTASVirtualHID
+"Enumerador virtual HID"=xhotas_vhid, USB\Vid_0100&Pid_0001
 
 [xhotas_vhid.NT]
 CopyFiles=KMDriverCopy
@@ -45,7 +52,7 @@ AddService=xhotas_vhid,0x2,xhotas_vhid_Service_Inst ;flag 0x2 sets this as the s
 HKR,,"LowerFilters",0x00010000,"vhf"
 
 [xhotas_vhid_Service_Inst]
-DisplayName    = "XHOTAS Virtual HID Service"
+DisplayName    = "XHOTAS Servicio enumerador virtual HID"
 ServiceType    = 1
 StartType      = 3
 ErrorControl   = 1

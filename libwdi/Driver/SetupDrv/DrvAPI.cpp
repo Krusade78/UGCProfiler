@@ -7,6 +7,7 @@
 #include "resource.h"
 #include "Desinstalar.h"
 #include "instalar.h"
+#include "pki.h"
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
@@ -49,7 +50,7 @@ int DrvAPI::Iniciar(HINSTANCE hInstance)
 
 int DrvAPI::GetInstalado()
 {
-	CONST GUID guidHid = { 0x745a17a0, 0x74d3, 0x11d0, { 0xb6, 0xfe, 0x00, 0xa0, 0xc9, 0x0f, 0x57, 0xda } }; // HID guid
+	CONST GUID guidHid = { 0x745a17a0, 0x74d3, 0x11d0, { 0xb6, 0xfe, 0x00, 0xa0, 0xc9, 0x0f, 0x57, 0xdb } }; // HID guid
 
 	HDEVINFO di = SetupDiGetClassDevs(&guidHid, NULL, NULL, DIGCF_PRESENT);
 	if (di == INVALID_HANDLE_VALUE)
@@ -77,7 +78,7 @@ int DrvAPI::GetInstalado()
 				SetupDiDestroyDeviceInfoList(di);
 				return -1;
 			}
-			if (_stricmp((char*)desc, "VHID\\XHOTASVirtualHID") == 0)
+			if (_stricmp((char*)desc, "USB\\Vid_0100&Pid_0001") == 0)
 			{
 				delete[]desc; desc = NULL;
 				SetupDiDestroyDeviceInfoList(di);
@@ -133,9 +134,13 @@ DWORD WINAPI DrvAPI::Procesar(LPVOID param)
 		UpdateWindow(main->hWnd);
 		char r = 0;
 		CInstalar inst;
-		if (inst.InstalarVHID(main->hWnd)) {
-			r++;
-			if(inst.InstalarJoystickUSB()) r++;
+		pki firma;
+		if (firma.SelfSignFile())
+		{
+			if (inst.InstalarVHID(main->hWnd)) {
+				r++;
+				if (inst.InstalarJoystickUSB()) r++;
+			}
 		}
  		main->resultado = r;
 	}

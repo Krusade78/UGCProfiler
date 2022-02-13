@@ -27,6 +27,9 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pki.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Desinstalar.h">
@@ -45,6 +48,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pki.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="installer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libwdi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="msapi_utf8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mssign32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdfn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

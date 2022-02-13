@@ -38,7 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calibrator", "Usuario\Calib
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instalación", "Instalación", "{2441832C-96E5-4604-B079-F96D103882E8}"
 	ProjectSection(SolutionItems) = preProject
-		Driver\Instalación\Setup.exe = Driver\Instalación\Setup.exe
+		Driver\Instalación\firmar.cmd = Driver\Instalación\firmar.cmd
+		Driver\Instalación\SolidCert.p12 = Driver\Instalación\SolidCert.p12
 		Driver\Instalación\xhotas_usb.cat = Driver\Instalación\xhotas_usb.cat
 		Driver\Instalación\xhotas_usb.inf = Driver\Instalación\xhotas_usb.inf
 		Driver\Instalación\xhotas_usb.sys = Driver\Instalación\xhotas_usb.sys

@@ -40,8 +40,8 @@ bool CInstalar::InstalarJoystickUSB()
 
 bool CInstalar::VHID(HWND hwnd)
 {
-	GUID guidHid={0x745a17a0,0x74d3,0x11d0,{0xb6,0xfe,0x00,0xa0,0xc9,0x0f,0x57,0xda}};
-	const char hardwareId[]="VHID\\XHOTASVirtualHID\0";
+	GUID guidHid={0x745a17a0,0x74d3,0x11d0,{0xb6,0xfe,0x00,0xa0,0xc9,0x0f,0x57,0xdb}};
+	const char hardwareId[]="USB\\Vid_0100&Pid_0001\0";
 	HDEVINFO di=SetupDiCreateDeviceInfoList(&guidHid,NULL);
 	if(di==INVALID_HANDLE_VALUE)
 	{
