@@ -46,6 +46,15 @@
     <Filter Include="Base\NXT">
       <UniqueIdentifier>{87da078f-9c5f-46ee-8fa3-e5adc532f25d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Base\vJoy">
+      <UniqueIdentifier>{4fda3b8f-c588-41a4-964e-b9ecb5552f59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{9f3d3854-f947-4a3e-9b7e-c56294dc559c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Pedales">
+      <UniqueIdentifier>{24aab781-ff83-474b-aef7-2a72bd44e019}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xhotas_svc.h">
@@ -141,6 +150,24 @@
     <ClInclude Include="Codigo\NXT\EscribirHIDNXT.h">
       <Filter>Base\NXT</Filter>
     </ClInclude>
+    <ClInclude Include="Codigo\vJoy\public.h">
+      <Filter>Base\vJoy</Filter>
+    </ClInclude>
+    <ClInclude Include="Codigo\vJoy\vjoyinterface.h">
+      <Filter>Base\vJoy</Filter>
+    </ClInclude>
+    <ClInclude Include="Codigo\X52\CWinUSBX52.h">
+      <Filter>Base\X52</Filter>
+    </ClInclude>
+    <ClInclude Include="Codigo\Pedales\CWinUSBPedales.h">
+      <Filter>Base\Pedales</Filter>
+    </ClInclude>
+    <ClInclude Include="Codigo\IEntradaHID.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Codigo\NXT\LeerHIDNXT.h">
+      <Filter>Base\NXT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xhotas_svc.cpp">
@@ -230,10 +257,29 @@
     <ClCompile Include="Codigo\NXT\EscribirHIDNXT.cpp">
       <Filter>Base\NXT</Filter>
     </ClCompile>
+    <ClCompile Include="Codigo\X52\CWinUSBX52.cpp">
+      <Filter>Base\X52</Filter>
+    </ClCompile>
+    <ClCompile Include="Codigo\Pedales\CWinUSBPedales.cpp">
+      <Filter>Base\Pedales</Filter>
+    </ClCompile>
+    <ClCompile Include="Codigo\NXT\LeerHIDNXT.cpp">
+      <Filter>Base\NXT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="xhotas_svc.rc">
       <Filter>Archivos de recursos</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\vJoyInterface.dll">
+      <Filter>lib</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\vJoyInterface.lib">
+      <Filter>lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

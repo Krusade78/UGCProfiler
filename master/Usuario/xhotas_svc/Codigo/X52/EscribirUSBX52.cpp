@@ -1,5 +1,7 @@
 #include "../framework.h"
 #include "EscribirUSBX52.h"
+#include <winusb.h>
+
 
 CX52Salida* CX52Salida::pLocal = nullptr;
 
@@ -7,98 +9,107 @@ CX52Salida::CX52Salida()
 {
 	pLocal = this;
 	semCola = CreateSemaphore(NULL, 1, 1, NULL);
-	semDriver = CreateSemaphore(NULL, 1, 1, NULL);
-	wkPool = CreateThreadpoolWork(WkEnviar, this, NULL);
-	AbrirDriver();
+	evCola = CreateEvent(NULL, TRUE, FALSE, NULL);
+	CreateThread(NULL, 0, WkEnviar, this, 0, NULL);
 }
 
 CX52Salida::~CX52Salida()
 {
 	pLocal = nullptr;
+	salir = true;
 	WaitForSingleObject(semCola, INFINITE);
 	{
 		while (!cola.empty())
 		{
 			PORDEN orden = cola.front();
-			delete[] orden->buff;
 			delete orden;
 			cola.pop();
 		}
 	}
 	ReleaseSemaphore(semCola, 1, NULL);
-	WaitForThreadpoolWorkCallbacks(wkPool, TRUE);
-	CloseThreadpoolWork(wkPool);
-	if (hDriver != nullptr)
-	{
-		CloseHandle(hDriver);
-		hDriver = nullptr;
-	}
+	SetEvent(evCola);
+	while (salir) { Sleep(500); }
 	CloseHandle(semCola);
-	CloseHandle(semDriver);
-}
-
-bool CX52Salida::AbrirDriver()
-{
-	WaitForSingleObject(semDriver, INFINITE);
-	{
-		if (hDriver != nullptr)
-		{
-			CloseHandle(hDriver);
-			hDriver = nullptr;
-		}
-		hDriver = CreateFile(L"\\\\.\\X52_XHOTASControl", GENERIC_WRITE | GENERIC_READ, FILE_SHARE_WRITE | FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-		if (hDriver == INVALID_HANDLE_VALUE)
-		{
-			DWORD err = GetLastError();
-			hDriver = nullptr;
-			ReleaseSemaphore(semDriver, 1, NULL);
-			return false;
-		}
-	}
-	ReleaseSemaphore(semDriver, 1, NULL);
-	return true;
+	CloseHandle(evCola);
 }
 
 #pragma region "Ordenes"
 void CX52Salida::Luz_MFD(PUCHAR SystemBuffer)
 {
 	UCHAR params[3] = { *(SystemBuffer) ,0 , 0xb1};
-	EnviarOrden(IOCTL_X52, params, 3);
+	EnviarOrden(params, 1);
 }
 
 void CX52Salida::Luz_Global(PUCHAR SystemBuffer)
 {
 	UCHAR params[3] = { *(SystemBuffer),0 ,0xb2 };
-	EnviarOrden(IOCTL_X52, params, 3);
+	EnviarOrden(params, 1);
 }
 
 void CX52Salida::Luz_Info(PUCHAR SystemBuffer)
 {
 	UCHAR params[3] = { static_cast<UCHAR>(*(SystemBuffer) + 0x50),0 , 0xb4 };
-	EnviarOrden(IOCTL_X52, params, 3);
+	EnviarOrden(params, 1);
 }
 
 void CX52Salida::Set_Pinkie(PUCHAR SystemBuffer)
 {
 	UCHAR params[3] = { static_cast<UCHAR>(*(SystemBuffer) + 0x50),0 , 0xfd };
-	EnviarOrden(IOCTL_X52, params, 3);
+	EnviarOrden(params, 1);
 }
 
 void CX52Salida::Set_Texto(PUCHAR SystemBuffer, BYTE tamBuffer)
 {
-	EnviarOrden(IOCTL_TEXTO, SystemBuffer, tamBuffer);
+	UCHAR params[3 * 17];
+	UCHAR texto[16];
+	UCHAR nparams = 1;
+	UCHAR paramIdx = 0;
+
+	if ((tamBuffer - 1) > 16)
+		return;
+
+	RtlZeroMemory(texto, 16);
+	RtlCopyMemory(texto, &(SystemBuffer)[1], tamBuffer - 1);
+
+
+	params[0] = 0x0; params[1] = 0;
+	switch (*(SystemBuffer)) //linea
+	{
+	case 1:
+		params[2] = 0xd9;
+		paramIdx = 0xd1;
+		break;
+	case 2:
+		params[2] = 0xda;
+		paramIdx = 0xd2;
+		break;
+	case 3:
+		params[2] = 0xdc;
+		paramIdx = 0xd4;
+	}
+	for (UCHAR i = 0; i < 16; i += 2)
+	{
+		if (texto[i] == 0)
+			break;
+		params[0 + (3 * nparams)] = texto[i];
+		params[1 + (3 * nparams)] = texto[i + 1];
+		params[2 + (3 * nparams)] = paramIdx;
+		nparams++;
+	}
+
+	EnviarOrden(params, nparams);
 }
 
 void CX52Salida::Set_Hora(PUCHAR SystemBuffer)
 {
 	UCHAR params[3] = { (SystemBuffer)[2] ,(SystemBuffer)[1] , static_cast<UCHAR>(*(SystemBuffer) + 0xbf) };
-	EnviarOrden(IOCTL_X52, params, 3);
+	EnviarOrden(params, 1);
 }
 
 void CX52Salida::Set_Hora24(PUCHAR SystemBuffer)
 {
 	UCHAR params[3] = { (SystemBuffer)[2] ,static_cast<UCHAR>((SystemBuffer)[1] + 0x80), static_cast<UCHAR>(*(SystemBuffer) + 0xbf) };
-	EnviarOrden(IOCTL_X52, params, 3);
+	EnviarOrden(params, 1);
 }
 
 void CX52Salida::Set_Fecha(PUCHAR SystemBuffer)
@@ -124,31 +135,32 @@ void CX52Salida::Set_Fecha(PUCHAR SystemBuffer)
 		params[1] = 0;
 		params[0] = SystemBuffer[1];
 	}
-	EnviarOrden(IOCTL_X52, params, 3);
+	EnviarOrden(params, 1);
 }
 #pragma endregion
 
-void CX52Salida::EnviarOrden(DWORD dwIoControlCode, UCHAR* buffer, BYTE tamaño)
+void CX52Salida::EnviarOrden(UCHAR* buffer, BYTE paquetes)
 {
-	PORDEN orden = new ORDEN;
-	orden->ioCtl = dwIoControlCode;
-	orden->buff = new BYTE[tamaño];
-	RtlCopyMemory(orden->buff, buffer, tamaño);
-	orden->tam = tamaño;
-
-	WaitForSingleObject(semCola, INFINITE);
+	for (BYTE procesados = 0; procesados < paquetes; procesados++)
 	{
-		cola.push(orden);
+		PORDEN orden = new ORDEN;
+		orden->valor = *((USHORT*)&buffer[procesados * 3]);
+		orden->idx = buffer[2 + (procesados * 3)];
+
+		WaitForSingleObject(semCola, INFINITE);
+		{
+			cola.push(orden);
+			SetEvent(evCola);
+		}
+		ReleaseSemaphore(semCola, 1, NULL);
 	}
-	ReleaseSemaphore(semCola, 1, NULL);
-	SubmitThreadpoolWork(wkPool);
 }
 
-VOID CALLBACK CX52Salida::WkEnviar(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_WORK Work)
+DWORD WINAPI  CX52Salida::WkEnviar(LPVOID param)
 {	
-	if (Context != NULL)
+	CX52Salida* local = static_cast<CX52Salida*>(param);
+	while (!local->salir)
 	{
-		CX52Salida* local = static_cast<CX52Salida*>(Context);
 		PORDEN orden = nullptr;
 		WaitForSingleObject(local->semCola, INFINITE);
 		{
@@ -156,23 +168,35 @@ VOID CALLBACK CX52Salida::WkEnviar(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inou
 			{
 				orden = local->cola.front();
 				local->cola.pop();
+				ResetEvent(local->evCola);
 			}
 		}
 		ReleaseSemaphore(local->semCola, 1, NULL);
 
 		if (orden != nullptr)
 		{
-			DWORD tam = 0;
-			if (!DeviceIoControl(local->hDriver, orden->ioCtl, orden->buff, orden->tam, NULL, 0, &tam, NULL))
+			WINUSB_SETUP_PACKET controlSetupPacket
 			{
-				DWORD err = GetLastError();
-				if (local->AbrirDriver())
-				{
-					DeviceIoControl(local->hDriver, orden->ioCtl, orden->buff, orden->tam, NULL, 0, &tam, NULL);
-				}
-			}
-			delete[] orden->buff;
+				controlSetupPacket.RequestType = 0b01000000,
+				controlSetupPacket.Request = 0x91, // Request
+				controlSetupPacket.Value = orden->valor, // Value
+				controlSetupPacket.Index = orden->idx, // Index  
+				controlSetupPacket.Length = 0
+			};
+
 			delete orden;
+
+			if (InterlockedCompareExchangePointer(&local->wUSB, nullptr, nullptr) != nullptr)
+			{
+				WinUsb_ControlTransfer(local->wUSB, controlSetupPacket, NULL, 0, NULL, NULL);
+			}
+		}
+		else
+		{
+			WaitForSingleObject(local->evCola, INFINITE);
 		}
 	}
+
+	local->salir = false;
+	return 0;
 }

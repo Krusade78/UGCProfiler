@@ -6,18 +6,20 @@ using System.Threading.Tasks;
 
 namespace Launcher
 {
-    class CServicio : IDisposable
+    internal class CServicio : IDisposable
     {
-        private Comunes.DataSetConfiguracion dsc = new Comunes.DataSetConfiguracion();
-        private System.Threading.CancellationTokenSource cerrarPipe = new System.Threading.CancellationTokenSource();
-        private System.Threading.CancellationTokenSource cerrarPipeSvc = new System.Threading.CancellationTokenSource();
+        private Comunes.DataSetConfiguracion dsc = new();
+        private System.Threading.CancellationTokenSource cerrarPipe = new();
+        private System.Threading.CancellationTokenSource cerrarPipeSvc = new();
         private System.IO.BinaryWriter salidaPipeSvc = null;
+        private readonly object main = null;
 
         public event EventHandler<ResolveEventArgs> EvtSalir;
         public enum TipoMsj : byte { ModoRaw, ModoCalibrado, Calibrado, Antiv, Mapa, Comandos };
 
-        public CServicio()
+        public CServicio(object main)
         {
+            this.main = main;
         }
 
         #region IDisposable Support
@@ -29,9 +31,9 @@ namespace Launcher
             {
                 if (disposing)
                 {
-                    cerrarPipe.Cancel();
+                    cerrarPipe?.Cancel();
                     while (cerrarPipe != null) { System.Threading.Thread.Sleep(100); }
-                    dsc.Dispose(); dsc = null;
+                    dsc?.Dispose(); dsc = null;
                     cerrarPipeSvc?.Cancel();
                     while (cerrarPipeSvc != null) { System.Threading.Thread.Sleep(100); }
                 }
@@ -50,7 +52,7 @@ namespace Launcher
                 {
                     while (!cerrarPipe.Token.IsCancellationRequested)
                     {
-                        using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("LauncherPipe", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough))
+                        using (NamedPipeServerStream pipeServer = new ("LauncherPipe", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough))
                         {
                             try { pipeServer.WaitForConnectionAsync(cerrarPipe.Token).Wait(cerrarPipe.Token); } catch { break; }
                             if (cerrarPipe.Token.IsCancellationRequested)
@@ -66,18 +68,18 @@ namespace Launcher
                 });
             Task.Run(() =>
             {
-                using (NamedPipeServerStream pipeServerSvc = new NamedPipeServerStream("LauncherPipeSvc", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough))
+                using (NamedPipeServerStream pipeServerSvc = new("LauncherPipeSvc", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough))
                 {
-                    using (System.Diagnostics.Process p = new System.Diagnostics.Process())
-                    {
-                        p.StartInfo.FileName = "xhotas_svc.dat";
-                        p.StartInfo.UseShellExecute = false;
-                        try
-                        {
-                            p.Start();
-                        }
-                        catch { }
-                    }
+                    //using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+                    //{
+                    //    p.StartInfo.FileName = "xhotas_svc.exe";
+                    //    p.StartInfo.UseShellExecute = true;
+                    //    try
+                    //    {
+                    //        p.Start();
+                    //    }
+                    //    catch { }
+                    //}
                     while (!cerrarPipeSvc.Token.IsCancellationRequested)
                     {
                         try { pipeServerSvc.WaitForConnectionAsync(cerrarPipeSvc.Token).Wait(cerrarPipeSvc.Token); } catch { cerrarPipeSvc.Cancel(); }
@@ -120,7 +122,7 @@ namespace Launcher
                 }
                 cerrarPipeSvc.Dispose();
                 cerrarPipeSvc = null;
-            }).ContinueWith((ret) => EvtSalir.Invoke(null, null), TaskScheduler.FromCurrentSynchronizationContext());
+            }).ContinueWith((ret) => EvtSalir.Invoke(null, null));
 
             return true;
         }
@@ -243,13 +245,13 @@ namespace Launcher
             byte ret = 0;
             lock (this)
             {
-                ret = CPerfil.CargarMapa(archivo, salidaPipeSvc);
+                ret = CPerfil.CargarMapa(main, archivo, salidaPipeSvc);
             }
 
             if ((ret == 0) && (archivo != "perfilbase.dat"))
             {
                 string nombre = System.IO.Path.GetFileNameWithoutExtension(archivo);
-                CMain.MessageBox("Perfil cargado correctamente.", nombre, MessageBoxButton.OK, MessageBoxImage.Information);
+                ((CMain)main).MessageBox("Perfil cargado correctamente.", nombre, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

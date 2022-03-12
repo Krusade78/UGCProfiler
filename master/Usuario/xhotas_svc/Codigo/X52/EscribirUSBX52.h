@@ -1,10 +1,5 @@
 #pragma once
-#include <winioctl.h>
 #include <queue>
-
-#define IOCTL_X52		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0800, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-#define IOCTL_TEXTO		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0801, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-
 
 class CX52Salida
 {
@@ -12,6 +7,8 @@ public:
 	CX52Salida();
 	~CX52Salida();
 	static CX52Salida* Get() { return pLocal; }
+
+	void SetWinUSB(void* ptr) { InterlockedExchangePointer(&wUSB, ptr); }
 
 	void Luz_MFD(PUCHAR SystemBuffer);
 	void Luz_Global(PUCHAR SystemBuffer);
@@ -26,20 +23,18 @@ private:
 
 	typedef struct
 	{
-		DWORD ioCtl;
-		PUCHAR buff;
-		BYTE tam;
+		USHORT valor;
+		BYTE idx;
 	} ORDEN, *PORDEN;
 
 	static CX52Salida* pLocal;
 
+	bool salir = false;
 	HANDLE semCola = nullptr;
-	HANDLE semDriver = nullptr;
-	PTP_WORK wkPool = nullptr;
-	HANDLE hDriver = nullptr;
+	void* wUSB = nullptr;
 	std::queue<PORDEN> cola;
+	HANDLE evCola = nullptr;
 
-	bool AbrirDriver();
-	void EnviarOrden(DWORD ioctl, UCHAR* params, BYTE tam);
-	static VOID CALLBACK WkEnviar(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_WORK Work);
+	void EnviarOrden(UCHAR* params, BYTE paquetes);
+	static DWORD WINAPI WkEnviar(LPVOID param);
 };

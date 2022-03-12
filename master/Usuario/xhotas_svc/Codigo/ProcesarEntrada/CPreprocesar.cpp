@@ -151,8 +151,8 @@ void CPreprocesar::HIDX52(PHIDX52_INPUT_DATA hidGameData)
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[3], 1023, 511); //Rx
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[2], 255, 127); //Z
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[5], 255, 127); //Sl
-		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[3], 255, 128); //Rx
-		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[4], 255, 128); //Ry
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[3], 255, 127); //Rx
+		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[4], 255, 127); //Ry
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[6], 15, 8); //mX
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Ace.Ejes[7], 15, 8); //mY
 
@@ -289,10 +289,10 @@ void CPreprocesar::ConvertirEjeCentroMitad(UINT16* pos, UINT16 maximo, UINT16 ce
 			*pos = 0;
 		}
 	}
-	else if (*pos == maximo)
-	{
-		*pos = maximo + 1;
-	}
+	//else if (*pos == maximo)
+	//{
+		//*pos = maximo + 1;
+	//}
 }
 
 void CPreprocesar::ConvertirEjeRango(TipoJoy joy, char eje, UINT16* pos, UINT16 rango)

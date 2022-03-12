@@ -1,7 +1,7 @@
 #include "../../framework.h"
 #include "CRaton.h"
 
-bool CRaton::EnviarSalida(CVirtualHID* pVHid, bool ejeX, bool ejeY)
+bool CRaton::EnviarSalida(CVirtualHID* pVHid, TipoComando cmd, bool ejeX, bool ejeY)
 {
 	BYTE buffer[4];
 	bool ratonOn = FALSE;
@@ -14,7 +14,39 @@ bool CRaton::EnviarSalida(CVirtualHID* pVHid, bool ejeX, bool ejeY)
 		ratonOn = ((pVHid->Estado.Raton.X != 0) || (pVHid->Estado.Raton.Y != 0));
 	}
 	pVHid->UnlockRaton();
-	pVHid->EnviarRequestRaton(buffer);
+
+	INPUT ip;
+	RtlZeroMemory(&ip, sizeof(INPUT));
+	ip.type = INPUT_MOUSE;
+	if ((cmd == TipoComando::RatonIzq) || (cmd == TipoComando::RatonDer))
+	{
+		ip.mi.dx = static_cast<CHAR>(buffer[1]);
+		ip.mi.dwFlags = MOUSEEVENTF_MOVE;
+	}
+	else if ((cmd == TipoComando::RatonArr) || (cmd == TipoComando::RatonAba))
+	{
+		ip.mi.dy = static_cast<CHAR>(buffer[2]);
+		ip.mi.dwFlags = MOUSEEVENTF_MOVE;
+	}
+	else if ((cmd == TipoComando::RatonWhArr) || (cmd == TipoComando::RatonWhAba))
+	{
+		ip.mi.mouseData= buffer[3];
+		ip.mi.dwFlags = MOUSEEVENTF_WHEEL;
+	}
+	else if (cmd == TipoComando::RatonBt1)
+	{
+		ip.mi.dwFlags = (buffer[0] & 1) ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
+	}
+	else if (cmd == TipoComando::RatonBt2)
+	{
+		ip.mi.dwFlags = (buffer[0] & 2) ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
+	}
+	else
+	{
+		ip.mi.dwFlags = (buffer[0] & 4) ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
+	}
+	SendInput(1, &ip, sizeof(INPUT));
+
 	if (ratonOn)
 	{
 		return true;
@@ -107,7 +139,8 @@ bool CRaton::Procesar(CVirtualHID* pVHid, PEV_COMANDO comando, bool* setTimer)
 
 	if (procesado)
 	{
-		*setTimer = EnviarSalida(pVHid, ejeX, ejeY);		
+		TipoComando cmd; cmd = comando->Tipo & 0x7f;
+		*setTimer = EnviarSalida(pVHid, cmd, ejeX, ejeY);
 	}
 
 	return procesado;

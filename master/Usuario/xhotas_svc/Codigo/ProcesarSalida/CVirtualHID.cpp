@@ -1,6 +1,7 @@
 #include "../framework.h"
 #include "CVirtualHID.h"
-#include "../Perfil/CPerfil.h"
+//#include "../Perfil/CPerfil.h"
+#include "../vJoy/vjoyinterface.h"
 
 CVirtualHID::CVirtualHID()
 {
@@ -10,95 +11,97 @@ CVirtualHID::CVirtualHID()
 
 CVirtualHID::~CVirtualHID()
 {
-    CloseHandle(hVHid);
+    if (reportOk)
+    {
+        reportOk = false;
+        RelinquishVJD(3);
+        RelinquishVJD(2);
+        RelinquishVJD(1);
+    }
     CloseHandle(hMutextRaton);
 }
 
 bool CVirtualHID::Iniciar()
 {
-    HANDLE hdev = CreateFile(L"\\\\.\\XHOTAS_VHID_Interface", GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-    if (INVALID_HANDLE_VALUE == hdev)
+    if (!vJoyEnabled())
+    {
+        return false;
+    }
+    if ((GetVJDStatus(1) != VJD_STAT_FREE) || (GetVJDStatus(2) != VJD_STAT_FREE) || (GetVJDStatus(3) != VJD_STAT_FREE))
+    {
+        return false;
+    }
+    if (AcquireVJD(1))
+    {
+        if (AcquireVJD(2))
+        {
+            if (!AcquireVJD(3))
+            {
+                RelinquishVJD(2);
+                RelinquishVJD(1);
+                return false;
+            }
+        }
+        else
+        {
+            RelinquishVJD(1);
+            return false;
+        }
+    }
+    else
     {
         return false;
     }
 
-    hVHid = hdev;
-
+    reportOk = true;
     return true;
-}
-
-bool CVirtualHID::EnviarReportDescriptor(void* vpPerfil)
-{
-    CPerfil* pPerfil = static_cast<CPerfil*>(vpPerfil);
-    DWORD tam = 0;
-    UCHAR* buff = new UCHAR[1 + sizeof(size_t) + sizeof(ReportDescriptor0) + (sizeof(ReportDescriptor1) * 3)];
-    buff[0] = 0;
-    size_t* tamaño = (size_t*)(buff + 1);
-    *tamaño = sizeof(ReportDescriptor0) + (sizeof(ReportDescriptor1) * 3);
-    RtlCopyMemory(&buff[1 + sizeof(size_t)], ReportDescriptor0, sizeof(ReportDescriptor0));
-
-    UCHAR* buffJ = new UCHAR[sizeof(ReportDescriptor1)];
-    for (char i = 0; i < 3; i++)
-    {
-        RtlCopyMemory(buffJ, ReportDescriptor1, sizeof(ReportDescriptor1));
-        buffJ[7] = i + 3;
-        *((UINT16*)&buffJ[EJE_X_MAX]) = pPerfil->GetPr()->RangosSalida[i][0];
-        *((UINT16*)&buffJ[EJE_Y_MAX]) = pPerfil->GetPr()->RangosSalida[i][1];
-        *((UINT16*)&buffJ[EJE_Z_MAX]) = pPerfil->GetPr()->RangosSalida[i][2];
-        *((UINT16*)&buffJ[EJE_RX_MAX]) = pPerfil->GetPr()->RangosSalida[i][3];
-        *((UINT16*)&buffJ[EJE_RY_MAX]) = pPerfil->GetPr()->RangosSalida[i][4];
-        *((UINT16*)&buffJ[EJE_RZ_MAX]) = pPerfil->GetPr()->RangosSalida[i][5];
-        *((UINT16*)&buffJ[EJE_SL1_MAX]) = pPerfil->GetPr()->RangosSalida[i][6];
-        *((UINT16*)&buffJ[EJE_SL2_MAX]) = pPerfil->GetPr()->RangosSalida[i][7];
-        RtlCopyMemory(&buff[1 + sizeof(size_t) + sizeof(ReportDescriptor0) + (sizeof(ReportDescriptor1) * i)], buffJ, sizeof(ReportDescriptor1));
-    }
-    delete[] buffJ;
-
-    reportOk = WriteFile(hVHid, buff, 1 + sizeof(size_t) + sizeof(ReportDescriptor0) + (sizeof(ReportDescriptor1) * 3), &tam, NULL);
-    //DWORD err = GetLastError();
-    delete[] buff;
-    return reportOk;
-}
-
-void CVirtualHID::EnviarRequestRaton(BYTE* inputData)
-{
-    if (reportOk)
-    {
-        DWORD tam = 0;
-        UCHAR* buff = new UCHAR[sizeof(Estado.Raton) + 1];
-        buff[0] = 2;
-        RtlCopyMemory(&buff[1], inputData, sizeof(Estado.Raton));
-        /*BOOL ok = */WriteFile(hVHid, buff, sizeof(Estado.Raton) + 1, &tam, NULL);
-        //DWORD err = GetLastError();
-        delete[] buff;
-    }
-}
-
-void CVirtualHID::EnviarRequestTeclado()
-{
-    if (reportOk)
-    {
-        DWORD tam = 0;
-        UCHAR* buff = new UCHAR[30];
-        buff[0] = 1;
-        RtlCopyMemory(&buff[1], Estado.Teclado, 29);
-        WriteFile(hVHid, buff, 30, &tam, NULL);
-        //DWORD err = GetLastError();
-        delete[] buff;
-    }
-
 }
 
 void CVirtualHID::EnviarRequestJoystick(UCHAR joyId, PVHID_INPUT_DATA inputData)
 {
     if (reportOk)
     {
-        DWORD tam = 0;
-        UCHAR* buff = new UCHAR[sizeof(VHID_INPUT_DATA) + 1];
-        buff[0] = joyId + 3;
-        RtlCopyMemory(&buff[1], inputData, sizeof(VHID_INPUT_DATA));
-        WriteFile(hVHid, buff, sizeof(VHID_INPUT_DATA) + 1, &tam, NULL);
-        //DWORD err = GetLastError();
-        delete[] buff;
+        JOYSTICK_POSITION input;
+        RtlZeroMemory(&input, sizeof(JOYSTICK_POSITION));
+        input.wAxisX = inputData->Ejes[0];
+        input.wAxisY = inputData->Ejes[1];
+        input.wAxisZ = inputData->Ejes[2];
+        input.wAxisXRot = inputData->Ejes[3];
+        input.wAxisYRot = inputData->Ejes[4];
+        input.wAxisZRot = inputData->Ejes[5];
+        input.wSlider = inputData->Ejes[6];
+        input.wDial = inputData->Ejes[7];
+        input.lButtons = inputData->Botones[0] | (inputData->Botones[1] << 8) | (inputData->Botones[2] << 16) | (inputData->Botones[3] << 24);
+        input.bHats = Hat2Switch(inputData->Setas[0]);
+        input.bHatsEx1 = Hat2Switch(inputData->Setas[1]);
+        input.bHatsEx2 = Hat2Switch(inputData->Setas[2]);
+        input.bHatsEx3 = Hat2Switch(inputData->Setas[3]);
+        UpdateVJD(joyId + 1, &input);
+    }
+}
+
+DWORD CVirtualHID::Hat2Switch(UCHAR pos)
+{
+    switch (pos)
+    {
+    case 1:
+        return 0;
+    case 2:
+        return 4500;
+    case 3:
+        return 9000;
+    case 4:
+        return 13500;
+    case 5:
+        return 18000;
+    case 6:
+        return 22500;
+    case 7:
+        return 27000;
+    case 8:
+        return 31500;
+
+    default:
+        return -1;
     }
 }

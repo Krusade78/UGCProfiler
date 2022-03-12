@@ -13,6 +13,11 @@
 #include "Codigo/X52/MenuMFD.h"
 #include "Codigo/NXT/EscribirHIDNXT.h"
 #include <Dbt.h>
+#include <sas.h>
+#define DLLIMPORT
+#include "CExportados.h"
+#pragma comment(lib, "Sas.lib")
+DWORD WINAPI Menu(LPVOID param);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 					 _In_opt_ HINSTANCE hPrevInstance,
@@ -41,6 +46,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//	return 1;
 	//}
 	//delete di;
+
+	CExportados* pExp = new CExportados();
+	pExp->Iniciar();
 
 	//Iniciar objetos
 
@@ -81,8 +89,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	delete nxtDrv;
 	delete x52Drv;
 
-	ReleaseSemaphore(mtx, 1, NULL);
-	CloseHandle(mtx);
+	delete pExp;
 
 	return 0;
 }
+

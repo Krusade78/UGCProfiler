@@ -20,37 +20,34 @@ CComs::~CComs()
 
 bool CComs::Iniciar()
 {
-	hPipe = CreateFile(L"\\\\.\\pipe\\LauncherPipeSvc", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-	if (hPipe == INVALID_HANDLE_VALUE)
+	char retry = 5;
+	while (retry-- > 0)
 	{
-		hPipe = nullptr;
-		return false;
-	}
-	else
-	{
-		DWORD mode = PIPE_READMODE_MESSAGE;
-		if (SetNamedPipeHandleState(hPipe, &mode, NULL, NULL))
+		hPipe = CreateFile(L"\\\\.\\pipe\\LauncherPipeSvc", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+		if (hPipe != INVALID_HANDLE_VALUE)
 		{
-			if (WriteFile(hPipe, "OK\r\n", 5, NULL, NULL))
+			DWORD mode = PIPE_READMODE_MESSAGE;
+			if (SetNamedPipeHandleState(hPipe, &mode, NULL, NULL))
 			{
-				HANDLE hilo = CreateThread(NULL, 0, HiloLectura, this, 0, NULL);
-				if (hilo != NULL)
+				if (WriteFile(hPipe, "OK\r\n", 5, NULL, NULL))
 				{
-					while (InterlockedCompareExchange16(&hiloCerrado, FALSE, FALSE))
+					HANDLE hilo = CreateThread(NULL, 0, HiloLectura, this, 0, NULL);
+					if (hilo != NULL)
 					{
-						Sleep(500);
+						while (InterlockedCompareExchange16(&hiloCerrado, FALSE, FALSE))
+						{
+							Sleep(500);
+						}
+						return true;
 					}
-					return true;
 				}
 			}
+			CloseHandle(hPipe);
 		}
+		hPipe = nullptr;
+		Sleep(1000);
 	}
 
-	if (hPipe != nullptr)
-	{
-		CloseHandle(hPipe);
-	}
-	hPipe = nullptr;
 	return false;
 }
 
@@ -107,7 +104,7 @@ DWORD WINAPI CComs::HiloLectura(LPVOID param)
 	}
 
 	InterlockedExchange16(&local->hiloCerrado, TRUE);
-	SendMessage(local->hWndMensajes, WM_CLOSE, 0, 0);
+	SendNotifyMessage(local->hWndMensajes, WM_CLOSE, 0, 0);
 	return 0;
 }
 

@@ -91,11 +91,13 @@ bool  CPerfil::HF_IoEscribirMapa(BYTE* SystemBuffer, DWORD tam)
 			RtlCopyMemory(perfil.RangosEntrada, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas) + sizeof(perfil.MapaEjes), sizeof(perfil.RangosEntrada));
 			RtlCopyMemory(perfil.RangosSalida, SystemBuffer + 17 + 1 + sizeof(perfil.MapaBotones) + sizeof(perfil.MapaSetas) + sizeof(perfil.MapaEjes) + sizeof(perfil.RangosEntrada), sizeof(perfil.RangosSalida));
 			
-			if (!((CVirtualHID*)pVHID)->EnviarReportDescriptor(this))
+			for (char i = 0; i < 4; i++)
 			{
-				ReleaseMutex(hMutexPrograma);
-				LimpiarPerfil();
-				return false;
+				for (char j = 0; j < 8; j++ )
+				{
+					if (i < 3) perfil.RangosSalida[i][j] = 0x8000;
+					perfil.RangosEntrada[i][j] = 0x8000;
+				}
 			}
 		}
 		ReleaseMutex(hMutexPrograma);

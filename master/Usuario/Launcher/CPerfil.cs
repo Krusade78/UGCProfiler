@@ -5,7 +5,7 @@ namespace Launcher
 {
     internal class CPerfil
     {
-        public static byte CargarMapa(string archivo, System.IO.BinaryWriter pipe)
+        public static byte CargarMapa(object main, string archivo, System.IO.BinaryWriter pipe)
         {
             Comunes.DSPerfil perfil = new();
             try
@@ -14,7 +14,7 @@ namespace Launcher
             }
             catch (Exception ex)
             {
-                CMain.MessageBox(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ((CMain)main).MessageBox(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 perfil.Dispose();
                 return 1;
             }

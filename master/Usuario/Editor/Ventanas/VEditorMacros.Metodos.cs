@@ -870,6 +870,8 @@ namespace Editor
                     return 0x5B;
                 case 0x64: //hp 4
                     return 0x5C;
+                case 0x65: //hp 4
+                    return 0x5D;
                 case 0x66: //kp 6
                     return 0x5E;
                 case 0x67: //kp 7
@@ -877,7 +879,7 @@ namespace Editor
                 case 0x68: //kp 8
                     return 0x60;
                 case 0x69: //kp 9
-                    return 0x62;
+                    return 0x61;
                 case 0x6A: // kp *
                     return 0x55;
                 case 0x6b: // kp +

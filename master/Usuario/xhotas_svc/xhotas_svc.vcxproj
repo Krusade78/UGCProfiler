@@ -52,11 +52,13 @@
     <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
     <PublicIncludeDirectories>$(ProjectDir)Codigo;$(PublicIncludeDirectories)</PublicIncludeDirectories>
     <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+    <CustomBuildAfterTargets />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+    <CustomBuildAfterTargets />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -64,16 +66,21 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)usuario\CPPaCS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Hid.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(TargetName).dat</OutputFile>
+      <AdditionalDependencies>..\CPPaCS\$(Platform)\$(Configuration)\CPPaCS.lib;lib/vJoyInterface.lib;WinUSB.lib;Hid.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <UACUIAccess>false</UACUIAccess>
+      <AdditionalLibraryDirectories>$(SolutionDir)usuario\CPPaCS\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y $(SolutionDir)usuario\cppacs\$(Platform)\$(Configuration)\CPPaCS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)
+xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configuration)\
+"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe" sign /f "$(SolutionDir)\Driver\SolidCert.p12" /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a "$(OutDir)$(TargetName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -85,14 +92,23 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)usuario\CPPaCS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Setupapi.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>..\CPPaCS\$(Platform)\$(Configuration)\CPPaCS.lib;lib/vJoyInterface.lib;WinUSB.lib;Setupapi.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)usuario\CPPaCS\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <UACUIAccess>false</UACUIAccess>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(SolutionDir)usuario\cppacs\$(Platform)\$(Configuration)\CPPaCS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)
+xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configuration)\
+"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe" sign /f "$(SolutionDir)\Driver\SolidCert.p12" /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a "$(OutDir)$(TargetName)$(TargetExt)"
+"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe" sign /f "$(SolutionDir)\Driver\SolidCert.p12" /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a "$(OutDir)vJoyInterface.dll"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Codigo\CalibradoDx\CDirectInput.h" />
@@ -104,7 +120,10 @@
     <ClInclude Include="Codigo\ColaEventos\CPaqueteEventos.h" />
     <ClInclude Include="Codigo\CSalidaHID.h" />
     <ClInclude Include="Codigo\framework.h" />
+    <ClInclude Include="Codigo\IEntradaHID.h" />
     <ClInclude Include="Codigo\NXT\EscribirHIDNXT.h" />
+    <ClInclude Include="Codigo\NXT\LeerHIDNXT.h" />
+    <ClInclude Include="Codigo\Pedales\CWinUSBPedales.h" />
     <ClInclude Include="Codigo\Perfil\CPerfil.h" />
     <ClInclude Include="Codigo\ProcesarEntrada\CPreprocesar.h" />
     <ClInclude Include="Codigo\ProcesarEntrada\CProcesarNXT.h" />
@@ -123,6 +142,9 @@
     <ClInclude Include="Codigo\ProcesarSalida\CProcesarSalida.h" />
     <ClInclude Include="Codigo\ProcesarSalida\CVirtualHID.h" />
     <ClInclude Include="Codigo\targetver.h" />
+    <ClInclude Include="Codigo\vJoy\public.h" />
+    <ClInclude Include="Codigo\vJoy\vjoyinterface.h" />
+    <ClInclude Include="Codigo\X52\CWinUSBX52.h" />
     <ClInclude Include="Codigo\X52\EscribirUSBX52.h" />
     <ClInclude Include="Codigo\X52\MenuMFD.h" />
     <ClInclude Include="xhotas_svc.h" />
@@ -137,6 +159,8 @@
     <ClCompile Include="Codigo\ColaEventos\CPaqueteEventos.cpp" />
     <ClCompile Include="Codigo\CSalidaHID.cpp" />
     <ClCompile Include="Codigo\NXT\EscribirHIDNXT.cpp" />
+    <ClCompile Include="Codigo\NXT\LeerHIDNXT.cpp" />
+    <ClCompile Include="Codigo\Pedales\CWinUSBPedales.cpp" />
     <ClCompile Include="Codigo\Perfil\CPerfil.cpp" />
     <ClCompile Include="Codigo\ProcesarEntrada\CPreprocesar.cpp" />
     <ClCompile Include="Codigo\ProcesarEntrada\CProcesarNXT.cpp" />
@@ -154,12 +178,32 @@
     <ClCompile Include="Codigo\ProcesarSalida\Comandos\CX52.cpp" />
     <ClCompile Include="Codigo\ProcesarSalida\CProcesarSalida.cpp" />
     <ClCompile Include="Codigo\ProcesarSalida\CVirtualHID.cpp" />
+    <ClCompile Include="Codigo\X52\CWinUSBX52.cpp" />
     <ClCompile Include="Codigo\X52\EscribirUSBX52.cpp" />
     <ClCompile Include="Codigo\X52\MenuMFD.cpp" />
     <ClCompile Include="xhotas_svc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="xhotas_svc.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\vJoyInterface.dll">
+      <DeploymentContent>false</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\vJoyInterface.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Comunes\Comunes.csproj">
+      <Project>{e3e06aad-247d-4927-9f64-359e4ac1d54f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\CPPaCS\CPPaCS.vcxproj">
+      <Project>{6de78144-2a0e-47bf-80d6-bbaffc123d99}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Launcher\Launcher.csproj">
+      <Project>{19e2df53-6e1e-4812-b33a-5aa0b76347c1}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

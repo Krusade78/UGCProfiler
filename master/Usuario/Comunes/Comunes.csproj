@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Product>XHOTAS</Product>
     <Authors>Alfredo Costalago</Authors>
@@ -62,4 +62,7 @@
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </None>
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&quot;C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe&quot; sign /f &quot;$(SolutionDir)\Driver\SolidCert.p12&quot; /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a &quot;$(OutDir)$(TargetName)$(TargetExt)&quot;" />
+  </Target>
 </Project>
