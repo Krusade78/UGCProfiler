@@ -96,9 +96,9 @@ bool CEntradaHID::PnpNotification(HINSTANCE hInst)
             RtlZeroMemory(&dbbd, sizeof(dbbd));
             dbbd.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);;
             dbbd.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-            HidD_GetHidGuid(&dbbd.dbcc_classguid);
+            //HidD_GetHidGuid(&dbbd.dbcc_classguid);
 
-            if (NULL != RegisterDeviceNotification(pnpHWnd, &dbbd, DEVICE_NOTIFY_WINDOW_HANDLE))
+            if (NULL != RegisterDeviceNotification(pnpHWnd, &dbbd, DEVICE_NOTIFY_WINDOW_HANDLE | DEVICE_NOTIFY_ALL_INTERFACE_CLASSES))
             {
                 SetWindowLongPtr(pnpHWnd, GWLP_USERDATA, (LONG_PTR)this);
                 return true;

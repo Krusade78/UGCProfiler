@@ -1,13 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <Platforms>x64</Platforms>
+    <SccProjectName>%24/Driver joystick/master/Usuario/Launcher</SccProjectName>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
+    <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
+    <SccLocalPath>.</SccLocalPath>
   </PropertyGroup>
-
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
@@ -22,8 +19,7 @@
     <Description>XHOTAS Tray app</Description>
     <Copyright>Copyright 2022</Copyright>
     <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
-    <IsPublishable>False</IsPublishable>
-
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

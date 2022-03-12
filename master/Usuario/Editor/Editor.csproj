@@ -1,13 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <Platforms>x64</Platforms>
+    <SccProjectName>%24/Driver joystick/master/Usuario/Editor</SccProjectName>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
+    <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
+    <SccLocalPath>.</SccLocalPath>
   </PropertyGroup>
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
@@ -21,8 +18,8 @@
     <Copyright>Copyright 2021</Copyright>
     <StartupObject>Editor.App</StartupObject>
     <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
+	  <Platforms>x64</Platforms>
   </PropertyGroup>
-
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebugType>none</DebugType>

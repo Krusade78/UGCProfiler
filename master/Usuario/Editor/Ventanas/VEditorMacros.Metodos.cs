@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Input;
 using static Comunes.CTipos;
@@ -11,8 +10,8 @@ namespace Editor
         private MainWindow padre;
         private readonly int indicep;
         private static readonly int ultimaPlantilla = -1;
-        private readonly List<byte> teclas = new List<byte>();
-        private readonly DataSetMacros dsMacros = new DataSetMacros();
+        private readonly List<byte> teclas = new();
+        private readonly DataSetMacros dsMacros = new();
 
         private void Iniciar()
         {
@@ -226,7 +225,7 @@ namespace Editor
         {
             ComboBox1.Items.Clear();
             dsMacros.TECLAS.Clear();
-            using (System.IO.StreamReader f = new System.IO.StreamReader(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Editor.Plantillas." + vtSelPlantilla.SelectedItem + ".kbp")))
+            using (System.IO.StreamReader f = new(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Editor.Plantillas." + vtSelPlantilla.SelectedItem + ".kbp")))
             {
                 while (f.Peek() >= 0)
                 {
@@ -514,20 +513,20 @@ namespace Editor
                 {
                     if ((r.Nombre == TextBoxNombre.Text.Trim()) && (r.idAccion != indicep))
                     {
-                        MessageBox.Show("El de nombre de la macro está repetido.", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        _ = MessageBox.Show("El de nombre de la macro está repetido.", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                         return;
                     }
                 }
             }
 
-            List<ushort> macro = new List<ushort>();
+            List<ushort> macro = new();
 
             if (CheckBox1.IsChecked == true) //texto x52
             {
-                String st = TextBoxNombre.Text.Trim();
+                string st = TextBoxNombre.Text.Trim();
                 if (st.Length > 16)
                 {
-                    st = st.Substring(0, 16);
+                    st = st[..16];
                 }
                 st = st.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
                 byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(st));
@@ -583,10 +582,10 @@ namespace Editor
                 dsMacros.MACROS.Clear();
             }
 
-            List<ushort> bloque = new List<ushort>();
+            List<ushort> bloque = new();
             for (byte i = 0; i < teclas.Count; i++)
             {
-                int k = MapKey(teclas[i]);
+                int k = teclas[i];
                 if (k > -1) bloque.Add((ushort)((byte)TipoComando.TipoComando_Tecla + (k << 8)));
             }
             if (mantener)
@@ -595,7 +594,7 @@ namespace Editor
             }
             for (int j = teclas.Count - 1; j >= 0; j--)
             {
-                int k = MapKey(teclas[j]);
+                int k = teclas[j];
                 if (k > -1)
                 {
                     bloque.Add((ushort)((byte)(TipoComando.TipoComando_Soltar | TipoComando.TipoComando_Tecla) + (k << 8)));
@@ -606,7 +605,7 @@ namespace Editor
 
         private void LeerTeclado()
         {
-            String s = "";
+            string s = "";
             bool[] buff = new bool[256];
             for (Key k = Key.Cancel; k <= Key.DeadCharProcessed; k++)
             {
@@ -614,20 +613,29 @@ namespace Editor
                     buff[KeyInterop.VirtualKeyFromKey(k)] = true;
             }
             teclas.Clear();
-            if (buff[0x10] && !buff[0xa0] && !buff[0xa1])
+            if (buff[0x10])
             {
-                s += "May.";
-                teclas.Add(0x10);
+                buff[0x10] = false;
+                if (!buff[0xa0] && !buff[0xa1])
+                {
+                    buff[0xa0] = true;
+                }
             }
-            if (buff[0x11] && !buff[0xa2] && !buff[0xa3])
+            if (buff[0x11])
             {
-                s += ((s == "") ? "" : " + ") + "Control" ;
-                teclas.Add(0x11);
+                buff[0x11] = false;
+                if (!buff[0xa2] && !buff[0xa3])
+                {
+                    buff[0xa2] = true;
+                }
             }
-            if (buff[0x12] && !buff[0xa4] && !buff[0xa5])
+            if (buff[0x12])
             {
-                s += ((s == "") ? "" : " + ") + "Alt";
-                teclas.Add(0x12);
+                buff[0x12] = false;
+                if (!buff[0xa4] && !buff[0xa5])
+                {
+                    buff[0xa4] = true;
+                }
             }
             if (buff[0xa0])
             {
@@ -669,9 +677,9 @@ namespace Editor
                 s += ((s == "") ? "" : " + ") + "WinD";
                 teclas.Add(0x5c);
             }
-            for (ushort i = 1; i < 256; i++)
+            for (ushort i = 1; i < 255; i++)
             {
-                if (((i < 0x10) || (i > 0x12)) && (i != 0x5B) && (i != 0x5C) && ((i < 0xA0) || (i > 0xA5)))
+                if (i is not 0x5B and not 0x5C and (< 0xA0 or > 0xA5))
                 {
                     if (buff[i])
                     {
@@ -684,398 +692,6 @@ namespace Editor
             TextBoxTecla.Text = s;
         }
 
-        #region "Conversiones"
-        private int MapKey(int vkey)
-        {
-            //especiales 0xE0
-            switch(vkey)
-            {
-                case 1: //Left mouse button
-                case 2: //Right mouse button
-                    return -1;
-                case 3: // crtl+break
-                    return 0x47;
-                case 4: //Middle mouse button (three-button mouse)
-                case 5: //X1 mouse button
-                case 6: //X2 mouse button
-                case 7: //Undefined
-                    return -1;
-                case 8:
-                    return 0x2a;
-                case 9:
-                    return 0x2b;
-                case 0xa:
-                case 0xb:
-                    return -1;
-                case 0xc: //CLEAR key
-                    return 0x9c;
-                case 0xD: // enter
-                    return 0x28;
-                case 0xe:
-                case 0xf:
-                    return -1;
-                case 0x10: //SHIFT key
-                    return 0xe1;
-                case 0x11: // ctrl
-                    return 0xE0;
-                case 0x12: //alt
-                    return 0xE2;
-                case 0x13: //pausa
-                    return 0x48;
-                case 0x14: //CAPS LOCK key
-                    return 0x39;
-                case 0x15:
-                case 0x16:
-                case 0x17:
-                case 0x18:
-                case 0x19:
-                case 0x1a:
-                    return -1;
-                case 0x1b: //escape
-                    return 0x29;
-                case 0x1c:
-                case 0x1d:
-                case 0x1e:
-                case 0x1f:
-                    return -1;
-                case 0x20: //espacio
-                    return 0x2c; 
-                case 0x21: //pg up
-                    return 0x4B;
-                case 0x22: //pg down
-                    return 0x4E;
-                case 0x23: //end
-                    return 0x4D;
-                case 0x24: //home
-                    return 0x4A;
-                case 0x25: //left
-                    return 0x50;
-                case 0x26:  //up
-                    return 0x52;
-                case 0x27: // derecha
-                    return 0x4F;
-                case 0x28: //down
-                    return 0x51;
-                case 0x29: //select
-                    return 0x77;
-                case 0x2a: //print
-                    return -1;
-                case 0x2b: //execute
-                    return 0x74;
-                case 0x2C: //print screen
-                    return 0x46;
-                case 0x2D: //insert
-                    return 0x49;
-                case 0x2E:
-                    return 0x4C; //delete;
-                case 0x2f: //help
-                    return 0x75;
-                case 0x30: //0
-                    return 0x27;
-                case 0x31:
-                    return 0x1e;
-                case 0x32:
-                    return 0x1f;
-                case 0x33:
-                    return 0x20;
-                case 0x34:
-                    return 0x21;
-                case 0x35:
-                    return 0x22;
-                case 0x36:
-                    return 0x23;
-                case 0x37:
-                    return 0x24;
-                case 0x38:
-                    return 0x25;
-                case 0x39:
-                    return 0x26;
-                case 0x3a:
-                case 0x3b:
-                case 0x3c:
-                case 0x3d:
-                case 0x3e:
-                case 0x3f:
-                case 0x40:
-                    return -1;
-                case 0x41: //a
-                    return 0x04;
-                case 0x42:
-                    return 0x05;
-                case 0x43:
-                    return 0x06;
-                case 0x44:
-                    return 0x07;
-                case 0x45:
-                    return 0x08;
-                case 0x46:
-                    return 0x09;
-                case 0x47:
-                    return 0x0a;
-                case 0x48:
-                    return 0x0b;
-                case 0x49:
-                    return 0x0c;
-                case 0x4a:
-                    return 0x0d;
-                case 0x4b:
-                    return 0x0e;
-                case 0x4c:
-                    return 0x0f;
-                case 0x4d:
-                    return 0x10;
-                case 0x4e:
-                    return 0x11;
-                case 0x4f:
-                    return 0x12;
-                case 0x50:
-                    return 0x13;
-                case 0x51:
-                    return 0x14;
-                case 0x52:
-                    return 0x15;
-                case 0x53:
-                    return 0x16;
-                case 0x54:
-                    return 0x17;
-                case 0x55:
-                    return 0x18;
-                case 0x56:
-                    return 0x19;
-                case 0x57:
-                    return 0x1a;
-                case 0x58:
-                    return 0x1b;
-                case 0x59:
-                    return 0x1c;
-                case 0x5a:
-                    return 0x1d;
-                case 0x5B: //left win
-                    return 0xE3;
-                case 0x5C: //right win
-                    return 0xE7;
-                case 0x5D: //app
-                    return 0x65;
-                case 0x5E:
-                    return -1;
-                case 0x5f: //sleep
-                    return -1;
-                case 0x60: // kp 0
-                    return 0x62;
-                case 0x61: //kp 1
-                    return 0x59;
-                case 0x62: //kp 2
-                    return 0x5A;
-                case 0x63: //kp 3
-                    return 0x5B;
-                case 0x64: //hp 4
-                    return 0x5C;
-                case 0x65: //hp 4
-                    return 0x5D;
-                case 0x66: //kp 6
-                    return 0x5E;
-                case 0x67: //kp 7
-                    return 0x5F;
-                case 0x68: //kp 8
-                    return 0x60;
-                case 0x69: //kp 9
-                    return 0x61;
-                case 0x6A: // kp *
-                    return 0x55;
-                case 0x6b: // kp +
-                    return 0x57;
-                case 0x6c: //separator
-                    return 0x9f;
-                case 0x6d: //kp -
-                    return 0x56;
-                case 0x6E: //kp.
-                    return 0x63;
-                case 0x6F: //kp/
-                    return 0x54;
-                case 0x70: // F1
-                    return 0x3a;
-                case 0x71:
-                    return 0x3b;
-                case 0x72:
-                    return 0x3c;
-                case 0x73:
-                    return 0x3d;
-                case 0x74:
-                    return 0x3e;
-                case 0x75:
-                    return 0x3f;
-                case 0x76:
-                    return 0x40;
-                case 0x77:
-                    return 0x41;
-                case 0x78:
-                    return 0x42;
-                case 0x79:
-                    return 0x43;
-                case 0x7a:
-                    return 0x44;
-                case 0x7b:
-                    return 0x45;
-                case 0x7c:
-                    return 0x68;
-                case 0x7d:
-                    return 0x69;
-                case 0x7e:
-                    return 0x6a;
-                case 0x7f:
-                    return 0x6b;
-                case 0x80:
-                    return 0x6c;
-                case 0x81:
-                    return 0x6d;
-                case 0x82:
-                    return 0x6e;
-                case 0x83:
-                    return 0x6f;
-                case 0x84:
-                    return 0x70;
-                case 0x85:
-                    return 0x71;
-                case 0x86:
-                    return 0x72;
-                case 0x87:
-                    return 0x73;
-                //0x88 - 0x8f
-                case 0x90: //num lock
-                    return 0x53;
-                case 0x91: //scroll lock
-                    return 0x47;
-                case 0x92:
-                case 0x93:
-                case 0x94:
-                case 0x95:
-                case 0x96:
-                    return -1;
-                //0x97 - 0x9f
-                case 0xA0: // left shifht
-                    return 0xE1;
-                case 0xA1: // right shift
-                    return 0xE5;
-                case 0xA2: // left control
-                    return 0xE0;
-                case 0xA3: //right control
-                    return 0xE4;
-                case 0xA4: //left alt
-                    return 0xE2;
-                case 0xA5: //right alt
-                    //return 0xE6;
-                case 0xa6:
-                    //return 0x72;
-                case 0xa7:
-                    //return 0x71;
-                case 0xa8:
-                    //return 0x6f;
-                case 0xa9:
-                    //return 0x70;
-                case 0xaa:
-                    //return 0x6d;
-                case 0xab:
-                    //return 0x6e;
-                case 0xac:
-                    return -1;
-                case 0xad: //Volume Mute key
-                    return 0x7f;
-                case 0xae: //Volume Down key
-                    return 0x81;
-                case 0xaf: //Volume Up key
-                    return 0x80;
-                case 0xb0:
-                case 0xb1:
-                    return -1;
-                case 0xb2: // stop media
-                    return 0x78;
-                case 0xb3:
-                case 0xb4:
-                case 0xb5:
-                    return -1;
-                case 0xb6:
-                    return 0x73;
-                case 0xb7:
-                    return -1;
-                //0xb8 - 0xb9
-                case 0xba: //VK_OEM_1
-                    return 0x2f;
-                case 0xbb: //For any country/region, the '+' key
-                    return 0x30;
-                case 0xbc: //For any country/region, the ',' key
-                    return 0x36;
-                case 0xBD: //For any country/region, the '-' key
-                    return 0x38;
-                case 0xbe: //For any country/region, the '.' key
-                    return 0x37;
-                case 0xbf: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '/?' key
-                    return 0x32;
-                case 0xc0: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '`~' key
-                    return 0x33;
-                //0xc1 - 0xd7
-                //0xd8 - 0xda
-                case 0xdb: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '[{' key
-                    return 0x2d;
-                case 0xdc: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the '\|' key
-                    return 0x35;
-                case 0xdd: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the ']}' key
-                    return 0x2e;
-                case 0xde: //Used for miscellaneous characters; it can vary by keyboard. For the US standard keyboard, the 'single-quote/double-quote' key
-                    return 0x34;
-                case 0xdf: //Used for miscellaneous characters; it can vary by keyboard.
-                    return -1;
-                //0xe0
-                case 0xe1: //OEM specific
-                    return -1;
-                case 0xe2: //Either the angle bracket key or the backslash key on the RT 102-key keyboard
-                    return 0x64 ;
-                case 0xe3: //OEM specific
-                case 0xe4: //OEM specific
-                    return -1;
-                case 0xe5: //IME PROCESS key
-                    return -1;
-                case 0xe6: //OEM specific
-                    return -1;
-                case 0xe7: //Used to pass Unicode characters as if they were keystrokes. The VK_PACKET key is the low word of a 32-bit Virtual Key value used for non-keyboard input methods
-                    return -1;
-                //0xe8
-                case 0xe9: //OEM specific
-                    return -1;
-                case 0xea: 
-                    return 0xe7;
-                case 0xeb:
-                case 0xec:
-                case 0xed:
-                case 0xee:
-                case 0xef:
-                case 0xf0:
-                case 0xf1: //0xE3
-                case 0xf2:
-                case 0xf3:
-                case 0xf4:
-                case 0xf5:
-                    return -1;
-                case 0xf6: //Attn key
-                    return 0x9a;
-                case 0xf7: //CrSel key
-                    return 0xa3;
-                case 0xf8: //ExSel key
-                    return 0xa4;
-                case 0xF9: //Erase EOF key
-                    return 0x6a; //0x65
-                case 0xfa: //Play key
-                case 0xfb: //Zoom key
-                    return -1;
-                //0xfc
-                case 0xfd: //PA1 key
-                    return -1;
-                case 0xfe: //Clear key
-                    return 0x9c;
-                default:
-                    return -1;
-            }
-        }
-        #endregion
         #endregion
 
         #region "comandos estado"
@@ -1150,11 +766,11 @@ namespace Editor
             if ((GetCuenta() + 2 + TextBox3.Text.Length) > 237)
                 return;
 
-            List<ushort> bloque = new List<ushort>
+            List<ushort> bloque = new()
             {
                 (ushort)((byte)TipoComando.TipoComando_MfdTextoIni + ((ushort)NumericUpDown9.Valor << 8))
             };
-            String st = TextBox3.Text.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
+            string st = TextBox3.Text.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
             byte[] stb = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(st));
             for (byte i = 0; i < st.Length; i++)
             {

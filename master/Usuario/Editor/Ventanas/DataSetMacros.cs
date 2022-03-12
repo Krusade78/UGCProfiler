@@ -9,7 +9,7 @@ namespace Editor
         {
             public override void BeginInit()
             {
-                this.RowChanged += MACROSDataTable_RowChanged;
+                RowChanged += MACROSDataTable_RowChanged;
                 base.BeginInit();
             }
 
@@ -17,7 +17,7 @@ namespace Editor
             {
                 if (e.Action == DataRowAction.Add)
                 {
-                    ((DataSetMacros.MACROSRow)e.Row).nombre = GetNombre(((DataSetMacros.MACROSRow)e.Row).comando);
+                    ((MACROSRow)e.Row).nombre = GetNombre(((MACROSRow)e.Row).comando);
                 }
             }
 

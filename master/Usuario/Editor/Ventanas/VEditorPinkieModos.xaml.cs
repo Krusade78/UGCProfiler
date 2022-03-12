@@ -149,15 +149,21 @@ namespace Editor
                     ar.Nombre = "<Modo " + modo.ToString() + ">";
                     if (modo == 1)
                     {
-                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)), 0x0a32, 0x3832, 0x0032, 0x0432, 0x0032, 0xc032, 0x0f32, 0x2432 };
+                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)),
+                            0x0a32, 0x3832, 0x0032, 0x0432, 0x0032, 0xc032, 0x0f32, 0x2432,
+                            0x022c, 0x2d2d, 0x2d2d, 0x2d2d, 0x3e2d, 0x202d, 0x4d2d, 0x6f2d, 0x642d, 0x6f2d, 0x202d, 0x312d, 0x202d, 0x3c2d, 0x2d2d, 0x2d2d, 0x2d2d, 0x002e};
                     }
                     else if (modo == 2)
                     {
-                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)), 0x0a32, 0x3f32, 0x0032, 0x0432, 0x0032, 0xc032, 0x0f32, 0x0432 };
+                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)),
+                            0x0a32, 0x3f32, 0x0032, 0x0432, 0x0032, 0xc032, 0x0f32, 0x0432,
+                            0x022c, 0x2d2d, 0x2d2d, 0x2d2d, 0x3e2d, 0x202d, 0x4d2d, 0x6f2d, 0x642d, 0x6f2d, 0x202d, 0x322d, 0x202d, 0x3c2d, 0x2d2d, 0x2d2d, 0x2d2d, 0x002e};
                     }
                     else
                     {
-                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)), 0x0a32, 0xf832, 0x0132, 0x0432, 0x0032, 0xc032, 0x0f32, 0x8432 };
+                        ar.Comandos = new ushort[] { (ushort)((byte)CTipos.TipoComando.TipoComando_Modo + ((modo - 1) << 8)),
+                            0x0a32, 0xf832, 0x0132, 0x0432, 0x0032, 0xc032, 0x0f32, 0x8432,
+                            0x022c, 0x2d2d, 0x2d2d, 0x2d2d, 0x3e2d, 0x202d, 0x4d2d, 0x6f2d, 0x642d, 0x6f2d, 0x202d, 0x332d, 0x202d, 0x3c2d, 0x2d2d, 0x2d2d, 0x2d2d, 0x002e};
                     }
                     padre.GetDatos().Perfil.ACCIONES.AddACCIONESRow(ar);
                 }
