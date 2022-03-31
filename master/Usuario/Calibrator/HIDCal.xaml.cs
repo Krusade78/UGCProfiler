@@ -84,7 +84,7 @@ namespace Calibrator
             {
                 for (byte i = 0; i < 8; i++)
                 {
-                    hidReport[joy - 1, i] = (ushort)((hidData[(i * 2) + 1] << 8) | hidData[i * 2]);
+                    hidReport[joy - 1, i] = (ushort)((hidData[(i * 4) + 1] << 8) | hidData[i * 4]);
                 }
                 if (joy == 2)
                 {

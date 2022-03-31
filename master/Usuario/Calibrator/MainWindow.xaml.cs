@@ -50,15 +50,14 @@ namespace Calibrator
         {
             if (msg == 0x00FF)
             {
-                int outSize = 0;
                 int size = 0;
 
-                outSize = CRawInput.GetRawInputData(lParam, 0x10000003, null, ref size, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+                _ = CRawInput.GetRawInputData(lParam, 0x10000003, null, ref size, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
                 if (size != 0)
                 {
                     byte[] buff = new byte[size];
 
-                    outSize = CRawInput.GetRawInputData(lParam, 0x10000003, buff, ref size, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
+                    int outSize = CRawInput.GetRawInputData(lParam, 0x10000003, buff, ref size, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)));
                     if (outSize == size)
                     {
                         //CRawInput.RAWINPUTHEADER header = new CRawInput.RAWINPUTHEADER();
@@ -73,12 +72,12 @@ namespace Calibrator
                                 {
                                     IntPtr pNombre = Marshal.AllocHGlobal(256);
                                     uint cbSize = 128;
-                                    uint ret = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
-                                    String nombre = Marshal.PtrToStringAnsi(pNombre);
+                                    _ = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
+                                    string nombre = Marshal.PtrToStringAnsi(pNombre);
                                     Marshal.FreeHGlobal(pNombre);
-                                    if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
+                                    if (nombre.StartsWith("\\\\?\\HID#HIDCLASS"))
                                     {
-                                        nombre = nombre.Remove(0, 34).Substring(0, 1);
+                                        nombre = nombre.Remove(0, 21)[..1];
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
                                         CRawInput.RAWINPUTHID hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
@@ -88,9 +87,8 @@ namespace Calibrator
                                         for (int i = 0; i < hidData.Length; i++)
                                             hidData[i] = buff[i + 1 + size - hid.Size];
 
-                                        byte[] mapa = { 0, 0, 0, 1, 2, 3 };
-                                        ucInfo.ActualizarEstado(hidData, mapa[byte.Parse(nombre)], false);
-                                        ucCalibrar.ActualizarEstado(hidData, mapa[byte.Parse(nombre)], false);
+                                        ucInfo.ActualizarEstado(hidData, byte.Parse(nombre), false);
+                                        ucCalibrar.ActualizarEstado(hidData, byte.Parse(nombre), false);
                                     }
                                 }
                                 break;
@@ -101,7 +99,7 @@ namespace Calibrator
                                     uint ret = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
                                     String nombre = Marshal.PtrToStringAnsi(pNombre);
                                     Marshal.FreeHGlobal(pNombre);
-                                    if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
+                                    //if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
                                     {
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTKEYBOARD)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTKEYBOARD)));
@@ -119,7 +117,7 @@ namespace Calibrator
                                     uint ret = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
                                     String nombre = Marshal.PtrToStringAnsi(pNombre);
                                     Marshal.FreeHGlobal(pNombre);
-                                    if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
+                                    //if (nombre.StartsWith("\\\\?\\HID#HID_DEVICE_SYSTEM_VHF"))
                                     {
                                         ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
                                         Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTMOUSE)));
@@ -171,16 +169,16 @@ namespace Calibrator
             SetRawMode(modoRaw);
         }
 
-        private void SetModoCalibrado(bool on)
+        private static void SetModoCalibrado(bool on)
         {
             EnviarAlLauncher("CAL:" + on.ToString());
         }
-        private void SetRawMode(bool on)
+        private static void SetRawMode(bool on)
         {
             EnviarAlLauncher("RAW:" + on.ToString());
         }
 
-        private void EnviarAlLauncher(string msj)
+        private static void EnviarAlLauncher(string msj)
         {
             using (System.IO.Pipes.NamedPipeClientStream pipeClient = new System.IO.Pipes.NamedPipeClientStream("LauncherPipe"))
             {

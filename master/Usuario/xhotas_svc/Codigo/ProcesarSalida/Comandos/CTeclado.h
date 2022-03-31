@@ -7,6 +7,6 @@ class CTeclado
 public:
 	static void Procesar(PEV_COMANDO pComando, CVirtualHID* pVHid);
 private:
-	static UCHAR Unmap(UCHAR tecla);
+	static UINT GetExtendida(UCHAR tecla);
 };
 

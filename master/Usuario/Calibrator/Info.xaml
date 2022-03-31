@@ -76,7 +76,7 @@
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                     <TextBlock Text="Ejes X,Y" Foreground="GreenYellow" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" />
                     <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" Height="128" Width="128" Stretch="Fill" Margin="0,20,0,0">
-                        <Grid Height="65535" Width="65535" Background="#EF003200">
+                        <Grid Height="65536" Width="65536" Background="#EF003200">
                             <Ellipse x:Name="ejeXY" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="{DynamicResource colorCirculo}" Width="2048" Height="2048"/>
                         </Grid>
                     </Viewbox>
@@ -128,7 +128,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Eje Sl1" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
                     <Viewbox HorizontalAlignment="Center" Margin="2,20,2,0" VerticalAlignment="Top" Height="20" Width="80" Stretch="Fill">
-                        <Grid Height="40" Width="65535" Background="#EF003200">
+                        <Grid Height="40" Width="65536" Background="#EF003200">
                             <Rectangle x:Name="ejeSl2" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                         </Grid>
                     </Viewbox>
@@ -136,7 +136,7 @@
 
                     <TextBlock Grid.Column="1" Text="Eje Sl2" Foreground="GreenYellow" HorizontalAlignment="Center" FontSize="14" />
                     <Viewbox Grid.Column="1" HorizontalAlignment="Center" Margin="2,20,2,0" VerticalAlignment="Top" Height="20" Width="80" Stretch="Fill">
-                        <Grid Height="40" Width="65535" Background="#EF003200">
+                        <Grid Height="40" Width="65536" Background="#EF003200">
                             <Rectangle x:Name="ejeSl3" HorizontalAlignment="Left" Fill="{DynamicResource colorBarra}"/>
                         </Grid>
                     </Viewbox>
@@ -147,7 +147,7 @@
                     <TextBlock Text="MiniStick" HorizontalAlignment="Center" Foreground="GreenYellow" FontSize="14"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <Viewbox Height="80" Width="80" Stretch="Fill">
-                            <Grid Height="69631" Width="65535" Background="#EF003200">
+                            <Grid Height="65536" Width="65536" Background="#EF003200">
                                 <Ellipse x:Name="ejeMXY" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Fill="{DynamicResource colorCirculo}" Width="4096" Height="4096"/>
                             </Grid>
                         </Viewbox>

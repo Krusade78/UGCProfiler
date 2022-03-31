@@ -81,7 +81,9 @@ void CPreprocesar::HIDPedales(UCHAR* datos)
 	if (!pPerfil->GetModoCalibrado())
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::Pedales, &hidData);
-
+	}
+	if (!pPerfil->GetModoRaw() && !pPerfil->GetModoCalibrado())
+	{
 		ConvertirEjeCentroMitad((UINT16*)&hidData.Ejes[3], 511, 255);
 		ConvertirEjeCentroMitad((UINT16*)&hidData.Ejes[6], 127, 63);
 		ConvertirEjeCentroMitad((UINT16*)&hidData.Ejes[7], 127, 63);
@@ -145,7 +147,9 @@ void CPreprocesar::HIDX52(PHIDX52_INPUT_DATA hidGameData)
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::X52_Joy, &hidData_Joy);
 		CCalibrado::Calibrar(pPerfil, TipoJoy::X52_Ace, &hidData_Ace);
-
+	}
+	if (!pPerfil->GetModoRaw() && !pPerfil->GetModoCalibrado())
+	{
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[0], 2047, 1023); //X
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[1], 2047, 1023); //Y
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[3], 1023, 511); //Rx
@@ -215,7 +219,9 @@ void CPreprocesar::HIDNXT(UCHAR* datos)
 	if (!pPerfil->GetModoCalibrado())
 	{
 		CCalibrado::Calibrar(pPerfil, TipoJoy::NXT, &hidData_Joy);
-
+	}
+	if (!pPerfil->GetModoRaw() && !pPerfil->GetModoCalibrado())
+	{
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[0], 4095, 2048); //X
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[1], 4095, 2048); //Y
 		ConvertirEjeCentroMitad((UINT16*)&hidData_Joy.Ejes[2], 2047, 1024); //Z
@@ -289,10 +295,10 @@ void CPreprocesar::ConvertirEjeCentroMitad(UINT16* pos, UINT16 maximo, UINT16 ce
 			*pos = 0;
 		}
 	}
-	//else if (*pos == maximo)
-	//{
-		//*pos = maximo + 1;
-	//}
+	else if (*pos == maximo)
+	{
+		*pos = maximo + 1;
+	}
 }
 
 void CPreprocesar::ConvertirEjeRango(TipoJoy joy, char eje, UINT16* pos, UINT16 rango)

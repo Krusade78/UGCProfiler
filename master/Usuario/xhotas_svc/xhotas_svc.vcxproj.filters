@@ -170,9 +170,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="xhotas_svc.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="Codigo\ProcesarEntrada\CProcesarPedales.cpp">
       <Filter>Base\ProcesarEntrada</Filter>
     </ClCompile>
@@ -265,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="Codigo\NXT\LeerHIDNXT.cpp">
       <Filter>Base\NXT</Filter>
+    </ClCompile>
+    <ClCompile Include="xhotas_svc.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
