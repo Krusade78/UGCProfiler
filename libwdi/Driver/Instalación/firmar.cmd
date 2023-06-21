@@ -1,2 +1,0 @@
-"D:\Programacion\Windows Kits\10\bin\10.0.22000.0\x64\signtool.exe" sign /f "D:\Programacion\Proyectos\Driver\Driver\Instalaci¢n\SolidCert.p12" /p sldcrt22 /fd sha256 /td sha256 /tr http://timestamp.comodoca.com/?td=sha256 /a "D:\Programacion\Proyectos\Driver\Driver\SetupDrv\*.sys"
-pause
