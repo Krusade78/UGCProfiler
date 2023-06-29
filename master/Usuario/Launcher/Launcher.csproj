@@ -7,7 +7,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>True</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>res\launcher.ico</ApplicationIcon>
@@ -18,7 +18,6 @@
     <Version>10.0.0</Version>
     <Description>XHOTAS Tray app</Description>
     <Copyright>Copyright 2022</Copyright>
-    <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
@@ -26,18 +25,6 @@
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Remove="app.manifest" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="res\calibrador.ico" />
-    <None Remove="res\editar.ico" />
-    <None Remove="res\editor.ico" />
-    <None Remove="res\lanzar.png" />
-    <None Remove="res\launcher.ico" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Comunes\Comunes.csproj" />
@@ -49,18 +36,6 @@
     <Resource Include="res\editor.ico" />
     <Resource Include="res\lanzar.png" />
     <Resource Include="res\launcher.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="MenuLauncher.xaml.cs">
-      <DependentUpon>MenuLauncher.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="MenuLauncher.xaml">
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

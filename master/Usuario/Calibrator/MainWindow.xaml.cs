@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Calibrator.APIs;
+using System;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 
 
@@ -11,6 +13,7 @@ namespace Calibrator
     public partial class MainWindow : Window
     {
         private System.Windows.Interop.HwndSource hWnd = null;
+        private UsbX52 procX52 = new();
         private bool modoRaw = false;
         
         public MainWindow()
@@ -43,7 +46,10 @@ namespace Calibrator
                 this.Close();
             }
             else
+            {
                 hWnd.AddHook(WndProc);
+                System.Threading.Tasks.Task.Run(() => { procX52.Leer(this); });
+            }
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -75,20 +81,24 @@ namespace Calibrator
                                     _ = CRawInput.GetRawInputDeviceInfo(header.hDevice, CRawInput.RawInputDeviceInfoCommand.DeviceName, pNombre, ref cbSize);
                                     string nombre = Marshal.PtrToStringAnsi(pNombre);
                                     Marshal.FreeHGlobal(pNombre);
+
+                                    ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
+                                    Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
+                                    CRawInput.RAWINPUTHID hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
+                                    Marshal.FreeHGlobal(ptr);
+
+                                    byte[] hidData = new byte[hid.Size + 4];
+                                    Array.Copy(buff, size - hid.Size, hidData, 0, hid.Size);
+
                                     if (nombre.StartsWith("\\\\?\\HID#HIDCLASS"))
                                     {
-                                        nombre = nombre.Remove(0, 21)[..1];
-                                        ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
-                                        Marshal.Copy(buff, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHEADER)), ptr, Marshal.SizeOf(typeof(CRawInput.RAWINPUTHID)));
-                                        CRawInput.RAWINPUTHID hid = Marshal.PtrToStructure<CRawInput.RAWINPUTHID>(ptr);
-                                        Marshal.FreeHGlobal(ptr);
-
-                                        byte[] hidData = new byte[hid.Size - 1];
-                                        for (int i = 0; i < hidData.Length; i++)
-                                            hidData[i] = buff[i + 1 + size - hid.Size];
-
-                                        ucInfo.ActualizarEstado(hidData, byte.Parse(nombre), false);
-                                        ucCalibrar.ActualizarEstado(hidData, byte.Parse(nombre), false);
+                                        ucInfo.ActualizarEstado(nombre, hidData, (byte)(byte.Parse(nombre.Remove(0, 21)[..1]) - 1));
+                                    }
+                                    else
+                                    {
+                                        uint hId = uint.Parse(nombre[12..16], System.Globalization.NumberStyles.AllowHexSpecifier) << 16;
+                                        hId |= uint.Parse(nombre[21..25], System.Globalization.NumberStyles.AllowHexSpecifier);
+                                        ucCalibrar.ActualizarEstado(nombre, hidData, hId);
                                     }
                                 }
                                 break;
@@ -141,14 +151,12 @@ namespace Calibrator
             if (this.IsLoaded)
             {
                 tbCalibrar.IsChecked = false;
-                SetModoCalibrado(false);
             }
         }
 
         private void PestañaCalibrar_Checked(object sender, RoutedEventArgs e)
         {
             tbPrueba.IsChecked = false;
-            SetModoCalibrado(true);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -157,8 +165,8 @@ namespace Calibrator
             {
                 hWnd.RemoveHook(WndProc);
                 hWnd = null;
+                procX52.Cerrar();
             }
-            SetModoCalibrado(false);
             SetRawMode(false);
         }
 
@@ -169,10 +177,6 @@ namespace Calibrator
             SetRawMode(modoRaw);
         }
 
-        private static void SetModoCalibrado(bool on)
-        {
-            EnviarAlLauncher("CAL:" + on.ToString());
-        }
         private static void SetRawMode(bool on)
         {
             EnviarAlLauncher("RAW:" + on.ToString());
@@ -180,22 +184,18 @@ namespace Calibrator
 
         private static void EnviarAlLauncher(string msj)
         {
-            using (System.IO.Pipes.NamedPipeClientStream pipeClient = new System.IO.Pipes.NamedPipeClientStream("LauncherPipe"))
+            using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
+            try
             {
-                try
-                {
-                    pipeClient.Connect(1000);
-                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(pipeClient))
-                    {
-                        sw.WriteLine(msj);
-                        sw.Flush();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                pipeClient.Connect(1000);
+                using System.IO.StreamWriter sw = new(pipeClient);
+                sw.WriteLine(msj);
+                sw.Flush();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
         }
         #endregion

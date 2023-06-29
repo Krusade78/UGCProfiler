@@ -11,6 +11,7 @@ public:
 		UINT16 Izq;
 		UINT16 Cen;
 		UINT16 Der;
+		UINT16 Rango;
 	} ST_LIMITES;
 	typedef struct {
 		UCHAR Antiv;
@@ -51,9 +52,6 @@ public:
 			UCHAR ResistenciaInc;
 			UCHAR ResistenciaDec;
 		} MapaEjes[4][2][3][8];
-
-		UINT16 RangosEntrada[4][8];
-		UINT16 RangosSalida[3][8];
 
 		std::deque<CPaqueteEvento*>* Acciones;
 
@@ -123,6 +121,7 @@ private:
 	bool resetComandos = false;
 	bool nuevoReport = true;
 	
+	bool RangoHIDvJoy();
+	void ActualizarvJoy();
 	void LimpiarPerfil();
 };
-

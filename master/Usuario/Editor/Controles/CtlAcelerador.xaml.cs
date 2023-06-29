@@ -160,12 +160,12 @@ namespace Editor
         #region "ministick"
         private void ButtonMinix_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(6, CEnums.Tipo.Eje, (String)ButtonMinix.Content);
+            Vista.Ver(0, CEnums.Tipo.Eje, (String)ButtonMinix.Content);
         }
 
         private void ButtonMiniy_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(7, CEnums.Tipo.Eje, (String)ButtonMiniy.Content);
+            Vista.Ver(1, CEnums.Tipo.Eje, (String)ButtonMiniy.Content);
         }
 
         private void ButtonMouse_Click(object sender, RoutedEventArgs e)
@@ -187,7 +187,7 @@ namespace Editor
 
         private void Buttonsl_Click(object sender, RoutedEventArgs e)
         {
-            Vista.Ver(5, CEnums.Tipo.Eje, (String)Buttonsl.Content);
+            Vista.Ver(6, CEnums.Tipo.Eje, (String)Buttonsl.Content);
         }
 
         private void ButtonZ_Click(object sender, RoutedEventArgs e)

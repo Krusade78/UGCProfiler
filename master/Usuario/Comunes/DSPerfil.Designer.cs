@@ -40,10 +40,6 @@ namespace Comunes {
         
         private MAPASETASDataTable tableMAPASETAS;
         
-        private RANGOSENTRADADataTable tableRANGOSENTRADA;
-        
-        private RANGOSSALIDADataTable tableRANGOSSALIDA;
-        
         private global::System.Data.DataRelation relationFK_ACCIONES_INDICESEJES;
         
         private global::System.Data.DataRelation relationFK_ACCIONES_INDICESSETAS;
@@ -101,12 +97,6 @@ namespace Comunes {
                 }
                 if ((ds.Tables["MAPASETAS"] != null)) {
                     base.Tables.Add(new MAPASETASDataTable(ds.Tables["MAPASETAS"]));
-                }
-                if ((ds.Tables["RANGOSENTRADA"] != null)) {
-                    base.Tables.Add(new RANGOSENTRADADataTable(ds.Tables["RANGOSENTRADA"]));
-                }
-                if ((ds.Tables["RANGOSSALIDA"] != null)) {
-                    base.Tables.Add(new RANGOSSALIDADataTable(ds.Tables["RANGOSSALIDA"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -208,26 +198,6 @@ namespace Comunes {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public RANGOSENTRADADataTable RANGOSENTRADA {
-            get {
-                return this.tableRANGOSENTRADA;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public RANGOSSALIDADataTable RANGOSSALIDA {
-            get {
-                return this.tableRANGOSSALIDA;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -317,12 +287,6 @@ namespace Comunes {
                 if ((ds.Tables["MAPASETAS"] != null)) {
                     base.Tables.Add(new MAPASETASDataTable(ds.Tables["MAPASETAS"]));
                 }
-                if ((ds.Tables["RANGOSENTRADA"] != null)) {
-                    base.Tables.Add(new RANGOSENTRADADataTable(ds.Tables["RANGOSENTRADA"]));
-                }
-                if ((ds.Tables["RANGOSSALIDA"] != null)) {
-                    base.Tables.Add(new RANGOSSALIDADataTable(ds.Tables["RANGOSSALIDA"]));
-                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -404,18 +368,6 @@ namespace Comunes {
                     this.tableMAPASETAS.InitVars();
                 }
             }
-            this.tableRANGOSENTRADA = ((RANGOSENTRADADataTable)(base.Tables["RANGOSENTRADA"]));
-            if ((initTable == true)) {
-                if ((this.tableRANGOSENTRADA != null)) {
-                    this.tableRANGOSENTRADA.InitVars();
-                }
-            }
-            this.tableRANGOSSALIDA = ((RANGOSSALIDADataTable)(base.Tables["RANGOSSALIDA"]));
-            if ((initTable == true)) {
-                if ((this.tableRANGOSSALIDA != null)) {
-                    this.tableRANGOSSALIDA.InitVars();
-                }
-            }
             this.relationFK_ACCIONES_INDICESEJES = this.Relations["FK_ACCIONES_INDICESEJES"];
             this.relationFK_ACCIONES_INDICESSETAS = this.Relations["FK_ACCIONES_INDICESSETAS"];
             this.relationFK_ACCIONES_INDICESBOTONES = this.Relations["FK_ACCIONES_INDICESBOTONES"];
@@ -445,10 +397,6 @@ namespace Comunes {
             base.Tables.Add(this.tableMAPABOTONES);
             this.tableMAPASETAS = new MAPASETASDataTable();
             base.Tables.Add(this.tableMAPASETAS);
-            this.tableRANGOSENTRADA = new RANGOSENTRADADataTable();
-            base.Tables.Add(this.tableRANGOSENTRADA);
-            this.tableRANGOSSALIDA = new RANGOSSALIDADataTable();
-            base.Tables.Add(this.tableRANGOSSALIDA);
             global::System.Data.ForeignKeyConstraint fkc;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ACCIONES_INDICESEJES", new global::System.Data.DataColumn[] {
                         this.tableACCIONES.idAccionColumn}, new global::System.Data.DataColumn[] {
@@ -535,18 +483,6 @@ namespace Comunes {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        private bool ShouldSerializeRANGOSENTRADA() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        private bool ShouldSerializeRANGOSSALIDA() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void SchemaChanged(object sender, global::System.ComponentModel.CollectionChangeEventArgs e) {
             if ((e.Action == global::System.ComponentModel.CollectionChangeAction.Remove)) {
                 this.InitVars();
@@ -623,12 +559,6 @@ namespace Comunes {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         public delegate void MAPASETASRowChangeEventHandler(object sender, MAPASETASRowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public delegate void RANGOSENTRADARowChangeEventHandler(object sender, RANGOSENTRADARowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public delegate void RANGOSSALIDARowChangeEventHandler(object sender, RANGOSSALIDARowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -837,7 +767,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public MAPAEJESRow AddMAPAEJESRow(byte idJoy, byte idPinkie, byte idModo, byte idEje, byte Mouse, byte JoySalida, byte TipoEje, byte Eje, byte[] Sensibilidad, byte Slider, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
+            public MAPAEJESRow AddMAPAEJESRow(uint idJoy, byte idPinkie, byte idModo, byte idEje, byte Mouse, byte JoySalida, byte TipoEje, byte Eje, byte[] Sensibilidad, byte Slider, byte[] Bandas, byte ResistenciaInc, byte ResistenciaDec) {
                 MAPAEJESRow rowMAPAEJESRow = ((MAPAEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idJoy,
@@ -860,7 +790,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public MAPAEJESRow FindByidJoyidPinkieidModoidEje(byte idJoy, byte idPinkie, byte idModo, byte idEje) {
+            public MAPAEJESRow FindByidJoyidPinkieidModoidEje(uint idJoy, byte idPinkie, byte idModo, byte idEje) {
                 return ((MAPAEJESRow)(this.Rows.Find(new object[] {
                             idJoy,
                             idPinkie,
@@ -903,7 +833,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
@@ -1750,7 +1680,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public INDICESEJESRow AddINDICESEJESRow(byte idJoy, byte idPinkie, byte idModo, uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJES) {
+            public INDICESEJESRow AddINDICESEJESRow(uint idJoy, byte idPinkie, byte idModo, uint idEje, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESEJES) {
                 INDICESEJESRow rowINDICESEJESRow = ((INDICESEJESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idJoy,
@@ -1769,7 +1699,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public INDICESEJESRow FindByidJoyidPinkieidModoidEjeid(byte idJoy, byte idPinkie, byte idModo, uint idEje, byte id) {
+            public INDICESEJESRow FindByidJoyidPinkieidModoidEjeid(uint idJoy, byte idPinkie, byte idModo, uint idEje, byte id) {
                 return ((INDICESEJESRow)(this.Rows.Find(new object[] {
                             idJoy,
                             idPinkie,
@@ -1806,7 +1736,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
@@ -2096,7 +2026,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public INDICESSETASRow AddINDICESSETASRow(byte idJoy, byte idPinkie, byte idModo, uint idSeta, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESSETAS) {
+            public INDICESSETASRow AddINDICESSETASRow(uint idJoy, byte idPinkie, byte idModo, uint idSeta, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESSETAS) {
                 INDICESSETASRow rowINDICESSETASRow = ((INDICESSETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idJoy,
@@ -2115,7 +2045,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public INDICESSETASRow FindByidJoyidPinkieidModoidSetaid(byte idJoy, byte idPinkie, byte idModo, uint idSeta, byte id) {
+            public INDICESSETASRow FindByidJoyidPinkieidModoidSetaid(uint idJoy, byte idPinkie, byte idModo, uint idSeta, byte id) {
                 return ((INDICESSETASRow)(this.Rows.Find(new object[] {
                             idJoy,
                             idPinkie,
@@ -2152,7 +2082,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
@@ -2443,7 +2373,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public INDICESBOTONESRow AddINDICESBOTONESRow(byte idJoy, byte idPinkie, byte idModo, uint idBoton, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESBOTONES) {
+            public INDICESBOTONESRow AddINDICESBOTONESRow(uint idJoy, byte idPinkie, byte idModo, uint idBoton, byte id, ACCIONESRow parentACCIONESRowByFK_ACCIONES_INDICESBOTONES) {
                 INDICESBOTONESRow rowINDICESBOTONESRow = ((INDICESBOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idJoy,
@@ -2462,7 +2392,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public INDICESBOTONESRow FindByidJoyidPinkieidModoidBotonid(byte idJoy, byte idPinkie, byte idModo, uint idBoton, byte id) {
+            public INDICESBOTONESRow FindByidJoyidPinkieidModoidBotonid(uint idJoy, byte idPinkie, byte idModo, uint idBoton, byte id) {
                 return ((INDICESBOTONESRow)(this.Rows.Find(new object[] {
                             idJoy,
                             idPinkie,
@@ -2499,7 +2429,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
@@ -2780,7 +2710,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public MAPABOTONESRow AddMAPABOTONESRow(byte idJoy, byte idPinkie, byte idModo, byte idBoton, byte TamIndices) {
+            public MAPABOTONESRow AddMAPABOTONESRow(uint idJoy, byte idPinkie, byte idModo, byte idBoton, byte TamIndices) {
                 MAPABOTONESRow rowMAPABOTONESRow = ((MAPABOTONESRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idJoy,
@@ -2795,7 +2725,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public MAPABOTONESRow FindByidJoyidPinkieidModoidBoton(byte idJoy, byte idPinkie, byte idModo, byte idBoton) {
+            public MAPABOTONESRow FindByidJoyidPinkieidModoidBoton(uint idJoy, byte idPinkie, byte idModo, byte idBoton) {
                 return ((MAPABOTONESRow)(this.Rows.Find(new object[] {
                             idJoy,
                             idPinkie,
@@ -2830,7 +2760,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
@@ -3103,7 +3033,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public MAPASETASRow AddMAPASETASRow(byte idJoy, byte idPinkie, byte idModo, byte IdSeta, byte TamIndices) {
+            public MAPASETASRow AddMAPASETASRow(uint idJoy, byte idPinkie, byte idModo, byte IdSeta, byte TamIndices) {
                 MAPASETASRow rowMAPASETASRow = ((MAPASETASRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         idJoy,
@@ -3118,7 +3048,7 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public MAPASETASRow FindByidJoyidPinkieidModoIdSeta(byte idJoy, byte idPinkie, byte idModo, byte IdSeta) {
+            public MAPASETASRow FindByidJoyidPinkieidModoIdSeta(uint idJoy, byte idPinkie, byte idModo, byte IdSeta) {
                 return ((MAPASETASRow)(this.Rows.Find(new object[] {
                             idJoy,
                             idPinkie,
@@ -3153,7 +3083,7 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
+                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(uint), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidJoy);
                 this.columnidPinkie = new global::System.Data.DataColumn("idPinkie", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnidPinkie);
@@ -3300,582 +3230,6 @@ namespace Comunes {
         }
         
         /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class RANGOSENTRADADataTable : global::System.Data.TypedTableBase<RANGOSENTRADARow> {
-            
-            private global::System.Data.DataColumn columnidJoy;
-            
-            private global::System.Data.DataColumn columnidEje;
-            
-            private global::System.Data.DataColumn columnMaximo;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSENTRADADataTable() {
-                this.TableName = "RANGOSENTRADA";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal RANGOSENTRADADataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected RANGOSENTRADADataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn idJoyColumn {
-                get {
-                    return this.columnidJoy;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
-                get {
-                    return this.columnidEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn MaximoColumn {
-                get {
-                    return this.columnMaximo;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSENTRADARow this[int index] {
-                get {
-                    return ((RANGOSENTRADARow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSENTRADARowChangeEventHandler RANGOSENTRADARowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSENTRADARowChangeEventHandler RANGOSENTRADARowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSENTRADARowChangeEventHandler RANGOSENTRADARowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSENTRADARowChangeEventHandler RANGOSENTRADARowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void AddRANGOSENTRADARow(RANGOSENTRADARow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSENTRADARow AddRANGOSENTRADARow(byte idJoy, byte idEje, ushort Maximo) {
-                RANGOSENTRADARow rowRANGOSENTRADARow = ((RANGOSENTRADARow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        idJoy,
-                        idEje,
-                        Maximo};
-                rowRANGOSENTRADARow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowRANGOSENTRADARow);
-                return rowRANGOSENTRADARow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSENTRADARow FindByidJoyidEje(byte idJoy, byte idEje) {
-                return ((RANGOSENTRADARow)(this.Rows.Find(new object[] {
-                            idJoy,
-                            idEje})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                RANGOSENTRADADataTable cln = ((RANGOSENTRADADataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new RANGOSENTRADADataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal void InitVars() {
-                this.columnidJoy = base.Columns["idJoy"];
-                this.columnidEje = base.Columns["idEje"];
-                this.columnMaximo = base.Columns["Maximo"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidJoy);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
-                this.columnMaximo = new global::System.Data.DataColumn("Maximo", typeof(ushort), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMaximo);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidJoy,
-                                this.columnidEje}, true));
-                this.columnidJoy.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSENTRADARow NewRANGOSENTRADARow() {
-                return ((RANGOSENTRADARow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new RANGOSENTRADARow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(RANGOSENTRADARow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.RANGOSENTRADARowChanged != null)) {
-                    this.RANGOSENTRADARowChanged(this, new RANGOSENTRADARowChangeEvent(((RANGOSENTRADARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.RANGOSENTRADARowChanging != null)) {
-                    this.RANGOSENTRADARowChanging(this, new RANGOSENTRADARowChangeEvent(((RANGOSENTRADARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.RANGOSENTRADARowDeleted != null)) {
-                    this.RANGOSENTRADARowDeleted(this, new RANGOSENTRADARowChangeEvent(((RANGOSENTRADARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.RANGOSENTRADARowDeleting != null)) {
-                    this.RANGOSENTRADARowDeleting(this, new RANGOSENTRADARowChangeEvent(((RANGOSENTRADARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void RemoveRANGOSENTRADARow(RANGOSENTRADARow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DSPerfil ds = new DSPerfil();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "RANGOSENTRADADataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class RANGOSSALIDADataTable : global::System.Data.TypedTableBase<RANGOSSALIDARow> {
-            
-            private global::System.Data.DataColumn columnidJoy;
-            
-            private global::System.Data.DataColumn columnidEje;
-            
-            private global::System.Data.DataColumn columnMaximo;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSSALIDADataTable() {
-                this.TableName = "RANGOSSALIDA";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal RANGOSSALIDADataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected RANGOSSALIDADataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn idJoyColumn {
-                get {
-                    return this.columnidJoy;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn idEjeColumn {
-                get {
-                    return this.columnidEje;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn MaximoColumn {
-                get {
-                    return this.columnMaximo;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSSALIDARow this[int index] {
-                get {
-                    return ((RANGOSSALIDARow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSSALIDARowChangeEventHandler RANGOSSALIDARowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSSALIDARowChangeEventHandler RANGOSSALIDARowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSSALIDARowChangeEventHandler RANGOSSALIDARowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public event RANGOSSALIDARowChangeEventHandler RANGOSSALIDARowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void AddRANGOSSALIDARow(RANGOSSALIDARow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSSALIDARow AddRANGOSSALIDARow(byte idJoy, byte idEje, ushort Maximo) {
-                RANGOSSALIDARow rowRANGOSSALIDARow = ((RANGOSSALIDARow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        idJoy,
-                        idEje,
-                        Maximo};
-                rowRANGOSSALIDARow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowRANGOSSALIDARow);
-                return rowRANGOSSALIDARow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSSALIDARow FindByidJoyidEje(byte idJoy, byte idEje) {
-                return ((RANGOSSALIDARow)(this.Rows.Find(new object[] {
-                            idJoy,
-                            idEje})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                RANGOSSALIDADataTable cln = ((RANGOSSALIDADataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new RANGOSSALIDADataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal void InitVars() {
-                this.columnidJoy = base.Columns["idJoy"];
-                this.columnidEje = base.Columns["idEje"];
-                this.columnMaximo = base.Columns["Maximo"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            private void InitClass() {
-                this.columnidJoy = new global::System.Data.DataColumn("idJoy", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidJoy);
-                this.columnidEje = new global::System.Data.DataColumn("idEje", typeof(byte), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnidEje);
-                this.columnMaximo = new global::System.Data.DataColumn("Maximo", typeof(ushort), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnMaximo);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnidJoy,
-                                this.columnidEje}, true));
-                this.columnidJoy.AllowDBNull = false;
-                this.columnidEje.AllowDBNull = false;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSSALIDARow NewRANGOSSALIDARow() {
-                return ((RANGOSSALIDARow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new RANGOSSALIDARow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(RANGOSSALIDARow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.RANGOSSALIDARowChanged != null)) {
-                    this.RANGOSSALIDARowChanged(this, new RANGOSSALIDARowChangeEvent(((RANGOSSALIDARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.RANGOSSALIDARowChanging != null)) {
-                    this.RANGOSSALIDARowChanging(this, new RANGOSSALIDARowChangeEvent(((RANGOSSALIDARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.RANGOSSALIDARowDeleted != null)) {
-                    this.RANGOSSALIDARowDeleted(this, new RANGOSSALIDARowChangeEvent(((RANGOSSALIDARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.RANGOSSALIDARowDeleting != null)) {
-                    this.RANGOSSALIDARowDeleting(this, new RANGOSSALIDARowChangeEvent(((RANGOSSALIDARow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void RemoveRANGOSSALIDARow(RANGOSSALIDARow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DSPerfil ds = new DSPerfil();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "RANGOSSALIDADataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class MAPAEJESRow : global::System.Data.DataRow {
@@ -3891,9 +3245,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
+            public uint idJoy {
                 get {
-                    return ((byte)(this[this.tableMAPAEJES.idJoyColumn]));
+                    return ((uint)(this[this.tableMAPAEJES.idJoyColumn]));
                 }
                 set {
                     this[this.tableMAPAEJES.idJoyColumn] = value;
@@ -4207,9 +3561,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
+            public uint idJoy {
                 get {
-                    return ((byte)(this[this.tableINDICESEJES.idJoyColumn]));
+                    return ((uint)(this[this.tableINDICESEJES.idJoyColumn]));
                 }
                 set {
                     this[this.tableINDICESEJES.idJoyColumn] = value;
@@ -4299,9 +3653,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
+            public uint idJoy {
                 get {
-                    return ((byte)(this[this.tableINDICESSETAS.idJoyColumn]));
+                    return ((uint)(this[this.tableINDICESSETAS.idJoyColumn]));
                 }
                 set {
                     this[this.tableINDICESSETAS.idJoyColumn] = value;
@@ -4391,9 +3745,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
+            public uint idJoy {
                 get {
-                    return ((byte)(this[this.tableINDICESBOTONES.idJoyColumn]));
+                    return ((uint)(this[this.tableINDICESBOTONES.idJoyColumn]));
                 }
                 set {
                     this[this.tableINDICESBOTONES.idJoyColumn] = value;
@@ -4483,9 +3837,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
+            public uint idJoy {
                 get {
-                    return ((byte)(this[this.tableMAPABOTONES.idJoyColumn]));
+                    return ((uint)(this[this.tableMAPABOTONES.idJoyColumn]));
                 }
                 set {
                     this[this.tableMAPABOTONES.idJoyColumn] = value;
@@ -4570,9 +3924,9 @@ namespace Comunes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
+            public uint idJoy {
                 get {
-                    return ((byte)(this[this.tableMAPASETAS.idJoyColumn]));
+                    return ((uint)(this[this.tableMAPASETAS.idJoyColumn]));
                 }
                 set {
                     this[this.tableMAPASETAS.idJoyColumn] = value;
@@ -4638,136 +3992,6 @@ namespace Comunes {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetTamIndicesNull() {
                 this[this.tableMAPASETAS.TamIndicesColumn] = global::System.Convert.DBNull;
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
-        public partial class RANGOSENTRADARow : global::System.Data.DataRow {
-            
-            private RANGOSENTRADADataTable tableRANGOSENTRADA;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal RANGOSENTRADARow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableRANGOSENTRADA = ((RANGOSENTRADADataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
-                get {
-                    return ((byte)(this[this.tableRANGOSENTRADA.idJoyColumn]));
-                }
-                set {
-                    this[this.tableRANGOSENTRADA.idJoyColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idEje {
-                get {
-                    return ((byte)(this[this.tableRANGOSENTRADA.idEjeColumn]));
-                }
-                set {
-                    this[this.tableRANGOSENTRADA.idEjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ushort Maximo {
-                get {
-                    try {
-                        return ((ushort)(this[this.tableRANGOSENTRADA.MaximoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Maximo\' de la tabla \'RANGOSENTRADA\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRANGOSENTRADA.MaximoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsMaximoNull() {
-                return this.IsNull(this.tableRANGOSENTRADA.MaximoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetMaximoNull() {
-                this[this.tableRANGOSENTRADA.MaximoColumn] = global::System.Convert.DBNull;
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
-        public partial class RANGOSSALIDARow : global::System.Data.DataRow {
-            
-            private RANGOSSALIDADataTable tableRANGOSSALIDA;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            internal RANGOSSALIDARow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableRANGOSSALIDA = ((RANGOSSALIDADataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idJoy {
-                get {
-                    return ((byte)(this[this.tableRANGOSSALIDA.idJoyColumn]));
-                }
-                set {
-                    this[this.tableRANGOSSALIDA.idJoyColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public byte idEje {
-                get {
-                    return ((byte)(this[this.tableRANGOSSALIDA.idEjeColumn]));
-                }
-                set {
-                    this[this.tableRANGOSSALIDA.idEjeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ushort Maximo {
-                get {
-                    try {
-                        return ((ushort)(this[this.tableRANGOSSALIDA.MaximoColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("El valor de la columna \'Maximo\' de la tabla \'RANGOSSALIDA\' es DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRANGOSSALIDA.MaximoColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsMaximoNull() {
-                return this.IsNull(this.tableRANGOSSALIDA.MaximoColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetMaximoNull() {
-                this[this.tableRANGOSSALIDA.MaximoColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -5029,74 +4253,6 @@ namespace Comunes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public MAPASETASRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public class RANGOSENTRADARowChangeEvent : global::System.EventArgs {
-            
-            private RANGOSENTRADARow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSENTRADARowChangeEvent(RANGOSENTRADARow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSENTRADARow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        public class RANGOSSALIDARowChangeEvent : global::System.EventArgs {
-            
-            private RANGOSSALIDARow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSSALIDARowChangeEvent(RANGOSSALIDARow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public RANGOSSALIDARow Row {
                 get {
                     return this.eventRow;
                 }

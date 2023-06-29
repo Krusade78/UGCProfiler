@@ -7,7 +7,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>res\editor.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -15,50 +15,11 @@
     <Authors>Alfredo Costalago</Authors>
     <Description>Editor de perfiles</Description>
     <Version>9.1.0</Version>
-    <Copyright>Copyright 2021</Copyright>
+    <Copyright>Copyright 2023</Copyright>
     <StartupObject>Editor.App</StartupObject>
     <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
 	  <Platforms>x64</Platforms>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Plantillas\english-us.kbp" />
-    <None Remove="Plantillas\español-es.kbp" />
-    <None Remove="res\abrir.ico" />
-    <None Remove="res\bajar.gif" />
-    <None Remove="res\CalibrationGrid.JPG" />
-    <None Remove="res\CompileHS.png" />
-    <None Remove="res\DeleteHS.png" />
-    <None Remove="res\Edicion.png" />
-    <None Remove="res\editor.ico" />
-    <None Remove="res\f1.gif" />
-    <None Remove="res\f2.gif" />
-    <None Remove="res\f3.gif" />
-    <None Remove="res\f4.gif" />
-    <None Remove="res\f5.gif" />
-    <None Remove="res\f6.gif" />
-    <None Remove="res\f7.gif" />
-    <None Remove="res\f8.gif" />
-    <None Remove="res\FillDownHS.png" />
-    <None Remove="res\FillUpHS.png" />
-    <None Remove="res\guardar.ico" />
-    <None Remove="res\imprimir.ico" />
-    <None Remove="res\LaunchHS.png" />
-    <None Remove="res\Listado.png" />
-    <None Remove="res\Modos.png" />
-    <None Remove="res\mouse.png" />
-    <None Remove="res\nuevo.ico" />
-    <None Remove="res\nxt.png" />
-    <None Remove="res\pedales.png" />
-    <None Remove="res\subir.gif" />
-    <None Remove="res\x52j.png" />
-    <None Remove="res\x52t.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Plantillas\english-us.kbp" />
@@ -102,31 +63,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controles\CtlAcelerador.xaml.cs">
-      <DependentUpon>CtlAcelerador.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controles\CtlEditar.xaml.cs">
-      <DependentUpon>CtlEditar.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controles\CtlListar.xaml.cs">
-      <DependentUpon>CtlListar.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controles\CtlNXTJoystick.xaml.cs">
-      <DependentUpon>CtlNXTJoystick.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controles\CtlPedales.xaml.cs">
-      <DependentUpon>CtlPedales.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controles\CtlPropiedades.xaml.cs">
-      <DependentUpon>CtlPropiedades.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controles\CtlX52Joystick.xaml.cs">
-      <DependentUpon>CtlX52Joystick.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="MainWindow.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Ventanas\DataSetMacros.cs">
       <DependentUpon>DataSetMacros.xsd</DependentUpon>
     </Compile>
@@ -134,30 +70,6 @@
       <DependentUpon>DataSetMacros.xsd</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Ventanas\VCopiarDe.xaml.cs">
-      <DependentUpon>VCopiarDe.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Ventanas\VEditorBandas.xaml.cs">
-      <DependentUpon>VEditorBandas.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Ventanas\VEditorMacros.xaml.cs">
-      <DependentUpon>VEditorMacros.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Ventanas\VEditorModos.xaml.cs">
-      <DependentUpon>VEditorModos.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Ventanas\VEditorPinkieModos.xaml.cs">
-      <DependentUpon>VEditorPinkieModos.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Ventanas\VEditorPOV.xaml.cs">
-      <DependentUpon>VEditorPOV.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Ventanas\VEditorRaton.xaml.cs">
-      <DependentUpon>VEditorRaton.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Ventanas\VEditorSensibilidad.xaml.cs">
-      <DependentUpon>VEditorSensibilidad.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -175,63 +87,4 @@
       <DependentUpon>DataSetMacros.xsd</DependentUpon>
     </None>
   </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Controles\CtlAcelerador.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controles\CtlEditar.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controles\CtlListar.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controles\CtlNXTJoystick.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controles\CtlPedales.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controles\CtlPropiedades.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Controles\CtlX52Joystick.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Themes\EstiloPorDefecto.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VCopiarDe.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VEditorBandas.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VEditorMacros.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VEditorModos.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VEditorPinkieModos.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VEditorPOV.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VEditorRaton.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Ventanas\VEditorSensibilidad.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-
 </Project>

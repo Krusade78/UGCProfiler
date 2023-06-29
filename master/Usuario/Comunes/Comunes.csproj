@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <Product>XHOTAS</Product>
     <Authors>Alfredo Costalago</Authors>
@@ -25,11 +25,6 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Update="DataSetConfiguracion.Designer.cs">
-      <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Update="DSPerfil.Designer.cs">
       <DependentUpon>DSPerfil.xsd</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -37,18 +32,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Update="DataSetConfiguracion.xsc">
-      <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
-    </None>
-    <None Update="DataSetConfiguracion.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSetConfiguracion.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-      <CustomToolNamespace>Comunes</CustomToolNamespace>
-    </None>
-    <None Update="DataSetConfiguracion.xss">
-      <DependentUpon>DataSetConfiguracion.xsd</DependentUpon>
-    </None>
     <None Update="DSPerfil.xsc">
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </None>

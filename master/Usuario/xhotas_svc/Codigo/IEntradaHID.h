@@ -1,7 +1,7 @@
 #pragma once
 #include <strsafe.h>
 
-constexpr auto BUFF_TAM = 64;;
+constexpr auto BUFF_TAM = 64;
 
 class IEntradaHID
 {

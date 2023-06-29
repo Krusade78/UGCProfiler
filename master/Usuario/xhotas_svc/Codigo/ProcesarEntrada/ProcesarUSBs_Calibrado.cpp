@@ -3,7 +3,7 @@
 
 void CCalibrado::Calibrar(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DATA datosHID)
 {
-	const BYTE mapaEjesUsados[4] = { 0b11001000, 0b00001011, 0b01011111, 0b11111111 }; //Pedales, X52_Joy, X52_Ace, NXT
+	//const BYTE mapaEjesUsados[4] = { 0b11001000, 0b00001011, 0b01011111, 0b11111111 }; //Pedales, X52_Joy, X52_Ace, NXT
 
 	UCHAR tipo = static_cast<UCHAR>(tipoJ);
 	CPerfil::ST_LIMITES	limites[8];
@@ -19,10 +19,10 @@ void CCalibrado::Calibrar(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DATA dato
 	// Filtrado de ejes
 	for (char idx = 0; idx < 8; idx++)
 	{
-		if (!((mapaEjesUsados[tipo] >> idx) & 1))
-		{
-			continue;
-		}
+		//if (!((mapaEjesUsados[tipo] >> idx) & 1))
+		//{
+		//	continue;
+		//}
 		UINT16 pollEje = static_cast<UINT16>(datosHID->Ejes[idx]);
 
 		if (jitter[idx].Antiv)
@@ -52,12 +52,12 @@ void CCalibrado::Calibrar(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DATA dato
 		{
 			// Calibrado
 			UINT16 ancho1, ancho2;
-			ancho1 = (MAPA_CENTROS[tipo][idx] - limites[idx].Nulo) - limites[idx].Izq;
-			ancho2 = limites[idx].Der - (MAPA_CENTROS[tipo][idx] + limites[idx].Nulo);
-			if (((pollEje >= (MAPA_CENTROS[tipo][idx] - limites[idx].Nulo)) && (pollEje <= (MAPA_CENTROS[tipo][idx] + limites[idx].Nulo))))
+			ancho1 = (limites[idx].Cen - limites[idx].Nulo) - limites[idx].Izq;
+			ancho2 = limites[idx].Der - (limites[idx].Cen + limites[idx].Nulo);
+			if (((pollEje >= (limites[idx].Cen - limites[idx].Nulo)) && (pollEje <= (limites[idx].Cen + limites[idx].Nulo))))
 			{
 				//Zona nula
-				datosHID->Ejes[idx] = MAPA_CENTROS[tipo][idx];
+				datosHID->Ejes[idx] = limites[idx].Cen;
 				continue;
 			}
 			else
@@ -67,22 +67,22 @@ void CCalibrado::Calibrar(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DATA dato
 				if (pollEje > limites[idx].Der)
 					pollEje = limites[idx].Der;
 
-				if (pollEje < MAPA_CENTROS[tipo][idx])
+				if (pollEje < limites[idx].Cen)
 				{
-					if (ancho1 != (MAPA_CENTROS[tipo][idx] - MAPA_MINIMOS[tipo][idx]))
+					if (ancho1 != (limites[idx].Cen - 0))
 					{
 						if (pollEje >= ancho1) { pollEje = ancho1; }
 						pollEje -= limites[idx].Izq;
-						pollEje = ((pollEje * (MAPA_CENTROS[tipo][idx] - MAPA_MINIMOS[tipo][idx])) / ancho1);
+						pollEje = ((pollEje * (limites[idx].Cen - 0)) / ancho1);
 					}
 				}
 				else
 				{
-					if (ancho2 != (MAPA_MAXIMOS[tipo][idx] - MAPA_CENTROS[tipo][idx]))
+					if (ancho2 != (limites[idx].Rango - limites[idx].Cen))
 					{
 						if (pollEje >= limites[idx].Der) { pollEje = limites[idx].Der; }
-						pollEje -= (MAPA_CENTROS[tipo][idx] + limites[idx].Nulo);
-						pollEje = MAPA_CENTROS[tipo][idx] + ((pollEje * (MAPA_MAXIMOS[tipo][idx] - MAPA_CENTROS[tipo][idx])) / ancho2);
+						pollEje -= (limites[idx].Cen + limites[idx].Nulo);
+						pollEje = limites[idx].Cen + ((pollEje * (limites[idx].Rango - limites[idx].Cen)) / ancho2);
 					}
 				}
 			}

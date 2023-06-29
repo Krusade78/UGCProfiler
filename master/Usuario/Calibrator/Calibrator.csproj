@@ -10,41 +10,20 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <NoWin32Manifest>true</NoWin32Manifest>
     <StartupObject></StartupObject>
     <Product>XHOTAS - Calibrator</Product>
     <Description>Herramienta de calibrado y prueba</Description>
     <Authors>Alfredo Costalago</Authors>
-    <Copyright>Copyright ©  2021</Copyright>
+    <Copyright>Copyright© 2023</Copyright>
     <AssemblyVersion>9.1.0.0</AssemblyVersion>
     <FileVersion>9.1.0.0</FileVersion>
     <ApplicationIcon>res\calibrador.ico</ApplicationIcon>
     <Version>9.1.0</Version>
     <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="res\calibrador.ico" />
-    <None Remove="res\CalibrationGrid.jpg" />
-    <None Remove="res\combo.png" />
-    <None Remove="res\keybd.ico" />
-    <None Remove="res\Mouse.ico" />
-    <None Remove="res\ry.png" />
-    <None Remove="res\rz.png" />
-    <None Remove="res\sl1.png" />
-    <None Remove="res\sl2.png" />
-    <None Remove="res\x52jx.png" />
-    <None Remove="res\x52jy.png" />
-    <None Remove="res\x52tr.png" />
-    <None Remove="res\x52tz.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Comunes\Comunes.csproj" />
@@ -65,44 +44,4 @@
     <Resource Include="res\x52tr.png" />
     <Resource Include="res\x52tz.png" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ApplicationDefinition Update="App.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </ApplicationDefinition>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="HIDCal.xaml.cs">
-      <DependentUpon>HIDCal.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Info.xaml.cs">
-      <DependentUpon>Info.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="MainWindow.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="HIDCal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Info.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
 </Project>

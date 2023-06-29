@@ -76,6 +76,7 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <UACUIAccess>false</UACUIAccess>
       <AdditionalLibraryDirectories>$(SolutionDir)usuario\CPPaCS\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y $(SolutionDir)usuario\cppacs\$(Platform)\$(Configuration)\CPPaCS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)
@@ -102,6 +103,7 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
       <AdditionalDependencies>..\CPPaCS\$(Platform)\$(Configuration)\CPPaCS.lib;lib/vJoyInterface.lib;WinUSB.lib;Setupapi.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)usuario\CPPaCS\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <UACUIAccess>false</UACUIAccess>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y $(SolutionDir)usuario\cppacs\$(Platform)\$(Configuration)\CPPaCS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)

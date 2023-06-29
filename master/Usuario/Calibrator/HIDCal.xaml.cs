@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Runtime.InteropServices;
 
 namespace Calibrator
 {
@@ -10,155 +10,187 @@ namespace Calibrator
     /// </summary>
     internal partial class HIDCal : UserControl
     {
-        private byte joySel = 0;
+        private uint joySel = 0;
         private byte ejeSel = 0;
-        private readonly Comunes.CTipos.STJITTER[,] jitter = new Comunes.CTipos.STJITTER[4,8];
-        private readonly Comunes.CTipos.STLIMITES[,] limites = new Comunes.CTipos.STLIMITES[4,8];
-        private static readonly ushort[,] mapaRangosCen = {
-                { 0,0,0,255,0,0,63,63 },
-                { 1023,1023,0,511,0,0,0,0 },
-                { 0,0,127,128,128,127,8,8 },
-                { 2048,2048,1024,2048,0,0,512,512 }
-        };
+        private readonly Dictionary<uint, Dictionary<byte, Comunes.CTipos.STJITTER>> jitter = new();
+        private readonly Dictionary<uint, Dictionary<byte, Comunes.CTipos.STLIMITES>> limites = new();
 
-        private static readonly ushort[,] mapaRangosMax = {
-                { 0,0,0,511,0,0,127,127 },
-                { 2047,2047,0,1023,0,0,0,0 },
-                { 0,0,255,255,255,255,15,15 },
-                { 4095,4095,2047,4095,0,0,1023,1023 }
-        };
-        private ushort[,] hidReport = new ushort[4, 8];
+        private readonly ushort[] hidReport = new ushort[8];
+
+        private readonly Dictionary<uint, DatosJoy> dispositivos = new();
 
         public HIDCal()
         {
             InitializeComponent();
 
-            for (byte j = 0; j < 4; j++)
+            try
             {
-                for (int i = 0; i < 8; i++)
+                Comunes.Calibrado.CCalibrado cal = System.Text.Json.JsonSerializer.Deserialize<Comunes.Calibrado.CCalibrado>(System.IO.File.ReadAllText("configuracion.dat"));
+                foreach (Comunes.Calibrado.Limites r in cal.Limites)
                 {
-                    limites[j,i].Cal = 0;
-                    limites[j,i].Cen = mapaRangosCen[j, i];
-                    limites[j,i].Izq = 0;
-                    limites[j,i].Der = mapaRangosMax[j, i];
-                    jitter[j,i].Antiv = 0;
-                    jitter[j,i].Margen = 0;
-                    jitter[j,i].Resistencia = 0;
+                    Comunes.CTipos.STLIMITES l = new()
+                    {
+                        Cen = r.Cen,
+                        Izq = r.Izq,
+                        Der = r.Der,
+                        Nulo = r.Nulo,
+                        Cal = r.Cal,
+                    };
+                    if (!limites.ContainsKey(r.IdJoy))
+                    {
+                        limites.Add(r.IdJoy, new() { { r.IdEje, l } });
+                    }
+                    else
+                    {
+                        limites[r.IdJoy].Add(r.IdEje, l);
+                    }
+                }
+                foreach (Comunes.Calibrado.Jitter r in cal.Jitters)
+                {
+                    Comunes.CTipos.STJITTER j = new()
+                    {
+                        Margen = r.Margen,
+                        Resistencia = r.Resistencia,
+                        Antiv = r.Antiv
+                    };
+                    if (!jitter.ContainsKey(r.IdJoy))
+                    {
+                        jitter.Add(r.IdJoy, new() { { r.IdEje, j } });
+                    }
+                    else
+                    {
+                        jitter[r.IdJoy].Add(r.IdEje, j);
+                    }
                 }
             }
-
-            using (Comunes.DataSetConfiguracion dsc = new())
+            catch (System.IO.FileNotFoundException) { }
+            catch (Exception ex)
             {
-                try
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+        }
+
+        public void ActualizarEstado(string ninterface, byte[] hidData, uint joy)
+        {
+            if (!dispositivos.ContainsKey(joy))
+            {
+                DatosJoy nuevo = DatosJoy.GetInfo(ninterface, joy);
+                dispositivos.Add(joy, nuevo);
+                lDevices.Items.Add(nuevo);
+                if (!limites.ContainsKey(joy))
                 {
-                    dsc.ReadXml("configuracion.dat");
-                    for (byte j = 0; j < 4; j++)
+                    limites.Add(joy, new());
+                    jitter.Add(joy, new());
+                    foreach (DatosJoy.CUsage u in nuevo.Usages)
                     {
-                        for (int i = 0; i < 8; i++)
+                        if (u.Eje < 254)
                         {
-                            limites[j,i].Cen = dsc.CALIBRADO_LIMITES[(j * 8) + i].Cen;
-                            limites[j,i].Izq = dsc.CALIBRADO_LIMITES[(j * 8) + i].Izq;
-                            limites[j,i].Der = dsc.CALIBRADO_LIMITES[(j * 8) + i].Der;
-                            limites[j,i].Nulo = dsc.CALIBRADO_LIMITES[(j * 8) + i].Nulo;
-                            limites[j,i].Cal = dsc.CALIBRADO_LIMITES[(j * 8) + i].Cal;
-                            jitter[j,i].Margen = dsc.CALIBRADO_JITTER[(j * 8) + i].Margen;
-                            jitter[j,i].Resistencia = dsc.CALIBRADO_JITTER[(j * 8) + i].Resistencia;
-                            jitter[j,i].Antiv = dsc.CALIBRADO_JITTER[(j * 8) + i].Antiv;
+                            limites[joy].Add(u.Eje, new() { Cen = (ushort)(u.Rango /2), Rango = u.Rango });
+                            jitter[joy].Add(u.Eje, new());
                         }
                     }
                 }
-                catch (System.IO.FileNotFoundException) { }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-            }
-
-            CargarTextosEje(0, 3);
-        }
-
-        public void ActualizarEstado(byte[] hidData, byte joy, bool sinReport)
-        {
-            if (!sinReport)
-            {
-                for (byte i = 0; i < 8; i++)
-                {
-                    hidReport[joy - 1, i] = (ushort)((hidData[(i * 4) + 1] << 8) | hidData[i * 4]);
-                }
-                if (joy == 2)
-                {
-                    for (byte i = 0; i < 8; i++)
+                    foreach (DatosJoy.CUsage u in nuevo.Usages)
                     {
-                        hidReport[3, i] = (ushort)((hidData[(i * 2) + 1] << 8) | hidData[i * 2]);
+                        if (u.Eje < 254)
+                        {
+                            Comunes.CTipos.STLIMITES st = limites[joy][u.Eje];
+                            st.Rango = u.Rango;
+                            limites[joy][u.Eje] = st;
+                        }
                     }
                 }
             }
+            if (joySel != joy)
+            {
+                return;
+            }
+            if (hidData !=  null)
+            {
+                uint botones = 0;
+                short[] povs = new short[4];
+                uint[] ejes = new uint[8];
+                dispositivos[joySel].ToHiddata(hidData, ref ejes, ref botones, ref povs);
+                for (byte i = 0; i < 8;  i++) { hidReport[i] = (ushort)ejes[i]; }
+            }
 
-            int posr = hidReport[joySel, ejeSel];
+            int posr = hidReport[ejeSel];
             txtPosReal.Text = posr.ToString();
             posReal.Margin = new Thickness(posr, 0, 0, 0);
 
             // Filtrado de ejes
-            ushort pollEje = hidReport[joySel, ejeSel];
+            ushort pollEje = hidReport[ejeSel];
 
-            if (jitter[joySel, ejeSel].Antiv == 1)
+            if (jitter[joySel][ejeSel].Antiv == 1)
             {
                 // Antivibraciones
-                if ((pollEje < (jitter[joySel, ejeSel].PosElegida - jitter[joySel, ejeSel].Margen)) || (pollEje > (jitter[joySel, ejeSel].PosElegida + jitter[joySel, ejeSel].Margen)))
+                jitter[joySel].TryGetValue(ejeSel, out Comunes.CTipos.STJITTER v);
+                //if ((pollEje == v.PosElegida) || (pollEje < (v.PosElegida - v.Margen)) || (pollEje > (v.PosElegida + v.Margen)))
+                //{
+                //    v.PosRepetida = 0;
+                //    v.PosElegida = pollEje;
+                //    v.PosPosible = pollEje;
+                //    jitter[joySel][ejeSel] = v;
+                //}
+                //else
                 {
-                    jitter[joySel, ejeSel].PosRepetida = 0;
-                    jitter[joySel, ejeSel].PosElegida = pollEje;
-                }
-                else
-                {
-                    if (jitter[joySel, ejeSel].PosRepetida < jitter[joySel, ejeSel].Resistencia)
+                    if (pollEje == v.PosPosible)
                     {
-                        jitter[joySel, ejeSel].PosRepetida++;
-                        pollEje = jitter[joySel, ejeSel].PosElegida;
-                    }
-                    else
-                    {
-                        jitter[joySel, ejeSel].PosRepetida = 0;
-                        jitter[joySel, ejeSel].PosElegida = pollEje;
-                    }
-                }
-            }
-
-            if (limites[joySel, ejeSel].Cal == 1)
-            {
-                // Calibrado
-                ushort ancho1, ancho2;
-                ancho1 = (ushort)((limites[joySel, ejeSel].Cen - limites[joySel, ejeSel].Nulo) - limites[joySel, ejeSel].Izq);
-                ancho2 = (ushort)(limites[joySel, ejeSel].Der - (limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo));
-                if (((pollEje >= (limites[joySel, ejeSel].Cen - limites[joySel, ejeSel].Nulo)) && (pollEje <= (limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo))))
-                {
-                    //Zona nula
-                    pollEje = limites[joySel, ejeSel].Cen;
-                }
-                else
-                {
-                    if (pollEje < limites[joySel, ejeSel].Izq)
-                        pollEje = limites[joySel, ejeSel].Izq;
-                    if (pollEje > limites[joySel, ejeSel].Der)
-                        pollEje = limites[joySel, ejeSel].Der;
-
-                    if (pollEje < limites[joySel, ejeSel].Cen)
-                    {
-                        if (ancho1 != mapaRangosCen[joySel, ejeSel])
+                        v.PosRepetida++;
+                        if (v.PosRepetida == v.Resistencia)
                         {
-                            if (pollEje >= ancho1) { pollEje = ancho1; }
-                            pollEje -= limites[joySel, ejeSel].Izq;
-                            pollEje = (ushort)((pollEje * mapaRangosCen[joySel, ejeSel]) / ancho1);
+                            v.PosRepetida = 0;
+                            v.PosElegida = pollEje;
+                            jitter[joySel][ejeSel] = v;
                         }
                     }
                     else
                     {
-                        if (ancho2 != (mapaRangosMax[joySel, ejeSel] - mapaRangosCen[joySel, ejeSel]))
+                        v.PosRepetida = 0;
+                        v.PosPosible = pollEje;
+                        jitter[joySel][ejeSel] = v;
+                    }
+                    pollEje = v.PosElegida;
+                }
+            }
+
+            if (limites[joySel][ejeSel].Cal == 1)
+            {
+                // Calibrado
+                ushort ancho1, ancho2;
+                ancho1 = (ushort)((limites[joySel][ejeSel].Cen - limites[joySel][ejeSel].Nulo) - limites[joySel][ejeSel].Izq);
+                ancho2 = (ushort)(limites[joySel][ejeSel].Der - (limites[joySel][ejeSel].Cen + limites[joySel][ejeSel].Nulo));
+                if (((pollEje >= (limites[joySel][ejeSel].Cen - limites[joySel][ejeSel].Nulo)) && (pollEje <= (limites[joySel][ejeSel].Cen + limites[joySel][ejeSel].Nulo))))
+                {
+                    //Zona nula
+                    pollEje = limites[joySel][ejeSel].Cen;
+                }
+                else
+                {
+                    if (pollEje < limites[joySel][ejeSel].Izq)
+                        pollEje = limites[joySel][ejeSel].Izq;
+                    if (pollEje > limites[joySel][ejeSel].Der)
+                        pollEje = limites[joySel][ejeSel].Der;
+
+                    if (pollEje < limites[joySel][ejeSel].Cen)
+                    {
+                        if (ancho1 != limites[joySel][ejeSel].Cen)
                         {
-                            if (pollEje >= limites[joySel, ejeSel].Der) { pollEje = limites[joySel, ejeSel].Der; }
-                            pollEje -= (ushort)(limites[joySel, ejeSel].Cen + limites[joySel, ejeSel].Nulo);
-                            pollEje = (ushort)(mapaRangosCen[joySel, ejeSel] + ((pollEje * (mapaRangosMax[joySel, ejeSel] - mapaRangosCen[joySel, ejeSel])) / ancho2));
+                            if (pollEje >= ancho1) { pollEje = ancho1; }
+                            pollEje -= limites[joySel][ejeSel].Izq;
+                            pollEje = (ushort)((pollEje * limites[joySel][ejeSel].Cen) / ancho1);
+                        }
+                    }
+                    else
+                    {
+                        if (ancho2 != (limites[joySel][ejeSel].Rango - limites[joySel][ejeSel].Cen))
+                        {
+                            if (pollEje >= limites[joySel][ejeSel].Der) { pollEje = limites[joySel][ejeSel].Der; }
+                            pollEje -= (ushort)(limites[joySel][ejeSel].Cen + limites[joySel][ejeSel].Nulo);
+                            pollEje = (ushort)(limites[joySel][ejeSel].Cen + ((pollEje * (limites[joySel][ejeSel].Rango - limites[joySel][ejeSel].Cen)) / ancho2));
                         }
                     }
                 }
@@ -168,23 +200,65 @@ namespace Calibrator
             posCal.Margin = new Thickness(pollEje, 0, 0, 0);
         }
 
+        private void FbtSeleccionar_Click(object sender, RoutedEventArgs e)
+        {
+            if (lDevices.SelectedIndex == -1)
+            {
+                tbJoy2.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            DatosJoy sel = (DatosJoy)lDevices.SelectedItem;
+
+            tbJoy2.Visibility = Visibility.Visible;
+            tbJoy2.Content = sel.Nombre;
+
+            System.Windows.Controls.Primitives.ToggleButton[] btEjes = { tbX, tbY, tbZ, tbR, tbRy, tbRz, tbSl1, tbSl2 };
+
+            joySel = sel.Id;
+            ejeSel = 0;
+            for (byte i = 0; i < btEjes.Length; i++) { btEjes[i].IsEnabled = false; }
+            foreach (DatosJoy.CUsage usg in sel.Usages)
+            {
+                if (usg.Eje < 254)
+                {
+                    btEjes[usg.Eje].IsChecked = true;
+                    ejeSel = usg.Eje;
+                    break;
+                }
+            }
+
+            foreach (DatosJoy.CUsage usg in sel.Usages)
+            {
+                if (usg.Eje < 254)
+                {
+                    btEjes[usg.Eje].IsEnabled = true;
+                }
+            }
+            ToggleButton_Checked_1(null, null);
+        }
+
         private void FbtAplicar_Click(object sender, RoutedEventArgs e)
         {
-            limites[joySel, ejeSel].Cal = (chkCalActiva.IsChecked == true) ? (byte)1 : (byte)0;
-            ushort.TryParse(txtI.Text, out ushort s);
-            limites[joySel, ejeSel].Izq = s;
-            ushort.TryParse(txtC.Text, out s);
-            limites[joySel, ejeSel].Cen = s;
-            ushort.TryParse(txtD.Text, out s);
-            limites[joySel, ejeSel].Der = s;
-            byte.TryParse(txtN.Text, out byte b);
-            limites[joySel, ejeSel].Nulo = b;
+            Comunes.CTipos.STLIMITES l = limites[joySel][ejeSel];
+            l.Cal = (chkCalActiva.IsChecked == true) ? (byte)1 : (byte)0;
+            _ = ushort.TryParse(txtI.Text, out ushort s);
+            l.Izq = s;
+            _ = ushort.TryParse(txtRawC.Text, out s);
+            l.Cen = s;
+            _ = ushort.TryParse(txtD.Text, out s);
+            l.Der = s;
+            _ = byte.TryParse(txtN.Text, out byte b);
+            l.Nulo = b;
+            limites[joySel][ejeSel] = l;
 
-            jitter[joySel, ejeSel].Antiv = (chkAntivActiva.IsChecked == true) ? (byte)1 : (byte)0;
-            byte.TryParse(txtMargen.Text, out b);
-            jitter[joySel, ejeSel].Margen = b;
-            byte.TryParse(txtResistencia.Text, out b);
-            jitter[joySel, ejeSel].Resistencia = b;
+            Comunes.CTipos.STJITTER j = jitter[joySel][ejeSel];
+            j.Antiv = (chkAntivActiva.IsChecked == true) ? (byte)1 : (byte)0;
+            _ = byte.TryParse(txtMargen.Text, out b);
+            j.Margen = b;
+            _ = byte.TryParse(txtResistencia.Text, out b);
+            j.Resistencia = b;
+            jitter[joySel][ejeSel] = j;
 
             btAplicar.Foreground = System.Windows.Media.Brushes.GreenYellow;
         }
@@ -192,33 +266,27 @@ namespace Calibrator
         private void FbtGuardar_Click(object sender, RoutedEventArgs e)
         {
             FbtAplicar_Click(null, null);
-            using (Comunes.DataSetConfiguracion dsc = new Comunes.DataSetConfiguracion())
             {
-                try
-                {
-                    dsc.ReadXml("configuracion.dat");
-                }
-                catch (System.IO.FileNotFoundException) { }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                Comunes.Calibrado.CCalibrado dsc = new();
 
-                dsc.CALIBRADO_JITTER.Clear();
-                dsc.CALIBRADO_LIMITES.Clear();
-                for (byte j = 0; j < 4; j++)
+                foreach (var v in limites)
                 {
-                    for (int i = 0; i < 8; i++)
+                    foreach (var l in v.Value)
                     {
-                        dsc.CALIBRADO_LIMITES.AddCALIBRADO_LIMITESRow(limites[j, i].Cal, limites[j, i].Nulo, limites[j, i].Izq, limites[j, i].Cen, limites[j, i].Der);
-                        dsc.CALIBRADO_JITTER.AddCALIBRADO_JITTERRow(jitter[j, i].Antiv, jitter[j, i].Margen, jitter[j, i].Resistencia);
+                        dsc.Limites.Add(new() { IdJoy = v.Key, IdEje = l.Key, Cal =l.Value.Cal, Nulo = l.Value.Nulo, Izq = l.Value.Izq, Cen = l.Value.Cen, Der = l.Value.Der, Rango = l.Value.Rango });
+                    }
+                }
+                foreach (var v in jitter)
+                {
+                    foreach (var j in v.Value)
+                    {
+                        dsc.Jitters.Add(new() { IdJoy = v.Key, IdEje = j.Key, Antiv = j.Value.Antiv, Margen = j.Value.Margen, Resistencia = j.Value.Resistencia });
                     }
                 }
 
                 try
                 {
-                    dsc.WriteXml("configuracion.dat");
+                    System.IO.File.WriteAllText("configuracion.dat", System.Text.Json.JsonSerializer.Serialize(dsc));
                 }
                 catch (Exception ex)
                 {
@@ -227,141 +295,92 @@ namespace Calibrator
                 }
             }
 
-            using (System.IO.Pipes.NamedPipeClientStream pipeClient = new System.IO.Pipes.NamedPipeClientStream("LauncherPipe"))
+            using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
+            try
             {
-                try
-                {
-                    pipeClient.Connect(1000);
-                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(pipeClient))
-                    {
-                        sw.WriteLine("CCAL");
-                        sw.Flush();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                pipeClient.Connect(1000);
+                using System.IO.StreamWriter sw = new(pipeClient);
+                sw.WriteLine("CCAL");
+                sw.Flush();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
         }
 
         #region "Toggles"
         private void FtbX_Checked(object sender, RoutedEventArgs e)
         {
-            tbY.IsChecked = false;
-            tbZ.IsChecked = false;
-            tbR.IsChecked = false;
-            tbRy.IsChecked = false;
-            tbRz.IsChecked = false;
-            tbSl1.IsChecked = false;
-            tbSl2.IsChecked = false;
-            CargarTextosEje(joySel, 0);
+            CargarTextosEje(0);
         }
 
         private void FtbY_Checked(object sender, RoutedEventArgs e)
         {
-            tbX.IsChecked = false;
-            tbZ.IsChecked = false;
-            tbR.IsChecked = false;
-            tbRy.IsChecked = false;
-            tbRz.IsChecked = false;
-            tbSl1.IsChecked = false;
-            tbSl2.IsChecked = false;
-            CargarTextosEje(joySel, 1);
+            CargarTextosEje(1);
         }
 
         private void FtbR_Checked(object sender, RoutedEventArgs e)
         {
-            if (this.IsLoaded)
-            {
-                tbX.IsChecked = false;
-                tbZ.IsChecked = false;
-                tbY.IsChecked = false;
-                tbRy.IsChecked = false;
-                tbRz.IsChecked = false;
-                tbSl1.IsChecked = false;
-                tbSl2.IsChecked = false;
-                CargarTextosEje(joySel, 3);
-            }
+            CargarTextosEje(3);
         }
 
         private void FtbZ_Checked(object sender, RoutedEventArgs e)
         {
-            tbX.IsChecked = false;
-            tbY.IsChecked = false;
-            tbR.IsChecked = false;
-            tbRy.IsChecked = false;
-            tbRz.IsChecked = false;
-            tbSl1.IsChecked = false;
-            tbSl2.IsChecked = false;
-            CargarTextosEje(joySel, 2);
+            CargarTextosEje(2);
         }
 
         private void FtbRy_Checked(object sender, RoutedEventArgs e)
         {
-            tbX.IsChecked = false;
-            tbY.IsChecked = false;
-            tbR.IsChecked = false;
-            tbZ.IsChecked = false;
-            tbRz.IsChecked = false;
-            tbSl1.IsChecked = false;
-            tbSl2.IsChecked = false;
-            CargarTextosEje(joySel, 4);
+            CargarTextosEje(4);
         }
         private void FtbRz_Checked(object sender, RoutedEventArgs e)
         {
-            tbX.IsChecked = false;
-            tbY.IsChecked = false;
-            tbZ.IsChecked = false;
-            tbR.IsChecked = false;
-            tbRy.IsChecked = false;
-            tbSl1.IsChecked = false;
-            tbSl2.IsChecked = false;
-            CargarTextosEje(joySel, 5);
+            CargarTextosEje(5);
         }
         private void FtbSl1_Checked(object sender, RoutedEventArgs e)
         {
-            tbX.IsChecked = false;
-            tbY.IsChecked = false;
-            tbZ.IsChecked = false;
-            tbR.IsChecked = false;
-            tbRy.IsChecked = false;
-            tbRz.IsChecked = false;
-            tbSl2.IsChecked = false;
-            CargarTextosEje(joySel, 6);
+            CargarTextosEje(6);
 
         }
         private void FtbSl2_Checked(object sender, RoutedEventArgs e)
         {
-            tbX.IsChecked = false;
-            tbY.IsChecked = false;
-            tbZ.IsChecked = false;
-            tbR.IsChecked = false;
-            tbRy.IsChecked = false;
-            tbRz.IsChecked = false;
-            tbSl1.IsChecked = false;
-            CargarTextosEje(joySel, 7);
+            CargarTextosEje(7);
         }
         #endregion
 
-        private void CargarTextosEje(byte joy, byte eje)
+        private void CargarTextosEje(byte eje)
         {
-            joySel = joy;
+            System.Windows.Controls.Primitives.ToggleButton[] btEjes = { tbX, tbY, tbZ, tbR, tbRy, tbRz, tbSl1, tbSl2 };
+            for (byte i = 0; i < btEjes.Length; i++)
+            {
+                if (eje != i)
+                {
+                    btEjes[i].IsChecked = false;
+                }
+            }
             ejeSel = eje;
-            grBruto.Width = mapaRangosMax[joy, eje] + 1;
+            grBruto.Width = limites[joySel][ejeSel].Rango + 1;
             posReal.Width = ((grBruto.Width + 1) * 2) / 1024;
             grCal.Width = grBruto.Width;
             posCal.Width = posReal.Width;
-            chkCalActiva.IsChecked = (limites[joySel, ejeSel].Cal == 1);
-            txtI.Text = limites[joySel, ejeSel].Izq.ToString();
-            txtC.Text = limites[joySel, ejeSel].Cen.ToString();
-            txtN.Text = limites[joySel, ejeSel].Nulo.ToString();
-            txtD.Text = limites[joySel, ejeSel].Der.ToString();
-            chkAntivActiva.IsChecked = (jitter[joySel, ejeSel].Antiv == 1);
-            txtMargen.Text = jitter[joySel, ejeSel].Margen.ToString();
-            txtResistencia.Text = jitter[joySel, ejeSel].Resistencia.ToString();
-            ActualizarEstado(null, joy, true);
+            chkCalActiva.IsChecked = (limites[joySel][ejeSel].Cal == 1);
+            txtI.Text = limites[joySel][ejeSel].Izq.ToString();
+            txtN.Text = limites[joySel][ejeSel].Nulo.ToString();
+            txtD.Text = limites[joySel][ejeSel].Der.ToString();
+            txtCalcRawC.Text = (limites[joySel][ejeSel].Rango / 2).ToString();
+            txtRawC.Text = limites[joySel][ejeSel].Cen.ToString();
+            txtRawD.Text = limites[joySel][ejeSel].Rango.ToString();
+            chkAntivActiva.IsChecked = (jitter[joySel][ejeSel].Antiv == 1);
+            txtMargen.Text = jitter[joySel][ejeSel].Margen.ToString();
+            txtResistencia.Text = jitter[joySel][ejeSel].Resistencia.ToString();
+            ActualizarEstado(null, null, joySel);
+        }
+
+        private void ButtonCen_Click(object sender, RoutedEventArgs e)
+        {
+            txtRawC.Text = txtCalcRawC.Text;
         }
 
         private void Fchk_Cambiado(object sender, RoutedEventArgs e)
@@ -381,72 +400,16 @@ namespace Calibrator
         {
             if (this.IsLoaded)
             {
-                joySel = 0;
+                gCalibrado.Visibility = Visibility.Collapsed;
+                gDispositivos.Visibility = Visibility.Visible;
                 tbJoy2.IsChecked = false;
-                tbJoy3.IsChecked = false;
-                tbJoy4.IsChecked = false;
-                tbX.IsEnabled = false;
-                tbY.IsEnabled = false;
-                tbZ.IsEnabled = false;
-                tbR.IsEnabled = true;
-                tbRy.IsEnabled = false;
-                tbRz.IsEnabled = false;
-                tbSl1.IsEnabled = true;
-                tbSl2.IsEnabled = true;
-                tbR.IsChecked = true;
-                FtbR_Checked(null, null);
             }
         }
         private void ToggleButton_Checked_1(object sender, RoutedEventArgs e)
         {
-            joySel = 1;
+            gCalibrado.Visibility = Visibility.Visible;
+            gDispositivos.Visibility = Visibility.Collapsed;
             tbJoy1.IsChecked = false;
-            tbJoy3.IsChecked = false;
-            tbJoy4.IsChecked = false;
-            tbX.IsEnabled = true;
-            tbY.IsEnabled = true;
-            tbZ.IsEnabled = false;
-            tbR.IsEnabled = true;
-            tbRy.IsEnabled = false;
-            tbRz.IsEnabled = false;
-            tbSl1.IsEnabled = false;
-            tbSl2.IsEnabled = false;
-            tbX.IsChecked = true;
-            FtbX_Checked(null, null);
-        }
-        private void ToggleButton_Checked_2(object sender, RoutedEventArgs e)
-        {
-            joySel = 2;
-            tbJoy2.IsChecked = false;
-            tbJoy1.IsChecked = false;
-            tbJoy4.IsChecked = false;
-            tbX.IsEnabled = false;
-            tbY.IsEnabled = false;
-            tbZ.IsEnabled = true;
-            tbR.IsEnabled = true;
-            tbRy.IsEnabled = true;
-            tbRz.IsEnabled = true;
-            tbSl1.IsEnabled = true;
-            tbSl2.IsEnabled = true;
-            tbZ.IsChecked = true;
-            FtbZ_Checked(null, null);
-        }
-        private void ToggleButton_Checked_3(object sender, RoutedEventArgs e)
-        {
-            joySel = 3;
-            tbJoy2.IsChecked = false;
-            tbJoy3.IsChecked = false;
-            tbJoy1.IsChecked = false;
-            tbX.IsEnabled = true;
-            tbY.IsEnabled = true;
-            tbZ.IsEnabled = true;
-            tbR.IsEnabled = true;
-            tbRy.IsEnabled = false;
-            tbRz.IsEnabled = false;
-            tbSl1.IsEnabled = true;
-            tbSl2.IsEnabled = true;
-            tbX.IsChecked = true;
-            FtbX_Checked(null, null);
         }
         #endregion
     }

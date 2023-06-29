@@ -183,7 +183,7 @@ void CProcesarX52::Procesar_Ace(PVHID_INPUT_DATA p_hidData)
 
 		// Ejes
 
-		for (idx = 2; idx < 8; idx++)
+		for (idx = 0; idx < 7; idx++)
 		{
 			if (p_hidData->Ejes[idx] != viejohidData.Ejes[idx])
 				CEjes::MoverEje(devExt->Perfil, TipoJoy::X52_Ace, idx, p_hidData->Ejes[idx]);

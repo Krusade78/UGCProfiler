@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Globalization;
 using System.Windows.Input;
+using Comunes.Calibrado;
 
 namespace Calibrator
 {
@@ -13,8 +14,8 @@ namespace Calibrator
 	{
 		private class CEje
 		{
-			public int Posicion { get; set; }
-			public int Maximo { get; set; }
+			public uint Posicion { get; set; }
+			public uint Maximo { get; set; }
 		}
 
 		private readonly System.Collections.Generic.List<Key> shifted = new();
@@ -22,7 +23,9 @@ namespace Calibrator
 		private readonly System.Collections.Generic.List<string> raton = new();
 		private readonly System.Windows.Threading.DispatcherTimer borradoRueda = new();
 		private readonly CEje[,] hidReportEjes = new CEje[3, 8];
-		private readonly int[,] hidReportResto = new int[3, 8];
+		private readonly uint[] hidBotones = new uint[3];
+        private readonly short[,] hidPovs = new short[3, 4];
+        private readonly DatosJoy[] dispositivos = new DatosJoy[3];
 		private byte joySel = 0;
 
 		public Info()
@@ -43,22 +46,10 @@ namespace Calibrator
 		private void FcheckBox_Checked(object sender, RoutedEventArgs e)
 		{
 			((MainWindow)((Grid)((Grid)((Grid)this.Parent).Parent).Parent).Parent).SetModoRaw(true);
-			for (byte i = 0; i < 8; i++)
-			{
-				hidReportEjes[0, i].Maximo = 1;
-				hidReportEjes[1, i].Maximo = 1;
-				hidReportEjes[2, i].Maximo = 1;
-			}
 		}
 		private void FcheckBox_Unchecked(object sender, RoutedEventArgs e)
 		{
 			((MainWindow)((Grid)((Grid)((Grid)this.Parent).Parent).Parent).Parent).SetModoRaw(false);
-			for (byte i = 0; i < 8; i++)
-			{
-				hidReportEjes[0, i].Maximo = 1;
-				hidReportEjes[1, i].Maximo = 1;
-				hidReportEjes[2, i].Maximo = 1;
-			}
 		}
 
 		private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -71,62 +62,77 @@ namespace Calibrator
 			borradoRueda.Tick -= BorradoRueda_Tick;
 		}
 
-		public void ActualizarEstado(byte[] hidData, byte joy, bool sinReport)
+		public void ActualizarEstado(string nombre, byte[] hidData, byte joy)
 		{
-			if (!sinReport)
-			{
-				for (byte i = 0; i < 8; i++)
+            if (dispositivos[joy] == null)
+            {
+                DatosJoy nuevo = DatosJoy.GetInfo(nombre, joy);
+				dispositivos[joy] = nuevo;
+				byte eje = 0;
+				foreach (DatosJoy.CUsage u in nuevo.Usages)
 				{
-					hidReportEjes[joy - 1, i].Posicion = (hidData[(i * 4) + 3] << 24) | (hidData[(i * 4) + 2] << 16) | (hidData[(i * 4) + 1] << 8) | hidData[i * 4];
-					if (hidReportEjes[joy - 1, i].Posicion > hidReportEjes[joy - 1, i].Maximo)
-                    {
-						hidReportEjes[joy - 1, i].Maximo = hidReportEjes[joy - 1, i].Posicion;
-					}
-					hidReportResto[joy - 1, i] = (hidData[32 + (i * 4) + 3] << 24) | (hidData[32 + (i * 4) + 2] << 16) | (hidData[32 + (i * 4) + 1] << 8) | hidData[32 + (i * 4)];
+					hidReportEjes[joy, eje++].Maximo = u.Rango;
+					if (eje == 8) { break; }
 				}
+            }
+            if (joySel != joy)
+            {
+                return;
+            }
+
+			uint[] pos = new uint[8];
+			short[] povs = new short[4];
+            dispositivos[joySel].ToHiddata(hidData, ref pos, ref hidBotones[joy], ref povs);
+			for (byte e = 0; e < 8; e++)
+			{
+				hidReportEjes[joy, e].Posicion = pos[e];
 			}
-			Actualizar();
+            for (byte p = 0; p < 4; p++)
+            {
+                hidPovs[joy, p] = povs[p];
+            }
+            Actualizar();
 		}
 
 		private void Actualizar()
-		{ 
-			int x = hidReportEjes[joySel, 0].Posicion;
-			int y = hidReportEjes[joySel, 1].Posicion;
+		{
+			long x = hidReportEjes[joySel, 0].Posicion;
+			long y = hidReportEjes[joySel, 1].Posicion;
 			Labelxy.Text = x + " # " + y;
 			ejeXY.Margin = new Thickness(x * (65536 / hidReportEjes[joySel, 0].Maximo), y * (65536 / hidReportEjes[joySel, 1].Maximo), 0, 0);
 
-			int z = hidReportEjes[joySel, 2].Posicion;
+			long z = hidReportEjes[joySel, 2].Posicion;
 			Labelz.Text = z.ToString();
 			ejeZ.Height = z * (65536 / hidReportEjes[joySel, 2].Maximo);
 
-			int r = hidReportEjes[joySel, 3].Posicion;
+			long r = hidReportEjes[joySel, 3].Posicion;
 			Labelr.Text = r.ToString();
 			ejeR.Width = r * (65536 / hidReportEjes[joySel, 3].Maximo);
 
-			int ry = hidReportEjes[joySel, 4].Posicion;
+			long ry = hidReportEjes[joySel, 4].Posicion;
 			Labelrx.Text = ry.ToString();
 			double angulo = (Math.PI * (((double)360 / hidReportEjes[joySel, 4].Maximo) * ry)) / 180;
 			string ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
 			string ax = (ry == hidReportEjes[joySel, 4].Maximo) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
 			ejeRX.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1" : "0") + " 1 " + ax + "," + ay + " Z");
 
-			int rz = hidReportEjes[joySel, 5].Posicion;
+			long rz = hidReportEjes[joySel, 5].Posicion;
 			Labelry.Text = rz.ToString();
 			angulo = (Math.PI * (((double)360 / hidReportEjes[joySel, 5].Maximo) * rz)) / 180;
 			ay = (25 - (Math.Cos(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
 			ax = (rz == 32767) ? "24.999" : (25 + (Math.Sin(angulo) * 25)).ToString("0.##########", CultureInfo.InvariantCulture);
 			ejeRY.Data = System.Windows.Media.Geometry.Parse("M25,25 L25,0 A25,25 0 " + ((angulo > Math.PI) ? "1" : "0") + " 1 " + ax + "," + ay + " Z");
 
-			int sl1 = hidReportEjes[joySel, 6].Posicion;
+			long sl1 = hidReportEjes[joySel, 6].Posicion;
 			Labelsl2.Text = sl1.ToString();
 			ejeSl2.Width = sl1 * (65536 / hidReportEjes[joySel, 6].Maximo);
 
-			int sl2 = hidReportEjes[joySel, 7].Posicion;
+			long sl2 = hidReportEjes[joySel, 7].Posicion;
 			Labelsl3.Text = sl2.ToString();
 			ejeSl3.Width = sl2 * (65536 / hidReportEjes[joySel, 7].Maximo);
 
-			int my = sl2;
-			int mx = sl1;
+			long my = sl2;
+			long mx = sl1;
 			Labelmxy.Text = "mX: " + mx + "\n" + "mY: " + my;
 			ejeMXY.Margin = new Thickness(mx * (65536 / hidReportEjes[joySel, 6].Maximo), my * (65536 / hidReportEjes[joySel, 7].Maximo), 0, 0);
 
@@ -136,17 +142,17 @@ namespace Calibrator
 																					bt25, bt26, bt27, bt28, bt29, bt30, bt31, bt32};
 			for (int i = 0; i < 32; i++)
 			{
-				bts[i].Visibility = ((hidReportResto[joySel, 4] & (1 << i)) != 0) ? Visibility.Visible : Visibility.Hidden;
+				bts[i].Visibility = ((hidBotones[joySel] & (1 << i)) != 0) ? Visibility.Visible : Visibility.Hidden;
 			}
 
-				pathP1.Visibility = (hidReportResto[joySel, 0] == -1) ? Visibility.Hidden : Visibility.Visible;
-				pathP1.RenderTransform = new System.Windows.Media.RotateTransform(hidReportResto[joySel, 0] / 100);
-				pathP2.Visibility = (hidReportResto[joySel, 1] == -1) ? Visibility.Hidden : Visibility.Visible;
-				pathP2.RenderTransform = new System.Windows.Media.RotateTransform(hidReportResto[joySel, 1] / 100);
-				pathP3.Visibility = (hidReportResto[joySel, 2] == -1) ? Visibility.Hidden : Visibility.Visible;
-				pathP3.RenderTransform = new System.Windows.Media.RotateTransform(hidReportResto[joySel, 2] / 100);
-				pathP4.Visibility = (hidReportResto[joySel, 3] == -1) ? Visibility.Hidden : Visibility.Visible;
-				pathP4.RenderTransform = new System.Windows.Media.RotateTransform(hidReportResto[joySel, 3] / 100);
+				pathP1.Visibility = (hidPovs[joySel, 0] == -1) ? Visibility.Hidden : Visibility.Visible;
+				pathP1.RenderTransform = new System.Windows.Media.RotateTransform(hidPovs[joySel, 0] / 100);
+				pathP2.Visibility = (hidPovs[joySel, 1] == -1) ? Visibility.Hidden : Visibility.Visible;
+				pathP2.RenderTransform = new System.Windows.Media.RotateTransform(hidPovs[joySel, 1] / 100);
+				pathP3.Visibility = (hidPovs[joySel, 2] == -1) ? Visibility.Hidden : Visibility.Visible;
+				pathP3.RenderTransform = new System.Windows.Media.RotateTransform(hidPovs[joySel, 2] / 100);
+				pathP4.Visibility = (hidPovs[joySel, 3] == -1) ? Visibility.Hidden : Visibility.Visible;
+				pathP4.RenderTransform = new System.Windows.Media.RotateTransform(hidPovs[joySel, 3] / 100);
 		}
 
 		public void ActualizarTeclado(CRawInput.RAWINPUTKEYBOARD data)

@@ -63,9 +63,7 @@ namespace Launcher
                 const int TAM_MAPAEJES = ((16 * 2) + 1 + 1 + 1 + 1 + 10 + 1 + 15 + 1 + 1) * (4 * 2 * 3 * 8);
                 const int TAM_MAPABOTONES = ((15 * 2) + 1 + (1)) * (4 * 2 * 3 * 16);
                 const int TAM_MAPASETAS = ((15 * 2) + 1 + (1)) * (4 * 2 * 3 * 32);
-                const int TAM_RANGOSENTRADA = 2 * (4 * 8);
-                const int TAM_RANGOSSALIDA = 2 * (3 * 8);
-                byte[] bufferMapa = new byte[1 + TAM_TEXTO_MFD + 1 + TAM_MAPAEJES + TAM_MAPABOTONES + TAM_MAPASETAS + TAM_RANGOSENTRADA + TAM_RANGOSSALIDA];
+                byte[] bufferMapa = new byte[1 + TAM_TEXTO_MFD + 1 + TAM_MAPAEJES + TAM_MAPABOTONES + TAM_MAPASETAS];
                 int pos = 0;
 
                 bufferMapa[0] = (byte)CServicio.TipoMsj.Mapa;
@@ -188,30 +186,6 @@ namespace Launcher
 
                             }
                         }
-                    }
-                }
-                //rangos entrada
-                for (byte j = 0; j < 4; j++)
-                {
-                    for (byte e = 0; e < 8; e++)
-                    {
-                        UInt16 rango = perfil.RANGOSENTRADA.FindByidJoyidEje(j, e).Maximo;
-                        bufferMapa[pos] = (byte)(rango & 0xff);
-                        pos++;
-                        bufferMapa[pos] = (byte)(rango >> 8);
-                        pos++;
-                    }
-                }
-                //rangos salida
-                for (byte j = 0; j < 3; j++)
-                {
-                    for (byte e = 0; e < 8; e++)
-                    {
-                        UInt16 rango = perfil.RANGOSSALIDA.FindByidJoyidEje(j, e).Maximo;
-                        bufferMapa[pos] = (byte)(rango & 0xff);
-                        pos++;
-                        bufferMapa[pos] = (byte)(rango >> 8);
-                        pos++;
                     }
                 }
 

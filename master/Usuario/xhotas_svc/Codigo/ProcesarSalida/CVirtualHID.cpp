@@ -11,13 +11,10 @@ CVirtualHID::CVirtualHID()
 
 CVirtualHID::~CVirtualHID()
 {
-    if (reportOk)
-    {
-        reportOk = false;
-        RelinquishVJD(3);
-        RelinquishVJD(2);
-        RelinquishVJD(1);
-    }
+    if (GetVJDStatus(3) == VJD_STAT_OWN) { RelinquishVJD(3); }
+    if (GetVJDStatus(2) == VJD_STAT_OWN) { RelinquishVJD(2); }
+    if (GetVJDStatus(1) == VJD_STAT_OWN) { RelinquishVJD(1); }
+
     CloseHandle(hMutextRaton);
 }
 
@@ -27,6 +24,18 @@ bool CVirtualHID::Iniciar()
     {
         return false;
     }
+
+    if ((GetVJDStatus(1) == VJD_STAT_OWN) || (GetVJDStatus(2) == VJD_STAT_OWN) || (GetVJDStatus(3) == VJD_STAT_OWN))
+    {
+        return true;
+    }
+    else
+    {
+        if (GetVJDStatus(3) == VJD_STAT_OWN) { RelinquishVJD(3); }
+        if (GetVJDStatus(2) == VJD_STAT_OWN) { RelinquishVJD(2); }
+        if (GetVJDStatus(1) == VJD_STAT_OWN) { RelinquishVJD(1); }
+    }
+
     if ((GetVJDStatus(1) != VJD_STAT_FREE) || (GetVJDStatus(2) != VJD_STAT_FREE) || (GetVJDStatus(3) != VJD_STAT_FREE))
     {
         return false;
@@ -53,13 +62,12 @@ bool CVirtualHID::Iniciar()
         return false;
     }
 
-    reportOk = true;
     return true;
 }
 
 void CVirtualHID::EnviarRequestJoystick(UCHAR joyId, PVHID_INPUT_DATA inputData)
 {
-    if (reportOk)
+    if (Iniciar())
     {
         JOYSTICK_POSITION input;
         RtlZeroMemory(&input, sizeof(JOYSTICK_POSITION));

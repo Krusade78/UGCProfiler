@@ -24,10 +24,12 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 	{
 		UCHAR sy1;
 		UCHAR sy2;
-		pPerfil->InicioLecturaPr();
-		UINT16 stopeSl = pPerfil->GetPr()->RangosEntrada[static_cast<UCHAR>(tipoJ)][idx];
-		pPerfil->FinLecturaPr();
-		INT16 stope = stopeSl / 2;
+		pPerfil->InicioLecturaCal();
+		UINT16 stopeSl = pPerfil->GetCal()->Limites[static_cast<UCHAR>(tipoJ)][idx].Rango;
+		INT16 stope = pPerfil->GetCal()->Limites[static_cast<UCHAR>(tipoJ)][idx].Cen;
+		pPerfil->FinLecturaCal();
+		if (stopeSl == 0) { stopeSl = 32767; }
+		if (stope == 0) { stope = stopeSl / 2; }
 		bool slider = false;
 		pPerfil->InicioLecturaPr();
 		{
@@ -73,7 +75,7 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 		UCHAR tipoEje;
 		UCHAR nEje;
 		UCHAR sRaton; //t
-		UINT16 etope, stope;
+		UINT16 etope, stope, centro;
 
 		pPerfil->InicioLecturaPr();
 		{
@@ -81,10 +83,15 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 			tipoEje = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].TipoEje;
 			nEje = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].Eje;
 			sRaton = pPerfil->GetPr()->MapaEjes[tipo][pinkie][modos][idx].SensibilidadRaton;
-			etope = pPerfil->GetPr()->RangosEntrada[joy][idx];
-			stope = pPerfil->GetPr()->RangosSalida[joy][idx];
 		}
 		pPerfil->FinLecturaPr();
+		pPerfil->InicioLecturaCal();
+		{
+			etope = pPerfil->GetCal()->Limites[static_cast<unsigned char>(tipoJ)][idx].Rango;
+			centro = pPerfil->GetCal()->Limites[static_cast<unsigned char>(tipoJ)][idx].Cen;
+			stope = etope;
+		}
+		pPerfil->FinLecturaCal();
 
 		if (tipoEje == 0)
 		{
@@ -103,20 +110,20 @@ void CEjes::SensibilidadYMapeado(CPerfil* pPerfil, TipoJoy tipoJ, PVHID_INPUT_DA
 		{
 			if (entrada->Ejes[idx] != viejo->Ejes[idx])
 			{
-				if (entrada->Ejes[idx] == (etope / 2))
+				if (entrada->Ejes[idx] == centro)
 				{
 					EjeARaton(nEje, 0);
 				}
 				else
 				{
-					INT32 ejeTransformado = entrada->Ejes[idx] - (etope / 2);
+					INT32 ejeTransformado = entrada->Ejes[idx] - centro;
 					if ((tipoEje & 0x2) == 0x2) //invertido
 					{
-						EjeARaton(nEje, static_cast<CHAR>(((-ejeTransformado) * sRaton) / (etope / 2)));
+						EjeARaton(nEje, static_cast<CHAR>(-ejeTransformado * sRaton));
 					}
 					else
 					{
-						EjeARaton(nEje, static_cast<CHAR>((ejeTransformado * sRaton) / (etope / 2)));
+						EjeARaton(nEje, static_cast<CHAR>(ejeTransformado * sRaton));
 					}
 
 				}
@@ -236,7 +243,7 @@ UCHAR CEjes::TraducirGiratorio(CPerfil* pPerfil, UCHAR tipoJ, UCHAR eje, UINT16 
 	incremental = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 16) == 16;
 	bandas = (pPerfil->GetPr()->MapaEjes[tipoJ][pinkie][modos][eje].TipoEje & 32) == 32;
 
-	UINT16 rango = pPerfil->GetPr()->RangosEntrada[tipoJ][eje];
+	UINT16 rango = pPerfil->GetCal()->Limites[tipoJ][eje].Rango;
 	UINT16	posNueva = nueva;
 
 	if (incremental)

@@ -23,11 +23,14 @@ bool CComs::Iniciar()
 	char retry = 5;
 	while (retry-- > 0)
 	{
-		hPipe = CreateFile(L"\\\\.\\pipe\\LauncherPipeSvc", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+		hPipe = CreateFileW(L"\\\\.\\pipe\\LauncherPipeSvc", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 		if (hPipe != INVALID_HANDLE_VALUE)
 		{
 			DWORD mode = PIPE_READMODE_MESSAGE;
+#pragma warning( push )
+#pragma warning( disable : 6001 )
 			if (SetNamedPipeHandleState(hPipe, &mode, NULL, NULL))
+#pragma warning( pop )
 			{
 				if (WriteFile(hPipe, "OK\r\n", 5, NULL, NULL))
 				{
@@ -127,9 +130,7 @@ bool CComs::ProcesarMensaje(BYTE* msj, DWORD tam)
 		case TipoMsj::Mapa:
 			return pPerfil->HF_IoEscribirMapa(&msj[1], tam - 1);
 		case TipoMsj::Comandos:
-		{
 			return pPerfil->HF_IoEscribirComandos((tam > 1) ? &msj[1] : msj, tam - 1);
-		}
 		default:
 			break;
 	}

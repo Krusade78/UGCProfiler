@@ -8,7 +8,7 @@ namespace Launcher
 {
     internal class CServicio : IDisposable
     {
-        private Comunes.DataSetConfiguracion dsc = new();
+        private Comunes.Calibrado.CCalibrado dsc = new();
         private System.Threading.CancellationTokenSource cerrarPipe = new();
         private System.Threading.CancellationTokenSource cerrarPipeSvc = new();
         private System.IO.BinaryWriter salidaPipeSvc = null;
@@ -33,7 +33,7 @@ namespace Launcher
                 {
                     cerrarPipe?.Cancel();
                     while (cerrarPipe != null) { System.Threading.Thread.Sleep(100); }
-                    dsc?.Dispose(); dsc = null;
+                    dsc = null;
                     cerrarPipeSvc?.Cancel();
                     while (cerrarPipeSvc != null) { System.Threading.Thread.Sleep(100); }
                 }
@@ -129,56 +129,38 @@ namespace Launcher
 
         private void CargarCalibrado()
         {
-            dsc.Clear();
             try
             {
-                dsc.ReadXml("configuracion.dat");
+                dsc = System.Text.Json.JsonSerializer.Deserialize<Comunes.Calibrado.CCalibrado>(System.IO.File.ReadAllText("configuracion.dat"));
             }
-            catch {}
-
-
-            ushort[,] mapaRangosCen = {
-                    { 0,0,0,255,0,0,63,63 },
-                    { 1023,1023,0,511,0,0,0,0 },
-                    { 0,0,127,127,127,127,7,7 },
-                    { 16383,16383,1023,16383,0,0,511,511 }
-            };
-            ushort[,] mapaRangosMax = {
-                    { 0,0,0,511,0,0,127,127 },
-                    { 2047,2047,0,1023,0,0,0,0 },
-                    { 0,0,255,255,255,255,15,15 },
-                    { 32767,32767,2047,32767,0,0,1023,1023 }
-            };
+            catch (Exception ex)
+            {
+                ((CMain)main).MessageBox($"Error al leer calibrado:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
             Comunes.CTipos.STJITTER[,] jitter = new Comunes.CTipos.STJITTER[4,8];
             Comunes.CTipos.STLIMITES[,] limites = new Comunes.CTipos.STLIMITES[4,8];
-            if ((dsc.CALIBRADO_LIMITES.Count == 32) && (dsc.CALIBRADO_JITTER.Count == 32))
+            uint[] ids = { 0x06A30763, 0x06a30255, 0x06a30256, 0x231d0200 };
+            for (byte j = 0; j < 4; j++)
             {
-                for (byte j = 0; j < 4; j++)
+                for (int i = 0; i < 8; i++)
                 {
-                    for (int i = 0; i < 8; i++)
+                    Comunes.Calibrado.Limites l = dsc.Limites.Find(x => (x.IdJoy == ids[j]) && (x.IdEje == i));
+                    if (l != null)
                     {
-                        if ((dsc.CALIBRADO_LIMITES.Count == 32) && (dsc.CALIBRADO_JITTER.Count == 32))
-                        {
-                            limites[j, i].Cen = dsc.CALIBRADO_LIMITES[(j * 8) + i].Cen;
-                            limites[j, i].Izq = dsc.CALIBRADO_LIMITES[(j * 8) + i].Izq;
-                            limites[j, i].Der = dsc.CALIBRADO_LIMITES[(j * 8) + i].Der;
-                            limites[j, i].Nulo = dsc.CALIBRADO_LIMITES[(j * 8) + i].Nulo;
-                            limites[j, i].Cal = dsc.CALIBRADO_LIMITES[(j * 8) + i].Cal;
-                            jitter[j, i].Margen = dsc.CALIBRADO_JITTER[(j * 8) + i].Margen;
-                            jitter[j, i].Resistencia = dsc.CALIBRADO_JITTER[(j * 8) + i].Resistencia;
-                            jitter[j, i].Antiv = dsc.CALIBRADO_JITTER[(j * 8) + i].Antiv;
-                        }
-                        else
-                        {
-                            limites[j, i].Cal = 0;
-                            limites[j, i].Cen = mapaRangosCen[j, i];
-                            limites[j, i].Izq = 0;
-                            limites[j, i].Der = mapaRangosMax[j, i]; ;
-                            jitter[j, i].Antiv = 0;
-                            jitter[j, i].Margen = 0;
-                            jitter[j, i].Resistencia = 0;
-                        }
+                        limites[j, i].Cen = l.Cen;
+                        limites[j, i].Izq = l.Izq;
+                        limites[j, i].Der = l.Der;
+                        limites[j, i].Nulo = l.Nulo;
+                        limites[j, i].Cal = l.Cal;
+                        limites[j, i].Rango = l.Rango;
+                    }
+                    Comunes.Calibrado.Jitter ji = dsc.Jitters.Find(x => (x.IdJoy == ids[j]) && (x.IdEje == i));
+                    if (ji != null)
+                    { 
+                        jitter[j, i].Margen = ji.Margen;
+                        jitter[j, i].Resistencia = ji.Resistencia;
+                        jitter[j, i].Antiv = ji.Antiv;
                     }
                 }
             }

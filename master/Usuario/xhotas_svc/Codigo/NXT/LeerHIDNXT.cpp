@@ -121,7 +121,7 @@ unsigned short CNXTEntrada::Leer(void* buff)
     }
     else
     {
-        if (!ReadFile(hdevNXT, buff, BUFF_TAM, &tam, NULL))
+        if (!ReadFile(hdevNXT, buff, READ_TAM, &tam, NULL))
         {
             Sleep(1500);
             return 0;

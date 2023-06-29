@@ -31,7 +31,6 @@ public :
 	void UnlockRaton() { ReleaseSemaphore(hMutextRaton, 1, NULL); }
 private:
 	HANDLE hMutextRaton = nullptr;
-    bool reportOk = false;
 
 	DWORD Hat2Switch(UCHAR pos);
 };

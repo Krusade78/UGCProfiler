@@ -18,5 +18,7 @@ private:
 	PVOID hdevNXT = INVALID_HANDLE_VALUE;
 	wchar_t* rutaNXT = nullptr;
 	HANDLE mutexOperar = nullptr;
+
+	const unsigned char READ_TAM = 64;
 };
 

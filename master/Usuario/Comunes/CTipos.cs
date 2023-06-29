@@ -12,6 +12,7 @@ namespace Comunes
             public ushort Izq;
             public ushort Cen;
             public ushort Der;
+            public ushort Rango;
         };
 
         [StructLayout(LayoutKind.Sequential)]
@@ -22,6 +23,7 @@ namespace Comunes
             public byte Margen;
             public byte Resistencia;
             public ushort PosElegida;
+            public ushort PosPosible;
         };
 
         public enum TipoComando : byte
