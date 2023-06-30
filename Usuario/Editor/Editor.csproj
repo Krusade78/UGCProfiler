@@ -1,24 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Label="Globals">
-    <SccProjectName>%24/Driver joystick/master/Usuario/Editor</SccProjectName>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
-    <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
-    <SccLocalPath>.</SccLocalPath>
-  </PropertyGroup>
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>res\editor.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <Product>XHOTAS - Editor</Product>
+    <Product>UGC Profiler - Editor</Product>
     <Authors>Alfredo Costalago</Authors>
-    <Description>Editor de perfiles</Description>
-    <Version>9.1.0</Version>
-    <Copyright>Copyright 2023</Copyright>
+    <Description>Profile editor</Description>
+    <Version>9.1.1</Version>
+    <Copyright>Copyright© 2023</Copyright>
     <StartupObject>Editor.App</StartupObject>
     <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
-	  <Platforms>x64</Platforms>
+	<Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

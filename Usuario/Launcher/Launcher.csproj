@@ -1,23 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Label="Globals">
-    <SccProjectName>%24/Driver joystick/master/Usuario/Launcher</SccProjectName>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
-    <SccAuxPath>https://alfredocos.visualstudio.com</SccAuxPath>
-    <SccLocalPath>.</SccLocalPath>
-  </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>True</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>res\launcher.ico</ApplicationIcon>
-    <Product>XHOTAS - Launcher</Product>
+    <Product>UGC Profiler - Launcher</Product>
     <Authors>Alfredo Costalago</Authors>
-    <AssemblyVersion>10.0.0.0</AssemblyVersion>
-    <FileVersion>10.0.0.0</FileVersion>
     <Version>10.0.0</Version>
-    <Description>XHOTAS Tray app</Description>
-    <Copyright>Copyright 2022</Copyright>
+    <Description>UGC Profiler Tray app</Description>
+    <Copyright>Copyright© 2023</Copyright>
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
@@ -37,8 +29,4 @@
     <Resource Include="res\lanzar.png" />
     <Resource Include="res\launcher.ico" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe&quot; sign /f &quot;$(SolutionDir)\Driver\SolidCert.p12&quot; /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a &quot;$(OutDir)$(TargetName)$(TargetExt)&quot;" />
-  </Target>
 </Project>

@@ -1,28 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <Platforms>x64</Platforms>
-  </PropertyGroup>
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <StartupObject></StartupObject>
-    <Product>XHOTAS - Calibrator</Product>
-    <Description>Herramienta de calibrado y prueba</Description>
+    <Product>UGC Profiler - Calibrator</Product>
+    <Description>Calibration and test tool</Description>
     <Authors>Alfredo Costalago</Authors>
     <Copyright>Copyright© 2023</Copyright>
-    <AssemblyVersion>9.1.0.0</AssemblyVersion>
-    <FileVersion>9.1.0.0</FileVersion>
     <ApplicationIcon>res\calibrador.ico</ApplicationIcon>
-    <Version>9.1.0</Version>
+    <Version>9.1.1</Version>
     <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
+	<Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

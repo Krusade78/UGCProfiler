@@ -1,22 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <Platforms>x64</Platforms>
-  </PropertyGroup>
-
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <Product>XHOTAS</Product>
+    <Product>UGC Profiler</Product>
     <Authors>Alfredo Costalago</Authors>
-    <Company />
-    <Version>9.1.0</Version>
-    <Copyright>Copyright 2021</Copyright>
+    <Version>9.1.1</Version>
+    <Copyright>Copyright© 2023</Copyright>
     <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
+	<Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -45,7 +36,4 @@
       <DependentUpon>DSPerfil.xsd</DependentUpon>
     </None>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe&quot; sign /f &quot;$(SolutionDir)\Driver\SolidCert.p12&quot; /p sldcrt22 /fd sha256 /tr http://timestamp.comodoca.com /td sha256 /a &quot;$(OutDir)$(TargetName)$(TargetExt)&quot;" />
-  </Target>
 </Project>

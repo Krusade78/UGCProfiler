@@ -1,0 +1,9 @@
+﻿/.vs
+obj/
+bin/
+debug/
+release/
+*.aps
+/Driver/SolidCert.p12
+*.user
+test/
