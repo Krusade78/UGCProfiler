@@ -1,5 +1,5 @@
 # Universal Game Controller Profiler
-After many year of developing drivers and tools for the Saitek X series I am moving to a more generic approach.
+After many years of developing drivers and tools for the Saitek X series I am moving to a more generic approach.
 Based on the XHOTAS code this new software will be able to program any HID game controller device.
 
 ## v11
@@ -8,7 +8,7 @@ Based on the XHOTAS code this new software will be able to program any HID game 
 
 As my free time is very limited now, universal support is going to take some time so, at this moment only
 four devices are available, those that I own for testing:
-- Saitek X52 joystick and throttle (internally the devices are separated into two differt HardwareIds).
+- Saitek X52 joystick and throttle (internally the devices are separated into two different HardwareIds).
 - Saitek Pro flight rudder pedals.
 - VKB Gladiator NXT.
 
