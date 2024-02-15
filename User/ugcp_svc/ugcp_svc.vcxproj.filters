@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{9f3d3854-f947-4a3e-9b7e-c56294dc559c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{9aee1cae-acc2-4c07-aa09-6a0dba40dbc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\X52">
+      <UniqueIdentifier>{85c991b5-7eb8-45ac-9ac9-27e1a33d20b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\NXT">
+      <UniqueIdentifier>{87da078f-9c5f-46ee-8fa3-e5adc532f25d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\vJoy">
+      <UniqueIdentifier>{4fda3b8f-c588-41a4-964e-b9ecb5552f59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\Profile">
+      <UniqueIdentifier>{b4dcf559-e93e-43e7-bfb0-213784a3f472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\ProcessOutput">
+      <UniqueIdentifier>{1045d47f-373b-4110-8477-f837783cbaba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\DxCalibration">
+      <UniqueIdentifier>{6a0fd1cc-6352-4441-b79e-d680ba5a1c59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\InputQueue">
+      <UniqueIdentifier>{e761d953-8ff2-4fda-8d9c-09a1567e681e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\EventQueue">
+      <UniqueIdentifier>{33116cd5-e9bd-43e1-b278-f5bd6379e802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\ProcessInput">
+      <UniqueIdentifier>{b3579ce4-1646-47ad-a2f0-5b7e8457c71b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\ProcessInput\GenerateEvents">
+      <UniqueIdentifier>{78ce811f-c017-4db2-9b00-ba4609fc8cf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\ProcessOutput\Commands">
+      <UniqueIdentifier>{4999236b-cb37-435c-aab0-cfe66ad670ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\HIDInput">
+      <UniqueIdentifier>{d20652e1-3fb2-4203-9765-5ed9eeb7a20e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ugcp_svc.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\X52\USBX52Write.h">
+      <Filter>Content\X52</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\X52\CWinUSBX52.h">
+      <Filter>Content\X52</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\DxCalibration\CDirectInput.h">
+      <Filter>Content\DxCalibration</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\CComs.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\X52\MFDMenu.h">
+      <Filter>Content\X52</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Profile\CProfile.h">
+      <Filter>Content\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\vJoy\vjoyinterface.h">
+      <Filter>Content\vJoy</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\InputQueue\CHIDPacket.h">
+      <Filter>Content\InputQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\vJoy\public.h">
+      <Filter>Content\vJoy</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\InputQueue\CHIDQueue.h">
+      <Filter>Content\InputQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\CVirtualHID.h">
+      <Filter>Content\ProcessOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\targetver.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\framework.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\EventQueue\CEventQueue.h">
+      <Filter>Content\EventQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\EventQueue\CEventPacket.h">
+      <Filter>Content\EventQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\CHIDOutput.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\NXT\HIDNXTWrite.h">
+      <Filter>Content\NXT</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\Commands\CDirectX.h">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\Commands\CKeyboard.h">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\Commands\CMouse.h">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\Commands\CNXT.h">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\Commands\COther.h">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\Commands\CX52.h">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessOutput\CProcessOutput.h">
+      <Filter>Content\ProcessOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Profile\CProfile.Status.h">
+      <Filter>Content\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\HIDInput\CHIDDevices.h">
+      <Filter>Content\HIDInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\HIDInput\IHIDInput.h">
+      <Filter>Content\HIDInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\HIDInput\CHIDInput.h">
+      <Filter>Content\HIDInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\HIDInput\CPreprocess.h">
+      <Filter>Content\HIDInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessInput\CProcessInput.h">
+      <Filter>Content\ProcessInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\HIDInput\Hid_Input_Data.h">
+      <Filter>Content\HIDInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessInput\GenerateEvents\ProcessUSBs_Buttons-Hats.h">
+      <Filter>Content\ProcessInput\GenerateEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessInput\GenerateEvents\CGenerateEvents.h">
+      <Filter>Content\ProcessInput\GenerateEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessInput\GenerateEvents\ProcessUSBs_Axes.h">
+      <Filter>Content\ProcessInput\GenerateEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ProcessInput\ProcessUSBs_Calibration.h">
+      <Filter>Content\ProcessInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Profile\CProfile.Programming.h">
+      <Filter>Content\Profile</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Profile\CProfile.Calibration.h">
+      <Filter>Content\Profile</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Content\X52\USBX52Write.cpp">
+      <Filter>Content\X52</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\X52\CWinUSBX52.cpp">
+      <Filter>Content\X52</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\DxCalibration\cdirectinput.cpp">
+      <Filter>Content\DxCalibration</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\CComs.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\X52\MFDMenu.cpp">
+      <Filter>Content\X52</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Profile\CProfile.cpp">
+      <Filter>Content\Profile</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\InputQueue\CHIDPacket.cpp">
+      <Filter>Content\InputQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\InputQueue\CHIDQueue.cpp">
+      <Filter>Content\InputQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\CVirtualHID.cpp">
+      <Filter>Content\ProcessOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\EventQueue\CEventQueue.cpp">
+      <Filter>Content\EventQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\EventQueue\CEventPacket.cpp">
+      <Filter>Content\EventQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\CHIDOutput.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ugcp_svc.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\NXT\HIDNXTWrite.cpp">
+      <Filter>Content\NXT</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\Commands\CDirectX.cpp">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\Commands\CKeyboard.cpp">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\Commands\CMouse.cpp">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\Commands\CNXT.cpp">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\Commands\COther.cpp">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\Commands\CX52.cpp">
+      <Filter>Content\ProcessOutput\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessOutput\CProcessOutput.cpp">
+      <Filter>Content\ProcessOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\HIDInput\CHIDDevices.cpp">
+      <Filter>Content\HIDInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\HIDInput\CHIDInput.cpp">
+      <Filter>Content\HIDInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\HIDInput\CPreprocess.cpp">
+      <Filter>Content\HIDInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessInput\CProcessInput.cpp">
+      <Filter>Content\ProcessInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessInput\GenerateEvents\ProcessUSBs_Buttons-Hats.cpp">
+      <Filter>Content\ProcessInput\GenerateEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessInput\GenerateEvents\CGenerateEvents.cpp">
+      <Filter>Content\ProcessInput\GenerateEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessInput\GenerateEvents\ProcessUSBs_Axes.cpp">
+      <Filter>Content\ProcessInput\GenerateEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ProcessInput\ProcessUSBs_Calibration.cpp">
+      <Filter>Content\ProcessInput</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ugcp_svc.rc">
+      <Filter>Resource files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\vJoyInterface.dll">
+      <Filter>lib</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\vJoyInterface.lib">
+      <Filter>lib</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

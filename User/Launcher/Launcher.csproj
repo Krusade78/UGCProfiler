@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<OutputType>Library</OutputType>
+	<TargetFramework>net8.0-windows</TargetFramework>
+	<UseWPF>True</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
+	<ApplicationIcon>res\launcher.ico</ApplicationIcon>
+	<Product>UGC Profiler - Launcher</Product>
+	<Authors>Alfredo Costalago</Authors>
+	<Version>11.0.0</Version>
+	<Description>UGC Profiler Tray app</Description>
+	<Copyright>Copyright© 2024</Copyright>
+	<Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+	<DebugType>none</DebugType>
+	<DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<Content Include="Language\launcher.es.xaml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shrared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<Resource Include="Language\en.xaml" />
+	<Resource Include="res\edit.ico" />
+	<Resource Include="res\profiler.ico" />
+	<Resource Include="res\launch.png" />
+	<Resource Include="res\launcher.ico" />
+  </ItemGroup>
+</Project>

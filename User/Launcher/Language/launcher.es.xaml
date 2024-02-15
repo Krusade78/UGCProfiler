@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:t="clr-namespace:System;assembly=mscorlib">
+    <t:String x:Key="profiles">Perfiles</t:String>
+    <t:String x:Key="launch">Lanzar...</t:String>
+    <t:String x:Key="edit">Editar...</t:String>
+    <t:String x:Key="profiler">Editor de perfiles</t:String>
+    <t:String x:Key="reset">Resetear</t:String>
+    <t:String x:Key="exit">Salir</t:String>
+
+    <t:String x:Key="error">Error</t:String>
+    <t:String x:Key="error reading calibration">Error al leer calibrado:</t:String>
+    <t:String x:Key="profile loaded ok">Perfil cargado correctamente.</t:String>
+    <t:String x:Key="default"># Por defecto #</t:String>
+    <t:String x:Key="not enough axes">No hay ejes suficientes en vJoy</t:String>
+    <t:String x:Key="detected">Dispositivos en el perfil por defecto:</t:String>
+</ResourceDictionary>
