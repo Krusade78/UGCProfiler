@@ -69,6 +69,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)usuario\CPPaCS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,8 +94,9 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)usuario\CPPaCS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,7 +106,7 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
       <AdditionalDependencies>..\CPP2CS\$(Platform)\$(Configuration)\CPP2CS.lib;lib/vJoyInterface.lib;WinUSB.lib;Setupapi.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <UACUIAccess>false</UACUIAccess>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y $(SolutionDir)usuario\cpp2cs\$(Platform)\$(Configuration)\CPP2CS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)

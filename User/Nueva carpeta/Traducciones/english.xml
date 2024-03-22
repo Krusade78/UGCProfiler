@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<traduccion idioma="english">
+  <Calibrator>
+    <joystick_text>Joystick test</joystick_text>
+    <dx_calibration>DX Calibration</dx_calibration>
+    <x36_calibration>X36 Gameport calibration</x36_calibration>
+    <x52_setup>X52 Setup</x52_setup>
+    <disconnected xml:space="preserve" >   Disconnected</disconnected>
+    <error_opening_device>Error opening device</error_opening_device>
+    <error_accessing_device>Error accessing device</error_accessing_device>
+    <raw_data>Raw data/ calibration</raw_data>
+    <bottom_limit>Botton limit</bottom_limit>
+    <center>Center</center>
+    <null_zone>Null zone</null_zone>
+    <upper_limit>Upper limit</upper_limit>
+    <antovibration>Antivibration</antovibration>
+    <activate>Activate</activate>
+    <resistance>Resistance:</resistance>
+    <margin>Margin:</margin>
+    <calibration_result>Calibration result</calibration_result>
+    <default>Default</default>
+    <apply>Apply</apply>
+    <configuration_saved>Configuration saved</configuration_saved>
+    <error_writing_directinput>Error writing DirectInput calibration</error_writing_directinput>
+    <directx_opening_failed>DirectX opening failed</directx_opening_failed>
+    <slider>Slider: </slider>
+    <reset_graphic_bar>Reset graphic bar</reset_graphic_bar>
+    <note>NOTE:</note>
+    <note_text>This configuration can be bypassed by profiles and SDK programs.</note_text>
+    <button_light>Button light</button_light>
+    <mfd_light>MFD Light</mfd_light>
+    <none>None</none>
+    <low>Low</low>
+    <high>High</high>
+    <first_clock>First clock time (relative to system time):</first_clock>
+    <second_clock>Second clock time (relative to system time):</second_clock>
+    <third_clock>Third clock time (relative to system time):</third_clock>
+    <axes>Axes</axes>
+    <buttons>Buttons</buttons>
+    <povs>POVs</povs>
+    <keyboard>Keyboard</keyboard>
+    <mouse>Mouse</mouse>
+    <wheelup>WheelUp</wheelup>
+    <wheeldw>WheelDw</wheeldw>
+    <show_raw_data>Show raw data (bypass profile)</show_raw_data>
+  </Calibrator>
+  <Launcher>
+    <default>Default</default>
+    <load_profile>Load profile</load_profile>
+    <new_profile>New profile</new_profile>
+    <edit_profile>Edit profile:</edit_profile>
+    <calibrator>XCalibrator</calibrator>
+    <exit>Exit</exit>
+    <error_open_xhp>Couldn't open the profile.</error_open_xhp>
+    <load_ok>Profile correctly loaded.</load_ok>
+    <error_reading_file>Error reading file.</error_reading_file>
+    <error_opening_device>Error opening device</error_opening_device>
+    <error_accessing_device>Error accessing device</error_accessing_device>
+    <error_default_profile_xhp>Could't open the default profile.</error_default_profile_xhp>
+  </Launcher>
+  <Editor>
+    <profile_editor>Profile editor</profile_editor>
+    <untitled>Untitled</untitled>
+    <profile_name>Profile name.xhp</profile_name>
+    <profile_file>XHOTAS Configuration file (*.xhp)|*.xhp</profile_file>
+    <!--Menu-->
+    <mfile>&amp;File</mfile>
+    <mnew>&amp;New</mnew>
+    <mopen>&amp;Open</mopen>
+    <msave>&amp;Save</msave>
+    <msave_as>Save &amp;As...</msave_as>
+    <mprint>&amp;Print...</mprint>
+    <mprint_preview>P&amp;rint preview</mprint_preview>
+    <mexit>&amp;Exit</mexit>
+    <mprofile>&amp;Profile</mprofile>
+    <mmouse_configuration>&amp;Mouse configuration</mmouse_configuration>
+    <mmode_configuration>M&amp;ode configuration</mmode_configuration>
+    <mlaunch>&amp;Launch</mlaunch>
+    <mview>&amp;View</mview>
+    <medit_view>&amp;Edit view</medit_view>
+    <mlist_view>&amp;List view</mlist_view>
+    <mhelp>&amp;Help</mhelp>
+    <mabout>&amp;About...</mabout>
+    <!--Toolbar-->
+    <new>New</new>
+    <open>Open</open>
+    <save>Save</save>
+    <print>Print</print>
+    <launch>Launch</launch>
+    <x36_gameport>X36 Gameport</x36_gameport>
+    <mouse_configuration>Mouse configuration</mouse_configuration>
+    <edit_view>Edit view</edit_view>
+    <list_view>List view</list_view>
+    <modes_configuration>Modes configuration</modes_configuration>
+    <current_mode>Current mode</current_mode>
+    <no_modes>No modes</no_modes>
+    <joystick>JOYSTICK</joystick>
+    <throttle>THROTTLE</throttle>
+    <!--Elements-->
+    <trigger>Trigger</trigger>
+    <trigger1>Trigger 1</trigger1>
+    <trigger2>Trigger 2</trigger2>
+    <buttonlaunch>Launch</buttonlaunch>
+    <buttona>Button A</buttona>
+    <buttonb>Button B</buttonb>
+    <buttonc>Button C</buttonc>
+    <pinkie>Pinkie</pinkie>
+    <mode1>Mode 1</mode1>
+    <mode2>Mode 2</mode2>
+    <mode3>Mode 3</mode3>
+    <pov1>POV 1</pov1>
+    <pov2>POV 2</pov2>
+    <pov3>POV 3</pov3>
+    <pov4>POV 4</pov4>
+    <pov1_n>POV 1 North</pov1_n>
+    <pov1_ne>POV 1 Northeast</pov1_ne>
+    <pov1_e>POV 1 East</pov1_e>
+    <pov1_se>POV 1 Southeast</pov1_se>
+    <pov1_s>POV 1 South</pov1_s>
+    <pov1_sw>POV 1 Southwest</pov1_sw>
+    <pov1_w>POV 1 West</pov1_w>
+    <pov1_nw>POV 1 Northwest</pov1_nw>
+    <pov2_n>POV 2 North</pov2_n>
+    <pov2_ne>POV 2 Northeast</pov2_ne>
+    <pov2_e>POV 2 East</pov2_e>
+    <pov2_se>POV 2 Southeast</pov2_se>
+    <pov2_s>POV 2 South</pov2_s>
+    <pov2_sw>POV 2 Southwest</pov2_sw>
+    <pov2_w>POV 2 West</pov2_w>
+    <pov2_nw>POV 2 Northwest</pov2_nw>
+    <toggle1>Toggle 1</toggle1>
+    <toggle2>Toggle 2</toggle2>
+    <toggle3>Toggle 3</toggle3>
+    <toggle4>Toggle 4</toggle4>
+    <toggle5>Toggle 5</toggle5>
+    <toggle6>Toggle 6</toggle6>
+    <axisx>Axis X</axisx>
+    <axisy>Axis Y</axisy>
+    <buttond>Button D</buttond>
+    <buttone>Button E</buttone>
+    <buttoni>Button I</buttoni>
+    <buttonm>Button M</buttonm>
+    <pov3_n>POV 3 North</pov3_n>
+    <pov3_ne>POV 3 Northeast</pov3_ne>
+    <pov3_e>POV 3 East</pov3_e>
+    <pov3_se>POV 3 Southeast</pov3_se>
+    <pov3_s>POV 3 South</pov3_s>
+    <pov3_sw>POV 3 Southwest</pov3_sw>
+    <pov3_w>POV 3 West</pov3_w>
+    <pov3_nw>POV 3 Northwest</pov3_nw>
+    <pov4_n>POV 4 North</pov4_n>
+    <pov4_ne>POV 4 Northeast</pov4_ne>
+    <pov4_e>POV 4 East</pov4_e>
+    <pov4_se>POV 4 Southeast</pov4_se>
+    <pov4_s>POV 4 South</pov4_s>
+    <pov4_sw>POV 4 Southwest</pov4_sw>
+    <pov4_w>POV 4 West</pov4_w>
+    <pov4_nw>POV 4 Northwest</pov4_nw>
+    <ministickx>Ministick X</ministickx>
+    <ministicky>Ministick Y</ministicky>
+    <wheel_up>Wheel up</wheel_up>
+    <wheel_down>Wheel down</wheel_down>
+    <wheel_button>Wheel button</wheel_button>
+    <mfd1>MFD 1</mfd1>
+    <mfd2>MFD 2</mfd2>
+    <mfd3>MFD 3</mfd3>
+    <slider>Slider</slider>
+    <aux1>Aux mode 1</aux1>
+    <aux2>Aux mode 2</aux2>
+    <aux3>Aux mode 3</aux3>
+    <axisz>Axis Z</axisz>
+    <axisr>Axis R</axisr>
+    <axisrx>Axis Rx</axisrx>
+    <axisry>Axis Ry</axisry>
+    <!--Properties-->
+    <axis_configuration>Axis configuration</axis_configuration>
+    <work_as>Work as:</work_as>
+    <none>None</none>
+    <mousex>Mouse X</mousex>
+    <mousey>Mouse Y</mousey>
+    <inverted>Inverted</inverted>
+    <sensibility_curve>Sensibility curve</sensibility_curve>
+    <mouse_sensibility>Mouse sensibility:</mouse_sensibility>
+    <digital_function>Digital functionality</digital_function>
+    <incremental>Incremental</incremental>
+    <bands>Bands</bands>
+    <resistance_inc>Resistance inc.:</resistance_inc>
+    <resistance_dec>Resistance dec.:</resistance_dec>
+    <edit_bands>Edit bands</edit_bands>
+    <button_configuration>Button configuration</button_configuration>
+    <updown>Up/Down</updown>
+    <toggle>Toggle</toggle>
+    <assign_to_pov>Assign to POV</assign_to_pov>
+    <assign_to_pinkie>Assign to Pinkie</assign_to_pinkie>
+    <assign_to_modes>Assign to Modes</assign_to_modes>
+    <pinkie_text>This will assign the default pinkie button to the pinkie mode selector. It will add any required macros and will overwrite the configuration of the button.</pinkie_text>
+    <modes_text>This will assign the default mode buttons as the mode selectors. It will add any required macros and will overwrite the configuration of the 3 buttons.</modes_text>
+    <pov_text>This function will assign the current POV to the selected DirectX POV (and only to the current mode). It will add any required macros and will overwrite any configuration of the 8 POV positions with the DirectX POV positions.</pov_text>
+    <directx_pov>DirectX POV:</directx_pov>
+    <positions>Positions:</positions>
+    <assigned_macros>Assigned commands/macros</assigned_macros>
+    <pressed>Pressed</pressed>
+    <raised>Raised</raised>
+    <increment>Increment</increment>
+    <decrement>Decrement</decrement>
+    <position>Position:</position>
+    <macro_configuration>Macro configuration</macro_configuration>
+    <add>Add</add>
+    <edit>Edit</edit>
+    <delete>Delete</delete>
+    <!--Menssages-->
+    <warning>Warning</warning>
+    <ok>OK</ok>
+    <save_changes>Do you want to save changes?</save_changes>
+    <save_before_launch>Changes must be saved before launch. Continue?</save_before_launch>
+    <error_reading_file>Error reading file.</error_reading_file>
+    <error_opening_device>Error opening device.</error_opening_device>
+    <error_accessing_device>Error accessing device.</error_accessing_device>
+    <error_open_xhp>Couldn't open the profile.</error_open_xhp>
+    <load_ok>Profile correctly loaded.</load_ok>
+    <error_opening_file>Error opening file.</error_opening_file>
+    <error_writing_file>Error writing file.</error_writing_file>
+    <name_repeated>The macro name is repeated.</name_repeated>
+    <hold_and_repeat_in_macro>Hold and repeat commands cannot be in the same macro.</hold_and_repeat_in_macro>
+    <cannot_be_inside_repeatn>You cannot insert a hold or repeat commmand inside a repeatn loop.</cannot_be_inside_repeatn>
+    <!--Common buttons-->
+    <accept>Accept</accept>
+    <cancel>Cancel</cancel>
+    <!--Mouse configuration-->
+    <mouse_text>This control is used to delay the mouse movement. Higher values will move the mouse pointer slower and lower values will move it faster. The preferred way to do this is by using the mouse sensibility control, but if you need more precision you may need to modify this value.</mouse_text>
+    <!--Mode editor-->
+    <pinkie_activate>Activate Pinkie mode</pinkie_activate>
+    <pinkie_name>Pinkie name:</pinkie_name>
+    <pinkie_default>Pinkie</pinkie_default>
+    <modes>Modes</modes>
+    <modes_activate>Activate modes</modes_activate>
+    <mode1_name>Mode 1 name:</mode1_name>
+    <mode1_default>Mode 1</mode1_default>
+    <mode2_name>Mode 2 name:</mode2_name>
+    <mode2_default>Mode 2</mode2_default>
+    <mode3_name>Mode 3 name:</mode3_name>
+    <mode3_default>Mode 3</mode3_default>
+    <aux_modes>Aux Modes</aux_modes>
+    <aux_activate>Activate aux modes</aux_activate>
+    <aux1_name>Aux mode 1 name:</aux1_name>
+    <aux1_default>AuxMode 1</aux1_default>
+    <aux2_name>Aux mode 2 name:</aux2_name>
+    <aux2_default>AuxMode 2</aux2_default>
+    <aux3_name>Aux mode 3 name:</aux3_name>
+    <aux3_default>AuxMode 3</aux3_default>
+    <!--Macro editor-->
+    <edit_macro>Edit macro</edit_macro>
+    <name>Name</name>
+    <advanced_mode>Advanced mode</advanced_mode>
+    <easy_mode>Easy mode</easy_mode>
+    <use_in_mfd>Use name in MFD (first 16 characters)</use_in_mfd>
+    <keyboard>Keyboard</keyboard>
+    <template>Template</template>
+    <key>Key</key>
+    <press>Press</press>
+    <release>Release</release>
+    <easy_config>Easy configuration</easy_config>
+    <normal>Normal</normal>
+    <repeat>Repeat</repeat>
+    <auxm1>Aux. 1</auxm1>
+    <auxm2>Aux. 2</auxm2>
+    <auxm3>Aux. 3</auxm3>
+    <commands>Commands</commands>
+    <delete_command>Del.</delete_command>
+    <special>Special</special>
+    <hold>Hold</hold>
+    <repeat_end>Repeat end</repeat_end>
+    <pause>Pause</pause>
+    <repeatn>Repeat N</repeatn>
+    <repeatn_end>RepeatN end</repeatn_end>
+    <mouse>Mouse</mouse>
+    <left>Left</left>
+    <center>Center</center>
+    <right>Right</right>
+    <up>Up</up>
+    <down>Down</down>
+    <wheel>Wheel</wheel>
+    <movement>Movement</movement>
+    <sensibility>Sensibility</sensibility>
+    <buttons>Buttons</buttons>
+    <button>Button:</button>
+    <povs>POVs</povs>
+    <pov>POV:</pov>
+    <light>Light</light>
+    <text>Text:</text>
+    <line>Line:</line>
+    <text_line>Text line</text_line>
+    <hour>Hour:</hour>
+    <minute>Minute:</minute>
+    <clock>Clock:</clock>
+    <date>Date</date>
+    <digit>Digit</digit>
+    <mfd_light>MFD Light</mfd_light>
+    <button_light>Buttons light</button_light>
+    <level>Level</level>
+  </Editor>
+</traduccion>

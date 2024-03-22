@@ -58,7 +58,7 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 			{
 				UINT16 pollAxis = static_cast<UINT16>(pHidData->Axis[idx++]);
 
-				if ((pollAxis < (jitt.PosChosen - jitt.Margin)) || (pollAxis > (jitt.PosChosen + jitt.Margin)))
+				if ((pollAxis == jitt.PosChosen) ||(pollAxis < (jitt.PosChosen - jitt.Margin)) || (pollAxis > (jitt.PosChosen + jitt.Margin)))
 				{
 					jitt.PosRepeated = 0;
 					jitt.PosChosen = pollAxis;
@@ -110,11 +110,11 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 
 					if (pollAxis < limit.Center)
 					{
-						if (width1 != (limit.Center - 0))
+						if (width1 != limit.Center)
 						{
 							if (pollAxis >= width1) { pollAxis = width1; }
 							pollAxis -= limit.Left;
-							pollAxis = ((pollAxis * (limit.Center - 0)) / width1);
+							pollAxis = ((pollAxis * limit.Center) / width1);
 						}
 					}
 					else

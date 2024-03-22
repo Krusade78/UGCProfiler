@@ -133,7 +133,11 @@ namespace Launcher
                     outputPipeSvc.Flush();
                 }
             }
-            else
+			else if (msj.StartsWith("DEF:"))
+			{
+                LoadProfile(null);
+			}
+			else
             {
                 LoadProfile(msj);
             }

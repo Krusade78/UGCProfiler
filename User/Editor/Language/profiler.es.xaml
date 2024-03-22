@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- #region Messages -->
+    <x:String x:Key="error">Error</x:String>
+    <x:String x:Key="warning">Advertencia</x:String>
+    <x:String x:Key="do you want to save changes?">¿Quieres guardar los cambios?</x:String>
+    <x:String x:Key="profile filter">"Perfil (.xhp)|*.xhp"</x:String>
+    <x:String x:Key="profile_name">nombre_perfil</x:String>
+    <x:String x:Key="save title">"Editor de perfiles -</x:String>
+    <x:String x:Key="profile launched ok">Perfil cargado correntamente.</x:String>
+    <!--#endregion-->
+
+    <!--#region MessageBox-->
+    <x:String x:Key="ok">Aceptar</x:String>
+    <x:String x:Key="yes">Si</x:String>
+    <x:String x:Key="no">No</x:String>
+    <x:String x:Key="cancel">Cancelar</x:String>
+    <!--#endregion-->
+
+    <x:String x:Key="profiler">Editor de perfiles</x:String>
+
+    <!--#region Menu bar -->
+    <x:String x:Key="new">Nuevo</x:String>
+    <x:String x:Key="open">Abrir</x:String>
+    <x:String x:Key="save">Guardar</x:String>
+    <x:String x:Key="save_as">Guardar como...</x:String>
+    <x:String x:Key="launch">Cargar</x:String>
+    <x:String x:Key="reset">Reset</x:String>
+    <x:String x:Key="mouse_conf">Conf. ratón</x:String>
+    <x:String x:Key="calibrate">Calibrar</x:String>
+    <x:String x:Key="profile">Perfil</x:String>
+    <x:String x:Key="devices">Dispositivos</x:String>
+    <x:String x:Key="refresh">Actualizar</x:String>
+    <x:String x:Key="view">Vista</x:String>
+    <x:String x:Key="edit">Editar</x:String>
+    <x:String x:Key="list">Lista</x:String>
+    <x:String x:Key="current_mode">Modo actual</x:String>
+    <x:String x:Key="mode">Modo</x:String>
+    <x:String x:Key="submode">Submodo</x:String>
+    <!-- #endregion -->
+
+    <!--#region Devices -->
+    <x:String x:Key="unable to register raw input device">No se puedo el disposito de entrada en bruto</x:String>
+    <x:String x:Key="device_list">Lista de dispositivos</x:String>
+    <!--#endregion-->
+
+    <!--#region Profile -->
+    <x:String x:Key="profile none">&lt;/------- Ninguna -------/&gt;</x:String>
+    <!--#endregion-->
+
+</ResourceDictionary>

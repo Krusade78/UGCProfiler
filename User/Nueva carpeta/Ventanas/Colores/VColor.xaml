@@ -1,0 +1,225 @@
+﻿<Window x:Class="Ventanas.VColor" x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Ventanas.Colores"
+        Title="Color" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" Loaded="Window_Loaded" >
+    <Window.Background>
+        <ImageBrush ImageSource="/Editor;component/res/CalibrationGrid.JPG"/>
+    </Window.Background>
+    <Grid>
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#E0323232" Offset="1"/>
+                <GradientStop Color="#E0666666"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+        <Grid x:Name="colores" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="177" />
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
+            <Border BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" BorderThickness="1">
+                <Border Name="PART_ColorDetail" Width="200" Height="177" Cursor="Cross" Loaded="PART_ColorDetail_Loaded" MouseDown="PART_ColorDetail_MouseDown" MouseMove="PART_ColorDetail_MouseMove">
+                    <Border.Background>
+                        <DrawingBrush x:Name="dbFondo">
+                            <DrawingBrush.Drawing>
+                                <DrawingGroup>
+                                    <GeometryDrawing>
+                                        <GeometryDrawing.Geometry>
+                                            <RectangleGeometry Rect="0,0,100,100" />
+                                        </GeometryDrawing.Geometry>
+                                        <GeometryDrawing.Brush>
+                                            <SolidColorBrush Color="{Binding ElementName=PART_ColorSlider, Path=SelectedColor}" />
+                                        </GeometryDrawing.Brush>
+                                    </GeometryDrawing>
+                                    <GeometryDrawing>
+                                        <GeometryDrawing.Geometry>
+                                            <RectangleGeometry Rect="0,0,100,100" />
+                                        </GeometryDrawing.Geometry>
+                                        <GeometryDrawing.Brush>
+                                            <LinearGradientBrush StartPoint="0.5,1" EndPoint="0.5,0">
+                                                <GradientStop Offset="0.0" Color="Black" />
+                                                <GradientStop Offset="1.0" Color="{Binding ElementName=PART_ColorSlider,Path=SelectedColor}" />
+                                            </LinearGradientBrush>
+                                        </GeometryDrawing.Brush>
+                                    </GeometryDrawing>
+                                    <DrawingGroup>
+                                        <GeometryDrawing>
+                                            <GeometryDrawing.Geometry>
+                                                <RectangleGeometry Rect="0,0,100,100" />
+                                            </GeometryDrawing.Geometry>
+                                            <GeometryDrawing.Brush>
+                                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                    <GradientStop Offset="0.0" Color="White" />
+                                                    <GradientStop Offset="1" Color="Black" />
+                                                </LinearGradientBrush>
+                                            </GeometryDrawing.Brush>
+                                        </GeometryDrawing>
+                                        <DrawingGroup.OpacityMask>
+                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                <GradientStop Offset="0.0" Color="#FF000000" />
+                                                <GradientStop Offset="1" Color="#00000000" />
+                                            </LinearGradientBrush>
+                                        </DrawingGroup.OpacityMask>
+                                    </DrawingGroup>
+                                </DrawingGroup>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Border.Background>
+                    <Path Name="PART_ColorMarker" StrokeThickness="2" Cursor="Cross" Fill="Transparent">
+                        <Path.Data>
+                            <EllipseGeometry RadiusX="7" RadiusY="7"  />
+                        </Path.Data>
+                        <Path.Stroke>
+                            <SolidColorBrush x:Name="markerBrush" Color="White" />
+                        </Path.Stroke>
+                    </Path>
+                </Border>
+            </Border>
+
+            <local:SliderColor x:Name="PART_ColorSlider" Grid.Column="1" Width="28" Margin="1,2" ValueChanged="PART_ColorSlider_ValueChanged" />
+
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="63" />
+                    <ColumnDefinition Width="25" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="24" />
+                </Grid.RowDefinitions>
+
+                <Label Content="R" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                <Label Content="G" Padding="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                <Label Content="B" Padding="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+
+                <Grid Grid.Column="1">
+                    <Slider x:Name="sldR" IsSnapToTickEnabled="True" Maximum="255" LargeChange="64" SmallChange="32" TickPlacement="TopLeft" Height="10" VerticalAlignment="Bottom" Margin="1,0,1,1" ValueChanged="Sld_ValueChanged" />
+                    <Rectangle Margin="5,7" Stroke="Black" Name="rectR" MouseMove="RectR_MouseMove" MouseUp="RectR_MouseUp">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Offset="0.0" Color="Black" />
+                                <GradientStop Offset="1.0" Color="#FFFF0000" />
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Grid>
+                <TextBox x:Name="txtR" Text="{Binding ElementName=sldR, Path=Value, Mode=TwoWay}" Grid.Column="2" FontSize="9" Height="17" TextAlignment="Center" Background="Black" Foreground="White"/>
+
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Slider x:Name="sldG" IsSnapToTickEnabled="True" Maximum="255" LargeChange="64" SmallChange="32" TickPlacement="TopLeft" Height="10" VerticalAlignment="Bottom" Margin="1,0,1,1" ValueChanged="Sld_ValueChanged" />
+                    <Rectangle Margin="5,7" Stroke="Black" Name="rectG" MouseMove="RectG_MouseMove" MouseUp="RectG_MouseUp">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Offset="0.0" Color="Black" />
+                                <GradientStop Offset="1.0" Color="#FF00FF00" />
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Grid>
+                <TextBox Height="17" TextAlignment="Center" x:Name="txtG" Padding="0" Text="{Binding ElementName=sldG, Path=Value, Mode=TwoWay}" Grid.Column="2" Grid.Row="1" FontSize="9" VerticalContentAlignment="Center" Foreground="White" Background="Black" />
+
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Slider x:Name="sldB" IsSnapToTickEnabled="True" Maximum="255" LargeChange="64" SmallChange="32" TickPlacement="TopLeft" Height="10" VerticalAlignment="Bottom" Margin="1,0,1,1" ValueChanged="Sld_ValueChanged" />
+                    <!--<Border BorderThickness="1" BorderBrush="Black" Margin="5,7" />-->
+                    <Rectangle Margin="5,7" Name="rectB" Stroke="Black" MouseMove="RectB_MouseMove" MouseUp="RectB_MouseUp">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Offset="0.0" Color="Black" />
+                                <GradientStop Offset="1.0" Color="#FF0000FF" />
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Grid>
+                <TextBox Height="17" TextAlignment="Center" x:Name="txtB" Padding="0" Text="{Binding ElementName=sldB, Path=Value,Mode=TwoWay}" Grid.Column="2" Grid.Row="2" FontSize="9" VerticalContentAlignment="Center" Background="Black" Foreground="White" />
+
+                <Label Content="Predefinido:" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.ColumnSpan="3" Foreground="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+
+                <ComboBox Grid.ColumnSpan="3" Grid.Row="5" HorizontalAlignment="Left" Name="cbPredefinidos" VerticalAlignment="Top" FontSize="10" Margin="4,0" SelectedIndex="0" SelectionChanged="CbPredefinidos_SelectionChanged">
+                    <ComboBoxItem Tag="FF000000">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="Black" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF808080">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF808080" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFA4A4A4">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFA4A4A4" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFBF0201">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFBF0201" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFFF0302">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFFF0302" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFFEBF14">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFFEBF14" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFFDFE1F">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFFDFE1F" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF90CF53">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF90CF53" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF00AF52">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF00AF52" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF0AB0EE">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF0AB0EE" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF0870BE">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF0870BE" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF02205F">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF02205F" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF70319E">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF70319E" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFEDEBE0">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFEDEBE0" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF1F497C">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF1F497C" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF4F81BC">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF4F81BC" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFBF4F4C">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFBF4F4C" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF9ABA5A">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF9ABA5A" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF8064A1">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF8064A1" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FF4BABC5">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FF4BABC5" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="FFF69547">
+                        <Rectangle Width="60" Height="12" Stroke="Black" Fill="#FFF69547" />
+                    </ComboBoxItem>
+                </ComboBox>
+            </Grid>
+
+            <TextBox Grid.Row="1" Margin="0,2,0,0" Height="22" Width="93" HorizontalAlignment="Left" Name="txtColor" VerticalAlignment="Center" Padding="33,2,0,0" MaxLength="8" CharacterCasing="Upper" TextChanged="TxtColor_TextChanged" Background="Black" Foreground="#FFE4E4E4" SelectionTextBrush="#FF575757" />
+            <TextBlock Text="#" HorizontalAlignment="Left" Margin="28,7,0,0" VerticalAlignment="Top" Grid.RowSpan="2" Grid.Row="1" Foreground="White" />
+            <Border Grid.Row="1"  Height="15" Width="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,6,0,0" Background="White" BorderThickness="1" BorderBrush="Black">
+                <Rectangle Name="rSeleccionado" StrokeThickness="0" />
+            </Border>
+        </Grid>
+        <Button Content="Aceptar" Grid.Column="1" Height="23" Background="Linen" Foreground="#FF762626" HorizontalAlignment="Right" Margin="0,210,90,10" VerticalAlignment="Top" Width="75" Click="BtAceptar_Click" />
+        <Button Content="Cancelar" Grid.Column="1" Height="23" Background="Linen" Foreground="#FF762626" HorizontalAlignment="Right" Margin="0,210,10,10" VerticalAlignment="Top" Width="75" IsCancel="True" />
+    </Grid>
+</Window>
