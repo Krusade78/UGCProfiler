@@ -9,6 +9,8 @@ namespace Shared
 
         public Dictionary<uint, ButtonMapModel> ButtonsMap { get; set; } = []; //JoyId key
 
+        public Dictionary<uint, ButtonMapModel> HatsMap { get; set; } = []; //JoyId key, Hat = button Id / 8, 8 positions per Hat 0-7,8-15,16-23,24-31
+
         public Dictionary<uint, AxisMapModel> AxesMap { get; set; } = []; //JoyId key
 
         public List<MacroModel> Macros { get; set; } = [];
@@ -40,13 +42,13 @@ namespace Shared
                 {
                     public byte Mouse { get; set; } = 1;
                     public byte IdJoyOutput { get; set; }
-                    public byte Type {  get; set; }
+                    public byte Type {  get; set; } //Mapped in bits 0:none, 1:Normal, 10:Inverted, 100:Mini, 1000:Mouse, 10000:Incremental, 100000: Bands
                     public byte OutputAxis { get; set; }
                     public byte[] Sensibility { get; set; } = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
                     public bool IsSensibilityForSlider { get; set; }
-                    public List<byte> Bands { get; set; } = []; //band position %
+                    public List<byte> Zones { get; set; } = []; //zone position %
                     public List<ushort> Actions { get; set; } = []; //macro index
-                    public (byte, byte) Toughness { get; set; } = (1, 1);//increment/decrement type
+                    public (byte, byte) Resistance { get; set; } = (1, 1);//increment/decrement type
                 }
             }
 
@@ -58,6 +60,29 @@ namespace Shared
             public ushort Id { get; set; }
             public string Name { get; set; }
             public List<uint> Commands { get; set; } = [];
+        }
+
+        public List<DeviceInfo> DevicesIncluded { get; set; } = [];
+        public class DeviceInfo
+        {
+            public class CUsage
+            {
+                public ushort ReportId { get; set; }
+                public ushort ReportIdx { get; set; }
+                public byte Id { get; set; }
+                public byte Type { get; set; }
+                public byte Bits { get; set; }
+                public ushort Range { get; set; }
+            }
+
+            public uint Id { get; set; }
+            public string Name { get; set; }
+
+            public byte NAxes { get; set; }
+            public byte NHats { get; set; }
+            public ushort NButtons { get; set; }
+
+            public List<CUsage> Usages { get; } = []; //sorted by idx
         }
     }
 }

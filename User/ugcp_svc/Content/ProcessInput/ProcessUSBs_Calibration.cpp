@@ -88,7 +88,6 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 		idx = 0;
 		for (auto const& limit : plimit->second)
 		{
-			if (limit.Cal)
 			{
 				UINT16 pollAxis = static_cast<UINT16>(pHidData->Axis[idx]);
 				UINT16 width1, width2;

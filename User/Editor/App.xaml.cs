@@ -12,6 +12,7 @@ namespace Profiler
 	{
 		private readonly bool duplicated = false;
 		private MainWindow m_window;
+		public static readonly System.Text.Json.JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
 
 		public MainWindow GetMainWindow() => m_window;
 
@@ -57,7 +58,8 @@ namespace Profiler
 				m_window = new MainWindow();
 				if (m_window.AppWindow is not null)
 				{
-					Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(m_window)), Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
+                    m_window.AppWindow.Resize(new() { Width = 1700, Height = 1040 });
+                    Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(m_window)), Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
 					if (displayArea is not null)
 					{
 						m_window.AppWindow.Move(new()
@@ -65,7 +67,7 @@ namespace Profiler
 							X = (displayArea.WorkArea.Width - m_window.AppWindow.Size.Width) / 2,
 							Y = ((displayArea.WorkArea.Height - m_window.AppWindow.Size.Height) / 2)
 						});
-					}
+                    }
 				}
 				//Icon   res/Editor.ico
 				//this.AppWindow.SetIcon

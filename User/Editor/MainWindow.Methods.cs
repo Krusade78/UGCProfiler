@@ -44,6 +44,7 @@ namespace Profiler
 
 			this.Title = $"{Translate.Get("save title")} [---]";
 			profilePath = "";
+			btSave.IsEnabled = true;
 		}
 
 		private async void Open(string filename = null)
@@ -67,7 +68,7 @@ namespace Profiler
 				dlg.FileTypeFilter.Add(Translate.Get("profile filter"));
 				Windows.Storage.StorageFile file = await dlg.PickSingleFileAsync();
 				if (file != null)
-					filename = file.Path + file.Name;
+					filename = file.Path;
 			}
 			if (filename != null)
 			{
@@ -75,16 +76,15 @@ namespace Profiler
 				{
 					tbEdit.IsChecked = false;
 					tbList.IsChecked = false;
-					cbPinkie.SelectedIndex = 0;
-					cbModo.SelectedIndex = 0;
 					if (CurrentSection != Section.Calibrate)
 					{
 						CurrentSection = Section.None;
-						ctlDevs.Refresh();
+						mainFrame.Refresh(Section.None);
 					}
 
 					profilePath = filename;
 					this.Title = $"{Translate.Get("save title")} [{System.IO.Path.GetFileNameWithoutExtension(filename)}]";
+					btSave.IsEnabled = true;
 				}
 			}
 		}
@@ -107,9 +107,9 @@ namespace Profiler
 			Windows.Storage.StorageFile file = await dlg.PickSaveFileAsync();
 			if (file != null)
 			{
-				if (await data.Save(file.Path + file.Name))
+				if (await data.Save(file.Path))
 				{
-					profilePath = file.Path + file.Name;
+					profilePath = file.Path;
 					this.Title = $"{Translate.Get("save title")} [{System.IO.Path.GetFileNameWithoutExtension(file.DisplayName)}]";
 					return true;
 				}
@@ -138,12 +138,6 @@ namespace Profiler
 			{
 				await MessageBox.Show(Translate.Get("profile launched ok"), "Launcher", MessageBoxButton.OK, MessageBoxImage.Information);
 			}
-		}
-
-		public void GetMode(ref byte pinkie, ref byte modo)
-		{
-			pinkie = (byte)cbPinkie.SelectedIndex;
-			modo = (byte)cbModo.SelectedIndex;
 		}
 	}
 }

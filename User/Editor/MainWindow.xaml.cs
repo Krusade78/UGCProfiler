@@ -6,6 +6,7 @@ namespace Profiler
 	public sealed partial class MainWindow : Window
 	{
 		private bool exit;
+		private readonly Pages.Main mainFrame = new();
 		public Grid Root { get => root; }
 		public enum Section : byte
 		{
@@ -15,7 +16,8 @@ namespace Profiler
 			View,
 		}
 		
-		public Section CurrentSection { get; private set; } = Section.None;
+		private Section CurrentSection { get; set; } = Section.None;
+		private bool forceToggle = false;
 
 		public MainWindow()
 		{
@@ -37,6 +39,10 @@ namespace Profiler
 			{
 				this.Close();
 			}
+			else
+			{
+				ctlDevs.SetMainFrame(mainFrame);
+			}
 		}
 
 		private void Window_Closing(Microsoft.UI.Windowing.AppWindow sender, Microsoft.UI.Windowing.AppWindowClosingEventArgs args)
@@ -50,27 +56,27 @@ namespace Profiler
 
 		private async void Exit()
 		{
-            if (data.Modified)
-            {
-                ContentDialogResult r = await MessageBox.Show(Translate.Get("do you want to save changes?"), Translate.Get("save"), MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-                if (r == ContentDialogResult.None)
-                {
-                    return;
-                }
-                else if (r == ContentDialogResult.Primary)
-                {
-                    if (!await Save())
-                    {
-                        return;
-                    }
-                }
-            }
-            await CLauncherPipe.SetRawMode(false, true);
-            await CLauncherPipe.SetCalibrationMode(false, true);
-            ctlDevs.Dispose();
+			if (data.Modified)
+			{
+				ContentDialogResult r = await MessageBox.Show(Translate.Get("do you want to save changes?"), Translate.Get("save"), MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+				if (r == ContentDialogResult.None)
+				{
+					return;
+				}
+				else if (r == ContentDialogResult.Primary)
+				{
+					if (!await Save())
+					{
+						return;
+					}
+				}
+			}
+			await CLauncherPipe.SetRawMode(false, true);
+			await CLauncherPipe.SetCalibrationMode(false, true);
+			ctlDevs.Dispose();
 			exit = true;
 			Close();
-        }
+		}
 
 		#region "File"
 		private void RibbonButtonNew_Click(object sender, RoutedEventArgs e)
@@ -104,22 +110,19 @@ namespace Profiler
 		#endregion
 
 		#region Devices
-		private void ButtonMouseConf_Click(object sender, RoutedEventArgs e)
+		private async void ButtonMouseConf_Click(object sender, RoutedEventArgs e)
 		{
-			//VMouseConfig v = new()
-			//{
-			//	Owner = this
-			//};
-			//if (v.ShowDialog() == true)
-			//	GetData().Modified = true;
+			await Dialogs.MouseConfig.Show(this);
 		}
 
 		private void TbCalibrate_Checked(object sender, RoutedEventArgs e)
 		{
+			forceToggle = true;
 			tbList.IsChecked = false;
 			tbEdit.IsChecked = false;
-			CurrentSection = Section.Calibrate;
-			ctlDevs.Refresh();
+			forceToggle = false;
+			CurrentSection = tbCalibrate.IsChecked == true ? Section.Calibrate : Section.None;
+            mainFrame.Refresh(CurrentSection);
 			
 		}
 		#endregion
@@ -127,26 +130,32 @@ namespace Profiler
 		#region "View"
 		private void FtbEdit_Checked(object sender, RoutedEventArgs e)
 		{
+			forceToggle = true;
 			tbCalibrate.IsChecked = false;
 			tbList.IsChecked = false;
+			forceToggle = false;
 			CurrentSection = Section.Edit;
-			ctlDevs.Refresh();
+			mainFrame.Refresh(Section.Edit);
 		}
 		private void FtbList_Checked(object sender, RoutedEventArgs e)
 		{
+			forceToggle = true;
 			tbCalibrate.IsChecked = false;
 			tbEdit.IsChecked = false;
+			forceToggle = false;
 			CurrentSection = Section.View;
-			ctlDevs.Refresh();
+			mainFrame.Refresh(Section.View);
 		}
-		#endregion
 
-		private void FcbMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (this.root.IsLoaded)
+        private void TbUnchecked(object sender, RoutedEventArgs e)
+        {
+			if (!forceToggle)
 			{
-				ctlDevs.Refresh();
-			}
-		}
+                CurrentSection = Section.None;
+                mainFrame.Refresh(CurrentSection);
+            }
+        }
+
+        #endregion
 	}
 }

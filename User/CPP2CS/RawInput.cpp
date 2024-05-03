@@ -1,5 +1,9 @@
 #include "RawInput.h"
 #include <strsafe.h>
+#include <winternl.h>
+#include <hidusage.h>
+#include <hidpi.h>
+typedef unsigned __int64 QWORD;
 #pragma managed
 
 CPP2CS::RawInput::RawInput(CPP2CS::WndProcCallback^ callback)
@@ -29,32 +33,35 @@ void CPP2CS::RawInput::Call(System::String^ hidInterface, array<System::Byte>^ d
 }
 
 #pragma unmanaged
-LRESULT CALLBACK URawInput::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+void URawInput::ProcessRawInput()
 {
-	switch (message)
-	{
-	case WM_NCCREATE:
-		return 1;
-	case WM_CLOSE:
-		DestroyWindow(hWnd);
-		return 0;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-	case 0xFF:
-	{
 		UINT size = 0;
 
-		GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &size, sizeof(RAWINPUTHEADER));
-		if (size != 0)
+		if (GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER)) != 0)
 		{
-			BYTE* buff = new BYTE[size];
+			Sleep(100);
+			return;
+		}
+		if (size == 0)
+		{
+			Sleep(50);
+			return;
+		}
+		size *= 128; // up to 128 messages
 
-			UINT outSize = GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, buff, &size, sizeof(RAWINPUTHEADER));
-			if (outSize == size)
+		PRAWINPUT pRawInput = reinterpret_cast<PRAWINPUT>(new BYTE[size]);
+		while(true)
+		{
+			UINT sizeT = size;
+			UINT nInput = GetRawInputBuffer(pRawInput, &sizeT, sizeof(RAWINPUTHEADER));
+			if (nInput <= 0)
 			{
-				RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(buff);
+				break;
+			}
 
+			RAWINPUT* raw = pRawInput;
+			for (; nInput > 0; nInput--)
+			{
 				wchar_t pName[256]{};
 				UINT cbSize = 256 * sizeof(wchar_t);
 				GetRawInputDeviceInfoW(raw->header.hDevice, RIDI_DEVICENAME, pName, &cbSize);
@@ -70,70 +77,101 @@ LRESULT CALLBACK URawInput::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 							UINT32 deviceId = static_cast<UINT32>(wcstol(&pName[12], NULL, 16)) << 16;
 							deviceId |= static_cast<UINT32>(wcstol(&pName[21], NULL, 16));
 
-							URawInput* ptr = reinterpret_cast<URawInput*>(GetWindowLongPtrW(hWnd, GWLP_USERDATA));
-							ptr->Call(cmps, size - 1, raw->data.hid.bRawData, raw->data.hid.dwSizeHid);
+							UINT ppdSize = 0;
+							GetRawInputDeviceInfoW(raw->header.hDevice, RIDI_PREPARSEDDATA, NULL, &ppdSize);
+							BYTE* ppdBuffer = new BYTE[ppdSize];
+							cbSize = ppdSize;
+							if (GetRawInputDeviceInfoW(raw->header.hDevice, RIDI_PREPARSEDDATA, ppdBuffer, &cbSize) == ppdSize)
+							{
+								ULONG dataSize = 0;
+								if (HIDP_STATUS_BUFFER_TOO_SMALL == HidP_GetData(HidP_Input, NULL, &dataSize, reinterpret_cast<PHIDP_PREPARSED_DATA>(ppdBuffer), reinterpret_cast<PCHAR>(raw->data.hid.bRawData), raw->data.hid.dwSizeHid))
+								{
+									PHIDP_DATA data = new HIDP_DATA[dataSize];
+									if (HIDP_STATUS_SUCCESS == HidP_GetData(HidP_Input, data, &dataSize, reinterpret_cast<PHIDP_PREPARSED_DATA>(ppdBuffer), reinterpret_cast<PCHAR>(raw->data.hid.bRawData), raw->data.hid.dwSizeHid))
+									{
+										URawInput* ptr = reinterpret_cast<URawInput*>(GetWindowLongPtrW(hWnd, GWLP_USERDATA));
+										ptr->Call(cmps, size - 1, reinterpret_cast<BYTE*>(data), sizeof(HIDP_DATA) * dataSize);
+									}
+									delete[] data;
+								}
+							}
+							delete[] ppdBuffer;
 						}
 						catch (...) {}
 						delete[] cmps;
 					}
 				}
-			}
-			delete[] buff;
-		}
 
-		return 0;
-	}
-	default:
-		return 0;
-	}
+				raw = NEXTRAWINPUTBLOCK(raw);
+			}
+		}
+		delete[] reinterpret_cast<BYTE*>(pRawInput);
+		pRawInput = NULL;
 }
 
 void URawInput::Init(void* ptrm)
 {
 	this->ptrm = reinterpret_cast<msclr::gcroot<CPP2CS::RawInput^>*>(ptrm);
 
-	WNDCLASSW wc = { 0 };
-	wc.lpfnWndProc = WndProc;
-	wc.hInstance = GetModuleHandle(NULL);
-	wc.lpszClassName = L"UGCP RawInput";
-
-	RegisterClassW(&wc);
-	hWnd = CreateWindowW(L"UGCP RawInput", NULL, 0, 0, 0, 0, 0, HWND_MESSAGE, NULL, NULL, NULL);
-	if (hWnd != NULL)
+	hEvClose = CreateEventW(NULL, TRUE, FALSE, NULL);
+	if (hEvClose != NULL)
 	{
-		SetWindowLongPtrW(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-
-		RAWINPUTDEVICE* rdev = new RAWINPUTDEVICE[2];
-		rdev[0].usUsagePage = 0x01;
-		rdev[0].usUsage = 0x04;
-		rdev[0].hwndTarget = hWnd;
-		rdev[0].dwFlags = 0;
-		rdev[1].usUsagePage = 0x01;
-		rdev[1].usUsage = 0x05;
-		rdev[1].hwndTarget = hWnd;
-		rdev[1].dwFlags = 0;
-
-		if (!RegisterRawInputDevices(rdev, 1, sizeof(RAWINPUTDEVICE)))
+		hWnd = CreateWindowExW(0, L"STATIC", NULL, 0, 0, 0, 0, 0, HWND_MESSAGE, NULL, GetModuleHandle(NULL), NULL);
+		if (hWnd != NULL)
 		{
+			SetWindowLongPtrW(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+
+			RAWINPUTDEVICE* rdev = new RAWINPUTDEVICE[2];
+			rdev[0].usUsagePage = 0x01;
+			rdev[0].usUsage = 0x04;
+			rdev[0].hwndTarget = hWnd;
+			rdev[0].dwFlags = 0;
+			rdev[1].usUsagePage = 0x01;
+			rdev[1].usUsage = 0x05;
+			rdev[1].hwndTarget = hWnd;
+			rdev[1].dwFlags = 0;
+
+			if (!RegisterRawInputDevices(rdev, 1, sizeof(RAWINPUTDEVICE)))
+			{
+				DestroyWindow(hWnd);
+				return;
+			}
+
+			while (true)
+			{
+				if (WaitForSingleObject(hEvClose, 0) == WAIT_OBJECT_0)
+				{
+					break;
+				}
+				DWORD ret = MsgWaitForMultipleObjects(1, &hEvClose, 0, INFINITE, QS_RAWINPUT);
+				if (ret != (WAIT_OBJECT_0 + 1))
+				{
+					break;
+				}
+				else
+				{
+					ProcessRawInput();
+				}
+			}
+
 			DestroyWindow(hWnd);
-			return;
+			hWnd = NULL;
 		}
 
-		MSG msg;
-		while (GetMessageW(&msg, NULL, 0, 0) != 0)
-		{
-			DispatchMessage(&msg);
-		}
-
-		hWnd = NULL;
+		ResetEvent(hEvClose);
 	}
 }
 
 void URawInput::Close() const
 {
-	if (hWnd != NULL)
+	if (hEvClose != NULL)
 	{
-		SendMessageW(hWnd, WM_CLOSE, 0, 0);
+		SetEvent(hEvClose);
+		while (WaitForSingleObject(hEvClose, 500) == WAIT_OBJECT_0)
+		{
+			Sleep(100);
+		}
+		CloseHandle(hEvClose);
 	}
 }
 #pragma managed

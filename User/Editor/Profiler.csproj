@@ -19,40 +19,17 @@
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <Compile Remove="KeyTemplates\**" />
-    <Compile Remove="Ventanas\**" />
-    <Content Remove="KeyTemplates\**" />
-    <Content Remove="Ventanas\**" />
-    <EmbeddedResource Remove="KeyTemplates\**" />
-    <EmbeddedResource Remove="Ventanas\**" />
-    <None Remove="KeyTemplates\**" />
-    <None Remove="Ventanas\**" />
-    <Page Remove="KeyTemplates\**" />
-    <Page Remove="Ventanas\**" />
-    <PRIResource Remove="KeyTemplates\**" />
-    <PRIResource Remove="Ventanas\**" />
-  </ItemGroup>
-	
+    
+ 
   <ItemGroup>
     <Compile Remove="Calibrator\Info.xaml.cs" />
+	  <Page Remove="Calibrator\Info.xaml" />
   </ItemGroup>
-	
-  <ItemGroup>
-    <None Remove="Controls\CtlDevices.NavItem.xaml" />
-  </ItemGroup>
-    
+     
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
     
-  <ItemGroup>
-    <Page Remove="Calibrator\Info.xaml" />
-    <Page Remove="Themes\EstiloPorDefecto.xaml" />
-    <Page Remove="Themes\Generic.xaml" />
-  </ItemGroup>
-
   <ItemGroup>
     <Content Include="Language\profiler.es.xaml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -60,10 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CPP2CS\CPP2CS.vcxproj">
-      <Private></Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Shrared\Shared.csproj" />
     <Resource Include="Language\en.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -74,8 +47,6 @@
     <Resource Include="res\CompileHS.png" />
     <Resource Include="res\DeleteHS.png" />
     <EmbeddedResource Include="res\editor.ico" />
-    <None Include="Calibrator\Info.xaml.cs" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
     <Resource Include="res\f1.gif" />
     <Resource Include="res\f2.gif" />
     <Resource Include="res\f3.gif" />
@@ -94,6 +65,15 @@
     <Resource Include="res\x52t.png" />
   </ItemGroup>
 
+    <ImportGroup>
+		<ProjectReference Include="..\CPP2CS\CPP2CS.vcxproj">
+			<Private></Private>
+		</ProjectReference>
+		<ProjectReference Include="..\Shrared\Shared.csproj" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />        
+    </ImportGroup>
+
   <ItemGroup>
     <Compile Update="OldProfile\DSPerfil.Designer.cs">
       <CustomToolNamespace>OldProfile</CustomToolNamespace>
@@ -104,14 +84,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Controls\CtlDevices.NavItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <None Update="OldProfile\DSPerfil.xsd">
         <SubType>Designer</SubType>
         <CustomToolNamespace>OldProfile</CustomToolNamespace>
         <LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
         <Generator>MSDataSetGenerator</Generator>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Themes\" />
   </ItemGroup>
 </Project>

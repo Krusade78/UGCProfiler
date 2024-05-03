@@ -26,22 +26,22 @@ namespace Profiler
 
 		private static async System.Threading.Tasks.Task<bool> SendAsync(string msj, bool onClose = false)
 		{
-			using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
-			try
-			{
-				pipeClient.Connect(1000);
-				using System.IO.StreamWriter sw = new(pipeClient);
-				sw.WriteLine(msj);
-				sw.Flush();
-			}
-			catch (Exception ex)
-			{
-				if (!onClose)
-				{
-					await MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				}
-				return false;
-			}
+			//using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
+			//try
+			//{
+			//	pipeClient.Connect(1000);
+			//	using System.IO.StreamWriter sw = new(pipeClient);
+			//	sw.WriteLine(msj);
+			//	sw.Flush();
+			//}
+			//catch (Exception ex)
+			//{
+			//	if (!onClose)
+			//	{
+			//		await MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			//	}
+			//	return false;
+			//}
 
 			return true;
 		}

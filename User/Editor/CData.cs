@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Windows;
 using System.Collections.Generic;
 using Shared;
-using System.IO.Packaging;
 //using System.Windows.Media.Imaging;
-using System.Data.Common;
 
 namespace Profiler
 {
-	class CDatos : IDisposable
+    class CDatos : IDisposable
 	{
 		public ProfileModel Profile { get; private set; } = new();
 		public bool Modified { get; set; } = false;
@@ -156,7 +153,11 @@ namespace Profiler
 			foreach (OldProfile.DSPerfil.MAPABOTONESRow br in old.MAPABOTONES)
 			{
 				byte size = br.TamIndices;
-				uint joyId = GetId((OldProfile.CTipos.TipoJoy)br.idJoy);
+				uint joyId = GetId((OldProfile.Types.JoyType)br.idJoy);
+				if (size == 0)
+				{
+					size = 2;
+				}
 				for (byte i = 0; i < size; i++)
 				{
 					OldProfile.DSPerfil.INDICESBOTONESRow ibr = old.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(br.idJoy, br.idPinkie, br.idModo, br.idBoton, i);
@@ -177,6 +178,7 @@ namespace Profiler
 							bm = new();
 							mm.Buttons.Add((byte)ibr.idBoton, bm);
 						}
+						bm.Type = (byte)(br.TamIndices == 0 ? 0 : 1);
 						bm.Actions.Add(ibr.idAccion);
 					}
 				}
@@ -184,7 +186,7 @@ namespace Profiler
 
 			foreach (OldProfile.DSPerfil.MAPAEJESRow er in old.MAPAEJES)
 			{
-				uint joyId = GetId((OldProfile.CTipos.TipoJoy)er.idJoy);
+				uint joyId = GetId((OldProfile.Types.JoyType)er.idJoy);
 				if (!Profile.AxesMap.TryGetValue(joyId, out ProfileModel.AxisMapModel amm))
 				{
 					amm = new();
@@ -206,8 +208,8 @@ namespace Profiler
 				am.OutputAxis = er.Eje;
 				er.Sensibilidad.CopyTo(am.Sensibility, 0);
 				am.IsSensibilityForSlider = er.Slider == 1;
-				am.Bands = [.. er.Bandas];
-				am.Toughness = (er.ResistenciaInc, er.ResistenciaDec);
+				am.Zones = [.. er.Bandas];
+				am.Resistance = (er.ResistenciaInc, er.ResistenciaDec);
 
 				for (byte i= 0; i <= byte.MaxValue; i++)
 				{
@@ -223,43 +225,47 @@ namespace Profiler
 				}
 			}
 
-			//foreach (OldProfile.DSPerfil.MAPASETASRow br in old.MAPASETAS)
-			//{
-			//	byte size = br.TamIndices;
-			//	uint joyId = GetId((OldProfile.CTipos.TipoJoy)br.idJoy);
-			//	for (byte i = 0; i < size; i++)
-			//	{
-			//		OldProfile.DSPerfil.INDICESBOTONESRow ibr = old.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(br.idJoy, br.idPinkie, br.idModo, br.idBoton, i);
-			//		if (ibr != null)
-			//		{
-			//			if (!Profile.ButtonsMap.TryGetValue(joyId, out ProfileModel.ButtonMapModel bmm))
-			//			{
-			//				bmm = new();
-			//				Profile.ButtonsMap.Add(joyId, bmm);
-			//			}
-			//			if (!bmm.Modes.TryGetValue((byte)((ibr.idPinkie << 4) | ibr.idModo), out ProfileModel.ButtonMapModel.ModeModel mm))
-			//			{
-			//				mm = new();
-			//				bmm.Modes.Add((byte)((ibr.idPinkie << 4) | ibr.idModo), mm);
-			//			}
-			//			if (!mm.Buttons.TryGetValue((byte)ibr.idBoton, out ProfileModel.ButtonMapModel.ModeModel.ButtonModel bm))
-			//			{
-			//				bm = new();
-			//				mm.Buttons.Add((byte)ibr.idBoton, bm);
-			//			}
-			//			bm.Actions.Add(ibr.idAccion);
-			//		}
-			//	}
-			//}
-
+			foreach (OldProfile.DSPerfil.MAPASETASRow br in old.MAPASETAS)
+			{
+				byte size = br.TamIndices;
+				uint joyId = GetId((OldProfile.Types.JoyType)br.idJoy);
+				if (size == 0)
+				{
+					size = 2;
+				}
+				for (byte i = 0; i < size; i++)
+				{
+					OldProfile.DSPerfil.INDICESSETASRow ibr = old.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(br.idJoy, br.idPinkie, br.idModo, br.IdSeta, i);
+					if (ibr != null)
+					{
+						if (!Profile.HatsMap.TryGetValue(joyId, out ProfileModel.ButtonMapModel bmm))
+						{
+							bmm = new();
+							Profile.HatsMap.Add(joyId, bmm);
+						}
+						if (!bmm.Modes.TryGetValue((byte)((ibr.idPinkie << 4) | ibr.idModo), out ProfileModel.ButtonMapModel.ModeModel mm))
+						{
+							mm = new();
+							bmm.Modes.Add((byte)((ibr.idPinkie << 4) | ibr.idModo), mm);
+						}
+						if (!mm.Buttons.TryGetValue((byte)ibr.idSeta, out ProfileModel.ButtonMapModel.ModeModel.ButtonModel bm))
+						{
+							bm = new();
+							mm.Buttons.Add((byte)ibr.idSeta, bm);
+						}
+						bm.Type = (byte)(br.TamIndices == 0 ? 0 : 1);
+						bm.Actions.Add(ibr.idAccion);
+					}
+				}
+			}
 		}
 
-		private static uint GetId(OldProfile.CTipos.TipoJoy joy)
+		private static uint GetId(OldProfile.Types.JoyType joy)
 		{
 			return joy switch
 			{
-				OldProfile.CTipos.TipoJoy.NXT => 0x231d0200,
-				OldProfile.CTipos.TipoJoy.Pedales => 0x06a30763,
+				OldProfile.Types.JoyType.NXT => 0x231d0200,
+				OldProfile.Types.JoyType.Pedals => 0x06a30763,
 				//_ => 0x063a0255 x52
 				_ => 0x231d012d
 			};

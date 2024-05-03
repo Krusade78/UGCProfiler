@@ -59,63 +59,7 @@ namespace OldProfile {
             this.EndInit();
         }
         
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-        protected DSPerfil(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                base(info, context, false) {
-            if ((this.IsBinarySerialized(info, context) == true)) {
-                this.InitVars(false);
-                global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler1 = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
-                this.Tables.CollectionChanged += schemaChangedHandler1;
-                this.Relations.CollectionChanged += schemaChangedHandler1;
-                return;
-            }
-            string strSchema = ((string)(info.GetValue("XmlSchema", typeof(string))));
-            if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.IncludeSchema)) {
-                global::System.Data.DataSet ds = new global::System.Data.DataSet();
-                ds.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
-                if ((ds.Tables["MAPAEJES"] != null)) {
-                    base.Tables.Add(new MAPAEJESDataTable(ds.Tables["MAPAEJES"]));
-                }
-                if ((ds.Tables["GENERAL"] != null)) {
-                    base.Tables.Add(new GENERALDataTable(ds.Tables["GENERAL"]));
-                }
-                if ((ds.Tables["ACCIONES"] != null)) {
-                    base.Tables.Add(new ACCIONESDataTable(ds.Tables["ACCIONES"]));
-                }
-                if ((ds.Tables["INDICESEJES"] != null)) {
-                    base.Tables.Add(new INDICESEJESDataTable(ds.Tables["INDICESEJES"]));
-                }
-                if ((ds.Tables["INDICESSETAS"] != null)) {
-                    base.Tables.Add(new INDICESSETASDataTable(ds.Tables["INDICESSETAS"]));
-                }
-                if ((ds.Tables["INDICESBOTONES"] != null)) {
-                    base.Tables.Add(new INDICESBOTONESDataTable(ds.Tables["INDICESBOTONES"]));
-                }
-                if ((ds.Tables["MAPABOTONES"] != null)) {
-                    base.Tables.Add(new MAPABOTONESDataTable(ds.Tables["MAPABOTONES"]));
-                }
-                if ((ds.Tables["MAPASETAS"] != null)) {
-                    base.Tables.Add(new MAPASETASDataTable(ds.Tables["MAPASETAS"]));
-                }
-                this.DataSetName = ds.DataSetName;
-                this.Prefix = ds.Prefix;
-                this.Namespace = ds.Namespace;
-                this.Locale = ds.Locale;
-                this.CaseSensitive = ds.CaseSensitive;
-                this.EnforceConstraints = ds.EnforceConstraints;
-                this.Merge(ds, false, global::System.Data.MissingSchemaAction.Add);
-                this.InitVars();
-            }
-            else {
-                this.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
-            }
-            this.GetSerializationData(info, context);
-            global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
-            base.Tables.CollectionChanged += schemaChangedHandler;
-            this.Relations.CollectionChanged += schemaChangedHandler;
-        }
-        
+      
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Browsable(false)]
@@ -619,13 +563,7 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected MAPAEJESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
+           
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public global::System.Data.DataColumn idJoyColumn {
@@ -1040,13 +978,7 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected GENERALDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
+           
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public global::System.Data.DataColumn TickRatonColumn {
@@ -1293,12 +1225,6 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected ACCIONESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
@@ -1588,12 +1514,6 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected INDICESEJESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
@@ -1934,12 +1854,6 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected INDICESSETASDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
@@ -2281,12 +2195,6 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected INDICESBOTONESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
@@ -2626,12 +2534,6 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected MAPABOTONESDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
@@ -2949,12 +2851,6 @@ namespace OldProfile {
                 this.MinimumCapacity = table.MinimumCapacity;
             }
             
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            protected MAPASETASDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]

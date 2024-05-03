@@ -61,18 +61,90 @@ namespace Profiler.Controls
 
 		public  bool Prepare()
 		{
+			AddConnectedDevices();
+
 			thRawInput = System.Threading.Tasks.Task.Run(() => { rawInput.Init(); });
 			if (thRawInput.Wait(2000))
 			{
 				return false;
 			}
 			wndProcReady = true;
-			
+
 			//X52 via WinUSB
 			thWinusbX52 = System.Threading.Tasks.Task.Run(() => { winusbX52.Process(this); });
 
 			return true;
 		}
+
+		private void AddConnectedDevices()
+		{
+            API.CWinUSB.SP_DEVICE_INTERFACE_DATA diData = new();
+            Guid hidGuid = new();
+            API.HID.HidD_GetHidGuid(ref hidGuid);
+            IntPtr diDevs = API.CWinUSB.SetupDiGetClassDevsW(ref hidGuid, null, IntPtr.Zero, 0x2 | 0x10);
+            if (new IntPtr(-1) == diDevs)
+            {
+                return;
+            }
+
+            diData.cbSize = System.Runtime.InteropServices.Marshal.SizeOf<API.CWinUSB.SP_DEVICE_INTERFACE_DATA>();
+            uint idx = 0;
+            while (API.CWinUSB.SetupDiEnumDeviceInterfaces(diDevs, IntPtr.Zero, ref hidGuid, idx++, ref diData))
+            {
+                uint tam = 0;
+                if ((false == API.CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, IntPtr.Zero, 0, ref tam, IntPtr.Zero)) && (122 != API.CWinUSB.GetLastError()))
+                {
+                    continue;
+                }
+
+                IntPtr buf = System.Runtime.InteropServices.Marshal.AllocHGlobal((int)tam);
+                System.Runtime.InteropServices.Marshal.WriteInt32(buf, 8);
+                if (!API.CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, buf, tam, ref tam, IntPtr.Zero))
+                {
+                    System.Runtime.InteropServices.Marshal.FreeHGlobal(buf);
+                    continue;
+                }
+
+                string ninterface = System.Runtime.InteropServices.Marshal.PtrToStringAuto(buf + 4);
+                System.Runtime.InteropServices.Marshal.FreeHGlobal(buf);
+                if (!ninterface.Contains("vid", StringComparison.InvariantCultureIgnoreCase) || !ninterface.Contains("pid", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                IntPtr hDev = API.CWinUSB.CreateFileW(ninterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x00000080 | 0x40000000, IntPtr.Zero);
+                if (hDev == API.CWinUSB.INVALID_HANDLE_VALUE)
+                {
+                    continue;
+                }
+
+                IntPtr pdata = IntPtr.Zero;
+                if (!API.HID.HidD_GetPreparsedData(hDev, ref pdata))
+                {
+                    API.CWinUSB.CloseHandle(hDev);
+                    continue;
+                }
+
+                IntPtr pcaps = System.Runtime.InteropServices.Marshal.AllocHGlobal(System.Runtime.InteropServices.Marshal.SizeOf<API.HID.HIDP_CAPS>());
+                if (API.HID.HidP_GetCaps(pdata, pcaps) == 0x110000)
+                {
+                    API.HID.HIDP_CAPS caps = System.Runtime.InteropServices.Marshal.PtrToStructure<API.HID.HIDP_CAPS>(pcaps);
+                    System.Runtime.InteropServices.Marshal.FreeHGlobal(pcaps);
+                    if ((caps.UsagePage == 1) && ((caps.Usage == 4) || (caps.Usage == 5)))
+                    {
+                        AddHardwareDevice(ninterface);
+                    }
+                }
+                else
+                {
+                    System.Runtime.InteropServices.Marshal.FreeHGlobal(pcaps);
+                }
+                API.HID.HidD_FreePreparsedData(pdata);
+                API.CWinUSB.CloseHandle(hDev);
+            }
+
+            API.CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
+        }
 
 		public void AddWinUSBX52Device()
 		{
@@ -133,54 +205,25 @@ namespace Profiler.Controls
 
 		public void SetStatus(uint hId, byte[] hidData)
 		{
-			MainWindow parent = ((App)Microsoft.UI.Xaml.Application.Current).GetMainWindow();
-			if (parent.CurrentSection == MainWindow.Section.Calibrate)
-			{
-				((Calibrator.HIDCal)frContent.Content).UpdateStatus(hidData, hId);
-			}
+			((Pages.Main)frContent.Content)?.UpdateStatus(hId, hidData);
+		}
+
+		public void SetMainFrame(Pages.Main mainFrame)
+		{
+			frContent.Content = mainFrame;
 		}
 
 		private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
 		{
-			Refresh();
-		}
-
-		public void Refresh()
-		{
 			if (this.SelectedItem == null)
 			{
-				frContent.Content = null;
-				return;
+				this.Header = null;
+				((Pages.Main)frContent.Content)?.ChangeDevice(null);
 			}
-			MainWindow parent = ((App)Microsoft.UI.Xaml.Application.Current).GetMainWindow();
-			switch(parent.CurrentSection)
+			else
 			{
-				case MainWindow.Section.Calibrate:
-					this.Header = ((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext).Name;
-					frContent.Content = new Calibrator.HIDCal((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext);
-					break;
-				case MainWindow.Section.View:
-					break;
-				case MainWindow.Section.Edit:
-					//	switch (uint.Parse(e.PropertyName))
-					//	{
-					//		case 0x6a30713:
-					//			gridView.Children.Add(new CtlPedales(ctlProperties));
-					//			break;
-					//		case 0x6a30255:
-					//			gridView.Children.Add(new CtlX52Joystick(ctlProperties));
-					//			break;
-					//		case 0x6a30700:
-					//			gridView.Children.Add(new CtlNXTJoystick(ctlProperties));
-					//			break;
-					//		default:
-					//			gridView.Children.Add(new CtlOther(ctlProperties));
-					//			break;
-					//	}
-					break;
-				default:
-					frContent.Content = null;
-					break;
+				this.Header = ((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext).Name;
+				((Pages.Main)frContent.Content)?.ChangeDevice((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext);
 			}
 		}
 	}

@@ -7,7 +7,6 @@ namespace Shared
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STLIMITS
 		{
-			public byte Cal; //bool
 			public byte Null;
 			public ushort Left;
 			public ushort Center;

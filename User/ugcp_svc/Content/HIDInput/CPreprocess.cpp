@@ -64,6 +64,7 @@ void CPreprocess::ConvertToCommon(UCHAR* data, DWORD size, UINT32 joyId)
 	DWORD idx = 0;
 	UCHAR idxAxis = 0;
 	UCHAR idxButton = 0;
+	UCHAR idxHat = 0;
 	UCHAR* report = &data[1];
 
 	LockDevices(pHIDInput);
@@ -101,6 +102,13 @@ void CPreprocess::ConvertToCommon(UCHAR* data, DWORD size, UINT32 joyId)
 						hidData.Buttons[1] |= *(UINT64*)&v[8] << shiftBt;
 					}
 					idxButton += mapIndex->Bits;
+				}
+				else if (mapIndex->IsHat)
+				{
+					UINT16 v = 0;
+					RtlCopyMemory(&v, &report[idx / 8], ((idx + mapIndex->Bits - 1) / 8) + 1 - (idx / 8));
+					v = (v >> shift) & ((1 << mapIndex->Bits) - 1);
+					hidData.Hats[idxHat++] = static_cast<UCHAR>(v);
 				}
 				else
 				{

@@ -4,7 +4,6 @@ class CALIBRATION
 public:
 	typedef struct TDST_LIMITS
 	{
-		UCHAR Cal;
 		UCHAR Null;
 		UINT16 Left;
 		UINT16 Center;

@@ -1,5 +1,6 @@
 #pragma once
 #pragma unmanaged
+#include <SDKDDKVer.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #pragma managed
@@ -31,7 +32,8 @@ public:
 	void Close() const;
 	void Call(wchar_t* hidInterface, int interfaceSize, BYTE* data, DWORD dataSize);
 private:
-	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	void ProcessRawInput();
+	HANDLE hEvClose = NULL;
 	HWND hWnd = NULL;
 	msclr::gcroot<CPP2CS::RawInput^>* ptrm = nullptr;
 };

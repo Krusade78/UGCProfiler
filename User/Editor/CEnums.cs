@@ -2,11 +2,18 @@
 {
     class CEnums
     {
-        public enum ElementType
+        public enum ElementType : byte
         {
-            Axis,
+            AxisX,
+            AxisY,
+            AxisZ,
+            AxisRx,
+            AxisRy,
+            AxisRz,
+            AxisSl,
+            Hat = 253,
             Button,
-            Hat
+            None
         }
 
         public enum LedOrder : byte

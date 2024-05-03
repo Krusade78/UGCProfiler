@@ -7,7 +7,7 @@ using System.Linq;
 namespace Calibrator
 {
 	/// <summary>
-	/// Lógica de interacción para HIDCal.xaml
+	/// HIDCal.xaml
 	/// </summary>
 	internal sealed partial class HIDCal : Page
 	{
@@ -16,28 +16,26 @@ namespace Calibrator
 			public ushort Raw { get; set; }
 			public ushort Calibrated { get; set; }
 		}
-        private class AxisTempData
-        {
-            public byte Id { get; set; }
-            public ushort Minimun { get; set; } = ushort.MaxValue;
-            public ushort Maximun { get; set; }
-            public ushort Center { get; set; } = ushort.MaxValue / 2;
-            public ushort CenterAlt { get; set; } = ushort.MaxValue / 2;
-            public byte CenterAltRepeats { get; set; }
-        }
+		private class AxisTempRawData
+		{
+			public byte Id { get; set; }
+			public ushort Minimun { get; set; } = ushort.MaxValue;
+			public ushort Maximun { get; set; }
+			public ushort CenterManual { get; set; }
+			public ushort CenterAuto { get; set; }
+			public ushort CenterAlt { get; set; }
+			public byte CenterAltRepeats { get; set; }
+			public bool CenterManualOn { get; set; }
+		}
 
-        //private uint joySel = 0;
-        //private byte axisSel = 0;
-        private readonly Dictionary<uint, Dictionary<byte, Shared.CTypes.STJITTER>> jitters = [];
-		private readonly Dictionary<uint, Dictionary<byte, Shared.CTypes.STLIMITS>> limits = [];
-
-		private Profiler.Devices.DeviceInfo.HID_INPUT_DATA lastHidData = new();
+		private readonly Dictionary<uint, Dictionary<byte, Shared.CTypes.STJITTER>> jitters = [];
+		private readonly Dictionary<uint, Dictionary<byte, Shared.CTypes.STLIMITS>> limitsCal = [];
 		private System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<BufferTuple>> Tuples { get; set; } = [[]];
-
-		//private readonly ushort[] hidReport = new ushort[8];
-
-		//private readonly Dictionary<uint, DatosJoy> dispositivos = new();
 		private readonly Profiler.Devices.DeviceInfo devInfo;
+		private readonly DispatcherTimer refresh = new();
+		private BufferTuple toRefresh;
+		private int lastRaw;
+
 
 		public HIDCal(Profiler.Devices.DeviceInfo deviceInfo)
 		{
@@ -52,6 +50,9 @@ namespace Calibrator
 			devInfo = deviceInfo;
 			ReadCalibration();
 			InsertAxes();
+
+			refresh.Interval = new TimeSpan(3000000);
+			refresh.Tick += (sender, e) => { refresh.Stop(); if (toRefresh != null) { gvBuffer.ScrollIntoView(toRefresh); } };
 		}
 
 		private async void ReadCalibration()
@@ -71,12 +72,11 @@ namespace Calibrator
 						Left = r.Left,
 						Right = r.Right,
 						Null = r.Null,
-						Cal = r.Cal,
 						Range = r.Range,
 					};
-					if (!limits.TryGetValue(r.IdJoy, out Dictionary<byte, Shared.CTypes.STLIMITS> limitJoy))
+					if (!limitsCal.TryGetValue(r.IdJoy, out Dictionary<byte, Shared.CTypes.STLIMITS> limitJoy))
 					{
-						limits.Add(r.IdJoy, new() { { r.IdAxis, l } });
+						limitsCal.Add(r.IdJoy, new() { { r.IdAxis, l } });
 					}
 					else
 					{
@@ -104,7 +104,7 @@ namespace Calibrator
 			catch (System.IO.FileNotFoundException) { }
 			catch (Exception ex)
 			{
-				await Profiler.MessageBox.Show(ex.Message, "Error", Profiler.MessageBoxButton.OK, Profiler.MessageBoxImage.Warning);
+				await Profiler.MessageBox.Show(ex.Message, Profiler.Translate.Get("error"), Profiler.MessageBoxButton.OK, Profiler.MessageBoxImage.Warning);
 			}
 		}
 
@@ -117,25 +117,25 @@ namespace Calibrator
 				switch (u.Type)
 				{
 					case 0:
-						navs.Add(u.Type, new SelectorBarItem() { Text = $"X {x++}", Tag = new AxisTempData() { Id = u.Id.Value } });
+						navs.Add(u.Type, new SelectorBarItem() { Text = $"X {x++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
 						break;
 					case 1:
-						navs.Add(u.Type, new SelectorBarItem() { Text = $"Y {y++}", Tag = new AxisTempData() { Id = u.Id.Value } });
+						navs.Add(u.Type, new SelectorBarItem() { Text = $"Y {y++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
 						break;
 					case 2:
-						navs.Add(u.Type, new SelectorBarItem() { Text = $"Z {z++}", Tag = new AxisTempData() { Id = u.Id.Value } });
+						navs.Add(u.Type, new SelectorBarItem() { Text = $"Z {z++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
 						break;
 					case 3:
-						navs.Add(u.Type, new SelectorBarItem() { Text = $"Rx {rx++}", Tag = new AxisTempData() { Id = u.Id.Value } });
+						navs.Add(u.Type, new SelectorBarItem() { Text = $"Rx {rx++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
 						break;
 					case 4:
-						navs.Add(u.Type, new SelectorBarItem() { Text = $"Ry {ry++}", Tag = new AxisTempData() { Id = u.Id.Value } });
+						navs.Add(u.Type, new SelectorBarItem() { Text = $"Ry {ry++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
 						break;
 					case 5:
-						navs.Add(u.Type, new SelectorBarItem() { Text = $"Rz {rz++}", Tag = new AxisTempData() { Id = u.Id.Value } });
+						navs.Add(u.Type, new SelectorBarItem() { Text = $"Rz {rz++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
 						break;
 					case 6:
-						navs.Add(u.Type, new SelectorBarItem() { Text = $"Sl {sl++}", Tag = new AxisTempData() { Id = u.Id.Value } });
+						navs.Add(u.Type, new SelectorBarItem() { Text = $"Sl {sl++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
 						break;
 					default:
 						break;
@@ -151,7 +151,7 @@ namespace Calibrator
 			}
 		}
 
-		private byte GetNavIdx() => ((AxisTempData)lsAxes.SelectedItem.Tag).Id;
+		private AxisTempRawData GetNavData() => (AxisTempRawData)lsAxes.SelectedItem.Tag;
 
 		public void UpdateStatus(byte[] rawData, uint joy)
 		{
@@ -166,18 +166,11 @@ namespace Calibrator
 				return;
 			}
 
-			byte axisId = GetNavIdx();
-
-			if (hidData.Axis[axisId] == lastHidData.Axis[axisId])
-			{
-				lastHidData = hidData;
-				return;
-			}
+			byte axisId = GetNavData().Id;
 
 			int posr = hidData.Axis[axisId];
-			lastHidData = hidData;
 
-			// Filtrado de ejes
+			//Axes filters
 			ushort pollAxis = (ushort)posr;
 
 			if (jitters.TryGetValue(joy, out Dictionary<byte, Shared.CTypes.STJITTER> jjit) && jjit.TryGetValue(axisId, out Shared.CTypes.STJITTER v) && (v.Antiv == 1))
@@ -222,7 +215,7 @@ namespace Calibrator
 				}
 			}
 
-			if (limits.TryGetValue(joy, out Dictionary<byte, Shared.CTypes.STLIMITS> jlim) && jlim.TryGetValue(axisId, out Shared.CTypes.STLIMITS limit) && (limit.Cal == 1))
+			if (limitsCal.TryGetValue(joy, out Dictionary<byte, Shared.CTypes.STLIMITS> jlim) && jlim.TryGetValue(axisId, out Shared.CTypes.STLIMITS limit))
 			{
 				// Calibration
 				ushort width1, width2;
@@ -242,7 +235,7 @@ namespace Calibrator
 
 					if (pollAxis < limit.Center)
 					{
-						if (width1 != limit.Center)
+						if ((width1 != limit.Center) && (width1 != 0))
 						{
 							if (pollAxis >= width1) { pollAxis = width1; }
 							pollAxis -= limit.Left;
@@ -251,41 +244,92 @@ namespace Calibrator
 					}
 					else
 					{
-						if (width2 != (limit.Right - limit.Center))
+						if ((width2 != (devInfo.Usages[axisId].Range - limit.Center)) && (width2 != 0))
 						{
 							if (pollAxis >= limit.Right) { pollAxis = limit.Right; }
 							pollAxis -= (ushort)(limit.Center + limit.Null);
-							pollAxis = (ushort)(limit.Center + ((pollAxis * (limit.Right - limit.Center)) / width2));
+							pollAxis = (ushort)(limit.Center + ((pollAxis * (devInfo.Usages[axisId].Range - limit.Center)) / width2));
 						}
 					}
 				}
 			}
 
-			txtPosRaw.Text = posr.ToString();
-			posRaw.Margin = new Thickness(posr, 0, 0, 0);
-			txtPosCal.Text = pollAxis.ToString();
-			posCal.Margin = new Thickness(pollAxis, 20, 0, 0);
-			BufferTuple lvi = new() { Calibrated = hidData.Axis[axisId], Raw = pollAxis };
-			if (Tuples[0].Count > 200)
+			DispatcherQueue.TryEnqueue(() => UpdateGUI((ushort)posr, pollAxis, (ushort)(devInfo.Usages[axisId].Range / 2), GetNavData()));
+		}
+
+		private void UpdateGUI(ushort raw, ushort calibrated, ushort center, AxisTempRawData temprawData)
+		{
+			if (raw < temprawData.Minimun)
 			{
-				Tuples[0].RemoveAt(0);
+				temprawData.Minimun = raw;
+				txtRawMin.Text = raw.ToString();
 			}
-			Tuples[0].Add(lvi);
-			gvBuffer.ScrollIntoView(lvi);
+			if (raw > temprawData.Maximun)
+			{
+				temprawData.Maximun = raw;
+				txtRawMax.Text = raw.ToString();
+			}
+			if ((raw != temprawData.CenterAuto) && (raw > (center - 2)) & (raw < (center + 2)))
+			{
+				if (raw == temprawData.CenterAlt)
+				{
+					temprawData.CenterAltRepeats++;
+				}
+				else
+				{
+					temprawData.CenterAlt = raw;
+					temprawData.CenterAltRepeats = 0;
+				}
+				if (temprawData.CenterAltRepeats == 50)
+				{
+					temprawData.CenterAuto = temprawData.CenterAlt;
+					temprawData.CenterAltRepeats = 0;
+					txtCalcRawC.Text = temprawData.CenterAuto.ToString();
+				}
+			}
+			if (lastRaw != raw)
+			{
+				lastRaw = raw;
+				txtPosRaw.Text = raw.ToString();
+				posRaw.Margin = new Thickness(raw, 0, 0, 0);
+				txtPosCal.Text = calibrated.ToString();
+				posCal.Margin = new Thickness(calibrated, 20, 0, 0);
+				if (tbPlay.IsChecked == true)
+				{
+					BufferTuple lvi = new() { Calibrated = calibrated, Raw = raw };
+					if (Tuples[0].Count > 400)
+					{
+						Tuples[0].RemoveAt(0);
+					}
+					Tuples[0].Add(lvi);
+
+					toRefresh = lvi;
+					refresh.Start();
+				}
+			}
 		}
 
 		private void LsAxes_SelectionChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
 		{
 			Tuples[0].Clear();
-			txtPosCal.Text = "0";
-			txtPosRaw.Text = "0";
+			GetNavData().Maximun = 0;
+			GetNavData().Minimun = 65535;
+            GetNavData().CenterAuto = 0;
 
-			if (!limits.TryGetValue(devInfo.Id, out Dictionary<byte, Shared.CTypes.STLIMITS> axesl))
+            txtPosCal.Text = "0";
+			txtPosRaw.Text = "0";
+			txtRawMin.Text = "0";
+			txtRawMax.Text = "0";
+			txtRawC.Text = GetNavData().CenterManual.ToString();
+			txtCalcRawC.Text = "0";
+			tsCenter.IsOn = GetNavData().CenterManualOn;
+
+			if (!limitsCal.TryGetValue(devInfo.Id, out Dictionary<byte, Shared.CTypes.STLIMITS> axesl))
 			{
 				axesl = [];
-				limits.Add(devInfo.Id, axesl);
+				limitsCal.Add(devInfo.Id, axesl);
 			}
-			if (!axesl.TryGetValue(GetNavIdx(), out Shared.CTypes.STLIMITS limit))
+			if (!axesl.TryGetValue(GetNavData().Id, out Shared.CTypes.STLIMITS limit))
 			{
 				limit = new();
 			}
@@ -295,123 +339,85 @@ namespace Calibrator
 				axesj = [];
 				jitters.Add(devInfo.Id, axesj);
 			}
-			if (!axesj.TryGetValue(GetNavIdx(), out Shared.CTypes.STJITTER jitter))
+			if (!axesj.TryGetValue(GetNavData().Id, out Shared.CTypes.STJITTER jitter))
 			{
 				jitter = new();
 			}
 
-			tsCenter.IsOn = true;
-			txtRawMin.Text = limit.Left.ToString();
-			txtRawMax.Text = limit.Right.ToString();
-			txtRawC.Text = limit.Center.ToString();
-			txtCalcRawC.Text = limit.Center.ToString();
-
-			chkCalActiva.IsOn = limit.Cal == 1;
-			txtI.Text = limit.Left.ToString();
-			txtN.Text = limit.Null.ToString();
-			txtD.Text = limit.Right.ToString();
+			txtL.Text = limit.Left.ToString();
+            txtC.Text = limit.Center.ToString();
+            txtN.Text = limit.Null.ToString();
+			txtR.Text = limit.Right.ToString();
 
 			chkAntivActiva.IsOn = jitter.Antiv == 1;
 			txtMargen.Text = jitter.Margin.ToString();
 			txtResistencia.Text = jitter.Strength.ToString();
 
-			grTest.Width = devInfo.Usages.First(x => (x.Type < 128) && (x.Id == GetNavIdx())).Range + 1;
+			grTest.Width = devInfo.Usages.First(x => (x.Type < 253) && (x.Id == GetNavData().Id)).Range + 1;
 			posRaw.Width = posCal.Width = (grTest.Width * 100) / 32768;
 			if (posRaw.Width < 1 ) { posRaw.Width = posCal.Width = 1; }
 			grTest.Width += posRaw.Width;
 		}
 
-		private void Aplicar()
+		private void ButtonTakeFromRaw_Click(object sender, RoutedEventArgs e)
 		{
-			if (!limits.TryGetValue(devInfo.Id, out Dictionary<byte, Shared.CTypes.STLIMITS> limitJoy))
-			{
-				limits.Add(devInfo.Id, []);
-			}
-			if (!limitJoy.TryGetValue(GetNavIdx(), out Shared.CTypes.STLIMITS limit))
-			{
-				limit = new();
-				limitJoy.Add(GetNavIdx(), limit);
-			}
-			limit.Cal = chkCalActiva.IsOn ? (byte)1 : (byte)0;
-			_ = ushort.TryParse(txtI.Text, out ushort s);
-			limit.Left = s;
-			_ = ushort.TryParse(txtRawC.Text, out s);
-			limit.Center = s;
-			_ = ushort.TryParse(txtD.Text, out s);
-			limit.Right = s;
-			_ = byte.TryParse(txtN.Text, out byte b);
-			limit.Null = b;
-			limitJoy[GetNavIdx()] = limit;
-
-			if (!jitters.TryGetValue(devInfo.Id, out Dictionary<byte, Shared.CTypes.STJITTER> jitterJoy))
-			{
-				jitters.Add(devInfo.Id, []);
-			}
-			if (!jitterJoy.TryGetValue(GetNavIdx(), out Shared.CTypes.STJITTER jitter))
-			{
-				jitter = new();
-				jitterJoy.Add(GetNavIdx(), jitter);
-			}
-			jitter.Antiv = chkAntivActiva.IsOn ? (byte)1 : (byte)0;
-			_ = byte.TryParse(txtMargen.Text, out b);
-			jitter.Margin = b;
-			_ = byte.TryParse(txtResistencia.Text, out b);
-			jitter.Strength = b;
-			jitterJoy[GetNavIdx()] = jitter;
+			txtL.Text = txtRawMin.Text;
+			txtC.Text = tsCenter.IsOn ? txtRawC.Text : txtCalcRawC.Text;
+			txtR.Text = txtRawMax.Text;
 		}
 
-		private void FbtGuardar_Click(object sender, RoutedEventArgs e)
+		private async void FbtSave_Click(object sender, RoutedEventArgs e)
 		{
-			//	FbtAplicar_Click(null, null);
-			//	{
-			//		Shared.Calibration.CCalibration dsc = new();
+			Apply();
+			{
+				Shared.Calibration.CCalibration dsc = new();
 
-			//		foreach (var v in limits)
-			//		{                    
-			//			foreach (var l in v.Value)
-			//			{
-			//				dsc.Limits.Add(new() { IdJoy = v.Key, IdAxis = l.Key, Cal =l.Value.Cal, Null = l.Value.Null, Left = l.Value.Left, Center = l.Value.Center, Right = l.Value.Right, Range = l.Value.Range });
-			//			}
-			//		}
-			//		foreach (var v in jitters)
-			//		{
-			//			foreach (var j in v.Value)
-			//			{
-			//				dsc.Jitters.Add(new() { IdJoy = v.Key, IdAxis = j.Key, Antiv = j.Value.Antiv, Margin = j.Value.Margin, Strength = j.Value.Strength });
-			//			}
-			//		}
+				foreach (var v in limitsCal)
+				{
+					foreach (KeyValuePair<byte, Shared.CTypes.STLIMITS> l in v.Value)
+					{
+						dsc.Limits.Add(new() { IdJoy = v.Key, IdAxis = l.Key, Null = l.Value.Null, Left = l.Value.Left, Center = l.Value.Center, Right = l.Value.Right, Range = l.Value.Range });
+					}
+				}
+				foreach (var v in jitters)
+				{
+					foreach (KeyValuePair<byte, Shared.CTypes.STJITTER> j in v.Value)
+					{
+						dsc.Jitters.Add(new() { IdJoy = v.Key, IdAxis = j.Key, Antiv = j.Value.Antiv, Margin = j.Value.Margin, Strength = j.Value.Strength });
+					}
+				}
 
-			//		try
-			//		{
-			//			System.IO.File.WriteAllText("configuracion.dat", System.Text.Json.JsonSerializer.Serialize(dsc, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
-			//		}
-			//		catch (Exception ex)
-			//		{
-			//			MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-			//			return;
-			//		}
-			//	}
+				try
+				{
+					System.IO.File.WriteAllText("calibration.dat", System.Text.Json.JsonSerializer.Serialize(dsc, Profiler.App.jsonOptions));
+				}
+				catch (Exception ex)
+				{
+					await Profiler.MessageBox.Show(ex.Message, "Error", Profiler.MessageBoxButton.OK, Profiler.MessageBoxImage.Warning);
+					return;
+				}
+			}
 
-			//	using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
-			//	try
-			//	{
-			//		pipeClient.Connect(1000);
-			//		using System.IO.StreamWriter sw = new(pipeClient);
-			//		sw.WriteLine("CCAL");
-			//		sw.Flush();
-			//	}
-			//	catch (Exception ex)
-			//	{
-			//		MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			//		return;
-			//	}
+			using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
+			try
+			{
+				pipeClient.Connect(1000);
+				using System.IO.StreamWriter sw = new(pipeClient);
+				sw.WriteLine("CCAL");
+				sw.Flush();
+			}
+			catch (Exception ex)
+			{
+				await Profiler.MessageBox.Show(ex.Message, "Error", Profiler.MessageBoxButton.OK, Profiler.MessageBoxImage.Error);
+				return;
+			}
 		}
 
 		private void Fchk_Changed(object sender, RoutedEventArgs e)
 		{
 			if (this.IsLoaded)
 			{
-				Aplicar();
+				Apply();
 			}
 		}
 
@@ -419,8 +425,58 @@ namespace Calibrator
 		{
 			if (this.IsLoaded)
 			{
-				Aplicar();
+				Apply();
 			}
 		}
-	}
+
+		private void Apply()
+		{
+			if (!limitsCal.TryGetValue(devInfo.Id, out Dictionary<byte, Shared.CTypes.STLIMITS> limitJoy))
+			{
+				limitsCal.Add(devInfo.Id, []);
+			}
+			if (!limitJoy.TryGetValue(GetNavData().Id, out Shared.CTypes.STLIMITS limit))
+			{
+				limit = new();
+				limitJoy.Add(GetNavData().Id, limit);
+			}
+
+			_ = ushort.TryParse(txtL.Text, out ushort s);
+			limit.Left = s;
+			_ = ushort.TryParse(txtR.Text, out s);
+			limit.Right = s;
+			_ = ushort.TryParse(txtC.Text, out s);
+			limit.Center = s;
+			limit.Range = devInfo.Usages[GetNavData().Id].Range;
+
+			_ = byte.TryParse(txtN.Text, out byte b);
+			limit.Null = b;
+			limitJoy[GetNavData().Id] = limit;
+
+			_ = ushort.TryParse(txtRawC.Text, out s);
+			GetNavData().CenterManual = s;
+			GetNavData().CenterManualOn = tsCenter.IsOn;
+
+			if (!jitters.TryGetValue(devInfo.Id, out Dictionary<byte, Shared.CTypes.STJITTER> jitterJoy))
+			{
+				jitters.Add(devInfo.Id, []);
+			}
+			if (!jitterJoy.TryGetValue(GetNavData().Id, out Shared.CTypes.STJITTER jitter))
+			{
+				jitter = new();
+				jitterJoy.Add(GetNavData().Id, jitter);
+			}
+			jitter.Antiv = chkAntivActiva.IsOn ? (byte)1 : (byte)0;
+			_ = byte.TryParse(txtMargen.Text, out b);
+			jitter.Margin = b;
+			_ = byte.TryParse(txtResistencia.Text, out b);
+			jitter.Strength = b;
+			jitterJoy[GetNavData().Id] = jitter;
+		}
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+			Tuples[0].Clear();
+        }
+    }
 }
