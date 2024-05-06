@@ -531,7 +531,7 @@ namespace Profiler.Controls
                     mode = new();
                     buttonMap.Modes.Add(GetMode(), mode);
                 }
-                if (!mode.Buttons.TryGetValue(CurrentSel.Usage.Id, out button))
+                if (!mode.Buttons.TryGetValue((byte)((CurrentSel.Usage.Id * 8) + CurrentSel.HatPosition), out button))
                 {
                     button = new();
                     mode.Buttons.Add((byte)((CurrentSel.Usage.Id * 8) + CurrentSel.HatPosition), button);

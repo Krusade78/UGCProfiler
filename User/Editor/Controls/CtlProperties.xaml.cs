@@ -143,7 +143,7 @@ namespace Profiler.Controls
 
         private async void ButtonAssignPOV_Click(object sender, RoutedEventArgs e)
         {
-            await Dialogs.HatEditor.Show(/*CurrentSel.Usage.Range, axis*/);
+            await Dialogs.HatEditor.Show(CurrentSel.Joy, GetMode(), CurrentSel.Usage);
             //            VEditorPOV dlg = new VEditorPOV(idActual)
             //            {
             //                Owner = App.Current.MainWindow

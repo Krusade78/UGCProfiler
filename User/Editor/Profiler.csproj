@@ -65,14 +65,10 @@
     <Resource Include="res\x52t.png" />
   </ItemGroup>
 
-    <ImportGroup>
-		<ProjectReference Include="..\CPP2CS\CPP2CS.vcxproj">
-			<Private></Private>
-		</ProjectReference>
-		<ProjectReference Include="..\Shrared\Shared.csproj" />
+	<ItemGroup>
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />        
-    </ImportGroup>
+    </ItemGroup>
 
   <ItemGroup>
     <Compile Update="OldProfile\DSPerfil.Designer.cs">
@@ -94,5 +90,10 @@
 
   <ItemGroup>
     <Folder Include="Themes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CPP2CS\CPP2CS.vcxproj" />
+    <ProjectReference Include="..\Shrared\Shared.csproj" />
   </ItemGroup>
 </Project>

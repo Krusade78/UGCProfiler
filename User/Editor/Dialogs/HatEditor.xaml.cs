@@ -11,15 +11,22 @@ namespace Profiler.Dialogs
     internal partial class HatEditor : Page
     {
         //private byte pov;
-        public HatEditor(/*byte idSeta*/)
+        private readonly byte currentModes;
+        private readonly uint currentJoy;
+        private readonly Shared.ProfileModel.DeviceInfo.CUsage usage;
+
+        public HatEditor(uint joyId, byte mode, Shared.ProfileModel.DeviceInfo.CUsage usage)
         {
             InitializeComponent();
+            currentModes = mode;
+            currentJoy = joyId;
+            this.usage = usage;
             //pov = idSeta;
         }
 
-        public static async System.Threading.Tasks.Task Show(/*Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel axisData, uint joyId, byte axisId*/)
+        public static async System.Threading.Tasks.Task Show(uint joyId, byte mode, Shared.ProfileModel.DeviceInfo.CUsage usage)
         {
-            HatEditor content = new(/*axisData, joyId, axisId*/);
+            HatEditor content = new(joyId, mode, usage);
             ContentDialog dlg = new()
             {
                 // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
@@ -48,22 +55,21 @@ namespace Profiler.Dialogs
         private void Save()
         {
             MainWindow parent = ((App)Application.Current).GetMainWindow();
-            string[] st = [ Translate.Get("dx_hat_n"), Translate.Get("dx_hat_ne"), Translate.Get("dx_hat_e"), Translate.Get("dx_hat_se"), Translate.Get("dx_hat_s"), Translate.Get("dx_hat_sw"), Translate.Get("dx_hat_w"), Translate.Get("dx_hat_nw")];
-            //byte idJ = 0, p = 0, m = 0;
-
-            //padre.GetModos(ref idJ, ref p, ref m);
-            //pov /= 8;
-
-
+            string[] st8 = [ Translate.Get("dx_hat_n"), Translate.Get("dx_hat_ne"), Translate.Get("dx_hat_e"), Translate.Get("dx_hat_se"), Translate.Get("dx_hat_s"), Translate.Get("dx_hat_sw"), Translate.Get("dx_hat_w"), Translate.Get("dx_hat_nw")];
             for (byte i = 0; i < 8; i++)
-                st[i] = st[i].Replace("%", NumericUpDownJ.Value.ToString()).Replace("&", NumericUpDown1.Value.ToString());
+            {
+                st8[i] = st8[i].Replace("%", NumericUpDownJ.Value.ToString()).Replace("$", NumericUpDown1.Value.ToString());
+            }
 
-            for (byte i = 0; i < 8; i++)
+            string[] st4 = [st8[0], st8[2], st8[4], st8[6]];
+
+
+            for (byte i = 0; i <= usage.Range; i++)
             {
                 ushort idx = 0;
                 foreach (Shared.ProfileModel.MacroModel ar in parent.GetData().Profile.Macros)
                 {
-                    if (ar.Name == st[i])
+                    if (ar.Name == (usage.Range == 3 ? st4[i] : st8[i]))
                     {
                         idx = ar.Id;
                         break;
@@ -83,11 +89,11 @@ namespace Profiler.Dialogs
                     Shared.ProfileModel.MacroModel ar = new()
                     {
                         Id = idx,
-                        Name = st[i],
+                        Name = usage.Range == 3 ? st4[i] : st8[i],
                     };
                     //'text x52
                     ar.Commands.Add((byte)CommandType.X52MfdTextIni + (3 << 8)); //line
-                    byte[] text = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(st[i]));
+                    byte[] text = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(ar.Name));
                     for (byte j = 0; j < text.Length; j++)
                     {
                         ar.Commands.Add((ushort)((byte)CommandType.X52MfdText + (text[j] << 8)));
@@ -98,29 +104,28 @@ namespace Profiler.Dialogs
                     ar.Commands.Add((byte)CommandType.DxHat | v);
                     ar.Commands.Add((byte)CommandType.Hold);
                     ar.Commands.Add(((byte)(CommandType.DxHat | CommandType.Release) | v));
+                    parent.GetData().Profile.Macros.Add(ar);
                 }
 
-                Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button;
-
-                    if (!padre.GetData().Profile.HatsMap.TryGetValue(CurrentSel.Joy, out Shared.ProfileModel.ButtonMapModel buttonMap))
-                    {
-                        buttonMap = new();
-                        padre.GetData().Profile.HatsMap.Add(CurrentSel.Joy, buttonMap);
-                    }
-                    if (!buttonMap.Modes.TryGetValue(GetMode(), out Shared.ProfileModel.ButtonMapModel.ModeModel mode))
-                    {
-                        mode = new();
-                        buttonMap.Modes.Add(GetMode(), mode);
-                    }
-                    if (!mode.Buttons.TryGetValue(CurrentSel.Usage.Id, out button))
-                    {
-                        button = new();
-                        mode.Buttons.Add((byte)((CurrentSel.Usage.Id * 8) + CurrentSel.HatPosition), button);
-                    }
-
-                    padre.GetData().Profile.MAPASETAS.FindByidJoyidPinkieidModoIdSeta(idJ, p, m, (byte)(i + (pov * 8))).TamIndices = 0;
-                padre.GetData().Profile.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, (uint)(i + (pov * 8)), 0).idAccion = idx;
-                padre.GetData().Profile.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(idJ, p, m, (uint)(i + (pov * 8)), 1).idAccion = 0;
+                if (!parent.GetData().Profile.HatsMap.TryGetValue(currentJoy, out Shared.ProfileModel.ButtonMapModel buttonMap))
+                {
+                    buttonMap = new();
+                    parent.GetData().Profile.HatsMap.Add(currentJoy, buttonMap);
+                }
+                if (!buttonMap.Modes.TryGetValue(currentModes, out Shared.ProfileModel.ButtonMapModel.ModeModel mode))
+                {
+                    mode = new();
+                    buttonMap.Modes.Add(currentModes, mode);
+                }
+                if (!mode.Buttons.TryGetValue((byte)((usage.Id * 8) + i), out Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button))
+                {
+                    button = new();
+                    mode.Buttons.Add((byte)((usage.Id * 8) + i), button);
+                }
+                button.Type = 0;
+                button.Actions.Clear();
+                button.Actions.Add(idx);
+                button.Actions.Add(0);
             }
 
             parent.GetData().Modified = true;
