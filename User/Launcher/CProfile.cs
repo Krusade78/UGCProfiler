@@ -161,8 +161,8 @@ namespace Launcher
 								mapBuffer.Add(sens);
 							}
 							mapBuffer.Add((byte)(axis.Value.IsSensibilityForSlider ? 1 : 0));
-							mapBuffer.Add((byte)axis.Value.Bands.Count);
-							foreach (byte band in axis.Value.Bands)
+							mapBuffer.Add((byte)axis.Value.Zones.Count);
+							foreach (byte band in axis.Value.Zones)
 							{
 								mapBuffer.Add(band);
 							}
@@ -173,8 +173,8 @@ namespace Launcher
 								mapBuffer.Add((byte)(index & 0xff));
 								mapBuffer.Add((byte)(index >> 8));
 							}
-							mapBuffer.Add(axis.Value.Toughness.Item1);
-							mapBuffer.Add(axis.Value.Toughness.Item2);
+							mapBuffer.Add(axis.Value.Resistance.Item1);
+							mapBuffer.Add(axis.Value.Resistance.Item2);
 						}
 					}
 				}
@@ -440,7 +440,7 @@ namespace Launcher
 							54 => 6, //slider
 							55 => 6, //dial
 							0x38 => 6, //Wheel
-							57 => throw new NotImplementedException(), //254, //hat
+							57 => 253, //254, //hat
 							0x40 => 9, //vx
 							0x41 => 10, //vy
 							0x42 => 11, //vz
@@ -451,8 +451,9 @@ namespace Launcher
 							_ => throw new NotImplementedException()
 						};
 						if (destinationAxis == 255) { break; }
+                        if (destinationAxis == 253) { break; }
 
-						if (!axisUsed.Contains(destinationAxis))
+                        if (!axisUsed.Contains(destinationAxis))
 						{
 							Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel newAxis = new()
 							{

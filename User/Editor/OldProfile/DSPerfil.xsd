@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DSPerfil" targetNamespace="http://tempuri.org/DSPerfil.xsd" xmlns:mstns="http://tempuri.org/DSPerfil.xsd" xmlns="http://tempuri.org/DSPerfil.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="NotPublic" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DSPerfil" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="DSPerfil" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DSPerfil">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="MAPAEJES" msprop:Generator_RowEvHandlerName="MAPAEJESRowChangeEventHandler" msprop:Generator_RowDeletedName="MAPAEJESRowDeleted" msprop:Generator_RowDeletingName="MAPAEJESRowDeleting" msprop:Generator_RowEvArgName="MAPAEJESRowChangeEvent" msprop:Generator_TablePropName="MAPAEJES" msprop:Generator_RowChangedName="MAPAEJESRowChanged" msprop:Generator_UserTableName="MAPAEJES" msprop:Generator_RowChangingName="MAPAEJESRowChanging" msprop:Generator_RowClassName="MAPAEJESRow" msprop:Generator_TableClassName="MAPAEJESDataTable" msprop:Generator_TableVarName="tableMAPAEJES">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idJoy" msprop:Generator_ColumnPropNameInTable="idJoyColumn" msprop:Generator_ColumnPropNameInRow="idJoy" msprop:Generator_UserColumnName="idJoy" msprop:Generator_ColumnVarNameInTable="columnidJoy" type="xs:unsignedInt" />
+              <xs:element name="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_UserColumnName="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" type="xs:unsignedByte" />
+              <xs:element name="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_UserColumnName="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" type="xs:unsignedByte" />
+              <xs:element name="idEje" msprop:Generator_ColumnPropNameInTable="idEjeColumn" msprop:Generator_ColumnPropNameInRow="idEje" msprop:Generator_UserColumnName="idEje" msprop:Generator_ColumnVarNameInTable="columnidEje" type="xs:unsignedByte" />
+              <xs:element name="Mouse" msprop:Generator_ColumnPropNameInTable="MouseColumn" msprop:Generator_ColumnPropNameInRow="Mouse" msprop:Generator_UserColumnName="Mouse" msprop:Generator_ColumnVarNameInTable="columnMouse" type="xs:unsignedByte" default="1" />
+              <xs:element name="JoySalida" msprop:Generator_ColumnPropNameInTable="JoySalidaColumn" msprop:Generator_ColumnPropNameInRow="JoySalida" msprop:Generator_UserColumnName="JoySalida" msprop:Generator_ColumnVarNameInTable="columnJoySalida" type="xs:unsignedByte" minOccurs="0" />
+              <xs:element name="TipoEje" msprop:Generator_ColumnPropNameInTable="TipoEjeColumn" msprop:Generator_ColumnPropNameInRow="TipoEje" msprop:Generator_UserColumnName="TipoEje" msprop:Generator_ColumnVarNameInTable="columnTipoEje" type="xs:unsignedByte" minOccurs="0" />
+              <xs:element name="Eje" msprop:Generator_ColumnPropNameInTable="EjeColumn" msprop:Generator_ColumnPropNameInRow="Eje" msprop:Generator_UserColumnName="Eje" msprop:Generator_ColumnVarNameInTable="columnEje" type="xs:unsignedByte" />
+              <xs:element name="Sensibilidad" msprop:Generator_ColumnPropNameInTable="SensibilidadColumn" msprop:Generator_ColumnPropNameInRow="Sensibilidad" msprop:Generator_UserColumnName="Sensibilidad" msprop:Generator_ColumnVarNameInTable="columnSensibilidad" type="xs:base64Binary" />
+              <xs:element name="Slider" msprop:Generator_ColumnPropNameInTable="SliderColumn" msprop:Generator_ColumnPropNameInRow="Slider" msprop:Generator_UserColumnName="Slider" msprop:Generator_ColumnVarNameInTable="columnSlider" type="xs:unsignedByte" default="0" />
+              <xs:element name="Bandas" msprop:Generator_ColumnPropNameInTable="BandasColumn" msprop:Generator_ColumnPropNameInRow="Bandas" msprop:Generator_UserColumnName="Bandas" msprop:Generator_ColumnVarNameInTable="columnBandas" type="xs:base64Binary" />
+              <xs:element name="ResistenciaInc" msprop:Generator_ColumnPropNameInTable="ResistenciaIncColumn" msprop:Generator_ColumnPropNameInRow="ResistenciaInc" msprop:Generator_UserColumnName="ResistenciaInc" msprop:Generator_ColumnVarNameInTable="columnResistenciaInc" type="xs:unsignedByte" default="0" />
+              <xs:element name="ResistenciaDec" msprop:Generator_ColumnPropNameInTable="ResistenciaDecColumn" msprop:Generator_ColumnPropNameInRow="ResistenciaDec" msprop:Generator_UserColumnName="ResistenciaDec" msprop:Generator_ColumnVarNameInTable="columnResistenciaDec" type="xs:unsignedByte" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="GENERAL" msprop:Generator_RowEvHandlerName="GENERALRowChangeEventHandler" msprop:Generator_RowDeletedName="GENERALRowDeleted" msprop:Generator_RowDeletingName="GENERALRowDeleting" msprop:Generator_RowEvArgName="GENERALRowChangeEvent" msprop:Generator_TablePropName="GENERAL" msprop:Generator_RowChangedName="GENERALRowChanged" msprop:Generator_UserTableName="GENERAL" msprop:Generator_RowChangingName="GENERALRowChanging" msprop:Generator_RowClassName="GENERALRow" msprop:Generator_TableClassName="GENERALDataTable" msprop:Generator_TableVarName="tableGENERAL">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TickRaton" msprop:Generator_ColumnPropNameInTable="TickRatonColumn" msprop:Generator_ColumnPropNameInRow="TickRaton" msprop:Generator_UserColumnName="TickRaton" msprop:Generator_ColumnVarNameInTable="columnTickRaton" type="xs:unsignedByte" default="1" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ACCIONES" msprop:Generator_RowEvHandlerName="ACCIONESRowChangeEventHandler" msprop:Generator_RowDeletedName="ACCIONESRowDeleted" msprop:Generator_RowDeletingName="ACCIONESRowDeleting" msprop:Generator_RowEvArgName="ACCIONESRowChangeEvent" msprop:Generator_TablePropName="ACCIONES" msprop:Generator_RowChangedName="ACCIONESRowChanged" msprop:Generator_UserTableName="ACCIONES" msprop:Generator_RowChangingName="ACCIONESRowChanging" msprop:Generator_RowClassName="ACCIONESRow" msprop:Generator_TableClassName="ACCIONESDataTable" msprop:Generator_TableVarName="tableACCIONES">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idAccion" msprop:Generator_ColumnPropNameInTable="idAccionColumn" msprop:Generator_ColumnPropNameInRow="idAccion" msprop:Generator_UserColumnName="idAccion" msprop:Generator_ColumnVarNameInTable="columnidAccion" type="xs:unsignedShort" />
+              <xs:element name="Nombre" msprop:Generator_ColumnPropNameInTable="NombreColumn" msprop:Generator_ColumnPropNameInRow="Nombre" msprop:Generator_UserColumnName="Nombre" msprop:Generator_ColumnVarNameInTable="columnNombre" default="">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="32" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Comandos" msdata:DataType="System.UInt16[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnPropNameInTable="ComandosColumn" msprop:Generator_ColumnPropNameInRow="Comandos" msprop:Generator_UserColumnName="Comandos" msprop:Generator_ColumnVarNameInTable="columnComandos" type="xs:anyType" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="INDICESEJES" msprop:Generator_RowEvHandlerName="INDICESEJESRowChangeEventHandler" msprop:Generator_RowDeletedName="INDICESEJESRowDeleted" msprop:Generator_RowDeletingName="INDICESEJESRowDeleting" msprop:Generator_RowEvArgName="INDICESEJESRowChangeEvent" msprop:Generator_TablePropName="INDICESEJES" msprop:Generator_RowChangedName="INDICESEJESRowChanged" msprop:Generator_UserTableName="INDICESEJES" msprop:Generator_RowChangingName="INDICESEJESRowChanging" msprop:Generator_RowClassName="INDICESEJESRow" msprop:Generator_TableClassName="INDICESEJESDataTable" msprop:Generator_TableVarName="tableINDICESEJES">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idJoy" msprop:Generator_ColumnPropNameInTable="idJoyColumn" msprop:Generator_ColumnPropNameInRow="idJoy" msprop:Generator_UserColumnName="idJoy" msprop:Generator_ColumnVarNameInTable="columnidJoy" type="xs:unsignedInt" />
+              <xs:element name="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_UserColumnName="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" type="xs:unsignedByte" />
+              <xs:element name="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_UserColumnName="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" type="xs:unsignedByte" />
+              <xs:element name="idEje" msprop:Generator_ColumnPropNameInTable="idEjeColumn" msprop:Generator_ColumnPropNameInRow="idEje" msprop:Generator_UserColumnName="idEje" msprop:Generator_ColumnVarNameInTable="columnidEje" type="xs:unsignedInt" />
+              <xs:element name="id" msdata:Caption="Mouse" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_UserColumnName="id" msprop:Generator_ColumnVarNameInTable="columnid" type="xs:unsignedByte" />
+              <xs:element name="idAccion" msdata:Caption="Indices" msprop:Generator_ColumnPropNameInTable="idAccionColumn" msprop:Generator_ColumnPropNameInRow="idAccion" msprop:Generator_UserColumnName="idAccion" msprop:Generator_ColumnVarNameInTable="columnidAccion" type="xs:unsignedShort" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="INDICESSETAS" msprop:Generator_RowEvHandlerName="INDICESSETASRowChangeEventHandler" msprop:Generator_RowDeletedName="INDICESSETASRowDeleted" msprop:Generator_RowDeletingName="INDICESSETASRowDeleting" msprop:Generator_RowEvArgName="INDICESSETASRowChangeEvent" msprop:Generator_TablePropName="INDICESSETAS" msprop:Generator_RowChangedName="INDICESSETASRowChanged" msprop:Generator_UserTableName="INDICESSETAS" msprop:Generator_RowChangingName="INDICESSETASRowChanging" msprop:Generator_RowClassName="INDICESSETASRow" msprop:Generator_TableClassName="INDICESSETASDataTable" msprop:Generator_TableVarName="tableINDICESSETAS">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idJoy" msprop:Generator_ColumnPropNameInTable="idJoyColumn" msprop:Generator_ColumnPropNameInRow="idJoy" msprop:Generator_UserColumnName="idJoy" msprop:Generator_ColumnVarNameInTable="columnidJoy" type="xs:unsignedInt" />
+              <xs:element name="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_UserColumnName="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" type="xs:unsignedByte" />
+              <xs:element name="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_UserColumnName="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" type="xs:unsignedByte" />
+              <xs:element name="idSeta" msdata:Caption="idEje" msprop:Generator_ColumnPropNameInTable="idSetaColumn" msprop:Generator_ColumnPropNameInRow="idSeta" msprop:Generator_UserColumnName="idSeta" msprop:Generator_ColumnVarNameInTable="columnidSeta" type="xs:unsignedInt" />
+              <xs:element name="id" msdata:Caption="Mouse" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_UserColumnName="id" msprop:Generator_ColumnVarNameInTable="columnid" type="xs:unsignedByte" />
+              <xs:element name="idAccion" msdata:Caption="Indices" msprop:Generator_ColumnPropNameInTable="idAccionColumn" msprop:Generator_ColumnPropNameInRow="idAccion" msprop:Generator_UserColumnName="idAccion" msprop:Generator_ColumnVarNameInTable="columnidAccion" type="xs:unsignedShort" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="INDICESBOTONES" msprop:Generator_RowEvHandlerName="INDICESBOTONESRowChangeEventHandler" msprop:Generator_RowDeletedName="INDICESBOTONESRowDeleted" msprop:Generator_RowDeletingName="INDICESBOTONESRowDeleting" msprop:Generator_RowEvArgName="INDICESBOTONESRowChangeEvent" msprop:Generator_TablePropName="INDICESBOTONES" msprop:Generator_RowChangedName="INDICESBOTONESRowChanged" msprop:Generator_UserTableName="INDICESBOTONES" msprop:Generator_RowChangingName="INDICESBOTONESRowChanging" msprop:Generator_RowClassName="INDICESBOTONESRow" msprop:Generator_TableClassName="INDICESBOTONESDataTable" msprop:Generator_TableVarName="tableINDICESBOTONES">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idJoy" msprop:Generator_ColumnPropNameInTable="idJoyColumn" msprop:Generator_ColumnPropNameInRow="idJoy" msprop:Generator_UserColumnName="idJoy" msprop:Generator_ColumnVarNameInTable="columnidJoy" type="xs:unsignedInt" />
+              <xs:element name="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_UserColumnName="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" type="xs:unsignedByte" />
+              <xs:element name="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_UserColumnName="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" type="xs:unsignedByte" />
+              <xs:element name="idBoton" msdata:Caption="idEje" msprop:Generator_ColumnPropNameInTable="idBotonColumn" msprop:Generator_ColumnPropNameInRow="idBoton" msprop:Generator_UserColumnName="idBoton" msprop:Generator_ColumnVarNameInTable="columnidBoton" type="xs:unsignedInt" />
+              <xs:element name="id" msdata:Caption="Mouse" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_UserColumnName="id" msprop:Generator_ColumnVarNameInTable="columnid" type="xs:unsignedByte" />
+              <xs:element name="idAccion" msdata:Caption="Indices" msprop:Generator_ColumnPropNameInTable="idAccionColumn" msprop:Generator_ColumnPropNameInRow="idAccion" msprop:Generator_UserColumnName="idAccion" msprop:Generator_ColumnVarNameInTable="columnidAccion" type="xs:unsignedShort" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="MAPABOTONES" msprop:Generator_RowEvHandlerName="MAPABOTONESRowChangeEventHandler" msprop:Generator_RowDeletedName="MAPABOTONESRowDeleted" msprop:Generator_RowDeletingName="MAPABOTONESRowDeleting" msprop:Generator_RowEvArgName="MAPABOTONESRowChangeEvent" msprop:Generator_TablePropName="MAPABOTONES" msprop:Generator_RowChangedName="MAPABOTONESRowChanged" msprop:Generator_UserTableName="MAPABOTONES" msprop:Generator_RowChangingName="MAPABOTONESRowChanging" msprop:Generator_RowClassName="MAPABOTONESRow" msprop:Generator_TableClassName="MAPABOTONESDataTable" msprop:Generator_TableVarName="tableMAPABOTONES">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idJoy" msprop:Generator_ColumnPropNameInTable="idJoyColumn" msprop:Generator_ColumnPropNameInRow="idJoy" msprop:Generator_UserColumnName="idJoy" msprop:Generator_ColumnVarNameInTable="columnidJoy" type="xs:unsignedInt" />
+              <xs:element name="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_UserColumnName="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" type="xs:unsignedByte" />
+              <xs:element name="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_UserColumnName="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" type="xs:unsignedByte" />
+              <xs:element name="idBoton" msprop:Generator_ColumnPropNameInTable="idBotonColumn" msprop:Generator_ColumnPropNameInRow="idBoton" msprop:Generator_UserColumnName="idBoton" msprop:Generator_ColumnVarNameInTable="columnidBoton" type="xs:unsignedByte" />
+              <xs:element name="TamIndices" msprop:Generator_ColumnPropNameInTable="TamIndicesColumn" msprop:Generator_ColumnPropNameInRow="TamIndices" msprop:Generator_UserColumnName="TamIndices" msprop:Generator_ColumnVarNameInTable="columnTamIndices" type="xs:unsignedByte" default="0" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="MAPASETAS" msprop:Generator_RowEvHandlerName="MAPASETASRowChangeEventHandler" msprop:Generator_RowDeletedName="MAPASETASRowDeleted" msprop:Generator_RowDeletingName="MAPASETASRowDeleting" msprop:Generator_RowEvArgName="MAPASETASRowChangeEvent" msprop:Generator_TablePropName="MAPASETAS" msprop:Generator_RowChangedName="MAPASETASRowChanged" msprop:Generator_UserTableName="MAPASETAS" msprop:Generator_RowChangingName="MAPASETASRowChanging" msprop:Generator_RowClassName="MAPASETASRow" msprop:Generator_TableClassName="MAPASETASDataTable" msprop:Generator_TableVarName="tableMAPASETAS">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idJoy" msprop:Generator_ColumnPropNameInTable="idJoyColumn" msprop:Generator_ColumnPropNameInRow="idJoy" msprop:Generator_UserColumnName="idJoy" msprop:Generator_ColumnVarNameInTable="columnidJoy" type="xs:unsignedInt" />
+              <xs:element name="idPinkie" msprop:Generator_ColumnPropNameInTable="idPinkieColumn" msprop:Generator_ColumnPropNameInRow="idPinkie" msprop:Generator_UserColumnName="idPinkie" msprop:Generator_ColumnVarNameInTable="columnidPinkie" type="xs:unsignedByte" />
+              <xs:element name="idModo" msprop:Generator_ColumnPropNameInTable="idModoColumn" msprop:Generator_ColumnPropNameInRow="idModo" msprop:Generator_UserColumnName="idModo" msprop:Generator_ColumnVarNameInTable="columnidModo" type="xs:unsignedByte" />
+              <xs:element name="IdSeta" msprop:Generator_ColumnPropNameInTable="IdSetaColumn" msprop:Generator_ColumnPropNameInRow="IdSeta" msprop:Generator_UserColumnName="IdSeta" msprop:Generator_ColumnVarNameInTable="columnIdSeta" type="xs:unsignedByte" />
+              <xs:element name="TamIndices" msprop:Generator_ColumnPropNameInTable="TamIndicesColumn" msprop:Generator_ColumnPropNameInRow="TamIndices" msprop:Generator_UserColumnName="TamIndices" msprop:Generator_ColumnVarNameInTable="columnTamIndices" type="xs:unsignedByte" default="0" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:MAPAEJES" />
+      <xs:field xpath="mstns:idJoy" />
+      <xs:field xpath="mstns:idPinkie" />
+      <xs:field xpath="mstns:idModo" />
+      <xs:field xpath="mstns:idEje" />
+    </xs:unique>
+    <xs:unique name="ACCIONES_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:ACCIONES" />
+      <xs:field xpath="mstns:idAccion" />
+    </xs:unique>
+    <xs:unique name="INDICESEJES_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:INDICESEJES" />
+      <xs:field xpath="mstns:idJoy" />
+      <xs:field xpath="mstns:idPinkie" />
+      <xs:field xpath="mstns:idModo" />
+      <xs:field xpath="mstns:idEje" />
+      <xs:field xpath="mstns:id" />
+    </xs:unique>
+    <xs:unique name="INDICESSETAS_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:INDICESSETAS" />
+      <xs:field xpath="mstns:idJoy" />
+      <xs:field xpath="mstns:idPinkie" />
+      <xs:field xpath="mstns:idModo" />
+      <xs:field xpath="mstns:idSeta" />
+      <xs:field xpath="mstns:id" />
+    </xs:unique>
+    <xs:unique name="INDICESBOTONES_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:INDICESBOTONES" />
+      <xs:field xpath="mstns:idJoy" />
+      <xs:field xpath="mstns:idPinkie" />
+      <xs:field xpath="mstns:idModo" />
+      <xs:field xpath="mstns:idBoton" />
+      <xs:field xpath="mstns:id" />
+    </xs:unique>
+    <xs:unique name="MAPABOTONES_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:MAPABOTONES" />
+      <xs:field xpath="mstns:idJoy" />
+      <xs:field xpath="mstns:idPinkie" />
+      <xs:field xpath="mstns:idModo" />
+      <xs:field xpath="mstns:idBoton" />
+    </xs:unique>
+    <xs:unique name="MAPASETAS_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:MAPASETAS" />
+      <xs:field xpath="mstns:idJoy" />
+      <xs:field xpath="mstns:idPinkie" />
+      <xs:field xpath="mstns:idModo" />
+      <xs:field xpath="mstns:IdSeta" />
+    </xs:unique>
+    <xs:keyref name="FK_ACCIONES_INDICESBOTONES" refer="ACCIONES_Constraint1" msprop:rel_Generator_UserParentTable="ACCIONES" msprop:rel_Generator_UserChildTable="INDICESBOTONES" msprop:rel_Generator_RelationVarName="relationFK_ACCIONES_INDICESBOTONES" msprop:rel_Generator_ChildPropName="GetINDICESBOTONESRows" msprop:rel_Generator_UserRelationName="FK_ACCIONES_INDICESBOTONES" msprop:rel_Generator_ParentPropName="ACCIONESRow" msdata:DeleteRule="SetDefault">
+      <xs:selector xpath=".//mstns:INDICESBOTONES" />
+      <xs:field xpath="mstns:idAccion" />
+    </xs:keyref>
+    <xs:keyref name="FK_ACCIONES_INDICESSETAS" refer="ACCIONES_Constraint1" msprop:rel_Generator_UserParentTable="ACCIONES" msprop:rel_Generator_UserChildTable="INDICESSETAS" msprop:rel_Generator_RelationVarName="relationFK_ACCIONES_INDICESSETAS" msprop:rel_Generator_ChildPropName="GetINDICESSETASRows" msprop:rel_Generator_UserRelationName="FK_ACCIONES_INDICESSETAS" msprop:rel_Generator_ParentPropName="ACCIONESRow" msdata:DeleteRule="SetDefault">
+      <xs:selector xpath=".//mstns:INDICESSETAS" />
+      <xs:field xpath="mstns:idAccion" />
+    </xs:keyref>
+    <xs:keyref name="FK_ACCIONES_INDICESEJES" refer="ACCIONES_Constraint1" msprop:rel_Generator_UserParentTable="ACCIONES" msprop:rel_Generator_UserChildTable="INDICESEJES" msprop:rel_Generator_RelationVarName="relationFK_ACCIONES_INDICESEJES" msprop:rel_Generator_ChildPropName="GetINDICESEJESRows" msprop:rel_Generator_UserRelationName="FK_ACCIONES_INDICESEJES" msprop:rel_Generator_ParentPropName="ACCIONESRow" msdata:DeleteRule="SetDefault">
+      <xs:selector xpath=".//mstns:INDICESEJES" />
+      <xs:field xpath="mstns:idAccion" />
+    </xs:keyref>
+  </xs:element>
+</xs:schema>

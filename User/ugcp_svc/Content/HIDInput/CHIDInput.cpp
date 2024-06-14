@@ -255,7 +255,7 @@ void CHIDInput::LoopWnd()
     BOOL ok = 1;
     do
     {
-        ok = GetMessage(&msg, 0, 0, 0);
+        ok = GetMessageW(&msg, 0, 0, 0);
     }
     while (ok != 0);
 }

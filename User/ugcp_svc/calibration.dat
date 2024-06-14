@@ -1,0 +1,239 @@
+{
+  "Limits": [
+    {
+      "IdJoy": 111347555,
+      "IdAxis": 0,
+      "Null": 0,
+      "Left": 0,
+      "Center": 63,
+      "Right": 127,
+      "Range": 127
+    },
+    {
+      "IdJoy": 111347555,
+      "IdAxis": 1,
+      "Null": 0,
+      "Left": 0,
+      "Center": 63,
+      "Right": 127,
+      "Range": 127
+    },
+    {
+      "IdJoy": 111347555,
+      "IdAxis": 2,
+      "Null": 0,
+      "Left": 3,
+      "Center": 255,
+      "Right": 511,
+      "Range": 511
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 0,
+      "Null": 0,
+      "Left": 0,
+      "Center": 4096,
+      "Right": 8191,
+      "Range": 8191
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 1,
+      "Null": 0,
+      "Left": 0,
+      "Center": 4096,
+      "Right": 8191,
+      "Range": 8191
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 3,
+      "Null": 0,
+      "Left": 0,
+      "Center": 1024,
+      "Right": 2047,
+      "Range": 2047
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 4,
+      "Null": 0,
+      "Left": 0,
+      "Center": 512,
+      "Right": 1023,
+      "Range": 1023
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 5,
+      "Null": 0,
+      "Left": 0,
+      "Center": 512,
+      "Right": 1023,
+      "Range": 1023
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 2,
+      "Null": 0,
+      "Left": 0,
+      "Center": 4096,
+      "Right": 8191,
+      "Range": 8191
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 0,
+      "Null": 0,
+      "Left": 0,
+      "Center": 4096,
+      "Right": 8191,
+      "Range": 8191
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 1,
+      "Null": 0,
+      "Left": 0,
+      "Center": 4096,
+      "Right": 8191,
+      "Range": 8191
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 2,
+      "Null": 0,
+      "Left": 0,
+      "Center": 512,
+      "Right": 1023,
+      "Range": 1023
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 3,
+      "Null": 0,
+      "Left": 0,
+      "Center": 512,
+      "Right": 1023,
+      "Range": 1023
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 4,
+      "Null": 0,
+      "Left": 0,
+      "Center": 512,
+      "Right": 1023,
+      "Range": 1023
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 5,
+      "Null": 0,
+      "Left": 0,
+      "Center": 512,
+      "Right": 1023,
+      "Range": 1023
+    }
+  ],
+  "Jitters": [
+    {
+      "IdJoy": 111347555,
+      "IdAxis": 0,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 111347555,
+      "IdAxis": 2,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 0,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 1,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 3,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 4,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 5,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103616,
+      "IdAxis": 2,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 0,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 1,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 2,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 3,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 4,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    },
+    {
+      "IdJoy": 589103405,
+      "IdAxis": 5,
+      "Antiv": 0,
+      "Margin": 0,
+      "Strength": 0
+    }
+  ]
+}

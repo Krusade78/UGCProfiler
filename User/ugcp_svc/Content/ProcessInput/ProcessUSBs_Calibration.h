@@ -10,7 +10,7 @@ public:
 	~CCalibration();
 	void Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA pHidData);
 private:
-	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_LIMITS>> limits;
-	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_JITTER>> jitters;
+	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_LIMITS>> limitsCache;
+	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_JITTER>> jittersCache;
 };
 

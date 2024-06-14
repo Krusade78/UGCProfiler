@@ -19,6 +19,7 @@ public:
 		UCHAR ReportId;
 		UCHAR Bits;
 		UCHAR IsButton;
+		UCHAR IsHat;
 		UCHAR Skip;
 		UINT16 Index;
 	} ST_MAP;

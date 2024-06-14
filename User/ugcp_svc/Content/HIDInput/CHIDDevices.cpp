@@ -185,6 +185,7 @@ bool CHIDDevices::GetDeviceMap(void* ppd, void* pc)
 
     UCHAR btId = 0;
     UCHAR axId = 0;
+    UCHAR hatId = 0;
     for (USHORT idx = 0; idx < pCaps->NumberInputDataIndices; idx++)
     {
         for(USHORT i = 0; i < pCaps->NumberInputButtonCaps; i++)
@@ -216,6 +217,7 @@ bool CHIDDevices::GetDeviceMap(void* ppd, void* pc)
                     amap->ReportId = val.ReportID;
                     amap->Bits = static_cast<UCHAR>(val.BitSize);
                     amap->IsButton = FALSE;
+                    amap->IsHat = FALSE;
                     amap->Index = val.NotRange.DataIndex;
                     amap->Skip = TRUE;
                     map.push_back(amap);
@@ -227,11 +229,12 @@ bool CHIDDevices::GetDeviceMap(void* ppd, void* pc)
                     amap->ReportId = val.ReportID;
                     amap->Bits = static_cast<UCHAR>(val.BitSize);
                     amap->IsButton = FALSE;
+                    amap->IsHat = val.NotRange.Usage == 57;
                     amap->Index = val.NotRange.DataIndex;
                     amap->Skip = FALSE;
                     map.push_back(amap);
-                    axId++;
-                    if (axId == 24) { return false; }
+                    if (!amap->IsHat) { axId++; } else { hatId++; }
+                    if ((axId == 24) || (hatId == 4)) { return false; }
                 }
                 break;
             }

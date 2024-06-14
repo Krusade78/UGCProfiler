@@ -69,6 +69,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)usuario\CPPaCS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -80,7 +81,7 @@
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y $(SolutionDir)usuario\cpp2cs\$(Platform)\$(Configuration)\CPP2CS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)
+      <Command>xcopy /y $(SolutionDir)user\cpp2cs\$(Platform)\$(Configuration)\CPP2CS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)
 xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configuration)\
 </Command>
     </PostBuildEvent>
@@ -93,8 +94,9 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)usuario\CPPaCS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,17 +106,16 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
       <AdditionalDependencies>..\CPP2CS\$(Platform)\$(Configuration)\CPP2CS.lib;lib/vJoyInterface.lib;WinUSB.lib;Setupapi.lib;Hid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <UACUIAccess>false</UACUIAccess>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y $(SolutionDir)usuario\cpp2cs\$(Platform)\$(Configuration)\CPP2CS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)
+      <Command>xcopy /y $(SolutionDir)user\cpp2cs\$(Platform)\$(Configuration)\CPP2CS.runtimeconfig.json $(ProjectDir)$(Platform)\$(Configuration)
 xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configuration)\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Content\HIDInput\CHIDInput.h" />
     <ClInclude Include="Content\CHIDOutput.h" />
-    <ClInclude Include="Content\DxCalibration\CDirectInput.h" />
     <ClInclude Include="Content\CComs.h" />
     <ClInclude Include="Content\EventQueue\CEventQueue.h" />
     <ClInclude Include="Content\EventQueue\CEventPacket.h" />
@@ -155,7 +156,6 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
   <ItemGroup>
     <ClCompile Include="Content\HIDInput\CHIDInput.cpp" />
     <ClCompile Include="Content\CHIDOutput.cpp" />
-    <ClCompile Include="Content\DxCalibration\cdirectinput.cpp" />
     <ClCompile Include="Content\CComs.cpp" />
     <ClCompile Include="Content\EventQueue\CEventQueue.cpp" />
     <ClCompile Include="Content\EventQueue\CEventPacket.cpp" />
@@ -195,15 +195,14 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
     <Library Include="lib\vJoyInterface.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CPP2CS\CPPaCS.vcxproj">
+    <ProjectReference Include="..\CPP2CS\CPP2CS.vcxproj">
       <Project>{6de78144-2a0e-47bf-80d6-bbaffc123d99}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Launcher\Launcher.csproj">
-      <Project>{19e2df53-6e1e-4812-b33a-5aa0b76347c1}</Project>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+      <Project>{59b85d3f-b707-4847-ae1d-93ec65bb6565}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Shrared\Shared.csproj">
-      <Project>{d64e9747-0d33-4d24-8035-3cc4d0ed63ad}</Project>
+      <Project>{96c167c8-a0f9-4882-8a96-5aed739b603f}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,8 +3,8 @@
 
 CCalibration::~CCalibration()
 {
-	limits.clear();
-	jitters.clear();
+	limitsCache.clear();
+	jittersCache.clear();
 }
 
 void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA pHidData)
@@ -19,23 +19,23 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 			{
 				try
 				{
-					limits.erase(joyId);
-					limits.insert({ joyId, std::vector<CALIBRATION::ST_LIMITS>() });
+					limitsCache.erase(joyId);
+					limitsCache.insert({ joyId, std::vector<CALIBRATION::ST_LIMITS>() });
 					for (auto const& axis : pProfile->GetCalibration()->Limits.at(joyId))
 					{
-						limits.at(joyId).push_back(CALIBRATION::ST_LIMITS());
-						memcpy(&limits.at(joyId).back(), &axis, sizeof(CALIBRATION::ST_LIMITS));
+						limitsCache.at(joyId).push_back(CALIBRATION::ST_LIMITS());
+						memcpy(&limitsCache.at(joyId).back(), &axis, sizeof(CALIBRATION::ST_LIMITS));
 					}
 				}
 				catch (...) {}
 				try
 				{
-					jitters.erase(joyId);
-					jitters.insert({ joyId, std::vector<CALIBRATION::ST_JITTER>()});
+					jittersCache.erase(joyId);
+					jittersCache.insert({ joyId, std::vector<CALIBRATION::ST_JITTER>()});
 					for (auto const& axis : pProfile->GetCalibration()->Jitters.at(joyId))
 					{
-						jitters.at(joyId).push_back(CALIBRATION::ST_JITTER());
-						memcpy(&jitters.at(joyId).back(), &axis, sizeof(CALIBRATION::ST_JITTER));
+						jittersCache.at(joyId).push_back(CALIBRATION::ST_JITTER());
+						memcpy(&jittersCache.at(joyId).back(), &axis, sizeof(CALIBRATION::ST_JITTER));
 					}
 				}
 				catch (...) {}
@@ -49,8 +49,8 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 
 	// Antivibration
 
-	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_JITTER>>::iterator pjitt = jitters.find(joyId);
-	if (pjitt != jitters.end())
+	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_JITTER>>::iterator pjitt = jittersCache.find(joyId);
+	if (pjitt != jittersCache.end())
 	{
 		for (auto& jitt : pjitt->second)
 		{
@@ -58,7 +58,7 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 			{
 				UINT16 pollAxis = static_cast<UINT16>(pHidData->Axis[idx++]);
 
-				if ((pollAxis < (jitt.PosChosen - jitt.Margin)) || (pollAxis > (jitt.PosChosen + jitt.Margin)))
+				if ((pollAxis == jitt.PosChosen) ||(pollAxis < (jitt.PosChosen - jitt.Margin)) || (pollAxis > (jitt.PosChosen + jitt.Margin)))
 				{
 					jitt.PosRepeated = 0;
 					jitt.PosChosen = pollAxis;
@@ -82,49 +82,40 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 
 	// Calibration
 
-	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_LIMITS>>::iterator plimit = limits.find(joyId);
-	if (plimit != limits.end())
+	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_LIMITS>>::iterator plimit = limitsCache.find(joyId);
+	if (plimit != limitsCache.end())
 	{
 		idx = 0;
 		for (auto const& limit : plimit->second)
 		{
-			if (limit.Cal)
 			{
 				UINT16 pollAxis = static_cast<UINT16>(pHidData->Axis[idx]);
 				UINT16 width1, width2;
-				width1 = (limit.Center - limit.Null) - limit.Left;
+				width1 = limit.Center - limit.Null - limit.Left;
 				width2 = limit.Right - (limit.Center + limit.Null);
 
 				if (((pollAxis >= (limit.Center - limit.Null)) && (pollAxis <= (limit.Center + limit.Null))))
 				{
 					//Null zone
-					pHidData->Axis[idx++] = limit.Center;
+					pHidData->Axis[idx++] = 16383; //normalized vjoy 15bit limit.Center;
 					continue;
 				}
 				else
 				{
 					if (pollAxis < limit.Left)
-						pollAxis = limit.Left;
+						pollAxis = 0;
 					if (pollAxis > limit.Right)
-						pollAxis = limit.Right;
+						pollAxis = 32767; //normalized vjoy 15bit
 
 					if (pollAxis < limit.Center)
 					{
-						if (width1 != (limit.Center - 0))
-						{
-							if (pollAxis >= width1) { pollAxis = width1; }
-							pollAxis -= limit.Left;
-							pollAxis = ((pollAxis * (limit.Center - 0)) / width1);
-						}
+						pollAxis -= limit.Left;
+						pollAxis = ((pollAxis * 16382) / (limit.Center - 1)); //normalized vjoy 15bit
 					}
 					else
 					{
-						if (width2 != (limit.Range - limit.Center))
-						{
-							if (pollAxis >= limit.Right) { pollAxis = limit.Right; }
-							pollAxis -= (limit.Center + limit.Null);
-							pollAxis = limit.Center + ((pollAxis * (limit.Range - limit.Center)) / width2);
-						}
+						pollAxis -= (limit.Center + limit.Null + 1);
+						pollAxis = 16384 + ((pollAxis * 16383) / (limit.Right - limit.Center - limit.Null - 1)); //normalized vjoy 15bit
 					}
 				}
 

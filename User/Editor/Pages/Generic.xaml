@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Profiler.Pages.Generic"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <ScrollViewer x:Name="scroll" VerticalScrollMode="Auto" Margin="0,20" MaxWidth="1000">
+        <StackPanel>
+            <Border x:Name="bd1" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,0,30,0" Visibility="Visible">
+                <Border.Shadow>
+                    <ThemeShadow />
+                </Border.Shadow>
+                <StackPanel x:Name="spAxes" Margin="15">
+                    <TextBlock Text="Axes" Style="{ThemeResource SubheaderTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="bd2" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,20,30,20" Visibility="Visible">
+                <Border.Shadow>
+                    <ThemeShadow />
+                </Border.Shadow>
+                <StackPanel x:Name="spHats" Margin="15">
+                    <TextBlock Text="Hats" Style="{ThemeResource SubheaderTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="bd3" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,0,30,20" Visibility="Visible">
+                <Border.Shadow>
+                    <ThemeShadow />
+                </Border.Shadow>
+                <StackPanel x:Name="spButtons" Margin="15">
+                    <TextBlock Text="Buttons" Style="{ThemeResource SubheaderTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

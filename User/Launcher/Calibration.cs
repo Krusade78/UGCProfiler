@@ -9,19 +9,17 @@ namespace Launcher
 {
 	internal class CCalibration
 	{
-		public bool Load(System.IO.BinaryWriter outputPipeSvc)
+		public static bool Load(System.IO.BinaryWriter outputPipeSvc)
 		{
 			Shared.Calibration.CCalibration dsc = new();
 			try
 			{
 				dsc = System.Text.Json.JsonSerializer.Deserialize<Shared.Calibration.CCalibration>(System.IO.File.ReadAllText("calibration.dat"));
 			}
-			catch
+			catch {}
+			if (!LoadDefault(ref dsc))
 			{
-				if (!LoadDefault(ref dsc))
-				{
-					return false;
-				}
+				return false;
 			}
 
 			Dictionary<uint, List<Shared.CTypes.STJITTER>> jitter = [];
@@ -34,7 +32,7 @@ namespace Launcher
 				axesLimits += 5;
 				foreach (Shared.Calibration.Limits lAxis in dsc.Limits.OrderBy(x => x.IdAxis).Where(x => x.IdJoy == l.IdJoy))
 				{
-					limits[l.IdJoy].Add(new Shared.CTypes.STLIMITS() { Center = lAxis.Center, Left = lAxis.Left, Right = lAxis.Right, Null = lAxis.Null, Cal = lAxis.Cal, Range = lAxis.Range });
+					limits[l.IdJoy].Add(new Shared.CTypes.STLIMITS() { Center = lAxis.Center, Left = lAxis.Left, Right = lAxis.Right, Null = lAxis.Null, Range = lAxis.Range });
 					axesLimits += Marshal.SizeOf(typeof(Shared.CTypes.STLIMITS));
 				}
 			}
@@ -155,6 +153,11 @@ namespace Launcher
 					continue;
 				}
 
+				if (cal.Limits.Any(x => x.IdJoy == joyId))
+				{
+					continue;
+				}
+
 				IntPtr hDev = CWinUSB.CreateFileW(ninterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x00000080 | 0x40000000, IntPtr.Zero);
 				if (hDev == CWinUSB.INVALID_HANDLE_VALUE)
 				{
@@ -243,9 +246,9 @@ namespace Launcher
 						case 0x43: //vbrx
 						case 0x44: //vbry
 						case 0x45:  //vbrz
+						case 0x46: //vno
 							destinationAxis = true;
 							break;
-						//0x46 => 6, //vno
 						default:
 							break;
 
@@ -258,7 +261,6 @@ namespace Launcher
 					{
 						IdAxis = axId,
 						IdJoy = joyId,
-						Cal = 1,
 						Null = 1,
 						Left = (ushort)val.LogicalMin,
 						Right = (ushort)val.LogicalMax,

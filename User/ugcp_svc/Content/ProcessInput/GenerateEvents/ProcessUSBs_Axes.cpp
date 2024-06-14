@@ -20,23 +20,9 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 	{
 		UCHAR sy1;
 		UCHAR sy2;
-		UINT16 sTopSl;
-		INT16 sTop;
-		pProfile->InitCalibrationRead();
-		{
-			CALIBRATION::ST_LIMITS* pCal = pProfile->GetCalibration()->GetLimit(joyId, idx);
-			if (pCal != nullptr)
-			{
-				sTopSl = pCal->Range;
-				sTop = pCal->Center;
-			}
-			else
-			{
-				pProfile->EndCalibrationRead();
-				continue;
-			}
-		}
-		pProfile->EndCalibrationRead();
+		UINT16 sTopSl = 32767;
+		INT16 sTop = 16383;
+
 		if (sTopSl == 0) { sTopSl = 32767; }
 		if (sTop == 0) { sTop = sTopSl / 2; }
 		bool slider = false;
