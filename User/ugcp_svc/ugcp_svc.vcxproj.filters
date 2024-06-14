@@ -34,9 +34,6 @@
     <Filter Include="Content\ProcessOutput">
       <UniqueIdentifier>{1045d47f-373b-4110-8477-f837783cbaba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Content\DxCalibration">
-      <UniqueIdentifier>{6a0fd1cc-6352-4441-b79e-d680ba5a1c59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Content\InputQueue">
       <UniqueIdentifier>{e761d953-8ff2-4fda-8d9c-09a1567e681e}</UniqueIdentifier>
     </Filter>
@@ -65,9 +62,6 @@
     </ClInclude>
     <ClInclude Include="Content\X52\CWinUSBX52.h">
       <Filter>Content\X52</Filter>
-    </ClInclude>
-    <ClInclude Include="Content\DxCalibration\CDirectInput.h">
-      <Filter>Content\DxCalibration</Filter>
     </ClInclude>
     <ClInclude Include="Content\CComs.h">
       <Filter>Content</Filter>
@@ -181,9 +175,6 @@
     </ClCompile>
     <ClCompile Include="Content\X52\CWinUSBX52.cpp">
       <Filter>Content\X52</Filter>
-    </ClCompile>
-    <ClCompile Include="Content\DxCalibration\cdirectinput.cpp">
-      <Filter>Content\DxCalibration</Filter>
     </ClCompile>
     <ClCompile Include="Content\CComs.cpp">
       <Filter>Content</Filter>

@@ -116,7 +116,6 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
   <ItemGroup>
     <ClInclude Include="Content\HIDInput\CHIDInput.h" />
     <ClInclude Include="Content\CHIDOutput.h" />
-    <ClInclude Include="Content\DxCalibration\CDirectInput.h" />
     <ClInclude Include="Content\CComs.h" />
     <ClInclude Include="Content\EventQueue\CEventQueue.h" />
     <ClInclude Include="Content\EventQueue\CEventPacket.h" />
@@ -157,7 +156,6 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
   <ItemGroup>
     <ClCompile Include="Content\HIDInput\CHIDInput.cpp" />
     <ClCompile Include="Content\CHIDOutput.cpp" />
-    <ClCompile Include="Content\DxCalibration\cdirectinput.cpp" />
     <ClCompile Include="Content\CComs.cpp" />
     <ClCompile Include="Content\EventQueue\CEventQueue.cpp" />
     <ClCompile Include="Content\EventQueue\CEventPacket.cpp" />

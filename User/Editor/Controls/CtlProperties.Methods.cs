@@ -20,12 +20,12 @@ namespace Profiler.Controls
 
         public void Refresh()
         {
-            Show(CurrentSel.Joy, CurrentSel.Idx, /*tipoActual,*/ "", CurrentSel.HatPosition);
+            Show(CurrentSel.Joy, CurrentSel.Idx, "", CurrentSel.HatPosition);
         }
 
         private byte GetMode()
         {
-            return (byte)((cbMode.SelectedIndex << 4) | cbSubmode.SelectedIndex);
+            return (byte)((cbSubmode.SelectedIndex << 4) | cbMode.SelectedIndex);
         }
 
         #region "Load"

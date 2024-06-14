@@ -85,6 +85,11 @@ namespace Profiler
 					profilePath = filename;
 					this.Title = $"{Translate.Get("save title")} [{System.IO.Path.GetFileNameWithoutExtension(filename)}]";
 					btSave.IsEnabled = true;
+
+					foreach (Shared.ProfileModel.DeviceInfo di in data.Profile.DevicesIncluded)
+					{
+						ctlDevs.AddProfileDevice(di);
+					}
 				}
 			}
 		}
@@ -94,7 +99,14 @@ namespace Profiler
 			if (profilePath == "")
 				return await SaveAs();
 			else
-				return await data.Save(profilePath);
+			{
+				System.Collections.Generic.List<Shared.ProfileModel.DeviceInfo> devs = [];
+				foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kv in ctlDevs.GetDevices())
+				{
+					devs.Add(kv.Value);
+				}
+				return await data.Save(profilePath, devs);
+			}
 		}
 
 		private async System.Threading.Tasks.Task<bool> SaveAs()
@@ -107,7 +119,12 @@ namespace Profiler
 			Windows.Storage.StorageFile file = await dlg.PickSaveFileAsync();
 			if (file != null)
 			{
-				if (await data.Save(file.Path))
+                System.Collections.Generic.List<Shared.ProfileModel.DeviceInfo> devs = [];
+                foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kv in ctlDevs.GetDevices())
+                {
+                    devs.Add(kv.Value);
+                }
+                if (await data.Save(file.Path, devs))
 				{
 					profilePath = file.Path;
 					this.Title = $"{Translate.Get("save title")} [{System.IO.Path.GetFileNameWithoutExtension(file.DisplayName)}]";

@@ -31,7 +31,7 @@
     <x:String x:Key="profile">Profile</x:String>
     <x:String x:Key="devices">Devices</x:String>
     <x:String x:Key="refresh">Refresh</x:String>
-    <x:String x:Key="view">View</x:String>
+    <x:String x:Key="view">Editing</x:String>
     <x:String x:Key="edit">Edit</x:String>
     <x:String x:Key="list">List</x:String>
     <x:String x:Key="current_mode">Current mode</x:String>
@@ -66,6 +66,7 @@
     <x:String x:Key="test">Test</x:String>
     <x:String x:Key="raw_value">Raw value</x:String>
     <x:String x:Key="calibrated_value">Calibrated value</x:String>
+    <x:String x:Key="calibrated_game_value">Calibrated game value</x:String>
     <x:String x:Key="buffer">Buffer</x:String>
     <x:String x:Key="save_and_activate">Save and activate</x:String>
     <x:String x:Key="take_from_raw">Take from raw</x:String>
@@ -143,5 +144,9 @@
     <x:String x:Key="dx_hat_se">&lt;vJoy % - Hat $ SE&gt;</x:String>
     <x:String x:Key="dx_hat_e">&lt;vJoy % - Hat $ E&gt;</x:String>
     <x:String x:Key="dx_hat_ne">&lt;vJoy % - Hat $ NE&gt;</x:String>
+    <!--#endregion-->
+
+    <!--#region MacroEditor-->
+    <x:String x:Key="macros_management">Macros management</x:String>
     <!--#endregion-->
 </ResourceDictionary>

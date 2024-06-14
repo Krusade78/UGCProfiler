@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 namespace Profiler.Pages
 {
@@ -9,7 +10,7 @@ namespace Profiler.Pages
     internal sealed partial class SaitekPedals : Page, IHidToButton
     {
         private readonly Controls.CtlProperties props;
-        private Microsoft.UI.Xaml.Controls.Primitives.ToggleButton lastUse = null;
+        private ToggleButton lastUse = null;
         private readonly CHidToButton converter;
 
         public SaitekPedals(Controls.CtlProperties props)
@@ -30,7 +31,7 @@ namespace Profiler.Pages
         private void Uncheck(object sender)
         {
             if (lastUse != null) { lastUse.IsChecked = false; }
-            lastUse = (Microsoft.UI.Xaml.Controls.Primitives.ToggleButton)sender;
+            lastUse = (ToggleButton)sender;
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
@@ -42,19 +43,19 @@ namespace Profiler.Pages
         #region "axes"
         private void RightPedal_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x06a30763, 0, (string)((Button)sender).Content);
+            props.Show(0x06a30763, 0, (string)((ToggleButton)sender).Content);
             Uncheck(sender);
         }
 
         private void LeftPedal_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x06a30763, 1, (string)((Button)sender).Content);
+            props.Show(0x06a30763, 1, (string)((ToggleButton)sender).Content);
             Uncheck(sender);
         }
 
         private void AxisR_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x06a30763, 2, (string)((Button)sender).Content);
+            props.Show(0x06a30763, 2, (string)((ToggleButton)sender).Content);
             Uncheck(sender);
         }
         #endregion

@@ -13,7 +13,7 @@
             <ResourceDictionary>
                 <ResourceDictionary.ThemeDictionaries>
                     <ResourceDictionary x:Key="Default">
-                        <media:AcrylicBrush x:Key="CustomAcrylicInAppLuminosity"  TintOpacity="0" TintColor="LightSkyBlue" />
+                        <media:AcrylicBrush x:Key="CustomAcrylicInAppLuminosity"  TintOpacity="0" TintColor="White" />
                     </ResourceDictionary>
                 </ResourceDictionary.ThemeDictionaries>
             </ResourceDictionary>
@@ -115,15 +115,21 @@
 
             <Line Grid.Column="5" Y1="5" Y2="65" Stroke="#FFB9B9B9" StrokeThickness="1" Width="10" X1="4" X2="4"/>
 
-            <!--#region view -->
+            <!--#region edit -->
             <StackPanel Grid.Column="6" Orientation="Horizontal">
+                <ToggleButton MinWidth="70" x:Name="tbMacroEdit" Background="Transparent" BorderThickness="0" Checked="FtbMacroEdit_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+                    <StackPanel Margin="2">
+                        <TextBlock  Height="32" Width="32" Text="&#xE765;" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" FontSize="28"/>
+                        <TextBlock Text="Macros" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </ToggleButton>
+                
                 <ToggleButton MinWidth="70" x:Name="tbEdit" Background="Transparent" BorderThickness="0" Checked="FtbEdit_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
                     <StackPanel Margin="2">
                         <TextBlock  Height="32" Width="32" Text="&#xE70F;" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" FontSize="28"/>
                         <TextBlock Text="{StaticResource edit}" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </ToggleButton>
-
 
                 <ToggleButton MinWidth="70" x:Name="tbList" Background="Transparent" BorderThickness="0" Checked="FtbList_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}" >
                     <StackPanel Margin="2">
@@ -137,9 +143,9 @@
         </Grid>
 
         <Grid Grid.Row="1">
-                <Grid.Background>
-                    <ImageBrush ImageSource="/Res/CalibrationGrid.JPG" />
-                </Grid.Background>
+            <Grid.Background>
+                <ImageBrush ImageSource="/Res/CalibrationGrid.JPG" />
+            </Grid.Background>
             <Rectangle Fill="{ThemeResource CustomAcrylicInAppLuminosity}" />
         </Grid>
         <controls:CtlDevices Grid.Row="1" x:Name="ctlDevs" />

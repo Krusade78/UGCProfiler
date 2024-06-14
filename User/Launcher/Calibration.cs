@@ -17,12 +17,12 @@ namespace Launcher
 				dsc = System.Text.Json.JsonSerializer.Deserialize<Shared.Calibration.CCalibration>(System.IO.File.ReadAllText("calibration.dat"));
 			}
 			catch {}
-            if (!LoadDefault(ref dsc))
-            {
-                return false;
-            }
+			if (!LoadDefault(ref dsc))
+			{
+				return false;
+			}
 
-            Dictionary<uint, List<Shared.CTypes.STJITTER>> jitter = [];
+			Dictionary<uint, List<Shared.CTypes.STJITTER>> jitter = [];
 			Dictionary<uint, List<Shared.CTypes.STLIMITS>> limits = [];
 			int axesJitter = 5;
 			int axesLimits = 5;

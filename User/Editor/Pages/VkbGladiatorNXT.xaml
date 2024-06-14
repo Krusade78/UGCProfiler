@@ -18,9 +18,9 @@
             <ToggleButton x:Name="ButtonTrigger1" Content="Gatillo P.1" Width="85" Checked="ButtonTrigger1_Click"/>
             <ToggleButton x:Name="ButtonTrigger2" Content="Gatillo P.2" Margin="0,5,0,0"  Width="85" Checked="ButtonTrigger2_Click"/>
         </StackPanel>
-        <ToggleButton x:Name="ButtonS1" Content="Gatillo Rap." HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,200,350,0"  Width="75" Checked="ButtonS1_Click"/>
+        <ToggleButton x:Name="ButtonS1" Content="Gatillo Rap." HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,200,350,0"  Width="75" Checked="ButtonFastTrigger_Click"/>
         
-        <ToggleButton x:Name="ButtonLanzar" Content="Lanzar" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,150,380,0"  Width="75" Checked="ButtonLanzar_Click"/>
+        <ToggleButton x:Name="ButtonLanzar" Content="Lanzar" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,150,380,0"  Width="75" Checked="ButtonLaunch_Click"/>
 
         <ToggleButton x:Name="Button1" Content="Botón 1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,30,0"  Width="75" Checked="Button1_Click"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="180,435,0,0">

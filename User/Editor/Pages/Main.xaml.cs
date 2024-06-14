@@ -24,7 +24,12 @@ namespace Profiler.Pages
         }
         private void Refresh()
         {
-            if (deviceInfo == null)
+            if (currentSection == MainWindow.Section.Macros)
+            {
+                page.Content = new Macros.Main();
+                properties.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            }
+            else if (deviceInfo == null)
             {
                 page.Content = null;
                 properties.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;

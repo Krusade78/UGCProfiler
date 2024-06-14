@@ -205,10 +205,7 @@ namespace Profiler.Devices
 						ushort v = (ushort)indexData.RawValue;
 						if (mapIndex.Type == 253)
 						{
-							if (v != 8)
-							{
-								hidData.Hats[mapIndex.Id] |= (byte)v;
-							}
+							hidData.Hats[mapIndex.Id] = (byte)v;
 						}
 						else
 						{

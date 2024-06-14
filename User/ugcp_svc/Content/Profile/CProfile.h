@@ -22,17 +22,17 @@ public:
 	inline bool GetCalibrationMode() { return InterlockedCompareExchange16(&calibrationMode, FALSE, FALSE) == TRUE; };
 	inline bool GetRawMode() { return InterlockedCompareExchange16(&rawMode, FALSE, FALSE) == TRUE; };
 
-	inline void InitCalibrationRead() { WaitForSingleObject(hMutexCalibration, INFINITE); }
+	inline void InitCalibrationRead() const { WaitForSingleObject(hMutexCalibration, INFINITE); }
 	inline CALIBRATION* GetCalibration() { return &calibration; }
-	inline void EndCalibrationRead() { ReleaseMutex(hMutexCalibration); }
+	inline void EndCalibrationRead() const { ReleaseMutex(hMutexCalibration); }
 
-	inline void BeginProfileRead() { WaitForSingleObject(hMutexProgram, INFINITE); }
+	inline void BeginProfileRead() const { WaitForSingleObject(hMutexProgram, INFINITE); }
 	inline PROGRAMMING* GetProfile() { return &profile; };
-	inline void EndProfileRead() { ReleaseMutex(hMutexProgram); }
+	inline void EndProfileRead() const { ReleaseMutex(hMutexProgram); }
 
-	inline void LockStatus() { WaitForSingleObject(hMutexStatus, INFINITE); }
+	inline void LockStatus() const { WaitForSingleObject(hMutexStatus, INFINITE); }
 	inline STATUS* GetStatus() { return &status; }
-	inline void UnlockStatus() { ReleaseMutex(hMutexStatus); }
+	inline void UnlockStatus() const { ReleaseMutex(hMutexStatus); }
 
 	inline void SetRefreshDevicesCallback(void* hidInput, void (*FnRefreshHidInputDevice)(void*, UINT32*, UCHAR)) { this->hidInput = hidInput, this->RefreshHidInputDevice = FnRefreshHidInputDevice; }
 	inline void SetPauseWinUSBCallback(void (*FnPauseWinUSB)(void*, bool)) { this->PauseWinUSB = FnPauseWinUSB; }
@@ -49,13 +49,10 @@ private:
 	bool newProfileOut = false;
 	bool newProfileIn = false;
 	bool resetComanmds = false;
-	bool newReport = true;
 
 	void* hidInput = nullptr;
 	void (*RefreshHidInputDevice)(void*, UINT32*, UCHAR) = nullptr;
 	void (*PauseWinUSB)(void*, bool) = nullptr;
 
-	bool HIDvJoyRange();
-	void UpdatevJoy();
 	void ClearProfile();
 };

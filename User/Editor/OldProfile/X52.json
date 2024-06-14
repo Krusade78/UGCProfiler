@@ -1,0 +1,97 @@
+{
+  "Id": 111346261,
+  "Name": "Saitek X52",
+  "NAxes": 9,
+  "NHats": 4,
+  "NButtons": 56,
+  "Usages": [
+    {
+      "ReportId": 1,
+      "ReportIdx": 0,
+      "Id": 0,
+      "Type": 0,
+      "Bits": 11,
+      "Range": 2047
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 1,
+      "Id": 1,
+      "Type": 1,
+      "Bits": 11,
+      "Range": 2047
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 2,
+      "Id": 2,
+      "Type": 3,
+      "Bits": 10,
+      "Range": 1023
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 3,
+      "Id": 3,
+      "Type": 2,
+      "Bits": 8,
+      "Range": 255
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 4,
+      "Id": 4,
+      "Type": 4,
+      "Bits": 8,
+      "Range": 255
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 5,
+      "Id": 5,
+      "Type": 3,
+      "Bits": 8,
+      "Range": 255
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 6,
+      "Id": 6,
+      "Type": 6,
+      "Bits": 8,
+      "Range": 255
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 7,
+      "Id": 0,
+      "Type": 255,
+      "Bits": 36,
+      "Range": 0
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 8,
+      "Id": 0,
+      "Type": 254,
+      "Bits": 4,
+      "Range": 0
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 9,
+      "Id": 7,
+      "Type": 0,
+      "Bits": 4,
+      "Range": 15
+    },
+    {
+      "ReportId": 1,
+      "ReportIdx": 10,
+      "Id": 8,
+      "Type": 1,
+      "Bits": 4,
+      "Range": 15
+    }
+  ]
+}

@@ -31,7 +31,7 @@
     <x:String x:Key="profile">Perfil</x:String>
     <x:String x:Key="devices">Dispositivos</x:String>
     <x:String x:Key="refresh">Actualizar</x:String>
-    <x:String x:Key="view">Vista</x:String>
+    <x:String x:Key="view">Edición</x:String>
     <x:String x:Key="edit">Editar</x:String>
     <x:String x:Key="list">Lista</x:String>
     <x:String x:Key="current_mode">Modo actual</x:String>
@@ -66,6 +66,7 @@
     <x:String x:Key="test">Prueba</x:String>
     <x:String x:Key="raw_value">Valor bruto</x:String>
     <x:String x:Key="calibrated_value">Valor calibrado</x:String>
+    <x:String x:Key="calibrated_game_value">Valor calibrado en juego</x:String>
     <x:String x:Key="buffer">Buffer</x:String>
     <x:String x:Key="save_and_activate">Guardar y activar</x:String>
     <x:String x:Key="take_from_raw">Coger rango bruto</x:String>
@@ -146,4 +147,7 @@
     <x:String x:Key="dx_hat_ne">&lt;vJoy % - Seta $ NE&gt;</x:String>
     <!--#endregion-->
 
+    <!--#region MacroEditor-->
+    <x:String x:Key="macros_management">Administración de macros</x:String>
+    <!--#endregion-->
 </ResourceDictionary>

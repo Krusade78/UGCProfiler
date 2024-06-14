@@ -76,55 +76,55 @@ namespace Profiler.Pages
         #region "Seta 1"
         private void Buttonp10_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Centro", 12);
+            props.Show(0x231d0200, 20, "Seta 1 Centro");
             Uncheck(sender);
         }
 
         private void Buttonp11_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Norte", 1);
+            props.Show(0x231d0200, 44, "Seta 1 Norte", 0);
             Uncheck(sender);
         }
 
         private void Buttonp12_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Noreste", 2);
+            props.Show(0x231d0200, 44, "Seta 1 Noreste", 1);
             Uncheck(sender);
         }
 
         private void Buttonp13_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Este", 3);
+            props.Show(0x231d0200, 44, "Seta 1 Este", 2);
             Uncheck(sender);
         }
 
         private void Buttonp14_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Sureste", 4);
+            props.Show(0x231d0200, 44, "Seta 1 Sureste", 3);
             Uncheck(sender);
         }
 
         private void Buttonp15_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Sur", 5);
+            props.Show(0x231d0200, 44, "Seta 1 Sur", 4);
             Uncheck(sender);
         }
 
         private void Buttonp16_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Suroeste", 6);
+            props.Show(0x231d0200, 44, "Seta 1 Suroeste", 5);
             Uncheck(sender);
         }
 
         private void Buttonp17_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Oeste", 7);
+            props.Show(0x231d0200, 44, "Seta 1 Oeste", 6);
             Uncheck(sender);
         }
 
         private void Buttonp18_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Noroeste", 8);
+            props.Show(0x231d0200, 44, "Seta 1 Noroeste", 7);
             Uncheck(sender);
         }
         #endregion
@@ -221,13 +221,13 @@ namespace Profiler.Pages
             Uncheck(sender);
         }
 
-        private void ButtonS1_Click(object sender, RoutedEventArgs e)
+        private void ButtonFastTrigger_Click(object sender, RoutedEventArgs e)
         {
             props.Show(0x231d0200, 43, (string)ButtonS1.Content);
             Uncheck(sender);
         }
 
-        private void ButtonLanzar_Click(object sender, RoutedEventArgs e)
+        private void ButtonLaunch_Click(object sender, RoutedEventArgs e)
         {
             props.Show(0x231d0200, 19, (string)ButtonLanzar.Content);
             Uncheck(sender);

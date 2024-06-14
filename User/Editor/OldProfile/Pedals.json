@@ -1,0 +1,33 @@
+{
+  "Id": 111347555,
+  "Name": "Saitek Pro Flight Rudder Pedals",
+  "NAxes": 3,
+  "NHats": 0,
+  "NButtons": 0,
+  "Usages": [
+    {
+      "ReportId": 0,
+      "ReportIdx": 0,
+      "Id": 0,
+      "Type": 1,
+      "Bits": 7,
+      "Range": 127
+    },
+    {
+      "ReportId": 0,
+      "ReportIdx": 1,
+      "Id": 1,
+      "Type": 0,
+      "Bits": 7,
+      "Range": 127
+    },
+    {
+      "ReportId": 0,
+      "ReportIdx": 2,
+      "Id": 2,
+      "Type": 5,
+      "Bits": 9,
+      "Range": 511
+    }
+  ]
+}

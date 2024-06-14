@@ -31,10 +31,6 @@ namespace Profiler.Controls
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             parent = ((App)Application.Current).GetMainWindow();
-            //            ComboBoxMacro.DataContext = new System.Data.DataView(padre.GetData().Profile.ACCIONES);
-            //            ((System.Data.DataView)ComboBoxMacro.DataContext).RowFilter = "idAccion <> 0";
-            //            ((System.Data.DataView)ComboBoxMacro.DataContext).Sort = "Nombre";
-            //            ComboBoxMacro.SelectedIndex = 0;
         }
 
         #region "Axes"
@@ -190,35 +186,6 @@ namespace Profiler.Controls
             if (events && (ComboBoxAssigned.SelectedValue != null))
                 MacroAssignment((ushort)ComboBoxAssigned.SelectedValue);
         }
-
-        //private void ButtonAdd_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //            VEditorMacros dlg = new VEditorMacros(-1)
-        //    //            {
-        //    //                Owner = App.Current.MainWindow
-        //    //            };
-        //    //            if (dlg.ShowDialog() == true)
-        //    //                padre.GetData().Modified = true;
-        //}
-
-        //private void ButtonEdit_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //            if (ComboBoxMacro.SelectedIndex != -1)
-        //    //            {
-        //    //                VEditorMacros dlg = new VEditorMacros((int)(ushort)ComboBoxMacro.SelectedValue)
-        //    //                {
-        //    //                    Owner = App.Current.MainWindow
-        //    //                };
-        //    //                if (dlg.ShowDialog() == true)
-        //    //                    padre.GetData().Modified = true;
-        //    //            }
-        //}
-
-        //private void ButtonDelete_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //            if (ComboBoxMacro.SelectedIndex != -1)
-        //    //                padre.GetData().Profile.ACCIONES.Rows.Remove(padre.GetData().Profile.ACCIONES.FindByidAccion((ushort)ComboBoxMacro.SelectedValue));
-        //}
         #endregion
     }
 }

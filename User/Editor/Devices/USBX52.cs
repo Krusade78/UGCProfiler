@@ -236,7 +236,7 @@ namespace Profiler.Devices
                 {
                     Bits = 36,
                     Type = 255,
-                    Range = 1
+                    Range = 0
                 });
                 datos.Usages.Add(new()
                 {

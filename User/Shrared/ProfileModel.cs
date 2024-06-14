@@ -82,7 +82,7 @@ namespace Shared
             public byte NHats { get; set; }
             public ushort NButtons { get; set; }
 
-            public List<CUsage> Usages { get; } = []; //sorted by idx
+            public List<CUsage> Usages { get; set; } = []; //sorted by idx
         }
     }
 }

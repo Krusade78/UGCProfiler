@@ -9,9 +9,9 @@ void CKeyboard::Processed(PEV_COMMAND pCommand, CVirtualHID* pVHid)
     RtlZeroMemory(&ip, sizeof(INPUT));
     UINT sc = GetExtended(pCommand->Basic.Data);
         ip.type = INPUT_KEYBOARD;
-        ip.ki.wVk = pCommand->Basic.Data;
+        //ip.ki.wVk = pCommand->Basic.Data;
         ip.ki.wScan = sc & 0xff;
-        ip.ki.dwFlags = 8 |(release ? KEYEVENTF_KEYUP : 0) | ((sc & 0xff00) ? KEYEVENTF_EXTENDEDKEY : 0);
+        ip.ki.dwFlags = KEYEVENTF_SCANCODE |(release ? KEYEVENTF_KEYUP : 0) | ((sc & 0xff00) ? KEYEVENTF_EXTENDEDKEY : 0);
     SendInput(1, &ip, sizeof(INPUT));
 }
 

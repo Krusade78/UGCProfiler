@@ -12,6 +12,7 @@ namespace Profiler
 		{
 			None,
 			Calibrate,
+			Macros,
 			Edit,
 			View,
 		}
@@ -118,32 +119,50 @@ namespace Profiler
 		private void TbCalibrate_Checked(object sender, RoutedEventArgs e)
 		{
 			forceToggle = true;
+			tbMacroEdit.IsChecked = false;
 			tbList.IsChecked = false;
 			tbEdit.IsChecked = false;
 			forceToggle = false;
+			ctlDevs.SetMacroHeader(false);
 			CurrentSection = tbCalibrate.IsChecked == true ? Section.Calibrate : Section.None;
             mainFrame.Refresh(CurrentSection);
 			
 		}
-		#endregion
+        #endregion
 
-		#region "View"
-		private void FtbEdit_Checked(object sender, RoutedEventArgs e)
+        #region "View"
+        private void FtbMacroEdit_Checked(object sender, RoutedEventArgs e)
+        {
+            forceToggle = true;
+            tbCalibrate.IsChecked = false;
+            tbList.IsChecked = false;
+            tbEdit.IsChecked = false;
+            forceToggle = false;
+            ctlDevs.SetMacroHeader(true);
+            CurrentSection = Section.Macros;
+            mainFrame.Refresh(Section.Macros);
+        }
+
+        private void FtbEdit_Checked(object sender, RoutedEventArgs e)
 		{
 			forceToggle = true;
 			tbCalibrate.IsChecked = false;
-			tbList.IsChecked = false;
+            tbMacroEdit.IsChecked = false;
+            tbList.IsChecked = false;
 			forceToggle = false;
-			CurrentSection = Section.Edit;
+            ctlDevs.SetMacroHeader(false);
+            CurrentSection = Section.Edit;
 			mainFrame.Refresh(Section.Edit);
 		}
 		private void FtbList_Checked(object sender, RoutedEventArgs e)
 		{
 			forceToggle = true;
 			tbCalibrate.IsChecked = false;
-			tbEdit.IsChecked = false;
+            tbMacroEdit.IsChecked = false;
+            tbEdit.IsChecked = false;
 			forceToggle = false;
-			CurrentSection = Section.View;
+            ctlDevs.SetMacroHeader(false);
+            CurrentSection = Section.View;
 			mainFrame.Refresh(Section.View);
 		}
 
@@ -151,6 +170,7 @@ namespace Profiler
         {
 			if (!forceToggle)
 			{
+                ctlDevs.SetMacroHeader(false);
                 CurrentSection = Section.None;
                 mainFrame.Refresh(CurrentSection);
             }

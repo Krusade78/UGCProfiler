@@ -58,7 +58,7 @@ namespace Profiler
 				m_window = new MainWindow();
 				if (m_window.AppWindow is not null)
 				{
-                    m_window.AppWindow.Resize(new() { Width = 1700, Height = 1040 });
+                    //m_window.AppWindow.Resize(new() { Width = 1700, Height = 1040 });
                     Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(m_window)), Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
 					if (displayArea is not null)
 					{

@@ -42,8 +42,8 @@
                     <local:BooleanToVisibleConverter x:Key="b2v"/>
                 </Grid.Resources>
                 <StackPanel>
-                    <Border x:Name="bd2" Background="#2F5A85" Margin="0,0,0,5" CornerRadius="10,10,0,0">
-                        <TextBlock x:Name="Label2" Text="Test text" VerticalAlignment="Top" Foreground="#C7E0FF" HorizontalAlignment="Center" Padding="5,3" Style="{ThemeResource TitleTextBlockStyle}" />
+                    <Border x:Name="bd2" Background="{ThemeResource AccentFillColorDefaultBrush}" Margin="0,0,0,5" CornerRadius="10,10,0,0">
+                        <TextBlock x:Name="Label2" Text="Test text" VerticalAlignment="Top" Foreground="{ThemeResource TextOnAccentFillColorDefault}" HorizontalAlignment="Center" Padding="5,3" Style="{ThemeResource TitleTextBlockStyle}" />
                     </Border>
 
                     <Grid>

@@ -7,77 +7,80 @@ using System.Linq;
 
 namespace Profiler.Controls
 {
-	public sealed partial class CtlDevices : NavigationView, IDisposable
-	{
-		private bool wndProcReady;
-		private readonly Devices.UsbX52 winusbX52 = new();
+    public sealed partial class CtlDevices : NavigationView, IDisposable
+    {
+        private bool wndProcReady;
+        private readonly Devices.UsbX52 winusbX52 = new();
         System.Threading.Tasks.Task thWinusbX52 = null;
         private readonly CPP2CS.RawInput rawInput = null;
         System.Threading.Tasks.Task thRawInput = null;
+        private bool isMacroOn = false;
 
 
         private readonly System.Collections.Generic.SortedList<string, Devices.DeviceInfo> devices = [];
 
-		#region IDisposable
-		private bool disposedValue;
-		private void Dispose(bool disposing)
-		{
-			if (!disposedValue)
-			{
-				if (disposing)
-				{
-					rawInput?.Close();
-					thRawInput?.Wait();
-					winusbX52?.Dispose();
-					thWinusbX52.Wait();
-				}
+        #region IDisposable
+        private bool disposedValue;
+        private void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    rawInput?.Close();
+                    thRawInput?.Wait();
+                    winusbX52?.Dispose();
+                    thWinusbX52.Wait();
+                }
 
-				// TODO: free unmanaged resources (unmanaged objects) and override finalizer
-				// TODO: set large fields to null
-				disposedValue = true;
-			}
-		}
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
 
-		// // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-		// ~CtlDevices()
-		// {
-		//     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-		//     Dispose(disposing: false);
-		// }
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~CtlDevices()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
 
-		public void Dispose()
-		{
-			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-			Dispose(disposing: true);
-			GC.SuppressFinalize(this);
-		}
-		#endregion
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
 
-		public CtlDevices()
-		{
-			InitializeComponent();
-			rawInput = new(WndProc);
-		}
+        public CtlDevices()
+        {
+            InitializeComponent();
+            rawInput = new(WndProc);
+        }
 
-		public  bool Prepare()
-		{
-			AddConnectedDevices();
+        public System.Collections.Generic.SortedList<string, Devices.DeviceInfo> GetDevices() => devices;
 
-			thRawInput = System.Threading.Tasks.Task.Run(() => { rawInput.Init(); });
-			if (thRawInput.Wait(2000))
-			{
-				return false;
-			}
-			wndProcReady = true;
+        public  bool Prepare()
+        {
+            AddConnectedDevices();
 
-			//X52 via WinUSB
-			thWinusbX52 = System.Threading.Tasks.Task.Run(() => { winusbX52.Process(this); });
+            thRawInput = System.Threading.Tasks.Task.Run(() => { rawInput.Init(); });
+            if (thRawInput.Wait(2000))
+            {
+                return false;
+            }
+            wndProcReady = true;
 
-			return true;
-		}
+            //X52 via WinUSB
+            thWinusbX52 = System.Threading.Tasks.Task.Run(() => { winusbX52.Process(this); });
 
-		private void AddConnectedDevices()
-		{
+            return true;
+        }
+
+        private void AddConnectedDevices()
+        {
             API.CWinUSB.SP_DEVICE_INTERFACE_DATA diData = new();
             Guid hidGuid = new();
             API.HID.HidD_GetHidGuid(ref hidGuid);
@@ -146,85 +149,148 @@ namespace Profiler.Controls
             API.CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
         }
 
-		public void AddWinUSBX52Device()
-		{
-			AddHardwareDevice("_WUSBX52vid_06a3&pid_0255");
-		}
+        public void AddWinUSBX52Device()
+        {
+            AddHardwareDevice("_WUSBX52vid_06a3&pid_0255");
+        }
 
-		private void WndProc(string ninterface, byte[] hidData)
-		{
-			if (wndProcReady)
-			{
-				uint? hId = AddHardwareDevice(ninterface);
-				if (hId != null)
-				{
-					this.DispatcherQueue.TryEnqueue(() => {	SetStatus(hId.Value, hidData); });
-				}
-			}
-		}
+        private void WndProc(string ninterface, byte[] hidData)
+        {
+            if (wndProcReady)
+            {
+                uint? hId = AddHardwareDevice(ninterface);
+                if (hId != null)
+                {
+                    this.DispatcherQueue.TryEnqueue(() => {	SetStatus(hId.Value, hidData); });
+                }
+            }
+        }
 
+        public void AddProfileDevice(Shared.ProfileModel.DeviceInfo devProfileInfo)
+        {
+            Devices.DeviceInfo di = devices.Select(x => x.Value).FirstOrDefault(x => x.Id == devProfileInfo.Id);
+            if (di != null)
+            {
+                if (di.FromProfile)
+                {
+                    devices.Remove(di.Name);
+                    this.DispatcherQueue.TryEnqueue(() =>
+                    {
+                        MenuItems.RemoveAt(devices.IndexOfKey(di.Name));
+                    });
+                }
+                else
+                {
+                    return;
+                }
+            }
+            di = System.Text.Json.JsonSerializer.Deserialize<Devices.DeviceInfo>(System.Text.Json.JsonSerializer.Serialize(devProfileInfo));
+            di.FromProfile = true;
+            devices.Add(di.Name, di);
+            this.DispatcherQueue.TryEnqueue(() =>
+            {
+                MenuItems.Insert(devices.IndexOfKey(di.Name), new CtlDevices_NavItem(di));
+            });
+        }
 
-		private uint? AddHardwareDevice(string devName)
-		{
-			if (!uint.TryParse(devName[12..16], System.Globalization.NumberStyles.AllowHexSpecifier, null, out uint vid) ||
-				!uint.TryParse(devName[21..25], System.Globalization.NumberStyles.AllowHexSpecifier, null, out uint pid))
-			{
-				return null;
-			}
+        private uint? AddHardwareDevice(string devName)
+        {
+            if (!uint.TryParse(devName[12..16], System.Globalization.NumberStyles.AllowHexSpecifier, null, out uint vid) ||
+                !uint.TryParse(devName[21..25], System.Globalization.NumberStyles.AllowHexSpecifier, null, out uint pid))
+            {
+                return null;
+            }
 
-			uint hId = (vid << 16) | pid;
-			Devices.DeviceInfo di = devices.Select(x => x.Value).FirstOrDefault(x => x.Id == hId);
-			if (di == null)
-			{
-				ReadDeviceData(devName, hId);
-			}
-			else
-			{
-				if (di.FromProfile)
-				{
-					devices.Remove(di.Name);
-					ReadDeviceData(devName, hId);
-				}
-			}
+            uint hId = (vid << 16) | pid;
+            Devices.DeviceInfo di = devices.Select(x => x.Value).FirstOrDefault(x => x.Id == hId);
+            if (di == null)
+            {
+                ReadDeviceData(devName, hId);
+            }
+            else
+            {
+                if (di.FromProfile)
+                {
+                    devices.Remove(di.Name);
+                    this.DispatcherQueue.TryEnqueue(() =>
+                    {
+                        MenuItems.RemoveAt(devices.IndexOfKey(di.Name));
+                    });
+                    ReadDeviceData(devName, hId);
+                }
+            }
 
-			return hId;
-		}
+            return hId;
+        }
 
-		private void ReadDeviceData(string devName, uint hId)
-		{
-			Devices.DeviceInfo di = Devices.DeviceInfo.Get(devName, hId);
-			if (di != null)
-			{
-				devices.Add(di.Name, di);
-				this.DispatcherQueue.TryEnqueue(() =>
-				{
-					MenuItems.Insert(devices.IndexOfKey(di.Name), new CtlDevices_NavItem(di));
-				});
-			}
-		}
+        private void ReadDeviceData(string devName, uint hId)
+        {
+            Devices.DeviceInfo di = Devices.DeviceInfo.Get(devName, hId);
+            if (di != null)
+            {
+                devices.Add(di.Name, di);
+                this.DispatcherQueue.TryEnqueue(() =>
+                {
+                    MenuItems.Clear();
+                    foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kvp in devices)
+                    {
+                        MenuItems.Add(new CtlDevices_NavItem(kvp.Value));
+                    }
+                });
+            }
+        }
 
-		public void SetStatus(uint hId, byte[] hidData)
-		{
-			((Pages.Main)frContent.Content)?.UpdateStatus(hId, hidData);
-		}
+        public void SetStatus(uint hId, byte[] hidData)
+        {
+            ((Pages.Main)frContent.Content)?.UpdateStatus(hId, hidData);
+        }
 
-		public void SetMainFrame(Pages.Main mainFrame)
-		{
-			frContent.Content = mainFrame;
-		}
+        public void SetMainFrame(Pages.Main mainFrame)
+        {
+            frContent.Content = mainFrame;
+        }
 
-		private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-		{
-			if (this.SelectedItem == null)
-			{
-				this.Header = null;
-				((Pages.Main)frContent.Content)?.ChangeDevice(null);
-			}
-			else
-			{
-				this.Header = ((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext).Name;
-				((Pages.Main)frContent.Content)?.ChangeDevice((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext);
-			}
-		}
-	}
+        public void SetMacroHeader(bool on)
+        {
+            isMacroOn = on; 
+            if (on)
+            {
+                this.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftCompact;
+                this.Header = Translate.Get("macros_management");
+            }
+            else
+            {
+                this.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto;
+                SetDeviceHeader();
+            }
+        }
+
+        private void SetDeviceHeader()
+        {
+            if (!isMacroOn)
+            {
+                if (this.SelectedItem == null)
+                {
+                    this.Header = null;
+                }
+                else
+                {
+                    this.Header = ((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext).Name;
+                }
+            }
+        }
+
+        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            SetDeviceHeader();
+            if (this.SelectedItem == null)
+            {
+                ((Pages.Main)frContent.Content)?.ChangeDevice(null);
+            }
+            else
+            {				
+                ((Pages.Main)frContent.Content)?.ChangeDevice((Devices.DeviceInfo)((CtlDevices_NavItem)this.SelectedItem).DataContext);
+            }
+        }
+    }
 }
