@@ -32,7 +32,7 @@
                         <NumberBox x:Name="NumericUpDown4" Maximum="50" Minimum="1" Value="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5,0,0,0" SpinButtonPlacementMode="Compact"/>
                     </StackPanel>
                 </StackPanel>
-                <Grid x:Name="PanelBasic" Visibility="Collapsed" Background="#7F808080" Margin="5,3" />
+                <Border x:Name="PanelBasic" Visibility="Collapsed" Background="#40000000" Margin="-4,21,-4,-4" CornerRadius="6" />
             </Grid>
         </StackPanel>
     </Border>

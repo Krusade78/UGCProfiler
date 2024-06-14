@@ -19,6 +19,7 @@ namespace Profiler.Pages.Macros
             InitializeComponent();
             CurrentMacro.SetListBox(ListBox1);
             ctlName.DataContext = this;
+            ctlKeyboard.DataContext = CurrentMacro;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -100,34 +101,28 @@ namespace Profiler.Pages.Macros
 
         public void GoToBasic()
         {
-            //PanelNXT.Visibility = Visibility.Visible;
-            //PanelX52.Visibility = Visibility.Visible;
-            //PanelSetas.Visibility = Visibility.Visible;
-            //PanelRatonOff.Visibility = Visibility.Visible;
-            //PanelMovimiento.Visibility = Visibility.Visible;
-            //PanelModos.Visibility = Visibility.Visible;
-            //PanelPlantilla.Visibility = Visibility.Visible;
             ctlKeyboard.GoToBasic();
             ctlStatusCommands.GoToBasic();
+            ctlModes.GoToBasic();
+            ctlMouse.GoToBasic();
+            ctlDirectX.GoToBasic();
+            ctlVKBGladiatorNXT.GoToBasic();
+            ctlSaitekX52.GoToBasic();
 
-            //ButtonDXOff.IsEnabled = false;
             ButtonSubir.IsEnabled = false;
             ButtonBajar.IsEnabled = false;
         }
 
         public void GoToAdvanced()
         {
-            //PanelNXT.Visibility = Visibility.Collapsed;
-            //PanelX52.Visibility = Visibility.Collapsed;
-            //PanelSetas.Visibility = Visibility.Collapsed;
-            //PanelRatonOff.Visibility = Visibility.Collapsed;
-            //PanelMovimiento.Visibility = Visibility.Collapsed;
-            //PanelModos.Visibility = Visibility.Collapsed;
-            //PanelPlantilla.Visibility = Visibility.Collapsed;
             ctlKeyboard.GoToAdvanced();
             ctlStatusCommands.GoToAdvanced();
+            ctlModes.GoToAdvanced();
+            ctlMouse.GoToAdvanced();
+            ctlDirectX.GoToAdvanced();
+            ctlVKBGladiatorNXT.GoToAdvanced();
+            ctlSaitekX52.GoToAdvanced();
 
-            //ButtonDXOff.IsEnabled = true;
             ButtonSubir.IsEnabled = true;
             ButtonBajar.IsEnabled = true;
         }

@@ -1,6 +1,6 @@
-using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using static Shared.CTypes;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -10,6 +10,10 @@ namespace Profiler.Pages.Macros
 {
     public sealed partial class CtlKeyboard : UserControl , IChangeMode
     {
+        private readonly System.Collections.Generic.List<byte> keys = [];
+        private bool[] keyboardStatus = new bool[255];
+        private bool txtKeysFocused = false;
+
         public CtlKeyboard()
         {
             this.InitializeComponent();
@@ -18,71 +22,71 @@ namespace Profiler.Pages.Macros
         }
 
         #region "teclas"
-        private void ButtonPresionar_Click(object sender, RoutedEventArgs e)
+        private void ButtonPress_Click(object sender, RoutedEventArgs e)
         {
-            //if (GetCuenta() > 237)
-            //    return;
-            //else
-            //{
-            //    Insertar([(ushort)((byte)CommandType.Key + (ushort)(ComboBox1.SelectedIndex << 8))], false);
-            //}
+            if (((EditedMacro)DataContext).GetCuenta() > 237)
+                return;
+            else
+            {
+                ((EditedMacro)DataContext).Insertar([(ushort)((byte)CommandType.Key + (ushort)(ComboBox1.SelectedIndex << 8))], false);
+            }
         }
 
-        private void ButtonSoltar_Click(object sender, RoutedEventArgs e)
+        private void ButtonRelease_Click(object sender, RoutedEventArgs e)
         {
-            //if (GetCuenta() > 237)
-            //    return;
-            //else
-            //{
-            //    Insertar([(ushort)(((byte)CommandType.Key | (byte)CommandType.Release) + (ushort)(ComboBox1.SelectedIndex << 8))], false);
-            //}
+            if (((EditedMacro)DataContext).GetCuenta() > 237)
+                return;
+            else
+            {
+                ((EditedMacro)DataContext).Insertar([(ushort)(((byte)CommandType.Key | (byte)CommandType.Release) + (ushort)(ComboBox1.SelectedIndex << 8))], false);
+            }
         }
 
         private void ButtonNormal_Click(object sender, RoutedEventArgs e)
         {
-            //TeclasPulsar(false);
+            AddKeys(false);
         }
 
-        private void ButtonMantener_Click(object sender, RoutedEventArgs e)
+        private void ButtonHold_Click(object sender, RoutedEventArgs e)
         {
-            //TeclasPulsar(true);
+            AddKeys(true);
         }
 
-        private bool teclasActivado = false;
         private void TextBoxTecla_LostFocus(object sender, RoutedEventArgs e)
         {
-            //TextBoxTecla.Background = System.Windows.Media.Brushes.Black;
-            //TextBoxTecla.Foreground = System.Windows.Media.Brushes.GreenYellow;
-            //TextBoxTecla.FontWeight = FontWeights.Normal;
-            //teclasActivado = false;
+            TextBoxKey.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Black);
+            TextBoxKey.Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.GreenYellow);
+            TextBoxKey.FontWeight = Microsoft.UI.Text.FontWeights.Normal;
+            txtKeysFocused = false;
         }
 
         private void TextBoxTecla_GotFocus(object sender, RoutedEventArgs e)
         {
-            //teclas.Clear();
-            //TextBoxTecla.Text = "";
-            //TextBoxTecla.Background = System.Windows.Media.Brushes.LimeGreen;
-            //TextBoxTecla.Foreground = System.Windows.Media.Brushes.Black;
-            //TextBoxTecla.FontWeight = FontWeights.Bold;
-            //teclasActivado = true;
+            keys.Clear();
+            TextBoxKey.Text = "";
+            TextBoxKey.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.LimeGreen);
+            TextBoxKey.Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Black);
+            TextBoxKey.FontWeight = Microsoft.UI.Text.FontWeights.Bold;
+            txtKeysFocused = true;
+            keyboardStatus = new bool[255];
         }
 
-        private void TextBoxTecla_PreviewKeyDown(object sender, RoutedEventArgs e)
+        private void TextBoxTecla_PreviewKeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            //if (teclasActivado)
-            //{
-            //    LeerTeclado();
-            //    e.Handled = true;
-            //}
+            if (txtKeysFocused)
+            {
+                ReadKeyboard(e.Key, e.KeyStatus);
+                e.Handled = true;
+            }
         }
 
-        private void TextBoxTecla_PreviewKeyUp(object sender, RoutedEventArgs e)
+        private void TextBoxTecla_PreviewKeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            //if (teclasActivado)
-            //{
-            //    LeerTeclado();
-            //    e.Handled = true;
-            //}
+            if (txtKeysFocused)
+            {
+                ReadKeyboard(e.Key, e.KeyStatus);
+                e.Handled = true;
+            }
         }
         #endregion
 
@@ -142,129 +146,133 @@ namespace Profiler.Pages.Macros
             KeyPanel.Visibility = Visibility.Collapsed;
         }
 
-        //#region "teclas"
-        //private void TeclasPulsar(bool mantener)
-        //{
-        //	if (teclas.Count == 0)
-        //		return;
-        //	if ((GetCuenta() + ((mantener) ? 1 : 0) + (teclas.Count * 2)) > 237)
-        //		return;
+        #region
+        private void AddKeys(bool hold)
+        {
+            if (keys.Count == 0)
+                return;
+            if ((((EditedMacro)DataContext).GetCuenta() + (hold ? 1 : 0) + (keys.Count * 2)) > 237)
+                return;
 
-        //	if (RadioButtonBasico.IsChecked == true)
-        //	{
-        //		dsMacros.MACROS.Clear();
-        //	}
+            if (KeyPanel.Visibility == Visibility.Visible)
+            {
+                ((EditedMacro)DataContext).Clear();
+            }
 
-        //	List<ushort> bloque = [];
-        //	for (byte i = 0; i < teclas.Count; i++)
-        //	{
-        //		int k = teclas[i];
-        //		if (k > -1) bloque.Add((ushort)((byte)CommandType.Key + (k << 8)));
-        //	}
-        //	if (mantener)
-        //	{
-        //		bloque.Add((ushort)CommandType.Hold);
-        //	}
-        //	for (int j = teclas.Count - 1; j >= 0; j--)
-        //	{
-        //		int k = teclas[j];
-        //		if (k > -1)
-        //		{
-        //			bloque.Add((ushort)((byte)(CommandType.Release | CommandType.Key) + (k << 8)));
-        //		}
-        //	}
-        //	Insertar([.. bloque], true);
-        //}
+            System.Collections.Generic.List<uint> block = [];
+            for (byte i = 0; i < keys.Count; i++)
+            {
+                byte k = keys[i];
+                block.Add((uint)((byte)CommandType.Key + (k << 8)));
+            }
+            if (hold)
+            {
+                block.Add((uint)CommandType.Hold);
+            }
+            for (int j = keys.Count - 1; j >= 0; j--)
+            {
+                byte k = keys[j];
+                block.Add((uint)((byte)(CommandType.Release | CommandType.Key) + (k << 8)));
+            }
+            ((EditedMacro)DataContext).Insertar([.. block], true);
+        }
 
-        //private void LeerTeclado()
-        //{
-        //	string s = "";
-        //	bool[] buff = new bool[256];
-        //	for (Key k = Key.Cancel; k <= Key.DeadCharProcessed; k++)
-        //	{
-        //		if (Keyboard.IsKeyDown(k))
-        //			buff[KeyInterop.VirtualKeyFromKey(k)] = true;
-        //	}
-        //	teclas.Clear();
-        //	if (buff[0x10])
-        //	{
-        //		buff[0x10] = false;
-        //		if (!buff[0xa0] && !buff[0xa1])
-        //		{
-        //			buff[0xa0] = true;
-        //		}
-        //	}
-        //	if (buff[0x11])
-        //	{
-        //		buff[0x11] = false;
-        //		if (!buff[0xa2] && !buff[0xa3])
-        //		{
-        //			buff[0xa2] = true;
-        //		}
-        //	}
-        //	if (buff[0x12])
-        //	{
-        //		buff[0x12] = false;
-        //		if (!buff[0xa4] && !buff[0xa5])
-        //		{
-        //			buff[0xa4] = true;
-        //		}
-        //	}
-        //	if (buff[0xa0])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "May.I";
-        //		teclas.Add(0xa0);
-        //	}
-        //	if (buff[0xa1])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "May.D";
-        //		teclas.Add(0xa1);
-        //	}
-        //	if (buff[0xa2])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "ControlI";
-        //		teclas.Add(0xa2);
-        //	}
-        //	if (buff[0xa3])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "ControlD";
-        //		teclas.Add(0xa3);
-        //	}
-        //	if (buff[0xa4])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "AltI";
-        //		teclas.Add(0xa4);
-        //	}
-        //	if (buff[0xa5])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "AltD";
-        //		teclas.Add(0xa5);
-        //	}
-        //	if (buff[0x5b])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "WinI";
-        //		teclas.Add(0x5b);
-        //	}
-        //	if (buff[0x5c])
-        //	{
-        //		s += ((s == "") ? "" : " + ") + "WinD";
-        //		teclas.Add(0x5c);
-        //	}
-        //	for (ushort i = 1; i < 255; i++)
-        //	{
-        //		if (i is not 0x5B and not 0x5C and (< 0xA0 or > 0xA5))
-        //		{
-        //			if (buff[i])
-        //			{
-        //				s += ((s == "") ? "" : " + ") + KeyInterop.KeyFromVirtualKey(i).ToString();
-        //				teclas.Add((byte)i);
-        //				ButtonNormal.Focus();
-        //			}
-        //		}
-        //	}
-        //	TextBoxTecla.Text = s;
-        //}
+        private void ReadKeyboard(Windows.System.VirtualKey vk, Windows.UI.Core.CorePhysicalKeyStatus status)
+        {
+            string s = "";
+            //bool[] buff = new bool[255];
+            //for (Windows.System.VirtualKey k = 0; k <= (Windows.System.VirtualKey)255; k++)
+            //{
+            //    if (Microsoft.UI.Input.InputKeyboardSource.(k) == Windows.UI.Core.CoreVirtualKeyStates.Down)// Keyboard.IsKeyDown(k))
+            //        buff[(byte)k] = true;//buff[KeyInterop.VirtualKeyFromKey(k)] = true;
+            //}
+            keyboardStatus[(byte)vk] = !status.IsKeyReleased;
+            keys.Clear();
+            if (keyboardStatus[0x10])
+            {
+                //keyboardStatus[0x10] = false;
+                //if (!keyboardStatus[0xa0] && !keyboardStatus[0xa1])
+                //{
+                //    keyboardStatus[0xa0] = true;
+                //}
+                s += ((s == "") ? "" : " + ") + "May.";
+                keys.Add(0x10);
+            }
+            if (keyboardStatus[0x11])
+            {
+                //keyboardStatus[0x11] = false;
+                //if (!keyboardStatus[0xa2] && !keyboardStatus[0xa3])
+                //{
+                //    keyboardStatus[0xa2] = true;
+                //}
+                s += ((s == "") ? "" : " + ") + "Control";
+                keys.Add(0x11);
+            }
+            if (keyboardStatus[0x12])
+            {
+                //keyboardStatus[0x12] = false;
+                //if (!keyboardStatus[0xa4] && !keyboardStatus[0xa5])
+                //{
+                //    keyboardStatus[0xa4] = true;
+                //}
+                s += ((s == "") ? "" : " + ") + "Menu";
+                keys.Add(0x12);
+            }
+            if (keyboardStatus[0xa0])
+            {
+                s += ((s == "") ? "" : " + ") + "May.I";
+                keys.Add(0xa0);
+            }
+            if (keyboardStatus[0xa1])
+            {
+                s += ((s == "") ? "" : " + ") + "May.D";
+                keys.Add(0xa1);
+            }
+            if (keyboardStatus[0xa2])
+            {
+                s += ((s == "") ? "" : " + ") + "ControlI";
+                keys.Add(0xa2);
+            }
+            if (keyboardStatus[0xa3])
+            {
+                s += ((s == "") ? "" : " + ") + "ControlD";
+                keys.Add(0xa3);
+            }
+            if (keyboardStatus[0xa4])
+            {
+                s += ((s == "") ? "" : " + ") + "AltI";
+                keys.Add(0xa4);
+            }
+            if (keyboardStatus[0xa5])
+            {
+                s += ((s == "") ? "" : " + ") + "AltD";
+                keys.Add(0xa5);
+            }
+            if (keyboardStatus[0x5b])
+            {
+                s += ((s == "") ? "" : " + ") + "WinI";
+                keys.Add(0x5b);
+            }
+            if (keyboardStatus[0x5c])
+            {
+                s += ((s == "") ? "" : " + ") + "WinD";
+                keys.Add(0x5c);
+            }
+            for (byte i = 1; i < 255; i++)
+            {
+                if (i is not 0x5B and not 0x5C and (< 0xA0 or > 0xA5) and (< 0x10 or > 0x12))
+                {
+                    if (keyboardStatus[i])
+                    {
+                        s += ((s == "") ? "" : " + ") + ((Windows.System.VirtualKey)i).ToString();//; KeyInterop.KeyFromVirtualKey(i).ToString();
+                        keys.Add(i);
+                        ButtonNormal.Focus(FocusState.Programmatic);
+                    }
+                }
+            }
+            TextBoxKey.Text = s;
+        }
 
-        //#endregion
+        #endregion
     }
 }

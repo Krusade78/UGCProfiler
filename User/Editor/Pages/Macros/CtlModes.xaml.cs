@@ -18,7 +18,7 @@ using Microsoft.UI.Xaml.Navigation;
 
 namespace Profiler.Pages.Macros
 {
-    public sealed partial class CtlModes : UserControl
+    public sealed partial class CtlModes : UserControl, IChangeMode
     {
         public CtlModes()
         {
@@ -72,5 +72,13 @@ namespace Profiler.Pages.Macros
             //Insertar([(ushort)(((byte)CommandType.PrecisionMode | (byte)CommandType.Release) + dato)], false);
         }
         #endregion
+
+        public void GoToBasic()
+        {
+        }
+
+        public void GoToAdvanced()
+        {
+        }
     }
 }

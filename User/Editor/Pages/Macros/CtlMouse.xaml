@@ -33,7 +33,7 @@
                                     <Button Content="Derecho" x:Name="ButtonDerechoOff" Margin="5,0" Click="ButtonDerechoOff_Click" />
                                     <Button Content="Central" x:Name="ButtonCentroOff" Click="ButtonCentroOff_Click"/>
                                 </StackPanel>
-                                <Border x:Name="PanelRaton1Off" Visibility="Collapsed" Background="#90000000" CornerRadius="6" Margin="-2" />
+                                <Border x:Name="PanelBasic1" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4,-2" />
                             </Grid>
                         </StackPanel>
                         <StackPanel Margin="20,0,0,0">
@@ -47,7 +47,7 @@
                                     <Button Content="Abajo" x:Name="ButtonAbajoOff" Click="ButtonAbajoOff_Click"/>
                                     <Button Content="Arriba" x:Name="ButtonArribaOff" Margin="5,0,0,0" Click="ButtonArribaOff_Click"/>
                                 </StackPanel>
-                                <Border x:Name="PanelRaton2Off" Visibility="Collapsed" Background="#90000000" CornerRadius="6" Margin="-2" />
+                                <Border x:Name="PanelBasic2" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4,-2" />
                             </Grid>
                         </StackPanel>
                     </StackPanel>
@@ -75,7 +75,7 @@
                         <Button Grid.Row="1" Grid.Column="2" Content="Derecha" x:Name="ButtonMovDerecha" Click="ButtonMovDerecha_Click"/>
                         <Button Grid.Row="2" Grid.Column="2" Content="Abajo" x:Name="ButtonMovAbajo" Click="ButtonMovAbajo_Click" Width="{Binding Path=ActualWidth, ElementName=ButtonMovDerecha}"/>
 
-                        <Border Grid.ColumnSpan="3" Grid.RowSpan="3" x:Name="PanelMovimiento" Visibility="Collapsed" Background="#90000000" CornerRadius="6" Margin="-5" />
+                        <Border Grid.ColumnSpan="3" Grid.RowSpan="3" x:Name="PanelBasic3" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4" />
                     </Grid>
                 </StackPanel>
             </Grid>

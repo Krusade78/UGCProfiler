@@ -18,7 +18,7 @@ using Microsoft.UI.Xaml.Navigation;
 
 namespace Profiler.Pages.Macros
 {
-    public sealed partial class CtlVKBGladiatorNXT : UserControl
+    public sealed partial class CtlVKBGladiatorNXT : UserControl, IChangeMode
     {
         public CtlVKBGladiatorNXT()
         {
@@ -120,6 +120,16 @@ namespace Profiler.Pages.Macros
             //}
         }
         #endregion
+
+        public void GoToBasic()
+        {
+            PanelBasic.Visibility = Visibility.Visible;
+        }
+
+        public void GoToAdvanced()
+        {
+            PanelBasic.Visibility = Visibility.Collapsed;
+        }
 
         //#region "Gladiator NXT"
         //private void Leds(byte nLed, CEnums.LedOrder orden, CEnums.ModoColor mColor, string scolor1, string scolor2)

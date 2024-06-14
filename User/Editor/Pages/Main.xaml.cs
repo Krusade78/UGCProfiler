@@ -17,12 +17,13 @@ namespace Profiler.Pages
             InitializeComponent();
         }
 
-        public void Refresh(MainWindow.Section newSection)
+        public void GoToSection(MainWindow.Section newSection)
         {
             currentSection = newSection;
             Refresh();
         }
-        private void Refresh()
+
+        public void Refresh()
         {
             if (currentSection == MainWindow.Section.Macros)
             {

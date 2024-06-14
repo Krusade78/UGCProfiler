@@ -171,5 +171,19 @@ namespace Profiler.Pages.Macros
             //Insertar([(ushort)((byte)CommandType.MouseDown + ((ushort)NumericUpDownSensibilidad.Valor << 8))] , false);
         }
         #endregion
+
+        public void GoToBasic()
+        {
+            PanelBasic1.Visibility = Visibility.Visible;
+            PanelBasic2.Visibility = Visibility.Visible;
+            PanelBasic3.Visibility = Visibility.Visible;
+        }
+
+        public void GoToAdvanced()
+        {
+            PanelBasic1.Visibility = Visibility.Collapsed;
+            PanelBasic2.Visibility = Visibility.Collapsed;
+            PanelBasic3.Visibility = Visibility.Collapsed;
+        }
     }
 }

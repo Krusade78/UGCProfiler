@@ -22,8 +22,8 @@
                         <TextBlock Text="Tecla" Margin="0,0,0,5" />
                         <ComboBox x:Name="ComboBox1" Width="180" />
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
-                            <Button Content="Soltar" x:Name="ButtonSoltar"  Width="80" Click="ButtonSoltar_Click" />
-                            <Button Content="Presionar" x:Name="ButtonPresionar" Margin="5,0,0,0" Width="80" Click="ButtonPresionar_Click"  />
+                            <Button Content="Soltar" x:Name="ButtonSoltar"  Width="80" Click="ButtonRelease_Click" />
+                            <Button Content="Presionar" x:Name="ButtonPresionar" Margin="5,0,0,0" Width="80" Click="ButtonPress_Click"  />
                         </StackPanel>
                     </StackPanel>
                     <Border x:Name="KeyPanel" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4"/>
@@ -31,10 +31,10 @@
                 
                 <StackPanel VerticalAlignment="Top" Margin="0,110,0,0">
                     <TextBlock Text="Inserción sencilla" />
-                    <TextBox x:Name="TextBoxTecla" Margin="0,5" Width="350" IsReadOnly="True" Background="Black" Foreground="GreenYellow" HorizontalContentAlignment="Center" LostFocus="TextBoxTecla_LostFocus" GotFocus="TextBoxTecla_GotFocus" PreviewKeyDown="TextBoxTecla_PreviewKeyDown" PreviewKeyUp="TextBoxTecla_PreviewKeyUp" />
+                    <TextBox x:Name="TextBoxKey" Margin="0,5" Width="350" IsReadOnly="True" Background="Black" Foreground="GreenYellow" HorizontalContentAlignment="Center" LostFocus="TextBoxTecla_LostFocus" GotFocus="TextBoxTecla_GotFocus" PreviewKeyDown="TextBoxTecla_PreviewKeyDown" PreviewKeyUp="TextBoxTecla_PreviewKeyUp" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Content="Normal" x:Name="ButtonNormal" Width="85" Click="ButtonNormal_Click" />
-                        <Button Content="Mantener" x:Name="ButtonMantener" Margin="5,0,0,0" Width="85" Click="ButtonMantener_Click" />
+                        <Button Content="Mantener" x:Name="ButtonMantener" Margin="5,0,0,0" Width="85" Click="ButtonHold_Click" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

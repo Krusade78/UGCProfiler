@@ -17,7 +17,7 @@ namespace Profiler
 			View,
 		}
 		
-		private Section CurrentSection { get; set; } = Section.None;
+		private Section currentSection = Section.None;
 		private bool forceToggle = false;
 
 		public MainWindow()
@@ -124,8 +124,8 @@ namespace Profiler
 			tbEdit.IsChecked = false;
 			forceToggle = false;
 			ctlDevs.SetMacroHeader(false);
-			CurrentSection = tbCalibrate.IsChecked == true ? Section.Calibrate : Section.None;
-            mainFrame.Refresh(CurrentSection);
+			currentSection = tbCalibrate.IsChecked == true ? Section.Calibrate : Section.None;
+            mainFrame.GoToSection(currentSection);
 			
 		}
         #endregion
@@ -139,8 +139,8 @@ namespace Profiler
             tbEdit.IsChecked = false;
             forceToggle = false;
             ctlDevs.SetMacroHeader(true);
-            CurrentSection = Section.Macros;
-            mainFrame.Refresh(Section.Macros);
+            currentSection = Section.Macros;
+            mainFrame.GoToSection(Section.Macros);
         }
 
         private void FtbEdit_Checked(object sender, RoutedEventArgs e)
@@ -151,8 +151,8 @@ namespace Profiler
             tbList.IsChecked = false;
 			forceToggle = false;
             ctlDevs.SetMacroHeader(false);
-            CurrentSection = Section.Edit;
-			mainFrame.Refresh(Section.Edit);
+            currentSection = Section.Edit;
+			mainFrame.GoToSection(Section.Edit);
 		}
 		private void FtbList_Checked(object sender, RoutedEventArgs e)
 		{
@@ -162,8 +162,8 @@ namespace Profiler
             tbEdit.IsChecked = false;
 			forceToggle = false;
             ctlDevs.SetMacroHeader(false);
-            CurrentSection = Section.View;
-			mainFrame.Refresh(Section.View);
+            currentSection = Section.View;
+			mainFrame.GoToSection(Section.View);
 		}
 
         private void TbUnchecked(object sender, RoutedEventArgs e)
@@ -171,8 +171,8 @@ namespace Profiler
 			if (!forceToggle)
 			{
                 ctlDevs.SetMacroHeader(false);
-                CurrentSection = Section.None;
-                mainFrame.Refresh(CurrentSection);
+                currentSection = Section.None;
+                mainFrame.GoToSection(currentSection);
             }
         }
 

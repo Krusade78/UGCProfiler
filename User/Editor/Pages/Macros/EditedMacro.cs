@@ -63,7 +63,7 @@ namespace Profiler.Pages.Macros
             }
             LoadList(ref macros);
 
-            ListBox1.DataContext = gMacros.OrderBy(x => x.Id);
+            RefrestListBox();
         }
 
         private void LoadList(ref List<uint> macros)
@@ -117,76 +117,85 @@ namespace Profiler.Pages.Macros
             }
         }
 
-        //#region "Lista"
-        //private int GetCuenta()
-        //{
-        //	int n = 0;
-        //	foreach (System.Data.DataRowView rv in CurrentMacro.MACROS.DefaultView)
-        //	{
-        //		foreach (ushort c in ((DataSetMacros.MACROSRow)rv.Row).comando)
-        //		{
-        //			n++;
-        //		}
-        //	}
-        //	return n;
-        //}
+        private void RefrestListBox()
+        {
+            ListBox1.DataContext = gMacros.OrderBy(x => x.Id);
+        }
 
-        ///// <summary>
-        ///// Se inserta por encima de la selección
-        ///// </summary>
-        ///// <returns>Devuelve la posición de inserción</returns>
-        //private byte GetIndice()
-        //{
-        //	if (CurrentMacro.MACROS.DefaultView.Count == 0)
-        //	{
-        //		return 0;
-        //	}
-        //	if (ListBox1.SelectedIndex == -1) //al final
-        //	{              
-        //		return (byte)(((DataSetMacros.MACROSRow)CurrentMacro.MACROS.DefaultView[^1].Row).id + 1);
-        //	}
-        //	else
-        //	{
-        //		return ((DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row).id;
-        //	}
-        //}
+        #region
+        public int GetCuenta()
+        {
+            int n = 0;
+            foreach (GroupedCommand gc in gMacros)
+            {
+                n += gc.Commands.Length;
+            }
+            return n;
+        }
 
-        //private void Insertar(ushort[] bloque, bool separados)
-        //{
-        //	byte idInicio = GetIndice();
+        public void Clear()
+        {
+            gMacros.Clear();
+            RefrestListBox();
+        }
 
-        //	//hacer hueco
-        //	for (int i = CurrentMacro.MACROS.Count - 1; i >= 0; i--)
-        //	{
-        //		System.Data.DataRowView rvBusca = CurrentMacro.MACROS.DefaultView[i];
-        //		if (((DataSetMacros.MACROSRow)rvBusca.Row).id >= idInicio)
-        //		{
-        //			if (separados)
-        //			{
-        //				((DataSetMacros.MACROSRow)rvBusca.Row).id += (byte)bloque.Length;
-        //			}
-        //			else
-        //			{
-        //				((DataSetMacros.MACROSRow)rvBusca.Row).id++;
-        //			}
-        //		}
-        //		else
-        //			break;
-        //	}
+        /// <summary>
+        /// Se inserta por encima de la selección
+        /// </summary>
+        /// <returns>Devuelve la posición de inserción</returns>
+        private byte GetIndice()
+        {
+            if (gMacros.Count == 0)
+            {
+                return 0;
+            }
+            if (ListBox1.SelectedIndex == -1) //al final
+            {
+                return (byte)(gMacros[^1].Id + 1);
+            }
+            else
+            {
+                return ((GroupedCommand)ListBox1.SelectedItem).Id;
+            }
+        }
 
-        //	if (separados)
-        //	{
-        //		byte c = 0;
-        //		foreach (ushort comando in bloque)
-        //		{
-        //			CurrentMacro.MACROS.AddMACROSRow((byte)(idInicio + c++), "", [comando]);
-        //		}
-        //	}
-        //	else
-        //	{
-        //		CurrentMacro.MACROS.AddMACROSRow(idInicio, "", bloque);
-        //	}
-        //}
+        public void Insertar(uint[] block, bool separated)
+        {
+            byte idInicio = GetIndice();
+
+            //hacer hueco
+            for (int i = gMacros.Count - 1; i >= 0; i--)
+            {
+                GroupedCommand rvBusca = gMacros[i];
+                if (rvBusca.Id >= idInicio)
+                {
+                    if (separated)
+                    {
+                        rvBusca.Id += (byte)block.Length;
+                    }
+                    else
+                    {
+                        rvBusca.Id++;
+                    }
+                }
+                else
+                    break;
+            }
+
+            if (separated)
+            {
+                byte c = 0;
+                foreach (uint comando in block)
+                {
+                    gMacros.Add(new() { Id = (byte)(idInicio + c++), Commands = [comando] });
+                }
+            }
+            else
+            {
+                gMacros.Add(new() { Id = idInicio, Commands = block });
+            }
+            RefrestListBox();
+        }
 
         //private void BorrarMacroLista()
         //{
@@ -380,7 +389,7 @@ namespace Profiler.Pages.Macros
 
         //	ListBox1.SelectedIndex = sel + 1;
         //}
-        //#endregion
+        #endregion
 
         //private void Guardar()
         //{

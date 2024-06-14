@@ -18,7 +18,7 @@
             </Border>
             <Grid Margin="10">
                 <StackPanel Orientation="Horizontal">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-20,0,0">
                         <TextBlock Text="vJoy:" HorizontalAlignment="Center" />
                         <NumberBox x:Name="NumericUpDownJoy" Maximum="3" Minimum="1" Value="1"  Margin="0,6,0,0" SpinButtonPlacementMode="Compact" />
                     </StackPanel>
@@ -26,13 +26,14 @@
                     <StackPanel>
                         <StackPanel>
                             <TextBlock Text="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <StackPanel Orientation="Horizontal" Margin="0,5" HorizontalAlignment="Center">
                                 <TextBlock Text="Botón:" VerticalAlignment="Center" />
                                 <NumberBox x:Name="NumericUpDown1" Maximum="56" Minimum="1"  Value="1" Margin="5,0" SpinButtonPlacementMode="Compact" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="On" x:Name="ButtonDXOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0" Width="50" Click="ButtonDXOn_Click" />
                                 <Button Content="Off" x:Name="ButtonDXOff" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Click="ButtonDXOff_Click" />
+                                <Border x:Name="PanelBasic1" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-52,-2,-2,-2"/>
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Margin="0,20,0,0">
@@ -46,13 +47,11 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="On" x:Name="ButtonPovOn" Margin="5,0" Width="50" Click="ButtonPovOn_Click" />
                                 <Button Content="Off" x:Name="ButtonPovOff" Width="50" Click="ButtonPovOff_Click" />
+                                <Border x:Name="PanelBasic2" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-52,-2,-2,-2"/>
                             </StackPanel>
-                            <Grid x:Name="PanelSetas" Visibility="Collapsed" HorizontalAlignment="Center" Background="#7F808080" Width="178" Height="73" Margin="48,89,9,0" VerticalAlignment="Top" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-
-
             </Grid>
         </StackPanel>
     </Border>

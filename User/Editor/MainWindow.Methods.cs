@@ -36,7 +36,7 @@ namespace Profiler
 
 			data.New();
 
-			if (CurrentSection != Section.Calibrate)
+			if (currentSection != Section.Calibrate)
 			{
 				tbList.IsChecked = false;
 				tbEdit.IsChecked = true;
@@ -76,10 +76,10 @@ namespace Profiler
 				{
 					tbEdit.IsChecked = false;
 					tbList.IsChecked = false;
-					if (CurrentSection != Section.Calibrate)
+					if (currentSection != Section.Calibrate)
 					{
-						CurrentSection = Section.None;
-						mainFrame.Refresh(Section.None);
+						currentSection = Section.None;
+						mainFrame.Refresh();
 					}
 
 					profilePath = filename;

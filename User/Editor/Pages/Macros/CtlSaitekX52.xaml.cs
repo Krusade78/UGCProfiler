@@ -18,7 +18,7 @@ using Microsoft.UI.Xaml.Navigation;
 
 namespace Profiler.Pages.Macros
 {
-    public sealed partial class CtlSaitekX52 : UserControl
+    public sealed partial class CtlSaitekX52 : UserControl, IChangeMode
     {
         public CtlSaitekX52()
         {
@@ -161,5 +161,15 @@ namespace Profiler.Pages.Macros
         //	Insertar(bloque, false);
         //}
         //#endregion
+
+        public void GoToBasic()
+        {
+            PanelBasic.Visibility = Visibility.Visible;
+        }
+
+        public void GoToAdvanced()
+        {
+            PanelBasic.Visibility = Visibility.Collapsed;
+        }
     }
 }

@@ -18,7 +18,7 @@ using Microsoft.UI.Xaml.Navigation;
 
 namespace Profiler.Pages.Macros
 {
-    public sealed partial class CtlDirectX : UserControl
+    public sealed partial class CtlDirectX : UserControl, IChangeMode
     {
         public CtlDirectX()
         {
@@ -86,5 +86,17 @@ namespace Profiler.Pages.Macros
         }
 
         #endregion
+
+        public void GoToBasic()
+        {
+            PanelBasic1.Visibility = Visibility.Visible;
+            PanelBasic2.Visibility = Visibility.Visible;
+        }
+
+        public void GoToAdvanced()
+        {
+            PanelBasic1.Visibility = Visibility.Collapsed;
+            PanelBasic2.Visibility = Visibility.Collapsed;
+        }
     }
 }
