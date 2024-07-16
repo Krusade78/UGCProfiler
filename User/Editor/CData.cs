@@ -103,6 +103,7 @@ namespace Profiler
                             }
                         }
                     }
+                    ar.Id = id;
                 }
                 id++;
             }

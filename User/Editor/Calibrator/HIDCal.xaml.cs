@@ -234,31 +234,33 @@ namespace Calibrator
                 {
                     if (pollAxis < limit.Left)
                     {
-                        pollAxis = limit.Left;
+                        pollAxis = 0;
                         pollAxisGame = 0;
                     }
-                    if (pollAxis > limit.Right)
+                    else if (pollAxis > limit.Right)
                     {
-                        pollAxis = limit.Right;
+                        pollAxis = devInfo.Usages[axisId].Range;
                         pollAxisGame = 32767;
-                    }
-
-                    if (pollAxis < limit.Center)
-                    {
-                        if (width1 != 0)
-                        {
-                            pollAxis -= limit.Left;
-                            pollAxisGame = (ushort)((pollAxis * 16382) / (limit.Center - 1));
-                            pollAxis = (ushort)((pollAxis * limit.Center) / width1);
-                        }
                     }
                     else
                     {
-                        if (width2 != 0)
+                        if (pollAxis < limit.Center)
                         {
-                            pollAxis -= (ushort)(limit.Center + limit.Null + 1);
-                            pollAxisGame = (ushort)(16384 + ((pollAxis * 16383) / (limit.Right - limit.Center - limit.Null - 1)));
-                            pollAxis = (ushort)(limit.Center + 1 + ((pollAxis * (devInfo.Usages[axisId].Range - limit.Center)) / width2));
+                            if (width1 != 0)
+                            {
+                                pollAxis -= limit.Left;
+                                pollAxisGame = (ushort)((pollAxis * 16382) / (limit.Center - 1));
+                                pollAxis = (ushort)((pollAxis * limit.Center) / width1);
+                            }
+                        }
+                        else
+                        {
+                            if (width2 != 0)
+                            {
+                                pollAxis -= (ushort)(limit.Center + limit.Null + 1);
+                                pollAxisGame = (ushort)(16384 + ((pollAxis * 16383) / (limit.Right - limit.Center - limit.Null - 1)));
+                                pollAxis = (ushort)(limit.Center + 1 + ((pollAxis * (devInfo.Usages[axisId].Range - limit.Center)) / width2 - 1));
+                            }
                         }
                     }
                 }

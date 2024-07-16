@@ -87,16 +87,16 @@ void CProcessInput::Process(UINT32 joyId, PHID_INPUT_DATA p_hidData)
 			}
 		}
 
-		//// Setas
+		// Hats
 
-		//for (idx = 0; idx < 4; idx++)
+		//for (UCHAR idx = 0; idx < 4; idx++)
 		//{
 		//	if (p_hidData->Hats[idx] != viejohidData.Hats[idx])
 		//	{
-		//		if (viejohidData.Hats[idx] != 0)
-		//			CBotonesSetas::SoltarSeta(pProfile, TipoJoy::NXT, (idx * 8) + viejohidData.Hats[idx] - 1);
-		//		if (p_hidData->Hats[idx] != 0)
-		//			CBotonesSetas::PulsarSeta(pProfile, TipoJoy::NXT, (idx * 8) + p_hidData->Hats[idx] - 1);
+		//		if (viejohidData.Hats[idx] != 255)
+		//			CBotonesSetas::ReleaseHat(pProfile, joyId, (idx * 8) + viejohidData.Hats[idx]);
+		//		if (p_hidData->Hats[idx] != 255)
+		//			CBotonesSetas::PressHat(pProfile, joyId, (idx * 8) + p_hidData->Hats[idx]);
 		//	}
 		//}
 
@@ -120,7 +120,7 @@ void CProcessInput::Process(UINT32 joyId, PHID_INPUT_DATA p_hidData)
 		VHID_INPUT_DATA vJoyData;
 		RtlCopyMemory(&vJoyData.Axes, &p_hidData->Axis, sizeof(vJoyData.Axes));
 		RtlCopyMemory(&vJoyData.Buttons, reinterpret_cast<UCHAR*>(&p_hidData->Buttons), sizeof(vJoyData.Buttons));
-		//RtlCopyMemory(&command->VHid.Data.Hats, reinterpret_cast<UCHAR*>(&inputData->Buttons), sizeof(command->VHid.Data.Buttons));
+		RtlCopyMemory(&vJoyData.Hats, &p_hidData->Hats, sizeof(vJoyData.Hats));
 		CGenerateEvents::DirectX(outputId, 0xff, &vJoyData);
 	}
 }

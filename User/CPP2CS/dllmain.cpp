@@ -3,7 +3,7 @@
 #include <windows.h>
 
 extern "C"
-BOOL static __stdcall DllMain( HMODULE hModule,
+BOOL __stdcall DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
                      )

@@ -81,71 +81,68 @@ void CBotonesSetas::ReleaseButton(CProfile* pProfile, UINT32 joyId, UCHAR idx)
 	}
 }
 
-//void CBotonesSetas::PulsarSeta(CProfile* pPerfil, TipoJoy tipo, UCHAR idx)
+//void CBotonesSetas::PressHat(CProfile* pProfile, UINT32 joyId, UCHAR idx)
 //{
-//	UCHAR joy = static_cast<UCHAR>(tipo);
 //	UINT16 accionId;
 //
-//	pPerfil->InitProfileRead();
+//	pProfile->BeginProfileRead();
 //	{
-//		pPerfil->LockStatus();
+//		pProfile->LockStatus();
 //		{
-//			UCHAR pinkie = pPerfil->GetStatus()->SubMode;
-//			UCHAR modos = pPerfil->GetStatus()->Mode;
+//			UCHAR mode = pProfile->GetStatus()->Mode | pProfile->GetStatus()->SubMode << 4;
 //
-//			CProfile::PROGRAMMING* pdevExt = pPerfil->GetProfile();
-//			accionId = pdevExt->MapaSetas[joy][pinkie][modos][idx].Indices[pPerfil->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos];
+//			PROGRAMMING* pdevExt = pProfile->GetProfile();
+//			if (pProfile->GetStatus()->Hats)
+//			accionId = pdevExt->MapaSetas[joy][pinkie][modos][idx].Indices[pProfile->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos];
 //			if (pdevExt->MapaSetas[joy][pinkie][modos][idx].TamIndices > 0)
 //			{
-//				pPerfil->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos++;
+//				pProfile->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos++;
 //			}
-//			if (pPerfil->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos == pdevExt->MapaSetas[joy][pinkie][modos][idx].TamIndices)
+//			if (pProfile->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos == pdevExt->MapaSetas[joy][pinkie][modos][idx].TamIndices)
 //			{
-//				pPerfil->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos = 0;
+//				pProfile->GetStatus()->Hats[joy][pinkie][modos][idx].CurrentPos = 0;
 //			}
-//			pPerfil->GetStatus()->DxHats[joy][idx / 8] |= 1 << (idx % 8);
+//			pProfile->GetStatus()->DxHats[joy][idx / 8] |= 1 << (idx % 8);
 //		}
-//		pPerfil->UnlockStatus();
+//		pProfile->UnlockStatus();
 //	}
-//	pPerfil->EndProfileRead();
+//	pProfile->EndProfileRead();
 //
-//	CGenerarEventos::Comando(tipo, accionId, idx, CGenerarEventos::Origen::Seta, nullptr);
+//	CGenerateEvents::Command(joyId, accionId, idx, CGenerateEvents::Origin::Hat, nullptr);
 //}
 //
-//void CBotonesSetas::SoltarSeta(CProfile* pPerfil, TipoJoy tipo, UCHAR idx)
+//void CBotonesSetas::ReleaseHat(CProfile* pProfile, UINT32 joyId, UCHAR idx)
 //{
-//	UCHAR joy = static_cast<UCHAR>(tipo);
-//
-//	pPerfil->InitProfileRead();
+//	pProfile->InitProfileRead();
 //	{
 //		UCHAR pinkie;
 //		UCHAR modos;
-//		pPerfil->LockStatus();
+//		pProfile->LockStatus();
 //		{
-//			pinkie = pPerfil->GetStatus()->SubMode;
-//			modos = pPerfil->GetStatus()->Mode;
-//			pPerfil->GetStatus()->DxHats[joy][idx / 8] &= ~(1 << (idx % 8));
+//			pinkie = pProfile->GetStatus()->SubMode;
+//			modos = pProfile->GetStatus()->Mode;
+//			pProfile->GetStatus()->DxHats[joy][idx / 8] &= ~(1 << (idx % 8));
 //		}
-//		pPerfil->UnlockStatus();
+//		pProfile->UnlockStatus();
 //
-//		CProfile::PROGRAMMING* pdevExt = pPerfil->GetProfile();
+//		CProfile::PROGRAMMING* pdevExt = pProfile->GetProfile();
 //		if (pdevExt->MapaSetas[joy][pinkie][modos][idx].TamIndices == 0)
 //		{
 //			UINT16 accionId = pdevExt->MapaSetas[joy][pinkie][modos][idx].Indices[1];
-//			pPerfil->EndProfileRead();
+//			pProfile->EndProfileRead();
 //			if (accionId == 0)
 //			{
-//				CGenerarEventos::CheckHolds();
+//				CGenerateEvents::CheckHolds();
 //			}
 //			else
 //			{
-//				CGenerarEventos::Comando(tipo, accionId, idx, CGenerarEventos::Origen::Seta, nullptr);
+//				CGenerateEvents::Command(joyId, accionId, idx, CGenerateEvents::Origin::Hat, nullptr);
 //			}
 //		}
 //		else
 //		{
-//			pPerfil->EndProfileRead();
-//			CGenerarEventos::CheckHolds();
+//			pProfile->EndProfileRead();
+//			CGenerateEvents::CheckHolds();
 //		}
 //	}
 //}

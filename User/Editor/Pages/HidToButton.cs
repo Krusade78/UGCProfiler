@@ -64,9 +64,9 @@
                 if (hidData.Hats[i] != oldHidData.Hats[i])
                 {
                     byte nPos = hidData.Hats[i];
-                    if (nPos != 8)
+					Shared.ProfileModel.DeviceInfo.CUsage u = di.Usages.Find(x => (x.Id == i) && (x.Type == 253));
+					if (!((nPos > (u.Range >> 4)) || (nPos < (u.Range &0xf))))
                     {
-                        Shared.ProfileModel.DeviceInfo.CUsage u = di.Usages.Find(x => (x.Id == i) && (x.Type == 253));
                         map.Find(x => x.Idx == u.ReportIdx).HatButtons[nPos].IsChecked = true;
                         oldHidData = hidData;
                         return;

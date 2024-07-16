@@ -7,13 +7,13 @@
 class InternalCS2Cpp
 {
 public:
-	msclr::auto_gcroot<Launcher::CMain^> launcher;
+	msclr::auto_gcroot<LauncherWrapper::Passthrough^> launcher;
 };
 
 CExported::CExported()
 {
 	pImported = new InternalCS2Cpp;
-	pImported->launcher = gcnew Launcher::CMain;
+	pImported->launcher = gcnew LauncherWrapper::Passthrough;
 	pImported->launcher->Init();
 }
 

@@ -11,7 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
     <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -102,8 +101,8 @@
     <ClCompile Include="RawInput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Launcher\Launcher.csproj">
-      <Project>{19e2df53-6e1e-4812-b33a-5aa0b76347c1}</Project>
+    <ProjectReference Include="..\LauncherWrapper\LauncherWrapper.csproj">
+      <Project>{d5303089-8ba3-4640-8580-98b1b8ebda5f}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

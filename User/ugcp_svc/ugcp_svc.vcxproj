@@ -16,10 +16,6 @@
     <ProjectGuid>{fb85a669-9a7b-41e3-a150-48cc55e7c785}</ProjectGuid>
     <RootNamespace>xhotassvc</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <SccProjectName>SAK</SccProjectName>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccProvider>SAK</SccProvider>
     <ProjectName>ugcp_svc</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -198,8 +194,11 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
     <ProjectReference Include="..\CPP2CS\CPP2CS.vcxproj">
       <Project>{6de78144-2a0e-47bf-80d6-bbaffc123d99}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\LauncherWrapper\LauncherWrapper.csproj">
+      <Project>{d5303089-8ba3-4640-8580-98b1b8ebda5f}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Launcher\Launcher.csproj">
-      <Project>{59b85d3f-b707-4847-ae1d-93ec65bb6565}</Project>
+      <Project>{584db68e-fef0-488b-8b09-899cdcc444cb}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Shrared\Shared.csproj">
       <Project>{96c167c8-a0f9-4882-8a96-5aed739b603f}</Project>

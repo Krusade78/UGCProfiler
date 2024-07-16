@@ -10,8 +10,6 @@ namespace Profiler.Pages.Macros
     internal partial class Main : Page, IChangeMode
     {
         private MainWindow parent;
-        //private static readonly int ultimaPlantilla = -1;
-        //private readonly List<byte> teclas = [];
         internal EditedMacro CurrentMacro { get; private set; } = new();
 
         public Main()
@@ -20,6 +18,12 @@ namespace Profiler.Pages.Macros
             CurrentMacro.SetListBox(ListBox1);
             ctlName.DataContext = this;
             ctlKeyboard.DataContext = CurrentMacro;
+            ctlDirectX.DataContext = CurrentMacro;
+            ctlModes.DataContext = CurrentMacro;
+            ctlStatusCommands.DataContext = CurrentMacro;
+            ctlMouse.DataContext = CurrentMacro;
+            ctlSaitekX52.DataContext = CurrentMacro;
+            ctlVKBGladiatorNXT.DataContext = CurrentMacro;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -31,23 +35,29 @@ namespace Profiler.Pages.Macros
 
         private void ButtonBorrar_Click(object sender, RoutedEventArgs e)
         {
-            //BorrarMacroLista();
+            CurrentMacro.BorrarMacroLista();
         }
 
         private void ButtonSubir_Click(object sender, RoutedEventArgs e)
         {
-            //SubirMacroLista();
+            CurrentMacro.SubirMacroLista();
         }
 
         private void ButtonBajar_Click(object sender, RoutedEventArgs e)
         {
-            //BajarMacroLista();
+            CurrentMacro.BajarMacroLista();
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-
-            ushort nextId = (ushort)(parent.GetData().Profile.Macros.Max(x => x.Id) + 1);
+            ushort nextId = 1;
+            while(true)
+            {
+                if (!parent.GetData().Profile.Macros.Any(x => x.Id == nextId++))
+                {
+                    break;
+                }
+            }
             parent.GetData().Profile.Macros.Add(new () { Id = nextId, Name = "- New macro -" });
             lbMacros.DataContext = parent.GetData().Profile.Macros.Where(x => x.Id != 0).OrderBy(x => x.Name);
         }
@@ -74,7 +84,7 @@ namespace Profiler.Pages.Macros
                 ctlSaitekX52.IsEnabled = false;
                 ctlStatusCommands.IsEnabled = false;
                 ctlVKBGladiatorNXT.IsEnabled = false;
-                ListBox1.Items.Clear();
+                CurrentMacro.Clear();
             }
             else
             {
@@ -96,7 +106,8 @@ namespace Profiler.Pages.Macros
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            //Guardar();
+            CurrentMacro.Guardar(ctlSaitekX52.GetNameOnMFD(), ctlName.GetName());
+            lbMacros.DataContext = parent.GetData().Profile.Macros.Where(x => x.Id != 0).OrderBy(x => x.Name);
         }
 
         public void GoToBasic()
@@ -108,6 +119,8 @@ namespace Profiler.Pages.Macros
             ctlDirectX.GoToBasic();
             ctlVKBGladiatorNXT.GoToBasic();
             ctlSaitekX52.GoToBasic();
+
+            CurrentMacro.BasicMode = true;
 
             ButtonSubir.IsEnabled = false;
             ButtonBajar.IsEnabled = false;
@@ -122,6 +135,8 @@ namespace Profiler.Pages.Macros
             ctlDirectX.GoToAdvanced();
             ctlVKBGladiatorNXT.GoToAdvanced();
             ctlSaitekX52.GoToAdvanced();
+
+            CurrentMacro.BasicMode = false;
 
             ButtonSubir.IsEnabled = true;
             ButtonBajar.IsEnabled = true;

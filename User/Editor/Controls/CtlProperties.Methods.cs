@@ -549,7 +549,7 @@ namespace Profiler.Controls
                     mode = new();
                     buttonMap.Modes.Add(GetMode(), mode);
                 }
-                if (!mode.Buttons.TryGetValue(CurrentSel.Usage.Id, out button))
+                if (!mode.Buttons.TryGetValue((byte)(CurrentSel.Idx - CurrentSel.Usage.ReportIdx + CurrentSel.Usage.Id), out button))
                 {
                     button = new();
                     mode.Buttons.Add((byte)(CurrentSel.Idx - CurrentSel.Usage.ReportIdx + CurrentSel.Usage.Id), button);
@@ -656,6 +656,7 @@ namespace Profiler.Controls
             }
 
             parent.GetData().Modified = true;
+            Refresh();
         }
         #endregion
 

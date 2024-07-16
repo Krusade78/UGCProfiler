@@ -32,7 +32,7 @@ public:
 	void Close() const;
 	void Call(wchar_t* hidInterface, int interfaceSize, BYTE* data, DWORD dataSize);
 private:
-	void ProcessRawInput();
+	void ProcessRawInput() const;
 	HANDLE hEvClose = NULL;
 	HWND hWnd = NULL;
 	msclr::gcroot<CPP2CS::RawInput^>* ptrm = nullptr;

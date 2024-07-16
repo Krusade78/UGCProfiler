@@ -104,18 +104,20 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 				{
 					if (pollAxis < limit.Left)
 						pollAxis = 0;
-					if (pollAxis > limit.Right)
+					else if (pollAxis > limit.Right)
 						pollAxis = 32767; //normalized vjoy 15bit
-
-					if (pollAxis < limit.Center)
-					{
-						pollAxis -= limit.Left;
-						pollAxis = ((pollAxis * 16382) / (limit.Center - 1)); //normalized vjoy 15bit
-					}
 					else
 					{
-						pollAxis -= (limit.Center + limit.Null + 1);
-						pollAxis = 16384 + ((pollAxis * 16383) / (limit.Right - limit.Center - limit.Null - 1)); //normalized vjoy 15bit
+						if (pollAxis < limit.Center)
+						{
+							pollAxis -= limit.Left;
+							pollAxis = ((pollAxis * 16382) / (limit.Center - 1)); //normalized vjoy 15bit
+						}
+						else
+						{
+							pollAxis -= (limit.Center + limit.Null + 1);
+							pollAxis = 16384 + ((pollAxis * 16383) / (limit.Right - limit.Center - limit.Null - 1)); //normalized vjoy 15bit
+						}
 					}
 				}
 

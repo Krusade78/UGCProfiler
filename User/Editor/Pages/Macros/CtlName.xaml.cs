@@ -33,5 +33,7 @@ namespace Profiler.Pages.Macros
         {
             txtName.Text = ((App)Application.Current).GetMainWindow().GetData().Profile.Macros.Find(x => x.Id == id).Name;
         }
+
+        public string GetName() => txtName.Text.Trim();
     }
 }

@@ -28,7 +28,7 @@
                             <TextBlock Text="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
                             <StackPanel Orientation="Horizontal" Margin="0,5" HorizontalAlignment="Center">
                                 <TextBlock Text="Botón:" VerticalAlignment="Center" />
-                                <NumberBox x:Name="NumericUpDown1" Maximum="56" Minimum="1"  Value="1" Margin="5,0" SpinButtonPlacementMode="Compact" />
+                                <NumberBox x:Name="NumericUpDown1" Maximum="64" Minimum="1"  Value="1" Margin="5,0" SpinButtonPlacementMode="Compact" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="On" x:Name="ButtonDXOn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,0" Width="50" Click="ButtonDXOn_Click" />

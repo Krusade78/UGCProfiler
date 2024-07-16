@@ -26,62 +26,60 @@
             <ListBox Grid.Row="1" x:Name="lbMacros" ItemsSource="{Binding}" DisplayMemberPath="Name" Width="320" Background="White" SelectionChanged="LbMacros_SelectionChanged"/>
         </Grid>
         <ScrollViewer Grid.Column="1" Margin="0,10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
-            <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition  />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel VerticalAlignment="Top">
-                        <local:CtlName x:Name="ctlName" Margin="0,0,10,0" Width="850" HorizontalAlignment="Left" IsEnabled="False"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,10">
-                            <local:CtlKeyboard x:Name="ctlKeyboard" IsEnabled="False"/>
-                            <local:CtlStatusCommands Margin="10,0,10,0" x:Name="ctlStatusCommands" IsEnabled="False"/>
-                            <local:CtlModes  x:Name="ctlModes" IsEnabled="False"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <local:CtlMouse x:Name="ctlMouse" IsEnabled="False"/>
-                            <local:CtlDirectX Margin="10,0,0,0" x:Name="ctlDirectX" IsEnabled="False"/>
-                        </StackPanel>
-                        
-                        <Expander Header="VKB Gladiator NXT - Extra functions" Margin="0,10" MinWidth="850">
-                            <local:CtlVKBGladiatorNXT x:Name="ctlVKBGladiatorNXT" IsEnabled="False"/>
-                        </Expander>
-
-                        <Expander Header="Saitek X52 - Extra functions" Margin="0,10" MinWidth="850">
-                            <local:CtlSaitekX52 x:Name="ctlSaitekX52" IsEnabled="False"/>
-                        </Expander>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition  />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Top">
+                    <local:CtlName x:Name="ctlName" IsEnabled="False"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <local:CtlKeyboard x:Name="ctlKeyboard" IsEnabled="False"/>
+                        <local:CtlStatusCommands Margin="10,0,10,0" x:Name="ctlStatusCommands" IsEnabled="False"/>
+                        <local:CtlModes  x:Name="ctlModes" IsEnabled="False"/>
                     </StackPanel>
-                    <Button x:Name="btSave" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,30,0" Click="ButtonSave_Click" IsEnabled="False" Foreground="White" Background="#b93304">
-                        <StackPanel Orientation="Horizontal">
-                            <FontIcon Glyph="&#xE74E;" FontSize="24" Margin="0,0,10,0"/>
-                            <TextBlock Text="Guardar" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                    <StackPanel Orientation="Horizontal">
+                        <local:CtlMouse x:Name="ctlMouse" IsEnabled="False"/>
+                        <local:CtlDirectX Margin="10,0,0,0" x:Name="ctlDirectX" IsEnabled="False"/>
+                    </StackPanel>
+                        
+                    <Expander Header="VKB Gladiator NXT - Extra functions" Margin="0,10" HorizontalAlignment="Stretch">
+                        <local:CtlVKBGladiatorNXT x:Name="ctlVKBGladiatorNXT" IsEnabled="False"/>
+                    </Expander>
 
-                    <Border x:Name="GroupBox1" Grid.Column="1" Margin="10,0,18,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Comandos" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource SubtitleTextBlockStyle}" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"/>
-                            <ListBox x:Name="ListBox1" Margin="0,30,0,10" Background="#a0000000" Foreground="LightGreen" ItemsSource="{Binding}" DisplayMemberPath="Name" />
-                            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="5,100,0,0">
-                                <Button x:Name="ButtonSubir" Width="32" Height="32" Padding="0" Click="ButtonSubir_Click">
-                                    <SymbolIcon Symbol="Upload" />
-                                </Button>
-                                <Button x:Name="ButtonBajar" Margin="0,10" Width="32" Height="32" Padding="0" Click="ButtonBajar_Click">
-                                    <SymbolIcon Symbol="Download" />
-                                </Button>
-                                <Button x:Name="ButtonBorrar" Width="32" Height="32" Padding="0" Click="ButtonBorrar_Click">
-                                    <SymbolIcon Symbol="Delete"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </Grid>
-            </StackPanel>
+                    <Expander Header="Saitek X52 - Extra functions" Margin="0,10" HorizontalAlignment="Stretch">
+                        <local:CtlSaitekX52 x:Name="ctlSaitekX52" IsEnabled="False"/>
+                    </Expander>
+                </StackPanel>
+                <Button x:Name="btSave" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,30,0" Click="ButtonSave_Click" IsEnabled="False" Foreground="White" Background="#b93304">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Glyph="&#xE74E;" FontSize="24" Margin="0,0,10,0"/>
+                        <TextBlock Text="Guardar" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Border x:Name="GroupBox1" Grid.Column="1" Margin="10,0,18,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Comandos" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource SubtitleTextBlockStyle}" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"/>
+                        <ListBox RequestedTheme="Dark" x:Name="ListBox1" Margin="0,30,0,10" Foreground="LightGreen" ItemsSource="{Binding}" DisplayMemberPath="Name" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="5,100,0,0">
+                            <Button x:Name="ButtonSubir" Width="32" Height="32" Padding="0" Click="ButtonSubir_Click">
+                                <SymbolIcon Symbol="Upload" />
+                            </Button>
+                            <Button x:Name="ButtonBajar" Margin="0,10" Width="32" Height="32" Padding="0" Click="ButtonBajar_Click">
+                                <SymbolIcon Symbol="Download" />
+                            </Button>
+                            <Button x:Name="ButtonBorrar" Width="32" Height="32" Padding="0" Click="ButtonBorrar_Click">
+                                <SymbolIcon Symbol="Delete"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
         </ScrollViewer>
     </Grid>
 </Page>

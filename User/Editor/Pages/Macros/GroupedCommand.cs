@@ -13,8 +13,9 @@ namespace Profiler.Pages.Macros
         private static string GetName(uint[] comands)
         {
             byte cmdType = (byte)(comands[0] & 0x7f);
-            byte data = (byte)(comands[0] >> 8);
-            bool released = ((comands[0] & 0xff) & (byte)CommandType.Release) == (byte)CommandType.Release;
+            byte data = (byte)((comands[0] >> 8) & 0xff);
+            byte joy = (byte)((comands[0] >> 16) & 0xff);
+            bool released = (comands[0] & 0xff & (byte)CommandType.Release) == (byte)CommandType.Release;
 
             if (cmdType == (byte)CommandType.Key)
             {
@@ -172,22 +173,22 @@ namespace Profiler.Pages.Macros
             {
                 if (released)
                 {
-                    return "Botón DX " + ((data & 7) + 1) + " - " + ((data >> 3) + 1) + " Off";
+                    return $"Botón vJoy. {joy + 1} -  DX {data + 1} Off";
                 }
                 else
                 {
-                    return "Botón DX " + ((data & 7) + 1) + " - " + ((data >> 3) + 1) + " On";
+                    return $"Botón vJoy. {joy + 1} - DX {data + 1} On";
                 }
             }
             else if (cmdType == (byte)CommandType.DxHat)
             {
                 if (released)
                 {
-                    return "Seta DX " + ((data & 7) + 1) + " - " + (4 - ((data >> 3) / 8)) + "@" + (((data >> 3) % 8) + 1) + " Off";
+                    return $"Seta vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} Off";
                 }
                 else
                 {
-                    return "Seta DX " + ((data & 7) + 1) + " - " + (4 - ((data >> 3) / 8)) + "@" + (((data >> 3) % 8) + 1) + " On";
+                    return $"Seta vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} On";
                 }
             }
             else if (cmdType == (byte)CommandType.X52MfdLight)

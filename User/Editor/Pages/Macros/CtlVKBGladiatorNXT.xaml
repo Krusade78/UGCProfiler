@@ -26,8 +26,8 @@
                         <TextBlock Text="Led:"  VerticalAlignment="Center" Margin="0,0,5,0"/>
                         <ComboBox x:Name="cbLed" Width="140" SelectedIndex="0" SelectionChanged="FcbLed_SelectionChanged">
                             <ComboBoxItem Content="Base" />
-                            <ComboBoxItem Content="Joystick - RGB" />
                             <ComboBoxItem Content="Joystick - Red" />
+                            <ComboBoxItem Content="Joystick - RGB" />
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
@@ -58,7 +58,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"  VerticalAlignment="Center" Margin="10,0,0,0">
                         <TextBlock Text="Color 1:" VerticalAlignment="Center"  Margin="0,0,5,0"/>
-                        <SplitButton>
+                        <SplitButton x:Name="sbColor1">
                             <!--Click="FtxtColor1_PreviewMouseLeftButtonUp"-->
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock x:Name="txtColor1" Text="7;0;0"/>
@@ -66,14 +66,14 @@
                             </StackPanel>
                             <SplitButton.Flyout>
                                 <Flyout Placement="TopEdgeAlignedRight">
-                                    <ColorPicker IsHexInputVisible="False" />
+                                    <ColorPicker x:Name="cpColor1" IsHexInputVisible="False" ColorChanged="Color1Picker_ColorChanged" />
                                 </Flyout>
                             </SplitButton.Flyout>
                         </SplitButton>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"  VerticalAlignment="Center" Margin="10,0,0,0">
                         <TextBlock Text="Color 2:"  VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <SplitButton>
+                        <SplitButton x:Name="sbColor2">
                             <!--="FtxtColor2_PreviewMouseLeftButtonUp">-->
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock x:Name="txtColor2" Text="7;0;0"/>
@@ -81,7 +81,7 @@
                             </StackPanel>
                             <SplitButton.Flyout>
                                 <Flyout Placement="TopEdgeAlignedRight">
-                                    <ColorPicker IsHexInputVisible="False" />
+                                    <ColorPicker x:Name="cpColor2" IsHexInputVisible="False" ColorChanged="Color2Picker_ColorChanged" />
                                 </Flyout>
                             </SplitButton.Flyout>
                         </SplitButton>

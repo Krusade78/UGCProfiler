@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Language/en.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+            <!--<Color x:Key="SystemAccentColor">#2079D7</Color>-->
         </ResourceDictionary>
     </Application.Resources>
 </Application>

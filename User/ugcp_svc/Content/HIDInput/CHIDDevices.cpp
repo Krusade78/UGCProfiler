@@ -224,12 +224,12 @@ bool CHIDDevices::GetDeviceMap(void* ppd, void* pc)
                 }
                 else
                 {
-                    if (val.LogicalMin != 0) { return false; }
+                    if ((val.NotRange.Usage != 57) && (val.LogicalMin != 0)) { return false; }
                     ST_MAP* amap = new ST_MAP;
                     amap->ReportId = val.ReportID;
                     amap->Bits = static_cast<UCHAR>(val.BitSize);
                     amap->IsButton = FALSE;
-                    amap->IsHat = val.NotRange.Usage == 57;
+                    amap->IsHat = (val.NotRange.Usage == 57) ? static_cast<UCHAR>(val.LogicalMin) | ((static_cast<UCHAR>(val.LogicalMax) & 0xf) << 4) : 0;
                     amap->Index = val.NotRange.DataIndex;
                     amap->Skip = FALSE;
                     map.push_back(amap);

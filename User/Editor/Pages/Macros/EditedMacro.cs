@@ -10,14 +10,16 @@ namespace Profiler.Pages.Macros
         private Microsoft.UI.Xaml.Controls.ListBox ListBox1;
         private readonly List<GroupedCommand> gMacros = [];
         private readonly Shared.ProfileModel profile = ((App)Application.Current).GetMainWindow().GetData().Profile;
+        private ushort currentMacroId;
 
         public void SetListBox(Microsoft.UI.Xaml.Controls.ListBox lb) => ListBox1 = lb;
 
+        public bool BasicMode { get; set; } = true;
+
         public void LoadData(ushort macroId, ref bool MFDChecked)
         {
+            currentMacroId = macroId;
             gMacros.Clear();
-            //dsMacros.MACROS.DefaultView.Sort = "id";
-            //ListBox1.DataContext = dsMacros.MACROS.DefaultView;
 
             Shared.ProfileModel.MacroModel r = profile.Macros.Find(x => x.Id == macroId);
 
@@ -197,264 +199,286 @@ namespace Profiler.Pages.Macros
             RefrestListBox();
         }
 
-        //private void BorrarMacroLista()
-        //{
-        //	if (ListBox1.SelectedIndex == -1)
-        //		return;
+        public void BorrarMacroLista()
+        {
+            if (ListBox1.SelectedIndex == -1)
+                return;
 
-        //	if (RadioButtonAvanzado.IsChecked != true)
-        //	{
-        //		if (RadioButtonBasico.IsChecked == true)
-        //		{
-        //			CurrentMacro.MACROS.Clear();
-        //		}
-        //	}
-        //	else
-        //	{
-        //		DataSetMacros.MACROSRow rsel = (DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row;
-        //		byte tipo = (byte)(rsel.comando[0] & 0x7F);
-        //		if (tipo == (byte)CommandType.Repeat)
-        //		{
-        //			if (((byte)(rsel.comando[0] & 0xff) & (byte)CommandType.Release) == 0) //inicio repeat
-        //			{
-        //				foreach (DataSetMacros.MACROSRow rBusca in CurrentMacro.MACROS)
-        //				{
-        //					if ((rBusca.id > rsel.id) &&  
-        //						((byte)(rBusca.comando[0] & 0x7F) == (byte)CommandType.Repeat))
-        //					{
-        //						rBusca.Delete();
-        //						break;
-        //					}
-        //				}
-        //				rsel.Delete();
-        //			}
-        //			else //fin repeat
-        //			{
-        //				foreach (DataSetMacros.MACROSRow rBusca in CurrentMacro.MACROS)
-        //				{
-        //					if ((rBusca.id < rsel.id) && //hace falta porque en la tabla puede estar desordenado
-        //						((byte)(rBusca.comando[0] & 0x7F) == (byte)CommandType.Repeat))
-        //					{
-        //						rBusca.Delete();
-        //						break;
-        //					}
-        //				}
-        //				rsel.Delete();
-        //			}
-        //		}
-        //		else if (tipo == (byte)CommandType.RepeatN)
-        //		{
-        //			if ((byte)(rsel.comando[0] & 0xff & (byte)CommandType.Release) == 0)
-        //			{
-        //				byte anidado = 1;
-        //				foreach (System.Data.DataRowView rvBusca in CurrentMacro.MACROS.DefaultView)
-        //				{
-        //					DataSetMacros.MACROSRow rBusca = (DataSetMacros.MACROSRow)rvBusca.Row;
-        //					if (rBusca.id > rsel.id)
-        //					{
-        //						if ((byte)(rBusca.comando[0] & 0x7F) == (byte)CommandType.RepeatN)
-        //						{
-        //							if ((rBusca.comando[0] & 0xff & (byte)CommandType.Release) != 0)
-        //								anidado--;
-        //							else
-        //								anidado++;
-        //						}
-        //						if ((anidado == 0) &&
-        //								((byte)(rBusca.comando[0] & 0x7F) == (byte)CommandType.RepeatN) &&
-        //								((byte)(rBusca.comando[0] & (byte)CommandType.Release) != 0)) //fin repeatn
-        //						{
-        //							rBusca.Delete();
-        //							break;
-        //						}
-        //					}
-        //				}
-        //				rsel.Delete();
-        //			}
-        //			else
-        //			{
-        //				byte anidado = 1;
-        //				DataSetMacros.MACROSRow rUltima = null;
-        //				for (int i = rsel.id - 1; i >= 0; i--)
-        //				{
-        //					System.Data.DataRowView rvBusca = CurrentMacro.MACROS.DefaultView[i];
-        //					DataSetMacros.MACROSRow rBusca = (DataSetMacros.MACROSRow)rvBusca.Row;
-        //					{
-        //						if ((byte)(rBusca.comando[0] & 0x7F) == (byte)CommandType.RepeatN)
-        //						{
-        //							if ((rBusca.comando[0] & 0xff & (byte)CommandType.Release) != 0)
-        //								anidado++;
-        //							else
-        //								anidado--;
-        //						}
-        //						if ((anidado == 0) &&
-        //							((byte)(rBusca.comando[0] & 0x7F) == (byte)CommandType.RepeatN) &&
-        //							((rBusca.comando[0] & 0xff & (byte)CommandType.Release) == 0))
-        //						{
-        //							rUltima = rBusca;
-        //							break;
-        //						}
-        //					}
-        //				}
-        //				rUltima.Delete();
-        //				rsel.Delete();
-        //			}
-        //		}
-        //		else
-        //		{
-        //			rsel.Delete();
-        //		}
+            if (BasicMode)
+            {
+                Clear();
+            }
+            else
+            {
+                GroupedCommand rSel = (GroupedCommand)ListBox1.SelectedItem;
+                byte cmdType = (byte)(rSel.Commands[0] & 0x7F);
+                if (cmdType == (byte)CommandType.Repeat)
+                {
+                    if (((byte)(rSel.Commands[0] & 0xff) & (byte)CommandType.Release) == 0) //begin repeat
+                    {
+                        foreach (GroupedCommand rFind in gMacros)
+                        {
+                            if ((rFind.Id > rSel.Id) && ((byte)(rFind.Commands[0] & 0x7F) == (byte)CommandType.Repeat))
+                            {
+                                gMacros.Remove(rFind);
+                                break;
+                            }
+                        }
+                        gMacros.Remove(rSel);
+                    }
+                    else //end repeat
+                    {
+                        foreach (GroupedCommand rFind in gMacros)
+                        {
+                            if ((rFind.Id < rSel.Id) && //necessary because can be unordered in list
+                                ((byte)(rFind.Commands[0] & 0x7F) == (byte)CommandType.Repeat))
+                            {
+                                gMacros.Remove(rFind);
+                                break;
+                            }
+                        }
+                        gMacros.Remove(rSel);
+                    }
+                }
+                else if (cmdType == (byte)CommandType.RepeatN)
+                {
+                    if ((byte)(rSel.Commands[0] & 0xff & (byte)CommandType.Release) == 0)
+                    {
+                        byte nested = 1;
+                        foreach (GroupedCommand rFind in gMacros)
+                        {
+                            if (rFind.Id > rSel.Id)
+                            {
+                                if ((byte)(rFind.Commands[0] & 0x7F) == (byte)CommandType.RepeatN)
+                                {
+                                    if ((rFind.Commands[0] & 0xff & (byte)CommandType.Release) != 0)
+                                        nested--;
+                                    else
+                                        nested++;
+                                }
+                                if ((nested == 0) &&
+                                        ((byte)(rFind.Commands[0] & 0x7F) == (byte)CommandType.RepeatN) &&
+                                        ((byte)(rFind.Commands[0] & (byte)CommandType.Release) != 0)) //end repeatn
+                                {
+                                    gMacros.Remove(rFind);
+                                    break;
+                                }
+                            }
+                        }
+                        gMacros.Remove(rSel);
+                    }
+                    else
+                    {
+                        byte nested = 1;
+                        GroupedCommand rLast = null;
+                        for (int i = rSel.Id - 1; i >= 0; i--)
+                        {
+                            GroupedCommand rFind = gMacros[i];
+                            {
+                                if ((byte)(rFind.Commands[0] & 0x7F) == (byte)CommandType.RepeatN)
+                                {
+                                    if ((rFind.Commands[0] & 0xff & (byte)CommandType.Release) != 0)
+                                    {
+                                        nested++;
+                                    }
+                                    else
+                                    {
+                                        nested--;
+                                    }
+                                }
+                                if ((nested == 0) && ((byte)(rFind.Commands[0] & 0x7F) == (byte)CommandType.RepeatN) && ((rFind.Commands[0] & 0xff & (byte)CommandType.Release) == 0))
+                                {
+                                    rLast = rFind;
+                                    break;
+                                }
+                            }
+                        }
+                        gMacros.Remove(rLast);
+                        gMacros.Remove(rSel);
+                    }
+                }
+                else
+                {
+                    gMacros.Remove(rSel);
+                }
 
-        //		//reordenar
-        //		byte id = 0;
-        //		foreach (System.Data.DataRowView rvBusca in CurrentMacro.MACROS.DefaultView)
-        //		{
-        //			DataSetMacros.MACROSRow rBusca = (DataSetMacros.MACROSRow)rvBusca.Row;
-        //			if (rBusca.id != id)
-        //			{
-        //				rBusca.id = id;
-        //			}
-        //			id++;
-        //		}
-        //	}
-        //}
+                //reorder
+                byte id = 0;
+                foreach (GroupedCommand gc in gMacros)
+                {
+                    if (gc.Id != id)
+                    {
+                        gc.Id = id;
+                    }
+                    id++;
+                }
+            }
+            RefrestListBox();
+        }
 
-        //private void SubirMacroLista()
-        //{
-        //	if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == 0))
-        //		return;
+        public void SubirMacroLista()
+        {
+            if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == 0))
+                return;
 
-        //	DataSetMacros.MACROSRow rSel = (DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row;
-        //	DataSetMacros.MACROSRow rAnterior = CurrentMacro.MACROS.FindByid((byte)(rSel.id - 1));
-        //	byte tipoSel = (byte)(rSel.comando[0] & 0x7f);
-        //	byte tipoAnterior = (byte)(rAnterior.comando[0] & 0x7f);
+            GroupedCommand rSel = (GroupedCommand)ListBox1.SelectedItem;
+            GroupedCommand rBefore = gMacros.Find(x => x.Id == (byte)(rSel.Id - 1));
+            byte selType = (byte)(rSel.Commands[0] & 0x7f);
+            byte beforeType = (byte)(rBefore.Commands[0] & 0x7f);
 
-        //	if ((tipoSel  == (byte)CommandType.Hold) && 
-        //		(tipoAnterior == (byte)CommandType.RepeatN) && ((byte)(rAnterior.comando[0] & (byte)CommandType.Release) != 0)) //fin repeatn
-        //	{
-        //		return;
-        //	}
-        //	if ((tipoSel == (byte)CommandType.Repeat) &&   //cualquier repeat
-        //		((tipoAnterior == (byte)CommandType.RepeatN) || (tipoAnterior == (byte)CommandType.Repeat)))
-        //	{
-        //		return;
-        //	}
-        //	if ((tipoSel == (byte)CommandType.RepeatN) && //inicio repeat
-        //		((tipoAnterior == (byte)CommandType.RepeatN) || (tipoAnterior == (byte)CommandType.Repeat)))
-        //	{
-        //		return;
-        //	}
+            if ((selType == (byte)CommandType.Hold) &&
+                (beforeType == (byte)CommandType.RepeatN) && ((byte)(rBefore.Commands[0] & (byte)CommandType.Release) != 0)) //end repeatn
+            {
+                return;
+            }
+            if ((selType == (byte)CommandType.Repeat) &&   //any repeat
+                ((beforeType == (byte)CommandType.RepeatN) || (beforeType == (byte)CommandType.Repeat)))
+            {
+                return;
+            }
+            if ((selType == (byte)CommandType.RepeatN) && //begin repeat
+                ((beforeType == (byte)CommandType.RepeatN) || (beforeType == (byte)CommandType.Repeat)))
+            {
+                return;
+            }
 
 
-        //	int sel = ListBox1.SelectedIndex;
+            int sel = ListBox1.SelectedIndex;
 
-        //	byte idAnterior = rAnterior.id;
-        //	rAnterior.id = 255;
-        //	rSel.id = idAnterior;
-        //	rAnterior.id = (byte)(idAnterior + 1);
+            byte idBefore = rBefore.Id;
+            rBefore.Id = 255;
+            rSel.Id = idBefore;
+            rBefore.Id = (byte)(idBefore + 1);
 
-        //	ListBox1.SelectedIndex = sel - 1;
-        //}
+            RefrestListBox();
+            ListBox1.SelectedIndex = sel - 1;
+        }
 
-        //private void BajarMacroLista()
-        //{
-        //	if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == (ListBox1.Items.Count - 1)))
-        //		return;
+        public void BajarMacroLista()
+        {
+            if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == (ListBox1.Items.Count - 1)))
+                return;
 
-        //	DataSetMacros.MACROSRow rSel = (DataSetMacros.MACROSRow)((System.Data.DataRowView)ListBox1.SelectedItem).Row;
-        //	DataSetMacros.MACROSRow rSiguiente = CurrentMacro.MACROS.FindByid((byte)(rSel.id + 1));
-        //	byte tipoSel = (byte)(rSel.comando[0] & 0x7f);
-        //	byte tipoSiguiente = (byte)(rSiguiente.comando[0] & 0x7f);
+            GroupedCommand rSel = (GroupedCommand)ListBox1.SelectedItem;
+            GroupedCommand rNext = gMacros.Find(x => x.Id == (byte)(rSel.Id + 1));
+            byte selType = (byte)(rSel.Commands[0] & 0x7f);
+            byte nextType = (byte)(rNext.Commands[0] & 0x7f);
 
-        //	if ((tipoSel == (byte)CommandType.Hold) && (tipoSiguiente == (byte)CommandType.RepeatN))
-        //	{
-        //		return;
-        //	}
-        //	if ((tipoSel == (byte)CommandType.Repeat) &&
-        //		((tipoSiguiente == (byte)CommandType.RepeatN) || (tipoSiguiente == (byte)CommandType.Repeat)))
-        //	{
-        //		return;
-        //	}
-        //	if ((tipoSel == (byte)CommandType.RepeatN) &&
-        //		((tipoSiguiente == (byte)CommandType.RepeatN) || (tipoSiguiente == (byte)CommandType.Repeat)))
-        //	{
-        //		return;
-        //	}
+            if ((selType == (byte)CommandType.Hold) && (nextType == (byte)CommandType.RepeatN))
+            {
+                return;
+            }
+            if ((selType == (byte)CommandType.Repeat) &&
+                ((nextType == (byte)CommandType.RepeatN) || (nextType == (byte)CommandType.Repeat)))
+            {
+                return;
+            }
+            if ((selType == (byte)CommandType.RepeatN) &&
+                ((nextType == (byte)CommandType.RepeatN) || (nextType == (byte)CommandType.Repeat)))
+            {
+                return;
+            }
 
-        //	int sel = ListBox1.SelectedIndex;
+            int sel = ListBox1.SelectedIndex;
 
-        //	byte idSiguiente = rSiguiente.id;
-        //	rSiguiente.id = 255;
-        //	rSel.id = idSiguiente;
-        //	rSiguiente.id = (byte)(idSiguiente - 1);
+            byte idNext = rNext.Id;
+            rNext.Id = 255;
+            rSel.Id = idNext;
+            rNext.Id = (byte)(idNext - 1);
 
-        //	ListBox1.SelectedIndex = sel + 1;
-        //}
+            RefrestListBox();
+            ListBox1.SelectedIndex = sel + 1;
+        }
         #endregion
 
-        //private void Guardar()
-        //{
-        //	if (TextBoxNombre.Text.Trim() == "")
-        //		return;
-        //	else
-        //	{
-        //		foreach (Comunes.DSPerfil.ACCIONESRow r in parent.GetData().Profile.ACCIONES.Rows)
-        //		{
-        //			if ((r.Nombre == TextBoxNombre.Text.Trim()) && (r.idAccion != indicep))
-        //			{
-        //				_ = MessageBox.Show("El de nombre de la macro está repetido.", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        //				return;
-        //			}
-        //		}
-        //	}
+        public async System.Threading.Tasks.Task<bool> CheckHoldWithRepeat()
+        {
+            foreach (GroupedCommand r in gMacros)
+            {
+                byte tipo = (byte)(r.Commands[0] & 0x7f);
+                if ((tipo == (byte)CommandType.Repeat) || (tipo == (byte)CommandType.Hold))
+                {
+                    await MessageBox.Show("Repetir y Mantener deben ser únicos", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return false;
+                }
+            }
 
-        //	List<ushort> macro = [];
+            if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == 0))
+            {
+                return true;
+            }
 
-        //	if (CheckBox1.IsChecked == true) //texto x52
-        //	{
-        //		string st = TextBoxNombre.Text.Trim();
-        //		if (st.Length > 16)
-        //		{
-        //			st = st[..16];
-        //		}
-        //		st = st.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
-        //		byte[] texto = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(st));
+            int reps = 0;
+            foreach (GroupedCommand rv in ListBox1.Items)
+            {
+                if (rv == (GroupedCommand)ListBox1.SelectedItem)
+                {
+                    break;
+                }
+                byte tipo = (byte)(rv.Commands[0] & 0xff);
+                if ((CommandType)(tipo & 0x7f) == CommandType.RepeatN)
+                {
+                    if ((tipo & (byte)CommandType.Release) != 0)
+                        reps--;
+                    else
+                        reps++;
+                }
+            }
+            if (reps != 0)
+            {
+                await MessageBox.Show("Repetir y Mantener no pueden estar dentro de Repetir N.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                return false;
+            }
+            return true;
+        }
 
-        //		macro.Add((byte)CommandType.X52MfdTextIni + (3 << 8));
-        //		for (int i = 0; i < texto.Length; i++)
-        //		{
-        //			macro.Add((ushort)((byte)CommandType.X52MfdText + (texto[i] << 8)));
-        //		}
-        //		macro.Add((byte)CommandType.X52MfdTextEnd);
-        //	}
+        public async void Guardar(bool nameOnMFD, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return;
+            else
+            {
+                foreach (Shared.ProfileModel.MacroModel r in profile.Macros)
+                {
+                    if ((r.Name.Equals(name, System.StringComparison.CurrentCultureIgnoreCase)) && (r.Id != currentMacroId))
+                    {
+                        _ = await MessageBox.Show("El nombre de la macro está repetido.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+            }
 
-        //	foreach (System.Data.DataRowView rv in CurrentMacro.MACROS.DefaultView)
-        //	{
-        //		foreach (ushort c in ((DataSetMacros.MACROSRow)rv.Row).comando)
-        //		{
-        //			macro.Add(c);
-        //		}
-        //	}
+            List<uint> macro = [];
 
-        //	if (indicep == -1)
-        //	{
-        //		ushort idnuevo = 0;
-        //		foreach (Comunes.DSPerfil.ACCIONESRow r in parent.GetData().Profile.ACCIONES.Rows)
-        //		{
-        //			if (r.idAccion > idnuevo)
-        //				idnuevo = r.idAccion;
-        //		}
-        //		idnuevo++;
+            if (nameOnMFD) //texto x52
+            {
+                string st = name;
+                if (st.Length > 16)
+                {
+                    st = st[..16];
+                }
+                st = st.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
+                byte[] text = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(st));
 
-        //		parent.GetData().Profile.ACCIONES.AddACCIONESRow(idnuevo, TextBoxNombre.Text.Trim(), [.. macro]);
-        //		this.DialogResult = null;
-        //	}
-        //	else
-        //	{
-        //		Comunes.DSPerfil.ACCIONESRow nr = parent.GetData().Profile.ACCIONES.FindByidAccion((ushort)indicep);
-        //		nr.Nombre = TextBoxNombre.Text.Trim();
-        //		nr.Comandos = [.. macro];
-        //		this.DialogResult = true;
-        //	}
-        //}
+                macro.Add((byte)CommandType.X52MfdTextIni + (3 << 8));
+                for (byte i = 0; i < text.Length; i++)
+                {
+                    macro.Add((uint)((byte)CommandType.X52MfdText + (text[i] << 8)));
+                }
+                macro.Add((byte)CommandType.X52MfdTextEnd);
+            }
+
+            foreach (GroupedCommand gc in gMacros)
+            {
+                foreach (uint c in gc.Commands)
+                {
+                    macro.Add(c);
+                }
+            }
+           
+            Shared.ProfileModel.MacroModel nr = profile.Macros.Find(x => x.Id == currentMacroId);
+            nr.Name = name;
+            nr.Commands = [.. macro];
+        }
     }
 }

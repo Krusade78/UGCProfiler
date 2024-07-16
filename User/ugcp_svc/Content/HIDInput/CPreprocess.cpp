@@ -108,7 +108,14 @@ void CPreprocess::ConvertToCommon(UCHAR* data, DWORD size, UINT32 joyId)
 					UINT16 v = 0;
 					RtlCopyMemory(&v, &report[idx / 8], ((idx + mapIndex->Bits - 1) / 8) + 1 - (idx / 8));
 					v = (v >> shift) & ((1 << mapIndex->Bits) - 1);
-					hidData.Hats[idxHat++] = static_cast<UCHAR>(v);
+					if ((v < (mapIndex->IsHat & 0xf)) || (v > (mapIndex->IsHat >> 4)))
+					{
+						hidData.Hats[idxHat++] = 255;
+					}
+					else
+					{
+						hidData.Hats[idxHat++] = static_cast<UCHAR>(v) - (mapIndex->IsHat & 0xf);
+					}
 				}
 				else
 				{

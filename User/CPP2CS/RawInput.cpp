@@ -33,7 +33,7 @@ void CPP2CS::RawInput::Call(System::String^ hidInterface, array<System::Byte>^ d
 }
 
 #pragma unmanaged
-void URawInput::ProcessRawInput()
+void URawInput::ProcessRawInput() const
 {
 		UINT size = 0;
 

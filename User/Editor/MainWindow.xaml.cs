@@ -27,7 +27,8 @@ namespace Profiler
 			this.AppWindow.Closing += Window_Closing;
 			root.Loaded += Window_Loaded;
 			ctlDevs.SelectionChanged += (NavigationView, NavigationViewSelectionChangedEventArgs)  => { tbCalibrate.IsEnabled = ctlDevs.SelectedItem != null; };
-		}
+			grMenu.Translation += new System.Numerics.Vector3(0, 0, 64);
+        }
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e)
 		{

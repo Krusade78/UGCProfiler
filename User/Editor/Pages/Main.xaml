@@ -13,6 +13,6 @@
         <ColumnDefinition Width="auto" />
     </Grid.ColumnDefinitions>
 
-    <Frame x:Name="page" />
     <local:CtlProperties x:Name="properties" Grid.Column="1" Visibility="Collapsed" />
+    <Frame x:Name="page" />
 </Grid>
