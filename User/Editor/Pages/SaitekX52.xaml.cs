@@ -9,11 +9,11 @@ namespace Profiler.Pages
     /// </summary>
     internal sealed partial class SaitekX52 : Page, IHidToButton
     {
-        private readonly Controls.CtlProperties props;
+        private readonly Controls.Properties.CtlProperties props;
         private Microsoft.UI.Xaml.Controls.Primitives.ToggleButton lastUse = null;
         private readonly CHidToButton converter;
 
-        public SaitekX52(Controls.CtlProperties props)
+        public SaitekX52(Controls.Properties.CtlProperties props)
         {
             InitializeComponent();
             this.props = props;
@@ -22,33 +22,48 @@ namespace Profiler.Pages
                 new CHidToButton.Map(1, ButtonY),
                 new CHidToButton.Map(2, ButtonR),
                 new CHidToButton.Map(3, ButtonZ),
-                new CHidToButton.Map(4, ButtonRy),
-                new CHidToButton.Map(5, ButtonRx),
-                new CHidToButton.Map(6, Buttonsl),
-                new CHidToButton.Map(7, ButtonMinix),
-                new CHidToButton.Map(8, ButtonMiniy),
-                //new CHidToButton.Map(8, ButtonEnc1Ar),
-                //new CHidToButton.Map(9, ButtonEnc1Ab),
-                //new CHidToButton.Map(10, ButtonEnc2Ar),
-                //new CHidToButton.Map(11, ButtonEnc2Ab),
-                //new CHidToButton.Map(12, ButtonBase3),
-                //new CHidToButton.Map(13, ButtonBase2),
-                //new CHidToButton.Map(14, ButtonBase1),
-                //new CHidToButton.Map(16, ButtonTrigger2),
-                //new CHidToButton.Map(17, ButtonTrigger1),
-                //new CHidToButton.Map(18, ButtonPinkie),
-                //new CHidToButton.Map(19, ButtonLanzar),
-                //new CHidToButton.Map(20, Buttonp10),
-                //new CHidToButton.Map(23, Button1),
-                //new CHidToButton.Map(28, Buttonp35),
-                //new CHidToButton.Map(29, Buttonp31),
-                //new CHidToButton.Map(30, Buttonp37),
-                //new CHidToButton.Map(31, Buttonp33),
-                //new CHidToButton.Map(32, Buttonp25),
-                //new CHidToButton.Map(33, Buttonp21),
-                //new CHidToButton.Map(34, Buttonp27),
-                //new CHidToButton.Map(35, Buttonp23),
-                new CHidToButton.Map(36, [Buttonp11, Buttonp13, Buttonp15, Buttonp17]),
+                new CHidToButton.Map(5, ButtonRy),
+                new CHidToButton.Map(4, ButtonRx),
+                new CHidToButton.Map(6, ButtonSl),
+                new CHidToButton.Map(43, ButtonMinix),
+                new CHidToButton.Map(42, ButtonMiniy),
+
+                new CHidToButton.Map(7, ButtonTrigger1),
+                new CHidToButton.Map(8, ButtonLaunch),
+                new CHidToButton.Map(9, ButtonA),
+                new CHidToButton.Map(10, ButtonB),
+                new CHidToButton.Map(11, ButtonC),
+                new CHidToButton.Map(12, ButtonPinkie),
+                new CHidToButton.Map(13, ButtonD),
+                new CHidToButton.Map(14, ButtonE),
+                new CHidToButton.Map(15, ButtonTg1),
+                new CHidToButton.Map(16, ButtonTg2),
+                new CHidToButton.Map(17, ButtonTg3),
+                new CHidToButton.Map(18, ButtonTg4),
+                new CHidToButton.Map(19, ButtonTg5),
+                new CHidToButton.Map(20, ButtonTg6),
+                new CHidToButton.Map(21, ButtonTrigger2),
+                new CHidToButton.Map(22, Buttonp21),
+                new CHidToButton.Map(23, Buttonp23),
+                new CHidToButton.Map(24, Buttonp25),
+                new CHidToButton.Map(25, Buttonp27),
+                new CHidToButton.Map(26, Buttonp31),
+                new CHidToButton.Map(27, Buttonp33),
+                new CHidToButton.Map(28, Buttonp35),
+                new CHidToButton.Map(29, Buttonp37),
+                new CHidToButton.Map(30, ButtonMode1),
+                new CHidToButton.Map(31, ButtonMode2),
+                new CHidToButton.Map(32, ButtonMode3),
+                new CHidToButton.Map(33, ButtonMfd1),
+                new CHidToButton.Map(34, ButtonMfd2),
+                new CHidToButton.Map(35, ButtonMfd3),
+                new CHidToButton.Map(36, ButtonI),
+                new CHidToButton.Map(37, ButtonMouse),
+                new CHidToButton.Map(38, ButtonWb),
+                new CHidToButton.Map(39, ButtonWup),
+                new CHidToButton.Map(40, ButtonWdown),
+
+                new CHidToButton.Map(41, [Buttonp11, Buttonp12, Buttonp13, Buttonp14, Buttonp15, Buttonp16, Buttonp17, Buttonp18]),
             ]);
         }
 
@@ -56,8 +71,6 @@ namespace Profiler.Pages
         {
             converter.Update(di, rawData);
         }
-
-        /*** TODO CORRECT Idx & Hats ***/
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
@@ -68,124 +81,147 @@ namespace Profiler.Pages
 
         private void Uncheck(object sender)
         {
-            if (lastUse != null) { lastUse.IsChecked = false; }
+            if ((lastUse != null) && (lastUse != (Microsoft.UI.Xaml.Controls.Primitives.ToggleButton)sender)) { lastUse.IsChecked = false; }
             lastUse = (Microsoft.UI.Xaml.Controls.Primitives.ToggleButton)sender;
         }
 
         #region Joystick
-        #region "Seta 1"
+        #region "Hat 1"
         private void Buttonp11_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 36, "Seta 1 Norte", 0);
+            props.Show(0x6a30255, 41, "Seta 1 Norte", 0);
+            Uncheck(sender);
+        }
+
+        private void Buttonp12_Click(object sender, RoutedEventArgs e)
+        {
+            props.Show(0x6a30255, 41, "Seta 1 Noreste", 1);
             Uncheck(sender);
         }
 
         private void Buttonp13_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 36, "Seta 1 Este", 2);
+            props.Show(0x6a30255, 41, "Seta 1 Este", 2);
             Uncheck(sender);
         }
 
+        private void Buttonp14_Click(object sender, RoutedEventArgs e)
+        {
+            props.Show(0x6a30255, 41, "Seta 1 Sureste", 3);
+            Uncheck(sender);
+        }
 
         private void Buttonp15_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 36, "Seta 1 Sur", 4);
+            props.Show(0x6a30255, 41, "Seta 1 Sur", 4);
+            Uncheck(sender);
+        }
+
+        private void Buttonp16_Click(object sender, RoutedEventArgs e)
+        {
+            props.Show(0x6a30255, 41, "Seta 1 Suroeste", 5);
             Uncheck(sender);
         }
 
         private void Buttonp17_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 36, "Seta 1 Oeste", 6);
+            props.Show(0x6a30255, 41, "Seta 1 Oeste", 6);
+            Uncheck(sender);
+        }
+
+        private void Buttonp18_Click(object sender, RoutedEventArgs e)
+        {
+            props.Show(0x6a30255, 41, "Seta 1 Noroeste", 7);
             Uncheck(sender);
         }
         #endregion
 
-        #region "Seta 2"
+        #region "Hat 2"
         private void Buttonp21_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 8, "Seta 2 Norte");
+            props.Show(0x6a30255, 22, "Seta 2 Norte");
             Uncheck(sender);
         }
 
         private void Buttonp23_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 10, "Seta 2 Este");
+            props.Show(0x6a30255, 23, "Seta 2 Este");
             Uncheck(sender);
         }
 
         private void Buttonp25_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 12, "Seta 2 Sur");
+            props.Show(0x6a30255, 24, "Seta 2 Sur");
             Uncheck(sender);
         }
 
         private void Buttonp27_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 14, "Seta 2 Oeste");
+            props.Show(0x6a30255, 25, "Seta 2 Oeste");
             Uncheck(sender);
         }
         #endregion
 
-        #region "botones"
+        #region "Buttons"
         private void ButtonA_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 8, (string)ButtonA.Content);
+            props.Show(0x6a30255, 9, (string)ButtonA.Content);
             Uncheck(sender);
         }
 
         private void ButtonB_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 9, (string)ButtonB.Content);
+            props.Show(0x6a30255, 10, (string)ButtonB.Content);
             Uncheck(sender);
         }
 
         private void ButtonC_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 4, (string)ButtonC.Content);
+            props.Show(0x6a30255, 11, (string)ButtonC.Content);
             Uncheck(sender);
         }
 
         private void ButtonLaunch_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 2, (string)ButtonLaunch.Content);
+            props.Show(0x6a30255, 8, (string)ButtonLaunch.Content);
             Uncheck(sender);
         }
 
         private void ButtonTrigger1_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 1, (string)ButtonTrigger1.Content);
+            props.Show(0x6a30255, 7, (string)ButtonTrigger1.Content);
             Uncheck(sender);
         }
 
         private void ButtonTrigger2_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 0, (string)ButtonTrigger2.Content);
+            props.Show(0x6a30255, 21, (string)ButtonTrigger2.Content);
             Uncheck(sender);
         }
         #endregion
 
-        #region "modos"
+        #region "Modes"
         private void ButtonPinkie_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 3, (string)ButtonPinkie.Content);
+            props.Show(0x6a30255, 12, (string)ButtonPinkie.Content);
             Uncheck(sender);
         }
 
         private void ButtonMode1_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 5, (string)ButtonMode1.Content);
+            props.Show(0x6a30255, 30, (string)ButtonMode1.Content);
             Uncheck(sender);
         }
 
         private void ButtonMode2_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 6, (string)ButtonMode2.Content);
+            props.Show(0x6a30255, 31, (string)ButtonMode2.Content);
             Uncheck(sender);
         }
 
         private void ButtonMode3_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 7, (string)ButtonMode3.Content);
+            props.Show(0x6a30255, 32, (string)ButtonMode3.Content);
             Uncheck(sender);
         }
         #endregion
@@ -193,37 +229,37 @@ namespace Profiler.Pages
         #region "toggles"
         private void ButtonTg1_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 10, (string)ButtonTg1.Content);
+            props.Show(0x6a30255, 15, (string)ButtonTg1.Content);
             Uncheck(sender);
         }
 
         private void ButtonTg2_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 11, (string)ButtonTg2.Content);
+            props.Show(0x6a30255, 16, (string)ButtonTg2.Content);
             Uncheck(sender);
         }
 
         private void ButtonTg3_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 12, (string)ButtonTg3.Content);
+            props.Show(0x6a30255, 17, (string)ButtonTg3.Content);
             Uncheck(sender);
         }
 
         private void ButtonTg4_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 13, (string)ButtonTg4.Content);
+            props.Show(0x6a30255, 18, (string)ButtonTg4.Content);
             Uncheck(sender);
         }
 
         private void ButtonTg5_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 14, (string)ButtonTg5.Content);
+            props.Show(0x6a30255, 19, (string)ButtonTg5.Content);
             Uncheck(sender);
         }
 
         private void ButtonTg6_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 15, (string)ButtonTg6.Content);
+            props.Show(0x6a30255, 20, (string)ButtonTg6.Content);
             Uncheck(sender);
         }
         #endregion
@@ -250,120 +286,88 @@ namespace Profiler.Pages
         #endregion
 
         #region Throttle
-        #region "Seta 3"
+        #region "Hat 3"
         private void Buttonp31_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 0, "Seta 3 Norte");
+            props.Show(0x6a30255, 26, "Seta 3 Norte");
             Uncheck(sender);
         }
 
         private void Buttonp33_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 2, "Seta 3 Este");
+            props.Show(0x6a30255, 27, "Seta 3 Este");
             Uncheck(sender);
         }
 
         private void Buttonp35_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 4, "Seta 3 Sur");
+            props.Show(0x6a30255, 28, "Seta 3 Sur");
             Uncheck(sender);
         }
 
         private void Buttonp37_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 6, "Seta 3 Oeste");
+            props.Show(0x6a30255, 29, "Seta 3 Oeste");
             Uncheck(sender);
         }
         #endregion
 
-        #region "Seta 4"
-        private void Buttonp41_Click(object sender, RoutedEventArgs e)
-        {
-            props.Show(0x6a30255, 8, "Seta 4 Norte");
-            Uncheck(sender);
-        }
-
-        private void Buttonp43_Click(object sender, RoutedEventArgs e)
-        {
-            props.Show(0x6a30255, 10, "Seta 4 Este");
-            Uncheck(sender);
-        }
-
-        private void Buttonp45_Click(object sender, RoutedEventArgs e)
-        {
-            props.Show(0x6a30255, 12, "Seta 4 Sur");
-            Uncheck(sender);
-        }
-
-        private void Buttonp47_Click(object sender, RoutedEventArgs e)
-        {
-            props.Show(0x6a30255, 14, "Seta 4 Oeste");
-            Uncheck(sender);
-        }
-
-        private void Buttonp48_Click(object sender, RoutedEventArgs e)
-        {
-            props.Show(0x6a30255, 15, "Seta 4 Noroeste");
-            Uncheck(sender);
-        }
-        #endregion
-
-        #region "botones"
+        #region "Buttons"
         private void Buttond_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 0, (string)Buttond.Content);
+            props.Show(0x6a30255, 13, (string)ButtonD.Content);
             Uncheck(sender);
         }
 
         private void Buttone_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 1, (string)Buttone.Content);
+            props.Show(0x6a30255, 14, (string)ButtonE.Content);
             Uncheck(sender);
         }
 
         private void Buttoni_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 5, (string)Buttoni.Content);
+            props.Show(0x6a30255, 36, (string)ButtonI.Content);
             Uncheck(sender);
         }
         #endregion
 
-        #region "rueda"
+        #region "Wheel"
         private void ButtonWup_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 8, (string)ButtonWup.Content);
+            props.Show(0x6a30255, 39, (string)ButtonWup.Content);
             Uncheck(sender);
         }
 
         private void ButtonWb_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 7, (string)ButtonWb.Content);
+            props.Show(0x6a30255, 38, (string)ButtonWb.Content);
             Uncheck(sender);
         }
 
         private void ButtonWdown_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 9, (string)ButtonWdown.Content);
+            props.Show(0x6a30255, 40, (string)ButtonWdown.Content);
             Uncheck(sender);
         }
         #endregion
 
-        #region "botones mfd"
+        #region "MFD buttons"
         private void ButtonMfd3_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 4, (string)ButtonMfd3.Content);
+            props.Show(0x6a30255, 35, (string)ButtonMfd3.Content);
             Uncheck(sender);
         }
 
         private void ButtonMfd2_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 3, (string)ButtonMfd2.Content);
+            props.Show(0x6a30255, 34, (string)ButtonMfd2.Content);
             Uncheck(sender);
         }
 
         private void ButtonMfd1_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 2, (string)ButtonMfd1.Content);
+            props.Show(0x6a30255, 33, (string)ButtonMfd1.Content);
             Uncheck(sender);
         }
         #endregion
@@ -371,19 +375,19 @@ namespace Profiler.Pages
         #region "ministick"
         private void ButtonMinix_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 0, (string)ButtonMinix.Content);
+            props.Show(0x6a30255, 43, (string)ButtonMinix.Content);
             Uncheck(sender);
         }
 
         private void ButtonMiniy_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 1, (string)ButtonMiniy.Content);
+            props.Show(0x6a30255, 42, (string)ButtonMiniy.Content);
             Uncheck(sender);
         }
 
         private void ButtonMouse_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 6, (string)ButtonMouse.Content);
+            props.Show(0x6a30255, 37, (string)ButtonMouse.Content);
             Uncheck(sender);
         }
         #endregion
@@ -391,19 +395,19 @@ namespace Profiler.Pages
         #region "ejes"
         private void ButtonRy_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 4, (string)ButtonRy.Content);
+            props.Show(0x6a30255, 5, (string)ButtonRy.Content);
             Uncheck(sender);
         }
 
         private void ButtonRx_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 5, (string)ButtonRx.Content);
+            props.Show(0x6a30255, 4, (string)ButtonRx.Content);
             Uncheck(sender);
         }
 
         private void Buttonsl_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x6a30255, 6, (string)Buttonsl.Content);
+            props.Show(0x6a30255, 6, (string)ButtonSl.Content);
             Uncheck(sender);
         }
 

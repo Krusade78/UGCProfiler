@@ -18,11 +18,17 @@
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
 	<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+	<UseWPF>False</UseWPF>
   </PropertyGroup>
 	
  
   <ItemGroup>
 	<Compile Remove="Calibrator\Info.xaml.cs" />
+	<None Remove="Controls\CtlProperties.AxisConf.xaml" />
+	<None Remove="Controls\CtlProperties.ButtonConf.xaml" />
+	<None Remove="Controls\CtlProperties.HatConf.xaml" />
+	<None Remove="Controls\CtlProperties.MacroConf.xaml" />
+	<None Remove="Controls\CtlProperties.VAxisConf.xaml" />
 	<None Remove="Language\keytemplate-en.txt" />
 	<Page Remove="Calibrator\Info.xaml" />
   </ItemGroup>
@@ -56,7 +62,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240428000" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />        
 	</ItemGroup>
 
@@ -70,6 +76,22 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Page Update="Controls\CtlProperties.VAxisConf.xaml">
+	  <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  <SubType>Designer</SubType>
+	</Page>
+	<Page Update="Controls\CtlProperties.AxisConf.xaml">
+	  <Generator>MSBuild:Compile</Generator>
+	</Page>
+	<Page Update="Controls\CtlProperties.HatConf.xaml">
+	  <Generator>MSBuild:Compile</Generator>
+	</Page>
+	<Page Update="Controls\CtlProperties.ButtonConf.xaml">
+	  <Generator>MSBuild:Compile</Generator>
+	</Page>
+	<Page Update="Controls\CtlProperties.MacroConf.xaml">
+	  <Generator>MSBuild:Compile</Generator>
+	</Page>
 	<None Update="OldProfile\DSPerfil.xsd">
 		<SubType>Designer</SubType>
 		<CustomToolNamespace>OldProfile</CustomToolNamespace>

@@ -5,38 +5,42 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <ScrollViewer VerticalScrollMode="Auto" HorizontalScrollMode="Enabled" Margin="0,0,10,0">
-        <StackPanel>
-            <Grid Loaded="Grid_Loaded">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <TextBlock Text="Joystick" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondary}" />
-                <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <Image Source="/res/x52j.png" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,43,0,0" Width="400" Stretch="Uniform"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,310,0,0">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,10,0">
+        <Grid MinWidth="510">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Joystick" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondary}" />
+            <Grid Grid.Row="1" Loaded="Grid_Loaded">
+                <Grid HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Image Source="/res/x52j.png" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-80,43,0,0" Width="400" Stretch="Uniform"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-80,310,0,0">
                         <ToggleButton x:Name="ButtonX" Content="X Axis" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="85" Checked="ButtonX_Click"/>
                         <ToggleButton x:Name="ButtonY" Content="Y Axis" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,0,0,0" Width="74" Checked="ButtonY_Click"/>
                         <ToggleButton x:Name="ButtonR" Content="{StaticResource axis_r}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" Width="85" Checked="ButtonR_Click"/>
                     </StackPanel>
-                    <ToggleButton x:Name="ButtonPinkie" Content="Pinkie" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,250,200,0" Width="85" Checked="ButtonPinkie_Click"/>
-                    <ToggleButton x:Name="ButtonTrigger1" Content="Trigger 1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,170,200,0" Width="85" Checked="ButtonTrigger1_Click"/>
-                    <ToggleButton x:Name="ButtonTrigger2" Content="Trigger 2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,205,200,0" Width="85" Checked="ButtonTrigger2_Click"/>
-                    <ToggleButton x:Name="ButtonLaunch" Content="Launch" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="80,6,0,0" Width="85" Checked="ButtonLaunch_Click"/>
-                    <StackPanel Margin="340,85,0,0">
+                    <Grid Margin="-80,0,0,0">
+                        <ToggleButton x:Name="ButtonPinkie" Content="Pinkie" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,250,200,0" Width="85" Checked="ButtonPinkie_Click"/>
+                        <ToggleButton x:Name="ButtonTrigger1" Content="Trigger 1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,170,200,0" Width="85" Checked="ButtonTrigger1_Click"/>
+                        <ToggleButton x:Name="ButtonTrigger2" Content="Trigger 2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,205,200,0" Width="85" Checked="ButtonTrigger2_Click"/>
+                        <ToggleButton x:Name="ButtonLaunch" Content="Launch" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="80,6,0,0" Width="85" Checked="ButtonLaunch_Click"/>
+                    </Grid>
+                    <StackPanel Margin="280,85,0,0">
                         <ToggleButton x:Name="ButtonA" Content="Button A" Width="85" Checked="ButtonA_Click"/>
                         <ToggleButton x:Name="ButtonB" Content="Button B"  Margin="0,5,0,0" Width="85" Checked="ButtonB_Click"/>
                     </StackPanel>
                     <ToggleButton x:Name="ButtonC" Content="Button C" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,130,200,0" Width="85" Checked="ButtonC_Click"/>
 
-                    <StackPanel Margin="450,50,0,0">
+                    <StackPanel Margin="380,50,0,0">
                         <ToggleButton x:Name="ButtonMode1" Content="Mode 1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="85" Checked="ButtonMode1_Click"/>
                         <ToggleButton x:Name="ButtonMode2" Content="Mode 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Width="85" Checked="ButtonMode2_Click"/>
                         <ToggleButton x:Name="ButtonMode3" Content="Mode 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Width="85" Checked="ButtonMode3_Click"/>
                     </StackPanel>
 
-                    <StackPanel Margin="60,400,0,0">
+                    <StackPanel Margin="0,400,0,0">
                         <StackPanel Orientation="Horizontal">
                             <ToggleButton x:Name="ButtonTg1" Content="Toggle 1" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="85" Checked="ButtonTg1_Click"/>
                             <ToggleButton x:Name="ButtonTg3" Content="Toggle 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" Width="85" Checked="ButtonTg3_Click"/>
@@ -49,23 +53,35 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <Grid Margin="326,170,0,0">
+                    <Grid Margin="190,170,0,0">
                         <TextBlock Text="Hat 1" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Brown" />
                         <ToggleButton x:Name="Buttonp11" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" Height="30" Width="35" Checked="Buttonp11_Click" Padding="1">
                             <FontIcon Glyph="&#xF0AD;" FontSize="13"/>
                         </ToggleButton>
+                        <ToggleButton x:Name="Buttonp12" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="70,25,0,0" Height="30" Width="35" Checked="Buttonp12_Click" Padding="1">
+                            <FontIcon Glyph="&#xF0AD;" FontSize="13" Rotation="45" Translation="8,-2,0"/>
+                        </ToggleButton>
                         <ToggleButton x:Name="Buttonp13" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="70,55,0,0" Height="30" Width="35" Checked="Buttonp13_Click" Padding="1">
                             <FontIcon Glyph="&#xF0af;" FontSize="13"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="Buttonp14" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="70,85,0,0" Height="30" Width="35" Checked="Buttonp14_Click" Padding="1">
+                            <FontIcon Glyph="&#xF0AD;" FontSize="13" Rotation="135" Translation="16,7,0"/>
                         </ToggleButton>
                         <ToggleButton x:Name="Buttonp15" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,85,0,0" Height="30" Width="35" Checked="Buttonp15_Click" Padding="1">
                             <FontIcon Glyph="&#xF0Ae;" FontSize="13"/>
                         </ToggleButton>
+                        <ToggleButton x:Name="Buttonp16" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,85,70,0" Height="30" Width="35" Checked="Buttonp16_Click" Padding="1">
+                            <FontIcon Glyph="&#xF0AD;" FontSize="13" Rotation="225" Translation="6,16,0"/>
+                        </ToggleButton>
                         <ToggleButton x:Name="Buttonp17" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,55,70,0" Height="30" Width="35" Checked="Buttonp17_Click" Padding="1">
                             <FontIcon Glyph="&#xF0b0;" FontSize="13"/>
                         </ToggleButton>
+                        <ToggleButton x:Name="Buttonp18" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,70,0" Height="30" Width="35" Checked="Buttonp18_Click" Padding="1">
+                            <FontIcon Glyph="&#xF0AD;" FontSize="13" Rotation="315" Translation="-2,6,0"/>
+                        </ToggleButton>
                     </Grid>
 
-                    <Grid Margin="-200,0,0,0">
+                    <Grid Margin="-200,0,100,0">
                         <TextBlock Text="Hat 2" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Brown"/>
                         <ToggleButton x:Name="Buttonp21" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" Height="30" Width="35" Checked="Buttonp21_Click" Padding="1">
                             <FontIcon Glyph="&#xF0AD;" FontSize="13"/>
@@ -82,12 +98,8 @@
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid Margin="0,40,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <TextBlock Text="Throttle" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondary}" />
+            <TextBlock Grid.Row="2" Text="Throttle" Margin="0,40,0,0" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondary}" />
+            <Grid Grid.Row="3">
                 <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0,20,0,0">
                     <Image Source="/res/x52t.png" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top" Width="400" Margin="0,57,0,0" />
                     <StackPanel Margin="400,248,0,0">
@@ -102,26 +114,26 @@
                         <ToggleButton x:Name="ButtonMfd1" Content="MFD Button 1"  Margin="5,0,0,0" Width="110" Checked="ButtonMfd1_Click"/>
                     </StackPanel>
 
-                    <Grid Margin="0,35,350,0">
+                    <Grid Margin="0,35,0,0">
                         <ToggleButton x:Name="ButtonWup" Content="Wheel up" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="100" Checked="ButtonWup_Click"/>
                         <ToggleButton x:Name="ButtonWb" Content="Wheel button" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,21,0,0" Width="110" Checked="ButtonWb_Click"/>
                         <ToggleButton x:Name="ButtonWdown" Content="Wheel down" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0" Width="100" Checked="ButtonWdown_Click"/>
                     </Grid>
 
                     <StackPanel Margin="400,40,0,0">
-                        <ToggleButton x:Name="Buttone" Content="Button E"  Width="85" Checked="Buttone_Click"/>
+                        <ToggleButton x:Name="ButtonE" Content="Button E"  Width="85" Checked="Buttone_Click"/>
                         <ToggleButton x:Name="ButtonRx" Content="Rx Axis" Margin="0,5,0,0" Width="85" Checked="ButtonRx_Click"/>
-                        <ToggleButton x:Name="Buttond" Content="Button D" Margin="0,5,0,0" Width="85" Checked="Buttond_Click"/>
+                        <ToggleButton x:Name="ButtonD" Content="Button D" Margin="0,5,0,0" Width="85" Checked="Buttond_Click"/>
                         <ToggleButton x:Name="ButtonRy" Content="Ry Axis" Margin="0,5,0,0" Width="85" Checked="ButtonRy_Click"/>
-                        <ToggleButton x:Name="Buttoni" Content="Button I" Margin="0,5,0,0" Width="85" Checked="Buttoni_Click"/>
+                        <ToggleButton x:Name="ButtonI" Content="Button I" Margin="0,5,0,0" Width="85" Checked="Buttoni_Click"/>
                     </StackPanel>
 
                     <StackPanel Margin="60,190,0,0">
-                        <ToggleButton x:Name="Buttonsl" Content="Sl Axis"  Width="85" Checked="Buttonsl_Click"/>
+                        <ToggleButton x:Name="ButtonSl" Content="Sl Axis"  Width="85" Checked="Buttonsl_Click"/>
                         <ToggleButton x:Name="ButtonZ" Content="Z Axis" Margin="0,15,0,0" Width="85" Checked="ButtonZ_Click"/>
                     </StackPanel>
 
-                    <Grid Margin="40,0,10,0" >
+                    <Grid Margin="70,0,10,0" >
                         <TextBlock Text="Hat 3" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Brown"/>
                         <ToggleButton x:Name="Buttonp31" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" Height="30" Width="35" Checked="Buttonp31_Click" Padding="1">
                             <FontIcon Glyph="&#xF0AD;" FontSize="13"/>
@@ -138,6 +150,6 @@
                     </Grid>
                 </Grid>
             </Grid>
-        </StackPanel>
+        </Grid>
     </ScrollViewer>
 </Page>

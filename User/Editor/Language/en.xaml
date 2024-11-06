@@ -24,6 +24,7 @@
     <x:String x:Key="open">Open</x:String>
     <x:String x:Key="save">Save</x:String>
     <x:String x:Key="save_as">Save as...</x:String>
+    <x:String x:Key="file">File</x:String>
     <x:String x:Key="launch">Load</x:String>
     <x:String x:Key="reset">Reset</x:String>
     <x:String x:Key="mouse_conf">Mouse settings</x:String>

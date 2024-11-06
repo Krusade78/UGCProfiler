@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Profiler.Controls.Properties.CtlHatConf"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Profiler.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <StackPanel x:Name="spHat" Background="#ccefefef" Margin="7">
+        <StackPanel.Shadow>
+            <ThemeShadow />
+        </StackPanel.Shadow>
+        <Border Background="{ThemeResource CardBackgroundFillColorDefault}">
+            <TextBlock Text="{StaticResource hat_configuration}" VerticalAlignment="Top" Margin="0,3" HorizontalAlignment="Center" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+        </Border>
+
+        <Grid Margin="10">
+            <Button x:Name="hatSection" Content="{StaticResource assign_hat}" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssignPOV_Click" Visibility="Collapsed" />
+
+            <Grid x:Name="buttonSection"  RowSpacing="10" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Assign to default DirectX hat:" />
+                <Grid Grid.Row="1" HorizontalAlignment="Center" ColumnSpacing="5" RowSpacing="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="vJoy" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{StaticResource hat}" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="{StaticResource position}" HorizontalAlignment="Center"/>
+
+                    <NumberBox Grid.Row="1" x:Name="NumericUpDownJ" Maximum="3" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
+                    <NumberBox Grid.Row="1" Grid.Column="1" x:Name="NumericUpDown1" Maximum="4" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
+                    <ComboBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Width="140">
+                        <ComboBoxItem Content="Up" />
+                        <ComboBoxItem Content="Up-Right" />
+                        <ComboBoxItem Content="Right" />
+                    </ComboBox>
+                </Grid>
+                
+                <Button Grid.Row="2" Content="assign" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssignPOV_Click" />
+            </Grid>
+        </Grid>
+        
+    </StackPanel>
+</UserControl>

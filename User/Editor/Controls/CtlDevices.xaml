@@ -8,6 +8,8 @@
     mc:Ignorable="d" IsSettingsVisible="False" IsBackButtonVisible="Collapsed"
     PaneTitle="{StaticResource device_list}"
     AlwaysShowHeader="True"
+    PaneDisplayMode="Left"
     SelectionChanged="NavigationView_SelectionChanged">
-    <Frame x:Name="frContent"></Frame>
+
+    <Frame x:Name="frContent" />
 </NavigationView>

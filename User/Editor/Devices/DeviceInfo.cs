@@ -133,7 +133,7 @@ namespace Profiler.Devices
                                         Range = 0
                                     });
                                 }
-                                else if (val.LogicalMin != 0) { throw new NotImplementedException(); }
+                                else if ((val.Anonymous.NotRange.Usage != 57) && (val.LogicalMin != 0)) { throw new NotImplementedException(); }
                                 else
                                 {
                                     devData.Usages.Add(new()
@@ -144,6 +144,8 @@ namespace Profiler.Devices
                                         Bits = (byte)val.BitSize,
                                         Type = val.Anonymous.NotRange.Usage switch
                                         {
+                                            36 => (byte)CEnums.ElementType.AxisX, //usage page 5 (game controls)
+                                            38 => (byte)CEnums.ElementType.AxisY, //usage page 5 (game controls)
                                             48 => (byte)CEnums.ElementType.AxisX,
                                             49 => (byte)CEnums.ElementType.AxisY,
                                             50 => (byte)CEnums.ElementType.AxisZ,

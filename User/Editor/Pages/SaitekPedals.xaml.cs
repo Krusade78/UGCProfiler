@@ -9,11 +9,11 @@ namespace Profiler.Pages
     /// </summary>
     internal sealed partial class SaitekPedals : Page, IHidToButton
     {
-        private readonly Controls.CtlProperties props;
+        private readonly Controls.Properties.CtlProperties props;
         private ToggleButton lastUse = null;
         private readonly CHidToButton converter;
 
-        public SaitekPedals(Controls.CtlProperties props)
+        public SaitekPedals(Controls.Properties.CtlProperties props)
         {
             InitializeComponent();
             this.props = props;
@@ -30,7 +30,7 @@ namespace Profiler.Pages
 
         private void Uncheck(object sender)
         {
-            if (lastUse != null) { lastUse.IsChecked = false; }
+            if ((lastUse != null) && (lastUse != (ToggleButton)sender)) { lastUse.IsChecked = false; }
             lastUse = (ToggleButton)sender;
         }
 

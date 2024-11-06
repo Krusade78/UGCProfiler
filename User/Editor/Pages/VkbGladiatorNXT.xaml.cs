@@ -9,11 +9,11 @@ namespace Profiler.Pages
     /// </summary>
     internal partial class VkbGladiatorNXT : Page, IHidToButton
     {
-        private readonly Controls.CtlProperties props;
+        private readonly Controls.Properties.CtlProperties props;
         private Microsoft.UI.Xaml.Controls.Primitives.ToggleButton lastUse = null;
         private readonly CHidToButton converter;
 
-        public VkbGladiatorNXT(Controls.CtlProperties props)
+        public VkbGladiatorNXT(Controls.Properties.CtlProperties props)
         {
             InitializeComponent();
             this.props = props;
@@ -69,7 +69,7 @@ namespace Profiler.Pages
 
         private void Uncheck(object sender)
         {
-            if (lastUse != null) { lastUse.IsChecked = false; }
+            if ((lastUse != null) && (lastUse != (Microsoft.UI.Xaml.Controls.Primitives.ToggleButton)sender)) { lastUse.IsChecked = false; }
             lastUse = (Microsoft.UI.Xaml.Controls.Primitives.ToggleButton)sender;
         }
 

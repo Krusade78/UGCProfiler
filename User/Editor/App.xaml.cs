@@ -12,6 +12,7 @@ namespace Profiler
 	{
 		private readonly bool duplicated = false;
 		private MainWindow m_window;
+
 		public static readonly System.Text.Json.JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
 
 		public MainWindow GetMainWindow() => m_window;
@@ -58,7 +59,7 @@ namespace Profiler
 				m_window = new MainWindow();
 				if (m_window.AppWindow is not null)
 				{
-					m_window.AppWindow.Resize(new() { Width = 1700, Height = 1000 });
+					m_window.AppWindow.Resize(new() { Width = 1270, Height = 700 });
 					Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(m_window)), Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
 					if (displayArea is not null)
 					{
@@ -74,6 +75,6 @@ namespace Profiler
 				m_window.Activate();
 			}
 		}
-	}
+    }
 }
 

@@ -221,6 +221,10 @@ namespace Profiler
                             mm = new();
                             bmm.Modes.Add((byte)((ibr.idPinkie << 4) | ibr.idModo), mm);
                         }
+                        if (MapOldButton((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idBoton) == 255)
+                        {
+                            continue;
+                        }
                         if (!mm.Buttons.TryGetValue(MapOldButton((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idBoton), out ProfileModel.ButtonMapModel.ModeModel.ButtonModel bm))
                         {
                             bm = new();
@@ -245,6 +249,10 @@ namespace Profiler
                     mm = new();
                     amm.Modes.Add((byte)((er.idPinkie << 4) | er.idModo), mm);
                 }
+                if (MapOldAxis((OldProfile.Types.JoyType)er.idJoy, er.idEje) == 255)
+                {
+                    continue;
+                }
                 if (!mm.Axes.TryGetValue(MapOldAxis((OldProfile.Types.JoyType)er.idJoy, er.idEje), out ProfileModel.AxisMapModel.ModeModel.AxisModel am))
                 {
                     am = new();
@@ -256,7 +264,11 @@ namespace Profiler
                 am.OutputAxis = er.Eje;
                 er.Sensibilidad.CopyTo(am.Sensibility, 0);
                 am.IsSensibilityForSlider = er.Slider == 1;
-                am.Zones = [.. er.Bandas];
+                if ((am.Type & 0b100000) == 0b100000)
+                {
+                    am.Zones = [.. er.Bandas];
+                    for (int i = am.Zones.Count - 1; i >= 0; i--) { if (am.Zones[i] == 0) { am.Zones.RemoveAt(i); } else { break; } }
+                }
                 am.Resistance = (er.ResistenciaInc, er.ResistenciaDec);
 
                 for (byte i= 0; i <= byte.MaxValue; i++)
@@ -287,12 +299,16 @@ namespace Profiler
                     if (ibr != null)
                     {
                         ProfileModel.ButtonMapModel bmm;
-                        if (((OldProfile.Types.JoyType)br.idJoy == OldProfile.Types.JoyType.NXT) && (br.IdSeta > 7))
+                        if (
+                            (((OldProfile.Types.JoyType)br.idJoy == OldProfile.Types.JoyType.NXT) && (br.IdSeta > 7)) ||
+                            ((OldProfile.Types.JoyType)br.idJoy == OldProfile.Types.JoyType.X52_Throttle) ||
+                            (((OldProfile.Types.JoyType)br.idJoy == OldProfile.Types.JoyType.X52_Joy) && (br.IdSeta > 7))
+                            )
                         {
                             if (!Profile.ButtonsMap.TryGetValue(joyId, out bmm))
                             {
                                 bmm = new();
-                                Profile.HatsMap.Add(joyId, bmm);
+                                Profile.ButtonsMap.Add(joyId, bmm);
                             }
                         }
                         else
@@ -308,6 +324,10 @@ namespace Profiler
                         {
                             mm = new();
                             bmm.Modes.Add((byte)((ibr.idPinkie << 4) | ibr.idModo), mm);
+                        }
+                        if (MapOldHat((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idSeta) == 255)
+                        {
+                            continue;
                         }
                         if (!mm.Buttons.TryGetValue(MapOldHat((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idSeta), out ProfileModel.ButtonMapModel.ModeModel.ButtonModel bm))
                         {
@@ -327,50 +347,59 @@ namespace Profiler
             {
                 return axis switch
                 {
+                    0 => 0,
+                    1 => 1,
                     3 => 2,
-                    _ => axis
+                    _ => 255
                 };
             }
-            if (joyType == OldProfile.Types.JoyType.X52_Throttle)
+            else if (joyType == OldProfile.Types.JoyType.X52_Throttle)
             {
                 return axis switch
                 {
-                    0 => 7,
-                    1 => 8,
+                    0 => 43,
+                    1 => 42,
                     2 => 3,
-                    3 => 5,
-                    //4 => 4,
-                    //6 => 6,
-                    _ => axis
+                    3 => 4,
+                    4 => 5,
+                    6 => 6,
+                    _ => 255
                 };
             }
             else if (joyType == OldProfile.Types.JoyType.Pedals)
             {
                 return axis switch
                 {
+                    0 => 0,
+                    1 => 1,
                     5 => 2,
-                    _ => axis
+                    _ => 255
                 };
             }
             else
             {
                 return axis switch
                 {
+                    0 => 0,
+                    1 => 1,
                     2 => 3,
                     3 => 2,
                     6 => 4,
                     7 => 5,
-                    _ => axis
+                    _ => 255
                 };
             }
         }
 
         private static byte MapOldHat(OldProfile.Types.JoyType joyType, byte hat)
         {
-            if ((joyType == OldProfile.Types.JoyType.NXT) && (hat > 7))
+            if (joyType == OldProfile.Types.JoyType.NXT)
             {
                 return hat switch
                 {
+                    //hat
+                    < 8 => hat,
+                    //button
                     8 => 25,
                     10 => 27,
                     12 => 24,
@@ -381,13 +410,45 @@ namespace Profiler
                     22 => 22,
                     24 => 29,
                     26 => 31,
-                    //28 => 28,
-                    //30 => 30,
-                    _ => hat
+                    28 => 28,
+                    30 => 30,
+                    _ => 255
+                };
+            }
+            else if (joyType == OldProfile.Types.JoyType.X52_Joy)
+            {
+                return hat switch
+                {
+                    //hat
+                    0 => 0,
+                    1 => 1,
+                    2 => 2,
+                    3 => 3,
+                    4 => 4,
+                    5 => 5,
+                    6 => 6,
+                    7 => 7,
+                    //button
+                    8 => 15,
+                    10 => 16,
+                    12 => 17,
+                    14 => 18,
+                    _ => 255
+                };
+            }
+            else if (joyType == OldProfile.Types.JoyType.X52_Throttle)
+            {
+                return hat switch
+                {
+                    0 => 19,
+                    2 => 20,
+                    4 => 21,
+                    6 => 22,
+                    _ => (byte)(hat + 67)
                 };
             }
 
-            return hat;
+            return 255;
         }
 
         private static byte MapOldButton(OldProfile.Types.JoyType joyType, byte button)
@@ -396,27 +457,67 @@ namespace Profiler
             {
                 return button switch
                 {
-                    //0 => 0, //encoder
-                    //1 => 1, //encoder
-                    //2 => 2, //encoder
-                    //3 => 3, //encoder
+                    0 => 0, //encoder
+                    1 => 1, //encoder
+                    2 => 2, //encoder
+                    3 => 3, //encoder
                     4 => 6,// base 1
                     5 => 5, // base 2
                     6 => 4, // base 3
                     //7 //-
-                    //8 => 8, //trigger 2
-                    //9 trigger 1
-                    //10 => 10, //pinkie
-                    //11 => 11, // launch
-                    //12 => 12, //hat 1 - center
+                    8 => 8, //trigger 2
+                    9 => 9, //trigger 1
+                    10 => 10, //pinkie
+                    11 => 11, // launch
+                    12 => 12, //hat 1 - center
                     13 => 32, //hat 4 - center
-                    14 => 15, //bt 1
-                    15 => 35, //fast trigger
-                    _ => button
+                    14 => 35, //fast trigger
+                    15 => 15, //bt 1
+                    _ => 255
+                };
+            }
+            else if (joyType == OldProfile.Types.JoyType.X52_Joy)
+            {
+                return button switch
+                {
+                    0 => 14,
+                    1 => 0,
+                    2 => 1,
+                    3 => 5,
+                    4 => 4,
+                    5 => 23,
+                    6 => 24,
+                    7 => 25,
+                    8 => 2,
+                    9 => 3,
+                    10 => 8,
+                    11 => 9,
+                    12 => 10,
+                    13 => 11,
+                    14 => 12,
+                    15 => 13,
+                    _ => 255
+                };
+            }
+            else if (joyType == OldProfile.Types.JoyType.X52_Throttle)
+            {
+                return button switch
+                {
+                    0 => 6,
+                    1 => 7,
+                    2 => 26,
+                    3 => 27,
+                    4 => 28,
+                    5 => 29,
+                    6 => 30,
+                    7 => 31,
+                    8 => 32,
+                    9 => 33,
+                    _ => 255
                 };
             }
 
-            return button;
+            return 255;
         }
 
         private static uint GetId(OldProfile.Types.JoyType joy)

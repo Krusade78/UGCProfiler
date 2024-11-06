@@ -9,7 +9,7 @@ namespace Profiler.Pages
     internal sealed partial class Generic : Page, IHidToButton
     {
         private readonly Devices.DeviceInfo deviceInfo;
-        private readonly Controls.CtlProperties props;
+        private readonly Controls.Properties.CtlProperties props;
         private Microsoft.UI.Xaml.Controls.Primitives.ToggleButton lastUse = null;
         private CHidToButton converter;
 
@@ -19,7 +19,7 @@ namespace Profiler.Pages
             public byte Position = position;
         }
 
-        public Generic(Devices.DeviceInfo di, Controls.CtlProperties props)
+        public Generic(Devices.DeviceInfo di, Controls.Properties.CtlProperties props)
         {
             this.InitializeComponent();
             deviceInfo = di;
@@ -45,9 +45,9 @@ namespace Profiler.Pages
                         Microsoft.UI.Xaml.Controls.Primitives.ToggleButton tb = new()
                         {
                             Content = $"{Translate.Get("axis")} {name[o]} {count++}",
-                            Height = 70,
+                            Height = 60,
                             HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
-                            FontSize = 20,
+                            FontSize = 18,
                             Margin = new(25, 5, 25, 5),
                             Tag = new TagData(u.ReportIdx, 0),
                             Shadow = new Microsoft.UI.Xaml.Media.ThemeShadow(),
@@ -65,14 +65,15 @@ namespace Profiler.Pages
                 byte count = 1;
                 foreach (Shared.ProfileModel.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == 253))
                 {
-                    for (byte pos = 0; pos <= u.Range; pos++)
+                    byte posMin = (byte)(u.Range & 0xf);
+                    for (byte pos = posMin; pos <= (u.Range >> 4); pos++)
                     {
                         Microsoft.UI.Xaml.Controls.Primitives.ToggleButton tb = new()
                         {
-                            Content = $"{Translate.Get("hat")} {count++} - {Translate.Get("position")} {pos + 1}",
-                            Height = 70,
+                            Content = $"{Translate.Get("hat")} {count} - {Translate.Get("position")} {pos - posMin + 1}",
+                            Height = 60,
                             HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
-                            FontSize = 20,
+                            FontSize = 18,
                             Margin = new(25,5,25,5),
                             Tag = new TagData(u.ReportIdx, pos),
                             Shadow = new Microsoft.UI.Xaml.Media.ThemeShadow(),
@@ -82,6 +83,7 @@ namespace Profiler.Pages
                         spHats.Children.Add(tb);
                         map.Add(new(u.ReportIdx, tb));
                     }
+                    count++;
                 }
             }
 
@@ -95,9 +97,9 @@ namespace Profiler.Pages
                         Microsoft.UI.Xaml.Controls.Primitives.ToggleButton tb = new()
                         {
                             Content = $"{Translate.Get("button")} {count++}",
-                            Height = 70,
+                            Height = 60,
                             HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
-                            FontSize = 20,
+                            FontSize = 18,
                             Margin = new(25, 5, 25, 5),
                             Tag = new TagData((ushort)(u.ReportIdx + pos), 0),
                             Shadow = new Microsoft.UI.Xaml.Media.ThemeShadow(),
