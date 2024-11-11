@@ -21,24 +21,24 @@ namespace Profiler.Pages.Macros
             LoadTemplate();
         }
 
-        #region "teclas"
+        #region "keys"
         private void ButtonPress_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237)
+            if (((EditedMacro)DataContext).GetCount() > 237)
                 return;
             else
             {
-                ((EditedMacro)DataContext).Insertar([(ushort)((byte)CommandType.Key + (ushort)(ComboBox1.SelectedIndex << 8))], false);
+                ((EditedMacro)DataContext).Insert([(ushort)((byte)CommandType.Key + (ushort)(ComboBox1.SelectedIndex << 8))], false);
             }
         }
 
         private void ButtonRelease_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237)
+            if (((EditedMacro)DataContext).GetCount() > 237)
                 return;
             else
             {
-                ((EditedMacro)DataContext).Insertar([(ushort)(((byte)CommandType.Key | (byte)CommandType.Release) + (ushort)(ComboBox1.SelectedIndex << 8))], false);
+                ((EditedMacro)DataContext).Insert([(ushort)(((byte)CommandType.Key | (byte)CommandType.Release) + (ushort)(ComboBox1.SelectedIndex << 8))], false);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Profiler.Pages.Macros
             AddKeys(true);
         }
 
-        private void TextBoxTecla_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBoxKey_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBoxKey.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Black);
             TextBoxKey.Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.GreenYellow);
@@ -60,7 +60,7 @@ namespace Profiler.Pages.Macros
             txtKeysFocused = false;
         }
 
-        private void TextBoxTecla_GotFocus(object sender, RoutedEventArgs e)
+        private void TextBoxKey_GotFocus(object sender, RoutedEventArgs e)
         {
             keys.Clear();
             TextBoxKey.Text = "";
@@ -71,7 +71,7 @@ namespace Profiler.Pages.Macros
             keyboardStatus = new bool[255];
         }
 
-        private void TextBoxTecla_PreviewKeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void TextBoxKey_PreviewKeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (txtKeysFocused)
             {
@@ -80,7 +80,7 @@ namespace Profiler.Pages.Macros
             }
         }
 
-        private void TextBoxTecla_PreviewKeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void TextBoxKey_PreviewKeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (txtKeysFocused)
             {
@@ -98,9 +98,9 @@ namespace Profiler.Pages.Macros
                 using System.IO.StreamReader f = new($".\\Language\\keytemplate.{System.Threading.Thread.CurrentThread.CurrentUICulture.Name}.txt");
                 while (f.Peek() >= 0)
                 {
-                    string linea = f.ReadLine();
-                    ComboBox1.Items.Add(linea);
-                    GroupedCommand.Keys.Add(linea);
+                    string line = f.ReadLine();
+                    ComboBox1.Items.Add(line);
+                    GroupedCommand.Keys.Add(line);
                 }
             }
             else if (System.IO.File.Exists($".\\Language\\keytemplate.{System.Threading.Thread.CurrentThread.CurrentUICulture.Parent.Name}.txt"))
@@ -108,9 +108,9 @@ namespace Profiler.Pages.Macros
                 using System.IO.StreamReader f = new($".\\Language\\keytemplate.{System.Threading.Thread.CurrentThread.CurrentUICulture.Parent.Name}.txt");
                 while (f.Peek() >= 0)
                 {
-                    string linea = f.ReadLine();
-                    ComboBox1.Items.Add(linea);
-                    GroupedCommand.Keys.Add(linea);
+                    string line = f.ReadLine();
+                    ComboBox1.Items.Add(line);
+                    GroupedCommand.Keys.Add(line);
                 }
             }
             else
@@ -118,9 +118,9 @@ namespace Profiler.Pages.Macros
                 using System.IO.StreamReader f = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.Language.keytemplate-en.txt"));
                 while (f.Peek() >= 0)
                 {
-                    string linea = f.ReadLine();
-                    ComboBox1.Items.Add(linea);
-                    GroupedCommand.Keys.Add(linea);
+                    string line = f.ReadLine();
+                    ComboBox1.Items.Add(line);
+                    GroupedCommand.Keys.Add(line);
                 }
             }
 
@@ -151,7 +151,7 @@ namespace Profiler.Pages.Macros
         {
             if (keys.Count == 0)
                 return;
-            if ((((EditedMacro)DataContext).GetCuenta() + (hold ? 1 : 0) + (keys.Count * 2)) > 237)
+            if ((((EditedMacro)DataContext).GetCount() + (hold ? 1 : 0) + (keys.Count * 2)) > 237)
                 return;
 
             if (KeyPanel.Visibility == Visibility.Visible)
@@ -174,7 +174,7 @@ namespace Profiler.Pages.Macros
                 byte k = keys[j];
                 block.Add((uint)((byte)(CommandType.Release | CommandType.Key) + (k << 8)));
             }
-            ((EditedMacro)DataContext).Insertar([.. block], true);
+            ((EditedMacro)DataContext).Insert([.. block], true);
         }
 
         private void ReadKeyboard(Windows.System.VirtualKey vk, Windows.UI.Core.CorePhysicalKeyStatus status)

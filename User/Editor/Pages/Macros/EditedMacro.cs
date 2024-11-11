@@ -34,7 +34,7 @@ namespace Profiler.Pages.Macros
             }
             if (idc)
             {
-                bool nombreOk = true;
+                bool nameOk = true;
                 string st = r.Name;
                 if (st.Length > 16)
                 {
@@ -47,14 +47,14 @@ namespace Profiler.Pages.Macros
                 {
                     for (int i = 0; i < st.Length; i++)
                     {
-                        ushort comando = (ushort)((byte)CommandType.X52MfdText + (stb[i] << 8));
-                        if (comando != macros[i + 1])
+                        ushort command = (ushort)((byte)CommandType.X52MfdText + (stb[i] << 8));
+                        if (command != macros[i + 1])
                         {
-                            nombreOk = false;
+                            nameOk = false;
                             break;
                         }
                     }
-                    if ((macros[st.Length + 1] == (byte)CommandType.X52MfdTextEnd) && nombreOk)
+                    if ((macros[st.Length + 1] == (byte)CommandType.X52MfdTextEnd) && nameOk)
                     {
                         for (byte i = 0; i <= (st.Length + 1); i++)
                             macros.RemoveAt(0);
@@ -72,42 +72,42 @@ namespace Profiler.Pages.Macros
         {
             byte mtr = 0;
 
-            List<uint> bloque = [];
+            List<uint> block = [];
             for (int i = 0; i < macros.Count; i++)
             {
-                byte tipo = (byte)(macros[i] & 0x7f);
+                byte type = (byte)(macros[i] & 0x7f);
 
-                if (tipo == (byte)CommandType.X52MfdTextIni)
+                if (type == (byte)CommandType.X52MfdTextIni)
                 {
-                    bloque.Add(macros[i]);
+                    block.Add(macros[i]);
                 }
-                else if (tipo == (byte)CommandType.X52MfdText)
+                else if (type == (byte)CommandType.X52MfdText)
                 {
-                    bloque.Add(macros[i]);
+                    block.Add(macros[i]);
                 }
-                else if (tipo == (byte)CommandType.X52MfdTextEnd)
+                else if (type == (byte)CommandType.X52MfdTextEnd)
                 {
-                    bloque.Add(macros[i]);
-                    gMacros.Add(new() { Id = mtr++, Commands = [.. bloque] });
-                    bloque.Clear();
+                    block.Add(macros[i]);
+                    gMacros.Add(new() { Id = mtr++, Commands = [.. block] });
+                    block.Clear();
 
                 }
-                else if (tipo == (byte)CommandType.X52MfdHour)
+                else if (type == (byte)CommandType.X52MfdHour)
                 {
                     gMacros.Add(new() { Id = mtr++, Commands = [macros[i], macros[i + 1], macros[i + 2]] });
                     i += 2;
                 }
-                else if (tipo == (byte)CommandType.X52MfdHour24)
+                else if (type == (byte)CommandType.X52MfdHour24)
                 {
                     gMacros.Add(new() { Id = mtr++, Commands = [macros[i], macros[i + 1], macros[i + 2]] });
                     i += 2;
                 }
-                else if (tipo == (byte)CommandType.x52MfdDate)
+                else if (type == (byte)CommandType.x52MfdDate)
                 {
                     gMacros.Add(new() { Id = mtr++, Commands = [macros[i], macros[i + 1]] });
                     i++;
                 }
-                else if (tipo == (byte)CommandType.VkbGladiatorNxtLeds)
+                else if (type == (byte)CommandType.VkbGladiatorNxtLeds)
                 {
                     gMacros.Add(new() { Id = mtr++, Commands = [macros[i], macros[i + 1], macros[i + 2], macros[i + 3]] });
                     i += 3;
@@ -125,7 +125,7 @@ namespace Profiler.Pages.Macros
         }
 
         #region
-        public int GetCuenta()
+        public int GetCount()
         {
             int n = 0;
             foreach (GroupedCommand gc in gMacros)
@@ -142,10 +142,10 @@ namespace Profiler.Pages.Macros
         }
 
         /// <summary>
-        /// Se inserta por encima de la selección
+        /// Insert over the selection
         /// </summary>
-        /// <returns>Devuelve la posición de inserción</returns>
-        private byte GetIndice()
+        /// <returns>returns insertion position</returns>
+        private byte GetIndex()
         {
             if (gMacros.Count == 0)
             {
@@ -161,23 +161,23 @@ namespace Profiler.Pages.Macros
             }
         }
 
-        public void Insertar(uint[] block, bool separated)
+        public void Insert(uint[] block, bool separated)
         {
-            byte idInicio = GetIndice();
+            byte idBegin = GetIndex();
 
-            //hacer hueco
+            //make room
             for (int i = gMacros.Count - 1; i >= 0; i--)
             {
-                GroupedCommand rvBusca = gMacros[i];
-                if (rvBusca.Id >= idInicio)
+                GroupedCommand rvSearch = gMacros[i];
+                if (rvSearch.Id >= idBegin)
                 {
                     if (separated)
                     {
-                        rvBusca.Id += (byte)block.Length;
+                        rvSearch.Id += (byte)block.Length;
                     }
                     else
                     {
-                        rvBusca.Id++;
+                        rvSearch.Id++;
                     }
                 }
                 else
@@ -187,19 +187,19 @@ namespace Profiler.Pages.Macros
             if (separated)
             {
                 byte c = 0;
-                foreach (uint comando in block)
+                foreach (uint command in block)
                 {
-                    gMacros.Add(new() { Id = (byte)(idInicio + c++), Commands = [comando] });
+                    gMacros.Add(new() { Id = (byte)(idBegin + c++), Commands = [command] });
                 }
             }
             else
             {
-                gMacros.Add(new() { Id = idInicio, Commands = block });
+                gMacros.Add(new() { Id = idBegin, Commands = block });
             }
             RefrestListBox();
         }
 
-        public void BorrarMacroLista()
+        public void DeleteCommand()
         {
             if (ListBox1.SelectedIndex == -1)
                 return;
@@ -316,7 +316,7 @@ namespace Profiler.Pages.Macros
             RefrestListBox();
         }
 
-        public void SubirMacroLista()
+        public void MoveUpCommand()
         {
             if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == 0))
                 return;
@@ -354,7 +354,7 @@ namespace Profiler.Pages.Macros
             ListBox1.SelectedIndex = sel - 1;
         }
 
-        public void BajarMacroLista()
+        public void MoveDownCommand()
         {
             if ((ListBox1.SelectedIndex == -1) || (ListBox1.SelectedIndex == (ListBox1.Items.Count - 1)))
                 return;
@@ -395,10 +395,10 @@ namespace Profiler.Pages.Macros
         {
             foreach (GroupedCommand r in gMacros)
             {
-                byte tipo = (byte)(r.Commands[0] & 0x7f);
-                if ((tipo == (byte)CommandType.Repeat) || (tipo == (byte)CommandType.Hold))
+                byte type = (byte)(r.Commands[0] & 0x7f);
+                if ((type == (byte)CommandType.Repeat) || (type == (byte)CommandType.Hold))
                 {
-                    await MessageBox.Show("Repetir y Mantener deben ser únicos", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await MessageBox.Show(Translate.Get("repeat_and_hold_must_be_unique"), Translate.Get("warning"), MessageBoxButton.OK, MessageBoxImage.Information);
                     return false;
                 }
             }
@@ -426,13 +426,13 @@ namespace Profiler.Pages.Macros
             }
             if (reps != 0)
             {
-                await MessageBox.Show("Repetir y Mantener no pueden estar dentro de Repetir N.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Information);
+                await MessageBox.Show(Translate.Get("repeat_and_hold_cannot_be_inside_repeat_n"), Translate.Get("warning"), MessageBoxButton.OK, MessageBoxImage.Information);
                 return false;
             }
             return true;
         }
 
-        public async void Guardar(bool nameOnMFD, string name)
+        public async void Save(bool nameOnMFD, string name)
         {
             if (string.IsNullOrEmpty(name))
                 return;
@@ -442,7 +442,7 @@ namespace Profiler.Pages.Macros
                 {
                     if ((r.Name.Equals(name, System.StringComparison.CurrentCultureIgnoreCase)) && (r.Id != currentMacroId))
                     {
-                        _ = await MessageBox.Show("El nombre de la macro está repetido.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        _ = await MessageBox.Show(Translate.Get("macro_name_repeated"), Translate.Get("error"), MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                 }
@@ -450,7 +450,7 @@ namespace Profiler.Pages.Macros
 
             List<uint> macro = [];
 
-            if (nameOnMFD) //texto x52
+            if (nameOnMFD) //x52 text
             {
                 string st = name;
                 if (st.Length > 16)

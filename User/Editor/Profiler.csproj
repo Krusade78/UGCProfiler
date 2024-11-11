@@ -24,6 +24,7 @@
  
   <ItemGroup>
 	<Compile Remove="Calibrator\Info.xaml.cs" />
+	<Compile Remove="Pages\Macros\_Main - Copy.xaml.cs" />
 	<None Remove="Controls\CtlProperties.AxisConf.xaml" />
 	<None Remove="Controls\CtlProperties.ButtonConf.xaml" />
 	<None Remove="Controls\CtlProperties.HatConf.xaml" />

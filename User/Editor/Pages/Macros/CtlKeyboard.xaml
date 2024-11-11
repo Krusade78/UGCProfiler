@@ -14,27 +14,27 @@
         </Border.Shadow>
         <StackPanel>
             <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" VerticalAlignment="Top" >
-                <TextBlock Text="Teclado" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <TextBlock Text="{StaticResource keyboard}" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
             </Border>
             <Grid Margin="10">
                 <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
                     <StackPanel >
-                        <TextBlock Text="Tecla" Margin="0,0,0,5" />
-                        <ComboBox x:Name="ComboBox1" Width="180" />
+                        <TextBlock Text="{StaticResource key}" Margin="0,0,0,5" />
+                        <ComboBox x:Name="ComboBox1" Width="250" />
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
-                            <Button Content="Soltar" x:Name="ButtonSoltar"  Width="80" Click="ButtonRelease_Click" />
-                            <Button Content="Presionar" x:Name="ButtonPresionar" Margin="5,0,0,0" Width="80" Click="ButtonPress_Click"  />
+                            <Button Content="{StaticResource release}" x:Name="ButtonSoltar"  Width="85" Click="ButtonRelease_Click" />
+                            <Button Content="{StaticResource press}" x:Name="ButtonPresionar" Margin="5,0,0,0" Width="85" Click="ButtonPress_Click"  />
                         </StackPanel>
                     </StackPanel>
                     <Border x:Name="KeyPanel" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4"/>
                 </Grid>
                 
                 <StackPanel VerticalAlignment="Top" Margin="0,110,0,0">
-                    <TextBlock Text="Inserción sencilla" />
-                    <TextBox x:Name="TextBoxKey" Margin="0,5" Width="350" IsReadOnly="True" Background="Black" Foreground="GreenYellow" HorizontalContentAlignment="Center" LostFocus="TextBoxTecla_LostFocus" GotFocus="TextBoxTecla_GotFocus" PreviewKeyDown="TextBoxTecla_PreviewKeyDown" PreviewKeyUp="TextBoxTecla_PreviewKeyUp" />
+                    <TextBlock Text="{StaticResource easy_insert}" />
+                    <TextBox x:Name="TextBoxKey" Margin="0,5" Width="350" IsReadOnly="True" Background="Black" Foreground="GreenYellow" HorizontalContentAlignment="Center" LostFocus="TextBoxKey_LostFocus" GotFocus="TextBoxKey_GotFocus" PreviewKeyDown="TextBoxKey_PreviewKeyDown" PreviewKeyUp="TextBoxKey_PreviewKeyUp" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Content="Normal" x:Name="ButtonNormal" Width="85" Click="ButtonNormal_Click" />
-                        <Button Content="Mantener" x:Name="ButtonMantener" Margin="5,0,0,0" Width="85" Click="ButtonHold_Click" />
+                        <Button Content="{StaticResource hold}" x:Name="ButtonMantener" Margin="5,0,0,0" Width="85" Click="ButtonHold_Click" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

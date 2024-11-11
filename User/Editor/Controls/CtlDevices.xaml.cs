@@ -256,7 +256,7 @@ namespace Profiler.Controls
             if (on)
             {
                 this.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftCompact;
-                this.Header = Translate.Get("macros_management");
+                this.Header = Translate.Get("macro_management");
             }
             else
             {

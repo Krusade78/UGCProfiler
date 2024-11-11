@@ -42,6 +42,8 @@ namespace Shared
 			MouseWhUp,
 			MouseWhDown,
 
+			DxAxis,
+
 			Delay = 20,
 			Hold,
 			Repeat,

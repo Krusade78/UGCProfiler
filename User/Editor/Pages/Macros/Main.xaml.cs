@@ -33,19 +33,19 @@ namespace Profiler.Pages.Macros
             GoToBasic();
         }
 
-        private void ButtonBorrar_Click(object sender, RoutedEventArgs e)
+        private void ButtonDeleteCommand_Click(object sender, RoutedEventArgs e)
         {
-            CurrentMacro.BorrarMacroLista();
+            CurrentMacro.DeleteCommand();
         }
 
-        private void ButtonSubir_Click(object sender, RoutedEventArgs e)
+        private void ButtonMoveUp_Click(object sender, RoutedEventArgs e)
         {
-            CurrentMacro.SubirMacroLista();
+            CurrentMacro.MoveUpCommand();
         }
 
-        private void ButtonBajar_Click(object sender, RoutedEventArgs e)
+        private void ButtonMoveDown_Click(object sender, RoutedEventArgs e)
         {
-            CurrentMacro.BajarMacroLista();
+            CurrentMacro.MoveDownCommand();
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
@@ -58,7 +58,7 @@ namespace Profiler.Pages.Macros
                     break;
                 }
             }
-            parent.GetData().Profile.Macros.Add(new () { Id = nextId, Name = "- New macro -" });
+            parent.GetData().Profile.Macros.Add(new () { Id = nextId, Name = Translate.Get("new_macro") });
             lbMacros.DataContext = parent.GetData().Profile.Macros.Where(x => x.Id != 0).OrderBy(x => x.Name);
         }
 
@@ -106,7 +106,7 @@ namespace Profiler.Pages.Macros
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            CurrentMacro.Guardar(ctlSaitekX52.GetNameOnMFD(), ctlName.GetName());
+            CurrentMacro.Save(ctlSaitekX52.GetNameOnMFD(), ctlName.GetName());
             lbMacros.DataContext = parent.GetData().Profile.Macros.Where(x => x.Id != 0).OrderBy(x => x.Name);
         }
 
@@ -122,8 +122,8 @@ namespace Profiler.Pages.Macros
 
             CurrentMacro.BasicMode = true;
 
-            ButtonSubir.IsEnabled = false;
-            ButtonBajar.IsEnabled = false;
+            ButtonMoveUp.IsEnabled = false;
+            ButtonMoveDown.IsEnabled = false;
         }
 
         public void GoToAdvanced()
@@ -138,8 +138,8 @@ namespace Profiler.Pages.Macros
 
             CurrentMacro.BasicMode = false;
 
-            ButtonSubir.IsEnabled = true;
-            ButtonBajar.IsEnabled = true;
+            ButtonMoveUp.IsEnabled = true;
+            ButtonMoveDown.IsEnabled = true;
         }
     }
 }

@@ -22,145 +22,145 @@ namespace Profiler.Pages.Macros
                 string key = Keys[data];
                 if (released)
                 {
-                    return "Soltar " + key.Remove(0, 5);
+                    return $"{Translate.Get("release")} {key.Remove(0, 5)}";
                 }
                 else
                 {
-                    return "Presionar " + key.Remove(0, 5);
+                    return $"{Translate.Get("press")} {key.Remove(0, 5)}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseBt1)
             {
                 if (released)
                 {
-                    return "Ratón->Botón 1 Off";
+                    return Translate.Get("mouse_button1_off");
                 }
                 else
                 {
-                    return "Ratón->Botón 1 On";
+                    return Translate.Get("mouse_button1_on");
                 }
             }
             else if (cmdType == (byte)CommandType.MouseBt2)
             {
                 if (released)
                 {
-                    return "Ratón->Botón 2 Off";
+                    return Translate.Get("mouse_button2_off");
                 }
                 else
                 {
-                    return "Ratón->Botón 2 On";
+                    return Translate.Get("mouse_button2_on");
                 }
             }
             else if (cmdType == (byte)CommandType.MouseBt3)
             {
                 if (released)
                 {
-                    return "Ratón->Botón 3 Off";
+                    return Translate.Get("mouse_button3_off");
                 }
                 else
                 {
-                    return "Ratón->Botón 3 On";
+                    return Translate.Get("mouse_button3_on");
                 }
             }
             else if (cmdType == (byte)CommandType.MouseLeft)
             {
                 if (released)
                 {
-                    return "Ratón->Izquierda 0";
+                    return Translate.Get("mouse_left_0");
                 }
                 else
                 {
-                    return "Ratón->Izquierda " + data;
+                    return $"{Translate.Get("mouse_left")} {data}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseRight)
             {
                 if (released)
                 {
-                    return "Ratón->Derecha 0";
+                    return Translate.Get("mouse_right_0");
                 }
                 else
                 {
-                    return "Ratón->Derecha " + data;
+                    return $"{Translate.Get("mouse_right")} {data}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseDown)
             {
                 if (released)
                 {
-                    return "Ratón->Abajo 0";
+                    return Translate.Get("mouse_down_0");
                 }
                 else
                 {
-                    return "Ratón->Abajo " + data;
+                    return $"{Translate.Get("mouse_down")} {data}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseUp)
             {
                 if (released)
                 {
-                    return "Ratón->Arriba 0";
+                    return Translate.Get("mouse_up_0");
                 }
                 else
                 {
-                    return "Ratón->Arriba " + data;
+                    return $"{Translate.Get("mouse_up")} {data}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseWhUp)
             {
                 if (released)
                 {
-                    return "Ratón->Rueda arriba Off";
+                    return Translate.Get("mouse_wheel_up_off");
                 }
                 else
                 {
-                    return "Ratón->Rueda arriba On";
+                    return Translate.Get("mouse_wheel_up_on");
                 }
             }
             else if (cmdType == (byte)CommandType.MouseWhDown)
             {
                 if (released)
                 {
-                    return "Ratón->Rueba abajo Off";
+                    return Translate.Get("mouse_wheel_down_off");
                 }
                 else
                 {
-                    return "Ratón->Rueda abajo On";
+                    return Translate.Get("mouse_wheel_down_on");
                 }
             }
             else if (cmdType == (byte)CommandType.Delay)
             {
-                return "Pausa " + data;
+                return $"{Translate.Get("pause")} {data}";
             }
             else if (cmdType == (byte)CommandType.Hold)
             {
-                return "Mantener";
+                return Translate.Get("hold");
             }
             else if (cmdType == (byte)CommandType.Repeat)
             {
                 if (released)
-                    return "/-- Repetir Fin";
+                    return Translate.Get("repeat_end");
                 else
-                    return "/-- Repetir Inicio";
+                    return Translate.Get("repeat_begin");
             }
             else if (cmdType == (byte)CommandType.RepeatN)
             {
                 if (released)
-                    return "/-- Repetir N Fin";
+                    return $"{Translate.Get("repeat_n(slash)")} {Translate.Get("end")}";
                 else
-                    return "/-- Repetir N[" + data + "] Inicio";
+                    return $"{Translate.Get("repeat_n(slash)")}[{data}] {Translate.Get("begin") }";
             }
             else if (cmdType == (byte)CommandType.PrecisionMode)
             {
                 string[] ejes = ["X", "Y", "Z", "Rx", "Ry", "Rz", "Sl1", "Sl2"];
                 if (!released)
-                    return $"Modo preciso J{((data & 31) / 8) + 1} {ejes[(data & 31) % 8]} s{(data >> 5) + 1} On";
+                    return $"[{Translate.Get("precision_mode")}] J{((data & 31) / 8) + 1} {ejes[(data & 31) % 8]} s{(data >> 5) + 1} On";
                 else
-                    return $"Modo preciso J{((data & 31) / 8) + 1} {ejes[(data & 31) % 8]} Off";
+                    return $"[{Translate.Get("precision_mode")}] J{((data & 31) / 8) + 1} {ejes[(data & 31) % 8]} Off";
             }
             else if (cmdType == (byte)CommandType.Mode)
             {
-                return "Modo " + (data + 1);
+                return $"{Translate.Get("mode")} {(data + 1)}";
             }
             else if (cmdType == (byte)CommandType.SubMode)
             {
@@ -173,49 +173,49 @@ namespace Profiler.Pages.Macros
             {
                 if (released)
                 {
-                    return $"Botón vJoy. {joy + 1} -  DX {data + 1} Off";
+                    return $"[{Translate.Get("button")}] vJoy {joy + 1} -  DX {data + 1} Off";
                 }
                 else
                 {
-                    return $"Botón vJoy. {joy + 1} - DX {data + 1} On";
+                    return $"[{Translate.Get("button")}] vJoy {joy + 1} - DX {data + 1} On";
                 }
             }
             else if (cmdType == (byte)CommandType.DxHat)
             {
                 if (released)
                 {
-                    return $"Seta vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} Off";
+                    return $"[{Translate.Get("hat")}] vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} Off";
                 }
                 else
                 {
-                    return $"Seta vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} On";
+                    return $"[{Translate.Get("hat")}] vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} On";
                 }
             }
             else if (cmdType == (byte)CommandType.X52MfdLight)
             {
-                return "Luz MFD " + data;
+                return $"[X52] {Translate.Get("mfd_light")} {data}";
             }
             else if (cmdType == (byte)CommandType.X52Light)
             {
-                return "Luz Botones " + data;
+                return $"[X52] {Translate.Get("buttons_light")} {data}";
             }
             else if (cmdType == (byte)CommandType.X52InfoLight)
             {
                 if (data == 0)
-                    return "Luz Info Off";
+                    return $"[X52] {Translate.Get("info_light")} Off";
                 else
-                    return "Luz Info On";
+                    return $"[X52] {Translate.Get("info_light")} On";
             }
             else if (cmdType == (byte)CommandType.X52MfdPinkie)
             {
                 if (data == 0)
-                    return "MFD Pinkie Off";
+                    return "[X52] MFD Pinkie Off";
                 else
-                    return "MFD Pinkie On";
+                    return "[X52] MFD Pinkie On";
             }
             else if (cmdType == (byte)CommandType.X52MfdTextIni)
             {
-                string texto = "Línea de texto " + data;
+                string texto = $"[X52] {Translate.Get("text_line")} {data}";
                 byte[] ascii = new byte[16];
                 byte i = 1;
                 while ((byte)(comands[i] & 0x7f) != (byte)CommandType.X52MfdTextEnd)
@@ -231,43 +231,43 @@ namespace Profiler.Pages.Macros
             {
                 if (data == 1)
                 {
-                    return "MFD Hora " + data + " (AM/PM) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data} (AM/PM) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
                 }
                 else
                 {
-                    return "MFD Hora " + data + " (AM/PM) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data} (AM/PM) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
                 }
             }
             else if (cmdType == (byte)CommandType.X52MfdHour24)
             {
                 if (data == 1)
                 {
-                    return "MFD Hora " + data + " (24H) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data} (24H) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
                 }
                 else
                 {
-                    return "MFD Hora " + data + " (24H) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data} (24H) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
                 }
             }
             else if (cmdType == (byte)CommandType.x52MfdDate)
             {
-                return "MFD Fecha " + data + ": " + (comands[1] >> 8);
+                return $"[X52] {Translate.Get("mfd_date")} {data}: {(comands[1] >> 8)}";
             }
             else if (cmdType == (byte)CommandType.VkbGladiatorNxtLeds)
             {
                 string sled = (data == 0) ? "B1" : ((data == 11) ? "J1" : "J2");
-                string[] sorden = ["Off", "Cte", "It1", "It2", "It3", "Fl"];
+                string[] sorden = ["Off", "Ct", "It1", "It2", "It3", "Fl"];
                 string[] smodo = ["c1", "c2", "c1c2", "c2c1", "c1+c2", "c1+", "c2+"];
 
                 byte cmd = (byte)(comands[1] >> 8);
                 string rgb1 = (cmd & 0x7).ToString();
                 rgb1 += ((cmd >> 3) & 0x7).ToString();
-                rgb1 += ((cmd >> 6) | (((comands[2] >> 8) & 0x1) << 2)).ToString();
+                rgb1 += ((cmd >> 6) | (byte)(((comands[2] >> 8) & 0x1) << 2)).ToString();
 
                 cmd = (byte)(comands[2] >> 8);
                 string rgb2 = ((cmd >> 1) & 0x7).ToString();
                 rgb2 += ((cmd >> 4) & 0x7).ToString();
-                rgb2 += ((((comands[3] >> 8) << 1) & 0x6) | (cmd >> 7)).ToString();
+                rgb2 += ((byte)(((comands[3] >> 8) << 1) & 0x6) | (cmd >> 7)).ToString();
 
                 cmd = (byte)(comands[3] >> 8);
                 return $"NXT Led {sled}: {sorden[(cmd >> 2) & 0x7]} {smodo[(cmd >> 5) & 0x7]} {rgb1} {rgb2}";

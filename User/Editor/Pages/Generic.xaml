@@ -13,7 +13,7 @@
                     <ThemeShadow />
                 </Border.Shadow>
                 <StackPanel x:Name="spAxes" Margin="15">
-                    <TextBlock Text="Axes" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="Light"/>
+                    <TextBlock Text="{StaticResource axes}" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="Light"/>
                 </StackPanel>
             </Border>
 
@@ -22,7 +22,7 @@
                     <ThemeShadow />
                 </Border.Shadow>
                 <StackPanel x:Name="spHats" Margin="15">
-                    <TextBlock Text="Hats" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="Light" />
+                    <TextBlock Text="{StaticResource hats}" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="Light" />
                 </StackPanel>
             </Border>
 
@@ -31,7 +31,7 @@
                     <ThemeShadow />
                 </Border.Shadow>
                 <StackPanel x:Name="spButtons" Margin="15">
-                    <TextBlock Text="Buttons" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="Light" />
+                    <TextBlock Text="{StaticResource buttons}" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="Light" />
                 </StackPanel>
             </Border>
         </StackPanel>

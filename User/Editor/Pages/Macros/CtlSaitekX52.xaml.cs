@@ -21,75 +21,75 @@ namespace Profiler.Pages.Macros
         #region "MFD"
         private void ButtonLinea_Click(object sender, RoutedEventArgs e)
         {
-            Linea();
+            Line();
         }
 
         private void Button47_Click(object sender, RoutedEventArgs e)
         {
-            Hora(true);
+            Hour(true);
         }
 
         private void Button48_Click(object sender, RoutedEventArgs e)
         {
-            Hora(false);
+            Hour(false);
         }
 
         private void ButtonX52PinkieOn_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([(byte)CommandType.X52MfdPinkie], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.X52MfdPinkie], false);
         }
 
         private void ButtonX52PinkieOff_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([((byte)CommandType.X52MfdPinkie + (1 << 8))], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52MfdPinkie + (1 << 8))], false);
         }
 
         private void ButtonFecha1_Click(object sender, RoutedEventArgs e)
         {
-            Fecha(1);
+            Date(1);
         }
 
         private void ButtonFecha2_Click(object sender, RoutedEventArgs e)
         {
-            Fecha(2);
+            Date(2);
         }
 
         private void ButtonFecha3_Click(object sender, RoutedEventArgs e)
         {
-            Fecha(3);
+            Date(3);
         }
 
         private void ButtonInfoOn_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([(byte)CommandType.X52InfoLight], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.X52InfoLight], false);
         }
 
         private void ButtonInfoOff_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([((byte)CommandType.X52InfoLight + (1 << 8))], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52InfoLight + (1 << 8))], false);
         }
 
         private void ButtonLuzMfd_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))], false);
         }
 
         private void ButtonLuzBotones_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))], false);
         }
         #endregion
 
-        #region "MFD"
-        private void Linea()
+        #region "Texts"
+        private void Line()
         {
-            if ((((EditedMacro)DataContext).GetCuenta() + 2 + TextBox3.Text.Length) > 237)
+            if ((((EditedMacro)DataContext).GetCount() + 2 + TextBox3.Text.Length) > 237)
                 return;
 
             List<uint> block =
@@ -103,12 +103,12 @@ namespace Profiler.Pages.Macros
                 block.Add((uint)((byte)CommandType.X52MfdText + (stb[i] << 8)));
             }
             block.Add((byte)CommandType.X52MfdTextEnd);
-            ((EditedMacro)DataContext).Insertar([.. block], false);
+            ((EditedMacro)DataContext).Insert([.. block], false);
         }
 
-        private async void Hora(bool f24h)
+        private async void Hour(bool f24h)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 235)
+            if (((EditedMacro)DataContext).GetCount() > 235)
                 return;
             if ((NumericUpDown10.Value < 0) && (NumericUpDown7.Value == 1))
             {
@@ -117,39 +117,39 @@ namespace Profiler.Pages.Macros
             }
 
             uint[] block = new uint[3];
-            CommandType tipo = (f24h) ? CommandType.X52MfdHour24 : CommandType.X52MfdHour;
-            block[0] = (byte)tipo + ((uint)NumericUpDown7.Value << 8);
+            CommandType type = (f24h) ? CommandType.X52MfdHour24 : CommandType.X52MfdHour;
+            block[0] = (byte)type + ((uint)NumericUpDown7.Value << 8);
             if (NumericUpDown7.Value == 1)
             {
-                block[1] = (uint)((byte)tipo + ((uint)NumericUpDown10.Value << 8));
-                block[2] = (uint)((byte)tipo + ((uint)NumericUpDown11.Value << 8));
+                block[1] = (uint)((byte)type + ((uint)NumericUpDown10.Value << 8));
+                block[2] = (uint)((byte)type + ((uint)NumericUpDown11.Value << 8));
             }
             else
             {
-                int minutos = (int)((NumericUpDown10.Value * 60) + NumericUpDown11.Value);
-                if (minutos < 0)
+                int minutes = (int)((NumericUpDown10.Value * 60) + NumericUpDown11.Value);
+                if (minutes < 0)
                 {
-                    block[1] = (byte)tipo + ((((uint)-minutos >> 8) + 4) << 8);
-                    block[2] = (byte)tipo + (((uint)-minutos & 0xff) << 8);
+                    block[1] = (byte)type + ((((uint)-minutes >> 8) + 4) << 8);
+                    block[2] = (byte)type + (((uint)-minutes & 0xff) << 8);
                 }
                 else
                 {
-                    block[1] = (byte)tipo + (((uint)minutos >> 8) << 8);
-                    block[2] = (byte)tipo + (((uint)minutos & 0xff) << 8);
+                    block[1] = (byte)type + (((uint)minutes >> 8) << 8);
+                    block[2] = (byte)type + (((uint)minutes & 0xff) << 8);
                 }
             }
-            ((EditedMacro)DataContext).Insertar(block, false);
+            ((EditedMacro)DataContext).Insert(block, false);
         }
 
-        private void Fecha(ushort f)
+        private void Date(ushort f)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 236) return;
+            if (((EditedMacro)DataContext).GetCount() > 236) return;
             uint[] block =
             [
                 (uint)((byte)CommandType.x52MfdDate + (f << 8)),
                 ((byte)CommandType.x52MfdDate + ((uint)NumericUpDown13.Value << 8)),
             ];
-            ((EditedMacro)DataContext).Insertar(block, false);
+            ((EditedMacro)DataContext).Insert(block, false);
         }
         #endregion
 

@@ -17,9 +17,9 @@
             <TextBlock Grid.Column="1" Text="vJoy" HorizontalAlignment="Center"/>
             <TextBlock Grid.Column="2" Text="{StaticResource hat}" HorizontalAlignment="Center"/>
 
-            <TextBlock Grid.Row="1" Text="{StaticResource assign_to}" VerticalAlignment="Center"/>
             <NumberBox Grid.Row="1" Grid.Column="1" x:Name="NumericUpDownJ" Maximum="3" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
             <NumberBox Grid.Row="1" Grid.Column="2" x:Name="NumericUpDown1" Maximum="4" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
+            <TextBlock Grid.Row="1" Text="{StaticResource assign_to}" VerticalAlignment="Center"/>
         </Grid>
     </StackPanel>
 </Page>

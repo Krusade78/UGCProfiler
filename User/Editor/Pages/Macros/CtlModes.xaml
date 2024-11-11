@@ -18,12 +18,12 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
                 <Border Background="{ThemeResource CardBackgroundFillColorDefault}" VerticalAlignment="Top" >
-                    <TextBlock Text="Modos" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                    <TextBlock Text="{StaticResource modes}" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
                 </Border>
                 <StackPanel Margin="10" Grid.Row="1" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Modo:" VerticalAlignment="Center" MinWidth="70"/>
-                        <ComboBox x:Name="cbMode" SelectedIndex="0">
+                    <TextBlock VerticalAlignment="Center" MinWidth="70"><Run Text="{StaticResource mode}"/>:</TextBlock>
+                    <ComboBox x:Name="cbMode" SelectedIndex="0">
                             <TextBlock><Run Text="{StaticResource mode}" /> 1</TextBlock>
                             <TextBlock><Run Text="{StaticResource mode}" /> 2</TextBlock>
                             <TextBlock><Run Text="{StaticResource mode}" /> 3</TextBlock>
@@ -36,7 +36,7 @@
                         <Button Content="Set" Width="50" Click="ButtonSetMode_Click" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,20">
-                        <TextBlock Text="Submodo:" VerticalAlignment="Center" MinWidth="70"/>
+                    <TextBlock VerticalAlignment="Center" MinWidth="70"><Run Text="{StaticResource submode}"/>:</TextBlock>
                         <ComboBox x:Name="cbSubmode" SelectedIndex="0">
                             <TextBlock><Run Text="{StaticResource submode}" /> 1</TextBlock>
                             <TextBlock><Run Text="{StaticResource submode}" /> 2</TextBlock>

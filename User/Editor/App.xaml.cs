@@ -63,18 +63,26 @@ namespace Profiler
 					Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(m_window)), Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
 					if (displayArea is not null)
 					{
-						m_window.AppWindow.Move(new()
+						if (displayArea.WorkArea.Width < 1920 && displayArea.WorkArea.Width > 1220)
+						{
+                            m_window.AppWindow.Resize(new() { Width = displayArea.WorkArea.Width - 10, Height = displayArea.WorkArea.Height -20 });
+                        }
+						else if (displayArea.WorkArea.Width >= 1920)
+						{
+                            m_window.AppWindow.Resize(new() { Width = 1900, Height = 1040 });
+                        }
+                        m_window.AppWindow.Move(new()
 						{
 							X = (displayArea.WorkArea.Width - m_window.AppWindow.Size.Width) / 2,
 							Y = ((displayArea.WorkArea.Height - m_window.AppWindow.Size.Height) / 2)
 						});
-                    }
+					}
 				}
 				//Icon   res/Editor.ico
 				//this.AppWindow.SetIcon
 				m_window.Activate();
 			}
 		}
-    }
+	}
 }
 

@@ -113,37 +113,37 @@ namespace Calibrator
         private void InsertAxes()
         {
             byte x = 1, y = 1, z = 1, rx = 1, ry = 1, rz = 1, sl = 1;
-            SortedList<byte, SelectorBarItem> navs = [];
-            foreach (Profiler.Devices.DeviceInfo.CUsage u in devInfo.Usages)
+            SortedList<ushort, SelectorBarItem> navs = [];
+            foreach (Shared.ProfileModel.DeviceInfo.CUsage u in devInfo.Usages)
             {
                 switch (u.Type)
                 {
                     case 0:
-                        navs.Add(u.Type, new SelectorBarItem() { Text = $"X {x++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
+                        navs.Add((ushort)(x << 8), new SelectorBarItem() { Text = $"X {x++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
                         break;
                     case 1:
-                        navs.Add(u.Type, new SelectorBarItem() { Text = $"Y {y++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
+                        navs.Add((ushort)((y << 8) | 1), new SelectorBarItem() { Text = $"Y {y++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
                         break;
                     case 2:
-                        navs.Add(u.Type, new SelectorBarItem() { Text = $"Z {z++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
+                        navs.Add((ushort)((z << 8) | 2), new SelectorBarItem() { Text = $"Z {z++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
                         break;
                     case 3:
-                        navs.Add(u.Type, new SelectorBarItem() { Text = $"Rx {rx++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
+                        navs.Add((ushort)((rx << 8) | 3), new SelectorBarItem() { Text = $"Rx {rx++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
                         break;
                     case 4:
-                        navs.Add(u.Type, new SelectorBarItem() { Text = $"Ry {ry++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
+                        navs.Add((ushort)((ry << 8) | 4), new SelectorBarItem() { Text = $"Ry {ry++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
                         break;
                     case 5:
-                        navs.Add(u.Type, new SelectorBarItem() { Text = $"Rz {rz++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
+                        navs.Add((ushort)((rz << 8) | 5), new SelectorBarItem() { Text = $"Rz {rz++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
                         break;
                     case 6:
-                        navs.Add(u.Type, new SelectorBarItem() { Text = $"Sl {sl++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
+                        navs.Add((ushort)((sl << 8) | 6), new SelectorBarItem() { Text = $"Sl {sl++}", Tag = new AxisTempRawData() { Id = u.Id, CenterAuto = (ushort)(u.Range / 2), CenterAlt = (ushort)(u.Range / 2) } });
                         break;
                     default:
                         break;
                 }
             }
-            foreach (KeyValuePair<byte, SelectorBarItem> nav in navs)
+            foreach (KeyValuePair<ushort, SelectorBarItem> nav in navs)
             {
                 lsAxes.Items.Add(nav.Value);
             }

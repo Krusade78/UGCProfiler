@@ -24,7 +24,7 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Assign to default DirectX hat:" />
+                <TextBlock Text="{StaticResource assign_button_dx_hat}" />
                 <Grid Grid.Row="1" HorizontalAlignment="Center" ColumnSpacing="5" RowSpacing="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -41,14 +41,19 @@
 
                     <NumberBox Grid.Row="1" x:Name="NumericUpDownJ" Maximum="3" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
                     <NumberBox Grid.Row="1" Grid.Column="1" x:Name="NumericUpDown1" Maximum="4" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
-                    <ComboBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Width="140">
-                        <ComboBoxItem Content="Up" />
-                        <ComboBoxItem Content="Up-Right" />
-                        <ComboBoxItem Content="Right" />
+                    <ComboBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Width="140" SelectedIndex="0">
+                        <ComboBoxItem Content="{StaticResource up}" />
+                        <ComboBoxItem Content="{StaticResource up-right}" />
+                        <ComboBoxItem Content="{StaticResource right}" />
+                        <ComboBoxItem Content="{StaticResource down-right}" />
+                        <ComboBoxItem Content="{StaticResource down}" />
+                        <ComboBoxItem Content="{StaticResource down-left}" />
+                        <ComboBoxItem Content="{StaticResource left}" />
+                        <ComboBoxItem Content="{StaticResource up-left}" />
                     </ComboBox>
                 </Grid>
                 
-                <Button Grid.Row="2" Content="assign" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssignPOV_Click" />
+                <Button Grid.Row="2" Content="{StaticResource assign}" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssignPOV_Click" />
             </Grid>
         </Grid>
         

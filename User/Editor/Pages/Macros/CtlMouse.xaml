@@ -13,39 +13,39 @@
         </Border.Shadow>
         <StackPanel>
             <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" VerticalAlignment="Top" >
-                <TextBlock Text="Ratón" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <TextBlock Text="{StaticResource mouse}" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
             </Border>
             <Grid Margin="10">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel>
-                            <TextBlock Text="Botones" Margin="0,5" />
+                            <TextBlock Text="{StaticResource buttons}" Margin="0,5" />
                             <StackPanel Orientation="Horizontal" >
                                 <TextBlock Text="On -->" Width="50" VerticalAlignment="Center"/>
-                                <Button Content="Izquierdo" x:Name="ButtonIzquierdoOn" Click="ButtonIzquierdoOn_Click"/>
-                                <Button Content="Derecho" x:Name="ButtonDerechoOn" Margin="5,0" Click="ButtonDerechoOn_Click" />
-                                <Button Content="Central" x:Name="ButtonCentroOn" Click="ButtonCentroOn_Click"/>
+                                <Button Content="{StaticResource left}" x:Name="ButtonIzquierdoOn" Click="ButtonLeftOn_Click"/>
+                                <Button Content="{StaticResource right}" x:Name="ButtonDerechoOn" Margin="5,0" Click="ButtonRightOn_Click" />
+                                <Button Content="{StaticResource center}" x:Name="ButtonCentroOn" Click="ButtonCenterOn_Click"/>
                             </StackPanel>
                             <Grid Margin="0,5,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Off -->" Width="50" VerticalAlignment="Center"/>
-                                    <Button Content="Izquierdo" x:Name="ButtonIzquierdoOff" Click="ButtonIzquierdoOff_Click"/>
-                                    <Button Content="Derecho" x:Name="ButtonDerechoOff" Margin="5,0" Click="ButtonDerechoOff_Click" />
-                                    <Button Content="Central" x:Name="ButtonCentroOff" Click="ButtonCentroOff_Click"/>
+                                    <Button Content="{StaticResource left}" x:Name="ButtonIzquierdoOff" Click="ButtonLeftOff_Click"/>
+                                    <Button Content="{StaticResource right}" x:Name="ButtonDerechoOff" Margin="5,0" Click="ButtonRightOff_Click" />
+                                    <Button Content="{StaticResource center}" x:Name="ButtonCentroOff" Click="ButtonCenterOff_Click"/>
                                 </StackPanel>
                                 <Border x:Name="PanelBasic1" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4,-2" />
                             </Grid>
                         </StackPanel>
                         <StackPanel Margin="20,0,0,0">
-                            <TextBlock Text="Rueda" Margin="0,5"  />
+                            <TextBlock Text="{StaticResource wheel}" Margin="0,5"  />
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Abajo" x:Name="ButtonAbajoOn" Click="ButtonAbajoOn_Click"/>
-                                <Button Content="Arriba" x:Name="ButtonArribaOn" Margin="5,0,0,0" Click="ButtonArribaOn_Click" />
+                                <Button Content="{StaticResource down}" x:Name="ButtonAbajoOn" Click="ButtonDownOn_Click"/>
+                                <Button Content="{StaticResource up}" x:Name="ButtonArribaOn" Margin="5,0,0,0" Click="ButtonUpOn_Click" />
                             </StackPanel>
                             <Grid Margin="0,5,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Abajo" x:Name="ButtonAbajoOff" Click="ButtonAbajoOff_Click"/>
-                                    <Button Content="Arriba" x:Name="ButtonArribaOff" Margin="5,0,0,0" Click="ButtonArribaOff_Click"/>
+                                    <Button Content="{StaticResource down}" x:Name="ButtonAbajoOff" Click="ButtonDownOff_Click"/>
+                                    <Button Content="{StaticResource up}" x:Name="ButtonArribaOff" Margin="5,0,0,0" Click="ButtonUpOff_Click"/>
                                 </StackPanel>
                                 <Border x:Name="PanelBasic2" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4,-2" />
                             </Grid>
@@ -62,18 +62,18 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.ColumnSpan="3" Text="Movimiento" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.ColumnSpan="3" Text="{StaticResource movement}" HorizontalAlignment="Center"/>
 
-                        <Button Grid.Row="1" Content="Izquierda" x:Name="ButtonMovIzquierda" Click="ButtonMovIzquierda_Click"/>
-                        <Button Grid.Row="2" Content="Arriba" x:Name="ButtonMovArriba" Click="ButtonMovArriba_Click" Width="{Binding Path=ActualWidth, ElementName=ButtonMovIzquierda}"/>
+                        <Button Grid.Row="1" Content="{StaticResource left}" x:Name="ButtonMovIzquierda" Click="ButtonMoveLeft_Click"/>
+                        <Button Grid.Row="2" Content="{StaticResource up}" x:Name="ButtonMovArriba" Click="ButtonMoveUp_Click" Width="{Binding Path=ActualWidth, ElementName=ButtonMovIzquierda}"/>
 
                         <StackPanel Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock  Text="Sensibilidad" HorizontalAlignment="Center" FontSize="11"/>
+                            <TextBlock  Text="{StaticResource sensibility}" HorizontalAlignment="Center" FontSize="11"/>
                             <NumberBox x:Name="NumericUpDownSensibilidad" Maximum="200" Minimum="0" Value="0" SpinButtonPlacementMode="Compact"/>
                         </StackPanel>
 
-                        <Button Grid.Row="1" Grid.Column="2" Content="Derecha" x:Name="ButtonMovDerecha" Click="ButtonMovDerecha_Click"/>
-                        <Button Grid.Row="2" Grid.Column="2" Content="Abajo" x:Name="ButtonMovAbajo" Click="ButtonMovAbajo_Click" Width="{Binding Path=ActualWidth, ElementName=ButtonMovDerecha}"/>
+                        <Button Grid.Row="1" Grid.Column="2" Content="{StaticResource right}" x:Name="ButtonMovDerecha" Click="ButtonMoveRight_Click"/>
+                        <Button Grid.Row="2" Grid.Column="2" Content="{StaticResource down}" x:Name="ButtonMovAbajo" Click="ButtonMoveDown_Click" Width="{Binding Path=ActualWidth, ElementName=ButtonMovDerecha}"/>
 
                         <Border Grid.ColumnSpan="3" Grid.RowSpan="3" x:Name="PanelBasic3" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4" />
                     </Grid>

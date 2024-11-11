@@ -85,7 +85,7 @@
 
             <!--#region Profile-->
             <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <AppBarButton Click="ButtonLaunch_Click" Label="{StaticResource launch}" ToolTipService.ToolTip="{StaticResource launch}" IsEnabled="{Binding IsEnabled, ElementName=btSave}" >
+                <AppBarButton Click="ButtonLaunch_Click" Label="{StaticResource load}" ToolTipService.ToolTip="{StaticResource load}" IsEnabled="{Binding IsEnabled, ElementName=btSave}" >
                     <AppBarButton.Content>
                         <Viewbox Stretch="Uniform">
                             <Grid>

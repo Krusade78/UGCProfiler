@@ -15,32 +15,32 @@ namespace Profiler.Pages.Macros
             Panel2.Translation += new System.Numerics.Vector3(0, 0, 16);
         }
 
-        #region "comandos de estado"
-        private void ButtonMantener_Click_1(object sender, RoutedEventArgs e)
+        #region "Status commands"
+        private void ButtonHold_Click_1(object sender, RoutedEventArgs e)
         {
             Hold();
         }
 
-        private void ButtonRepetir_Click(object sender, RoutedEventArgs e)
+        private void ButtonRepeat_Click(object sender, RoutedEventArgs e)
         {
             Repeat();
         }
 
-        private void ButtonPausa_Click(object sender, RoutedEventArgs e)
+        private void ButtonPause_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([(uint)((byte)CommandType.Delay + ((ushort)NumericUpDown6.Value << 8))], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([(uint)((byte)CommandType.Delay + ((ushort)NumericUpDown6.Value << 8))], false);
         }
 
-        private void ButtonRepetirN_Click(object sender, RoutedEventArgs e)
+        private void ButtonRepeatN_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 236) return;
+            if (((EditedMacro)DataContext).GetCount() > 236) return;
             uint[] bloque =
             [
                 (uint)((byte)CommandType.RepeatN +((ushort)NumericUpDown4.Value << 8)),
                 (byte)CommandType.RepeatN | (byte)CommandType.Release,
             ];
-            ((EditedMacro)DataContext).Insertar(bloque, true);
+            ((EditedMacro)DataContext).Insert(bloque, true);
         }
         #endregion
 
@@ -57,19 +57,19 @@ namespace Profiler.Pages.Macros
         #region "status commands"
         private async void Hold()
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237)
+            if (((EditedMacro)DataContext).GetCount() > 237)
                 return;
 
             if (!await ((EditedMacro)DataContext).CheckHoldWithRepeat()) return;
-            ((EditedMacro)DataContext).Insertar([(byte)CommandType.Hold], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.Hold], false);
         }
         private async void Repeat()
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 236)
+            if (((EditedMacro)DataContext).GetCount() > 236)
                 return;
 
             if (! await ((EditedMacro)DataContext).CheckHoldWithRepeat()) return;
-            ((EditedMacro)DataContext).Insertar([(byte)CommandType.Repeat, (byte)CommandType.Repeat | (byte)CommandType.Release], true);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.Repeat, (byte)CommandType.Repeat | (byte)CommandType.Release], true);
         }
         #endregion
     }

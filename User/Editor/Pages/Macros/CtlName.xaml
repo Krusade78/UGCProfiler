@@ -12,10 +12,10 @@
             <ThemeShadow />
         </Border.Shadow>
         <Grid Margin="10">
-            <ToggleSwitch OffContent="Modo básico" OnContent="Modo avanzado" Margin="10,32,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Toggled="ToggleSwitch_Toggled" />
+            <ToggleSwitch OffContent="{StaticResource basic_mode}" OnContent="{StaticResource advanced_mode}" Margin="10,32,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Toggled="ToggleSwitch_Toggled" />
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                <TextBlock Text="Nombre:" VerticalAlignment="Center" />
-                <TextBox x:Name="txtName" Margin="5,0" Width="295" MaxLength="32" />
+                <TextBlock Text="{StaticResource name}" VerticalAlignment="Center" />
+                <TextBox x:Name="txtName" Margin="5,0" MinWidth="300" MaxLength="32" />
             </StackPanel>
         </Grid>
     </Border>

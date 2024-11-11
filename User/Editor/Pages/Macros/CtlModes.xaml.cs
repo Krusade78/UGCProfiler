@@ -16,29 +16,29 @@ namespace Profiler.Pages.Macros
         }
 
 
-        #region "Modos"
+        #region "Modes"
         private void ButtonSetMode_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([(uint)CommandType.Mode + (uint)(cbMode.SelectedIndex << 8)], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([(uint)CommandType.Mode + (uint)(cbMode.SelectedIndex << 8)], false);
         }
 
 
         private void ButtonSetSubmode_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-            ((EditedMacro)DataContext).Insertar([(uint)CommandType.SubMode + (uint)(cbSubmode.SelectedIndex << 8)], false);
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
+            ((EditedMacro)DataContext).Insert([(uint)CommandType.SubMode + (uint)(cbSubmode.SelectedIndex << 8)], false);
         }
 
 
-        private void ButtonPrecisoOn_Click(object sender, RoutedEventArgs e)
+        private void ButtonPrecisionOn_Click(object sender, RoutedEventArgs e)
         {
             //if (((EditedMacro)DataContext).GetCuenta() > 237) return;
             //ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + cbEje.SelectedIndex) | ((NumericUpDownPr.Valor - 1) << 5)) << 8);
             //((EditedMacro)DataContext).Insertar([(ushort)((ushort)CommandType.PrecisionMode + dato)], false);
         }
 
-        private void ButtonPrecisoOff_Click(object sender, RoutedEventArgs e)
+        private void ButtonPrecisionOff_Click(object sender, RoutedEventArgs e)
         {
             //if (GetCuenta() > 237) return;
             //ushort dato = (ushort)(((byte)((cbJoy.SelectedIndex * 8) + cbEje.SelectedIndex) | (byte)CommandType.Release) << 8); 

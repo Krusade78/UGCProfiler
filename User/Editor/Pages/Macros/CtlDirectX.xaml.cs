@@ -21,28 +21,28 @@ namespace Profiler.Pages.Macros
             uint v = (((uint)NumericUpDown1.Value - 1) << 8) + (((uint)NumericUpDownJoy.Value - 1) << 16);
             if (PanelBasic1.Visibility == Visibility.Visible)
             {
-                if (((EditedMacro)DataContext).GetCuenta() > 235) return;
+                if (((EditedMacro)DataContext).GetCount() > 235) return;
                 ((EditedMacro)DataContext).Clear();
-                uint[] bloque =
+                uint[] block =
                 [
                     ((byte)CommandType.DxButton + v),
                     (byte)CommandType.Hold,
                     (((byte)CommandType.DxButton | (byte)CommandType.Release) + v),
                 ];
-                ((EditedMacro)DataContext).Insertar(bloque, true);
+                ((EditedMacro)DataContext).Insert(block, true);
             }
             else
             {
-                if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-                ((EditedMacro)DataContext).Insertar([((byte)CommandType.DxButton + v)], false);
+                if (((EditedMacro)DataContext).GetCount() > 237) return;
+                ((EditedMacro)DataContext).Insert([((byte)CommandType.DxButton + v)], false);
             }
         }
 
         private void ButtonDXOff_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
             uint v = (((uint)NumericUpDown1.Value - 1) << 3) + (((uint)NumericUpDownJoy.Value - 1) << 8);
-            ((EditedMacro)DataContext).Insertar([(ushort)(((byte)CommandType.DxButton | (byte)CommandType.Release) + (ushort)v)], false);
+            ((EditedMacro)DataContext).Insert([(ushort)(((byte)CommandType.DxButton | (byte)CommandType.Release) + (ushort)v)], false);
         }
 
         private void ButtonPovOn_Click(object sender, RoutedEventArgs e)
@@ -50,28 +50,41 @@ namespace Profiler.Pages.Macros
             uint v = ((((4 - (uint)NumericUpDownPov.Value) * 8) + ((uint)NumericUpDownPosicion.Value - 1)) << 8) + (((uint)NumericUpDownJoy.Value - 1) << 16);
             if (PanelBasic1.Visibility == Visibility.Visible)
             {
-                if (((EditedMacro)DataContext).GetCuenta() > 235) return;
+                if (((EditedMacro)DataContext).GetCount() > 235) return;
                 ((EditedMacro)DataContext).Clear();
-                uint[] bloque =
+                uint[] block =
                 [
                     (byte)CommandType.DxHat + v,
                     (byte)CommandType.Hold,
                     ((byte)CommandType.DxHat | (byte)CommandType.Release) + v,
                 ];
-                ((EditedMacro)DataContext).Insertar(bloque, true);
+                ((EditedMacro)DataContext).Insert(block, true);
             }
             else
             {
-                if (((EditedMacro)DataContext).GetCuenta() > 237) return;
-                ((EditedMacro)DataContext).Insertar([(byte)CommandType.DxHat + v], false);
+                if (((EditedMacro)DataContext).GetCount() > 237) return;
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.DxHat + v], false);
             }
         }
 
         private void ButtonPovOff_Click(object sender, RoutedEventArgs e)
         {
-            if (((EditedMacro)DataContext).GetCuenta() > 237) return;
+            if (((EditedMacro)DataContext).GetCount() > 237) return;
             uint v = ((((4 - (uint)NumericUpDownPov.Value) * 8) + ((uint)NumericUpDownPosicion.Value - 1)) << 8) + (((uint)NumericUpDownJoy.Value - 1) << 16);
-            ((EditedMacro)DataContext).Insertar([((byte)CommandType.DxHat | (byte)CommandType.Release) + v], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.DxHat | (byte)CommandType.Release) + v], false);
+        }
+
+        private void ButtonMove_Click(object sender, RoutedEventArgs e)
+        {
+            if (uint.TryParse(cbSensibility.Text, out uint v) && (v > 0) && (v < 32769))
+            {
+                if (((EditedMacro)DataContext).GetCount() > 237) return;
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.DxAxis + (v << 8)], false);
+            }   
+            else
+            {
+                _ = MessageBox.Show(Translate.Get("value_out_of_range"), Translate.Get("warning"), MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
         #endregion
 

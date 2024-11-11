@@ -182,7 +182,7 @@ namespace Profiler.Pages.Macros
             block[1] = (uint)((byte)tipo + (cmds[1] << 8));
             block[2] = (uint)((byte)tipo + (cmds[2] << 8));
             block[3] = (uint)((byte)tipo + (cmds[3] << 8));
-            ((EditedMacro)DataContext).Insertar(block, false);
+            ((EditedMacro)DataContext).Insert(block, false);
         }
         #endregion
     }

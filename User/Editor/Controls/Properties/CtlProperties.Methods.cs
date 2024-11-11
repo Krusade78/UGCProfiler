@@ -20,7 +20,6 @@ namespace Profiler.Controls.Properties
         private CtlAxisConf spAxis;
         private CtlHatConf spHat;
         private CtlButtonConf spButton;
-        private CtlVAxisConf spVAxis;
         private CtlMacroConf spMacros;
 
         public void Refresh()
@@ -53,7 +52,6 @@ namespace Profiler.Controls.Properties
                 spHat = null;
                 spButton = null;
                 spMacros = null;
-                spVAxis = null;
             }
 
             if (CurrentSel.Usage.Type == (byte)CEnums.ElementType.Hat)

@@ -7,8 +7,7 @@ Based on the XHOTAS code this new software will be able to program any HID game 
 ### Status
 
 - [Profiler] Easy button to hat configuration is under development.
-- [Profiler] Encoder to axis is designed but needs to be coded.
-- [Profiler] Some texts must be globalized.
+- [Service] DirectX axis move command needs implementation (encoders).
 - [Service] Digital hat input is implemented but requires debugging.
 - [Service] Hot unplug seems to have some problem and needs debugging.
 

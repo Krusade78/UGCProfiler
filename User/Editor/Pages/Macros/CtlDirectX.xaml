@@ -25,9 +25,9 @@
                     <Path Data="M4,0 L2,2 2,103 0,105 2,107 2,212 4,214" Margin="5,0" Stroke="#66000000" StrokeThickness="2" />
                     <StackPanel>
                         <StackPanel>
-                            <TextBlock Text="Botones" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
+                            <TextBlock Text="{StaticResource buttons}" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
                             <StackPanel Orientation="Horizontal" Margin="0,5" HorizontalAlignment="Center">
-                                <TextBlock Text="Botón:" VerticalAlignment="Center" />
+                                <TextBlock VerticalAlignment="Center"><Run Text="{StaticResource button}"/>:</TextBlock>
                                 <NumberBox x:Name="NumericUpDown1" Maximum="64" Minimum="1"  Value="1" Margin="5,0" SpinButtonPlacementMode="Compact" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -37,11 +37,11 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Margin="0,20,0,0">
-                            <TextBlock Text="Setas" HorizontalAlignment="Center"  Style="{ThemeResource BodyStrongTextBlockStyle}"/>
+                            <TextBlock Text="{StaticResource hats}" HorizontalAlignment="Center"  Style="{ThemeResource BodyStrongTextBlockStyle}"/>
                             <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="Seta:" VerticalAlignment="Center" />
+                                <TextBlock VerticalAlignment="Center"><Run Text="{StaticResource hat}"/>:</TextBlock>
                                 <NumberBox x:Name="NumericUpDownPov" Maximum="4" Minimum="1" Value="1" SpinButtonPlacementMode="Compact" Margin="5,0,10,0"/>
-                                <TextBlock Text="Posición:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <TextBlock VerticalAlignment="Center" Margin="0,0,5,0"><Run Text="{StaticResource position}"/>:</TextBlock>
                                 <NumberBox x:Name="NumericUpDownPosicion" Maximum="8" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -50,6 +50,42 @@
                                 <Border x:Name="PanelBasic2" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-52,-2,-2,-2"/>
                             </StackPanel>
                         </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="30,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="{StaticResource axes}" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
+                        <ComboBox x:Name="cbAxis" Margin="0,5" HorizontalAlignment="Center">
+                            <ComboBoxItem Content="X+" />
+                            <ComboBoxItem Content="X-" />
+                            <ComboBoxItem Content="Y+" />
+                            <ComboBoxItem Content="Y-" />
+                            <ComboBoxItem Content="Z+" />
+                            <ComboBoxItem Content="Z-" />
+                            <ComboBoxItem Content="Rx+" />
+                            <ComboBoxItem Content="Rx-" />
+                            <ComboBoxItem Content="Ry+" />
+                            <ComboBoxItem Content="Ry-" />
+                            <ComboBoxItem Content="Rz+" />
+                            <ComboBoxItem Content="Rz-" />
+                            <ComboBoxItem Content="Sl 1+" />
+                            <ComboBoxItem Content="Sl 1-" />
+                            <ComboBoxItem Content="Sl 2+" />
+                            <ComboBoxItem Content="Sl 2-" />
+                        </ComboBox>
+                        <TextBlock Text="{StaticResource sensibility}" HorizontalAlignment="Center"/>
+                        <ComboBox x:Name="cbSensibility" Margin="0,5" Width="90" IsEditable="True">
+                            <ComboBoxItem Content="1" />
+                            <ComboBoxItem Content="2" />
+                            <ComboBoxItem Content="4" />
+                            <ComboBoxItem Content="8" />
+                            <ComboBoxItem Content="16" />
+                            <ComboBoxItem Content="32" />
+                            <ComboBoxItem Content="64" />
+                            <ComboBoxItem Content="128" />
+                            <ComboBoxItem Content="256" />
+                            <ComboBoxItem Content="512" />
+                            <ComboBoxItem Content="1024" />
+                        </ComboBox>
+                        <Button Content="{StaticResource move}" HorizontalAlignment="Center" Click="ButtonMove_Click"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

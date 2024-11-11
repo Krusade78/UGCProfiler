@@ -73,58 +73,58 @@ namespace Profiler.Pages
             lastUse = (Microsoft.UI.Xaml.Controls.Primitives.ToggleButton)sender;
         }
 
-        #region "Seta 1"
+        #region "Hat 1"
         private void Buttonp10_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 20, "Seta 1 Centro");
+            props.Show(0x231d0200, 20, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["center"]}");
             Uncheck(sender);
         }
 
         private void Buttonp11_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Norte", 0);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["up"]}", 0);
             Uncheck(sender);
         }
 
         private void Buttonp12_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Noreste", 1);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["up-right"]}", 1);
             Uncheck(sender);
         }
 
         private void Buttonp13_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Este", 2);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["right"]}", 2);
             Uncheck(sender);
         }
 
         private void Buttonp14_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Sureste", 3);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["down-right"]}", 3);
             Uncheck(sender);
         }
 
         private void Buttonp15_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Sur", 4);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["down"]}", 4);
             Uncheck(sender);
         }
 
         private void Buttonp16_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Suroeste", 5);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["down-left"]}", 5);
             Uncheck(sender);
         }
 
         private void Buttonp17_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Oeste", 6);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["left"]}", 6);
             Uncheck(sender);
         }
 
         private void Buttonp18_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 44, "Seta 1 Noroeste", 7);
+            props.Show(0x231d0200, 44, $"{(string)Application.Current.Resources["hat"]} 1 {(string)Application.Current.Resources["up-left"]}", 7);
             Uncheck(sender);
         }
         #endregion
@@ -132,25 +132,25 @@ namespace Profiler.Pages
         #region "Seta 2"
         private void Buttonp21_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 33, "Seta 2 Norte");
+            props.Show(0x231d0200, 33, $"{(string)Application.Current.Resources["hat"]} 2 {(string)Application.Current.Resources["up"]}");
             Uncheck(sender);
         }
 
         private void Buttonp23_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 35, "Seta 2 Este");
+            props.Show(0x231d0200, 35, $"{(string)Application.Current.Resources["hat"]} 2 {(string)Application.Current.Resources["right"]}");
             Uncheck(sender);
         }
 
         private void Buttonp25_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 32, "Seta 2 Sur");
+            props.Show(0x231d0200, 32, $"{(string)Application.Current.Resources["hat"]} 2 {(string)Application.Current.Resources["down"]}");
             Uncheck(sender);
         }
 
         private void Buttonp27_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 34, "Seta 2 Oeste");
+            props.Show(0x231d0200, 34, $"{(string)Application.Current.Resources["hat"]} 2 {(string)Application.Current.Resources["left"]}");
             Uncheck(sender);
         }
 
@@ -159,25 +159,25 @@ namespace Profiler.Pages
         #region "Seta 3"
         private void Buttonp31_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 29, "Seta 3 Norte");
+            props.Show(0x231d0200, 29, $"{(string)Application.Current.Resources["hat"]} 3 {(string)Application.Current.Resources["up"]}");
             Uncheck(sender);
         }
 
         private void Buttonp33_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 31, "Seta 3 Este");
+            props.Show(0x231d0200, 31, $"{(string)Application.Current.Resources["hat"]} 3 {(string)Application.Current.Resources["right"]}");
             Uncheck(sender);
         }
 
         private void Buttonp35_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 28, "Seta 3 Sur");
+            props.Show(0x231d0200, 28, $"{(string)Application.Current.Resources["hat"]} 3 {(string)Application.Current.Resources["down"]}");
             Uncheck(sender);
         }
 
         private void Buttonp37_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 30, "Seta 3 Oeste");
+            props.Show(0x231d0200, 30, $"{(string)Application.Current.Resources["hat"]} 3 {(string)Application.Current.Resources["left"]}");
             Uncheck(sender);
         }
         #endregion
@@ -185,31 +185,31 @@ namespace Profiler.Pages
         #region "Seta 4"
         private void Buttonp40_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 40, "Seta 4 Centro");
+            props.Show(0x231d0200, 40, $"{(string)Application.Current.Resources["hat"]} 4 {(string)Application.Current.Resources["center"]}");
             Uncheck(sender);
         }
 
         private void Buttonp41_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 37, "Seta 4 Norte");
+            props.Show(0x231d0200, 37, $"{(string)Application.Current.Resources["hat"]} 4 {(string)Application.Current.Resources["up"]}");
             Uncheck(sender);
         }
 
         private void Buttonp43_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 39, "Seta 4 Este");
+            props.Show(0x231d0200, 39, $"{(string)Application.Current.Resources["hat"]} 4 {(string)Application.Current.Resources["right"]}");
             Uncheck(sender);
         }
 
         private void Buttonp45_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 36, "Seta 4 Sur");
+            props.Show(0x231d0200, 36, $"{(string)Application.Current.Resources["hat"]} 4 {(string)Application.Current.Resources["down"]}");
             Uncheck(sender);
         }
 
         private void Buttonp47_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 38, "Seta 4 Oeste");
+            props.Show(0x231d0200, 38, $"{(string)Application.Current.Resources["hat"]} 4 {(string)Application.Current.Resources["left"]}");
             Uncheck(sender);
         }
         #endregion
@@ -217,7 +217,7 @@ namespace Profiler.Pages
         #region "botones"
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            props.Show(0x231d0200, 23, (string)Button1.Content);
+            props.Show(0x231d0200, 23, $"{Translate.Get("button")} 1");
             Uncheck(sender);
         }
 
