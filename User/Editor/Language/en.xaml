@@ -103,9 +103,10 @@
     <x:String x:Key="edit_zones">Edit zones</x:String>
     <x:String x:Key="button_configuration">Button configuration</x:String>
     <x:String x:Key="press_release">Press/Release</x:String>
+    <x:String x:Key="assign_button_dx">Assign to DirectX button:</x:String>
     <x:String x:Key="hat_configuration">Hat configuration</x:String>
-    <x:String x:Key="assign_hat">Assign all buttons to hat</x:String>
-    <x:String x:Key="assign_button_dx_hat">Assign button to default DirectX hat:</x:String>
+    <x:String x:Key="assign_hat">Assign all positions to hat</x:String>
+    <x:String x:Key="assign_button_dx_hat">Assign button/position to DirectX hat:</x:String>
     <x:String x:Key="assign">Assign</x:String>
     <x:String x:Key="up">Up</x:String>
     <x:String x:Key="up-right">Up - Right</x:String>
@@ -141,14 +142,14 @@
     <!--#region HatEditor-->
     <x:String x:Key="hat_editor">Hat assignment</x:String>
     <x:String x:Key="hat_editor_description">This will assign each position of the current hat to the selected DirectX hat (current mode). Any previous configuration in those positions will be overwritten.</x:String>
-    <x:String x:Key="dx_hat_n">&lt;vJoy % - Hat $ N&gt;</x:String>
-    <x:String x:Key="dx_hat_nw">&lt;vJoy % - Hat $ NW&gt;</x:String>
-    <x:String x:Key="dx_hat_w">&lt;vJoy % - Hat $ W&gt;</x:String>
-    <x:String x:Key="dx_hat_sw">&lt;vJoy % - Hat $ SW&gt;</x:String>
-    <x:String x:Key="dx_hat_s">&lt;vJoy % - Hat $ S&gt;</x:String>
-    <x:String x:Key="dx_hat_se">&lt;vJoy % - Hat $ SE&gt;</x:String>
-    <x:String x:Key="dx_hat_e">&lt;vJoy % - Hat $ E&gt;</x:String>
-    <x:String x:Key="dx_hat_ne">&lt;vJoy % - Hat $ NE&gt;</x:String>
+    <x:String x:Key="dx_hat_n">&lt;Hat J% H$ N&gt;</x:String>
+    <x:String x:Key="dx_hat_nw">&lt;Hat J% H$ NW&gt;</x:String>
+    <x:String x:Key="dx_hat_w">&lt;Hat J% H$ W&gt;</x:String>
+    <x:String x:Key="dx_hat_sw">&lt;Hat J% H$ SW&gt;</x:String>
+    <x:String x:Key="dx_hat_s">&lt;Hat J% H$ S&gt;</x:String>
+    <x:String x:Key="dx_hat_se">&lt;Hat J% H$ SE&gt;</x:String>
+    <x:String x:Key="dx_hat_e">&lt;Hat J% H$ E&gt;</x:String>
+    <x:String x:Key="dx_hat_ne">&lt;Hat J% H$ NE&gt;</x:String>
     <!--#endregion-->
 
     <!--#region MacroEditor-->

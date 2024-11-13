@@ -29,7 +29,7 @@ namespace Profiler.Pages.Macros
         private void ButtonPause_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(uint)((byte)CommandType.Delay + ((ushort)NumericUpDown6.Value << 8))], false);
+            ((EditedMacro)DataContext).Insert([(uint)((byte)CommandType.Delay + ((ushort)NumericUpDown6.Value << 8))]);
         }
 
         private void ButtonRepeatN_Click(object sender, RoutedEventArgs e)
@@ -40,7 +40,7 @@ namespace Profiler.Pages.Macros
                 (uint)((byte)CommandType.RepeatN +((ushort)NumericUpDown4.Value << 8)),
                 (byte)CommandType.RepeatN | (byte)CommandType.Release,
             ];
-            ((EditedMacro)DataContext).Insert(bloque, true);
+            ((EditedMacro)DataContext).Insert(bloque);
         }
         #endregion
 
@@ -61,7 +61,7 @@ namespace Profiler.Pages.Macros
                 return;
 
             if (!await ((EditedMacro)DataContext).CheckHoldWithRepeat()) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.Hold], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.Hold]);
         }
         private async void Repeat()
         {
@@ -69,7 +69,7 @@ namespace Profiler.Pages.Macros
                 return;
 
             if (! await ((EditedMacro)DataContext).CheckHoldWithRepeat()) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.Repeat, (byte)CommandType.Repeat | (byte)CommandType.Release], true);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.Repeat, (byte)CommandType.Repeat | (byte)CommandType.Release]);
         }
         #endregion
     }

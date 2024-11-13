@@ -53,7 +53,7 @@
                     </StackPanel>
                     <StackPanel Margin="30,0,0,0" VerticalAlignment="Center">
                         <TextBlock Text="{StaticResource axes}" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
-                        <ComboBox x:Name="cbAxis" Margin="0,5" HorizontalAlignment="Center">
+                        <ComboBox x:Name="cbAxis" Margin="0,5" HorizontalAlignment="Center" SelectedIndex="0">
                             <ComboBoxItem Content="X+" />
                             <ComboBoxItem Content="X-" />
                             <ComboBoxItem Content="Y+" />
@@ -72,7 +72,7 @@
                             <ComboBoxItem Content="Sl 2-" />
                         </ComboBox>
                         <TextBlock Text="{StaticResource sensibility}" HorizontalAlignment="Center"/>
-                        <ComboBox x:Name="cbSensibility" Margin="0,5" Width="90" IsEditable="True">
+                        <ComboBox x:Name="cbSensibility" Margin="0,5" Width="90" IsEditable="True" SelectedIndex="4">
                             <ComboBoxItem Content="1" />
                             <ComboBoxItem Content="2" />
                             <ComboBoxItem Content="4" />

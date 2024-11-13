@@ -35,6 +35,11 @@ namespace Profiler.Controls.Properties
             if (parent.Events)
                 SetButtonMode((byte)NumericUpDownPositions.Value);
         }
+
+        private void ButtonAssign_Click(object sender, RoutedEventArgs e)
+        {
+            SetButtonMode(0, true);
+        }
         #endregion
 
         public void Init(Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button)
@@ -53,7 +58,7 @@ namespace Profiler.Controls.Properties
         }
 
         #region "Edit"
-        private void SetButtonMode(byte numPositions = 0)
+        private void SetButtonMode(byte numPositions = 0, bool dxDefault = false)
         {
             Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button;
 
@@ -94,7 +99,7 @@ namespace Profiler.Controls.Properties
                 }
             }
 
-            button.Type = (byte)(RadioButtonToggle.IsChecked == true ? 1 : 0);
+            button.Type = (byte)(dxDefault ? 0 : (RadioButtonToggle.IsChecked == true ? 1 : 0));
             if (button.Type == 0)
             {
                 numPositions = 2;
@@ -106,6 +111,29 @@ namespace Profiler.Controls.Properties
             while (button.Actions.Count < numPositions)
             {
                 button.Actions.Add(0);
+            }
+
+            if (dxDefault)
+            {
+                uint v = (((uint)NumericUpDown1.Value - 1) << 8) + (((uint)NumericUpDownJ.Value - 1) << 16);
+                uint[] block =
+                [
+                    ((byte)Shared.CTypes.CommandType.DxButton + v),
+                    (byte)Shared.CTypes.CommandType.Hold,
+                    (((byte)Shared.CTypes.CommandType.DxButton | (byte)Shared.CTypes.CommandType.Release) + v),
+                ];
+                Shared.ProfileModel.MacroModel btMacro = parent.GetParent().GetData().Profile.Macros.Find(x => (x.Commands.Count == 3) && (x.Commands[0] == block[0]) && (x.Commands[1] == block[1]) && (x.Commands[2] == block[2]));
+                if (btMacro != null)
+                {
+                    button.Actions[0] = btMacro.Id;
+                }
+                else
+                {
+                    parent.GetParent().GetData().Profile.Macros.Add(new() {
+                        Id = (ushort)(parent.GetParent().GetData().Profile.Macros[^1].Id + 1),
+                        Name = $"<{Translate.Get("button")} {NumericUpDownJ.Value} - {NumericUpDown1.Value}>",
+                        Commands = [.. block] });
+                }
             }
 
             parent.GetParent().GetData().Modified = true;

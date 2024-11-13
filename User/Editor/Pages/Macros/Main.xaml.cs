@@ -50,16 +50,10 @@ namespace Profiler.Pages.Macros
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            ushort nextId = 1;
-            while(true)
-            {
-                if (!parent.GetData().Profile.Macros.Any(x => x.Id == nextId++))
-                {
-                    break;
-                }
-            }
-            parent.GetData().Profile.Macros.Add(new () { Id = nextId, Name = Translate.Get("new_macro") });
+            Shared.ProfileModel.MacroModel macro = new() { Id = (ushort)(parent.GetData().Profile.Macros[^1].Id + 1), Name = Translate.Get("new_macro") };
+            parent.GetData().Profile.Macros.Add(macro);
             lbMacros.DataContext = parent.GetData().Profile.Macros.Where(x => x.Id != 0).OrderBy(x => x.Name);
+            lbMacros.SelectedItem = macro;
         }
 
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)

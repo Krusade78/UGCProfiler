@@ -57,10 +57,11 @@ namespace Profiler
 				}
 
 				m_window = new MainWindow();
-				if (m_window.AppWindow is not null)
+                Microsoft.UI.WindowId wndId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(m_window));
+                if (m_window.AppWindow is not null)
 				{
 					m_window.AppWindow.Resize(new() { Width = 1270, Height = 700 });
-					Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(m_window)), Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
+					Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(wndId, Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
 					if (displayArea is not null)
 					{
 						if (displayArea.WorkArea.Width < 1920 && displayArea.WorkArea.Width > 1220)
@@ -78,9 +79,9 @@ namespace Profiler
 						});
 					}
 				}
-				//Icon   res/Editor.ico
-				//this.AppWindow.SetIcon
-				m_window.Activate();
+				System.Drawing.Icon ico = System.Drawing.Icon.ExtractAssociatedIcon(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+                Microsoft.UI.Windowing.AppWindow.GetFromWindowId(wndId).SetIcon(Microsoft.UI.Win32Interop.GetIconIdFromIcon(ico.Handle));
+                m_window.Activate();
 			}
 		}
 	}

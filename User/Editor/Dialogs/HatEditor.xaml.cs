@@ -45,13 +45,6 @@ namespace Profiler.Dialogs
             }
         }
 
-        //     private void Button1_Click(object sender, RoutedEventArgs e)
-        //     {
-        //         Guardar();
-        //         this.DialogResult = true;
-        //         this.Close();
-        //     }
-
         private void Save()
         {
             MainWindow parent = ((App)Application.Current).GetMainWindow();
@@ -66,45 +59,26 @@ namespace Profiler.Dialogs
 
             for (byte i = 0; i <= usage.Range; i++)
             {
-                ushort idx = 0;
-                foreach (Shared.ProfileModel.MacroModel ar in parent.GetData().Profile.Macros)
+                uint v = ((4 - (uint)NumericUpDown1.Value) << 12) + (uint)(i << 8) + (((uint)NumericUpDownJ.Value - 1) << 16);
+                uint[] block = [
+                    (byte)CommandType.DxHat | v,
+                    (byte)CommandType.Hold,
+                    (byte)(CommandType.DxHat | CommandType.Release) | v];
+                Shared.ProfileModel.MacroModel ar = parent.GetData().Profile.Macros.Find(x => (x.Commands.Count == 3) && (x.Commands[0] == block[0]) && (x.Commands[1] == block[1]) && (x.Commands[2] == block[2]));
+                ushort nId = 0;
+                if (ar == null)
                 {
-                    if (ar.Name == (usage.Range == 3 ? st4[i] : st8[i]))
+                    nId = (ushort)(parent.GetData().Profile.Macros[^1].Id + 1);
+                    parent.GetData().Profile.Macros.Add(new()
                     {
-                        idx = ar.Id;
-                        break;
-                    }
-                }
-
-                if (idx == 0)
-                {
-                    idx = 0;
-                    foreach (Shared.ProfileModel.MacroModel aar in parent.GetData().Profile.Macros)
-                    {
-                        if (aar.Id > idx)
-                            idx = aar.Id;
-                    }
-                    idx++; //new Id
-
-                    Shared.ProfileModel.MacroModel ar = new()
-                    {
-                        Id = idx,
+                        Id = nId,
                         Name = usage.Range == 3 ? st4[i] : st8[i],
-                    };
-                    //'text x52
-                    ar.Commands.Add((byte)CommandType.X52MfdTextIni + (3 << 8)); //line
-                    byte[] text = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(ar.Name));
-                    for (byte j = 0; j < text.Length; j++)
-                    {
-                        ar.Commands.Add((ushort)((byte)CommandType.X52MfdText + (text[j] << 8)));
-                    }
-                    ar.Commands.Add((byte)CommandType.X52MfdTextEnd);
-                    //remaining
-                    uint v = (uint)(((byte)NumericUpDown1.Value - 1) << 16) | (uint)((i * (byte)(NumericUpDownJ.Value - 1)) << 8);
-                    ar.Commands.Add((byte)CommandType.DxHat | v);
-                    ar.Commands.Add((byte)CommandType.Hold);
-                    ar.Commands.Add(((byte)(CommandType.DxHat | CommandType.Release) | v));
-                    parent.GetData().Profile.Macros.Add(ar);
+                        Commands = [.. block],
+                    });
+                }
+                else
+                {
+                    nId = ar.Id;
                 }
 
                 if (!parent.GetData().Profile.HatsMap.TryGetValue(currentJoy, out Shared.ProfileModel.ButtonMapModel buttonMap))
@@ -124,7 +98,7 @@ namespace Profiler.Dialogs
                 }
                 button.Type = 0;
                 button.Actions.Clear();
-                button.Actions.Add(idx);
+                button.Actions.Add(nId);
                 button.Actions.Add(0);
             }
 

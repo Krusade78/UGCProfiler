@@ -110,9 +110,10 @@
     <x:String x:Key="edit_zones">Editar bandas</x:String>
     <x:String x:Key="button_configuration">Configuración de botón</x:String>
     <x:String x:Key="press_release">Presionar/Soltar</x:String>
+    <x:String x:Key="assign_button_dx">Asignar a botón de DirectX:</x:String>
     <x:String x:Key="hat_configuration">Configuración de seta</x:String>
-    <x:String x:Key="assign_hat">Asignar todos los botones a seta</x:String>
-    <x:String x:Key="assign_button_dx_hat">Asignar botón a seta por defecto de DirectX:</x:String>
+    <x:String x:Key="assign_hat">Asignar todas las posiciones a seta</x:String>
+    <x:String x:Key="assign_button_dx_hat">Asignar botón/posición a seta de DirectX:</x:String>
     <x:String x:Key="up">Arriba</x:String>
     <x:String x:Key="up-right">Arriba - Derecha</x:String>
     <x:String x:Key="right">Derecha</x:String>
@@ -149,14 +150,14 @@
     <x:String x:Key="hat_editor">Asignación de setas</x:String>
     <x:String x:Key="hat_editor_description">Esto asignará cada posición de la seta actual a la seta DirectX seleccionada (modo actual). Se sobreescribirá cualquier configuración anterior en esas posiciones.</x:String>
     <!-- texts for macro names -->
-    <x:String x:Key="dx_hat_n">&lt;vJoy % - Seta $ N&gt;</x:String>
-    <x:String x:Key="dx_hat_nw">&lt;vJoy % - Seta $ NO&gt;</x:String>
-    <x:String x:Key="dx_hat_w">&lt;vJoy % - Seta $ O&gt;</x:String>
-    <x:String x:Key="dx_hat_sw">&lt;vJoy % - Seta $ SO&gt;</x:String>
-    <x:String x:Key="dx_hat_s">&lt;vJoy % - Seta $ S&gt;</x:String>
-    <x:String x:Key="dx_hat_se">&lt;vJoy % - Seta $ SE&gt;</x:String>
-    <x:String x:Key="dx_hat_e">&lt;vJoy % - Seta $ E&gt;</x:String>
-    <x:String x:Key="dx_hat_ne">&lt;vJoy % - Seta $ NE&gt;</x:String>
+    <x:String x:Key="dx_hat_n">&lt;Seta J% S$ N&gt;</x:String>
+    <x:String x:Key="dx_hat_nw">&lt;Seta J% S$ NO&gt;</x:String>
+    <x:String x:Key="dx_hat_w">&lt;Seta J% S$ O&gt;</x:String>
+    <x:String x:Key="dx_hat_sw">&lt;Seta J% S$ SO&gt;</x:String>
+    <x:String x:Key="dx_hat_s">&lt;Seta J% S$ S&gt;</x:String>
+    <x:String x:Key="dx_hat_se">&lt;Seta J% S$ SE&gt;</x:String>
+    <x:String x:Key="dx_hat_e">&lt;Seta J% S$ E&gt;</x:String>
+    <x:String x:Key="dx_hat_ne">&lt;Seta J% S$ NE&gt;</x:String>
     <!--#endregion-->
 
     <!--#region MacroEditor-->

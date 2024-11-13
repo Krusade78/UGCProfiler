@@ -37,13 +37,13 @@ namespace Profiler.Pages.Macros
         private void ButtonX52PinkieOn_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.X52MfdPinkie], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.X52MfdPinkie]);
         }
 
         private void ButtonX52PinkieOff_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52MfdPinkie + (1 << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52MfdPinkie + (1 << 8))]);
         }
 
         private void ButtonFecha1_Click(object sender, RoutedEventArgs e)
@@ -64,25 +64,25 @@ namespace Profiler.Pages.Macros
         private void ButtonInfoOn_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.X52InfoLight], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.X52InfoLight]);
         }
 
         private void ButtonInfoOff_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52InfoLight + (1 << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52InfoLight + (1 << 8))]);
         }
 
         private void ButtonLuzMfd_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))]);
         }
 
         private void ButtonLuzBotones_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.X52Light + ((uint)NumericUpDownLuzMfd.Value << 8))]);
         }
         #endregion
 
@@ -103,7 +103,7 @@ namespace Profiler.Pages.Macros
                 block.Add((uint)((byte)CommandType.X52MfdText + (stb[i] << 8)));
             }
             block.Add((byte)CommandType.X52MfdTextEnd);
-            ((EditedMacro)DataContext).Insert([.. block], false);
+            ((EditedMacro)DataContext).Insert([.. block], true);
         }
 
         private async void Hour(bool f24h)
@@ -138,7 +138,7 @@ namespace Profiler.Pages.Macros
                     block[2] = (byte)type + (((uint)minutes & 0xff) << 8);
                 }
             }
-            ((EditedMacro)DataContext).Insert(block, false);
+            ((EditedMacro)DataContext).Insert(block, true);
         }
 
         private void Date(ushort f)
@@ -149,7 +149,7 @@ namespace Profiler.Pages.Macros
                 (uint)((byte)CommandType.x52MfdDate + (f << 8)),
                 ((byte)CommandType.x52MfdDate + ((uint)NumericUpDown13.Value << 8)),
             ];
-            ((EditedMacro)DataContext).Insert(block, false);
+            ((EditedMacro)DataContext).Insert(block, true);
         }
         #endregion
 

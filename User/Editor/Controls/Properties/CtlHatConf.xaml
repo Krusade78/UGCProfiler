@@ -16,9 +16,13 @@
         </Border>
 
         <Grid Margin="10">
-            <Button x:Name="hatSection" Content="{StaticResource assign_hat}" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssignPOV_Click" Visibility="Collapsed" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Button x:Name="hatSection" Content="{StaticResource assign_hat}"  Margin="0,0,0,15" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssignPOV_Click" Visibility="Collapsed" />
 
-            <Grid x:Name="buttonSection"  RowSpacing="10" Visibility="Collapsed">
+            <Grid Grid.Row="1" x:Name="buttonSection"  RowSpacing="10" Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -41,7 +45,7 @@
 
                     <NumberBox Grid.Row="1" x:Name="NumericUpDownJ" Maximum="3" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
                     <NumberBox Grid.Row="1" Grid.Column="1" x:Name="NumericUpDown1" Maximum="4" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
-                    <ComboBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Width="140" SelectedIndex="0">
+                    <ComboBox Grid.Row="1" Grid.Column="2" x:Name="cbPosition" HorizontalAlignment="Center" Width="140" SelectedIndex="0">
                         <ComboBoxItem Content="{StaticResource up}" />
                         <ComboBoxItem Content="{StaticResource up-right}" />
                         <ComboBoxItem Content="{StaticResource right}" />
@@ -53,7 +57,7 @@
                     </ComboBox>
                 </Grid>
                 
-                <Button Grid.Row="2" Content="{StaticResource assign}" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssignPOV_Click" />
+                <Button Grid.Row="2" Content="{StaticResource assign}" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssign_Click" />
             </Grid>
         </Grid>
         

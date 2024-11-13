@@ -28,7 +28,7 @@ namespace Profiler.Pages.Macros
                 return;
             else
             {
-                ((EditedMacro)DataContext).Insert([(ushort)((byte)CommandType.Key + (ushort)(ComboBox1.SelectedIndex << 8))], false);
+                ((EditedMacro)DataContext).Insert([(ushort)((byte)CommandType.Key + (ushort)(ComboBox1.SelectedIndex << 8))]);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Profiler.Pages.Macros
                 return;
             else
             {
-                ((EditedMacro)DataContext).Insert([(ushort)(((byte)CommandType.Key | (byte)CommandType.Release) + (ushort)(ComboBox1.SelectedIndex << 8))], false);
+                ((EditedMacro)DataContext).Insert([(ushort)(((byte)CommandType.Key | (byte)CommandType.Release) + (ushort)(ComboBox1.SelectedIndex << 8))]);
             }
         }
 
@@ -174,7 +174,7 @@ namespace Profiler.Pages.Macros
                 byte k = keys[j];
                 block.Add((uint)((byte)(CommandType.Release | CommandType.Key) + (k << 8)));
             }
-            ((EditedMacro)DataContext).Insert([.. block], true);
+            ((EditedMacro)DataContext).Insert([.. block]);
         }
 
         private void ReadKeyboard(Windows.System.VirtualKey vk, Windows.UI.Core.CorePhysicalKeyStatus status)

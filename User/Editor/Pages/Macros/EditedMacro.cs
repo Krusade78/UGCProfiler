@@ -161,7 +161,7 @@ namespace Profiler.Pages.Macros
             }
         }
 
-        public void Insert(uint[] block, bool separated)
+        public void Insert(uint[] block, bool blockTogether = false)
         {
             byte idBegin = GetIndex();
 
@@ -171,7 +171,7 @@ namespace Profiler.Pages.Macros
                 GroupedCommand rvSearch = gMacros[i];
                 if (rvSearch.Id >= idBegin)
                 {
-                    if (separated)
+                    if (!blockTogether)
                     {
                         rvSearch.Id += (byte)block.Length;
                     }
@@ -184,17 +184,17 @@ namespace Profiler.Pages.Macros
                     break;
             }
 
-            if (separated)
+            if (blockTogether)
+            {
+                gMacros.Add(new() { Id = idBegin, Commands = block });
+            }
+            else
             {
                 byte c = 0;
                 foreach (uint command in block)
                 {
                     gMacros.Add(new() { Id = (byte)(idBegin + c++), Commands = [command] });
                 }
-            }
-            else
-            {
-                gMacros.Add(new() { Id = idBegin, Commands = block });
             }
             RefrestListBox();
         }

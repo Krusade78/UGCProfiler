@@ -20,14 +20,14 @@ namespace Profiler.Pages.Macros
         private void ButtonSetMode_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(uint)CommandType.Mode + (uint)(cbMode.SelectedIndex << 8)], false);
+            ((EditedMacro)DataContext).Insert([(uint)CommandType.Mode + (uint)(cbMode.SelectedIndex << 8)]);
         }
 
 
         private void ButtonSetSubmode_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(uint)CommandType.SubMode + (uint)(cbSubmode.SelectedIndex << 8)], false);
+            ((EditedMacro)DataContext).Insert([(uint)CommandType.SubMode + (uint)(cbSubmode.SelectedIndex << 8)]);
         }
 
 

@@ -27,19 +27,19 @@ namespace Profiler.Pages.Macros
                     (byte)CommandType.Hold,
                     (byte)CommandType.MouseBt1 | (byte)CommandType.Release,
                 ];
-                ((EditedMacro)DataContext).Insert(block, true);
+                ((EditedMacro)DataContext).Insert(block);
             }
             else
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt1], false);
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt1]);
             }
         }
 
         private void ButtonLeftOff_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt1 | (byte)CommandType.Release], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt1 | (byte)CommandType.Release]);
         }
 
         private void ButtonCenterOn_Click(object sender, RoutedEventArgs e)
@@ -53,19 +53,19 @@ namespace Profiler.Pages.Macros
                     (byte)CommandType.Hold,
                     (byte)CommandType.MouseBt2 | (byte)CommandType.Release,
                 ];
-                ((EditedMacro)DataContext).Insert(block, true);
+                ((EditedMacro)DataContext).Insert(block);
             }
             else
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt2], false);
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt2]);
             }
         }
 
         private void ButtonCenterOff_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt2 | (byte)CommandType.Release], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt2 | (byte)CommandType.Release]);
         }
 
         private void ButtonRightOn_Click(object sender, RoutedEventArgs e)
@@ -79,19 +79,19 @@ namespace Profiler.Pages.Macros
                     (byte)CommandType.Hold,
                     (byte)CommandType.MouseBt3 | (byte)CommandType.Release,
                 ];
-                ((EditedMacro)DataContext).Insert(block, true);
+                ((EditedMacro)DataContext).Insert(block);
             }
             else
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt3], false);
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt3]);
             }
         }
 
         private void ButtonRightOff_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt3 | (byte)CommandType.Release], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseBt3 | (byte)CommandType.Release]);
         }
 
         private void ButtonUpOn_Click(object sender, RoutedEventArgs e)
@@ -100,19 +100,19 @@ namespace Profiler.Pages.Macros
             {
                 ((EditedMacro)DataContext).Clear();
                 uint[] block = [(byte)CommandType.MouseWhUp, (byte)CommandType.MouseWhUp | (byte)CommandType.Release];
-                ((EditedMacro)DataContext).Insert(block, true);
+                ((EditedMacro)DataContext).Insert(block);
             }
             else
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhUp], false);
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhUp]);
             }
         }
 
         private void ButtonUpOff_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhUp | (byte)CommandType.Release], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhUp | (byte)CommandType.Release]);
         }
 
         private void ButtonDownOn_Click(object sender, RoutedEventArgs e)
@@ -121,43 +121,43 @@ namespace Profiler.Pages.Macros
             {
                 ((EditedMacro)DataContext).Clear();
                 uint[] block = [(byte)CommandType.MouseWhDown, (byte)CommandType.MouseWhDown | (byte)CommandType.Release];
-                ((EditedMacro)DataContext).Insert(block, true);
+                ((EditedMacro)DataContext).Insert(block);
             }
             else
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhDown], false);
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhDown]);
             }
         }
 
         private void ButtonDownOff_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhDown | (byte)CommandType.Release], false);
+            ((EditedMacro)DataContext).Insert([(byte)CommandType.MouseWhDown | (byte)CommandType.Release]);
         }
 
         private void ButtonMoveLeft_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseLeft + ((uint)NumericUpDownSensibilidad.Value << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseLeft + ((uint)NumericUpDownSensibilidad.Value << 8))]);
         }
 
         private void ButtonMoveUp_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseUp + ((uint)NumericUpDownSensibilidad.Value << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseUp + ((uint)NumericUpDownSensibilidad.Value << 8))]);
         }
 
         private void ButtonMoveRight_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseRight + ((uint)NumericUpDownSensibilidad.Value << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseRight + ((uint)NumericUpDownSensibilidad.Value << 8))]);
         }
 
         private void ButtonMoveDown_Click(object sender, RoutedEventArgs e)
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseDown + ((uint)NumericUpDownSensibilidad.Value << 8))], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.MouseDown + ((uint)NumericUpDownSensibilidad.Value << 8))]);
         }
         #endregion
 

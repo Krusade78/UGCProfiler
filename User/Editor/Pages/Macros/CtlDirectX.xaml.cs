@@ -21,7 +21,6 @@ namespace Profiler.Pages.Macros
             uint v = (((uint)NumericUpDown1.Value - 1) << 8) + (((uint)NumericUpDownJoy.Value - 1) << 16);
             if (PanelBasic1.Visibility == Visibility.Visible)
             {
-                if (((EditedMacro)DataContext).GetCount() > 235) return;
                 ((EditedMacro)DataContext).Clear();
                 uint[] block =
                 [
@@ -29,12 +28,12 @@ namespace Profiler.Pages.Macros
                     (byte)CommandType.Hold,
                     (((byte)CommandType.DxButton | (byte)CommandType.Release) + v),
                 ];
-                ((EditedMacro)DataContext).Insert(block, true);
+                ((EditedMacro)DataContext).Insert(block);
             }
             else
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([((byte)CommandType.DxButton + v)], false);
+                ((EditedMacro)DataContext).Insert([((byte)CommandType.DxButton + v)]);
             }
         }
 
@@ -42,15 +41,14 @@ namespace Profiler.Pages.Macros
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
             uint v = (((uint)NumericUpDown1.Value - 1) << 3) + (((uint)NumericUpDownJoy.Value - 1) << 8);
-            ((EditedMacro)DataContext).Insert([(ushort)(((byte)CommandType.DxButton | (byte)CommandType.Release) + (ushort)v)], false);
+            ((EditedMacro)DataContext).Insert([(ushort)(((byte)CommandType.DxButton | (byte)CommandType.Release) + (ushort)v)]);
         }
 
         private void ButtonPovOn_Click(object sender, RoutedEventArgs e)
         {
-            uint v = ((((4 - (uint)NumericUpDownPov.Value) * 8) + ((uint)NumericUpDownPosicion.Value - 1)) << 8) + (((uint)NumericUpDownJoy.Value - 1) << 16);
+            uint v = ((4 - (uint)NumericUpDownPov.Value) << 12) + (((uint)NumericUpDownPosicion.Value - 1) << 8) + (((uint)NumericUpDownJoy.Value - 1) << 16);
             if (PanelBasic1.Visibility == Visibility.Visible)
             {
-                if (((EditedMacro)DataContext).GetCount() > 235) return;
                 ((EditedMacro)DataContext).Clear();
                 uint[] block =
                 [
@@ -58,12 +56,12 @@ namespace Profiler.Pages.Macros
                     (byte)CommandType.Hold,
                     ((byte)CommandType.DxHat | (byte)CommandType.Release) + v,
                 ];
-                ((EditedMacro)DataContext).Insert(block, true);
+                ((EditedMacro)DataContext).Insert(block);
             }
             else
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([(byte)CommandType.DxHat + v], false);
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.DxHat + v]);
             }
         }
 
@@ -71,7 +69,7 @@ namespace Profiler.Pages.Macros
         {
             if (((EditedMacro)DataContext).GetCount() > 237) return;
             uint v = ((((4 - (uint)NumericUpDownPov.Value) * 8) + ((uint)NumericUpDownPosicion.Value - 1)) << 8) + (((uint)NumericUpDownJoy.Value - 1) << 16);
-            ((EditedMacro)DataContext).Insert([((byte)CommandType.DxHat | (byte)CommandType.Release) + v], false);
+            ((EditedMacro)DataContext).Insert([((byte)CommandType.DxHat | (byte)CommandType.Release) + v]);
         }
 
         private void ButtonMove_Click(object sender, RoutedEventArgs e)
@@ -79,7 +77,7 @@ namespace Profiler.Pages.Macros
             if (uint.TryParse(cbSensibility.Text, out uint v) && (v > 0) && (v < 32769))
             {
                 if (((EditedMacro)DataContext).GetCount() > 237) return;
-                ((EditedMacro)DataContext).Insert([(byte)CommandType.DxAxis + (v << 8)], false);
+                ((EditedMacro)DataContext).Insert([(byte)CommandType.DxAxis + (v << 8)]);
             }   
             else
             {
