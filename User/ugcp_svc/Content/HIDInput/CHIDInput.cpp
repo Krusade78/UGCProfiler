@@ -271,14 +271,14 @@ DWORD WINAPI CHIDInput::ThreadRead(LPVOID param)
 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
-    UCHAR buff[256]{};
+    UCHAR buff[sizeof(UINT32) + (sizeof(HIDP_DATA) * 140)]{};//128 buttons, 8 axes, 4 hats
     RtlCopyMemory(buff, &joyId, sizeof(UINT32));
     while (!local->exit.at(joyId))
     {  
         unsigned short tam = dev->Read(&buff[sizeof(UINT32)]);
         if (tam > 0)
         {
-            local->processHID->AddToQueue(buff, tam + sizeof(UINT32));
+            local->processHID->AddToQueue(buff, (tam * sizeof(HIDP_DATA)) + sizeof(UINT32));
         }
     }
 

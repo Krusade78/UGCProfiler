@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Profiler (Unpackaged)": {
-      "commandName": "Project",
-      "nativeDebugging": false
-    }
-  }
-}

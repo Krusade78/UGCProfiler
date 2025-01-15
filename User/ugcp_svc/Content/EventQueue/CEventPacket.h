@@ -20,6 +20,8 @@ public:
 	static const unsigned char MouseWhUp = 11;
 	static const unsigned char MouseWhDown = 12;
 
+	static const unsigned char DxAxis = 13;
+
 	static const unsigned char Delay = 20;
 	static const unsigned char Hold = 21;
 	static const unsigned char Repeat = 22;
@@ -65,7 +67,9 @@ typedef struct
 	{
 		struct
 		{
-			UCHAR Data;
+			UCHAR Data1;
+			UCHAR Data2;
+			UCHAR Extra; //4 bits
 			UCHAR OutputJoy;
 		} Basic;
 		struct

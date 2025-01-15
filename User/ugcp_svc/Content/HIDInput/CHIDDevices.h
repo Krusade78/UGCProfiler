@@ -16,11 +16,11 @@ public:
 
 	typedef struct
 	{
-		UCHAR ReportId;
+		//UCHAR ReportId;
 		UCHAR Bits;
 		UCHAR IsButton;
 		UCHAR IsHat;
-		UCHAR Skip;
+		//UCHAR Skip;
 		UINT16 Index;
 	} ST_MAP;
 
@@ -34,6 +34,8 @@ protected:
 	wchar_t* pathInterface = nullptr;
 	HANDLE mutex = nullptr;
 	PVOID hdev = nullptr;
+	PVOID preparsed = nullptr;
+	PCHAR reportBuffer = nullptr;
 	unsigned long reportLenght = 0;
 
 	bool GetDeviceMap(void* preparsedData, void* pCaps);

@@ -91,26 +91,36 @@ bool CWinUSBX52::Open()
                     return false;
                 }
 
-                PHIDP_PREPARSED_DATA preparsed = nullptr;
-                if (HidD_GetPreparsedData(nhdev, &preparsed))
+                reportLenght = 0;
+                if (HidD_GetPreparsedData(nhdev, reinterpret_cast<PHIDP_PREPARSED_DATA*>(&preparsed)))
                 {
                     HIDP_CAPS caps;
-                    if (HidP_GetCaps(preparsed, &caps) == HIDP_STATUS_SUCCESS)
+                    if (HidP_GetCaps(reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), &caps) == HIDP_STATUS_SUCCESS)
                     {
                         if (GetDeviceMap(preparsed, &caps))
                         {
                             reportLenght = caps.InputReportByteLength;
                         }
                     }
-                    HidD_FreePreparsedData(preparsed);
                 }
                 if (reportLenght != 0)
                 {
+                    reportBuffer = new CHAR[reportLenght];
                     CX52Write::Get()->SetWinUSB(hwusb);
                     CMFDMenu::Get()->SetWelcome();
                 }
                 else
                 {
+                    if (reportBuffer != nullptr)
+                    {
+                        delete[] reportBuffer;
+                        reportBuffer = nullptr;
+                    }
+                    if (preparsed != nullptr)
+                    {
+                        HidD_FreePreparsedData(reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed));
+                        preparsed = nullptr;
+                    }
                     ReleaseSemaphore(mutex, 1, NULL);
                     Close();
                     return false;
@@ -160,11 +170,20 @@ unsigned short CWinUSBX52::Read(void* buff)
         }
         else
         {
-            ULONG size = 0;
+            ULONG readSize = 0;
             ((CHAR*)buff)[0] = 0; //report id
-            if (WinUsb_ReadPipe(hwusb, pipe.PipeId, &static_cast<UCHAR*>(buff)[1], reportLenght - 1, &size, NULL))
+            if (WinUsb_ReadPipe(hwusb, pipe.PipeId, &static_cast<UCHAR*>(buff)[1], reportLenght - 1, &readSize, NULL))
             {
-                return static_cast<unsigned short>(size + 1);
+                readSize++;
+                ULONG size = 0;
+                if (HidP_GetData(HidP_Input, NULL, &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer, reportLenght) == HIDP_STATUS_BUFFER_TOO_SMALL)
+                {
+                    if (HidP_GetData(HidP_Input, reinterpret_cast<PHIDP_DATA>(buff), &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer, reportLenght) == HIDP_STATUS_SUCCESS)
+                    {
+                        return static_cast<unsigned short>(size);
+                    }
+                }
+                return 0;
             }
         }
     }

@@ -1,0 +1,16 @@
+<UserControl x:Class="Profiler.Controls.CtlDevices"
+        xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+		mc:Ignorable="d" >
+
+	<ui:NavigationView x:Name="navView" IsBackButtonVisible="False" IsSettingsVisible="False"
+					   PaneTitle="{StaticResource device_list}"
+					   PaneDisplayMode="Left"
+					   AlwaysShowHeader="True"
+					   SelectionChanged="NavigationView_SelectionChanged">
+		<ui:Frame x:Name="frContent" ClipToBounds="False" />
+	</ui:NavigationView>
+</UserControl>

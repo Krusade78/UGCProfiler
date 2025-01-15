@@ -44,6 +44,7 @@ private:
 	} AXISMAPMODEL;
 
 	std::unordered_map<UINT32, BUTTONMAPMODEL> stButtonsMap;
+	std::unordered_map<UINT32, BUTTONMAPMODEL> stHatsMap;
 	std::unordered_map<UINT32, AXISMAPMODEL> stAxesMap;
 
 	class CButtonMap
@@ -110,6 +111,7 @@ private:
 	};
 public:
 	CButtonMap ButtonsMap = CButtonMap(&stButtonsMap);
+	CButtonMap HatsMap = CButtonMap(&stHatsMap);
 	CAxesMap AxesMap = CAxesMap(&stAxesMap);
 	std::deque<CEventPacket*>* Actions = nullptr;
 	UCHAR MouseTick = 5;
@@ -117,6 +119,7 @@ public:
 	inline void Clear() 
 	{
 		stButtonsMap.clear();
+		stHatsMap.clear();
 		stAxesMap.clear();
 	}
 
@@ -124,6 +127,10 @@ public:
 	{
 		std::unordered_map<UINT32, bool> ids;
 		for (auto const& id : stButtonsMap)
+		{
+			ids.insert({ id.first, false });
+		}
+		for (auto const& id : stHatsMap)
 		{
 			ids.insert({ id.first, false });
 		}
@@ -143,6 +150,6 @@ public:
 
 	inline bool DeviceIncluded(UINT32 joyId)
 	{
-		return ((stAxesMap.find(joyId) != stAxesMap.end()) || ((stButtonsMap.find(joyId) != stButtonsMap.end())));
+		return ((stAxesMap.find(joyId) != stAxesMap.end()) || ((stButtonsMap.find(joyId) != stButtonsMap.end())) || ((stHatsMap.find(joyId) != stHatsMap.end())));
 	}
 };

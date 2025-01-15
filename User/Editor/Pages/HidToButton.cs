@@ -10,16 +10,16 @@
         public class Map
         {
             public ushort Idx {  get; set; }
-            public Microsoft.UI.Xaml.Controls.Primitives.ToggleButton Button { get; set; }
-            public System.Collections.Generic.List<Microsoft.UI.Xaml.Controls.Primitives.ToggleButton> HatButtons { get; set; }
+            public Avalonia.Controls.Primitives.ToggleButton Button { get; set; }
+            public System.Collections.Generic.List<Avalonia.Controls.Primitives.ToggleButton> HatButtons { get; set; }
 
-            public Map(ushort idx, Microsoft.UI.Xaml.Controls.Primitives.ToggleButton button)
+            public Map(ushort idx, Avalonia.Controls.Primitives.ToggleButton button)
             {
                 Idx = idx;
                 Button = button;
             }
 
-            public Map(ushort idx, System.Collections.Generic.List<Microsoft.UI.Xaml.Controls.Primitives.ToggleButton> hatButtons)
+            public Map(ushort idx, System.Collections.Generic.List<Avalonia.Controls.Primitives.ToggleButton> hatButtons)
             {
                 Idx = idx;
                 HatButtons = hatButtons;

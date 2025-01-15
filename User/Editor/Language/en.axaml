@@ -1,0 +1,335 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!-- #region Messages -->
+	<x:String x:Key="error">Error</x:String>
+	<x:String x:Key="warning">Warning</x:String>
+	<x:String x:Key="do you want to save changes?">Do you want to save changes?</x:String>
+	<x:String x:Key="profile filter">.xhp</x:String>
+	<x:String x:Key="profile_name">profile_name</x:String>
+	<x:String x:Key="save title">Profiler -</x:String>
+	<x:String x:Key="profile launched ok">Profile loaded OK.</x:String>
+	<!--#endregion-->
+	
+	<!--#region MessageBox-->
+	<x:String x:Key="ok">OK</x:String>
+	<x:String x:Key="yes">Yes</x:String>
+	<x:String x:Key="no">No</x:String>
+	<x:String x:Key="cancel">Cancel</x:String>
+	<!--#endregion-->
+
+	<x:String x:Key="profiler">Profiler</x:String>
+
+	<!--#region Menu bar -->
+	<x:String x:Key="new">New</x:String>
+	<x:String x:Key="open">Open</x:String>
+	<x:String x:Key="save">Save</x:String>
+	<x:String x:Key="save_as">Save as...</x:String>
+	<x:String x:Key="file">File</x:String>
+	<x:String x:Key="load">Load</x:String>
+	<x:String x:Key="reset">Reset</x:String>
+	<x:String x:Key="mouse_conf">Mouse settings</x:String>
+	<x:String x:Key="calibrate">Calibrate</x:String>
+	<x:String x:Key="profile">Profile</x:String>
+	<x:String x:Key="devices">Devices</x:String>
+	<x:String x:Key="refresh">Refresh</x:String>
+	<x:String x:Key="view">Editing</x:String>
+	<x:String x:Key="edit">Edit</x:String>
+	<x:String x:Key="list">List</x:String>
+	<x:String x:Key="current_mode">Current mode</x:String>
+	<x:String x:Key="mode">Mode</x:String>
+	<x:String x:Key="submode">Submode</x:String>
+	<!-- #endregion -->
+	
+	<!--#region Devices -->
+	<x:String x:Key="unable to register raw input device">Unable to register raw input device</x:String>
+	<x:String x:Key="device_list">Device list</x:String>
+	<!--#endregion-->
+	
+	<!--#region Profile -->
+	<x:String x:Key="profile none">&lt;/-------- None ---------/&gt;</x:String>
+	<!--#endregion-->
+	
+	<!--#region Calibration -->
+	<x:String x:Key="axes">Axes</x:String>
+	<x:String x:Key="raw_range">Raw range</x:String>
+	<x:String x:Key="position_minimun">Position minimun:</x:String>
+	<x:String x:Key="position_maximun">Position maximun:</x:String>
+	<x:String x:Key="position_center">Position center:</x:String>
+	<x:String x:Key="automatic">Auto.</x:String>
+	<x:String x:Key="manual">Manual</x:String>
+	<x:String x:Key="calibration_values">Calibration values</x:String>
+	<x:String x:Key="lower_limit">Lower limit:</x:String>
+	<x:String x:Key="null_zone">Null zone:</x:String>
+	<x:String x:Key="upper_limit">Upper limit:</x:String>
+	<x:String x:Key="antivibration_values">Antivibration values</x:String>
+	<x:String x:Key="margin">Margin:</x:String>
+	<x:String x:Key="resistance">Resistance:</x:String>
+	<x:String x:Key="test">Test</x:String>
+	<x:String x:Key="raw_value">Raw value</x:String>
+	<x:String x:Key="calibrated_value">Calibrated value</x:String>
+	<x:String x:Key="calibrated_game_value">Calibrated game value</x:String>
+	<x:String x:Key="buffer">Buffer</x:String>
+	<x:String x:Key="save_and_activate">Save and activate</x:String>
+	<x:String x:Key="take_from_raw">Take from raw</x:String>
+	<!--#endregion-->
+
+	<!--#region VMouseConfig-->
+	<x:String x:Key="mouse_configuration">Mouse configuration</x:String>
+	<x:String x:Key="mouse_description">This control changes the mouse movement speed. Higher values will move the mouse slower and lower values will move it faster. Normally, it is not necessary to change this value as each axis has its own sensibility control.</x:String>
+	<!--#endregion-->
+	
+	<!--#region Generic-->  
+	<x:String x:Key="axis">Axis</x:String>
+	<x:String x:Key="hat">Hat</x:String>
+	<x:String x:Key="position">Position</x:String>
+	<x:String x:Key="button">Button</x:String>
+	<!--#endregion-->
+	
+	<!--#region Assign default vJoy conf-->
+	<x:String x:Key="assign_vjoy_default_configuration">Assign vJoy default configuration</x:String>
+	<x:String x:Key="assign_default_description" xml:space="preserve">This will create a default profile for the selected device and mode/submode combination.&#13;All buttons, axes and hats will be assigned to the chosen vJoy (controls already assigned are not overwritten).</x:String>
+	<!--#endregion-->
+
+	<!--#region Properties-->
+	<x:String x:Key="none">None</x:String>
+	<x:String x:Key="axis_configuration">Axis configuration</x:String>
+	<x:String x:Key="mouse_x">Mouse X</x:String>
+	<x:String x:Key="mouse_y">Mouse Y</x:String>
+	<x:String x:Key="assign_to">Assign to:</x:String>
+	<x:String x:Key="inverted">Inverted</x:String>
+	<x:String x:Key="sensibility_curve">Sensibility curve</x:String>
+	<x:String x:Key="copy_from">Copy from...</x:String>
+	<x:String x:Key="mouse_sensibility">Mouse sensibility:</x:String>
+	<x:String x:Key="digita_function">Digital function</x:String>
+	<x:String x:Key="zones">Zones</x:String>
+	<x:String x:Key="incremental">Incremental</x:String>
+	<x:String x:Key="incremental_resistance">Inc. resistance:</x:String>
+	<x:String x:Key="decremental_resistance">Dec. resistance:</x:String>
+	<x:String x:Key="edit_zones">Edit zones</x:String>
+	<x:String x:Key="button_configuration">Button configuration</x:String>
+	<x:String x:Key="press_release">Press/Release</x:String>
+	<x:String x:Key="long_press_release">Long Press/Release</x:String>
+	<x:String x:Key="positions">Positions:</x:String>
+	<x:String x:Key="assign_button_dx">Assign to DirectX button:</x:String>
+	<x:String x:Key="hat_configuration">Hat configuration</x:String>
+	<x:String x:Key="assign_hat">Assign all positions to hat</x:String>
+	<x:String x:Key="assign_button_dx_hat">Assign button/position to DirectX hat:</x:String>
+	<x:String x:Key="assign">Assign</x:String>
+	<x:String x:Key="up">Up</x:String>
+	<x:String x:Key="up-right">Up - Right</x:String>
+	<x:String x:Key="right">Right</x:String>
+	<x:String x:Key="down-right">Down - Right</x:String>
+	<x:String x:Key="down">Down</x:String>
+	<x:String x:Key="down-left">Down - Left</x:String>
+	<x:String x:Key="left">Left</x:String>
+	<x:String x:Key="up-left">Up - Left</x:String>
+	<x:String x:Key="macro_assignment">Macro assignment</x:String>
+	<x:String x:Key="press">Press</x:String>
+	<x:String x:Key="release">Release</x:String>
+	<x:String x:Key="long_press">Long press</x:String>
+	<x:String x:Key="long_release">Long release</x:String>
+	<x:String x:Key="increase">Increase</x:String>
+	<x:String x:Key="decrease">Decrease</x:String>
+	<!--#endregion-->
+
+	<!--#region SensibilityEditor-->
+	<x:String x:Key="curve_for_slider">Curve for lineal axis (without center)</x:String>
+	<!--#endregion-->
+
+	<!--#region CopyFrom-->
+	<x:String x:Key="copy_sensibility_curve">Copy sensibility curve</x:String>
+	<x:String x:Key="copy_from_description">This, copies the sesibility curve to the current axis from another mode.</x:String>
+	<x:String x:Key="copy_from_">Copy from:</x:String>
+	<!--#endregion-->
+	
+	<!--#region ZoneEditor-->
+	<x:String x:Key="zone_editor">Zone editor</x:String>
+	<x:String x:Key="number_of_zones">Number of zones:</x:String>
+	<x:String x:Key="zone">Zone</x:String>
+	<!--#endregion-->
+
+	<!--#region HatEditor-->
+	<x:String x:Key="hat_editor">Hat assignment</x:String>
+	<x:String x:Key="hat_editor_description">This will assign each position of the current hat to the selected DirectX hat (current mode). Any previous configuration in those positions will be overwritten.</x:String>
+	<!-- texts for macro names -->
+	<x:String x:Key="dx_hat_n">&lt;Hat J% H$ N&gt;</x:String>
+	<x:String x:Key="dx_hat_nw">&lt;Hat J% H$ NW&gt;</x:String>
+	<x:String x:Key="dx_hat_w">&lt;Hat J% H$ W&gt;</x:String>
+	<x:String x:Key="dx_hat_sw">&lt;Hat J% H$ SW&gt;</x:String>
+	<x:String x:Key="dx_hat_s">&lt;Hat J% H$ S&gt;</x:String>
+	<x:String x:Key="dx_hat_se">&lt;Hat J% H$ SE&gt;</x:String>
+	<x:String x:Key="dx_hat_e">&lt;Hat J% H$ E&gt;</x:String>
+	<x:String x:Key="dx_hat_ne">&lt;Hat J% H$ NE&gt;</x:String>
+	<!--#endregion-->
+
+	<!--#region MacroEditor-->
+	<x:String x:Key="macro_management">Macro management</x:String>
+	<!--#endregion-->
+
+	<!--#region SaitekPedals-->
+	<x:String x:Key="left_brake">Left brake</x:String>
+	<x:String x:Key="right_brake">Right brake</x:String>
+	<x:String x:Key="axis_r">Axis R</x:String>
+	<!--#endregion-->
+
+	<!--#region Gladiator NXT-->
+	<x:String x:Key="axis_x">Axis X</x:String>
+	<x:String x:Key="axis_y">Axis Y</x:String>
+	<x:String x:Key="axis_z">Axis Z</x:String>
+	<x:String x:Key="trigger_p1">Trigger P.1</x:String>
+	<x:String x:Key="trigget_p2">Trigger P.2</x:String>
+	<x:String x:Key="fast_trigger">Fast trigger</x:String>
+	<x:String x:Key="launch">Launch</x:String>
+	<x:String x:Key="base_1">Base 1</x:String>
+	<x:String x:Key="base_2">Base 2</x:String>
+	<x:String x:Key="base_3">Base 3</x:String>
+	<x:String x:Key="enc_1_up">Enc. 1 Up</x:String>
+	<x:String x:Key="enc_1_down">Enc 1 Down</x:String>
+	<x:String x:Key="enc_2_up">Enc. 2 Up</x:String>
+	<x:String x:Key="enc_2_down">Enc 2 Down</x:String>
+	<x:String x:Key="mini_x_axis">Mini X axis</x:String>
+	<x:String x:Key="mini_y_axis">Mini Y axis</x:String>
+	<!--#endregion-->
+
+	<!--#region Generic-->
+	<x:String x:Key="hats">Hats</x:String>
+	<x:String x:Key="buttons">Buttons</x:String>
+	<!--#endregion-->
+
+	<!--#region Saitek X52-->
+	<x:String x:Key="button_a">Button A</x:String>
+	<x:String x:Key="button_b">Button B</x:String>
+	<x:String x:Key="button_c">Button C</x:String>
+	<x:String x:Key="mode_1">Mode 1</x:String>
+	<x:String x:Key="mode_2">Mode 2</x:String>
+	<x:String x:Key="mode_3">Mode 3</x:String>
+	<x:String x:Key="sc_1">Self ct. 1</x:String>
+	<x:String x:Key="sc_2">Self ct. 2</x:String>
+	<x:String x:Key="sc_3">Self ct. 3</x:String>
+	<x:String x:Key="sc_4">Self ct. 4</x:String>
+	<x:String x:Key="sc_5">Self ct. 5</x:String>
+	<x:String x:Key="sc_6">Self ct. 6</x:String>
+	<x:String x:Key="throttle">Throttle</x:String>
+	<x:String x:Key="mfd_button_1">MFD Button 1</x:String>
+	<x:String x:Key="mfd_button_2">MFD Button 2</x:String>
+	<x:String x:Key="mfd_button_3">MFD Button 3</x:String>
+	<x:String x:Key="mini_button">Mini button</x:String>
+	<x:String x:Key="wheel_up">Wheel Up</x:String>
+	<x:String x:Key="wheel_down">Wheel Down</x:String>
+	<x:String x:Key="wheel_button">Wheel Button</x:String>
+	<x:String x:Key="button_d">Button D</x:String>
+	<x:String x:Key="button_e">Button E</x:String>
+	<x:String x:Key="button_i">Button I</x:String>
+	<x:String x:Key="axis_rx">Axis Rx</x:String>
+	<x:String x:Key="axis_ry">Axis Ry</x:String>
+	<x:String x:Key="axis_sl">Axis Sl</x:String>
+	<!--#endregion-->
+
+	<x:String x:Key="center">Center</x:String>
+	
+	<!-- #region Macros -->
+		<!-- #region Main -->
+		<x:String x:Key="macro_list">Macro list</x:String>
+		<x:String x:Key="nxt_extra_functions">VKB Gladiator NXT - Extra functions</x:String>
+		<x:String x:Key="x52_extra_functions">Saitek X52 - Extra functions</x:String>
+		<x:String x:Key="commands">Commands</x:String>
+		<x:String x:Key="new_macro">- New macro -</x:String>
+		<!--#endregion-->
+		<!-- #region GroupedCommand -->
+		<x:String x:Key="mouse_button1_off">[Mouse] Button 1 Off</x:String>
+		<x:String x:Key="mouse_button1_on">[Mouse] Button 1 On</x:String>
+		<x:String x:Key="mouse_button2_off">[Mouse] Button 2 Off</x:String>
+		<x:String x:Key="mouse_button2_on">[Mouse] Button 2 On</x:String>
+		<x:String x:Key="mouse_button3_off">[Mouse] Button 3 Off</x:String>
+		<x:String x:Key="mouse_button3_on">[Mouse] Button 3 On</x:String>
+		<x:String x:Key="mouse_left_0">[Mouse] Left 0</x:String>
+		<x:String x:Key="mouse_left">[Mouse] Left</x:String>
+		<x:String x:Key="mouse_right_0">[Mouse] Right 0</x:String>
+		<x:String x:Key="mouse_right">[Mouse] Right</x:String>
+		<x:String x:Key="mouse_up_0">[Mouse] Up 0</x:String>
+		<x:String x:Key="mouse_up">[Mouse] Up</x:String>
+		<x:String x:Key="mouse_down_0">[Mouse] Down 0</x:String>
+		<x:String x:Key="mouse_down">[Mouse] Down</x:String>
+		<x:String x:Key="mouse_wheel_up_off">[Mouse] Wheel up Off</x:String>
+		<x:String x:Key="mouse_wheel_up_on">[Mouse] Wheel up On</x:String>
+		<x:String x:Key="mouse_wheel_down_off">[Mouse] Wheel down Off</x:String>
+		<x:String x:Key="mouse_wheel_down_on">[Mouse] Wheel down On</x:String>
+		<x:String x:Key="pause">Pause</x:String>
+		<x:String x:Key="hold">Hold</x:String>
+		<x:String x:Key="repeat_begin">/-- Repeat begin</x:String>
+		<x:String x:Key="repeat_end">/-- Repeat end</x:String>
+		<x:String x:Key="repeat_n(slash)">/-- Repeat N</x:String>
+		<x:String x:Key="begin">begin</x:String>
+		<x:String x:Key="end">end</x:String>
+		<x:String x:Key="precision_mode">Precision mode</x:String>
+		<x:String x:Key="mfd_light">MFD Light</x:String>
+		<x:String x:Key="buttons_light">Buttons light</x:String>
+		<x:String x:Key="info_light">Info light</x:String>
+		<x:String x:Key="text_line">Text line</x:String>
+		<x:String x:Key="mfd_hour">MFD Hour</x:String>
+		<x:String x:Key="mfd_date">MFD Date</x:String>
+		<!--#endregion-->
+		<!-- #region EditedMacro -->
+		<x:String x:Key="repeat_and_hold_must_be_unique">Repeat and Hold must be unique.</x:String>
+		<x:String x:Key="repeat_and_hold_cannot_be_inside_repeat_n">Repeat and Hold cannot be inside Repeat N.</x:String>
+		<x:String x:Key="macro_name_repeated">Macro name repeated.</x:String>
+		<!--#endregion-->
+		<!-- #region GladiatorNXT -->
+		<x:String x:Key="joystick_red">Joystick - Red</x:String>
+		<x:String x:Key="constant">Constant</x:String>
+		<x:String x:Key="blinking_slow">Blinking slow</x:String>
+		<x:String x:Key="blinking_medium">Blinking medium</x:String>
+		<x:String x:Key="blinking_fast">Blinking fast</x:String>
+		<x:String x:Key="color_mode">Color mode:</x:String>
+		<x:String x:Key="add">Add</x:String>
+		<!--#endregion-->
+		<!-- #region X52 -->
+		<x:String x:Key="use_name_in_mfd">Use name in MFD (16 characters)</x:String>
+		<x:String x:Key="mfd_text">MFD Text</x:String>
+		<x:String x:Key="text">Text:</x:String>
+		<x:String x:Key="line">Line:</x:String>
+		<x:String x:Key="text_line2" xml:space="preserve">Text line</x:String>
+		<x:String x:Key="dates">Dates</x:String>
+		<x:String x:Key="digit">Digit:</x:String>
+		<x:String x:Key="date_1">Date 1</x:String>
+		<x:String x:Key="date_2">Date 2</x:String>
+		<x:String x:Key="date_3">Date 3</x:String>
+		<x:String x:Key="watches">Watches</x:String>
+		<x:String x:Key="hour">Hour:</x:String>
+		<x:String x:Key="minute">Minute:</x:String>
+		<x:String x:Key="watch">Watch:</x:String>
+		<x:String x:Key="hotas_light">HOTAS Light</x:String>
+		<x:String x:Key="light">Light</x:String>
+		<x:String x:Key="level">Level</x:String>
+		<x:String x:Key="buttons_light(short)">Btns. light</x:String>
+		<!--#endregion-->
+		<!-- #region StatusCommand -->
+		<x:String x:Key="status_commands">Status commands</x:String>
+		<x:String x:Key="repeat">Repeat</x:String>
+		<x:String x:Key="repeat_n">Repeat N</x:String>
+		<!--#endregion-->
+		<!-- #region Name -->
+		<x:String x:Key="basic_mode">Basic mode</x:String>
+		<x:String x:Key="advanced_mode">Advanced mode</x:String>
+		<x:String x:Key="name">Name:</x:String>
+		<!--#endregion-->
+		<!-- #region Mouse -->
+		<x:String x:Key="mouse">Mouse</x:String>
+		<x:String x:Key="wheel">Wheel</x:String>
+		<x:String x:Key="movement">Movement</x:String>
+		<x:String x:Key="sensibility">Sensibility</x:String>
+		<!--#endregion-->
+		<!-- #region Modes -->
+		<x:String x:Key="modes">Modes</x:String>
+		<!--#endregion-->
+		<!-- #region Keyboard -->
+		<x:String x:Key="keyboard">Keyboard</x:String>
+		<x:String x:Key="key">Key</x:String>
+		<x:String x:Key="easy_insert">Easy insert</x:String>
+		<!--#endregion-->
+		<!-- #region DirectX -->
+		<x:String x:Key="move">Move</x:String>
+		<x:String x:Key="value_out_of_range" xml:space="preserve">The value is out of range.&#13;Valid range: 1 - 32768</x:String>
+		<!--#endregion-->
+	<!--#endregion-->
+</ResourceDictionary>

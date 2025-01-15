@@ -213,7 +213,6 @@ namespace Profiler.Devices
                         {
                             hidData.Axis[mapIndex.Id] = v;
                         }
-
                         break;
                     }
                     else if ((mapIndex.Type == 254) && (indexData.DataIndex >= mapIndex.ReportIdx) && (indexData.DataIndex <= mapIndex.Range))

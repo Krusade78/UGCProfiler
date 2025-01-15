@@ -29,7 +29,7 @@ namespace Profiler
 			using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
 			try
 			{
-				pipeClient.Connect(1000);
+				await pipeClient.ConnectAsync(200);
 				using System.IO.StreamWriter sw = new(pipeClient);
 				sw.WriteLine(msj);
 				sw.Flush();

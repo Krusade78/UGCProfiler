@@ -8,6 +8,7 @@ public:
 		UCHAR Band = 0;
 	} ST_AXIS;
 private:
+	// Button definitions
 	typedef struct TDST_BUTTONMODEMODEL
 	{
 		std::unordered_map<UCHAR, UCHAR> Status; //values are CurrentPosition
@@ -21,12 +22,8 @@ private:
 	{
 		UCHAR Status[16]{};
 	} HIDBUTTONMODEL;
-	//struct
-	//{
-	//	UCHAR CurrentPos;
-	//} Hats[4][2][3][32];
-	//UCHAR DxHats[4][4];
 
+	//Axis definitions
 	typedef struct
 	{
 		std::unordered_map<UCHAR, ST_AXIS> Status;
@@ -39,6 +36,9 @@ private:
 
 	std::unordered_map<UINT32, BUTTONSTATUSMODEL> stButtons;
 	std::unordered_map<UINT32, HIDBUTTONMODEL> stHIDButtons;
+
+	std::unordered_map<UINT32, BUTTONSTATUSMODEL> stHats;
+	std::unordered_map<UINT32, HIDBUTTONMODEL> stHIDHats;
 
 	std::unordered_map<UINT32, AXISSTATUSMODEL> stAxes;
 
@@ -86,7 +86,7 @@ private:
 			std::unordered_map<UINT32, BUTTONSTATUSMODEL>::iterator pBsm = pStButtons->find(inputJoyId);
 			if (pBsm != pStButtons->end())
 			{
-				BUTTONMODEMODEL pAmm = pBsm->second.Modes.at(mode);
+				BUTTONMODEMODEL& pAmm = pBsm->second.Modes.at(mode);
 				std::unordered_map<UCHAR, UCHAR>::iterator pB = pAmm.Status.find(button);
 				if (pB != pAmm.Status.end())
 				{
@@ -193,6 +193,7 @@ private:
 	};
 public:
 	CButtons Buttons = CButtons(&stButtons, &stHIDButtons);
+	CButtons Hats = CButtons(&stHats, &stHIDHats);
 	CAxes Axes = CAxes(&stAxes);
 	CAxesPreciseMode AxisPreciseMode = CAxesPreciseMode(&stAxisPreciseMode);
 	char SubMode = 0;
@@ -204,6 +205,8 @@ public:
 		SubMode = 0;
 		stButtons.clear();
 		stHIDButtons.clear();
+		stHats.clear();
+		stHIDHats.clear();
 		stAxes.clear();
 		stAxisPreciseMode.clear();
 	}

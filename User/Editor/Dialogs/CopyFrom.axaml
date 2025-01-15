@@ -1,0 +1,27 @@
+﻿<ui:Frame x:Class="Profiler.Dialogs.CopyFrom"
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:ui="using:FluentAvalonia.UI.Controls">
+    <Grid>
+        <TextBlock Text="{StaticResource copy_from_description}" Height="40" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="{StaticResource mode}" Margin="0,0,5,8" Grid.Column="1" HorizontalAlignment="Center" />
+            <TextBlock Text="{StaticResource submode}" Grid.Column="2" HorizontalAlignment="Center"/>
+            
+            <TextBlock Text="{StaticResource copy_from_}" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,5,0"/>
+			<!--VerticalContentAlignment="Center"--><ui:NumberBox x:Name="NumericUpDownM" Grid.Row="1" Grid.Column="1" Margin="0,0,5,0"  TextAlignment="Center" Maximum="8" Minimum="1" SpinButtonPlacementMode="Compact" GotFocus="NumericUpDownM_GettingFocus" />
+			<!--VerticalContentAlignment="Center"--> <ui:NumberBox x:Name="NumericUpDownP" Grid.Row="1" Grid.Column="2" Maximum="8" Minimum="1" SpinButtonPlacementMode="Compact" />
+        </Grid>
+    </Grid>
+</ui:Frame>

@@ -194,9 +194,6 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
     <ProjectReference Include="..\CPP2CS\CPP2CS.vcxproj">
       <Project>{6de78144-2a0e-47bf-80d6-bbaffc123d99}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\LauncherWrapper\LauncherWrapper.csproj">
-      <Project>{d5303089-8ba3-4640-8580-98b1b8ebda5f}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Launcher\Launcher.csproj">
       <Project>{584db68e-fef0-488b-8b09-899cdcc444cb}</Project>
     </ProjectReference>

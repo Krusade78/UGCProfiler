@@ -69,7 +69,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>user32.lib;hid.lib</AdditionalDependencies>
+      <AdditionalDependencies>user32.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -92,17 +92,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CExported.h" />
-    <ClInclude Include="RawInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CExported.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="RawInput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LauncherWrapper\LauncherWrapper.csproj">
-      <Project>{d5303089-8ba3-4640-8580-98b1b8ebda5f}</Project>
+    <ProjectReference Include="..\Launcher\Launcher.csproj">
+      <Project>{584db68e-fef0-488b-8b09-899cdcc444cb}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

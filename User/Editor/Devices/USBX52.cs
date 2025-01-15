@@ -156,7 +156,7 @@ namespace Profiler.Devices
                 {
                     byte[] buf = new byte[19];
                     Marshal.Copy(usbbuf, buf, 1, 14);
-                    wnd.DispatcherQueue.TryEnqueue(() =>
+                    Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                     {
                         wnd.AddWinUSBX52Device();
                         wnd.SetStatus(0x06a30255, buf);

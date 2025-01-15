@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Shared;
-//using System.Windows.Media.Imaging;
 
 namespace Profiler
 {

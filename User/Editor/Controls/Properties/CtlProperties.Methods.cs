@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.UI.Xaml.Controls;
+﻿using Avalonia.Controls;
 
 namespace Profiler.Controls.Properties
 {
@@ -139,22 +138,29 @@ namespace Profiler.Controls.Properties
             {
                 spConfs.Children.Add(spAxis = new(this));
             }
-            if ((axis != null) && spMacros == null)
+            if (axis != null)
             {
                 if ((axis.Type & 0b10000) == 0b10000) //incremental
                 {
-                    spMacros = new(this);
+                    if (spMacros == null)
+                    {
+                        spMacros = new(this);
+                        spConfs.Children.Add(spMacros);
+                    }
                 }
                 else if ((axis.Type & 0b100000) == 0b100000) //zones
                 {
-                    if (axis.Zones.Count > 0)
+                    if (spMacros == null)
                     {
                         spMacros = new(this);
+                        spConfs.Children.Add(spMacros);
                     }
+
                 }
-                if (spMacros != null)
+                else if (spMacros != null)
                 {
-                    spConfs.Children.Add(spMacros);
+                    spConfs.Children.Remove(spMacros);
+                    spMacros = null;
                 }
             }
 
@@ -177,6 +183,12 @@ namespace Profiler.Controls.Properties
         public void EnsureCreatedAxis()
         {
             spAxis.EnsureCreated();
+        }
+
+        public async void AssignDefaultvJoy()
+        {
+            await Dialogs.AssignDefault.Show(CurrentDevInfo, (byte)cbMode.SelectedIndex, (byte)cbSubmode.SelectedIndex);
+            Refresh();
         }
     }
 }

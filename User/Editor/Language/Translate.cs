@@ -1,7 +1,9 @@
-﻿namespace Profiler
+﻿using Avalonia;
+
+namespace Profiler
 {
     internal static class Translate
     {
-        public static string Get(string st) => (string)Microsoft.UI.Xaml.Application.Current.Resources[st];
+        public static string Get(string st) => (string)Application.Current.Resources[st];
     }
 }

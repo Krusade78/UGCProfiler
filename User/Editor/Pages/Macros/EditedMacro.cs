@@ -1,5 +1,4 @@
-﻿using Microsoft.UI.Xaml;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using static Shared.CTypes;
 
@@ -7,12 +6,12 @@ namespace Profiler.Pages.Macros
 {
     internal class EditedMacro
     {
-        private Microsoft.UI.Xaml.Controls.ListBox ListBox1;
+        private Avalonia.Controls.ListBox ListBox1;
         private readonly List<GroupedCommand> gMacros = [];
-        private readonly Shared.ProfileModel profile = ((App)Application.Current).GetMainWindow().GetData().Profile;
+        private readonly Shared.ProfileModel profile = ((App)Avalonia.Application.Current).GetMainWindow().GetData().Profile;
         private ushort currentMacroId;
 
-        public void SetListBox(Microsoft.UI.Xaml.Controls.ListBox lb) => ListBox1 = lb;
+        public void SetListBox(Avalonia.Controls.ListBox lb) => ListBox1 = lb;
 
         public bool BasicMode { get; set; } = true;
 
@@ -125,14 +124,14 @@ namespace Profiler.Pages.Macros
         }
 
         #region
-        public int GetCount()
+        public bool LimitReached(byte nAdded)
         {
             int n = 0;
             foreach (GroupedCommand gc in gMacros)
             {
                 n += gc.Commands.Length;
             }
-            return n;
+            return n + nAdded + 18 > 255; //18 = x52 mfd txt + begin + end
         }
 
         public void Clear()
@@ -468,7 +467,7 @@ namespace Profiler.Pages.Macros
                 macro.Add((byte)CommandType.X52MfdTextEnd);
             }
 
-            foreach (GroupedCommand gc in gMacros)
+            foreach (GroupedCommand gc in gMacros.OrderBy(x => x.Id))
             {
                 foreach (uint c in gc.Commands)
                 {

@@ -10,7 +10,9 @@ public:
 	{
 		Button = 0,
 		Hat,
-		Axis
+		Axis,
+		ButtonShort,
+		HatShort,
 	};
 
 	static void Init(CProfile* pProfile, CEventQueue* pEvQueue);

@@ -1,0 +1,31 @@
+﻿<ui:Frame x:Class="Profiler.Dialogs.AssignDefault"
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:ui="using:FluentAvalonia.UI.Controls">
+    <Grid>
+        <TextBlock Text="{StaticResource assign_default_description}" Height="100" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="vJoy" HorizontalAlignment="Center" Grid.Column="1" />
+            <TextBlock Text="{StaticResource mode}" Margin="8,0,8,8" Grid.Column="2" HorizontalAlignment="Center" />
+            <TextBlock Text="{StaticResource submode}" Grid.Column="3" HorizontalAlignment="Center"/>
+            
+            <TextBlock Text="{StaticResource assign_to}" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <TextBox x:Name="txtDummy" IsVisible="False" />
+			<!--VerticalContentAlignment="Center"--><ui:NumberBox x:Name="NumericUpDownJ" Grid.Row="1" Grid.Column="1" Margin="0,0,5,0" TextAlignment="Center" Value="1" Maximum="3" Minimum="1" SpinButtonPlacementMode="Compact" GotFocus="NumericUpDownJ_GettingFocus"/>
+            <TextBlock x:Name="txtMode" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <TextBlock x:Name="txtSubMode" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Grid>
+    </Grid>
+</ui:Frame>

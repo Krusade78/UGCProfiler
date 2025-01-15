@@ -152,6 +152,12 @@ void CProcessOutput::ProcessRequest()
 						CDirectX::Buttons_Hats(command, pVhid);
 						deleted = true;
 					}
+					else if ((command->Type & 0x7f) == CommandType::DxAxis)
+					{
+						ncmds = true;
+						CDirectX::Axis(command, pVhid);
+						deleted = true;
+					}
 					else if ((command->Type & 0x7f) == CommandType::Key)
 					{
 						ncmds = true;
@@ -178,7 +184,7 @@ void CProcessOutput::ProcessRequest()
 					{
 						pProfile->LockStatus();
 						{
-							pProfile->GetStatus()->Mode = command->Basic.Data;
+							pProfile->GetStatus()->Mode = command->Basic.Data1;
 						}
 						pProfile->UnlockStatus();
 						deleted = true;
@@ -187,7 +193,7 @@ void CProcessOutput::ProcessRequest()
 					{
 						pProfile->LockStatus();
 						{
-							pProfile->GetStatus()->SubMode = command->Basic.Data;
+							pProfile->GetStatus()->SubMode = command->Basic.Data1;
 						}
 						pProfile->UnlockStatus();
 						deleted = true;
@@ -277,12 +283,12 @@ void APIENTRY CProcessOutput::EvtMouseTick(_Inout_ PTP_CALLBACK_INSTANCE Instanc
 			if (local->pVhid->GetStatus()->Mouse.X < 0)
 			{
 				command.Type = CommandType::MouseLeft;
-				command.Basic.Data = -local->pVhid->GetStatus()->Mouse.X;
+				command.Basic.Data1 = -local->pVhid->GetStatus()->Mouse.X;
 			}
 			else
 			{
 				command.Type = CommandType::MouseRight;
-				command.Basic.Data = local->pVhid->GetStatus()->Mouse.X;
+				command.Basic.Data1 = local->pVhid->GetStatus()->Mouse.X;
 			}
 			send = true;
 		}
@@ -301,12 +307,12 @@ void APIENTRY CProcessOutput::EvtMouseTick(_Inout_ PTP_CALLBACK_INSTANCE Instanc
 			if (local->pVhid->GetStatus()->Mouse.Y < 0)
 			{
 				command.Type = CommandType::MouseUp;
-				command.Basic.Data = -local->pVhid->GetStatus()->Mouse.Y;
+				command.Basic.Data1 = -local->pVhid->GetStatus()->Mouse.Y;
 			}
 			else
 			{
 				command.Type = CommandType::MouseDown;
-				command.Basic.Data = local->pVhid->GetStatus()->Mouse.Y;
+				command.Basic.Data1 = local->pVhid->GetStatus()->Mouse.Y;
 			}
 			send = true;
 		}

@@ -9,22 +9,6 @@ CProcessInput::CProcessInput(CProfile* pProfile)
 {
 	this->pProfile = pProfile;
 }
-//UCHAR CProcessInput::ConvertirSeta(UCHAR pos)
-//{
-//	switch (pos)
-//	{
-//		case 1:
-//			return 5;
-//		case 2:
-//			return 1;
-//		case 4:
-//			return 7;
-//		case 8:
-//			return 3;
-//		default:
-//			return 0;
-//	}
-//}
 
 void CProcessInput::GetOldHidData(UINT32 joyId, PHID_INPUT_DATA data)
 {
@@ -32,11 +16,10 @@ void CProcessInput::GetOldHidData(UINT32 joyId, PHID_INPUT_DATA data)
 	if (ls == lastStatus.end())
 	{
 		lastStatus.insert({ joyId, HID_INPUT_DATA() });
+		ls = lastStatus.find(joyId);
 	}
-	else
-	{
-		RtlCopyMemory(data, &ls->second, sizeof(HID_INPUT_DATA));
-	}
+
+	RtlCopyMemory(data, &ls->second, sizeof(HID_INPUT_DATA));
 }
 
 void CProcessInput::SetOldHidData(UINT32 joyId, PHID_INPUT_DATA data)
@@ -79,9 +62,9 @@ void CProcessInput::Process(UINT32 joyId, PHID_INPUT_DATA p_hidData)
 					if ((changed >> exp) & 1)
 					{ // if button has changed
 						if ((p_hidData->Buttons[idx] >> exp) & 1)
-							CBotonesSetas::PressButton(pProfile, joyId, (idx * 64) + exp);
+							CButtonsHats::PressButton(pProfile, joyId, (idx * 64) + exp);
 						else
-							CBotonesSetas::ReleaseButton(pProfile, joyId, (idx * 64) + exp);
+							CButtonsHats::ReleaseButton(pProfile, joyId, (idx * 64) + exp);
 					}
 				}
 			}
@@ -89,16 +72,16 @@ void CProcessInput::Process(UINT32 joyId, PHID_INPUT_DATA p_hidData)
 
 		// Hats
 
-		//for (UCHAR idx = 0; idx < 4; idx++)
-		//{
-		//	if (p_hidData->Hats[idx] != viejohidData.Hats[idx])
-		//	{
-		//		if (viejohidData.Hats[idx] != 255)
-		//			CBotonesSetas::ReleaseHat(pProfile, joyId, (idx * 8) + viejohidData.Hats[idx]);
-		//		if (p_hidData->Hats[idx] != 255)
-		//			CBotonesSetas::PressHat(pProfile, joyId, (idx * 8) + p_hidData->Hats[idx]);
-		//	}
-		//}
+		for (UCHAR idx = 0; idx < 4; idx++)
+		{
+			if (p_hidData->Hats[idx] != viejohidData.Hats[idx])
+			{
+				if (viejohidData.Hats[idx] != 255)
+					CButtonsHats::ReleaseHat(pProfile, joyId, (idx * 8) + viejohidData.Hats[idx]);
+				if (p_hidData->Hats[idx] != 255)
+					CButtonsHats::PressHat(pProfile, joyId, (idx * 8) + p_hidData->Hats[idx]);
+			}
+		}
 
 		// Axes
 		for (UCHAR idx = 0; idx < 24; idx++)

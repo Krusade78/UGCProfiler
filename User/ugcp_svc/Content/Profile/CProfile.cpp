@@ -101,7 +101,7 @@ bool CProfile::HF_IoWriteMap(BYTE* SystemBuffer, DWORD size)
 		BYTE* ptr = SystemBuffer + 17;
 		RtlCopyMemory(&profile.MouseTick, ptr++ , 1);
 
-		BYTE njoys = *ptr++;
+		BYTE count = *ptr++;
 		for (BYTE j = 0; j < *(SystemBuffer + 17 + 1); j++)
 		{
 			UINT32 joyId = *((UINT32*)ptr);
@@ -124,8 +124,33 @@ bool CProfile::HF_IoWriteMap(BYTE* SystemBuffer, DWORD size)
 				}
 			}
 		}
-		njoys = *ptr++;
-		for (BYTE j = 0; j < njoys; j++)
+
+		count = *ptr++;
+		for (BYTE j = 0; j < count; j++)
+		{
+			UINT32 joyId = *((UINT32*)ptr);
+			ids.insert({ joyId, 0 });
+			ptr += sizeof(UINT32);
+			for (BYTE nModes = *ptr++; nModes > 0; nModes--)
+			{
+				BYTE mode = *ptr++;
+				for (BYTE nButtons = *ptr++; nButtons > 0; nButtons--)
+				{
+					BYTE buttonId = *ptr++;
+					std::vector<UINT16>* pActions = profile.HatsMap.NewButton(joyId, mode, buttonId, *ptr++);
+					status.Hats.NewStatus(joyId, mode, buttonId);
+
+					for (BYTE nActions = *ptr++; nActions > 0; nActions--)
+					{
+						pActions->push_back(*((UINT16*)ptr));
+						ptr += sizeof(UINT16);
+					}
+				}
+			}
+		}
+
+		count = *ptr++;
+		for (BYTE j = 0; j < count; j++)
 		{
 			UINT32 joyId = *((UINT32*)ptr);
 			ids.insert({joyId, 0});
@@ -194,8 +219,8 @@ bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
 		bufIn = SystemBuffer;
 		while (sizePredicted < InputBufferLength)
 		{
-			sizePredicted += (static_cast<size_t>(*bufIn) * 3) + 1;
-			bufIn += (static_cast<size_t>(*bufIn) * 3) + 1;
+			sizePredicted += (static_cast<size_t>(*bufIn) * 4) + 1;
+			bufIn += (static_cast<size_t>(*bufIn) * 4) + 1;
 		}
 		if (sizePredicted != InputBufferLength)
 		{
@@ -232,8 +257,10 @@ bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
 				PEV_COMMAND mem = new EV_COMMAND;
 				RtlZeroMemory(mem, sizeof(EV_COMMAND));
 				mem->Type = *bufIn;
-				mem->Basic.Data = *(bufIn + 1);
-				mem->Basic.OutputJoy = *(bufIn + 2);
+				mem->Basic.Data1 = *(bufIn + 1);
+				mem->Basic.Data2 = *(bufIn + 2);
+				mem->Basic.Extra = *(bufIn + 3) & 0xf;
+				mem->Basic.OutputJoy = *(bufIn + 3) >> 4;
 				if ((((PEV_COMMAND)bufIn)->Type == CommandType::X52MfdHour) || (((PEV_COMMAND)bufIn)->Type == CommandType::X52MfdHour24))
 				{
 					if (CMFDMenu::Get() != nullptr) CMFDMenu::Get()->SetHourActivated(false);
@@ -242,8 +269,8 @@ bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
 				{
 					if (CMFDMenu::Get() != nullptr) CMFDMenu::Get()->SetDateActivated(false);
 				}
-				bufIn += 3;
-				sizePredicted += 3;
+				bufIn += 4;
+				sizePredicted += 4;
 				commandQueue->AddCommand(mem);
 			}
 			profile.Actions->push_back(commandQueue);

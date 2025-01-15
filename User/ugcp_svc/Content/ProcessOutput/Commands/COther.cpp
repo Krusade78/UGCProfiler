@@ -21,7 +21,7 @@ bool COther::Process(CProfile* pProfile, std::deque<CEventPacket*>::iterator* po
 		if (timerHandle != NULL)
 		{
 			LARGE_INTEGER t{};
-			t.QuadPart = (-1000000LL * command->Basic.Data); //10 * 1000 * 100
+			t.QuadPart = (-1000000LL * command->Basic.Data1); //10 * 1000 * 100
 			FILETIME timeout{};
 			timeout.dwHighDateTime = t.HighPart;
 			timeout.dwLowDateTime = t.LowPart;
@@ -69,13 +69,13 @@ bool COther::Process(CProfile* pProfile, std::deque<CEventPacket*>::iterator* po
 	}
 	else if (command->Type == CommandType::RepeatN)
 	{
-		if (command->Basic.Data == 0)
+		if (command->Basic.Data1 == 0)
 		{
 			DeleteRepeatBlock(commandQueue, CommandType::RepeatN);
 		}
 		else
 		{
-			command->Basic.Data--;
+			command->Basic.Data1--;
 			CopyQueueWithRepeat(commandQueue, CommandType::RepeatN);
 		}
 	}
@@ -96,7 +96,7 @@ bool COther::IsHoldOn(CProfile* pProfile, PEV_COMMAND command)
 {
 	bool pressed = false;
 
-	pProfile->LockStatus(); 
+	pProfile->LockStatus();
 	{
 		if ((command->Extended.Origin & 128) == 128) //eje
 		{
@@ -111,11 +111,15 @@ bool COther::IsHoldOn(CProfile* pProfile, PEV_COMMAND command)
 		}
 		else
 		{
-			//if ((command->Extended.Origin & 64) == 64) //hat
-			//{
-			//	pressed = pProfile->GetStatus()->DxHats[command->Extended.JoyId][(command->Extended.Origin & 63) / 8] != 0;
-			//}
-			//else //button
+			if ((command->Extended.Origin & 64) == 64) //hat
+			{
+				UCHAR hatPressed;
+				if (pProfile->GetStatus()->Hats.GetPressed(&hatPressed, command->Extended.InputJoy, command->Extended.Origin & 63))
+				{
+					pressed = hatPressed == 1;
+				}
+			}
+			else //button
 			{
 				UCHAR btPressed;
 				if (pProfile->GetStatus()->Buttons.GetPressed(&btPressed, command->Extended.InputJoy, command->Extended.Origin))

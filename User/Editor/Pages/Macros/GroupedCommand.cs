@@ -13,13 +13,15 @@ namespace Profiler.Pages.Macros
         private static string GetName(uint[] comands)
         {
             byte cmdType = (byte)(comands[0] & 0x7f);
-            byte data = (byte)((comands[0] >> 8) & 0xff);
-            byte joy = (byte)((comands[0] >> 16) & 0xff);
+            byte data1 = (byte)((comands[0] >> 8) & 0xff);
+            byte data2 = (byte)((comands[0] >> 16) & 0xff);
+            byte extra = (byte)((comands[0] >> 24) & 0xf);
+            byte joy = (byte)(comands[0] >> 28);
             bool released = (comands[0] & 0xff & (byte)CommandType.Release) == (byte)CommandType.Release;
 
             if (cmdType == (byte)CommandType.Key)
             {
-                string key = Keys[data];
+                string key = Keys[data1];
                 if (released)
                 {
                     return $"{Translate.Get("release")} {key.Remove(0, 5)}";
@@ -70,7 +72,7 @@ namespace Profiler.Pages.Macros
                 }
                 else
                 {
-                    return $"{Translate.Get("mouse_left")} {data}";
+                    return $"{Translate.Get("mouse_left")} {data1}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseRight)
@@ -81,7 +83,7 @@ namespace Profiler.Pages.Macros
                 }
                 else
                 {
-                    return $"{Translate.Get("mouse_right")} {data}";
+                    return $"{Translate.Get("mouse_right")} {data1}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseDown)
@@ -92,7 +94,7 @@ namespace Profiler.Pages.Macros
                 }
                 else
                 {
-                    return $"{Translate.Get("mouse_down")} {data}";
+                    return $"{Translate.Get("mouse_down")} {data1}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseUp)
@@ -103,7 +105,7 @@ namespace Profiler.Pages.Macros
                 }
                 else
                 {
-                    return $"{Translate.Get("mouse_up")} {data}";
+                    return $"{Translate.Get("mouse_up")} {data1}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseWhUp)
@@ -130,7 +132,7 @@ namespace Profiler.Pages.Macros
             }
             else if (cmdType == (byte)CommandType.Delay)
             {
-                return $"{Translate.Get("pause")} {data}";
+                return $"{Translate.Get("pause")} {data1}";
             }
             else if (cmdType == (byte)CommandType.Hold)
             {
@@ -148,74 +150,78 @@ namespace Profiler.Pages.Macros
                 if (released)
                     return $"{Translate.Get("repeat_n(slash)")} {Translate.Get("end")}";
                 else
-                    return $"{Translate.Get("repeat_n(slash)")}[{data}] {Translate.Get("begin") }";
+                    return $"{Translate.Get("repeat_n(slash)")}[{data1}] {Translate.Get("begin")}";
             }
             else if (cmdType == (byte)CommandType.PrecisionMode)
             {
                 string[] ejes = ["X", "Y", "Z", "Rx", "Ry", "Rz", "Sl1", "Sl2"];
                 if (!released)
-                    return $"[{Translate.Get("precision_mode")}] J{((data & 31) / 8) + 1} {ejes[(data & 31) % 8]} s{(data >> 5) + 1} On";
+                    return $"[{Translate.Get("precision_mode")}] J{((data1 & 31) / 8) + 1} {ejes[(data1 & 31) % 8]} s{(data1 >> 5) + 1} On";
                 else
-                    return $"[{Translate.Get("precision_mode")}] J{((data & 31) / 8) + 1} {ejes[(data & 31) % 8]} Off";
+                    return $"[{Translate.Get("precision_mode")}] J{((data1 & 31) / 8) + 1} {ejes[(data1 & 31) % 8]} Off";
             }
             else if (cmdType == (byte)CommandType.Mode)
             {
-                return $"{Translate.Get("mode")} {(data + 1)}";
+                return $"{Translate.Get("mode")} {data1 + 1}";
             }
             else if (cmdType == (byte)CommandType.SubMode)
             {
-                if (data == 0)
-                    return "Pinkie Off";
-                else
-                    return "Pinkie On";
+                return $"{Translate.Get("submode")} {data1 + 1}";
             }
             else if (cmdType == (byte)CommandType.DxButton)
             {
                 if (released)
                 {
-                    return $"[{Translate.Get("button")}] vJoy {joy + 1} -  DX {data + 1} Off";
+                    return $"[{Translate.Get("button")}] vJoy {joy + 1} @ {data1 + 1} Off";
                 }
                 else
                 {
-                    return $"[{Translate.Get("button")}] vJoy {joy + 1} - DX {data + 1} On";
+                    return $"[{Translate.Get("button")}] vJoy {joy + 1} @ {data1 + 1} On";
                 }
             }
             else if (cmdType == (byte)CommandType.DxHat)
             {
                 if (released)
                 {
-                    return $"[{Translate.Get("hat")}] vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} Off";
+                    return $"[{Translate.Get("hat")}] vJoy {joy + 1} - {data2 + 1} @ {(data1 % 8) + 1} Off";
                 }
                 else
                 {
-                    return $"[{Translate.Get("hat")}] vJoy. {joy + 1} - DX {4 - (data / 8)} @ {(data % 8) + 1} On";
+                    return $"[{Translate.Get("hat")}] vJoy {joy + 1} - {data2 + 1} @ {(data1 % 8) + 1} On";
                 }
+            }
+            else if (cmdType == (byte)CommandType.DxAxis)
+            {
+                ushort move = (ushort)((data2 << 8) + data1);
+                move *= (ushort)((extra & 1) == 1 ? -1 : 1);
+                string[] axes = ["X", "Y", "Z", "Rx", "Ry", "Rz", "Sl1", "Sl2"];
+                return $"[{Translate.Get("axis")}] vJoy {joy + 1} - {axes[extra >> 1]} {(move > 0 ? '+' : "")}{move}";
             }
             else if (cmdType == (byte)CommandType.X52MfdLight)
             {
-                return $"[X52] {Translate.Get("mfd_light")} {data}";
+                return $"[X52] {Translate.Get("mfd_light")} {data1}";
             }
             else if (cmdType == (byte)CommandType.X52Light)
             {
-                return $"[X52] {Translate.Get("buttons_light")} {data}";
+                return $"[X52] {Translate.Get("buttons_light")} {data1}";
             }
             else if (cmdType == (byte)CommandType.X52InfoLight)
             {
-                if (data == 0)
+                if (data1 == 0)
                     return $"[X52] {Translate.Get("info_light")} Off";
                 else
                     return $"[X52] {Translate.Get("info_light")} On";
             }
             else if (cmdType == (byte)CommandType.X52MfdPinkie)
             {
-                if (data == 0)
+                if (data1 == 0)
                     return "[X52] MFD Pinkie Off";
                 else
                     return "[X52] MFD Pinkie On";
             }
             else if (cmdType == (byte)CommandType.X52MfdTextIni)
             {
-                string texto = $"[X52] {Translate.Get("text_line")} {data}";
+                string texto = $"[X52] {Translate.Get("text_line")} {data1}";
                 byte[] ascii = new byte[16];
                 byte i = 1;
                 while ((byte)(comands[i] & 0x7f) != (byte)CommandType.X52MfdTextEnd)
@@ -229,33 +235,33 @@ namespace Profiler.Pages.Macros
             }
             else if (cmdType == (byte)CommandType.X52MfdHour)
             {
-                if (data == 1)
+                if (data1 == 1)
                 {
-                    return $"[X52] {Translate.Get("mfd_hour")} {data} (AM/PM) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data1} (AM/PM) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
                 }
                 else
                 {
-                    return $"[X52] {Translate.Get("mfd_hour")} {data} (AM/PM) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data1} (AM/PM) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
                 }
             }
             else if (cmdType == (byte)CommandType.X52MfdHour24)
             {
-                if (data == 1)
+                if (data1 == 1)
                 {
-                    return $"[X52] {Translate.Get("mfd_hour")} {data} (24H) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data1} (24H) " + (comands[1] >> 8) + ":" + (comands[2] >> 8);
                 }
                 else
                 {
-                    return $"[X52] {Translate.Get("mfd_hour")} {data} (24H) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
+                    return $"[X52] {Translate.Get("mfd_hour")} {data1} (24H) " + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) / 60) + ":" + ((((comands[1] >> 8) * 256) + (comands[2] >> 8)) % 60);
                 }
             }
             else if (cmdType == (byte)CommandType.x52MfdDate)
             {
-                return $"[X52] {Translate.Get("mfd_date")} {data}: {(comands[1] >> 8)}";
+                return $"[X52] {Translate.Get("mfd_date")} {data1}: {(comands[1] >> 8)}";
             }
             else if (cmdType == (byte)CommandType.VkbGladiatorNxtLeds)
             {
-                string sled = (data == 0) ? "B1" : ((data == 11) ? "J1" : "J2");
+                string sled = (data1 == 0) ? "B1" : ((data1 == 11) ? "J1" : "J2");
                 string[] sorden = ["Off", "Ct", "It1", "It2", "It3", "Fl"];
                 string[] smodo = ["c1", "c2", "c1c2", "c2c1", "c1+c2", "c1+", "c2+"];
 

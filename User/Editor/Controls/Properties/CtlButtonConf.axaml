@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+	x:Class="Profiler.Controls.Properties.CtlButtonConf"
+		xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+	xmlns:local="using:Profiler.Controls"
+	mc:Ignorable="d">
+	<Border BoxShadow="5 5 10 Gray" Margin="7">
+		<StackPanel x:Name="spButton"  Background="#ccefefef">
+			<Border Background="{DynamicResource CardBackgroundFillColorDefault}">
+				<TextBlock Text="{StaticResource button_configuration}" x:Name="LabelButton" VerticalAlignment="Top" Margin="0,3" HorizontalAlignment="Center" FontSize="14"/>
+			</Border>
+			<Grid HorizontalAlignment="Center" Margin="0,10,0,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto" />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
+				<StackPanel>
+					<RadioButton Content="{StaticResource press_release}" x:Name="RadioButtonUpDown" Checked="RadioButtonUpDown_Checked" />
+					<RadioButton Content="{StaticResource long_press_release}" x:Name="RadioButtonLong" Checked="RadioButtonLong_Checked" />
+				</StackPanel>
+				<RadioButton Content="Toggle" x:Name="RadioButtonToggle" Grid.Column="1" Margin="20,0,0,0"  Checked="RadioButtonToggle_Checked" />
+			</Grid>
+			<StackPanel Orientation="Horizontal" Margin="10,10,0,10" HorizontalAlignment="Center">
+				<TextBlock x:Name="LabelPositions" Text="{StaticResource positions}" VerticalAlignment="Center" />
+				<ui:NumberBox x:Name="NumericUpDownPositions" Margin="5,0,0,0" Maximum="20" Minimum="1" Value="2" SpinButtonPlacementMode="Inline" IsEnabled="{Binding IsChecked, ElementName=RadioButtonToggle}"  ValueChanged="NumericUpDownPositions_TextChanged" />
+			</StackPanel>
+
+			<Grid Margin="10,5,0,10">
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition Height="10"/>
+					<RowDefinition />
+					<RowDefinition Height="10" />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<TextBlock Text="{StaticResource assign_button_dx}" />
+				<Grid Grid.Row="2" HorizontalAlignment="Center">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="5"/>
+						<ColumnDefinition Width="auto" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition />
+						<RowDefinition Height="5"/>
+						<RowDefinition />
+					</Grid.RowDefinitions>
+					<TextBlock Text="vJoy" HorizontalAlignment="Center"/>
+					<TextBlock Grid.Column="2" Text="{StaticResource button}" HorizontalAlignment="Center"/>
+
+					<ui:NumberBox Grid.Row="2" x:Name="NumericUpDownJ" Maximum="3" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
+					<ui:NumberBox Grid.Row="2" Grid.Column="2" x:Name="NumericUpDown1" Maximum="128" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
+				</Grid>
+
+				<Button Grid.Row="4" Content="{StaticResource assign}" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssign_Click" />
+			</Grid>
+		</StackPanel>		
+	</Border>
+</UserControl>

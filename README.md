@@ -6,14 +6,12 @@ Based on the XHOTAS code this new software will be able to program any HID game 
 
 ### Status
 
-- [Profiler] Easy button to hat configuration is under development.
-- [Service] DirectX axis move command needs implementation (encoders).
-- [Service] Digital hat input is implemented but requires debugging.
+- Testing v11 Beta 1.
 - [Service] Hot unplug seems to have some problem and needs debugging.
 
 ### Devices
 
-Universal support is ready but some specific HID configurations may not work as continuous range hats.
+Universal support is ready but some specific HID configurations may not work (continuous range hats).
 
 ### Driver
 
@@ -35,7 +33,7 @@ keeping it easy to use, with an event based system.
 The other important feature that is on the roadmap is to make the profiles script based so you can go to a lower level and
 do almost anything (v12?).
 
-The gui has been completly ported to Windows App SDK.
+The gui has been completly ported to Avalonia.
 <br>
 <br>
 
@@ -48,7 +46,7 @@ Can be compiled with Visual Studio Community 2022.
 
 ## Language
 
-Source code and gui are still been translated to english (mostly completed). The gui can be translated to other languages using the xaml files included for that purpose.
+The GUI can be translated to other languages using the xaml files included for that purpose.
 
 
 

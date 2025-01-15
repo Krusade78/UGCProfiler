@@ -7,7 +7,7 @@ void CKeyboard::Processed(PEV_COMMAND pCommand, CVirtualHID* pVHid)
 
     INPUT ip;
     RtlZeroMemory(&ip, sizeof(INPUT));
-    UINT sc = GetExtended(pCommand->Basic.Data);
+    UINT sc = GetExtended(pCommand->Basic.Data1);
         ip.type = INPUT_KEYBOARD;
         //ip.ki.wVk = pCommand->Basic.Data;
         ip.ki.wScan = sc & 0xff;

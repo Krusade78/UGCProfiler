@@ -51,7 +51,7 @@ namespace Launcher
 						continue;
 					}
 					nActions++;
-					tamBuffer += 1 + (uint)(3 * mm.Commands.Count); //1 list size
+					tamBuffer += 1 + (uint)(4 * mm.Commands.Count); //1 list size
 				}
 				byte[] bufferCommands = new byte[tamBuffer + 1];
 				bufferCommands[0] = (byte)CService.MsgType.Macros;
@@ -69,7 +69,8 @@ namespace Launcher
 						bufferCommands[pos++] = (byte)(mm.Commands[i] & 0xff);
 						bufferCommands[pos++] = (byte)((mm.Commands[i] >> 8) & 0xff);
 						bufferCommands[pos++] = (byte)((mm.Commands[i] >> 16) & 0xff);
-					}
+                        bufferCommands[pos++] = (byte)((mm.Commands[i] >> 24) & 0xff);
+                    }
 				}
 
 				if (pipe != null)
@@ -140,8 +141,35 @@ namespace Launcher
 					}
 				}
 
-				//axes
-				mapBuffer.Add((byte)profile.AxesMap.Count);
+				//hats
+                mapBuffer.Add((byte)profile.HatsMap.Count);
+                foreach (KeyValuePair<uint, Shared.ProfileModel.ButtonMapModel> bm in profile.HatsMap)
+                {
+                    mapBuffer.Add((byte)(bm.Key & 0xff));
+                    mapBuffer.Add((byte)((bm.Key >> 8) & 0xff));
+                    mapBuffer.Add((byte)((bm.Key >> 16) & 0xff));
+                    mapBuffer.Add((byte)((bm.Key >> 24) & 0xff));
+                    mapBuffer.Add((byte)bm.Value.Modes.Count);
+                    foreach (KeyValuePair<byte, Shared.ProfileModel.ButtonMapModel.ModeModel> bmm in bm.Value.Modes)
+                    {
+                        mapBuffer.Add(bmm.Key);
+                        mapBuffer.Add((byte)bmm.Value.Buttons.Count);
+                        foreach (KeyValuePair<byte, Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel> button in bmm.Value.Buttons)
+                        {
+                            mapBuffer.Add(button.Key);
+                            mapBuffer.Add(button.Value.Type);
+                            mapBuffer.Add((byte)button.Value.Actions.Count);
+                            foreach (ushort index in button.Value.Actions)
+                            {
+                                mapBuffer.Add((byte)(index & 0xff));
+                                mapBuffer.Add((byte)(index >> 8));
+                            }
+                        }
+                    }
+                }
+
+                //axes
+                mapBuffer.Add((byte)profile.AxesMap.Count);
 				foreach (KeyValuePair<uint, Shared.ProfileModel.AxisMapModel> am in profile.AxesMap)
 				{
 					mapBuffer.Add((byte)(am.Key & 0xff));
@@ -196,16 +224,9 @@ namespace Launcher
 
 		private bool LoadDefault(ref Shared.ProfileModel profile)
 		{
-			ushort btIni = 0;
 			#region Button Macros
 			{
-				ushort id = 0; //bypass no action macro (id == 0) on next id++;
-				foreach (Shared.ProfileModel.MacroModel mm in profile.Macros)
-				{
-					if (mm.Id > id) { id = mm.Id; }
-				}
-				id++;
-				btIni = id;
+				ushort id = 1; //bypass no action macro (id == 0);
 
 				for (byte j = 0; j < 3; j++)
 				{
@@ -214,12 +235,37 @@ namespace Launcher
 						profile.Macros.Add(new()
 						{
 							Id = id++,
-							Name = $"Bt j{j}-{bt}",
+							Name = $"<Btn. J{j} - {bt}>",
 							Commands = [
-								(byte)Shared.CTypes.CommandType.DxButton + (uint)(((j << 8) | bt) << 8),
+								(byte)Shared.CTypes.CommandType.DxButton + (uint)(((j << 20) | bt) << 8),
 								(byte)Shared.CTypes.CommandType.Hold,
-								(byte)(Shared.CTypes.CommandType.Release | Shared.CTypes.CommandType.DxButton) + (uint)(((j << 8) | bt) << 8)]
+								(byte)(Shared.CTypes.CommandType.Release | Shared.CTypes.CommandType.DxButton) + (uint)(((j << 20) | bt) << 8)]
 						});
+					}
+				}
+			}
+			#endregion
+
+			#region Hat Macros
+			{
+				ushort id = 385;
+
+				for (byte j = 0; j < 3; j++)
+				{
+					for (byte h = 0; h < 4; h++)
+					{
+						for (byte pos = 0; pos < 8; pos++)
+						{
+							profile.Macros.Add(new()
+							{
+								Id = id++,
+								Name = $">Hat J{j} H{h} P{pos}>",
+								Commands = [
+									(byte)Shared.CTypes.CommandType.DxHat + (uint)(((h) << 16) + (pos << 8) + (j << 28)),
+									(byte)Shared.CTypes.CommandType.Hold,
+									(byte)(Shared.CTypes.CommandType.Release | Shared.CTypes.CommandType.DxHat) + (uint)((h << 16) + (pos << 8) + (j << 28))]
+							});
+						}
 					}
 				}
 			}
@@ -292,7 +338,7 @@ namespace Launcher
 					Marshal.FreeHGlobal(pcaps);
 					if ((caps.UsagePage == 1) && ((caps.Usage == 4) || (caps.Usage == 5)))
 					{
-						if (!LoadDefaultDeviceProfile(ref profile, joyId, devicesDetected, (ushort)(devicesDetected * 128 + btIni), pdata, ref caps))
+						if (!LoadDefaultDeviceProfile(ref profile, joyId, devicesDetected, pdata, ref caps))
 						{
 							HID.HidD_FreePreparsedData(pdata);
 							CWinUSB.CloseHandle(hDev);
@@ -345,7 +391,7 @@ namespace Launcher
 			return true;
 		}
 
-		private static bool LoadDefaultDeviceProfile(ref Shared.ProfileModel profile, uint joyId, byte outJoy, ushort btIni, IntPtr pdata, ref HID.HIDP_CAPS caps)
+		private static bool LoadDefaultDeviceProfile(ref Shared.ProfileModel profile, uint joyId, byte outJoy, IntPtr pdata, ref HID.HIDP_CAPS caps)
 		{
 			HID.HIDP_BUTTON_CAPS[] bcaps = new HID.HIDP_BUTTON_CAPS[caps.NumberInputButtonCaps];
 			HID.HIDP_VALUE_CAPS[] vcaps = new HID.HIDP_VALUE_CAPS[caps.NumberInputValueCaps];
@@ -385,6 +431,7 @@ namespace Launcher
 
 			byte btId = 0;
 			byte axId = 0;
+			byte hatId = 0;
 			List<byte> axisUsed = [];
 			foreach (KeyValuePair<uint, Shared.ProfileModel.AxisMapModel> kvp in profile.AxesMap)
 			{
@@ -417,14 +464,9 @@ namespace Launcher
 
 						for (byte i = 0; i < (bt.Anonymous.Range.DataIndexMax - bt.Anonymous.Range.DataIndexMin + 1); i++)
 						{
-							if (!mode.Buttons.TryGetValue(btId, out Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button))
-							{
-								mode.Buttons.Add(btId, button = new() { Type = 0});
-							}
-							if (button.Type == 0 && button.Actions.Count == 0)
-							{
-								button.Actions.Add((ushort)(btIni + btId));
-							}
+							Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button = new() { Type = 0 };
+							button.Actions.Add((ushort)((outJoy * 128) + btId + 1));
+							mode.Buttons.Add(btId, button);
 							btId++;
 						}
 						break;
@@ -435,19 +477,16 @@ namespace Launcher
 				{
 					if (val.Anonymous.NotRange.DataIndex == idx)
 					{
-						if (val.LogicalMin != 0) { throw new NotImplementedException(); }
-						if (!profile.AxesMap.TryGetValue(joyId, out Shared.ProfileModel.AxisMapModel newv))
+						if (val.Anonymous.NotRange.Usage == 0)
 						{
-							profile.AxesMap.Add(joyId, newv = new());
+							break;
 						}
-						if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.AxisMapModel.ModeModel mode))
-						{
-							newv.Modes.Add(0, mode = new());
-						}
+						if ((val.Anonymous.NotRange.Usage != 57) && (val.LogicalMin != 0)) { throw new NotImplementedException(); }
 
 						byte destinationAxis = val.Anonymous.NotRange.Usage switch
 						{
-							0 => 255,
+							36 => 0,
+							38 => 1,
 							48 => 0, //x
 							49 => 1, //y
 							50 => 2, //z
@@ -457,63 +496,100 @@ namespace Launcher
 							54 => 6, //slider
 							55 => 6, //dial
 							0x38 => 6, //Wheel
-							57 => 253, //254, //hat
+							57 => 253, //hat
 							0x40 => 9, //vx
 							0x41 => 10, //vy
 							0x42 => 11, //vz
 							0x43 => 12, //vbrx
 							0x44 => 13, //vbry
 							0x45 => 14, //vbrz
-							//0x46 => 6, //vno
+							0x46 => 6, //vno
 							_ => throw new NotImplementedException()
 						};
-						if (destinationAxis == 255) { break; }
-						if (destinationAxis == 253) { break; }
 
-						if (!axisUsed.Contains(destinationAxis))
+						if (destinationAxis == 253)
 						{
-							Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel newAxis = new()
+							if (hatId == 4)
 							{
-								IdJoyOutput = outJoy,
-								Type = 1,
-								OutputAxis = destinationAxis
-							};
-							if (destinationAxis == 6)
-							{
-								newAxis.IsSensibilityForSlider = true;
+								//	MessageBox.Show(CTranslate.Get("not enough axes"), CTranslate.Get("error"), MessageBoxButton.OK, MessageBoxImage.Warning);
 							}
-							mode.Axes.Add(axId++, newAxis);
-							axisUsed.Add(destinationAxis);
-						}
-						else if (destinationAxis == 6)
-						{
-							//bool limit = true;
-							for (byte na = 7; na < 9; na++)
+							else
 							{
-								if (!axisUsed.Contains(na))
+								if ((val.LogicalMax + 1 - val.LogicalMin) != 8 && (val.LogicalMax + 1 - val.LogicalMin) != 4) { throw new NotImplementedException(); }
+								if (!profile.HatsMap.TryGetValue(joyId, out Shared.ProfileModel.ButtonMapModel newv))
 								{
-									Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel newSlider = new()
-									{
-										IdJoyOutput = outJoy,
-										Type = 1,
-										OutputAxis = na,
-										IsSensibilityForSlider = true
-									};
-									mode.Axes.Add(axId++, newSlider);
-									axisUsed.Add(na);
-									//limit = false;
-									break;
+									profile.HatsMap.Add(joyId, newv = new());
 								}
+								if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.ButtonMapModel.ModeModel mode))
+								{
+									newv.Modes.Add(0, mode = new());
+								}
+								for (byte pos = 0; pos < 8; pos++)
+								{
+									Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel hat = new() {
+										Type = 0,
+										Actions = [(ushort)(385 + (outJoy * 32) + (hatId * 8) + pos)]
+									};
+									mode.Buttons.Add((byte)((hatId * 8) + pos), hat);
+								}
+								hatId++;
 							}
-							//if (limit)
+						}
+						else
+						{
+							if (!profile.AxesMap.TryGetValue(joyId, out Shared.ProfileModel.AxisMapModel newv))
+							{
+								profile.AxesMap.Add(joyId, newv = new());
+							}
+							if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.AxisMapModel.ModeModel mode))
+							{
+								newv.Modes.Add(0, mode = new());
+							}
+							if (!axisUsed.Contains(destinationAxis))
+							{
+								Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel newAxis = new()
+								{
+									IdJoyOutput = outJoy,
+									Type = 1,
+									OutputAxis = destinationAxis
+								};
+								if (destinationAxis == 6)
+								{
+									newAxis.IsSensibilityForSlider = true;
+								}
+								mode.Axes.Add(axId++, newAxis);
+								axisUsed.Add(destinationAxis);
+							}
+							else if (destinationAxis == 6)
+							{
+								//bool limit = true;
+								for (byte na = 7; na < 9; na++)
+								{
+									if (!axisUsed.Contains(na))
+									{
+										Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel newSlider = new()
+										{
+											IdJoyOutput = outJoy,
+											Type = 1,
+											OutputAxis = na,
+											IsSensibilityForSlider = true
+										};
+										mode.Axes.Add(axId++, newSlider);
+										axisUsed.Add(na);
+										//limit = false;
+										break;
+									}
+								}
+								//if (limit)
+								//{
+								//	MessageBox.Show(CTranslate.Get("not enough axes"), CTranslate.Get("error"), MessageBoxButton.OK, MessageBoxImage.Warning);
+								//}
+							}
+							//else
 							//{
 							//	MessageBox.Show(CTranslate.Get("not enough axes"), CTranslate.Get("error"), MessageBoxButton.OK, MessageBoxImage.Warning);
 							//}
 						}
-						//else
-						//{
-						//	MessageBox.Show(CTranslate.Get("not enough axes"), CTranslate.Get("error"), MessageBoxButton.OK, MessageBoxImage.Warning);
-						//}
 
 						break;
 					}

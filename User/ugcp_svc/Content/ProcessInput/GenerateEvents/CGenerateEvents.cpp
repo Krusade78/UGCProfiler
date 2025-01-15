@@ -22,7 +22,7 @@ void CGenerateEvents::Mouse(PEV_COMMAND pev_command)
 
 void CGenerateEvents::Command(UINT32 idJoy, UINT16 actionId, UCHAR origin, Origin originType, PEV_COMMAND pAxisData)
 {
-	if (originType == Origin::Hat)
+	if ((originType == Origin::Hat) || (originType == Origin::HatShort))
 	{
 		origin += 64;
 	}
@@ -50,6 +50,11 @@ void CGenerateEvents::Command(UINT32 idJoy, UINT16 actionId, UCHAR origin, Origi
 				{
 					PEV_COMMAND pEvt = new EV_COMMAND;
 					RtlCopyMemory(pEvt, *idx, sizeof(EV_COMMAND));
+					if ((pEvt->Type == CommandType::Hold) && ((originType == Origin::ButtonShort) || (originType == Origin::HatShort)))
+					{
+						pEvt->Type == CommandType::Delay;
+						pEvt->Basic.Data1 = 2;
+					}
 					if ((pEvt->Type == CommandType::Hold) || ((pEvt->Type & 0x7f) == CommandType::Repeat))
 					{
 						pEvt->Extended.Origin = origin;

@@ -1,0 +1,157 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+		xmlns:controls="using:Profiler.Controls"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="Profiler.MainWindow" Name="main"
+		Title="Profiler2" Icon="/res/editor.ico" Loaded="Window_Loaded" Closing="Window_Closing">
+	<Grid x:Name="root" Background="#e0e0e0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.RowSpan="2">
+			<Image Stretch="UniformToFill" Effect="blur(100)" Source="/res/CalibrationGrid.JPG" />
+			<Border  HorizontalAlignment="Stretch" Background="Black" Opacity="0.2" />
+		</Grid>
+
+		<controls:CtlDevices x:Name="ctlDevs" Grid.Row="1" />
+		
+		<Border Margin="0,0,0,10" Background="#a0ffffff" BorderThickness="0" BoxShadow="0 0 10 Black">
+			<Grid x:Name="grMenu">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+
+				<!--#region file-->
+				<StackPanel Orientation="Horizontal">
+					<ui:CommandBarButton Label="{StaticResource new}" ToolTip.Tip="{StaticResource new}" Click="RibbonButtonNew_Click" >
+						<ui:CommandBarButton.IconSource>
+							<ui:FontIconSource Glyph="&#xE8A5;" FontFamily="Segoe MDL2 Assets" />
+						</ui:CommandBarButton.IconSource>
+					</ui:CommandBarButton>
+					<ui:CommandBarButton Label="{StaticResource open}" ToolTip.Tip="{StaticResource open}" Click="RibbonButtonOpen_Click" >
+						<ui:CommandBarButton.IconSource>
+							<ui:FontIconSource Glyph="&#xE838;" FontFamily="Segoe MDL2 Assets" />
+						</ui:CommandBarButton.IconSource>
+					</ui:CommandBarButton>
+					<ui:CommandBarButton x:Name="btSave" Label="{StaticResource save}" ToolTip.Tip="{StaticResource save}" IsEnabled="False" Click="RibbonButtonSave_Click">
+						<ui:CommandBarButton.IconSource>
+							<ui:FontIconSource Glyph="&#xE74E;" FontFamily="Segoe MDL2 Assets" />
+						</ui:CommandBarButton.IconSource>
+					</ui:CommandBarButton>
+					<Button Background="#20ffffff" BorderThickness="1,0,0,0" Padding="1" BorderBrush="DarkGray" Width="20" Height="50" Margin="0,8,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" CornerRadius="0,4,4,0" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+						<Button.Flyout>
+							<MenuFlyout>
+							<MenuItem Header="{StaticResource save_as}" Click="RibbonButtonSaveAs_Click" >
+								<MenuItem.Icon>
+									<ui:FontIcon Glyph="&#xE792;" FontFamily="Segoe MDL2 Assets" />
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuFlyout>
+						</Button.Flyout>
+						<ui:FontIcon Glyph="&#xE70D;" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
+					</Button>
+				</StackPanel>
+				<TextBlock Grid.Row="1" Text="{StaticResource file}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,0" />
+				<!--#endregion-->
+
+				<Line Grid.Column="1" Grid.RowSpan="2" StartPoint="4,5" EndPoint="4,72" Stroke="#FFa0a0a0" StrokeThickness="1" Width="10"/>
+
+				<!--#region Profile-->
+				<StackPanel Grid.Column="2" Orientation="Horizontal">
+					<StackPanel.Styles>
+						<Style Selector="Button">
+							<Setter Property="Background" Value="Transparent" />
+							<Style Selector="^ ContentPresenter:pointerover">
+								<Setter Property="Background" Value="#09000000"/>
+							</Style>
+						</Style>
+					</StackPanel.Styles>
+					<Button Click="ButtonLaunch_Click" BorderThickness="0" VerticalAlignment="Top" Margin="2,6,2,0" ToolTip.Tip="{StaticResource load}" IsEnabled="{Binding IsEnabled, ElementName=btSave}" >												
+							<Grid RowDefinitions="Auto,Auto">							
+								<Viewbox Height="{DynamicResource AppBarButtonContentHeight}" Margin="0,5,0,2" HorizontalAlignment="Left">
+									<Panel Width="14">
+										<ui:FontIcon Glyph="&#xF5B0;" FontFamily="Segoe MDL2 Assets" Foreground="Green"/>
+										<ui:FontIcon Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" />
+									</Panel>
+								</Viewbox>
+								<TextBlock Grid.Row="1" Text="{StaticResource load}" FontSize="12" />
+							</Grid>
+					</Button>
+					<ui:CommandBarButton Label="{StaticResource reset}" ToolTip.Tip="{StaticResource reset}"  Click="ButtonReset_Click" >
+						<ui:CommandBarButton.IconSource>
+							<ui:FontIconSource Glyph="&#xED10;" FontFamily="Segoe MDL2 Assets" />
+						</ui:CommandBarButton.IconSource>
+					</ui:CommandBarButton>
+
+					<Button Click="ButtonMouseConf_Click" BorderThickness="0" VerticalAlignment="Top" Margin="2,6,2,0" ToolTip.Tip="{StaticResource mouse_conf}" IsEnabled="{Binding IsEnabled, ElementName=btSave}" >												
+							<Grid RowDefinitions="Auto,Auto">							
+								<Viewbox Height="{DynamicResource AppBarButtonContentHeight}" Margin="0,5,0,2" HorizontalAlignment="Center">
+									<Panel Width="18" HorizontalAlignment="Center">
+										<ui:FontIcon Glyph="&#xE962;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Left" />
+										<ui:FontIcon Glyph="&#xF8B0;" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Segoe MDL2 Assets" FontSize="7" Foreground="#FFE6C737" />
+									</Panel>
+								</Viewbox>
+								<TextBlock Grid.Row="1" Text="{StaticResource mouse_conf}" FontSize="12" TextWrapping="Wrap" Width="48" TextAlignment="Center" />
+							</Grid>
+					</Button>
+				</StackPanel>
+				<TextBlock Grid.Column="2" Grid.Row="1" Text="{StaticResource profile}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,0" />
+				<!--#endregion-->
+
+				<Line Grid.Column="3" Grid.RowSpan="2" StartPoint="4,5" EndPoint="4,72" Stroke="#FFa0a0a0" StrokeThickness="1" Width="10" />
+
+				<!--#region devices -->
+				<StackPanel Grid.Column="4" Orientation="Horizontal">
+					<ui:CommandBarToggleButton x:Name="tbCalibrate" Label="{StaticResource calibrate}" ToolTip.Tip="{StaticResource calibrate}" IsEnabled="False" Checked="TbCalibrate_Checked" Unchecked="TbUnchecked">
+						<ui:CommandBarToggleButton.IconSource>
+							<ui:FontIconSource Glyph="&#xED5E;" FontFamily="Segoe MDL2 Assets"/>
+						</ui:CommandBarToggleButton.IconSource>
+					</ui:CommandBarToggleButton>
+				</StackPanel>
+				<TextBlock Grid.Row="1" Grid.Column="4" Text="{StaticResource devices}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,2" />
+				<!--#endregion-->
+
+				<Line Grid.Column="5" Grid.RowSpan="2" StartPoint="4,5" EndPoint="4,72" Stroke="#FFa0a0a0" StrokeThickness="1" Width="10" />
+
+				<!--#region edit -->
+				<StackPanel Grid.Column="6" Orientation="Horizontal">
+					<ui:CommandBarToggleButton x:Name="tbMacroEdit" Label="Macros" ToolTip.Tip="Macros" Checked="FtbMacroEdit_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+						<ui:CommandBarToggleButton.IconSource>
+							<ui:FontIconSource Glyph="&#xE765;" FontFamily="Segoe MDL2 Assets"/>
+						</ui:CommandBarToggleButton.IconSource>
+					</ui:CommandBarToggleButton>
+
+					<ui:CommandBarToggleButton x:Name="tbEdit" Label="{StaticResource edit}" ToolTip.Tip="{StaticResource edit}"  Checked="FtbEdit_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+						<ui:CommandBarToggleButton.IconSource>
+							<ui:FontIconSource Glyph="&#xE70F;" FontFamily="Segoe MDL2 Assets"/>
+						</ui:CommandBarToggleButton.IconSource>
+					</ui:CommandBarToggleButton>
+
+					<ui:CommandBarToggleButton x:Name="tbList" Label="{StaticResource list}" ToolTip.Tip="{StaticResource list}"  Checked="FtbList_Checked" Unchecked="TbUnchecked" IsEnabled="False">
+						<!--IsEnabled="{Binding IsEnabled, ElementName=btSave}" >-->
+						<ui:CommandBarToggleButton.IconSource>
+							<ui:FontIconSource Glyph="&#xF0E2;" FontFamily="Segoe MDL2 Assets"/>
+						</ui:CommandBarToggleButton.IconSource>
+					</ui:CommandBarToggleButton>
+				</StackPanel>
+				<TextBlock Grid.Row="1" Grid.Column="6" Text="{StaticResource view}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,0" />
+				<!--#endregion-->
+			</Grid>			
+		</Border>
+	</Grid>
+</Window>

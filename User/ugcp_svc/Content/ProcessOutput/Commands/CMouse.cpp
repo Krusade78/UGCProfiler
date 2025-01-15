@@ -88,7 +88,7 @@ bool CMouse::Process(CVirtualHID* pVHid, PEV_COMMAND command, bool* setTimer)
 		{
 			axisX = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.X = -command->Basic.Data;
+				pVHid->GetStatus()->Mouse.X = -command->Basic.Data1;
 			else
 				pVHid->GetStatus()->Mouse.X = 0;
 		}
@@ -96,7 +96,7 @@ bool CMouse::Process(CVirtualHID* pVHid, PEV_COMMAND command, bool* setTimer)
 		{
 			axisX = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.X = command->Basic.Data;
+				pVHid->GetStatus()->Mouse.X = command->Basic.Data1;
 			else
 				pVHid->GetStatus()->Mouse.X = 0;
 		}
@@ -104,7 +104,7 @@ bool CMouse::Process(CVirtualHID* pVHid, PEV_COMMAND command, bool* setTimer)
 		{
 			axisY = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.Y = -command->Basic.Data;
+				pVHid->GetStatus()->Mouse.Y = -command->Basic.Data1;
 			else
 				pVHid->GetStatus()->Mouse.Y = 0;
 		}
@@ -112,7 +112,7 @@ bool CMouse::Process(CVirtualHID* pVHid, PEV_COMMAND command, bool* setTimer)
 		{
 			axisY = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.Y = command->Basic.Data;
+				pVHid->GetStatus()->Mouse.Y = command->Basic.Data1;
 			else
 				pVHid->GetStatus()->Mouse.Y = 0;
 		}

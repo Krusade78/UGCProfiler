@@ -93,21 +93,21 @@ bool CHIDDevices::Open()
             }
             else
             {
-                PHIDP_PREPARSED_DATA preparsed = nullptr;
-                if (HidD_GetPreparsedData(nhdev, &preparsed))
+                reportLenght = 0;
+                if (HidD_GetPreparsedData(nhdev, reinterpret_cast<PHIDP_PREPARSED_DATA*>(&preparsed)))
                 {
                     HIDP_CAPS caps;
-                    if (HidP_GetCaps(preparsed, &caps) == HIDP_STATUS_SUCCESS)
+                    if (HidP_GetCaps(reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), &caps) == HIDP_STATUS_SUCCESS)
                     {
                         if (GetDeviceMap(preparsed, &caps))
                         {
                             reportLenght = caps.InputReportByteLength;
                         }
                     }
-                    HidD_FreePreparsedData(preparsed);
                 }
                 if (reportLenght != 0)
                 {
+                    reportBuffer = new CHAR[reportLenght];
                     InterlockedExchangePointer(&hdev, nhdev);
                     if (hardwareId == HARDWARE_ID_NXT)
                     {
@@ -116,6 +116,16 @@ bool CHIDDevices::Open()
                 }
                 else
                 {
+                    if (reportBuffer != nullptr)
+                    {
+                        delete[] reportBuffer;
+                        reportBuffer = nullptr;
+                    }
+                    if (preparsed != nullptr)
+                    {
+                        HidD_FreePreparsedData(reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed));
+                        preparsed = nullptr;
+                    }
                     CloseHandle(nhdev);
                 }
             }
@@ -139,6 +149,16 @@ void CHIDDevices::Close()
             HANDLE h = InterlockedExchangePointer(&hdev, nullptr);
             CancelIoEx(h, NULL);
             CloseHandle(h);
+        }
+        if (reportBuffer != nullptr)
+        {
+            delete[] reportBuffer;
+            reportBuffer = nullptr;
+        }
+        if (preparsed != nullptr)
+        {
+            HidD_FreePreparsedData(reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed));
+            preparsed = nullptr;
         }
 
         delete[] pathInterface; pathInterface = nullptr;
@@ -194,11 +214,12 @@ bool CHIDDevices::GetDeviceMap(void* ppd, void* pc)
             if (bt.Range.DataIndexMin == idx)
             {
                 ST_MAP* bmap = new ST_MAP;
-                bmap->ReportId = bt.ReportID;
+                //bmap->ReportId = bt.ReportID;
                 bmap->Bits = bt.Range.DataIndexMax - bt.Range.DataIndexMin + 1;
                 bmap->IsButton = TRUE;
+                bmap->IsHat = FALSE;
                 bmap->Index = bt.Range.DataIndexMin;
-                bmap->Skip = FALSE;
+                //bmap->Skip = FALSE;
                 map.push_back(bmap);
                 btId++;
                 if (btId == 128) { return false; }
@@ -213,25 +234,26 @@ bool CHIDDevices::GetDeviceMap(void* ppd, void* pc)
             {
                 if (val.NotRange.Usage == 0)
                 {
-                    ST_MAP* amap = new ST_MAP;
-                    amap->ReportId = val.ReportID;
-                    amap->Bits = static_cast<UCHAR>(val.BitSize);
-                    amap->IsButton = FALSE;
-                    amap->IsHat = FALSE;
-                    amap->Index = val.NotRange.DataIndex;
-                    amap->Skip = TRUE;
-                    map.push_back(amap);
+                    //ST_MAP* amap = new ST_MAP;
+                    //amap->ReportId = val.ReportID;
+                    //amap->Bits = static_cast<UCHAR>(val.BitSize);
+                    //amap->IsButton = FALSE;
+                    //amap->IsHat = FALSE;
+                    //amap->Index = val.NotRange.DataIndex;
+                    //amap->Skip = TRUE;
+                    //map.push_back(amap);
                 }
                 else
                 {
                     if ((val.NotRange.Usage != 57) && (val.LogicalMin != 0)) { return false; }
+                    if ((val.NotRange.Usage == 57) && (val.LogicalMax + 1 - val.LogicalMin) != 8 && (val.LogicalMax + 1 - val.LogicalMin) != 4) { return false; }
                     ST_MAP* amap = new ST_MAP;
-                    amap->ReportId = val.ReportID;
+                    //amap->ReportId = val.ReportID;
                     amap->Bits = static_cast<UCHAR>(val.BitSize);
                     amap->IsButton = FALSE;
                     amap->IsHat = (val.NotRange.Usage == 57) ? static_cast<UCHAR>(val.LogicalMin) | ((static_cast<UCHAR>(val.LogicalMax) & 0xf) << 4) : 0;
                     amap->Index = val.NotRange.DataIndex;
-                    amap->Skip = FALSE;
+                    //amap->Skip = FALSE;
                     map.push_back(amap);
                     if (!amap->IsHat) { axId++; } else { hatId++; }
                     if ((axId == 24) || (hatId == 4)) { return false; }
@@ -259,12 +281,20 @@ unsigned short CHIDDevices::Read(void* buff)
     }
     else
     {
-        DWORD size = 0;
         if (InterlockedCompareExchange(&reportLenght, 0, 0) != 0)
         {
-            if (ReadFile(hdev, buff, reportLenght, &size, NULL))
+            DWORD readSize = 0;
+            if (ReadFile(hdev, reportBuffer, reportLenght, &readSize, NULL))
             {
-                return static_cast<unsigned short>(size);
+                ULONG size = 0;
+                if (HidP_GetData(HidP_Input, NULL, &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer, reportLenght) == HIDP_STATUS_BUFFER_TOO_SMALL)
+                {
+                    if (HidP_GetData(HidP_Input, reinterpret_cast<PHIDP_DATA>(buff), &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer, reportLenght) == HIDP_STATUS_SUCCESS)
+                    {
+                        return static_cast<unsigned short>(size);
+                    }
+                }
+                return 0;
             }
         }
     }

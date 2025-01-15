@@ -14,20 +14,20 @@ bool CNXT::Process(CEventPacket* queue)
 	if (command->Type.Get() == CommandType::NxtLeds)
 	{
 		UCHAR params[4]{};
-		params[0] = command->Basic.Data;
+		params[0] = command->Basic.Data1;
 
 		std::deque<PEV_COMMAND>::iterator pos = queue->GetCommandQueue()->begin();
-		params[1] = (*(++pos))->Basic.Data;
+		params[1] = (*(++pos))->Basic.Data1;
 		delete (*pos);
 		queue->GetCommandQueue()->erase(pos);
 
 		pos = queue->GetCommandQueue()->begin();
-		params[2] = (*(++pos))->Basic.Data;
+		params[2] = (*(++pos))->Basic.Data1;
 		delete (*pos);
 		queue->GetCommandQueue()->erase(pos);
 
 		pos = queue->GetCommandQueue()->begin();
-		params[3] = (*(++pos))->Basic.Data;
+		params[3] = (*(++pos))->Basic.Data1;
 		delete (*pos);
 		queue->GetCommandQueue()->erase(pos);
 

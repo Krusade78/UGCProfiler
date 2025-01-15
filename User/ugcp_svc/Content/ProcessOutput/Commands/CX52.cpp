@@ -15,25 +15,25 @@ bool CX52::Process(CEventPacket* queue)
 	{
 		case CommandType::X52MfdLight:
 		{
-			UCHAR params = command->Basic.Data;
+			UCHAR params = command->Basic.Data1;
 			if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_MFD(&params);
 			break;
 		}
 		case CommandType::X52Light:
 		{
-			UCHAR params = command->Basic.Data;
+			UCHAR params = command->Basic.Data1;
 			if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_Global(&params);
 			break;
 		}
 		case CommandType::X52InfoLight:
 		{
-			UCHAR params = command->Basic.Data;
+			UCHAR params = command->Basic.Data1;
 			if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_Info(&params);
 			break;
 		}
 		case CommandType::X52MfdPinkie:
 		{
-			UCHAR params = command->Basic.Data;
+			UCHAR params = command->Basic.Data1;
 			if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Pinkie(&params);
 			break;
 		}
@@ -43,7 +43,7 @@ bool CX52::Process(CEventPacket* queue)
 			UCHAR size = 1;
 			RtlZeroMemory(text, 17);
 
-			text[0] = command->Basic.Data; //line
+			text[0] = command->Basic.Data1; //line
 			while (queue->GetCommandQueue()->size() != 1)
 			{
 				std::deque<PEV_COMMAND>::iterator pos = queue->GetCommandQueue()->begin();
@@ -58,7 +58,7 @@ bool CX52::Process(CEventPacket* queue)
 				{
 					throw new std::exception("Error text buffer");
 				}
-				text[size++] = comTxt->Basic.Data;
+				text[size++] = comTxt->Basic.Data1;
 				delete comTxt;
 				queue->GetCommandQueue()->erase(pos);
 			}
@@ -68,15 +68,15 @@ bool CX52::Process(CEventPacket* queue)
 		case CommandType::X52MfdHour:
 		{
 			UCHAR params[3]{};
-			params[0] = command->Basic.Data;
+			params[0] = command->Basic.Data1;
 
 			std::deque<PEV_COMMAND>::iterator pos = queue->GetCommandQueue()->begin();
-			params[1] = (*(++pos))->Basic.Data;
+			params[1] = (*(++pos))->Basic.Data1;
 			delete (*pos);
 			queue->GetCommandQueue()->erase(pos);
 
 			pos = queue->GetCommandQueue()->begin();
-			params[2] = (*(++pos))->Basic.Data;
+			params[2] = (*(++pos))->Basic.Data1;
 			delete (*pos);
 			queue->GetCommandQueue()->erase(pos);
 
@@ -86,15 +86,15 @@ bool CX52::Process(CEventPacket* queue)
 		case CommandType::X52MfdHour24:
 		{
 			UCHAR params[3]{};
-			params[0] = command->Basic.Data;
+			params[0] = command->Basic.Data1;
 
 			std::deque<PEV_COMMAND>::iterator pos = queue->GetCommandQueue()->begin();
-			params[1] = (*(++pos))->Basic.Data;
+			params[1] = (*(++pos))->Basic.Data1;
 			delete (*pos);
 			queue->GetCommandQueue()->erase(pos);
 
 			pos = queue->GetCommandQueue()->begin();
-			params[2] = (*(++pos))->Basic.Data;
+			params[2] = (*(++pos))->Basic.Data1;
 			delete (*pos);
 			queue->GetCommandQueue()->erase(pos);
 
@@ -104,10 +104,10 @@ bool CX52::Process(CEventPacket* queue)
 		case CommandType::MfdDate:
 		{
 			UCHAR params[2]{};
-			params[0] = command->Basic.Data;
+			params[0] = command->Basic.Data1;
 
 			std::deque<PEV_COMMAND>::iterator pos = queue->GetCommandQueue()->begin();
-			params[1] = (*(++pos))->Basic.Data;
+			params[1] = (*(++pos))->Basic.Data1;
 			delete (*pos);
 			queue->GetCommandQueue()->erase(pos);
 

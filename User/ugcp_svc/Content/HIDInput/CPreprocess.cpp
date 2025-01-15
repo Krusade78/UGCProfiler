@@ -1,4 +1,5 @@
 #include "../framework.h"
+#include <hidsdi.h>
 #include "CPreprocess.h"
 #include "../ProcessInput/GenerateEvents/CGenerateEvents.h" //init
 #include "Hid_Input_Data.h"
@@ -58,76 +59,55 @@ DWORD WINAPI CPreprocess::ThreadRead(LPVOID param)
 	return 0;
 }
 
-void CPreprocess::ConvertToCommon(UCHAR* data, DWORD size, UINT32 joyId)
+void CPreprocess::ConvertToCommon(UCHAR* buffer, DWORD size, UINT32 joyId)
 {
 	HID_INPUT_DATA hidData{};
-	DWORD idx = 0;
-	UCHAR idxAxis = 0;
-	UCHAR idxButton = 0;
-	UCHAR idxHat = 0;
-	UCHAR* report = &data[1];
+	PHIDP_DATA data = reinterpret_cast<PHIDP_DATA>(buffer);
 
 	LockDevices(pHIDInput);
 	CHIDDevices* pDev = GetDevice(pHIDInput, joyId);
 	if (pDev != nullptr)
 	{
-		for (auto const& mapIndex : *pDev->GetMap())
+		size /= sizeof(HIDP_DATA);
+		for (DWORD idxData = 0; idxData < size; idxData++)
 		{
-			if (mapIndex->ReportId != data[0]) { UnlockDevices(pHIDInput); return; }
-			if (mapIndex->Bits > 0)
+			UCHAR idxButton = 0;
+			UCHAR idxAxis = 0;
+			UCHAR idxHat = 0;
+			for (auto const& mapIndex : *pDev->GetMap())
 			{
-				UCHAR shift = idx % 8;
 				if (mapIndex->IsButton)
 				{
-					UCHAR v[17]{};
-					RtlCopyMemory(&v, &report[idx / 8], ((idx + mapIndex->Bits - 1) / 8) + 1 - (idx / 8));
-					v[(mapIndex->Bits + shift) / 8] &= (1 << ((mapIndex->Bits + shift) % 8)) - 1;
-					UINT64* pv64 = reinterpret_cast<UINT64*>(v);
-					if (shift != 0)
+					if ((data[idxData].DataIndex >= mapIndex->Index) && (data[idxData].DataIndex < (mapIndex->Index + mapIndex->Bits)))
 					{
-						*pv64 = (*pv64 >> shift) | *reinterpret_cast<UINT64*>(&v[8]) << (64 - shift);
-						pv64 = reinterpret_cast<UINT64*>(&v[8]);
-						*pv64 = (*pv64 >> shift) | static_cast<UINT64>(v[16]) << (64 - shift);
-						pv64 = reinterpret_cast<UINT64*>(v);
-					}
-					UCHAR shiftBt = idxButton % 64;
-					if (idxButton > 63)
-					{
-						hidData.Buttons[1] |= *pv64 << shiftBt;
-					}
-					else
-					{
-						hidData.Buttons[0] |= *pv64 << shiftBt;
-						if (shiftBt != 0) { hidData.Buttons[1] |= *pv64 >> (64 - shiftBt); }
-						hidData.Buttons[1] |= *(UINT64*)&v[8] << shiftBt;
+						UCHAR idx = data[idxData].DataIndex - mapIndex->Index + idxButton;
+						if (idx > 63)
+						{
+							hidData.Buttons[1] |= 1ull << (idx - 64);
+						}
+						else
+						{
+							hidData.Buttons[0] |= 1ull << idx;
+						}
 					}
 					idxButton += mapIndex->Bits;
 				}
 				else if (mapIndex->IsHat)
 				{
-					UINT16 v = 0;
-					RtlCopyMemory(&v, &report[idx / 8], ((idx + mapIndex->Bits - 1) / 8) + 1 - (idx / 8));
-					v = (v >> shift) & ((1 << mapIndex->Bits) - 1);
-					if ((v < (mapIndex->IsHat & 0xf)) || (v > (mapIndex->IsHat >> 4)))
+					if (data[idxData].DataIndex == mapIndex->Index)
 					{
-						hidData.Hats[idxHat++] = 255;
+						hidData.Hats[idxHat] = (static_cast<UCHAR>(data[idxData].RawValue) < (mapIndex->IsHat & 0xf)) || (static_cast<UCHAR>(data[idxData].RawValue) > (mapIndex->IsHat >> 4)) ? 255 : static_cast<UCHAR>(data[idxData].RawValue) - (mapIndex->IsHat & 0xf);
 					}
-					else
-					{
-						hidData.Hats[idxHat++] = static_cast<UCHAR>(v) - (mapIndex->IsHat & 0xf);
-					}
+					idxHat++;
 				}
 				else
 				{
-					UINT32 v = 0;
-					RtlCopyMemory(&v, &report[idx / 8], ((idx + mapIndex->Bits - 1) / 8) + 1 - (idx / 8));
-					v = (v >> shift) & ((1 << mapIndex->Bits) - 1);
-					if (!mapIndex->Skip)
+					if (data[idxData].DataIndex == mapIndex->Index)
 					{
-						hidData.Axis[idxAxis++] = static_cast<UINT16>(v);
+						hidData.Axis[idxAxis] = static_cast<UINT16>(data[idxData].RawValue);
 					}
+					idxAxis++;;
 				}
-				idx += mapIndex->Bits;
 			}
 		}
 	}

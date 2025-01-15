@@ -23,12 +23,20 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 		UINT16 sTopSl = 32767;
 		INT16 sTop = 16383;
 
-		if (sTopSl == 0) { sTopSl = 32767; }
-		if (sTop == 0) { sTop = sTopSl / 2; }
+		//if (sTopSl == 0) { sTopSl = 32767; }
+		//if (sTop == 0) { sTop = sTopSl / 2; }
 		bool slider = false;
 		pProfile->BeginProfileRead();
 		{
 			PROGRAMMING::AXISMODEL* axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, mode, idx);
+			if (axisMap == nullptr)
+			{
+				axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, 0, idx);
+				if (axisMap != nullptr)
+				{
+					mode = 0;
+				}
+			}
 			if (axisMap == nullptr)
 			{
 				pProfile->EndProfileRead();
@@ -165,19 +173,19 @@ void CAxes::Axis2Mouse(UCHAR axis, CHAR mov)
 		if (mov == 0)
 		{
 			event.Type = CommandType::Release | CommandType::MouseLeft;
-			event.Basic.Data = 0;
+			event.Basic.Data1 = 0;
 		}
 		else
 		{
 			if (mov >= 0)
 			{
 				event.Type = CommandType::MouseRight;
-				event.Basic.Data = mov;
+				event.Basic.Data1 = mov;
 			}
 			else
 			{
 				event.Type = CommandType::MouseLeft;
-				event.Basic.Data = -mov;
+				event.Basic.Data1 = -mov;
 			}
 		}
 	}
@@ -185,19 +193,19 @@ void CAxes::Axis2Mouse(UCHAR axis, CHAR mov)
 		if (mov == 0)
 		{
 			event.Type = CommandType::Release | CommandType::MouseUp;
-			event.Basic.Data = 0;
+			event.Basic.Data1 = 0;
 		}
 		else
 		{
 			if (mov >= 0)
 			{
 				event.Type = CommandType::MouseDown;
-				event.Basic.Data = mov;
+				event.Basic.Data1 = mov;
 			}
 			else
 			{
 				event.Type = CommandType::MouseUp;
-				event.Basic.Data = -mov;
+				event.Basic.Data1 = -mov;
 			}
 		}
 	}
@@ -267,12 +275,12 @@ UCHAR CAxes::TranslateRotary(CProfile* pProfile, UINT32 joyId, UCHAR axis, UINT1
 	bands = (axisMap->Type & 32) == 32;
 
 
-	CALIBRATION::ST_LIMITS* pl = pProfile->GetCalibration()->GetLimit(joyId, axis);
-	if (pl == nullptr)
-	{
-		return 255;
-	}
-	UINT16 range = pl->Range;
+	//CALIBRATION::ST_LIMITS* pl = pProfile->GetCalibration()->GetLimit(joyId, axis);
+	//if (pl == nullptr)
+	//{
+	//	return 255;
+	//}
+	const UINT16 range = 32768;// pl->Range;
 	UINT16 newPos = _new;
 
 	STATUS::ST_AXIS* status;
@@ -339,6 +347,10 @@ UCHAR CAxes::TranslateRotary(CProfile* pProfile, UINT32 joyId, UCHAR axis, UINT1
 			}
 			previousPos = static_cast<UINT16>((band * range) / 100);
 			idc++;
+		}
+		if ((currentBand == 255) && (newPos >= previousPos))
+		{
+			currentBand = idc;
 		}
 		if ((currentBand != 255) && (currentBand != oldBand))
 		{

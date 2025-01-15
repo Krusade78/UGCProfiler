@@ -29,8 +29,8 @@ public:
 	ST_STATUS* GetStatus() { return &status; }
 	void SendRequestToJoystick(UCHAR joyId);
 
-	void LockMouse() { WaitForSingleObject(hMutextMouse, INFINITE); }
-	void UnlockMouse() { ReleaseSemaphore(hMutextMouse, 1, NULL); }
+	void LockMouse() const { WaitForSingleObject(hMutextMouse, INFINITE); }
+	void UnlockMouse() const { ReleaseSemaphore(hMutextMouse, 1, NULL); }
 private:
 	HANDLE hMutextMouse = nullptr;
 	bool initialized = false;
