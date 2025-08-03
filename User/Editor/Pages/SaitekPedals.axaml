@@ -6,7 +6,7 @@
 	xmlns:ui="using:FluentAvalonia.UI.Controls"
 	mc:Ignorable="d">
 	<ScrollViewer>
-		<Viewbox StretchDirection="DownOnly" MinWidth="460">
+		<Viewbox StretchDirection="DownOnly" MinWidth="460" MinHeigth="460">
 			<Grid Loaded="Grid_Loaded" HorizontalAlignment="Center" VerticalAlignment="Center">
 				<Image Source="/res/pedales.png" Width="600" Stretch="Uniform"  HorizontalAlignment="Center" VerticalAlignment="Center" />
 

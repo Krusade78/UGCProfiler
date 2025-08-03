@@ -49,7 +49,10 @@ namespace Profiler.Dialogs
                 {
                     for (byte idx = usg.Id; idx < (usg.Id + usg.Bits); idx++)
                     {
-                        AddButton(parent, selMode, idx);
+                        if (idx + (NBStartIndex.Value - 1) < 128)
+                        {
+                            AddButton(parent, selMode, idx);
+                        }
                     }
                 }
                 else if (usg.Type == 253)
@@ -81,7 +84,7 @@ namespace Profiler.Dialogs
             {
                 button = new() { Type = 0 };
                 {
-                    uint v = (((uint)idx) << 8) + (((uint)NumericUpDownJ.Value - 1) << 28);
+                    uint v = (((uint)idx + (byte)NBStartIndex.Value - 1) << 8) + (((uint)NumericUpDownJ.Value - 1) << 28);
                     uint[] block =
                     [
                         ((byte)Shared.CTypes.CommandType.DxButton + v),
@@ -99,7 +102,7 @@ namespace Profiler.Dialogs
                         parent.GetData().Profile.Macros.Add(new()
                         {
                             Id = newId,
-                            Name = $"<{Translate.Get("button")} {NumericUpDownJ.Value} - {idx + 1}>",
+                            Name = $"<{Translate.Get("button")} {NumericUpDownJ.Value} - {idx + (byte)NBStartIndex.Value - 1 + 1}>",
                             Commands = [.. block]
                         });
                         button.Actions.Add(newId);

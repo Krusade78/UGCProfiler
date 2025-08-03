@@ -98,7 +98,7 @@ namespace Profiler.Pages
                 byte count = 1;
                 foreach (Shared.ProfileModel.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == 254))
                 {
-                    for (byte pos = 0; pos <= u.Bits; pos++)
+                    for (byte pos = 0; pos <= u.Range; pos++)
                     {
                         Avalonia.Controls.Border bd = new()
                         {

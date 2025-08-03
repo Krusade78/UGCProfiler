@@ -9,7 +9,7 @@ class IHIDInput
 public:
     virtual bool Prepare() = 0;
     virtual bool Open() = 0;
-    virtual void Close() = 0;
+    virtual void Close(bool exit) = 0;
 	virtual unsigned short Read(void* buff) = 0;
 
 	inline static UINT32 GetHardwareId(wchar_t* path)
@@ -18,7 +18,7 @@ public:
         wchar_t* cmps = new wchar_t[size];
         StringCchCopy(cmps, size, path);
 
-        UINT32 ret = 0;
+        UINT32 ret = 0xFFFFFFFF;
         try
         {
             ret = static_cast<UINT32>(wcstol(&path[12], NULL, 16)) << 16;

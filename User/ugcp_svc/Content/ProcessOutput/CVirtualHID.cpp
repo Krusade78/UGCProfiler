@@ -7,13 +7,18 @@ CVirtualHID::CVirtualHID()
 {
    RtlZeroMemory(&status, sizeof(ST_STATUS));
    hMutextMouse = CreateSemaphore(NULL, 1, 1, NULL);
+   for (char i = 0; i < 16; i++)
+   {
+       available[i] = isVJDExists(i + 1);
+   }
 }
 
 CVirtualHID::~CVirtualHID()
 {
-    if (GetVJDStatus(3) == VJD_STAT_OWN) { RelinquishVJD(3); }
-    if (GetVJDStatus(2) == VJD_STAT_OWN) { RelinquishVJD(2); }
-    if (GetVJDStatus(1) == VJD_STAT_OWN) { RelinquishVJD(1); }
+    for (char i = 0; i < 16; i++)
+    {
+        if (available[i] && (GetVJDStatus(i + 1) == VJD_STAT_OWN)) { RelinquishVJD(i + 1); }
+    }
 
     CloseHandle(hMutextMouse);
 }
@@ -29,40 +34,43 @@ bool CVirtualHID::Init()
         initialized = true;
     }
 
-    if ((GetVJDStatus(1) == VJD_STAT_OWN) && (GetVJDStatus(2) == VJD_STAT_OWN) && (GetVJDStatus(3) == VJD_STAT_OWN))
+    bool ok = true;
+    for (char i = 0; i < 16; i++)
     {
-        return true;
-    }
-    else
-    {
-        if (GetVJDStatus(3) == VJD_STAT_OWN) { RelinquishVJD(3); }
-        if (GetVJDStatus(2) == VJD_STAT_OWN) { RelinquishVJD(2); }
-        if (GetVJDStatus(1) == VJD_STAT_OWN) { RelinquishVJD(1); }
-    }
-
-    if ((GetVJDStatus(1) != VJD_STAT_FREE) || (GetVJDStatus(2) != VJD_STAT_FREE) || (GetVJDStatus(3) != VJD_STAT_FREE))
-    {
-        return false;
-    }
-    if (AcquireVJD(1))
-    {
-        if (AcquireVJD(2))
+        if (available[i] && (GetVJDStatus(i + 1) != VJD_STAT_OWN))
         {
-            if (!AcquireVJD(3))
+            ok = false;
+            break;
+        }
+    }
+    if (!ok)
+    {
+        for (char i = 0; i < 16; i++)
+        {
+            if (available[i] && (GetVJDStatus(i + 1) == VJD_STAT_OWN)) { RelinquishVJD(i + 1); }
+            if (available[i] && (GetVJDStatus(i + 1) != VJD_STAT_FREE))
             {
-                RelinquishVJD(2);
-                RelinquishVJD(1);
                 return false;
             }
         }
-        else
-        {
-            RelinquishVJD(1);
-            return false;
-        }
     }
     else
     {
+        return true;
+    }
+
+    ok = true;
+    char i = 0;
+    for (; i < 16; i++)
+    {
+        if (available[i] && !AcquireVJD(i + 1)) { ok = false; break; }
+    }
+    if (!ok)
+    {
+        for (; i >= 0; i--)
+        {
+            if (available[i]) { RelinquishVJD(i + 1); }
+        }
         return false;
     }
 
@@ -99,7 +107,20 @@ void CVirtualHID::SendRequestToJoystick(UCHAR joyId)
         input.lButtonsEx1 = status.DirectX[joyId].Buttons[4] | (status.DirectX[joyId].Buttons[5] << 8) | (status.DirectX[joyId].Buttons[6] << 16) | (status.DirectX[joyId].Buttons[7] << 24);
         input.lButtonsEx2 = status.DirectX[joyId].Buttons[8] | (status.DirectX[joyId].Buttons[9] << 8) | (status.DirectX[joyId].Buttons[10] << 16) | (status.DirectX[joyId].Buttons[11] << 24);// Buttons 65-96
         input.lButtonsEx3 = status.DirectX[joyId].Buttons[12] | (status.DirectX[joyId].Buttons[13] << 8) | (status.DirectX[joyId].Buttons[14] << 16) | (status.DirectX[joyId].Buttons[15] << 24);// Buttons 97-128
-        UpdateVJD(joyId + 1, &input);
+        char vjId = 0;
+        for (char i = 0; i < 16; i++)
+        {
+            if (available[i])
+            {
+                if (joyId == vjId)
+                {
+                    UpdateVJD(i + 1, (PVOID)&input);
+                    break;
+                }
+                vjId++;
+            }
+        }
+
     }
 }
 

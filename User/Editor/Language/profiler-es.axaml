@@ -88,6 +88,7 @@
 	<!--#region Assign default vJoy conf-->
 	<x:String x:Key="assign_vjoy_default_configuration">Asignar configuración de vJoy por defecto</x:String>
 	<x:String x:Key="assign_default_description" xml:space="preserve">Se creará un prefil por defecto para la combidación de dispositivo y modo/submodo seleccionados.&#13;Todos los botones, ejes y setas será asignados al vJoy elegido (no se sobreescriben controles ya asignados).</x:String>
+	<x:String x:Key="buttons_start_index">Idc. inicial botones:</x:String>
 	<!--#endregion-->
 
 	<!--#region Properties-->

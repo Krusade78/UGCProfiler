@@ -16,10 +16,12 @@ namespace Launcher
 			if (string.IsNullOrEmpty(file))
 			{
 				profile = new();
-				if (LoadDefault(ref profile))
+				string devices = null;
+				if (LoadDefault(ref profile, ref devices))
 				{
 					file = CTranslate.Get("default");
-				}
+                    main.MessageBox(devices ?? "/------/", CTranslate.Get("default profile loaded ok"), MessageBoxImage.Information);
+                }
 				else
 				{
 					return false;
@@ -222,7 +224,7 @@ namespace Launcher
 			return true;
 		}
 
-		private bool LoadDefault(ref Shared.ProfileModel profile)
+		private static bool LoadDefault(ref Shared.ProfileModel profile, ref string ndevices)
 		{
 			#region Button Macros
 			{
@@ -366,10 +368,6 @@ namespace Launcher
 
 				HID.HidD_FreePreparsedData(pdata);
 				CWinUSB.CloseHandle(hDev);
-				if (devicesDetected == 3)
-				{
-					break;
-				}
 			}
 
 			CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
@@ -378,14 +376,22 @@ namespace Launcher
 
 			if (devicesDetected > 0)
 			{
-				string msj = $"{CTranslate.Get("detected")}\n";
+				List<string> msj = [];
 				byte idOutput = 0;
 				foreach (KeyValuePair<string, uint> dev in selected)
 				{
-					msj += dev.Key + "\n";
+					if (idOutput < 3)
+					{
+						msj.Add(dev.Key);
+					}
 					idOutput++;
 				}
-				main.MessageBox(msj, "", MessageBoxImage.Information);
+				if (idOutput > 3)
+				{
+					msj.Add($"... ({idOutput - 3}+)");
+				}
+				ndevices = string.Join('\n', msj);
+				//main.MessageBox(msj, "", MessageBoxImage.Information);
 			}
 
 			return true;
@@ -482,8 +488,8 @@ namespace Launcher
 							break;
 						}
 						if ((val.Anonymous.NotRange.Usage != 57) && (val.LogicalMin != 0)) { throw new NotImplementedException(); }
-
-						byte destinationAxis = val.Anonymous.NotRange.Usage switch
+                        if (val.Anonymous.NotRange.Usage == 1) { continue; } //ignorar
+                        byte destinationAxis = val.Anonymous.NotRange.Usage switch
 						{
 							36 => 0,
 							38 => 1,

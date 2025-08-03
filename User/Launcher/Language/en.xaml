@@ -11,6 +11,7 @@
     <x:String x:Key="error">Error</x:String>
     <x:String x:Key="error reading calibration">Error reading calibration:</x:String>
     <x:String x:Key="profile loaded ok">Profile loaded OK.</x:String>
+    <x:String x:Key="default profile loaded ok">Default profile loaded OK</x:String>
     <x:String x:Key="default"># Default #</x:String>
     <x:String x:Key="not enough axes">Not enough axes available in vJoy</x:String>
     <x:String x:Key="detected">Devices in default profile:</x:String>

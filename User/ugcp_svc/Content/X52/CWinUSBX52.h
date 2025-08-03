@@ -11,9 +11,6 @@ public:
 	CWinUSBX52() : CHIDDevices(HARDWARE_ID_X52) {}
 
 	//IHIDInput overrides
-	virtual bool Prepare() override;
-	virtual bool Open() override;
-	virtual void Close() override;
 	virtual unsigned short Read(void* buff) override;
 
 	void SetPause(bool onoff);
@@ -24,5 +21,10 @@ private:
 	WINUSB_INTERFACE_HANDLE hwusb = nullptr;
 	WINUSB_PIPE_INFORMATION pipe{};
 	char paused = 0;
+
+	//IHIDInput overrides
+	virtual bool Prepare() override;
+	virtual bool Open() override;
+	virtual void Close(bool exit) override;
 };
 

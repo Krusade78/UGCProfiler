@@ -92,19 +92,14 @@ void CButtonsHats::PressButton(UINT32 joyId, UCHAR idx, bool longPress)
 			UCHAR pos;
 			if (pProfile->GetStatus()->Buttons.GetPos(&pos, joyId, mode, idx))
 			{
-				PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, mode, idx);
-				if (actions == nullptr)
-				{
-					actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, 0, idx);
-					mode = 0;
-				}
+				PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx);
 				if (actions != nullptr)
 				{
 					actionId = actions->Actions.at(pos);
 					if (actions->Type == 1)
 					{
 						pProfile->GetStatus()->Buttons.SetPos(1, false, joyId, mode, idx);
-						if (static_cast<UCHAR>(pos + 1) >= pProfile->GetProfile()->ButtonsMap.GetConf(joyId, mode, idx)->Actions.size())
+						if (static_cast<UCHAR>(pos + 1) >= pProfile->GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx)->Actions.size())
 						{
 							pProfile->GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
 						}
@@ -172,11 +167,7 @@ void CButtonsHats::ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease)
 		}
 		pProfile->UnlockStatus();
 
-		PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, mode, idx);
-		if (actions == nullptr)
-		{
-			actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, 0, idx);
-		}
+		PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx);
 		if (actions != nullptr)
 		{
 			bool longRelease = false;
@@ -287,19 +278,14 @@ void CButtonsHats::PressHat(UINT32 joyId, UCHAR idx, bool longPress)
 			UCHAR pos;
 			if (pProfile->GetStatus()->Hats.GetPos(&pos, joyId, mode, idx))
 			{
-				PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->HatsMap.GetConf(joyId, mode, idx);
-				if (actions == nullptr)
-				{
-					pProfile->GetProfile()->HatsMap.GetConf(joyId, 0, idx);
-					mode = 0;
-				}
+				PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->HatsMap.GetConf(joyId, &mode, idx);
 				if (actions != nullptr)
 				{
 					actionId = actions->Actions.at(pos);
 					if (actions->Type == 1)
 					{
 						pProfile->GetStatus()->Hats.SetPos(1, false, joyId, mode, idx);
-						if (static_cast<UCHAR>(pos + 1) >= pProfile->GetProfile()->HatsMap.GetConf(joyId, mode, idx)->Actions.size())
+						if (static_cast<UCHAR>(pos + 1) >= pProfile->GetProfile()->HatsMap.GetConf(joyId, &mode, idx)->Actions.size())
 						{
 							pProfile->GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
 						}
@@ -367,11 +353,7 @@ void CButtonsHats::ReleaseHat(UINT32 joyId, UCHAR idx, bool shortRelease)
 		}
 		pProfile->UnlockStatus();
 
-		PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->HatsMap.GetConf(joyId, mode, idx);
-		if (actions == nullptr)
-		{
-			pProfile->GetProfile()->HatsMap.GetConf(joyId, 0, idx);
-		}
+		PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->HatsMap.GetConf(joyId, &mode, idx);
 		if (actions != nullptr)
 		{
 			bool longRelease = false;

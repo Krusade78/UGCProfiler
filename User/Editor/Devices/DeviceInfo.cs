@@ -134,6 +134,7 @@ namespace Profiler.Devices
                                     });
                                 }
                                 else if ((val.Anonymous.NotRange.Usage != 57) && (val.LogicalMin != 0)) { throw new NotImplementedException(); }
+                                else if (val.Anonymous.NotRange.Usage == 1) { }//ignorar
                                 else
                                 {
                                     devData.Usages.Add(new()

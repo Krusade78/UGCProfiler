@@ -63,16 +63,27 @@ private:
 			return &pStButtonsMap->at(joyId).Modes.at(mode).Buttons.at(button).Actions;
 		}
 
-		inline BUTTONMODEL* GetConf(UINT32 joyId, UCHAR mode, UCHAR button)
+		inline BUTTONMODEL* GetConf(UINT32 joyId, UCHAR* mode, UCHAR button)
 		{
 			std::unordered_map<UINT32, BUTTONMAPMODEL>::iterator pBmm = pStButtonsMap->find(joyId);
 			if (pBmm != pStButtonsMap->end())
 			{
-				BUTTONMODEMODEL* pMm = &pBmm->second.Modes.at(mode);
-				std::unordered_map<UCHAR, BUTTONMODEL>::iterator pB = pMm->Buttons.find(button);
-				if (pB != pMm->Buttons.end())
+				std::unordered_map<UCHAR, BUTTONMODEMODEL>::iterator pMm = pBmm->second.Modes.find(*mode);
+				if (pMm == pBmm->second.Modes.end())
 				{
-					return &pB->second;
+					pMm = pBmm->second.Modes.find(0);
+					if (pMm != pBmm->second.Modes.end())
+					{
+						*mode = 0;
+					}
+				}
+				if (pMm != pBmm->second.Modes.end())
+				{
+					std::unordered_map<UCHAR, BUTTONMODEL>::iterator pB = pMm->second.Buttons.find(button);
+					if (pB != pMm->second.Buttons.end())
+					{
+						return &pB->second;
+					}
 				}
 			}
 			return nullptr;
@@ -94,16 +105,27 @@ private:
 			return &pStAxesMap->at(joyId).Modes.at(mode).Axes.at(axis);
 		}
 
-		inline AXISMODEL* GetConf(UINT32 joyId, UCHAR mode, UCHAR axis)
+		inline AXISMODEL* GetConf(UINT32 joyId, UCHAR* mode, UCHAR axis)
 		{
 			std::unordered_map<UINT32, AXISMAPMODEL>::iterator pAmm = pStAxesMap->find(joyId);
 			if (pAmm != pStAxesMap->end())
 			{
-				AXISMODEMODEL* pMm = &pAmm->second.Modes.at(mode);
-				std::unordered_map<UCHAR, AXISMODEL>::iterator pA = pMm->Axes.find(axis);
-				if (pA != pMm->Axes.end())
+				std::unordered_map<UCHAR, AXISMODEMODEL>::iterator pMm = pAmm->second.Modes.find(*mode);
+				if (pMm == pAmm->second.Modes.end())
 				{
-					return &pA->second;
+					pMm = pAmm->second.Modes.find(0);
+					if (pMm != pAmm->second.Modes.end())
+					{
+						*mode = 0;
+					}
+				}
+				if (pMm != pAmm->second.Modes.end())
+				{
+					std::unordered_map<UCHAR, AXISMODEL>::iterator pA = pMm->second.Axes.find(axis);
+					if (pA != pMm->second.Axes.end())
+					{
+						return &pA->second;
+					}
 				}
 			}
 			return nullptr;

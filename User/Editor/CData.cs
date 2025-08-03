@@ -6,6 +6,7 @@ namespace Profiler
 {
     class CDatos : IDisposable
     {
+        private static System.Text.Json.JsonSerializerOptions jsonsOptions = new() { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(System.Text.Unicode.UnicodeRanges.All) };
         public ProfileModel Profile { get; private set; } = new();
         public bool Modified { get; set; } = false;
 
@@ -138,7 +139,7 @@ namespace Profiler
 
             try
             {
-                System.IO.File.WriteAllText(filename, System.Text.Json.JsonSerializer.Serialize(Profile));
+                System.IO.File.WriteAllText(filename, System.Text.Json.JsonSerializer.Serialize(Profile, jsonsOptions));
             }
             catch (Exception ex)
             {

@@ -22,11 +22,7 @@ void CGenerateEvents::Mouse(PEV_COMMAND pev_command)
 
 void CGenerateEvents::Command(UINT32 idJoy, UINT16 actionId, UCHAR origin, Origin originType, PEV_COMMAND pAxisData)
 {
-	if ((originType == Origin::Hat) || (originType == Origin::HatShort))
-	{
-		origin += 64;
-	}
-	else if (originType == Origin::Axis)
+	if ((originType == Origin::Hat) || (originType == Origin::HatShort) || (originType == Origin::Axis))
 	{
 		origin += 128;
 	}
@@ -65,6 +61,10 @@ void CGenerateEvents::Command(UINT32 idJoy, UINT16 actionId, UCHAR origin, Origi
 							pEvt->Extended.Mode = pAxisData->Extended.Mode;
 							pEvt->Extended.Incremental = pAxisData->Extended.Incremental;
 							pEvt->Extended.Band = pAxisData->Extended.Band;
+						}
+						else if ((originType == Origin::Hat) || (originType == Origin::HatShort))
+						{
+							pEvt->Extended.Mode = 255; //Hat flag
 						}
 					}
 					pEvent->AddCommand(pEvt);

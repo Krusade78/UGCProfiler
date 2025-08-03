@@ -46,7 +46,7 @@
 						<TextBlock Grid.Column="2" Text="{StaticResource hat}" HorizontalAlignment="Center"/>
 						<TextBlock Grid.Column="4" Text="{StaticResource position}" HorizontalAlignment="Center"/>
 
-						<ui:NumberBox Grid.Row="2" x:Name="NumericUpDownJ" Maximum="3" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
+						<ui:NumberBox Grid.Row="2" x:Name="NumericUpDownJ" Maximum="16" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
 						<ui:NumberBox Grid.Row="2" Grid.Column="2" x:Name="NumericUpDown1" Maximum="4" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
 						<ComboBox Grid.Row="2" Grid.Column="4" x:Name="cbPosition" HorizontalAlignment="Center" Width="140" SelectedIndex="0">
 							<ComboBoxItem Content="{StaticResource up}" />

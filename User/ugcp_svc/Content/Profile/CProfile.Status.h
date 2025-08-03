@@ -69,13 +69,21 @@ private:
 			std::unordered_map<UINT32, BUTTONSTATUSMODEL>::const_iterator pBsm = pStButtons->find(inputJoyId);
 			if (pBsm != pStButtons->end())
 			{
-				BUTTONMODEMODEL pAmm = pBsm->second.Modes.at(mode);
-				std::unordered_map<UCHAR, UCHAR>::const_iterator pB = pAmm.Status.find(button);
-				if (pB != pAmm.Status.end())
+				std::unordered_map<UCHAR, BUTTONMODEMODEL>::const_iterator pAmm = pBsm->second.Modes.find(mode);
+				if (pAmm == pBsm->second.Modes.end())
 				{
-					*pos =  pB->second;
-					return true;
+					pAmm = pBsm->second.Modes.find(0);
 				}
+				if (pAmm != pBsm->second.Modes.end())
+				{
+					std::unordered_map<UCHAR, UCHAR>::const_iterator pB = pAmm->second.Status.find(button);
+					if (pB != pAmm->second.Status.end())
+					{
+						*pos = pB->second;
+						return true;
+					}
+				}
+
 			}
 
 			return false;
@@ -86,11 +94,18 @@ private:
 			std::unordered_map<UINT32, BUTTONSTATUSMODEL>::iterator pBsm = pStButtons->find(inputJoyId);
 			if (pBsm != pStButtons->end())
 			{
-				BUTTONMODEMODEL& pAmm = pBsm->second.Modes.at(mode);
-				std::unordered_map<UCHAR, UCHAR>::iterator pB = pAmm.Status.find(button);
-				if (pB != pAmm.Status.end())
+				std::unordered_map<UCHAR, BUTTONMODEMODEL>::iterator pAmm = pBsm->second.Modes.find(mode);
+				if (pAmm == pBsm->second.Modes.end())
 				{
-					pB->second = fixed ? pos : pB->second + pos;
+					pAmm = pBsm->second.Modes.find(0);
+				}
+				if (pAmm != pBsm->second.Modes.end())
+				{
+					std::unordered_map<UCHAR, UCHAR>::iterator pB = pAmm->second.Status.find(button);
+					if (pB != pAmm->second.Status.end())
+					{
+						pB->second = fixed ? pos : pB->second + pos;
+					}
 				}
 			}
 		}
@@ -142,12 +157,19 @@ private:
 			std::unordered_map<UINT32, AXISSTATUSMODEL>::iterator ijoy = pStAxes->find(inputJoyId);
 			if (ijoy != pStAxes->end())
 			{
-				AXISMODEMODEL* imode = &ijoy->second.Modes.at(mode);
-				std::unordered_map<UCHAR, ST_AXIS>::iterator iaxis = imode->Status.find(axis);
-				if (iaxis != imode->Status.end())
+				std::unordered_map<UCHAR, AXISMODEMODEL>::iterator imode = ijoy->second.Modes.find(mode);
+				if (imode == ijoy->second.Modes.end())
 				{
-					*status = &iaxis->second;
-					return true;
+					imode = ijoy->second.Modes.find(0);
+				}
+				if (imode != ijoy->second.Modes.end())
+				{
+					std::unordered_map<UCHAR, ST_AXIS>::iterator iaxis = imode->second.Status.find(axis);
+					if (iaxis != imode->second.Status.end())
+					{
+						*status = &iaxis->second;
+						return true;
+					}
 				}
 			}
 

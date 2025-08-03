@@ -12,8 +12,8 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 	}
 	pProfile->UnlockStatus();
 
-	UCHAR mapped[3] = { 0, 0, 0 };
-	VHID_INPUT_DATA output[3]{};
+	UCHAR mapped[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; //16 = Max vJoy devs
+	VHID_INPUT_DATA output[16]{};
 
 	//Sensibility
 	for (idx = 0; idx < 24; idx++)
@@ -28,15 +28,7 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 		bool slider = false;
 		pProfile->BeginProfileRead();
 		{
-			PROGRAMMING::AXISMODEL* axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, mode, idx);
-			if (axisMap == nullptr)
-			{
-				axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, 0, idx);
-				if (axisMap != nullptr)
-				{
-					mode = 0;
-				}
-			}
+			PROGRAMMING::AXISMODEL* axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx);
 			if (axisMap == nullptr)
 			{
 				pProfile->EndProfileRead();
@@ -61,8 +53,8 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 		pProfile->BeginProfileRead();
 		{
 			//checked null previously
-			sy1 = (pos == 0) ? 0 : pProfile->GetProfile()->AxesMap.GetConf(joyId, mode, idx)->Sensibility[pos - 1];
-			sy2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, mode, idx)->Sensibility[pos];
+			sy1 = (pos == 0) ? 0 : pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->Sensibility[pos - 1];
+			sy2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->Sensibility[pos];
 		}
 		pProfile->EndProfileRead();
 		if (slider)
@@ -88,7 +80,7 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 
 		pProfile->BeginProfileRead();
 		{
-			PROGRAMMING::AXISMODEL* axisMap= pProfile->GetProfile()->AxesMap.GetConf(joyId, mode, idx);
+			PROGRAMMING::AXISMODEL* axisMap= pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx);
 			if (axisMap == nullptr)
 			{
 				pProfile->EndProfileRead();
@@ -155,7 +147,7 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 		}
 	}
 
-	for (idx = 0; idx < 3; idx++)
+	for (idx = 0; idx < 16; idx++)
 	{
 		if (mapped[idx] != 0)
 		{
@@ -236,7 +228,7 @@ void CAxes::MoveAxis(CProfile* pProfile, UINT32 joyId, UCHAR idx, UINT16 _new)
 		pProfile->UnlockStatus();
 		if (change != 255)
 		{
-			actionId = pProfile->GetProfile()->AxesMap.GetConf(joyId, mode, idx)->Actions[change];
+			actionId = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->Actions[change];
 			axisData.Extended.Mode = mode & 0xf;
 			axisData.Extended.Submode = mode >> 4;
 		}
@@ -265,7 +257,7 @@ UCHAR CAxes::TranslateRotary(CProfile* pProfile, UINT32 joyId, UCHAR axis, UINT1
 	bool incremental;
 	bool bands;
 
-	PROGRAMMING::AXISMODEL* axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, mode, axis);
+	PROGRAMMING::AXISMODEL* axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, axis);
 	if (axisMap == nullptr)
 	{
 		return 255;

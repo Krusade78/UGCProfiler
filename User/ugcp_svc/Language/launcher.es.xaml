@@ -10,6 +10,7 @@
     <x:String x:Key="error">Error</x:String>
     <x:String x:Key="error reading calibration">Error al leer calibrado:</x:String>
     <x:String x:Key="profile loaded ok">Perfil cargado correctamente.</x:String>
+    <x:String x:Key="default profile loaded ok">Perfil por defecto cargado OK</x:String>
     <x:String x:Key="default"># Por defecto #</x:String>
     <x:String x:Key="not enough axes">No hay ejes suficientes en vJoy</x:String>
     <x:String x:Key="detected">Dispositivos en el perfil por defecto:</x:String>

@@ -152,9 +152,9 @@ namespace Launcher
 				ret = new CProfile(main).Load(file, outputPipeSvc);
 			}
 
-			if (ret)
+			if (ret && (file != null))
 			{
-				string name = (file != null) ? System.IO.Path.GetFileNameWithoutExtension(file): CTranslate.Get("default");
+				string name = System.IO.Path.GetFileNameWithoutExtension(file);
 				((CMain)main).MessageBox(CTranslate.Get("profile loaded ok"), name, MessageBoxImage.Information);
 			}
 		}

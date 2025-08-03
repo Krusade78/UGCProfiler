@@ -87,10 +87,6 @@ void CHIDInput::RefreshDevices(UINT32* ids, UCHAR size)
                 {
                     Sleep(500);
                 }
-                if (hidDevices.at(ids[i])->Prepare())
-                {
-                    hidDevices.at(ids[i])->Open();
-                }
             }
             else
             {

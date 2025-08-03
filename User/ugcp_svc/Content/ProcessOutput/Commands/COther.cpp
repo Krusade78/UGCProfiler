@@ -98,34 +98,35 @@ bool COther::IsHoldOn(CProfile* pProfile, PEV_COMMAND command)
 
 	pProfile->LockStatus();
 	{
-		if ((command->Extended.Origin & 128) == 128) //eje
+		
+		if ((command->Extended.Origin & 128) == 128)  //axis or hat
 		{
-			UCHAR mode = pProfile->GetStatus()->Mode;
-			UCHAR submode = pProfile->GetStatus()->SubMode;
-			UCHAR cmode = mode | static_cast<UCHAR>(submode << 4);
-			STATUS::ST_AXIS* stAxis;
-			if (pProfile->GetStatus()->Axes.GetStatus(&stAxis, command->Extended.InputJoy, mode | static_cast<UCHAR>(submode << 4), command->Extended.Origin & 127))
-			{
-				pressed = !((command->Extended.Mode == mode) && (command->Extended.Submode == submode) && ((command->Extended.Incremental != stAxis->IncrementalPos) || (command->Extended.Band != stAxis->Band)));
-			}
-		}
-		else
-		{
-			if ((command->Extended.Origin & 64) == 64) //hat
+			if (command->Extended.Mode == 255) //hat
 			{
 				UCHAR hatPressed;
-				if (pProfile->GetStatus()->Hats.GetPressed(&hatPressed, command->Extended.InputJoy, command->Extended.Origin & 63))
+				if (pProfile->GetStatus()->Hats.GetPressed(&hatPressed, command->Extended.InputJoy, command->Extended.Origin & 127))
 				{
 					pressed = hatPressed == 1;
 				}
 			}
-			else //button
+			else //axis
 			{
-				UCHAR btPressed;
-				if (pProfile->GetStatus()->Buttons.GetPressed(&btPressed, command->Extended.InputJoy, command->Extended.Origin))
+				UCHAR mode = pProfile->GetStatus()->Mode;
+				UCHAR submode = pProfile->GetStatus()->SubMode;
+				UCHAR cmode = mode | static_cast<UCHAR>(submode << 4);
+				STATUS::ST_AXIS* stAxis;
+				if (pProfile->GetStatus()->Axes.GetStatus(&stAxis, command->Extended.InputJoy, mode | static_cast<UCHAR>(submode << 4), command->Extended.Origin & 127))
 				{
-					pressed = btPressed == 1;
+					pressed = !((command->Extended.Mode == mode) && (command->Extended.Submode == submode) && ((command->Extended.Incremental != stAxis->IncrementalPos) || (command->Extended.Band != stAxis->Band)));
 				}
+			}
+		}
+		else //button
+		{
+			UCHAR btPressed;
+			if (pProfile->GetStatus()->Buttons.GetPressed(&btPressed, command->Extended.InputJoy, command->Extended.Origin))
+			{
+				pressed = btPressed == 1;
 			}
 		}
 	}

@@ -35,6 +35,8 @@ private:
 	HANDLE hMutextMouse = nullptr;
 	bool initialized = false;
 
+	bool available[16];
+
 	ST_STATUS status;
 
 	DWORD Hat2Switch(UCHAR pos);

@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:local="using:Profiler.Pages"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="Profiler.Pages.Info1">
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			<TextBlock Text="{StaticResource mode}" Margin="10,0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#E9F7EF" />
+			<ComboBox x:Name="cbMode" SelectedIndex="0" VerticalAlignment="Center" VerticalContentAlignment="Center" MinWidth="85">
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 1'}" />
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 2'}" />
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 3'}" />
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 4'}" />
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 5'}" />
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 6'}" />
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 7'}" />
+				<TextBlock Text="{Binding Source={StaticResource mode}, StringFormat='{}{0} 8'}" />
+			</ComboBox>
+		</StackPanel>
+		<DataGrid ItemsSource="{Binding}" x:DataType="local:DGModel">
+			<DataGrid.Columns>
+				<DataGridTextColumn Binding="{Binding Input}" Header="Input" />
+				<DataGridTextColumn Binding="{Binding SubMode[0]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 1'}" />
+				<DataGridTextColumn Binding="{Binding SubMode[1]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 2'}" />
+				<DataGridTextColumn Binding="{Binding SubMode[2]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 3'}" />
+				<DataGridTextColumn Binding="{Binding SubMode[3]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 4'}" />
+				<DataGridTextColumn Binding="{Binding SubMode[4]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 5'}" />
+				<DataGridTextColumn Binding="{Binding SubMode[5]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 6'}" />
+				<DataGridTextColumn Binding="{Binding SubMode[6]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 7'}" />
+				<DataGridTextColumn Binding="{Binding SubMode[7]}" Header="{Binding Source={StaticResource submode}, StringFormat='{}{0} 8'}" />
+			</DataGrid.Columns>
+		</DataGrid>
+	</DockPanel>
+</UserControl>

@@ -12,11 +12,14 @@ namespace Launcher
 		public static bool Load(System.IO.BinaryWriter outputPipeSvc)
 		{
 			Shared.Calibration.CCalibration dsc = new();
-			try
+			if (System.IO.File.Exists("calibration.dat"))
 			{
-				dsc = System.Text.Json.JsonSerializer.Deserialize<Shared.Calibration.CCalibration>(System.IO.File.ReadAllText("calibration.dat"));
+				try
+				{
+					dsc = System.Text.Json.JsonSerializer.Deserialize<Shared.Calibration.CCalibration>(System.IO.File.ReadAllText("calibration.dat"));
+				}
+				catch { }
 			}
-			catch {}
 			if (!LoadDefault(ref dsc))
 			{
 				return false;

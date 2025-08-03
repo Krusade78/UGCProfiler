@@ -35,7 +35,7 @@
 					<ComboBoxItem Content="{StaticResource mouse_y}" />
 				</ComboBox>
 				<TextBlock x:Name="LabelWorkAs" Text="{StaticResource assign_to}" VerticalAlignment="Center" Margin="0,0,5,0" />
-				<ui:NumberBox x:Name="NBOutJoy" Maximum="3" Minimum="1" Value="1" VerticalAlignment="Center" Grid.Column="1" SpinButtonPlacementMode="Compact" />
+				<ui:NumberBox x:Name="NBOutJoy" Maximum="16" Minimum="1" Value="1" VerticalAlignment="Center" Grid.Column="1" SpinButtonPlacementMode="Compact" />
 				<ToggleSwitch x:Name="CheckBoxInverted" OffContent="{StaticResource inverted}" OnContent="{StaticResource inverted}" Grid.Column="3" VerticalAlignment="Center" Checked="CheckBoxInverted_Checked" />
 			</Grid>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >

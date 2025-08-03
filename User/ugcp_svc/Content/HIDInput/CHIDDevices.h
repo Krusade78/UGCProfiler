@@ -9,9 +9,6 @@ public:
 	~CHIDDevices();
 
 	//IHIDInput overrides
-	virtual bool Prepare() override;
-	virtual bool Open() override;
-	virtual void Close() override;
 	virtual unsigned short Read(void* buff) override;
 
 	typedef struct
@@ -26,11 +23,10 @@ public:
 
 	inline std::vector<ST_MAP*>* GetMap() { return &map; }
 private:
-	UINT32 hardwareId = 0;
-
 	std::vector<ST_MAP*> map;
 
 protected:
+	UINT32 hardwareId = 0;
 	wchar_t* pathInterface = nullptr;
 	HANDLE mutex = nullptr;
 	PVOID hdev = nullptr;
@@ -39,5 +35,10 @@ protected:
 	unsigned long reportLenght = 0;
 
 	bool GetDeviceMap(void* preparsedData, void* pCaps);
+
+	//IHIDInput overrides
+	virtual bool Prepare() override;
+	virtual bool Open() override;
+	virtual void Close(bool exit) override;
 };
 

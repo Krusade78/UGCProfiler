@@ -179,7 +179,11 @@ namespace Profiler.Controls
             devices.Add(di.Name, di);
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
-                navView.MenuItems.Insert(devices.IndexOfKey(di.Name), new NavigationViewItem() { Content = new CtlDevices_NavItem(di), DataContext = di });
+                navView.MenuItems.Clear();
+                foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kvp in devices)
+                {
+                    navView.MenuItems.Add(new NavigationViewItem() { Content = new CtlDevices_NavItem(kvp.Value), DataContext = kvp.Value });
+                }
             });
         }
 

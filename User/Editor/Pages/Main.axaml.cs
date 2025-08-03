@@ -45,7 +45,7 @@ namespace Profiler.Pages
                     case MainWindow.Section.Edit:
                         page.Content = deviceInfo.Id switch
                         {
-                            //0x06a30763 => new SaitekPedals(properties),
+                            0x06a30763 => new SaitekPedals(properties),
                             0x6a30255 => new SaitekX52(properties),
                             0x231d0200 => new VkbGladiatorNXT(properties),
                             _ => new Generic(deviceInfo, properties),

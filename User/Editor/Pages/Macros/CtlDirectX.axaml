@@ -17,7 +17,7 @@
                 <StackPanel Orientation="Horizontal">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,-20,0,0">
                         <TextBlock Text="vJoy:" HorizontalAlignment="Center" />
-                        <ui:NumberBox x:Name="NumericUpDownJoy" Maximum="3" Minimum="1" Value="1"  Margin="0,6,0,0" SpinButtonPlacementMode="Compact" />
+                        <ui:NumberBox x:Name="NumericUpDownJoy" Maximum="16" Minimum="1" Value="1"  Margin="0,6,0,0" SpinButtonPlacementMode="Compact" />
                     </StackPanel>
                     <Path Data="M4,0 L2,2 2,103 0,105 2,107 2,212 4,214" Margin="5,0" Stroke="#66000000" StrokeThickness="2" />
                     <StackPanel>

@@ -15,13 +15,13 @@ CHIDDevices::CHIDDevices(UINT32 hardwareId)
 
 CHIDDevices::~CHIDDevices()
 {
-    Close();
+    Close(true);
     CloseHandle(mutex);
 }
 
 bool CHIDDevices::Prepare()
 {
-    Close();
+    Close(false);
 
     HDEVINFO                            diDevs = INVALID_HANDLE_VALUE;
     GUID                                hidGuid;
@@ -53,19 +53,19 @@ bool CHIDDevices::Prepare()
         }
 
         UINT32 hId = IHIDInput::GetHardwareId(didData->DevicePath);
+        WaitForSingleObject(mutex, INFINITE);
         if (hId == hardwareId)
         {
-            WaitForSingleObject(mutex, INFINITE);
             {
                 pathInterface = new wchar_t[size];
                 StringCchCopy(pathInterface, size, didData->DevicePath);
-                hardwareId = hId;
             }
             ReleaseSemaphore(mutex, 1, NULL);
             delete[] buf;
             break;
         }
 
+        ReleaseSemaphore(mutex, 1, NULL);
         delete[] buf;
     }
     if (GetLastError() != 0)
@@ -83,7 +83,7 @@ bool CHIDDevices::Open()
 {
     WaitForSingleObject(mutex, INFINITE);
     {
-        if ((pathInterface != nullptr) && (InterlockedCompareExchangePointer(&hdev, nullptr, nullptr) == nullptr))
+        if ((hardwareId != 0) && (pathInterface != nullptr) && (InterlockedCompareExchangePointer(&hdev, nullptr, nullptr) == nullptr))
         {
             PVOID nhdev = CreateFile(pathInterface, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
             if (INVALID_HANDLE_VALUE == nhdev)
@@ -136,7 +136,7 @@ bool CHIDDevices::Open()
     return true;
 }
 
-void CHIDDevices::Close()
+void CHIDDevices::Close(bool exit)
 {
     WaitForSingleObject(mutex, INFINITE);
     {
@@ -168,6 +168,11 @@ void CHIDDevices::Close()
     {
         delete map.back();
         map.pop_back();
+    }
+
+    if (exit)
+    {
+        hardwareId = 0;
     }
     ReleaseSemaphore(mutex, 1, NULL);
 
@@ -232,7 +237,7 @@ bool CHIDDevices::GetDeviceMap(void* ppd, void* pc)
             HIDP_VALUE_CAPS val = vCaps[i];
             if (val.NotRange.DataIndex == idx)
             {
-                if (val.NotRange.Usage == 0)
+                if ((val.NotRange.Usage == 0) || (val.NotRange.Usage == 1))
                 {
                     //ST_MAP* amap = new ST_MAP;
                     //amap->ReportId = val.ReportID;
@@ -272,7 +277,12 @@ unsigned short CHIDDevices::Read(void* buff)
         Sleep(3000);
         WaitForSingleObject(mutex, INFINITE);
         bool prepared = (pathInterface != nullptr);
+        bool exit = (hardwareId == 0);
         ReleaseSemaphore(mutex, 1, NULL);
+        if (exit)
+        {
+            return 0;
+        }
         if (!prepared)
         {
             Prepare();

@@ -7,7 +7,7 @@
 
 bool CWinUSBX52::Prepare()
 {
-    Close();
+    Close(false);
 
     HDEVINFO diDevs = INVALID_HANDLE_VALUE;
     SP_DEVICE_INTERFACE_DATA diData{};
@@ -46,8 +46,11 @@ bool CWinUSBX52::Prepare()
 
     WaitForSingleObject(mutex, INFINITE);
     {
-        pathInterface = new wchar_t[size];
-        StringCchCopy(pathInterface, size, didData->DevicePath);
+        if (hardwareId == HARDWARE_ID_X52)
+        {
+            pathInterface = new wchar_t[size];
+            StringCchCopy(pathInterface, size, didData->DevicePath);
+        }
     }
     ReleaseSemaphore(mutex, 1, NULL);
 
@@ -61,7 +64,7 @@ bool CWinUSBX52::Open()
 {
     WaitForSingleObject(mutex, INFINITE);
     {
-        if ((pathInterface != nullptr) && (InterlockedCompareExchangePointer(&hwusb, nullptr, nullptr) == nullptr))
+        if ((hardwareId != 0) && (pathInterface != nullptr) && (InterlockedCompareExchangePointer(&hwusb, nullptr, nullptr) == nullptr))
         {
             PVOID nhdev = CreateFile(pathInterface, GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
             if (INVALID_HANDLE_VALUE == nhdev)
@@ -76,7 +79,7 @@ bool CWinUSBX52::Open()
                 {
                     CloseHandle(nhdev);
                     ReleaseSemaphore(mutex, 1, NULL);
-                    Close();
+                    Close(false);
                     return false;
                 }
 
@@ -87,7 +90,7 @@ bool CWinUSBX52::Open()
                 if (!WinUsb_QueryPipe(hwusb, 0, 0, &pipe))
                 {
                     ReleaseSemaphore(mutex, 1, NULL);
-                    Close();
+                    Close(false);
                     return false;
                 }
 
@@ -122,7 +125,7 @@ bool CWinUSBX52::Open()
                         preparsed = nullptr;
                     }
                     ReleaseSemaphore(mutex, 1, NULL);
-                    Close();
+                    Close(false);
                     return false;
                 }
             }
@@ -133,7 +136,7 @@ bool CWinUSBX52::Open()
     return true;
 }
 
-void CWinUSBX52::Close()
+void CWinUSBX52::Close(bool exit)
 {
     WaitForSingleObject(mutex, INFINITE);
     {
@@ -148,7 +151,7 @@ void CWinUSBX52::Close()
     }
     ReleaseSemaphore(mutex, 1, NULL);
 
-    CHIDDevices::Close();
+    CHIDDevices::Close(exit);
 }
 
 unsigned short CWinUSBX52::Read(void* buff)
@@ -160,7 +163,12 @@ unsigned short CWinUSBX52::Read(void* buff)
             Sleep(3000);
             WaitForSingleObject(mutex, INFINITE);
             bool prepared = (pathInterface != nullptr);
+            bool exit = (hardwareId == 0);
             ReleaseSemaphore(mutex, 1, NULL);
+            if (exit)
+            {
+                return 0;
+            }
             if (!prepared)
             {
                 Prepare();
@@ -198,12 +206,12 @@ void CWinUSBX52::SetPause(bool onoff)
     {
         if (InterlockedOr8(&paused, 1) == 0)
         {
-            Close();
+            Close(false);
         }
     }
     else
     {
-        Close();
+        Close(false);
         InterlockedAnd8(&paused, 0);
     }
 }

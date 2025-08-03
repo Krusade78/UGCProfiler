@@ -52,7 +52,7 @@
 					<TextBlock Text="vJoy" HorizontalAlignment="Center"/>
 					<TextBlock Grid.Column="2" Text="{StaticResource button}" HorizontalAlignment="Center"/>
 
-					<ui:NumberBox Grid.Row="2" x:Name="NumericUpDownJ" Maximum="3" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
+					<ui:NumberBox Grid.Row="2" x:Name="NumericUpDownJ" Maximum="16" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
 					<ui:NumberBox Grid.Row="2" Grid.Column="2" x:Name="NumericUpDown1" Maximum="128" Minimum="1" Value="1" SpinButtonPlacementMode="Compact"/>
 				</Grid>
 
