@@ -28,7 +28,7 @@ namespace Profiler.Devices
 
         public bool FromProfile { get; set; } = false;
 
-        public static DeviceInfo Get(string ninterface, uint joy)
+        public static DeviceInfo? Get(string ninterface, uint joy)
         {
             if (ninterface.StartsWith("_WUSBX52"))
             {
@@ -48,7 +48,7 @@ namespace Profiler.Devices
                 goto error;
             }
 
-            DeviceInfo devData = new() { Id = joy, Name = Marshal.PtrToStringAuto(buf).Trim() };
+            DeviceInfo devData = new() { Id = joy, Name = Marshal.PtrToStringAuto(buf)?.Trim() };
             Marshal.FreeHGlobal(buf);
 
             IntPtr pdata = IntPtr.Zero;

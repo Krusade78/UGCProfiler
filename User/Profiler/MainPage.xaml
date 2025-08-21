@@ -1,0 +1,146 @@
+﻿<Page x:Class="Profiler.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:utu="using:Uno.UI.Toolkit"
+      xmlns:local="using:Profiler"
+      xmlns:controls="using:Profiler.Controls"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="root" Background="#e0e0e0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.RowSpan="2">
+            <Image Stretch="UniformToFill" Source="/res/CalibrationGrid.JPG" />
+        </Grid>
+        <Border Grid.RowSpan="2">
+            <Border.Background>
+                <AcrylicBrush  AlwaysUseFallback="False" TintColor="#404060"  TintOpacity="0.1" />
+            </Border.Background>
+        </Border>
+
+        <utu:ElevatedView Elevation="8" ShadowColor="#40000000" Background="#b0ffffff">
+            <Grid x:Name="grMenu">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!--#region file-->
+                <StackPanel Orientation="Horizontal">
+                    <AppBarButton Label="{StaticResource new}" ToolTipService.ToolTip="{StaticResource new}" Click="RibbonButtonNew_Click" >
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE8A5;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="{StaticResource open}" ToolTipService.ToolTip="{StaticResource open}" Click="RibbonButtonOpen_Click" >
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE838;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton x:Name="btSave" Label="{StaticResource save}" ToolTipService.ToolTip="{StaticResource save}" IsEnabled="False" Click="RibbonButtonSave_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE74E;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <Button Padding="2,0" Margin="0" Background="Transparent" BorderThickness="1,0,0,0" Height="34" CornerRadius="0,4,4,0" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+                        <FontIcon Glyph="&#xE70D;" FontSize="10"/>
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="{StaticResource save_as}" FontSize="{ThemeResource CaptionTextBlockFontSize}" Click="RibbonButtonSaveAs_Click" >
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xE792;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Text="{StaticResource file}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,0" />
+                <!--#endregion-->
+
+                <Line Grid.Column="1" Grid.RowSpan="2" Y1="5" Y2="72" Stroke="#FFa0a0a0" StrokeThickness="1" Width="10" X1="4" X2="4"/>
+
+                <!--#region Profile-->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <AppBarButton Click="ButtonLaunch_Click" Label="{StaticResource load}" ToolTipService.ToolTip="{StaticResource load}" IsEnabled="{Binding IsEnabled, ElementName=btSave}" >
+                        <AppBarButton.Content>
+                            <Viewbox Stretch="Uniform">
+                                <Grid>
+                                    <FontIcon Glyph="&#xF5B0;" FontFamily="Segoe MDL2 Assets" Foreground="Green"/>
+                                    <FontIcon Glyph="&#xE768;" FontFamily="Segoe MDL2 Assets" />
+                                </Grid>
+                            </Viewbox>
+                        </AppBarButton.Content>
+                    </AppBarButton>
+                    <AppBarButton Label="{StaticResource reset}" ToolTipService.ToolTip="{StaticResource reset}"  Click="ButtonReset_Click" >
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xED10;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
+                    <AppBarButton Label="{StaticResource mouse_conf}" ToolTipService.ToolTip="{StaticResource mouse_conf}"  Click="ButtonMouseConf_Click" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+                        <AppBarButton.Content>
+                            <Grid>
+                                <FontIcon Glyph="&#xE962;" FontFamily="Segoe MDL2 Assets" />
+                                <FontIcon Glyph="&#xF8B0;" HorizontalAlignment="Right" VerticalAlignment="Top" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#FFE6C737"/>
+                            </Grid>
+                        </AppBarButton.Content>
+                    </AppBarButton>
+                </StackPanel>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{StaticResource profile}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,0" />
+                <!--#endregion-->
+
+                <Line Grid.Column="3" Grid.RowSpan="2" Y1="5" Y2="72" Stroke="#FFa0a0a0" StrokeThickness="1" Width="10" X1="4" X2="4"/>
+
+                <!--#region devices -->
+                <StackPanel Grid.Column="4" Orientation="Horizontal">
+                    <AppBarToggleButton  x:Name="tbCalibrate" Label="{StaticResource calibrate}" ToolTipService.ToolTip="{StaticResource calibrate}" IsEnabled="False" Checked="TbCalibrate_Checked" Unchecked="TbUnchecked">
+                        <AppBarToggleButton.Icon>
+                            <FontIcon Glyph="&#xED5E;"/>
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Grid.Column="4" Text="{StaticResource devices}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,2" />
+                <!--#endregion-->
+
+                <Line Grid.Column="5" Grid.RowSpan="2" Y1="5" Y2="72" Stroke="#FFa0a0a0" StrokeThickness="1" Width="10" X1="4" X2="4"/>
+
+                <!--#region edit -->
+                <StackPanel Grid.Column="6" Orientation="Horizontal">
+                    <AppBarToggleButton x:Name="tbMacroEdit" Label="Macros" ToolTipService.ToolTip="Macros" Checked="FtbMacroEdit_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+                        <AppBarToggleButton.Icon>
+                            <FontIcon Glyph="&#xE765;"/>
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+
+                    <AppBarToggleButton x:Name="tbEdit" Label="{StaticResource edit}" ToolTipService.ToolTip="{StaticResource edit}"  Checked="FtbEdit_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}">
+                        <AppBarToggleButton.Icon>
+                            <FontIcon Glyph="&#xE70F;"/>
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+
+                    <AppBarToggleButton x:Name="tbList" Label="{StaticResource list}" ToolTipService.ToolTip="{StaticResource list}"  Checked="FtbList_Checked" Unchecked="TbUnchecked" IsEnabled="{Binding IsEnabled, ElementName=btSave}" >
+                        <AppBarToggleButton.Icon>
+                            <FontIcon Glyph="&#xF0E2;"/>
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Grid.Column="6" Text="{StaticResource view}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,0" />
+                <!--#endregion-->
+            </Grid>
+        </utu:ElevatedView>
+
+        <controls:CtlDevices x:Name="ctlDevs" Grid.Row="1" />
+    </Grid>
+</Page>

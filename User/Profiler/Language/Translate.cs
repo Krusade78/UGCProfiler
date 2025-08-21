@@ -1,4 +1,4 @@
-﻿using Avalonia;
+﻿using Microsoft.UI.Xaml;
 
 namespace Profiler
 {

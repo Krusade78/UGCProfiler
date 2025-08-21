@@ -10,16 +10,16 @@
         public class Map
         {
             public ushort Idx {  get; set; }
-            public Avalonia.Controls.Primitives.ToggleButton Button { get; set; }
-            public System.Collections.Generic.List<Avalonia.Controls.Primitives.ToggleButton> HatButtons { get; set; }
+            public Microsoft.UI.Xaml.Controls.Primitives.ToggleButton? Button { get; set; }
+            public System.Collections.Generic.List<Microsoft.UI.Xaml.Controls.Primitives.ToggleButton>? HatButtons { get; set; }
 
-            public Map(ushort idx, Avalonia.Controls.Primitives.ToggleButton button)
+            public Map(ushort idx, Microsoft.UI.Xaml.Controls.Primitives.ToggleButton button)
             {
                 Idx = idx;
                 Button = button;
             }
 
-            public Map(ushort idx, System.Collections.Generic.List<Avalonia.Controls.Primitives.ToggleButton> hatButtons)
+            public Map(ushort idx, System.Collections.Generic.List<Microsoft.UI.Xaml.Controls.Primitives.ToggleButton> hatButtons)
             {
                 Idx = idx;
                 HatButtons = hatButtons;
@@ -39,7 +39,7 @@
 
             for (byte i = 0; i < hidData.Axis.Length; i++)
             {
-                Shared.ProfileModel.DeviceInfo.CUsage u = di.Usages.Find(x => (x.Id == i) && (x.Type < 253));
+                Shared.ProfileModel.DeviceInfo.CUsage? u = di.Usages.Find(x => (x.Id == i) && (x.Type < 253));
                 if (u == null) continue;
                 if (
                     ((hidData.Axis[i] < oldAxisHidData.Axis[i]) && (hidData.Axis[i] > (u.Range / 2)))
@@ -52,7 +52,8 @@
                     && (hidData.Axis[i] > (u.Range * 0.25)) && (hidData.Axis[i] < (u.Range * 0.75))
                     && ((hidData.Axis[i] > (oldAxisHidData.Axis[i] * 1.10)) || (hidData.Axis[i] < (oldAxisHidData.Axis[i] * 0.9))))
                 {
-                    map.Find(x => x.Idx == u.ReportIdx).Button.IsChecked = true;
+                    Microsoft.UI.Xaml.Controls.Primitives.ToggleButton? tb = map.Find(x => x.Idx == u.ReportIdx)?.Button;
+                    if (tb != null) { tb.IsChecked = true; }
                     oldAxisHidData = hidData;
                     oldHidData = hidData;
                     return;
@@ -64,10 +65,15 @@
                 if (hidData.Hats[i] != oldHidData.Hats[i])
                 {
                     byte nPos = hidData.Hats[i];
-					Shared.ProfileModel.DeviceInfo.CUsage u = di.Usages.Find(x => (x.Id == i) && (x.Type == 253));
-					if (!((nPos > (u.Range >> 4)) || (nPos < (u.Range &0xf))))
+					Shared.ProfileModel.DeviceInfo.CUsage? u = di.Usages.Find(x => (x.Id == i) && (x.Type == 253));
+					if ( u!= null && !((nPos > (u.Range >> 4)) || (nPos < (u.Range &0xf))))
                     {
-                        map.Find(x => x.Idx == u.ReportIdx).HatButtons[nPos].IsChecked = true;
+                        System.Collections.Generic.List<Microsoft.UI.Xaml.Controls.Primitives.ToggleButton>? ltb = map.Find(x => x.Idx == u.ReportIdx)?.HatButtons;
+                        if (ltb != null)
+                        {
+                            Microsoft.UI.Xaml.Controls.Primitives.ToggleButton? tb = ltb[nPos];
+                            if (tb != null) { tb.IsChecked = true; }
+                        }
                         oldHidData = hidData;
                         return;
                     }
@@ -83,8 +89,12 @@
                         if (bt > 0 && bt != (oldHidData.Buttons[i] & (1ul << j)))
                         {
                             byte pos = (byte)(j + (i * 64));
-                            Shared.ProfileModel.DeviceInfo.CUsage u = di.Usages.Find(x => (pos >= x.Id) && (pos <= (x.Id + x.Bits)) && (x.Type == 254));
-                            map.Find(x => x.Idx == u.ReportIdx + pos - u.Id).Button.IsChecked = true;
+                            Shared.ProfileModel.DeviceInfo.CUsage? u = di.Usages.Find(x => (pos >= x.Id) && (pos <= (x.Id + x.Bits)) && (x.Type == 254));
+                            if (u != null)
+                            {
+                                Microsoft.UI.Xaml.Controls.Primitives.ToggleButton? tb = map.Find(x => x.Idx == u.ReportIdx + pos - u.Id)?.Button;
+                                if (tb != null) { tb.IsChecked = true; }
+                            }
                             oldHidData = hidData;
                             return;
                         }

@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+﻿using Microsoft.UI.Xaml.Controls;
 
 namespace Profiler.Controls.Properties
 {
@@ -9,17 +9,17 @@ namespace Profiler.Controls.Properties
             public static uint Joy { get; set; }
             public static ushort Idx { get; set; }
             public static byte HatPosition { get; set; }
-            public static Shared.ProfileModel.DeviceInfo.CUsage Usage { get; set; }
+            public static Shared.ProfileModel.DeviceInfo.CUsage Usage { get; set; } = new();
         }
 
         public Devices.DeviceInfo CurrentDevInfo { get; set; }
-        private MainWindow parent;
+        private MainPage parent;
         public  bool Events { get; set; } = true;
 
-        private CtlAxisConf spAxis;
-        private CtlHatConf spHat;
-        private CtlButtonConf spButton;
-        private CtlMacroConf spMacros;
+        private CtlAxisConf? spAxis;
+        private CtlHatConf? spHat;
+        private CtlButtonConf? spButton;
+        private CtlMacroConf? spMacros;
 
         public void Refresh()
         {
@@ -28,10 +28,10 @@ namespace Profiler.Controls.Properties
 
         public byte GetMode() => (byte)((cbSubmode.SelectedIndex << 4) | cbMode.SelectedIndex);
 
-        public MainWindow GetParent() => parent;
+        public MainPage GetParent() => parent;
 
         #region "Load"
-        public void Show(uint joy, ushort idx, string name, byte hatPosition = 0, bool refresh = false)
+        public void Show(uint joy, ushort idx, string? name, byte hatPosition = 0, bool refresh = false)
         {
             if (CurrentDevInfo == null) { return; }            
 
@@ -40,8 +40,11 @@ namespace Profiler.Controls.Properties
             CurrentSel.Idx = idx;
             CurrentSel.Joy = joy;
             CurrentSel.HatPosition = hatPosition;
-            CurrentSel.Usage = CurrentDevInfo.Usages.Find(x => x.ReportIdx == idx);
-            CurrentSel.Usage ??= CurrentDevInfo.Usages.Find(x => (x.Type == (byte)CEnums.ElementType.Button) &&  (idx >= x.ReportIdx) && (idx <= x.Range));
+            {
+                Shared.ProfileModel.DeviceInfo.CUsage? usage = CurrentDevInfo.Usages.Find(x => x.ReportIdx == idx);
+                usage ??= CurrentDevInfo.Usages.Find(x => (x.Type == (byte)CEnums.ElementType.Button) && (idx >= x.ReportIdx) && (idx <= x.Range)) ?? new();
+                CurrentSel.Usage = usage;
+            }
 
             if (!refresh)
             {
@@ -52,24 +55,25 @@ namespace Profiler.Controls.Properties
                 spButton = null;
                 spMacros = null;
             }
-
-            if (CurrentSel.Usage.Type == (byte)CEnums.ElementType.Hat)
-                Hat();
-            else if (CurrentSel.Usage.Type == (byte)CEnums.ElementType.Button)
-                JButton();
-            else
-                Axis();
-
+            if (CurrentSel.Usage != null)
+            {
+                if (CurrentSel.Usage.Type == (byte)CEnums.ElementType.Hat)
+                    Hat();
+                else if (CurrentSel.Usage.Type == (byte)CEnums.ElementType.Button)
+                    JButton();
+                else
+                    Axis();
+            }
             Events = true;
         }
 
         private void Hat()
         {
-            Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button = null;
+            Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel? button = null;
 
-            if (parent.GetData().Profile.HatsMap.TryGetValue(CurrentSel.Joy, out Shared.ProfileModel.ButtonMapModel buttonMap))
+            if (parent.GetData().Profile.HatsMap.TryGetValue(CurrentSel.Joy, out Shared.ProfileModel.ButtonMapModel? buttonMap))
             {
-                if (buttonMap.Modes.TryGetValue(GetMode(), out Shared.ProfileModel.ButtonMapModel.ModeModel mode))
+                if (buttonMap.Modes.TryGetValue(GetMode(), out Shared.ProfileModel.ButtonMapModel.ModeModel? mode))
                 {
                     mode.Buttons.TryGetValue((byte)((CurrentSel.Usage.Id * 8) + CurrentSel.HatPosition), out button);
                 }
@@ -86,7 +90,7 @@ namespace Profiler.Controls.Properties
             }
 
             spButton.Init(button);
-            spHat.Init(false);
+            spHat?.Init(false);
             spMacros?.Init(button);
 
             spMacros?.LoadMacroIndex();
@@ -95,11 +99,11 @@ namespace Profiler.Controls.Properties
 
         private void JButton()
         {
-            Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel button = null;
+            Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel? button = null;
 
-            if (parent.GetData().Profile.ButtonsMap.TryGetValue(CurrentSel.Joy, out Shared.ProfileModel.ButtonMapModel buttonMap))
+            if (parent.GetData().Profile.ButtonsMap.TryGetValue(CurrentSel.Joy, out Shared.ProfileModel.ButtonMapModel? buttonMap))
             {
-                if (buttonMap.Modes.TryGetValue(GetMode(), out Shared.ProfileModel.ButtonMapModel.ModeModel mode))
+                if (buttonMap.Modes.TryGetValue(GetMode(), out Shared.ProfileModel.ButtonMapModel.ModeModel? mode))
                 {
                     mode.Buttons.TryGetValue((byte)(CurrentSel.Idx - CurrentSel.Usage.ReportIdx + CurrentSel.Usage.Id), out button);
                 }
@@ -116,7 +120,7 @@ namespace Profiler.Controls.Properties
             }
 
             spButton.Init(button);
-            spHat.Init(true);
+            spHat?.Init(true);
             spMacros?.Init(button);
 
             spMacros?.LoadMacroIndex();
@@ -124,11 +128,11 @@ namespace Profiler.Controls.Properties
 
         private void Axis()
         {
-            Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel axis = null;
+            Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel? axis = null;
 
-            if (parent.GetData().Profile.AxesMap.TryGetValue(CurrentSel.Joy, out Shared.ProfileModel.AxisMapModel axesMap))
+            if (parent.GetData().Profile.AxesMap.TryGetValue(CurrentSel.Joy, out Shared.ProfileModel.AxisMapModel? axesMap))
             {
-                if (axesMap.Modes.TryGetValue(GetMode(), out Shared.ProfileModel.AxisMapModel.ModeModel mode))
+                if (axesMap.Modes.TryGetValue(GetMode(), out Shared.ProfileModel.AxisMapModel.ModeModel? mode))
                 {
                     mode.Axes.TryGetValue(CurrentSel.Usage.Id, out axis);
                 }
@@ -172,17 +176,17 @@ namespace Profiler.Controls.Properties
 
         public void ResetMacroIndex()
         {
-            spMacros.ResetMacroIndex();
+            spMacros?.ResetMacroIndex();
         }
 
         public void EnsureCreatedButton()
         {
-            spButton.EnsureCreated();
+            spButton?.EnsureCreated();
         }
 
         public void EnsureCreatedAxis()
         {
-            spAxis.EnsureCreated();
+            spAxis?.EnsureCreated();
         }
 
         public async void AssignDefaultvJoy()

@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="Profiler.Controls.Properties.CtlProperties"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:utu="using:Uno.UI.Toolkit"
+        mc:Ignorable="d" Width="410">
+    <Grid>
+        <Button x:Name="btAssign" Margin="-480,-75,25,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#cbc1f0" Click="Button_Click" Height="40" Width="350">
+            <StackPanel Orientation="Horizontal">
+                <FontIcon Glyph="&#xE74C;" FontFamily="Segoe MDL2 Assets" />
+                <TextBlock Text="{StaticResource assign_vjoy_default_configuration}" Margin="5,0,0,0" />
+            </StackPanel>
+        </Button>
+        
+        <utu:ElevatedView HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-75,20,20" CornerRadius="8" Elevation="8" Background="#aa28B463">
+            <StackPanel x:Name="spModes" Orientation="Horizontal"  Height="60">
+                <TextBlock Text="{StaticResource current_mode}" Margin="10,0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#E9F7EF" />
+                <ComboBox x:Name="cbMode" SelectedIndex="0" VerticalAlignment="Center" VerticalContentAlignment="Center" MinWidth="85" SelectionChanged="FcbMode_SelectionChanged">
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 1
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 2
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 3
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 4
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 5
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 6
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 7
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource mode}" /> 8
+                    </TextBlock>
+                </ComboBox>
+                <ComboBox Margin="5,0,10,0" x:Name="cbSubmode" SelectedIndex="0" VerticalAlignment="Center" VerticalContentAlignment="Center" MinWidth="85" SelectionChanged="FcbMode_SelectionChanged">
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 1
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 2
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 3
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 4
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 5
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 6
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 7
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="{StaticResource submode}" /> 8
+                    </TextBlock>
+                </ComboBox>
+            </StackPanel>
+        </utu:ElevatedView>
+
+        <Grid Loaded="Grid_Loaded">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <utu:ElevatedView x:Name="bd2" Background="{ThemeResource AccentFillColorDefaultBrush}" Margin="10,0,18,5" CornerRadius="4" Visibility="Collapsed" Elevation="10">
+                <TextBlock x:Name="Label2" Text="" VerticalAlignment="Top" Foreground="{ThemeResource TextOnAccentFillColorSecondaryBrush}" HorizontalAlignment="Center" Padding="5,3" FontSize="24" FontWeight="SemiBold" />
+            </utu:ElevatedView>
+            <ScrollViewer Grid.Row="1" Padding="0,0,8,0">
+                <StackPanel x:Name="spConfs" SizeChanged="SpConfs_SizeChanged" VerticalAlignment="Top">
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

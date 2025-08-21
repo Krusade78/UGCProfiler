@@ -1,0 +1,90 @@
+﻿<Frame x:Class="Profiler.Pages.Macros.Main"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Profiler.Pages.Macros"
+    xmlns:shared="using:Shared"
+      Loaded="Window_Loaded">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="10,10,20,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="{StaticResource macro_list}" VerticalAlignment="Center" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,5">
+                <Button Click="ButtonAdd_Click">
+                    <SymbolIcon Symbol="Add" Foreground="Green" />
+                </Button>
+                <Button Click="ButtonDelete_Click">
+                    <SymbolIcon Symbol="Delete" Foreground="DarkRed" />
+                </Button>
+            </StackPanel>
+            <ListView Grid.Row="1" x:Name="lbMacros" ItemsSource="{Binding}" DisplayMemberPath="Name" Width="320" Background="White" SelectionChanged="LbMacros_SelectionChanged"/>
+        </Grid>
+        <ScrollViewer Grid.Column="1" Margin="0,10" HorizontalScrollBarVisibility="Auto" >
+            <Grid HorizontalAlignment="Center">
+                <StackPanel VerticalAlignment="Top">
+                    <local:CtlName x:Name="ctlName" IsEnabled="False" Width="400" />
+                    <StackPanel Orientation="Horizontal" Margin="0,10">
+                        <local:CtlKeyboard x:Name="ctlKeyboard" IsEnabled="False"/>
+                        <local:CtlStatusCommands Margin="10,0,10,0" x:Name="ctlStatusCommands" IsEnabled="False"/>
+                        <local:CtlModes  x:Name="ctlModes" IsEnabled="False"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <local:CtlMouse x:Name="ctlMouse" IsEnabled="False"/>
+                        <local:CtlDirectX Margin="10,0,0,0" x:Name="ctlDirectX" IsEnabled="False"/>
+                    </StackPanel>
+                        
+                    <Expander Header="{StaticResource nxt_extra_functions}" Margin="0,10" Width="715" HorizontalAlignment="Center">
+                        <local:CtlVKBGladiatorNXT x:Name="ctlVKBGladiatorNXT" IsEnabled="False"/>
+                    </Expander>
+
+                    <Expander Header="{StaticResource x52_extra_functions}" Margin="0,10" Width="715" HorizontalAlignment="Center">
+                        <local:CtlSaitekX52 x:Name="ctlSaitekX52" IsEnabled="False"/>
+                    </Expander>
+                </StackPanel>
+                <Button x:Name="btSave" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,30,0" Click="ButtonSave_Click" IsEnabled="False" Foreground="White" Background="#b93304">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Glyph="&#xE74E;" FontSize="24" Margin="0,0,10,0" FontFamily="Segoe MDL2 Assets"/>
+                        <TextBlock Text="{StaticResource save}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </ScrollViewer>
+
+        <Border x:Name="GroupBox1" Grid.Column="2" Margin="10,0,18,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{StaticResource commands}" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{ThemeResource SubtitleTextBlockStyle}" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"/>
+                <ListView RequestedTheme="Dark" x:Name="ListBox1" Margin="0,30,0,10" Background="Black" ItemsSource="{Binding}" DisplayMemberPath="Name">
+                    <ListView.Resources>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Foreground" Value="LightGreen"/>
+                        </Style>
+                    </ListView.Resources>
+                </ListView>
+                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="5,100,0,0">
+                    <Button x:Name="ButtonMoveUp" Width="32" Height="32" Padding="0" Click="ButtonMoveUp_Click">
+                        <SymbolIcon Symbol="Upload" />
+                    </Button>
+                    <Button x:Name="ButtonMoveDown" Margin="0,10" Width="32" Height="32" Padding="0" Click="ButtonMoveDown_Click">
+                        <SymbolIcon Symbol="Download" />
+                    </Button>
+                    <Button Width="32" Height="32" Padding="0" Click="ButtonDeleteCommand_Click">
+                        <SymbolIcon Symbol="Delete"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Frame>

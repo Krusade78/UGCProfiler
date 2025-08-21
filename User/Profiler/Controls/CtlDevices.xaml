@@ -1,0 +1,11 @@
+<UserControl x:Class="Profiler.Controls.CtlDevices"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+	<NavigationView x:Name="navView" x:FieldModifier="internal" IsBackButtonVisible="Collapsed" IsSettingsVisible="False"
+					   PaneTitle="{StaticResource device_list}"
+					   PaneDisplayMode="Left"
+					   AlwaysShowHeader="True"
+					   SelectionChanged="NavigationView_SelectionChanged">
+		<Frame x:Name="frContent" />
+	</NavigationView>
+</UserControl>

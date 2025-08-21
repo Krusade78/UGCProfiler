@@ -6,7 +6,7 @@ namespace Profiler.Pages.Macros
     {
         public byte Id { get; set; }
         public string Name { get => GetName(Commands); }
-        public uint[] Commands { get; set; }
+        public uint[] Commands { get; set; } = [];
 
         public static System.Collections.Generic.List<string> Keys { get; set; } = []; //key names ordered by key code
 
@@ -24,11 +24,11 @@ namespace Profiler.Pages.Macros
                 string key = Keys[data1];
                 if (released)
                 {
-                    return $"{Translate.Get("release")} {key.Remove(0, 5)}";
+                    return $"{Translate.Get("release")} {key[5..]}";
                 }
                 else
                 {
-                    return $"{Translate.Get("press")} {key.Remove(0, 5)}";
+                    return $"{Translate.Get("press")} {key[5..]}";
                 }
             }
             else if (cmdType == (byte)CommandType.MouseBt1)

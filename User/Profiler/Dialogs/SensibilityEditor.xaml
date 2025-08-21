@@ -1,0 +1,76 @@
+﻿<Frame x:Class="Profiler.Dialogs.SensibilityEditor"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+    <Grid>
+        <Grid Margin="0,60,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="10%"  Foreground="Gray" />
+                <Slider x:Name="TrackBar1" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar1}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="20%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar2" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar2}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="30%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar3" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar3}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="3">
+                <TextBlock Text="40%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar4" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar4}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="4">
+                <TextBlock Text="50%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar5" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar5}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="5">
+                <TextBlock Text="60%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar6" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar6}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="6">
+                <TextBlock Text="70%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar7" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar7}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="7">
+                <TextBlock Text="80%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar8" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar8}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="8">
+                <TextBlock Text="90%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar9" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickFrequency="10" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10"  ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar9}" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Grid.Column="9">
+                <TextBlock Text="100%" HorizontalAlignment="Center" Foreground="Gray" />
+                <Slider x:Name="TrackBar10" Orientation="Vertical" VerticalAlignment="Top" Maximum="100" SmallChange="1" TickPlacement="Outside" Value="50" Height="150" HorizontalAlignment="Center" LargeChange="10" TickFrequency="10" ValueChanged="TrackBar_ValueChanged"/>
+                <TextBlock Text="{Binding Value, ElementName=TrackBar10}" HorizontalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <TextBlock Text="{StaticResource curve_for_slider}" VerticalAlignment="Center" Margin="5,0"/>
+            <ToggleSwitch x:Name="chkSlider" OnContent="" OffContent="" MinWidth="0" />
+        </StackPanel>
+    </Grid>
+</Frame>

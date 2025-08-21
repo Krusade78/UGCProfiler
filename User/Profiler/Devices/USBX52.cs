@@ -8,7 +8,7 @@ namespace Profiler.Devices
     class UsbX52 : IDisposable
     {
         private Guid guidInterface = new(0xA57C1168, 0x7717, 0x4AF0, 0xB3, 0x0E, 0x6A, 0x4C, 0x62, 0x30, 0xBB, 0x10);
-        private string hidInterface;
+        private string? hidInterface;
         private IntPtr usbh = IntPtr.Zero;
         private IntPtr hwusb = IntPtr.Zero;
         private CWinUSB.WINUSB_PIPE_INFORMATION pipe = new();
@@ -156,7 +156,7 @@ namespace Profiler.Devices
                 {
                     byte[] buf = new byte[19];
                     Marshal.Copy(usbbuf, buf, 1, 14);
-                    Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                    wnd.DispatcherQueue.TryEnqueue(() =>
                     {
                         wnd.AddWinUSBX52Device();
                         wnd.SetStatus(0x06a30255, buf);

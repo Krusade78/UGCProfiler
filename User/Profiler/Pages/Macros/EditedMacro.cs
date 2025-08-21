@@ -6,12 +6,12 @@ namespace Profiler.Pages.Macros
 {
     internal class EditedMacro
     {
-        private Avalonia.Controls.ListBox ListBox1;
+        private Microsoft.UI.Xaml.Controls.ListView ListBox1 = new();
         private readonly List<GroupedCommand> gMacros = [];
-        private readonly Shared.ProfileModel profile = ((App)Avalonia.Application.Current).GetMainWindow().GetData().Profile;
+        private readonly Shared.ProfileModel profile = ((App)Microsoft.UI.Xaml.Application.Current).GetMainPage().GetData().Profile;
         private ushort currentMacroId;
 
-        public void SetListBox(Avalonia.Controls.ListBox lb) => ListBox1 = lb;
+        public void SetListBox(Microsoft.UI.Xaml.Controls.ListView lb) => ListBox1 = lb;
 
         public bool BasicMode { get; set; } = true;
 
@@ -20,7 +20,7 @@ namespace Profiler.Pages.Macros
             currentMacroId = macroId;
             gMacros.Clear();
 
-            Shared.ProfileModel.MacroModel r = profile.Macros.Find(x => x.Id == macroId);
+            Shared.ProfileModel.MacroModel r = profile.Macros.Find(x => x.Id == macroId) ?? new();
 
             List<uint> macros = [.. r.Commands];
 
@@ -269,7 +269,7 @@ namespace Profiler.Pages.Macros
                     else
                     {
                         byte nested = 1;
-                        GroupedCommand rLast = null;
+                        GroupedCommand? rLast = null;
                         for (int i = rSel.Id - 1; i >= 0; i--)
                         {
                             GroupedCommand rFind = gMacros[i];
@@ -292,7 +292,7 @@ namespace Profiler.Pages.Macros
                                 }
                             }
                         }
-                        gMacros.Remove(rLast);
+                        if (rLast != null) { gMacros.Remove(rLast); }
                         gMacros.Remove(rSel);
                     }
                 }
@@ -321,7 +321,7 @@ namespace Profiler.Pages.Macros
                 return;
 
             GroupedCommand rSel = (GroupedCommand)ListBox1.SelectedItem;
-            GroupedCommand rBefore = gMacros.Find(x => x.Id == (byte)(rSel.Id - 1));
+            GroupedCommand rBefore = gMacros.Find(x => x.Id == (byte)(rSel.Id - 1)) ?? new();
             byte selType = (byte)(rSel.Commands[0] & 0x7f);
             byte beforeType = (byte)(rBefore.Commands[0] & 0x7f);
 
@@ -359,7 +359,7 @@ namespace Profiler.Pages.Macros
                 return;
 
             GroupedCommand rSel = (GroupedCommand)ListBox1.SelectedItem;
-            GroupedCommand rNext = gMacros.Find(x => x.Id == (byte)(rSel.Id + 1));
+            GroupedCommand rNext = gMacros.Find(x => x.Id == (byte)(rSel.Id + 1)) ?? new();
             byte selType = (byte)(rSel.Commands[0] & 0x7f);
             byte nextType = (byte)(rNext.Commands[0] & 0x7f);
 
@@ -475,9 +475,12 @@ namespace Profiler.Pages.Macros
                 }
             }
            
-            Shared.ProfileModel.MacroModel nr = profile.Macros.Find(x => x.Id == currentMacroId);
-            nr.Name = name;
-            nr.Commands = [.. macro];
+            Shared.ProfileModel.MacroModel? nr = profile.Macros.Find(x => x.Id == currentMacroId);
+            if (nr != null)
+            {
+                nr.Name = name;
+                nr.Commands = [.. macro];
+            }
         }
     }
 }

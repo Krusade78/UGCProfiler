@@ -1,72 +1,77 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net9.0</TargetFramework>
-		<Nullable>disable</Nullable>
-		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-		<Platforms>x64</Platforms>
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-	</PropertyGroup>
+﻿<Project Sdk="Uno.Sdk">
+  <PropertyGroup>
+	<TargetFrameworks>net9.0-desktop</TargetFrameworks>
 
+	<OutputType>Exe</OutputType>
+	<UnoSingleProject>true</UnoSingleProject>
+
+	<!-- Display name -->
+	<ApplicationTitle>Profiler</ApplicationTitle>
+	<!-- App Identifier -->
+	<ApplicationId>com.companyname.Profiler</ApplicationId>
+	<!-- Versions -->
+	<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+	<ApplicationVersion>1</ApplicationVersion>
+	<!-- Package Publisher -->
+	<ApplicationPublisher>Alfredo</ApplicationPublisher>
+	<!-- Package Description -->
+	<Description>Profiler powered by Uno Platform.</Description>
+
+	<!--
+	  UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
+	  https://aka.platform.uno/singleproject-features
+	-->
+	<UnoFeatures>
+	  SkiaRenderer;
+	</UnoFeatures>
+	<Platforms>x64</Platforms>
+	<ImplicitUsings>disable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+  <!--<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>-->
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-desktop|x64'">
+	<DebugType>none</DebugType>
+  </PropertyGroup>
   <ItemGroup>
-	<Compile Remove="Calibrator\Info.xaml.cs" />
-	<None Remove="res\nxt.png" />
-	  <None Include="Calibrator\Info.xaml.cs" />
-	  <None Update="Calibrator\Info.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-	  </None>
+    <Compile Include="Calibrator\Info.xaml.cs_" />
   </ItemGroup>
-
+	
+	<ItemGroup>
+		<ProjectReference Include="..\RawInputHelper\RawInputHelper.csproj" />
+		<ProjectReference Include="..\Shrared\Shared.csproj" />
+	</ItemGroup>
+	
   <ItemGroup>
 	<Content Include="Language\keytemplate-es.txt">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
-	<Content Include="Language\profiler-es.axaml">
+	<Content Include="Language\profiler-es.json">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
-	  <AvaloniaResource Include="res\**" />
-	  <AvaloniaResource Include="Language\keytemplate-en.txt" />
-	<AvaloniaResource Include="Language\en.axaml" />
-	<EmbeddedResource Include="OldProfile\GladiatosNXT.json" />
-	<EmbeddedResource Include="OldProfile\Pedals.json" />
-	<EmbeddedResource Include="OldProfile\X52.json" />
   </ItemGroup>
-
 	<ItemGroup>
-		<Compile Update="OldProfile\DSPerfil.Designer.cs">
-			<CustomToolNamespace>OldProfile</CustomToolNamespace>
-			<DependentUpon>DSPerfil.xsd</DependentUpon>
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-		</Compile>
-		<None Update="OldProfile\DSPerfil.xsd">
-			<SubType>Designer</SubType>
-			<CustomToolNamespace>OldProfile</CustomToolNamespace>
-			<LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
-			<Generator>MSDataSetGenerator</Generator>
-		</None>
+		<EmbeddedResource Include="Language\keytemplate-en.txt" />
+		<EmbeddedResource Include="OldProfile\GladiatosNXT.json" />
+		<EmbeddedResource Include="OldProfile\Pedals.json" />
+		<EmbeddedResource Include="OldProfile\X52.json" />
+		<EmbeddedResource Include="res\CalibrationGrid.JPG" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.4.2" />
 	</ItemGroup>
 	
-  <ItemGroup>
-	  <PackageReference Include="Avalonia" Version="11.2.1" />
-	  <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
-	  <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
-	  <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
-	  <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-	  <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
-		  <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-		  <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-	  </PackageReference>
-	<PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
-  </ItemGroup>
-	
-  <ItemGroup>
-	<ProjectReference Include="..\RawInputHelper\RawInputHelper.vcxproj">
-		<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	</ProjectReference>
-	<ProjectReference Include="..\Shrared\Shared.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <Compile Update="OldProfile\DSPerfil.Designer.cs">
+		<DesignTime>True</DesignTime>
+		<AutoGen>True</AutoGen>
+		<DependentUpon>DSPerfil.xsd</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="OldProfile\DSPerfil.xsd">
+		<Generator>MSDataSetGenerator</Generator>
+		<LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
+		<CustomToolNamespace>OldProfile</CustomToolNamespace>
+	  </None>
+	</ItemGroup>
 </Project>

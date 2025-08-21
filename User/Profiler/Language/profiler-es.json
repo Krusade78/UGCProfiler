@@ -1,0 +1,325 @@
+{
+  //Messages
+  "error": "Error",
+  "warning": "Advertencia",
+  "do you want to save changes?": "¿Quieres guardar los cambios?",
+  "profile filter": ".xhp",
+  "profile_name": "nombre_perfil",
+  "save title": "Editor de perfiles -",
+  "profile launched ok": "Perfil cargado correntamente.",
+  //-----------
+
+  //MessageBox
+  "ok": "Aceptar",
+  "yes": "Si",
+  "no": "No",
+  "cancel": "Cancelar",
+  //-----------
+
+
+  "profiler": "Editor de perfiles",
+
+  //Menu bar
+  "new": "Nuevo",
+  "open": "Abrir",
+  "save": "Guardar",
+  "save_as": "Guardar como...",
+  "file": "Archivo",
+  "load": "Cargar",
+  "reset": "Reset",
+  "mouse_conf": "Conf. ratón",
+  "calibrate": "Calibrar",
+  "profile": "Perfil",
+  "devices": "Dispositivos",
+  "refresh": "Actualizar",
+  "view": "Edición",
+  "edit": "Editar",
+  "list": "Lista",
+  "current_mode": "Modo actual",
+  "mode": "Modo",
+  "submode": "Submodo",
+  //-----------
+
+  //Devices
+  "unable to register raw input device": "No se puedo el disposito de entrada en bruto",
+  "device_list": "Lista de dispositivos",
+  //-----------
+
+  //Profile
+  "profile none": "</------- Ninguna -------/>",
+  //-----------
+
+  //Calibration
+  "axes": "Ejes",
+  "raw_range": "Rango bruto",
+  "position_minimun": "Posición minima:",
+  "position_maximun": "Posición maxima:",
+  "position_center": "Posición central:",
+  "automatic": "Auto.",
+  "manual": "Manual",
+  "calibration_values": "Valores calibración",
+  "lower_limit": "Límite inferior:",
+  "null_zone": "Zona nula:",
+  "upper_limit": "Límite superior:",
+  "antivibration_values": "Valores antivibración",
+  "margin": "Margen:",
+  "resistance": "Resistencia:",
+  "test": "Prueba",
+  "raw_value": "Valor bruto",
+  "calibrated_value": "Valor calibrado",
+  "calibrated_game_value": "Valor calibrado en juego",
+  "buffer": "Buffer",
+  "save_and_activate": "Guardar y activar",
+  "take_from_raw": "Coger rango bruto",
+  //-----------
+
+  //VMouseConfig
+  "mouse_configuration": "Configuración del ratón",
+  "mouse_description": "Este control sirve para ralentizar el movimiento del ratón. Valores altos moverán el ratón más despacio y valores más bajos lo moverán más rápido. Normalmente no es necesario cambiar este valor ya cada eje tiene su propio control de sensibilidad.",
+  //-----------
+
+  //Generic
+  "axis": "Eje",
+  "hat": "Seta",
+  "position": "Posición",
+  "button": "Botón",
+  //-----------
+
+  //Assign default vJoy conf
+  "assign_vjoy_default_configuration": "Asignar configuración de vJoy por defecto",
+  "assign_default_description": "Se creará un prefil por defecto para la combidación de dispositivo y modo/submodo seleccionados.\rTodos los botones, ejes y setas será asignados al vJoy elegido (no se sobreescriben controles ya asignados).",
+  "buttons_start_index": "Idc. inicial botones:",
+  //-----------
+
+  //Properties
+  "none": "Ninguno",
+  "axis_configuration": "Configuración de eje",
+  "mouse_x": "Ratón X",
+  "mouse_y": "Ratón Y",
+  "assign_to": "Asignar a:",
+  "inverted": "Invertido",
+  "sensibility_curve": "Curva de sensibilidad",
+  "copy_from": "Copiar de...",
+  "mouse_sensibility": "Sensibilidad ratón:",
+  "digita_function": "Función digital",
+  "zones": "Bandas",
+  "incremental": "Incremental",
+  "incremental_resistance": "Resistencia inc.:",
+  "decremental_resistance": "Resistencia dec.:",
+  "edit_zones": "Editar bandas",
+  "button_configuration": "Configuración de botón",
+  "press_release": "Presionar/Soltar",
+  "long_press_release": "Presionar/Soltar largo",
+  "positions": "Posiciones:",
+  "assign_button_dx": "Asignar a botón de DirectX:",
+  "hat_configuration": "Configuración de seta",
+  "assign_hat": "Asignar todas las posiciones a seta",
+  "assign_button_dx_hat": "Asignar botón/posición a seta de DirectX:",
+  "up": "Arriba",
+  "up-right": "Arriba - Derecha",
+  "right": "Derecha",
+  "down-right": "Abajo - Derecha",
+  "down": "Abajo",
+  "down-left": "Abajo - Izquierda",
+  "left": "Izquierda",
+  "up-left": "Arriba - Izquierda",
+  "assign": "Asignar",
+  "macro_assignment": "Asignación de macros",
+  "press": "Presionar",
+  "release": "Soltar",
+  "long_press": "Presionar largo",
+  "long_release": "Soltar largo",
+  "increase": "Incrementar",
+  "decrease": "Reducir",
+  //-----------
+
+  //SensibilityEditor
+  "curve_for_slider": "Curva para eje lineal (sin centro)",
+  //-----------
+
+  //CopyFrom
+  "copy_sensibility_curve": "Copiar curva de sensibilidad",
+  "copy_from_description": "Esto copia la curva de sensibilidad al eje actual desde otro modo.",
+  "copy_from_": "Copiar de:",
+  //-----------
+
+  //ZoneEditor
+  "zone_editor": "Editor de bandas",
+  "number_of_zones": "Número de bandas:",
+  "zone": "Banda",
+  //-----------
+
+  //HatEditor
+  "hat_editor": "Asignación de setas",
+  "hat_editor_description": "Esto asignará cada posición de la seta actual a la seta DirectX seleccionada (modo actual). Se sobreescribirá cualquier configuración anterior en esas posiciones.",
+  //HatEditor -> texts for macro names
+  "dx_hat_n": "<Seta J% S$ N>",
+  "dx_hat_nw": "<Seta J% S$ NO>",
+  "dx_hat_w": "<Seta J% S$ O>",
+  "dx_hat_sw": "<Seta J% S$ SO>",
+  "dx_hat_s": "<Seta J% S$ S>",
+  "dx_hat_se": "<Seta J% S$ SE>",
+  "dx_hat_e": "<Seta J% S$ E>",
+  "dx_hat_ne": "<Seta J% S$ NE>",
+  //-----------
+
+  //MacroEditor
+  "macro_management": "Administración de macros",
+  //-----------
+
+  //SaitekPedals
+  "left_brake": "Freno izquierdo",
+  "right_brake": "Freno derecho",
+  "axis_r": "Eje R",
+  //-----------
+
+  //Gladiator NXT
+  "axis_x": "Eje X",
+  "axis_y": "Eje Y",
+  "axis_z": "Eje Z",
+  "trigger_p1": "Gatillo P.1",
+  "trigget_p2": "Gatillo P.2",
+  "fast_trigger": "Gatillo Rap.",
+  "launch": "Lanzar",
+  "base_1": "Base 1",
+  "base_2": "Base 2",
+  "base_3": "Base 3",
+  "enc_1_up": "Enc. 1 Arr.",
+  "enc_1_down": "Enc 1 aba.",
+  "enc_2_up": "Enc. 2 Arr.",
+  "enc_2_down": "Enc 2 Aba.",
+  "mini_x_axis": "Eje Mini X",
+  "mini_y_axis": "Eje Mini Y",
+  //-----------
+
+  //Generic
+  "hats": "Setas",
+  "buttons": "Botones",
+  //-----------
+
+  //Saitek X52
+  "button_a": "Botón A",
+  "button_b": "Botón B",
+  "button_c": "Botón C",
+  "mode_1": "Modo 1",
+  "mode_2": "Modo 2",
+  "mode_3": "Modo 3",
+  "sc_1": "Auto ct. 1",
+  "sc_2": "Auto ct. 2",
+  "sc_3": "Auto ct. 3",
+  "sc_4": "Auto ct. 4",
+  "sc_5": "Auto ct. 5",
+  "sc_6": "Auto ct. 6",
+  "throttle": "Acelerador",
+  "mfd_button_1": "Botón MFD 1",
+  "mfd_button_2": "Botón MFD 2",
+  "mfd_button_3": "Botón MFD 3",
+  "mini_button": "Bottón Mini",
+  "wheel_up": "Rueda Arr.",
+  "wheel_down": "Rueda Aba.",
+  "wheel_button": "Rueda Botón",
+  "button_d": "Botón D",
+  "button_e": "Botón E",
+  "button_i": "Botón I",
+  "axis_rx": "Eje Rx",
+  "axis_ry": "Eje Ry",
+  "axis_sl": "Eje Sl",
+  //-----------
+
+  "center": "Centro",
+
+  //Macros
+  //Macros -> Main
+  "macro_list": "Lista de macros",
+  "nxt_extra_functions": "VKB Gladiator NXT - Funciones extra",
+  "x52_extra_functions": "Saitek X52 - Funciones extra",
+  "commands": "Commandos",
+  "new_macro": "- Nueva macro -",
+  //Macros -> GroupedCommand
+  "mouse_button1_off": "[Ratón] Botón 1 Off",
+  "mouse_button1_on": "[Ratón] Botón 1 On",
+  "mouse_button2_off": "[Ratón] Botón 2 Off",
+  "mouse_button2_on": "[Ratón] Botón 2 On",
+  "mouse_button3_off": "[Ratón] Botón 3 Off",
+  "mouse_button3_on": "[Ratón] Botón 3 On",
+  "mouse_left_0": "[Ratón] Izquierda 0",
+  "mouse_left": "[Ratón] Izquierda",
+  "mouse_right_0": "[Ratón] Derecha 0",
+  "mouse_right": "[Ratón] Derecha",
+  "mouse_up_0": "[Ratón] Arriba 0",
+  "mouse_up": "[Ratón] Arriba",
+  "mouse_down_0": "[Ratón] Abajo 0",
+  "mouse_down": "[Ratón] Abajo",
+  "mouse_wheel_up_off": "[Ratón] Rueda arriba Off",
+  "mouse_wheel_up_on": "[Ratón] Rueda arriba On",
+  "mouse_wheel_down_off": "[Ratón] Rueda abajo Off",
+  "mouse_wheel_down_on": "[Ratón] Rueda abajo On",
+  "pause": "Pausa",
+  "hold": "Mantener",
+  "repeat_begin": "/-- Comienzo Repetir",
+  "repeat_end": "/-- Fin Repetir",
+  "repeat_n(slash)": "/-- Repetir N",
+  "begin": "comienzo",
+  "end": "fin",
+  "precision_mode": "Modo preciso",
+  "mfd_light": "Luz MFD",
+  "buttons_light": "Luz botones",
+  "info_light": "Luz Info",
+  "text_line": "Línea de texto",
+  "mfd_hour": "Hora MFD",
+  "mfd_date": "Fecha MFD",
+  //Macros -> EditedMacro
+  "repeat_and_hold_must_be_unique": "Repetir y Mantener deben ser únicos.",
+  "repeat_and_hold_cannot_be_inside_repeat_n": "Repetir y Mantener no pueden estar dentro de Repetir N.",
+  "macro_name_repeated": "Nombre de macro repetido.",
+  //Macros -> GladiatorNXT
+  "joystick_red": "Joystick - Rojo",
+  "constant": "Constante",
+  "blinking_slow": "Parpadeo lento",
+  "blinking_medium": "Parpadeo medio",
+  "blinking_fast": "Parpadeo rápido",
+  "color_mode": "Modo color:",
+  "add": "Añadir",
+  //Macros -> X52
+  "use_name_in_mfd": "Usar nombre en MFD (16 caracteres)",
+  "mfd_text": "Texto MFD",
+  "text": "Texto:",
+  "line": "Linea:",
+  "text_line2": "Línea de\rtexto",
+  "dates": "Fechas",
+  "digit": "Digito:",
+  "date_1": "Fecha 1",
+  "date_2": "Fecha 2",
+  "date_3": "Fecha 3",
+  "watches": "Relojes",
+  "hour": "Hora:",
+  "minute": "Minuto:",
+  "watch": "Reloj:",
+  "hotas_light": "Luz HOTAS",
+  "light": "Luz",
+  "level": "Nivel",
+  "buttons_light(short)": "Luz botones",
+  //Macros -> StatusCommand
+  "status_commands": "Comandos de estado",
+  "repeat": "Repetir",
+  "repeat_n": "Repetir N",
+  //Macros -> Name
+  "basic_mode": "Modo básico",
+  "advanced_mode": "Modo avanzado",
+  "name": "Nombre:",
+  //Macros -> Mouse
+  "mouse": "Ratón",
+  "wheel": "Rueda",
+  "movement": "Movimiento",
+  "sensibility": "Sensibilidad",
+  //Macros -> Modes
+  "modes": "Modos",
+  //Macros -> Keyboard
+  "keyboard": "Teclado",
+  "key": "Tecla",
+  "easy_insert": "Inserción sencilla",
+  //Macros -> DirectX
+  "move": "Mover",
+  "value_out_of_range": "El valor está fuera de rango.\rRango válido: 1 - 32768"
+  //-----------
+}

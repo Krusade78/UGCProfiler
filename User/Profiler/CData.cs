@@ -6,7 +6,7 @@ namespace Profiler
 {
     class CDatos : IDisposable
     {
-        private static System.Text.Json.JsonSerializerOptions jsonsOptions = new() { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(System.Text.Unicode.UnicodeRanges.All) };
+        private static readonly System.Text.Json.JsonSerializerOptions jsonsOptions = new() { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(System.Text.Unicode.UnicodeRanges.All) };
         public ProfileModel Profile { get; private set; } = new();
         public bool Modified { get; set; } = false;
 
@@ -48,7 +48,7 @@ namespace Profiler
             try
             {
                 string json = System.IO.File.ReadAllText(filename);
-                Profile = System.Text.Json.JsonSerializer.Deserialize<Shared.ProfileModel>(json);
+                Profile = System.Text.Json.JsonSerializer.Deserialize<ProfileModel>(json) ?? throw new Exception("Profile null");
             }
             catch (Exception ex)
             {
@@ -158,15 +158,15 @@ namespace Profiler
                 MouseTick = old.GENERAL[0].TickRaton
             };
 
-            using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.Pedals.json")))
+            using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.Pedals.json") ?? throw new NotImplementedException()))
             {
                 Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<ProfileModel.DeviceInfo>(r.ReadToEnd()));
             }
-            using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.X52.json")))
+            using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.X52.json") ?? throw new NotImplementedException()))
             {
                 Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<ProfileModel.DeviceInfo>(r.ReadToEnd()));
             }
-            using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.GladiatosNXT.json")))
+            using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.GladiatosNXT.json") ?? throw new NotImplementedException()))
             {
                 Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<ProfileModel.DeviceInfo>(r.ReadToEnd()));
             }
@@ -211,12 +211,12 @@ namespace Profiler
                     OldProfile.DSPerfil.INDICESBOTONESRow ibr = old.INDICESBOTONES.FindByidJoyidPinkieidModoidBotonid(br.idJoy, br.idPinkie, br.idModo, br.idBoton, i);
                     if (ibr != null)
                     {
-                        if (!Profile.ButtonsMap.TryGetValue(joyId, out ProfileModel.ButtonMapModel bmm))
+                        if (!Profile.ButtonsMap.TryGetValue(joyId, out ProfileModel.ButtonMapModel? bmm))
                         {
                             bmm = new();
                             Profile.ButtonsMap.Add(joyId, bmm);
                         }
-                        if (!bmm.Modes.TryGetValue((byte)((ibr.idPinkie << 4) | ibr.idModo), out ProfileModel.ButtonMapModel.ModeModel mm))
+                        if (!bmm.Modes.TryGetValue((byte)((ibr.idPinkie << 4) | ibr.idModo), out ProfileModel.ButtonMapModel.ModeModel? mm))
                         {
                             mm = new();
                             bmm.Modes.Add((byte)((ibr.idPinkie << 4) | ibr.idModo), mm);
@@ -225,7 +225,7 @@ namespace Profiler
                         {
                             continue;
                         }
-                        if (!mm.Buttons.TryGetValue(MapOldButton((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idBoton), out ProfileModel.ButtonMapModel.ModeModel.ButtonModel bm))
+                        if (!mm.Buttons.TryGetValue(MapOldButton((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idBoton), out ProfileModel.ButtonMapModel.ModeModel.ButtonModel? bm))
                         {
                             bm = new();
                             mm.Buttons.Add(MapOldButton((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idBoton), bm);
@@ -239,12 +239,12 @@ namespace Profiler
             foreach (OldProfile.DSPerfil.MAPAEJESRow er in old.MAPAEJES)
             {
                 uint joyId = GetId((OldProfile.Types.JoyType)er.idJoy);
-                if (!Profile.AxesMap.TryGetValue(joyId, out ProfileModel.AxisMapModel amm))
+                if (!Profile.AxesMap.TryGetValue(joyId, out ProfileModel.AxisMapModel? amm))
                 {
                     amm = new();
                     Profile.AxesMap.Add(joyId, amm);
                 }
-                if (!amm.Modes.TryGetValue((byte)((er.idPinkie << 4) | er.idModo), out ProfileModel.AxisMapModel.ModeModel mm))
+                if (!amm.Modes.TryGetValue((byte)((er.idPinkie << 4) | er.idModo), out ProfileModel.AxisMapModel.ModeModel? mm))
                 {
                     mm = new();
                     amm.Modes.Add((byte)((er.idPinkie << 4) | er.idModo), mm);
@@ -253,7 +253,7 @@ namespace Profiler
                 {
                     continue;
                 }
-                if (!mm.Axes.TryGetValue(MapOldAxis((OldProfile.Types.JoyType)er.idJoy, er.idEje), out ProfileModel.AxisMapModel.ModeModel.AxisModel am))
+                if (!mm.Axes.TryGetValue(MapOldAxis((OldProfile.Types.JoyType)er.idJoy, er.idEje), out ProfileModel.AxisMapModel.ModeModel.AxisModel? am))
                 {
                     am = new();
                     mm.Axes.Add(MapOldAxis((OldProfile.Types.JoyType)er.idJoy, er.idEje), am);
@@ -298,7 +298,7 @@ namespace Profiler
                     OldProfile.DSPerfil.INDICESSETASRow ibr = old.INDICESSETAS.FindByidJoyidPinkieidModoidSetaid(br.idJoy, br.idPinkie, br.idModo, br.IdSeta, i);
                     if (ibr != null)
                     {
-                        ProfileModel.ButtonMapModel bmm;
+                        ProfileModel.ButtonMapModel? bmm;
                         if (
                             (((OldProfile.Types.JoyType)br.idJoy == OldProfile.Types.JoyType.NXT) && (br.IdSeta > 7)) ||
                             ((OldProfile.Types.JoyType)br.idJoy == OldProfile.Types.JoyType.X52_Throttle) ||
@@ -320,7 +320,7 @@ namespace Profiler
                             }
                         }
 
-                        if (!bmm.Modes.TryGetValue((byte)((ibr.idPinkie << 4) | ibr.idModo), out ProfileModel.ButtonMapModel.ModeModel mm))
+                        if (!bmm.Modes.TryGetValue((byte)((ibr.idPinkie << 4) | ibr.idModo), out ProfileModel.ButtonMapModel.ModeModel? mm))
                         {
                             mm = new();
                             bmm.Modes.Add((byte)((ibr.idPinkie << 4) | ibr.idModo), mm);
@@ -329,7 +329,7 @@ namespace Profiler
                         {
                             continue;
                         }
-                        if (!mm.Buttons.TryGetValue(MapOldHat((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idSeta), out ProfileModel.ButtonMapModel.ModeModel.ButtonModel bm))
+                        if (!mm.Buttons.TryGetValue(MapOldHat((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idSeta), out ProfileModel.ButtonMapModel.ModeModel.ButtonModel? bm))
                         {
                             bm = new();
                             mm.Buttons.Add(MapOldHat((OldProfile.Types.JoyType)br.idJoy, (byte)ibr.idSeta), bm);

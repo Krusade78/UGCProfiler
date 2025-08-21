@@ -1,0 +1,40 @@
+<UserControl
+    x:Class="Profiler.Pages.Macros.CtlKeyboard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Profiler.Pages.Macros"
+    xmlns:utu="using:Uno.UI.Toolkit"
+    mc:Ignorable="d">
+
+    <utu:ElevatedView x:Name="Panel2" CornerRadius="4" Background="#a0fff0b0" Elevation="8" Margin="1,1,5,5">
+        <StackPanel>
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" VerticalAlignment="Top" >
+                <TextBlock Text="{StaticResource keyboard}" HorizontalAlignment="Center" Margin="0,5" FontSize="20" FontWeight="SemiBold" />
+            </Border>
+            <Grid Margin="10">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
+                    <StackPanel >
+                        <TextBlock Text="{StaticResource key}" Margin="0,0,0,5" />
+                        <ComboBox x:Name="ComboBox1" Width="250" />
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                            <Button Content="{StaticResource release}" x:Name="ButtonSoltar"  Width="85" Click="ButtonRelease_Click" />
+                            <Button Content="{StaticResource press}" x:Name="ButtonPresionar" Margin="5,0,0,0" Width="85" Click="ButtonPress_Click"  />
+                        </StackPanel>
+                    </StackPanel>
+                    <Border x:Name="KeyPanel" Visibility="Collapsed" Background="#40000000" CornerRadius="6" Margin="-4"/>
+                </Grid>
+                
+                <StackPanel VerticalAlignment="Top" Margin="0,110,0,0">
+                    <TextBlock Text="{StaticResource easy_insert}" />
+                    <TextBox x:Name="TextBoxKey" Margin="0,5" Width="350" IsReadOnly="True" Background="Black" Foreground="GreenYellow" HorizontalContentAlignment="Center" LostFocus="TextBoxKey_LostFocus" GotFocus="TextBoxKey_GotFocus" PreviewKeyDown="TextBoxKey_PreviewKeyDown" PreviewKeyUp="TextBoxKey_PreviewKeyUp" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Normal" x:Name="ButtonNormal" Width="85" Click="ButtonNormal_Click" />
+                        <Button Content="{StaticResource hold}" x:Name="ButtonMantener" Margin="5,0,0,0" Width="85" Click="ButtonHold_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </utu:ElevatedView>
+</UserControl>
