@@ -15,7 +15,8 @@ namespace Profiler.Controls
 
 
         private readonly System.Collections.Generic.SortedList<string, Devices.DeviceInfo> devices = [];
-        private readonly System.Collections.ObjectModel.ObservableCollection<NavigationViewItem> navItems = [];
+        private readonly System.Threading.SemaphoreSlim lockNavView = new(1, 1);
+        private readonly System.Collections.Concurrent.ConcurrentQueue<Action> navItemOperate = [];
 
         #region IDisposable
         private bool disposedValue;
@@ -49,7 +50,6 @@ namespace Profiler.Controls
         {
             InitializeComponent();
             rawInput = new(WndProc);
-            navView.MenuItemsSource = navItems;
         }
 
         public System.Collections.Generic.SortedList<string, Devices.DeviceInfo> GetDevices() => devices;
@@ -158,6 +158,22 @@ namespace Profiler.Controls
             }
         }
 
+        private async void DequeueNavViewOperation()
+        {
+            await lockNavView.WaitAsync();
+            while (true)
+            {
+                if (navItemOperate.TryDequeue(out Action? action))
+                {
+                    action?.Invoke();
+                    await System.Threading.Tasks.Task.Delay(100);
+                    break;
+                }
+                await System.Threading.Tasks.Task.Delay(200);
+            }
+            lockNavView.Release();
+        }
+
         public void AddProfileDevice(Shared.ProfileModel.DeviceInfo devProfileInfo)
         {
             Devices.DeviceInfo? di = devices.Select(x => x.Value).FirstOrDefault(x => x.Id == devProfileInfo.Id);
@@ -166,10 +182,11 @@ namespace Profiler.Controls
                 if (di.FromProfile)
                 {
                     devices.Remove(di.Name);
-                    DispatcherQueue.TryEnqueue(() =>
+                    navItemOperate.Enqueue(() =>
                     {
-                        navItems.RemoveAt(devices.IndexOfKey(di.Name));
+                        navView.MenuItems.RemoveAt(devices.IndexOfKey(di.Name));
                     });
+                    DispatcherQueue.TryEnqueue(DequeueNavViewOperation);
                 }
                 else
                 {
@@ -183,14 +200,15 @@ namespace Profiler.Controls
             }
             di.FromProfile = true;
             devices.Add(di.Name, di);
-            DispatcherQueue.TryEnqueue(() =>
+            navItemOperate.Enqueue(() =>
             {
-                navItems.Clear();
+                navView.MenuItems.Clear();
                 foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kvp in devices)
                 {
-                    navItems.Add(new CtlDevices_NavItem(navView, kvp.Value));
+                    navView.MenuItems.Add(new CtlDevices_NavItem(navView, kvp.Value));
                 }
             });
+            DispatcherQueue.TryEnqueue(DequeueNavViewOperation);
         }
 
         private uint? AddHardwareDevice(string devName)
@@ -212,10 +230,11 @@ namespace Profiler.Controls
                 if (di.FromProfile)
                 {
                     devices.Remove(di.Name);
-                    DispatcherQueue.TryEnqueue(() =>
+                    navItemOperate.Enqueue(() =>
                     {
-                        navItems.RemoveAt(devices.IndexOfKey(di.Name));
+                        navView.MenuItems.RemoveAt(devices.IndexOfKey(di.Name));
                     });
+                    DispatcherQueue.TryEnqueue(DequeueNavViewOperation);
                     ReadDeviceData(devName, hId);
                 }
             }
@@ -229,14 +248,15 @@ namespace Profiler.Controls
             if (di != null)
             {
                 devices.Add(di.Name, di);
-                DispatcherQueue.TryEnqueue(() =>
+                navItemOperate.Enqueue(() =>
                 {
-                    navItems.Clear();
+                    navView.MenuItems.Clear();
                     foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kvp in devices)
                     {
-                        navItems.Add(new CtlDevices_NavItem(navView, kvp.Value));
+                        navView.MenuItems.Add(new CtlDevices_NavItem(navView, kvp.Value));
                     }
                 });
+                DispatcherQueue.TryEnqueue(DequeueNavViewOperation);
             }
         }
 
@@ -280,7 +300,7 @@ namespace Profiler.Controls
             }
         }
 
-        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private void NavigationView_SelectionChanged(NavigationView _1, NavigationViewSelectionChangedEventArgs _2)
         {
             SetDeviceHeader();
             if (navView.SelectedItem == null)

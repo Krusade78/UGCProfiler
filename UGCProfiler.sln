@@ -32,6 +32,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPP2CS", "User\CPP2CS\CPP2C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawInputHelper", "User\RawInputHelper\RawInputHelper.csproj", "{7A8F7261-694B-AD7B-7EEE-36DCBDF6344F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profiler", "User\Profiler\Profiler.csproj", "{6A05A7CE-C95C-4239-9C8E-0530780A4353}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -58,6 +60,10 @@ Global
 		{7A8F7261-694B-AD7B-7EEE-36DCBDF6344F}.Debug|x64.Build.0 = Debug|x64
 		{7A8F7261-694B-AD7B-7EEE-36DCBDF6344F}.Release|x64.ActiveCfg = Release|x64
 		{7A8F7261-694B-AD7B-7EEE-36DCBDF6344F}.Release|x64.Build.0 = Release|x64
+		{6A05A7CE-C95C-4239-9C8E-0530780A4353}.Debug|x64.ActiveCfg = Debug|x64
+		{6A05A7CE-C95C-4239-9C8E-0530780A4353}.Debug|x64.Build.0 = Debug|x64
+		{6A05A7CE-C95C-4239-9C8E-0530780A4353}.Release|x64.ActiveCfg = Release|x64
+		{6A05A7CE-C95C-4239-9C8E-0530780A4353}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{584DB68E-FEF0-488B-8B09-899CDCC444CB} = {E76A424D-9A61-4C0D-8B2D-085DCA1CACE7}
 		{6DE78144-2A0E-47BF-80D6-BBAFFC123D99} = {E76A424D-9A61-4C0D-8B2D-085DCA1CACE7}
 		{7A8F7261-694B-AD7B-7EEE-36DCBDF6344F} = {E76A424D-9A61-4C0D-8B2D-085DCA1CACE7}
+		{6A05A7CE-C95C-4239-9C8E-0530780A4353} = {E76A424D-9A61-4C0D-8B2D-085DCA1CACE7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92C35703-B89E-4F01-B7CD-259D00B377F4}

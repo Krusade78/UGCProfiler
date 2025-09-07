@@ -15,19 +15,17 @@
         </Grid.RowDefinitions>
                 
         <Grid x:Name="icoProfile" Width="30" Grid.RowSpan="2" Visibility="Collapsed" HorizontalAlignment="Left">
-            <FontIcon Glyph="&#xE8A5;" FontSize="20">
-                <ToolTipService.ToolTip>
-                    <ToolTip Content="{x:Bind Item.Name}" />
-                </ToolTipService.ToolTip>
-            </FontIcon>
+            <ToolTipService.ToolTip>
+                <ToolTip Content="{x:Bind Item.Name}" />
+            </ToolTipService.ToolTip>
+            <FontIcon Glyph="&#xE8A5;" FontSize="20"/>
             <FontIcon Glyph="&#xE7FC;" Margin="5,2,0,0" FontSize="9" />
         </Grid>
         <Grid x:Name="iconHardware" Width="30" Grid.RowSpan="2" Visibility="Collapsed" HorizontalAlignment="Left">
-            <FontIcon  Glyph="&#xE7FC;"  FontSize="20">
-                <ToolTipService.ToolTip>
-                    <ToolTip Content="{x:Bind Item.Name}" />
-                </ToolTipService.ToolTip>
-            </FontIcon>
+            <ToolTipService.ToolTip>
+                <ToolTip Content="{x:Bind Item.Name}" />
+            </ToolTipService.ToolTip>
+            <FontIcon  Glyph="&#xE7FC;"  FontSize="20"/>
         </Grid>
 
         <TextBlock x:Name="text" Grid.Row="1" Grid.Column="1" Text="{x:Bind Item.Name}" VerticalAlignment="Top" Margin="15,0,0,0" TextTrimming="CharacterEllipsis" Foreground="#c9c9c9" />

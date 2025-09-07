@@ -5,6 +5,21 @@ using Uno.UI;
 namespace Profiler;
 public partial class App : Application
 {
+    #region Win32
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+    private static extern nint FindWindow(string? lpClassName, string lpWindowName);
+
+
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+    private static extern nint LoadIconW(nint hInst, nint name);
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
+    private static extern nint GetModuleHandle(string? lpModuleName);
+
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+    private static extern nint SendMessage(nint hWnd, int Msg, int wParam, nint lParam);
+    #endregion
+
     public static readonly System.Text.Json.JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
 
     /// <summary>
@@ -62,39 +77,24 @@ public partial class App : Application
 
         // Do not repeat app initialization when the Window already has content,
         // just ensure that the window is active
-        if (mainWindow.Content is not Frame rootFrame)
+        if (mainWindow.Content is not MainPage)
         {
-            // Create a Frame to act as the navigation context and navigate to the first page
-            rootFrame = new Frame();
+            mainWindow.Content = new MainPage();
+            ((MainPage)mainWindow.Content).Loaded += (s, e) =>
+            {
+                nint hInstance = GetModuleHandle(null);
+                nint hIcon = LoadIconW(hInstance, new nint(101));
+                var hwnd = FindWindow(null, mainWindow.Title);
 
-            // Place the frame in the current Window
-            mainWindow.Content = rootFrame;
-
-            rootFrame.NavigationFailed += OnNavigationFailed;
+                var b1 = SendMessage(hwnd, 0x80, 0, hIcon);
+                var b2 =SendMessage(hwnd, 0x80, 1, hIcon);
+            };
         }
 
-        if (rootFrame.Content == null)
-        {
-            // When the navigation stack isn't restored navigate to the first page,
-            // configuring the new page by passing required information as a navigation
-            // parameter
-            rootFrame.Navigate(typeof(MainPage), args.Arguments);
-        }
-
-        //MainWindow.SetWindowIcon();
         // Ensure the current window is active
         mainWindow.Activate();
     }
 
-    /// <summary>
-    /// Invoked when Navigation to a certain page fails
-    /// </summary>
-    /// <param name="sender">The Frame which failed navigation</param>
-    /// <param name="e">Details about the navigation failure</param>
-    void OnNavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
-    {
-        throw new System.InvalidOperationException($"Failed to load {e.SourcePageType.FullName}: {e.Exception}");
-    }
 
     #region Window
     public void SetTitle(string title)

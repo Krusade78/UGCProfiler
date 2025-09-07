@@ -1,0 +1,33 @@
+#define IDI_APPICON 101
+#define ID_VERSION 1
+
+IDI_APPICON ICON "editor.ico"
+
+ID_VERSION VERSIONINFO
+ FILEVERSION 11,1,0,0
+ PRODUCTVERSION 11,1,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Alfredo Costalago"
+            VALUE "FileDescription", "Profile editor"
+            VALUE "FileVersion", "11.1.0"
+            VALUE "InternalName", "Profiler"
+            VALUE "LegalCopyright", "Copyright© 2025"
+            VALUE "OriginalFilename", "Profiler.exe"
+            VALUE "ProductName", "UGC Profiler"
+            VALUE "ProductVersion", "11.1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

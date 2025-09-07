@@ -5,19 +5,16 @@
 	<OutputType>Exe</OutputType>
 	<UnoSingleProject>true</UnoSingleProject>
 
-	<!-- Display name -->
-	<ApplicationTitle>Profiler</ApplicationTitle>
-	<!-- App Identifier -->
-	<ApplicationId>com.companyname.Profiler</ApplicationId>
-	<!-- Versions -->
-	<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-	<ApplicationVersion>1</ApplicationVersion>
-	<!-- Package Publisher -->
-	<ApplicationPublisher>Alfredo</ApplicationPublisher>
-	<!-- Package Description -->
-	<Description>Profiler powered by Uno Platform.</Description>
+	  <Product>UGC Profiler</Product>
+	  <Authors>Alfredo Costalago</Authors>
+	  <Description>Profile editor</Description>
+	  <Version>11.1.0</Version>
+	  <Copyright>Copyright© 2025</Copyright>
 
-	<!--
+	  <GenerateManifest>false</GenerateManifest>
+	  <Win32Resource>res\resources.res</Win32Resource>
+
+	  <!--
 	  UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
 	  https://aka.platform.uno/singleproject-features
 	-->
@@ -32,10 +29,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-desktop|x64'">
 	<DebugType>none</DebugType>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Calibrator\Info.xaml.cs_" />
-  </ItemGroup>
-	
+
 	<ItemGroup>
 		<ProjectReference Include="..\RawInputHelper\RawInputHelper.csproj" />
 		<ProjectReference Include="..\Shrared\Shared.csproj" />
@@ -55,6 +49,7 @@
 		<EmbeddedResource Include="OldProfile\Pedals.json" />
 		<EmbeddedResource Include="OldProfile\X52.json" />
 		<EmbeddedResource Include="res\CalibrationGrid.JPG" />
+		<EmbeddedResource Include="res\editor.ico" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.4.2" />
@@ -72,6 +67,9 @@
 		<Generator>MSDataSetGenerator</Generator>
 		<LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
 		<CustomToolNamespace>OldProfile</CustomToolNamespace>
+	  </None>
+	  <None Update="Profiler.exe.manifest">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 </Project>
