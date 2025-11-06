@@ -88,10 +88,9 @@ namespace RawInputHelper
                 System.Threading.Thread.Sleep(50);
                 return;
             }
-            size *= 128; // up to 128 messages
+            size *= 64; // up to 64 messages, for x64 size = size * 8
 
             IntPtr pRawInput = Marshal.AllocHGlobal((int)size);
-            IntPtr pNextRawInput = pRawInput;
             while (true)
             {
                 uint sizeT = size;
@@ -100,10 +99,13 @@ namespace RawInputHelper
                 {
                     break;
                 }
+                System.Diagnostics.Debug.WriteLine($"{nInput}");
 
-                Win32.RAWINPUT raw = Marshal.PtrToStructure<Win32.RAWINPUT>(pNextRawInput);
+                IntPtr pNextRawInput = pRawInput;
                 for (; nInput > 0; nInput--)
                 {
+                    Win32.RAWINPUT raw = Marshal.PtrToStructure<Win32.RAWINPUT>(pNextRawInput);
+
                     uint cbSize = 0;
                     _ = Win32.GetRawInputDeviceInfoW(raw.header.hDevice, 0x20000007, IntPtr.Zero, ref cbSize);
                     if (cbSize != 0)
@@ -149,7 +151,8 @@ namespace RawInputHelper
 
                         Marshal.FreeHGlobal(pName);
                     }
-                    pNextRawInput = IntPtr.Add(pRawInput, Marshal.SizeOf<Win32.RAWINPUT>());
+                    System.Diagnostics.Debug.WriteLine($"{pNextRawInput}:{raw.header.dwSize}");
+                    pNextRawInput = IntPtr.Add(pNextRawInput, ((int)raw.header.dwSize + 7) & ~7);
                 }
             }
 

@@ -18,7 +18,7 @@ namespace Profiler.Devices
         {
             [FieldOffset(0)]
             public ushort DataIndex;
-            [FieldOffset(0)]
+            [FieldOffset(2)]
             public ushort Reserved;
             [FieldOffset(4)]
             public uint RawValue;

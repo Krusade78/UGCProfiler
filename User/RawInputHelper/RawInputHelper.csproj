@@ -8,5 +8,7 @@
       <Authors>Alfredo Costalago</Authors>
       <Version>2.0.0</Version>
       <Copyright>Copyright© 2025</Copyright>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <EnableLibraryImportGenerator>true</EnableLibraryImportGenerator>
   </PropertyGroup>
 </Project>

@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace RawInputHelper
 {
-    internal static class Win32
+    internal static partial class Win32
     {
         #region Window
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateEventW(
+        [LibraryImport("kernel32.dll", EntryPoint = "CreateEventW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial IntPtr CreateEventW(
             IntPtr lpEventAttributes, // normalmente se pasa IntPtr.Zero
-            bool bManualReset,
-            bool bInitialState,
+            [MarshalAs(UnmanagedType.Bool)] bool bManualReset,
+            [MarshalAs(UnmanagedType.Bool)] bool bInitialState,
             string? lpName // puede ser null
         );
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateWindowExW(
+        [LibraryImport("user32.dll", EntryPoint = "CreateWindowExW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial IntPtr CreateWindowExW(
             uint dwExStyle,
             string lpClassName,
             string? lpWindowName,
@@ -31,33 +30,36 @@ namespace RawInputHelper
             IntPtr lpParam
         );
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr GetModuleHandleW(string? lpModuleName);
+        [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        internal static partial IntPtr GetModuleHandleW(string? lpModuleName);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool DestroyWindow(IntPtr hWnd);
+        [LibraryImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool DestroyWindow(IntPtr hWnd);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool SetEvent(IntPtr hEvent);
+        [LibraryImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool SetEvent(IntPtr hEvent);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool ResetEvent(IntPtr hEvent);
+        [LibraryImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool ResetEvent(IntPtr hEvent);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
+        [LibraryImport("kernel32.dll", SetLastError = true)]
+        internal static partial uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint MsgWaitForMultipleObjects(
+        [LibraryImport("user32.dll", SetLastError = true)]
+        internal static partial uint MsgWaitForMultipleObjects(
             uint nCount,
-            IntPtr[] pHandles,
-            bool bWaitAll,
+            [In] IntPtr[] pHandles,
+            [MarshalAs(UnmanagedType.Bool)] bool bWaitAll,
             uint dwMilliseconds,
             uint dwWakeMask
         );
 
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [LibraryImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool CloseHandle(IntPtr hObject);
+        internal static partial bool CloseHandle(IntPtr hObject);
         #endregion
 
         #region RawInput structs
@@ -79,18 +81,34 @@ namespace RawInputHelper
             public IntPtr wParam;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Explicit)]
         public struct RAWMOUSE
         {
+            [FieldOffset(0)]
             public ushort usFlags;
+
+            [FieldOffset(4)]
             public uint ulButtons;
+
+            [FieldOffset(4)]
             public ushort usButtonFlags;
+
+            [FieldOffset(6)]
             public ushort usButtonData;
+
+            [FieldOffset(8)]
             public uint ulRawButtons;
+
+            [FieldOffset(12)]
             public int lLastX;
+
+            [FieldOffset(16)]
             public int lLastY;
+
+            [FieldOffset(20)]
             public uint ulExtraInformation;
         }
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RAWKEYBOARD
@@ -108,8 +126,7 @@ namespace RawInputHelper
         {
             public uint dwSizeHid;
             public uint dwCount;
-            // Este es un buffer variable, así que se maneja como IntPtr
-            public IntPtr bRawData;
+            //public byte bRawData;
         }
 
         [StructLayout(LayoutKind.Explicit)]
@@ -128,36 +145,42 @@ namespace RawInputHelper
             public RAWHID hid;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Explicit)]
         public struct HIDP_DATA
         {
+            [FieldOffset(0)]
             public ushort DataIndex;
+            [FieldOffset(2)]
             public ushort Reserved;
+            [FieldOffset(4)]
             public uint RawValue;
+            [FieldOffset(4)]
+            public byte On;
         }
         #endregion
 
         #region RawInput functions
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool RegisterRawInputDevices(
+        [LibraryImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool RegisterRawInputDevices(
                 [In] RAWINPUTDEVICE[] pRawInputDevices,
                 uint uiNumDevices,
                 uint cbSize
             );
 
-        [DllImport("User32.dll", SetLastError = true)]
-        public static extern uint GetRawInputBuffer(
+        [LibraryImport("User32.dll", SetLastError = true)]
+        internal static partial uint GetRawInputBuffer(
             [Out] byte[] pData,
             ref uint pcbSize,
             uint cbSizeHeader);
-        [DllImport("User32.dll", SetLastError = true)]
-        public static extern uint GetRawInputBuffer(
+        [LibraryImport("User32.dll", SetLastError = true)]
+        internal static partial uint GetRawInputBuffer(
             IntPtr pData,
             ref uint pcbSize,
             uint cbSizeHeader);
 
-        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern uint GetRawInputDeviceInfoW(
+        [LibraryImport("User32.dll", EntryPoint = "GetRawInputDeviceInfoW", SetLastError = true)]
+        internal static partial uint GetRawInputDeviceInfoW(
             IntPtr hDevice,
             uint uiCommand,
             IntPtr pData,
@@ -170,13 +193,13 @@ namespace RawInputHelper
             HidP_Feature
         }
 
-        [DllImport("hid.dll", SetLastError = true)]
-        public static extern long HidP_GetData(
+        [LibraryImport("hid.dll", SetLastError = true)]
+        internal static partial long HidP_GetData(
             HidP_ReportType ReportType,
             IntPtr DataList,
             ref uint DataLength,
             IntPtr PreparsedData,
-            byte[] Report,
+            [In] byte[] Report,
             uint ReportLength);
         #endregion
     }
