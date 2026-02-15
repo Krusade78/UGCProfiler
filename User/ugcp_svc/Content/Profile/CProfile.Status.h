@@ -6,6 +6,9 @@ public:
 	{
 		UINT16 IncrementalPos = 0;
 		UCHAR Band = 0;
+		double LastPos = 0;
+		double LastVelocity = 0;
+		//double LastInertiaPos = 0;
 	} ST_AXIS;
 private:
 	// Button definitions

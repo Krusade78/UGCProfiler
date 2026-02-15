@@ -136,7 +136,14 @@
 
 	<!--#region SensibilityEditor-->
 	<x:String x:Key="curve_for_slider">Curve for lineal axis (without center)</x:String>
-	<!--#endregion-->
+    <x:String x:Key="custom_curve">Custom curve</x:String>
+    <x:String x:Key="parametric_curve">Parametric curve</x:String>
+    <x:String x:Key="blend">Blend</x:String>
+    <x:String x:Key="virtual_damping">Virtual damping</x:String>
+    <x:String x:Key="damping_factor">Damping factor:</x:String>
+    <x:String x:Key="inertia">Inertia:</x:String>
+    <x:String x:Key="soft_dead_zone">Soft dead zone (%):</x:String>
+    <!--#endregion-->
 
 	<!--#region CopyFrom-->
 	<x:String x:Key="copy_sensibility_curve">Copy sensibility curve</x:String>

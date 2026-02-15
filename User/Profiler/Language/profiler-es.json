@@ -135,6 +135,14 @@
 
   //SensibilityEditor
   "curve_for_slider": "Curva para eje lineal (sin centro)",
+  "custom_curve": "Curva personalizada",
+  "parametric_curve": "Curva paremétrica",
+  "blend": "Suavidad",
+  "exponent": "Exponente",
+  "virtual_damping": "Sensibilidad virtual",
+  "damping_factor": "F.Sensibilidad:",
+  "inertia": "Inercia:",
+  "soft_dead_zone": "Zona muerta suave (%):",
   //-----------
 
   //CopyFrom

@@ -170,8 +170,8 @@ namespace Profiler.Controls.Properties
                 if ((axis.Type & 0b10000) == 0b10000) //incremental
                 {
                     RadioButtonIncremental.IsOn = true;
-                    NumericUpDownResistanceInc.Value = axis.Resistance.Item1;
-                    NumericUpDownResistanceDec.Value = axis.Resistance.Item2;
+                    NumericUpDownResistanceInc.Value = axis.Resistance.Increment;
+                    NumericUpDownResistanceDec.Value = axis.Resistance.Decrement;
                 }
                 if ((axis.Type & 0b100000) == 0b100000) //zones
                 {
@@ -323,9 +323,9 @@ namespace Profiler.Controls.Properties
             }
 
             if (inc)
-                axis.Resistance = ((byte)NumericUpDownResistanceInc.Value, axis.Resistance.Item2);
+                axis.Resistance = new() { Increment = (byte)NumericUpDownResistanceInc.Value, Decrement = axis.Resistance.Decrement };
             else
-                axis.Resistance = (axis.Resistance.Item1, (byte)NumericUpDownResistanceDec.Value);
+                axis.Resistance = new() { Increment = axis.Resistance.Increment, Decrement = (byte)NumericUpDownResistanceDec.Value };
 
             parent.GetParent().GetData().Modified = true;
         }

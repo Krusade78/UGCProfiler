@@ -40,15 +40,33 @@ namespace Shared
                 public Dictionary<byte, AxisModel> Axes { get; set; } = []; //Axis Id as key
                 public class AxisModel
                 {
+                    public class CurveModel
+                    {
+                        public double Blend { get; set; }
+                        public double Exponent { get; set; }
+                    }
+                    public class ResistanceModel
+                    {
+                        public byte Increment { get; set; }
+                        public byte Decrement { get; set; }
+                    }
+
                     public byte Mouse { get; set; } = 1;
                     public byte IdJoyOutput { get; set; }
-                    public byte Type {  get; set; } //Mapped in bits 0:none, 1:Normal, 10:Inverted, 100:Mini, 1000:Mouse, 10000:Incremental, 100000: Bands
+                    public byte Type { get; set; } //Mapped in bits 0:none, 1:Normal, 10:Inverted, 100:Mini, 1000:Mouse, 10000:Incremental, 100000: Bands
                     public byte OutputAxis { get; set; }
-                    public byte[] Sensibility { get; set; } = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+                    public bool IsSensibilityAsCurve { get; set; } = false;
+                    public CurveModel Curve { get; set; } = new() { Blend = 0.5, Exponent = 1.5 };
+                    public double[] SensibilityX { get; set; } = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00];
+                    public double[] SensibilityY { get; set; } = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00];
+                    public double[] SensibilityS { get; set; } = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
                     public bool IsSensibilityForSlider { get; set; }
+                    public double DamplingK { get; set; } = 0;
+                    //public double Intertia { get; set; } = 0;
+                    public byte SoftDeadZone { get; set; } = 0;
                     public List<byte> Zones { get; set; } = []; //zone position %
                     public List<ushort> Actions { get; set; } = []; //macro index
-                    public (byte, byte) Resistance { get; set; } = (1, 1);//increment/decrement type
+                    public ResistanceModel Resistance { get; set; } = new() { Increment = 1, Decrement = 1 };//increment/decrement type
                 }
             }
 

@@ -18,14 +18,13 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 	//Sensibility
 	for (idx = 0; idx < 24; idx++)
 	{
-		UCHAR sy1;
-		UCHAR sy2;
-		UINT16 sTopSl = 32767;
-		INT16 sTop = 16383;
+		FLOAT x1, x2, y1, y2, m1, m2;
+		double range, center;
 
-		//if (sTopSl == 0) { sTopSl = 32767; }
-		//if (sTop == 0) { sTop = sTopSl / 2; }
 		bool slider = false;
+		//double inertia = 0;
+		double dampingK = 0;
+		double softDeadZone = 0;
 		pProfile->BeginProfileRead();
 		{
 			PROGRAMMING::AXISMODEL* axisMap = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx);
@@ -35,38 +34,162 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 				continue;
 			}
 			slider = axisMap->IsSlider;
+			//inertia = axisMap->Inertia;
+			dampingK = axisMap->DampingK;
+			softDeadZone = static_cast<double>(axisMap->SoftDeadZone) / static_cast<double>(100);
 		}
 		pProfile->EndProfileRead();
 
-		INT32 x = input->Axis[idx]; //for casting
-		if (!slider && (x == sTop))
+		pProfile->InitCalibrationRead();
 		{
-			continue;
+			CALIBRATION::ST_LIMITS* cal = pProfile->GetCalibration()->GetLimit(joyId, idx);
+			if (cal != nullptr)
+			{
+				range = cal->Right;
+				center = cal->Center;
+			}
+			else
+			{
+				pProfile->EndCalibrationRead();
+				continue;
+			}
 		}
-		bool left = (x < sTop);
-		x = slider ? x : ((left) ? sTop - x : x - sTop );
-		UCHAR pos = slider ? (UCHAR)((x * 10) / sTopSl) : (UCHAR)((x * 10) / sTop);
-		if (pos == 10)
-		{
-			pos = 9;
-		}
-		pProfile->BeginProfileRead();
-		{
-			//checked null previously
-			sy1 = (pos == 0) ? 0 : pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->Sensibility[pos - 1];
-			sy2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->Sensibility[pos];
-		}
-		pProfile->EndProfileRead();
+		pProfile->EndCalibrationRead();
+
+		//normalize 0.0 - 1.0 for interpolation
+		double normalPos;
+		bool left = input->Axis[idx] < center;
+		bool truncatedMax = false;
 		if (slider)
 		{
-			x = (x == sTopSl) ? ((sy2 * sTopSl) / 100) : ((((sy2 - sy1) * ((10 * x) - (pos * sTopSl))) + (sy1 * sTopSl))) / 100;
+			normalPos = input->Axis[idx] / range;
 		}
 		else
 		{
-			x = (x == sTop) ? ((sy2 * sTop) / 100) : ((((sy2 - sy1) * ((10 * x) - (pos * sTop))) + (sy1 * sTop))) / 100;
-			x = (left) ? sTop - x : x + sTop;
+			if (input->Axis[idx] == center)
+			{
+				input->Axis[idx] = 16383;
+				continue;
+			}
+			normalPos = left ? ((center - input->Axis[idx]) / center) : (input->Axis[idx] - center) / (range - center);
 		}
-		input->Axis[idx] = static_cast<UINT16>(x);
+
+		//soft dead zone
+		if ((softDeadZone > 0) && (normalPos < softDeadZone))
+		{
+			double u = normalPos / softDeadZone;
+			normalPos = softDeadZone * (6 * u * u * u * u * u - 15 * u * u * u * u + 10 * u * u * u);
+		}
+
+
+		pProfile->BeginProfileRead();
+		{
+			//checked null previously
+			if (normalPos >= pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityX[19])
+			{
+				truncatedMax = true;
+				normalPos = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityY[19];
+			}
+			else
+			{
+				if (normalPos < pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityX[0])
+				{
+					x1 = 0;
+					x2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityX[0];
+					y1 = 0;
+					y2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityY[0];
+					m1 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityY[0] / pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityX[0];
+					m2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityS[0];
+				}
+				else
+				{
+					for (CHAR pos = 0; pos < 19; pos++)
+					{
+						if (normalPos < pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityX[pos + 1])
+						{
+							x1 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityX[pos];
+							x2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityX[pos + 1];
+							y1 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityY[pos];
+							y2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityY[pos + 1];
+							m1 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityS[pos];
+							m2 = pProfile->GetProfile()->AxesMap.GetConf(joyId, &mode, idx)->SensibilityS[pos + 1];
+							break;
+						}
+					}
+				}
+			}
+		}
+		pProfile->EndProfileRead();
+
+		if (!truncatedMax) // interpolation
+		{
+			double h = x2 - x1;
+			double s0 = (normalPos - x1) / h;
+
+			double h00 = (1 + 2 * s0) * (1 - s0) * (1 - s0);
+			double h10 = s0 * (1 - s0) * (1 - s0);
+			double h01 = s0 * s0 * (3 - 2 * s0);
+			double h11 = s0 * s0 * (s0 - 1);
+
+			normalPos = h00 * y1 + h10 * h * m1 + h01 * y2 + h11 * h * m2;
+		}
+
+		//damping & inertia
+		{
+			double lastPos = normalPos;
+			double lastVelocity = 0;
+			//double lastInertia = 0;
+			pProfile->LockStatus();
+			{
+				STATUS::ST_AXIS* pStatus = nullptr;
+				if (pProfile->GetStatus()->Axes.GetStatus(&pStatus, joyId, mode, idx))
+				{
+					lastPos = pStatus->LastPos;
+					lastVelocity = pStatus->LastVelocity;
+					//lastInertia = pStatus->LastInertiaPos;
+				}
+			}
+			pProfile->UnlockStatus();
+
+			double vel = normalPos - lastPos;
+			double acc = vel - lastVelocity;
+			double centerFactor = 1.0 - normalPos;
+			double dampedPos = normalPos - dampingK * acc * centerFactor; //damping k = 0.25 (flight)
+
+			// clamp
+			if (dampedPos > 1.0) { dampedPos = 1.0; }
+
+			if (dampingK == 0) //disabled
+			{
+				dampedPos = normalPos;
+			}
+
+			//inertia
+			//normalPos = (dampedPos * (1.0 - inertia)) + (lastInertia * inertia);
+			normalPos = dampedPos;
+
+			pProfile->LockStatus();
+			{
+				STATUS::ST_AXIS* pStatus = nullptr;
+				if (pProfile->GetStatus()->Axes.GetStatus(&pStatus, joyId, mode, idx))
+				{
+					pStatus->LastPos = dampedPos;
+					pStatus->LastVelocity = vel;
+					//pStatus->LastInertiaPos = normalPos;
+				}
+			}
+			pProfile->UnlockStatus();
+		}
+
+
+		if (slider) //scale to vJoy
+		{
+			input->Axis[idx] = normalPos * 32767;
+		}
+		else
+		{
+			input->Axis[idx] = left ? 16383 * (1.0 - normalPos) : 16383 + (normalPos * 16384);
+		}
 	}
 
 	//Mapping
@@ -76,7 +199,6 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 		UCHAR axisType;
 		UCHAR outputAxis;
 		UCHAR mouseSens; //t
-		UINT16 eTop, sTop, center;
 
 		pProfile->BeginProfileRead();
 		{
@@ -92,22 +214,6 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 			mouseSens = axisMap->MouseSensibility;
 		}
 		pProfile->EndProfileRead();
-		pProfile->InitCalibrationRead();
-		{
-			CALIBRATION::ST_LIMITS* cal = pProfile->GetCalibration()->GetLimit(joyId, idx);
-			if (cal != nullptr)
-			{
-				eTop = cal->Range;
-				center = cal->Center;
-				sTop = eTop;
-			}
-			else
-			{
-				pProfile->EndCalibrationRead();
-				continue;
-			}
-		}
-		pProfile->EndCalibrationRead();
 
 		if (axisType == 0)
 		{
@@ -118,7 +224,7 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 			output[vJoy].Axes[outputAxis] = input->Axis[idx];
 			if ((axisType & 0x2) == 2) //inverted normal
 			{
-				output[vJoy].Axes[outputAxis] = sTop - output[vJoy].Axes[outputAxis];
+				output[vJoy].Axes[outputAxis] = 32767 - output[vJoy].Axes[outputAxis];
 			}
 			mapped[vJoy] |= 1 << outputAxis;
 		}
@@ -126,13 +232,13 @@ void CAxes::SensibilityAndMapping(CProfile* pProfile, UINT32 joyId, PHID_INPUT_D
 		{
 			if (input->Axis[idx] != old->Axis[idx])
 			{
-				if (input->Axis[idx] == center)
+				if (input->Axis[idx] == 16383)
 				{
 					Axis2Mouse(outputAxis, 0);
 				}
 				else
 				{
-					INT32 axisTransformed = input->Axis[idx] - center;
+					INT32 axisTransformed = input->Axis[idx] - 16383;
 					if ((axisType & 0x2) == 0x2) //inverted
 					{
 						Axis2Mouse(outputAxis, static_cast<CHAR>(-axisTransformed * mouseSens));
@@ -267,12 +373,12 @@ UCHAR CAxes::TranslateRotary(CProfile* pProfile, UINT32 joyId, UCHAR axis, UINT1
 	bands = (axisMap->Type & 32) == 32;
 
 
-	//CALIBRATION::ST_LIMITS* pl = pProfile->GetCalibration()->GetLimit(joyId, axis);
-	//if (pl == nullptr)
-	//{
-	//	return 255;
-	//}
-	const UINT16 range = 32768;// pl->Range;
+	CALIBRATION::ST_LIMITS* pl = pProfile->GetCalibration()->GetLimit(joyId, axis);
+	if (pl == nullptr)
+	{
+		return 255;
+	}
+	const UINT16 range = pl->Range;
 	UINT16 newPos = _new;
 
 	STATUS::ST_AXIS* status;

@@ -99,7 +99,6 @@ namespace RawInputHelper
                 {
                     break;
                 }
-                System.Diagnostics.Debug.WriteLine($"{nInput}");
 
                 IntPtr pNextRawInput = pRawInput;
                 for (; nInput > 0; nInput--)
@@ -151,7 +150,6 @@ namespace RawInputHelper
 
                         Marshal.FreeHGlobal(pName);
                     }
-                    System.Diagnostics.Debug.WriteLine($"{pNextRawInput}:{raw.header.dwSize}");
                     pNextRawInput = IntPtr.Add(pNextRawInput, ((int)raw.header.dwSize + 7) & ~7);
                 }
             }

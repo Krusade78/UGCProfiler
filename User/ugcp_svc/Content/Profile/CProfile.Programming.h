@@ -9,8 +9,13 @@ public:
 		UCHAR VJoyOutput;
 		UCHAR Type;  //Mapped in bits 0:none, 1:Normal, 10:Inverted, 100:Mini, 1000:Mouse, 10000:Incremental, 100000: Bands
 		UCHAR OutputAxis; //0:X, Y, Z, Rx, Ry, Rz, Sl1, Sl2
-		UCHAR Sensibility[10]; // Curva de sernsibilidad
+		UCHAR SoftDeadZone;
+		double SensibilityX[20]; // curve points in X, last point MUST be 1.0
+		double SensibilityY[20]; // curve points in Y
+		double SensibilityS[20]; // slopes for interpolation
 		UCHAR IsSlider;
+		//double Inertia;
+		double DampingK;
 		std::vector<UCHAR> Bands;
 		std::vector<UINT16> Actions;
 		UCHAR ToughnessInc;

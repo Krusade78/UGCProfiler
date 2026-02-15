@@ -27,7 +27,7 @@
         }
 
         private Devices.DeviceInfo.HID_INPUT_DATA oldHidData = new();
-        private Devices.DeviceInfo.HID_INPUT_DATA oldAxisHidData = new();
+        private readonly bool[] oldAxisHidData = new bool[24];
 
         public void Update(Devices.DeviceInfo di, byte[] rawData)
         {
@@ -41,22 +41,20 @@
             {
                 Shared.ProfileModel.DeviceInfo.CUsage? u = di.Usages.Find(x => (x.Id == i) && (x.Type < 253));
                 if (u == null) continue;
-                if (
-                    ((hidData.Axis[i] < oldAxisHidData.Axis[i]) && (hidData.Axis[i] > (u.Range / 2)))
-                    || ((hidData.Axis[i] > oldAxisHidData.Axis[i]) && (hidData.Axis[i] < (u.Range / 2)))
-                    )
+                if ((hidData.Axis[i] >= (u.Range * 0.15)) && (hidData.Axis[i] <= (u.Range * 0.45)))
                 {
-                    continue; //going to center
+                    if (!oldAxisHidData[i])
+                    {
+                        Microsoft.UI.Xaml.Controls.Primitives.ToggleButton? tb = map.Find(x => x.Idx == u.ReportIdx)?.Button;
+                        if (tb != null) { tb.IsChecked = true; }
+                        oldAxisHidData[i] = true;
+                        oldHidData = hidData;
+                        return;
+                    }
                 }
-                if (((hidData.Axis[i] > (u.Range / 2 * 1.10)) || (hidData.Axis[i] < (u.Range / 2 * 0.9)))
-                    && (hidData.Axis[i] > (u.Range * 0.25)) && (hidData.Axis[i] < (u.Range * 0.75))
-                    && ((hidData.Axis[i] > (oldAxisHidData.Axis[i] * 1.10)) || (hidData.Axis[i] < (oldAxisHidData.Axis[i] * 0.9))))
+                else
                 {
-                    Microsoft.UI.Xaml.Controls.Primitives.ToggleButton? tb = map.Find(x => x.Idx == u.ReportIdx)?.Button;
-                    if (tb != null) { tb.IsChecked = true; }
-                    oldAxisHidData = hidData;
-                    oldHidData = hidData;
-                    return;
+                    oldAxisHidData[i] = false;
                 }
             }
 

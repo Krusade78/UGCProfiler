@@ -168,9 +168,18 @@ bool CProfile::HF_IoWriteMap(BYTE* SystemBuffer, DWORD size)
 					axis->VJoyOutput = *ptr++;
 					axis->Type = *ptr++;
 					axis->OutputAxis = *ptr++;
-					RtlCopyMemory(&axis->Sensibility, ptr, 10);
-					ptr += 10;
+					axis->SoftDeadZone = *ptr++;
+					RtlCopyMemory(&axis->SensibilityX, ptr, 20 * sizeof(double));
+					ptr += 20 * sizeof(double);
+					RtlCopyMemory(&axis->SensibilityY, ptr, 20 * sizeof(double));
+					ptr += 20 * sizeof(double);
+					RtlCopyMemory(&axis->SensibilityS, ptr, 20 * sizeof(double));
+					ptr += 20 * sizeof(double);
 					axis->IsSlider = *ptr++;
+					//RtlCopyMemory(&axis->Inertia, ptr,  sizeof(double));
+					//ptr += sizeof(double);
+					RtlCopyMemory(&axis->DampingK, ptr, sizeof(double));
+					ptr += sizeof(double);
 					for (BYTE nBands = *ptr++; nBands > 0; nBands--)
 					{
 						axis->Bands.push_back(*ptr++);

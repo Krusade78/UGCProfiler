@@ -47,7 +47,7 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 
 	UCHAR idx = 0;
 
-	// Antivibration
+	// Antijitter
 
 	std::unordered_map<UINT32, std::vector<CALIBRATION::ST_JITTER>>::iterator pjitt = jittersCache.find(joyId);
 	if (pjitt != jittersCache.end())
@@ -97,7 +97,7 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 				if (((pollAxis >= (limit.Center - limit.Null)) && (pollAxis <= (limit.Center + limit.Null))))
 				{
 					//Null zone
-					pHidData->Axis[idx++] = 16383; //normalized vjoy 15bit limit.Center;
+					pHidData->Axis[idx++] = limit.Center;
 					continue;
 				}
 				else
@@ -105,15 +105,15 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 					if (pollAxis < limit.Left)
 						pollAxis = 0;
 					else if (pollAxis >= limit.Right)
-						pollAxis = 32767; //normalized vjoy 15bit
+						pollAxis = limit.Right;
 					else
 					{
-						if ((pollAxis < limit.Center) && (width1 != 0))
+						if (pollAxis < limit.Center)
 						{
 							if (width1 != 0)
 							{
 								pollAxis -= limit.Left;
-								pollAxis = ((pollAxis * 16382) / (limit.Center - 1)); //normalized vjoy 15bit
+								pollAxis = ((pollAxis * limit.Center) + (width1 / 2)) / width1; //Equivalent to round function
 							}
 							else
 							{
@@ -124,8 +124,9 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 						{
 							if (width2 != 0)
 							{
-								pollAxis -= (limit.Center + limit.Null + 1);
-								pollAxis = 16384 + ((pollAxis * 16383) / (width2 - 1)); //normalized vjoy 15bit
+								pollAxis -= (limit.Center + limit.Null + 1); //move range to 0
+								pollAxis = ((pollAxis * (limit.Right - limit.Center)) + (width2 / 2)) / width2; //Equivalent to round function
+								pollAxis += limit.Center + 1;
 							}
 							else
 							{
