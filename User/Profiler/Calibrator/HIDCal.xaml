@@ -4,8 +4,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:evs="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:utu="using:Uno.UI.Toolkit"
     xmlns:local="using:Profiler.Calibrator"
     mc:Ignorable="d">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
@@ -24,7 +22,10 @@
                     <ColumnDefinition  />
                 </Grid.ColumnDefinitions>
 
-                <utu:ElevatedView Margin="20,0" CornerRadius="4" Elevation="8" Background="White">
+                <Grid Margin="20,0" CornerRadius="4" Translation="0,0,8" Background="White">
+                    <Grid.Shadow>
+                        <ThemeShadow />
+                    </Grid.Shadow>
                     <Border x:Name="bd1" CornerRadius="4">
                         <Grid Margin="15">
                             <Grid HorizontalAlignment="Center">
@@ -63,10 +64,13 @@
                             </Grid>
                         </Grid>
                     </Border>
-                </utu:ElevatedView>
+                </Grid>
 
 
-                <utu:ElevatedView Grid.Column="1" CornerRadius="4" Elevation="8" Background="White" Margin="20,0">
+                <Grid Grid.Column="1" CornerRadius="4" Translation="0,0,8" Background="White" Margin="20,0">
+                    <Grid.Shadow>
+                        <ThemeShadow />
+                    </Grid.Shadow>
                     <Border x:Name="bd2"  CornerRadius="4">
                         <Grid Margin="15">
                             <Grid HorizontalAlignment="Center">
@@ -102,9 +106,12 @@
                             </Grid>
                         </Grid>
                     </Border>
-                </utu:ElevatedView>
+                </Grid>
 
-                <utu:ElevatedView Grid.Column="2" Margin="20,0" CornerRadius="4" Elevation="8" Background="White">
+                <Grid Grid.Column="2" Margin="20,0" CornerRadius="4" Translation="0,0,8" Background="White">
+                    <Grid.Shadow>
+                        <ThemeShadow />
+                    </Grid.Shadow>
                     <Border x:Name="bd3" CornerRadius="4">
                         <Grid Margin="15">
                             <Grid HorizontalAlignment="Center">
@@ -132,10 +139,13 @@
                         </Grid>
                     </Border>
 
-                </utu:ElevatedView>
+                </Grid>
             </Grid>
 
-            <utu:ElevatedView Grid.Row="2" HorizontalAlignment="Center"  Margin="0,20" CornerRadius="4" Elevation="8" Background="White">
+            <Grid Grid.Row="2" HorizontalAlignment="Center"  Margin="0,20" CornerRadius="4" Translation="0,0,8" Background="White">
+                <Grid.Shadow>
+                    <ThemeShadow />
+                </Grid.Shadow>
                 <Border x:Name="bd4" Grid.Row="2" CornerRadius="4">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -201,20 +211,20 @@
                                 <ToggleButton x:Name="tbPlay">
                                     <SymbolIcon Symbol="Play" />
                                     <evs:Interaction.Behaviors>
-                                        <core:DataTriggerBehavior Binding="{Binding IsChecked, ElementName=tbPlay}" Value="True">
-                                            <core:ChangePropertyAction PropertyName="Content">
-                                                <core:ChangePropertyAction.Value>
+                                        <evs:DataTriggerBehavior Binding="{Binding IsChecked, ElementName=tbPlay}" Value="True">
+                                            <evs:ChangePropertyAction PropertyName="Content">
+                                                <evs:ChangePropertyAction.Value>
                                                     <SymbolIcon Symbol="Pause"/>
-                                                </core:ChangePropertyAction.Value>
-                                            </core:ChangePropertyAction>
-                                        </core:DataTriggerBehavior>
-                                        <core:DataTriggerBehavior Binding="{Binding IsChecked, ElementName=tbPlay}" Value="False">
-                                            <core:ChangePropertyAction PropertyName="Content">
-                                                <core:ChangePropertyAction.Value>
+                                                </evs:ChangePropertyAction.Value>
+                                            </evs:ChangePropertyAction>
+                                        </evs:DataTriggerBehavior>
+                                        <evs:DataTriggerBehavior Binding="{Binding IsChecked, ElementName=tbPlay}" Value="False">
+                                            <evs:ChangePropertyAction PropertyName="Content">
+                                                <evs:ChangePropertyAction.Value>
                                                     <SymbolIcon Symbol="Play" Foreground="Green"/>
-                                                </core:ChangePropertyAction.Value>
-                                            </core:ChangePropertyAction>
-                                        </core:DataTriggerBehavior>
+                                                </evs:ChangePropertyAction.Value>
+                                            </evs:ChangePropertyAction>
+                                        </evs:DataTriggerBehavior>
                                     </evs:Interaction.Behaviors>
                                 </ToggleButton>
                                 <Button Click="Reset_Click">
@@ -226,22 +236,28 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-            </utu:ElevatedView>
+            </Grid>
 
-            <utu:ElevatedView Grid.Row="3" HorizontalAlignment="Center" Margin="0,35" CornerRadius="4" Background="White">
+            <Grid Grid.Row="3" HorizontalAlignment="Center" Margin="0,35" CornerRadius="4" Background="White">
+                <Grid.Shadow>
+                    <ThemeShadow />
+                </Grid.Shadow>
                 <Border x:Name="bd5">
                     <Button Content="{StaticResource save_and_activate}" Width="140" Height="45" Foreground="White" Background="#b93304" Click="FbtSave_Click"/>
                 </Border>
-            </utu:ElevatedView>
+            </Grid>
 
-            <utu:ElevatedView Background="#bbF6F2D7" VerticalAlignment="Center" CornerRadius="6" HorizontalAlignment="Center" Margin="0,10,0,0" >
+            <Grid Background="#bbF6F2D7" VerticalAlignment="Center" CornerRadius="6" HorizontalAlignment="Center" Margin="0,10,0,0" >
+                <Grid.Shadow>
+                    <ThemeShadow />
+                </Grid.Shadow>
                 <Border x:Name="bd6">
                     <Grid>
                         <TextBlock Text="{StaticResource axes}" HorizontalAlignment="Center" Style="{ThemeResource SubtitleTextBlockStyle}" />
                         <SelectorBar x:Name="lsAxes" Margin="0,25,0,0" SelectionChanged="LsAxes_SelectionChanged" />
                     </Grid>
                 </Border>
-            </utu:ElevatedView>
+            </Grid>
 
         </Grid>
     </ScrollViewer>

@@ -41,11 +41,12 @@ namespace Profiler.Pages
                         {
                             page.Content = new Calibrator.HIDCal(deviceInfo);
                             properties.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                        } 
+                        }
                         break;
                     case MainPage.Section.View:
                         break;
                     case MainPage.Section.Edit:
+                    default:
                         page.Content = deviceInfo.Id switch
                         {
                             0x06a30763 => new SaitekPedals(properties),
@@ -54,10 +55,9 @@ namespace Profiler.Pages
                             _ => new Generic(deviceInfo, properties),
                         };
                         break;
-                    default:
-                        page.Content = null;
-                        properties.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-                        break;
+                        //page.Content = null;
+                        //properties.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+                        //break;
                 }
             }
         }

@@ -59,9 +59,10 @@ namespace Profiler
                             return;
                     }
                 }
-                Windows.Storage.Pickers.FileOpenPicker fop = new()
+                Microsoft.Windows.Storage.Pickers.FileOpenPicker fop = new(this.XamlRoot.ContentIslandEnvironment.AppWindowId)
                 {
-                    ViewMode = Windows.Storage.Pickers.PickerViewMode.List
+                    ViewMode = Microsoft.Windows.Storage.Pickers.PickerViewMode.List,
+                    SuggestedStartLocation = Microsoft.Windows.Storage.Pickers.PickerLocationId.Unspecified
                 };
                 fop.FileTypeFilter.Add(Translate.Get("profile filter"));
 
@@ -80,7 +81,7 @@ namespace Profiler
                     if (currentSection != Section.Calibrate)
                     {
                         currentSection = Section.None;
-                        mainFrame.Refresh();
+                        mainFrame?.Refresh();
                     }
 
                     profilePath = filename;
@@ -112,7 +113,7 @@ namespace Profiler
 
         private async System.Threading.Tasks.Task<bool> SaveAs()
         {
-            var fsp = new Windows.Storage.Pickers.FileSavePicker()
+            Microsoft.Windows.Storage.Pickers.FileSavePicker fsp = new(this.XamlRoot.ContentIslandEnvironment.AppWindowId)
             {
                 SuggestedFileName = Translate.Get("profile_name")
             };
@@ -128,7 +129,7 @@ namespace Profiler
                 if (await data.Save(file.Path, devs))
                 {
                     profilePath = file.Path;
-                    ((App)Microsoft.UI.Xaml.Application.Current).SetTitle($"{Translate.Get("save title")} [{System.IO.Path.GetFileNameWithoutExtension(file.Name)}]");
+                    ((App)Microsoft.UI.Xaml.Application.Current).SetTitle($"{Translate.Get("save title")} [{System.IO.Path.GetFileNameWithoutExtension(file.Path)}]");
                     return true;
                 }
                 else

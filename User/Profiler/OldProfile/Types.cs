@@ -1,4 +1,4 @@
-﻿namespace OldProfile
+﻿namespace Profiler.OldProfile
 {
     public class Types
     {

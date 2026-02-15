@@ -3,27 +3,35 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:utu="using:Uno.UI.Toolkit"
 	mc:Ignorable="d">
 	<ScrollViewer x:Name="scroll" Margin="20" MaxWidth="800">
 		<StackPanel>
-			<utu:ElevatedView x:Name="bd1" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,0,30,0" Elevation="8">
-				<StackPanel x:Name="spAxes" Margin="15">
+            <Grid x:Name="bd1" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,0,30,0" Translation="0,0,8">
+                <Grid.Shadow>
+                    <ThemeShadow />
+                </Grid.Shadow>
+                <StackPanel x:Name="spAxes" Margin="15">
 					<TextBlock Text="{StaticResource axes}" FontSize="28" FontWeight="Light"/>
 				</StackPanel>
-			</utu:ElevatedView>
+			</Grid>
 
-            <utu:ElevatedView x:Name="bd2" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,20,30,20" Elevation="8">
-				<StackPanel x:Name="spHats" Margin="15">
+            <Grid x:Name="bd2" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,20,30,20" Translation="0,0,8">
+                <Grid.Shadow>
+                    <ThemeShadow />
+                </Grid.Shadow>
+                <StackPanel x:Name="spHats" Margin="15">
 					<TextBlock Text="{StaticResource hats}" FontSize="28" FontWeight="Light" />
 				</StackPanel>
-			</utu:ElevatedView>
+			</Grid>
 
-            <utu:ElevatedView x:Name="bd3" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,0,30,20" Elevation="8">
-				<StackPanel x:Name="spButtons" Margin="15">
+            <Grid x:Name="bd3" CornerRadius="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Margin="0,0,30,20" Translation="0,0,8">
+                <Grid.Shadow>
+                    <ThemeShadow />
+                </Grid.Shadow>
+                <StackPanel x:Name="spButtons" Margin="15">
 					<TextBlock Text="{StaticResource buttons}" FontSize="28" FontWeight="Light" />
 				</StackPanel>
-			</utu:ElevatedView>
+			</Grid>
 		</StackPanel>
 	</ScrollViewer>
 </Frame>

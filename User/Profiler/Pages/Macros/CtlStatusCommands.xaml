@@ -5,10 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Profiler.Pages.Macros"
-    xmlns:utu="using:Uno.UI.Toolkit"
     mc:Ignorable="d">
 
-    <utu:ElevatedView x:Name="Panel2" CornerRadius="4" Background="#a0ffa090" Elevation="8" Margin="1,1,5,5">
+    <Grid x:Name="Panel2" CornerRadius="4" Background="#a0ffa090" Translation="0,0,8" Margin="1,1,5,5">
+        <Grid.Shadow>
+            <ThemeShadow />
+        </Grid.Shadow>
         <StackPanel>
             <Border Background="{ThemeResource CardBackgroundFillColorDefault}" VerticalAlignment="Top" >
                 <TextBlock Text="{StaticResource status_commands}" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
@@ -21,16 +23,16 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,25,0,5">
                         <Button Content="{StaticResource pause}" x:Name="ButtonPausa" Width="85" Click="ButtonPause_Click" />
-                        <NumberBox x:Name="NumericUpDown6" Maximum="250" Minimum="0" Value="1" TextAlignment="Center" Margin="5,0,4,0" SpinButtonPlacementMode="Compact" />
+                        <NumberBox x:Name="NumericUpDown6" Maximum="250" Minimum="0" Value="1" HorizontalContentAlignment="Center" Margin="5,0,4,0" SpinButtonPlacementMode="Compact" />
                         <TextBlock Text="x100 ms." HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="{StaticResource repeat_n}" x:Name="ButtonRepetirN" Width="85" Click="ButtonRepeatN_Click" />
-                        <NumberBox x:Name="NumericUpDown4" Maximum="50" Minimum="1" Value="1" TextAlignment="Center" Margin="5,0,0,0" SpinButtonPlacementMode="Compact"/>
+                        <NumberBox x:Name="NumericUpDown4" Maximum="50" Minimum="1" Value="1" HorizontalContentAlignment="Center" Margin="5,0,0,0" SpinButtonPlacementMode="Compact"/>
                     </StackPanel>
                 </StackPanel>
                 <Border x:Name="PanelBasic" Visibility="Collapsed" Background="#40000000" Margin="-4,21,-4,-4" CornerRadius="6" />
             </Grid>
         </StackPanel>
-    </utu:ElevatedView>
+    </Grid>
 </UserControl>

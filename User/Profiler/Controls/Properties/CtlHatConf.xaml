@@ -4,11 +4,13 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:utu="using:Uno.UI.Toolkit"
 	xmlns:local="using:Profiler.Controls"
 	mc:Ignorable="d">
-    <utu:ElevatedView Elevation="8" Background="#ccefefef" Margin="7">
-		<StackPanel x:Name="spHat">
+    <Grid Translation="0,0,12" Background="#ccefefef" Margin="7">
+        <Grid.Shadow>
+            <ThemeShadow />
+        </Grid.Shadow>
+        <StackPanel x:Name="spHat">
 			<Border Background="{ThemeResource CardBackgroundFillColorDefault}">
 				<TextBlock Text="{StaticResource hat_configuration}" VerticalAlignment="Top" Margin="0,3" HorizontalAlignment="Center" FontSize="14"/>
 			</Border>
@@ -64,5 +66,5 @@
 				</Grid>
 			</Grid>
 		</StackPanel>		
-	</utu:ElevatedView>
+	</Grid>
 </UserControl>

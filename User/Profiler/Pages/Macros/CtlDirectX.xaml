@@ -5,10 +5,12 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Profiler.Pages.Macros"
-	xmlns:utu="using:Uno.UI.Toolkit"
     mc:Ignorable="d">
 
-    <utu:ElevatedView x:Name="Panel3" CornerRadius="4" Background="#a0a0d090" Elevation="8" Margin="1,1,5,5">
+    <Grid x:Name="Panel3" CornerRadius="4" Background="#a0a0d090" Translation="0,0,8" Margin="1,1,5,5">
+        <Grid.Shadow>
+            <ThemeShadow />
+        </Grid.Shadow>
         <StackPanel>
             <Border Background="{ThemeResource CardBackgroundFillColorDefault}" VerticalAlignment="Top" >
                 <TextBlock Text="DirectX" HorizontalAlignment="Center" Margin="0,5" FontSize="20" FontWeight="SemiBold" />
@@ -98,5 +100,5 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-    </utu:ElevatedView>
+    </Grid>
 </UserControl>

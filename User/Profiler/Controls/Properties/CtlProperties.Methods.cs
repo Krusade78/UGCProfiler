@@ -140,7 +140,7 @@ namespace Profiler.Controls.Properties
 
             if (spAxis == null)
             {
-                spConfs.Children.Add(spAxis = new(this));
+                spConfs?.Children.Add(spAxis = new(this));
             }
             if (axis != null)
             {
@@ -149,7 +149,7 @@ namespace Profiler.Controls.Properties
                     if (spMacros == null)
                     {
                         spMacros = new(this);
-                        spConfs.Children.Add(spMacros);
+                        spConfs?.Children.Add(spMacros);
                     }
                 }
                 else if ((axis.Type & 0b100000) == 0b100000) //zones
@@ -157,18 +157,18 @@ namespace Profiler.Controls.Properties
                     if (spMacros == null)
                     {
                         spMacros = new(this);
-                        spConfs.Children.Add(spMacros);
+                        spConfs?.Children.Add(spMacros);
                     }
 
                 }
                 else if (spMacros != null)
                 {
-                    spConfs.Children.Remove(spMacros);
+                    spConfs?.Children.Remove(spMacros);
                     spMacros = null;
                 }
             }
 
-            spAxis.Init(axis);
+            spAxis?.Init(axis);
             spMacros?.Init(axis);
             spMacros?.LoadMacroIndex();
         }

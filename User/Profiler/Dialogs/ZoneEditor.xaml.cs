@@ -116,7 +116,7 @@ namespace Profiler.Dialogs
                 Zone = b == 0 ? (byte)((zones.Count > 0) ? zones[^1].Zone + 1 : 1) : b,
                 GridText = grTxt,
                 Number = nb,
-                Area = []
+                Area = new()
             });
             var area = zones[^1].Area; //Incorrect warning from IntelliSense
             if (area != null)

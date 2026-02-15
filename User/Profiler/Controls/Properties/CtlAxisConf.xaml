@@ -4,14 +4,16 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:utu="using:Uno.UI.Toolkit"
 	xmlns:cvt="using:Profiler.Controls"
 	mc:Ignorable="d">
     <UserControl.Resources>
         <cvt:BooleanToVisibleConverter x:Key="b2v"/>
     </UserControl.Resources>
-    <utu:ElevatedView Background="#ccefefef" Elevation="8" Margin="7">
-		<StackPanel x:Name="spAxis">
+    <Grid Background="#ccefefef" Translation="0,0,12" Margin="7">
+        <Grid.Shadow>
+            <ThemeShadow />
+        </Grid.Shadow>
+        <StackPanel x:Name="spAxis">
 			<Border Background="{ThemeResource CardBackgroundFillColorDefault}" VerticalAlignment="Top" >
 				<TextBlock Text="{StaticResource axis_configuration}" x:Name="LabelAxis" VerticalAlignment="Top" Margin="0,3" HorizontalAlignment="Center" FontSize="14"/>
 			</Border>
@@ -74,5 +76,5 @@
 			</Grid>
             <Button x:Name="ButtonEditBands" Content="{StaticResource edit_zones}" HorizontalAlignment="Center" Margin="0,0,0,10"  Background="#FFF3C4C4" Foreground="#FF762626" Visibility="{Binding IsOn, ElementName=RadioButtonZones, Converter={StaticResource b2v}}" Click="ButtonEditBands_Click" />
 		</StackPanel>		
-	</utu:ElevatedView>
+	</Grid>
 </UserControl>

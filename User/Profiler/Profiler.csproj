@@ -1,75 +1,67 @@
-﻿<Project Sdk="Uno.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	<TargetFrameworks>net9.0-desktop</TargetFrameworks>
-
-	<OutputType>Exe</OutputType>
-	<UnoSingleProject>true</UnoSingleProject>
-
-	  <Product>UGC Profiler</Product>
-	  <Authors>Alfredo Costalago</Authors>
-	  <Description>Profile editor</Description>
-	  <Version>11.1.0</Version>
-	  <Copyright>Copyright© 2025</Copyright>
-
-	  <GenerateManifest>false</GenerateManifest>
-	  <Win32Resource>res\resources.res</Win32Resource>
-
-	  <!--
-	  UnoFeatures let's you quickly add and manage implicit package references based on the features you want to use.
-	  https://aka.platform.uno/singleproject-features
-	-->
-	<UnoFeatures>
-	  SkiaRenderer;
-	</UnoFeatures>
-	<Platforms>x64</Platforms>
-	<ImplicitUsings>disable</ImplicitUsings>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RootNamespace>Profiler</RootNamespace>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+	<WindowsPackageType>None</WindowsPackageType>
 	<Nullable>enable</Nullable>
-  <!--<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>-->
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-desktop|x64'">
-	<DebugType>none</DebugType>
+	<GenerateManifest>false</GenerateManifest>
+	<Win32Resource>res\resources.res</Win32Resource>
   </PropertyGroup>
 
-	<ItemGroup>
+  <ItemGroup>
 		<ProjectReference Include="..\RawInputHelper\RawInputHelper.csproj" />
 		<ProjectReference Include="..\Shrared\Shared.csproj" />
 	</ItemGroup>
 	
   <ItemGroup>
-	<Content Include="Language\keytemplate-es.txt">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</Content>
-	<Content Include="Language\profiler-es.json">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</Content>
+    <Content Include="Language\keytemplate-es.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Language\profiler-es.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Include="Language\keytemplate-en.txt" />
-		<EmbeddedResource Include="OldProfile\GladiatosNXT.json" />
-		<EmbeddedResource Include="OldProfile\Pedals.json" />
-		<EmbeddedResource Include="OldProfile\X52.json" />
-		<EmbeddedResource Include="res\CalibrationGrid.JPG" />
-		<EmbeddedResource Include="res\editor.ico" />
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.4.2" />
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <Compile Update="OldProfile\DSPerfil.Designer.cs">
-		<DesignTime>True</DesignTime>
-		<AutoGen>True</AutoGen>
-		<DependentUpon>DSPerfil.xsd</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-	<ItemGroup>
-	  <None Update="OldProfile\DSPerfil.xsd">
-		<Generator>MSDataSetGenerator</Generator>
-		<LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Language\keytemplate-en.txt" />
+	<EmbeddedResource Include="OldProfile\GladiatosNXT.json" />
+	<EmbeddedResource Include="OldProfile\Pedals.json" />
+	<EmbeddedResource Include="OldProfile\X52.json" />
+    <EmbeddedResource Include="res\CalibrationGrid.JPG" />
+    <EmbeddedResource Include="res\editor.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260209005" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="3.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="OldProfile\DSPerfil.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DSPerfil.xsd</DependentUpon>
+    </Compile>
+    <None Update="OldProfile\DSPerfil.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DSPerfil.Designer.cs</LastGenOutput>
 		<CustomToolNamespace>OldProfile</CustomToolNamespace>
-	  </None>
-	  <None Update="Profiler.exe.manifest">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
+    </None>
+  </ItemGroup>
+
+  <!-- Publish Properties -->
+  <PropertyGroup>
+    <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
+    <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
+    <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
+    <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+  </PropertyGroup>
 </Project>

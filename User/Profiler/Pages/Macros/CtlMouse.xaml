@@ -5,9 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Profiler.Pages.Macros"
-    xmlns:utu="using:Uno.UI.Toolkit"
     mc:Ignorable="d">
-    <utu:ElevatedView x:Name="Panel1" CornerRadius="4" Background="#a0e0d0ff" Elevation="8" Margin="1,1,5,5">
+    <Grid x:Name="Panel1" CornerRadius="4" Background="#a0e0d0ff" Translation="0,0,8" Margin="1,1,5,5">
+        <Grid.Shadow>
+            <ThemeShadow />
+        </Grid.Shadow>
         <StackPanel>
             <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" VerticalAlignment="Top" >
                 <TextBlock Text="{StaticResource mouse}" HorizontalAlignment="Center" Margin="0,5" Style="{ThemeResource SubtitleTextBlockStyle}" />
@@ -81,5 +83,5 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-    </utu:ElevatedView>
+    </Grid>
 </UserControl>

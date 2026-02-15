@@ -4,8 +4,9 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
-	<ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="0,0,10,0">
-		<Grid MinWidth="510">
+	<ScrollViewer>
+        <Viewbox StretchDirection="DownOnly">
+		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition />
 				<RowDefinition />
@@ -166,5 +167,6 @@
 				</Grid>
 			</Grid>
 		</Grid>
-	</ScrollViewer>
+        </Viewbox>
+    </ScrollViewer>
 </Frame>

@@ -3,9 +3,11 @@
 
 IDI_APPICON ICON "editor.ico"
 
+1 24 "Profiler.exe.manifest"
+
 ID_VERSION VERSIONINFO
- FILEVERSION 11,1,0,0
- PRODUCTVERSION 11,1,0,0
+ FILEVERSION 11,2,0,0
+ PRODUCTVERSION 11,2,0,0
  FILEFLAGSMASK 0x3fL
  FILEFLAGS 0x0L
  FILEOS 0x40004L
@@ -18,16 +20,29 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Alfredo Costalago"
             VALUE "FileDescription", "Profile editor"
-            VALUE "FileVersion", "11.1.0"
+            VALUE "FileVersion", "11.2.0"
             VALUE "InternalName", "Profiler"
-            VALUE "LegalCopyright", "Copyright© 2025"
+            VALUE "LegalCopyright", "©2026 Alfredo Costalago"
             VALUE "OriginalFilename", "Profiler.exe"
             VALUE "ProductName", "UGC Profiler"
-            VALUE "ProductVersion", "11.1.0.0"
+            VALUE "ProductVersion", "11.2.0"
+        END
+
+            // Español (España)
+        BLOCK "0C0A04E4"
+        BEGIN
+            VALUE "CompanyName", "Alfredo Costalago"
+            VALUE "FileDescription", "Editor de perfiles"
+            VALUE "FileVersion", "11.2.0"
+            VALUE "InternalName", "Profiler"
+            VALUE "LegalCopyright", "©2026 Alfredo Costalago"
+            VALUE "OriginalFilename", "Profiler.exe"
+            VALUE "ProductName", "UGC Profiler"
+            VALUE "ProductVersion", "11.2.0"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x0409, 1200
+        VALUE "Translation", 0x0409, 12000, 0x0C0A, 1200
     END
 END

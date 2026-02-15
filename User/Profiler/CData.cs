@@ -262,19 +262,7 @@ namespace Profiler
                 am.IdJoyOutput = er.IsJoySalidaNull() ? (byte)0 : er.JoySalida;
                 am.Type = er.TipoEje;
                 am.OutputAxis = er.Eje;
-                for(byte s = 0; s < 10; s++)
-                {
-                    if (s == 0)
-                    {
-                        am.SensibilityY[0] = er.Sensibilidad[0] / 2;
-                        am.SensibilityY[1] = er.Sensibilidad[0];
-                    }
-                    else
-                    {
-                        am.SensibilityY[s * 2] = er.Sensibilidad[s - 1] + ((er.Sensibilidad[s] - er.Sensibilidad[s - 1]) / 2);
-                        am.SensibilityY[(s * 2) + 1] = er.Sensibilidad[s];
-                    }
-                }
+                //er.Sensibilidad.CopyTo(am.Sensibility, 0);
                 am.IsSensibilityForSlider = er.Slider == 1;
                 if ((am.Type & 0b100000) == 0b100000)
                 {
