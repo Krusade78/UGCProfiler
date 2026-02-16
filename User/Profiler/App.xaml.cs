@@ -1,17 +1,36 @@
 ﻿using Microsoft.UI.Xaml;
 using System;
-using System.Runtime.InteropServices;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Uno.UI;
 
 namespace Profiler
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
     public partial class App : Application
     {
+    #region Win32
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+    private static extern nint FindWindow(string? lpClassName, string lpWindowName);
+
+
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+    private static extern nint LoadIconW(nint hInst, nint name);
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
+    private static extern nint GetModuleHandle(string? lpModuleName);
+
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+    private static extern nint SendMessage(nint hWnd, int Msg, int wParam, nint lParam);
+
+    [System.Runtime.InteropServices.DllImport("comctl32.dll", SetLastError = true)]
+    private static extern bool SetWindowSubclass(IntPtr hWnd, SubclassProcDelegate pfnSubclass, uint uIdSubclass, uint dwRefData);
+    [System.Runtime.InteropServices.DllImport("comctl32.dll", SetLastError = true)]
+    private static extern IntPtr DefSubclassProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct POINT { public int x, y; }
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct MINMAXINFO { public POINT ptReserved; public POINT ptMaxSize; public POINT ptMaxPosition; public POINT ptMinTrackSize; public POINT ptMaxTrackSize; }
+    #endregion
+
         public static readonly System.Text.Json.JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
         private Window? mainWindow;
 
@@ -24,11 +43,7 @@ namespace Profiler
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Invoked when the application is launched.
-        /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
             if (System.IO.File.Exists($".\\Language\\profiler-{System.Threading.Thread.CurrentThread.CurrentUICulture.Name}.json"))
             {
@@ -66,6 +81,9 @@ namespace Profiler
             }
 
             mainWindow = new();
+#if DEBUG
+            mainWindow.UseStudio();
+#endif
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -74,12 +92,12 @@ namespace Profiler
                 mainWindow.Content = new MainPage();
                 ((MainPage)mainWindow.Content).Loaded += (s, e) =>
                 {
-                    System.Drawing.Icon? ico = System.Drawing.Icon.ExtractAssociatedIcon(System.Environment.ProcessPath ?? "");
-                    if (ico != null)
-                    {
-                        Microsoft.UI.WindowId wndId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(WinRT.Interop.WindowNative.GetWindowHandle(mainWindow));
-                        Microsoft.UI.Windowing.AppWindow.GetFromWindowId(wndId).SetIcon(Microsoft.UI.Win32Interop.GetIconIdFromIcon(ico.Handle));
-                    }
+                    nint hInstance = GetModuleHandle(null);
+                    nint hIcon = LoadIconW(hInstance, new nint(101));
+                    var hwnd = FindWindow(null, mainWindow.Title);
+
+                    var b1 = SendMessage(hwnd, 0x80, 0, hIcon);
+                    var b2 = SendMessage(hwnd, 0x80, 1, hIcon);
                     InitializeMinSize(WinRT.Interop.WindowNative.GetWindowHandle(mainWindow));
                 };
             }
@@ -121,16 +139,6 @@ namespace Profiler
         #endregion
 
         #region Win32 MinSize
-        [DllImport("comctl32.dll", SetLastError = true)]
-        private static extern bool SetWindowSubclass(IntPtr hWnd, SubclassProcDelegate pfnSubclass, uint uIdSubclass, uint dwRefData);
-        [DllImport("comctl32.dll", SetLastError = true)]
-        private static extern IntPtr DefSubclassProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct POINT { public int x, y; }
-        [StructLayout(LayoutKind.Sequential)]
-        private struct MINMAXINFO { public POINT ptReserved; public POINT ptMaxSize; public POINT ptMaxPosition; public POINT ptMinTrackSize; public POINT ptMaxTrackSize; }
-
         private delegate IntPtr SubclassProcDelegate(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubclass, IntPtr dwRefData);
 
         private static void InitializeMinSize(IntPtr hwnd)
@@ -142,10 +150,10 @@ namespace Profiler
         {
             if (msg == 0x24)
             {
-                var mmi = Marshal.PtrToStructure<MINMAXINFO>(lParam);
+                var mmi = System.Runtime.InteropServices.Marshal.PtrToStructure<MINMAXINFO>(lParam);
                 mmi.ptMinTrackSize.x = 1280;
                 mmi.ptMinTrackSize.y = 720;
-                Marshal.StructureToPtr(mmi, lParam, true);
+                System.Runtime.InteropServices.Marshal.StructureToPtr(mmi, lParam, true);
             }
             return DefSubclassProc(hWnd, msg, wParam, lParam);
         }

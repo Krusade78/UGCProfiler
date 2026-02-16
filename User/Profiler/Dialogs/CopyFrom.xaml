@@ -19,8 +19,7 @@
             <TextBlock Text="{StaticResource submode}" Grid.Column="2" HorizontalAlignment="Center"/>
             
             <TextBlock Text="{StaticResource copy_from_}" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <!--VerticalContentAlignment="Center"-->
-            <NumberBox x:Name="NumericUpDownM" Grid.Row="1" Grid.Column="1" Margin="0,0,5,0"  HorizontalContentAlignment="Center" Maximum="8" Minimum="1" SpinButtonPlacementMode="Compact" GotFocus="NumericUpDownM_GettingFocus" />
+			<!--VerticalContentAlignment="Center"--><NumberBox x:Name="NumericUpDownM" Grid.Row="1" Grid.Column="1" Margin="0,0,5,0"  TextAlignment="Center" Maximum="8" Minimum="1" SpinButtonPlacementMode="Compact" GotFocus="NumericUpDownM_GettingFocus" />
 			<!--VerticalContentAlignment="Center"--> <NumberBox x:Name="NumericUpDownP" Grid.Row="1" Grid.Column="2" Maximum="8" Minimum="1" SpinButtonPlacementMode="Compact" />
         </Grid>
     </Grid>

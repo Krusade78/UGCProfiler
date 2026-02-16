@@ -23,13 +23,12 @@
 			
 			<TextBlock Text="{StaticResource assign_to}" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,5,0" HorizontalAlignment="Right"/>
 			<TextBox x:Name="txtDummy" Visibility="Collapsed" />
-            <!--VerticalContentAlignment="Center"-->
-            <NumberBox x:Name="NumericUpDownJ" Grid.Row="1" Grid.Column="1" Margin="0,0,5,0" HorizontalContentAlignment="Center" Value="1" Maximum="3" Minimum="1" SpinButtonPlacementMode="Compact" GotFocus="NumericUpDownJ_GettingFocus"/>
+			<!--VerticalContentAlignment="Center"--><NumberBox x:Name="NumericUpDownJ" Grid.Row="1" Grid.Column="1" Margin="0,0,5,0" TextAlignment="Center" Value="1" Maximum="3" Minimum="1" SpinButtonPlacementMode="Compact" GotFocus="NumericUpDownJ_GettingFocus"/>
 			<TextBlock x:Name="txtMode" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
 			<TextBlock x:Name="txtSubMode" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
 			<TextBlock Text="{StaticResource buttons_start_index}" Grid.Row="2" Margin="0,25,5,0" VerticalAlignment="Center"/>
-			<NumberBox x:Name="NBStartIndex" Grid.Row="2" Grid.Column="1" Margin="0,25,0,0" HorizontalContentAlignment="Center" Value="1" Maximum="100" Minimum="1" SpinButtonPlacementMode="Compact"/>
+			<NumberBox x:Name="NBStartIndex" Grid.Row="2" Grid.Column="1" Margin="0,25,0,0" TextAlignment="Center" Value="1" Maximum="100" Minimum="1" SpinButtonPlacementMode="Compact"/>
 		</Grid>
 	</Grid>
 </Frame>

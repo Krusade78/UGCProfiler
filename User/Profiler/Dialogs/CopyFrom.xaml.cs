@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
+using Uno.Extensions.Specialized;
 
 namespace Profiler.Dialogs
 {
@@ -60,11 +61,17 @@ namespace Profiler.Dialogs
             }
             if (axis != null) 
             {
-                for (byte i = 0; i < 10; i++)
+                axisData.IsSensibilityAsCurve = axis.IsSensibilityAsCurve;
+                axisData.Curve = new() { Blend = axis.Curve.Blend, Exponent = axis.Curve.Exponent };
+                for (byte i = 0; i < axis.SensibilityX.Length; i++)
                 {
-                    //axisData.Sensibility[i] = axis.Sensibility[i];
+                    axisData.SensibilityX[i] = axis.SensibilityX[i];
+                    axisData.SensibilityY[i] = axis.SensibilityY[i];
+                    axisData.SensibilityS[i] = axis.SensibilityS[i];
                 }
                 axisData.IsSensibilityForSlider = axis.IsSensibilityForSlider;
+                axisData.DamplingK = axis.DamplingK;
+                axisData.SoftDeadZone = axis.SoftDeadZone;
                 parent.GetData().Modified = true;
                 lastMode = (byte)NumericUpDownM.Value;
                 lastSubmode = (byte)NumericUpDownP.Value;

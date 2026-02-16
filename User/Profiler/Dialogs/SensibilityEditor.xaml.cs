@@ -86,7 +86,7 @@ namespace Profiler.Dialogs
         {
             SensibilityEditor content = new(axisData);
 
-            // Crea un nuevo estilo basado en el anterior
+            // Create a new style based on the previous
             Microsoft.UI.Xaml.Controls.ContentDialog dlg = new()
             {
                 // XamlRoot must be set in the case of a ContentDialog running in a Desktop app

@@ -4,12 +4,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:utu="using:Uno.UI.Toolkit"
     xmlns:local="using:Profiler.Controls"
     mc:Ignorable="d">
-    <Grid Translation="0,0,12" Background="#ccefefef" Margin="7">
-        <Grid.Shadow>
-            <ThemeShadow />
-        </Grid.Shadow>
+    <utu:ElevatedView Elevation="12" Background="#ccefefef" Margin="7">
         <StackPanel x:Name="spButton">
             <Border Background="{ThemeResource CardBackgroundFillColorDefault}">
                 <TextBlock Text="{StaticResource button_configuration}" x:Name="LabelButton" VerticalAlignment="Top" Margin="0,3" HorizontalAlignment="Center" FontSize="14"/>
@@ -60,5 +58,5 @@
                 <Button Grid.Row="4" Content="{StaticResource assign}" HorizontalAlignment="Center" Background="#FFF3C4C4" Foreground="#FF762626" Click="ButtonAssign_Click" />
             </Grid>
         </StackPanel>		
-    </Grid>
+    </utu:ElevatedView>
 </UserControl>

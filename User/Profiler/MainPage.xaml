@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="Profiler.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:utu="using:Uno.UI.Toolkit"
     xmlns:local="using:Profiler"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -24,10 +24,7 @@
             </Border.Background>
         </Border>
 
-        <Grid Background="#b0ffffff" Translation="0,0,8">
-            <Grid.Shadow>
-                <ThemeShadow />
-            </Grid.Shadow>
+        <utu:ElevatedView Elevation="8" ShadowColor="#40000000" Background="#b0ffffff">
             <Grid x:Name="grMenu">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -146,7 +143,7 @@
                 <TextBlock Grid.Row="1" Grid.Column="6" Text="{StaticResource view}" HorizontalAlignment="Center" FontSize="10" Margin="0,-2,0,0" />
                 <!--#endregion-->
             </Grid>
-        </Grid>
+        </utu:ElevatedView>
 
         <controls:CtlDevices x:Name="ctlDevs" Grid.Row="1" />
     </Grid>

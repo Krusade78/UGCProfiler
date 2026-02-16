@@ -41,9 +41,9 @@ namespace Profiler.Pages
                     byte count = 1;
                     foreach (Shared.ProfileModel.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == o))
                     {
-                        Grid bd = new()
+                        Uno.UI.Toolkit.ElevatedView bd = new()
                         {
-                            Translation = new(0, 0, 5),
+                            Elevation = 5,
                             Margin = new(25, 5, 25, 5),
                             CornerRadius = new CornerRadius(4)
                         };
@@ -55,7 +55,7 @@ namespace Profiler.Pages
                             FontSize = 18,
                             Tag = new TagData(u.ReportIdx, 0),
                         };
-                        bd.Children.Add(tb);
+                        bd.ElevatedContent = tb;
                         tb.Checked += Tb_Checked;
                         spAxes.Children.Add(bd);
                         map.Add(new(u.ReportIdx, tb));
@@ -72,9 +72,9 @@ namespace Profiler.Pages
                     System.Collections.Generic.List<Microsoft.UI.Xaml.Controls.Primitives.ToggleButton> hatPos = [];
                     for (byte pos = posMin; pos <= (u.Range >> 4); pos++)
                     {
-                        Grid bd = new()
+                        Uno.UI.Toolkit.ElevatedView bd = new()
                         {
-                            Translation = new(0, 0, 5),
+                            Elevation = 5,
                             Margin = new(25, 5, 25, 5),
                             CornerRadius = new CornerRadius(4)
                         };
@@ -86,7 +86,7 @@ namespace Profiler.Pages
                             FontSize = 18,
                             Tag = new TagData(u.ReportIdx, pos),
                         };
-                        bd.Children.Add(tb);
+                        bd.ElevatedContent = tb;
                         tb.Checked += Tb_Checked;
                         spHats.Children.Add(bd);
                         hatPos.Add(tb);
@@ -103,9 +103,9 @@ namespace Profiler.Pages
                 {
                     for (byte pos = 0; pos <= u.Range; pos++)
                     {
-                        Grid bd = new()
+                        Uno.UI.Toolkit.ElevatedView bd = new()
                         {
-                            Translation = new(0, 0, 5),
+                            Elevation = 5,
                             Margin = new(25, 5, 25, 5),
                             CornerRadius = new CornerRadius(4)
                         };
@@ -117,7 +117,7 @@ namespace Profiler.Pages
                             FontSize = 18,
                             Tag = new TagData((ushort)(u.ReportIdx + pos), 0),
                         };
-                        bd.Children.Add(tb);
+                        bd.ElevatedContent = tb;
                         tb.Checked += Tb_Checked;
                         spButtons.Children.Add(bd);
                         map.Add(new((ushort)(u.ReportIdx + pos), tb));
