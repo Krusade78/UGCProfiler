@@ -1,49 +1,39 @@
 #include "framework.h"
 #include "CHIDOutput.h"
+#include <thread>
 
-CHIDOutput::CHIDOutput(CProfile* profile, CEventQueue* evQueue, CVirtualHID* vhid)
+CHIDOutput::CHIDOutput(CProfile& profile, CEventQueue& evQueue, CVirtualHID& vhid)
+    : profile(profile), evQueue(evQueue), vhid(vhid)
 {
-    this->profile = profile;
-    this->evQueue = evQueue;
-    this->vhid = vhid;
-    evExit = CreateEvent(NULL, TRUE, FALSE, NULL);
+    evExit.set(CreateEvent(NULL, TRUE, FALSE, NULL));
 }
 
 CHIDOutput::~CHIDOutput()
 {
-    exit = true;
-    SetEvent(evExit);
-    while (InterlockedCompareExchange16(&threadClosed, 0, 0) == FALSE) Sleep(500);
-    CloseHandle(evExit);
-    if (output != nullptr) delete output;
+    SetEvent(evExit.get());
+    if (threadClosed.valid())
+    {
+        WaitForSingleObject(threadClosed.get(), INFINITE);
+    }
 }
 
 bool CHIDOutput::Init()
 {
-    output = new CProcessOutput(profile, vhid);
+    output = std::make_unique<CProcessOutput>(profile, vhid);
 
-    HANDLE hilo = CreateThread(NULL, 0, ThreadRead, this, 0, NULL);
-    if (hilo != NULL)
-    {
-        while (InterlockedCompareExchange16(&threadClosed, FALSE, FALSE))
-        {
-            Sleep(500);
-        }
-        return true;
-    }
+    threadClosed.set(reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, ThreadRead, this, 0, nullptr)));
 
-	return false;
+    return threadClosed.valid();
 }
 
-DWORD WINAPI CHIDOutput::ThreadRead(LPVOID param)
+unsigned _stdcall CHIDOutput::ThreadRead(void* param)
 {
-    CHIDOutput* local = (CHIDOutput*)param;
-    InterlockedExchange16(&local->threadClosed, FALSE);
+    auto* local = static_cast<CHIDOutput*>(param);
 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
-    HANDLE events[3]= { local->evExit, local->evQueue->GetEvQueue(), local->output->GetEvQueue()};
-    while (!local->exit)
+    HANDLE events[3]= { local->evExit.get(), local->evQueue.GetEvQueue(), local->output->GetEvQueue()};
+    while (true)
     {
 
         DWORD ev = WaitForMultipleObjects(3, events, FALSE, INFINITE);
@@ -52,12 +42,15 @@ DWORD WINAPI CHIDOutput::ThreadRead(LPVOID param)
             CEventPacket* paq = nullptr;
             if ((ev - WAIT_OBJECT_0) == 1)
             {
-                paq = local->evQueue->Read();
+                paq = local->evQueue.Read();
             }
             local->output->Process(paq);
         }
+        else
+        {
+            break;
+        }
     }
 
-    InterlockedExchange16(&local->threadClosed, TRUE);
     return 0;
 }

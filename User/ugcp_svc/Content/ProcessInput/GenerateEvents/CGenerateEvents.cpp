@@ -5,10 +5,10 @@
 CProfile* CGenerateEvents::pProfile = nullptr;
 CEventQueue* CGenerateEvents::pEvQueue = nullptr;
 
-void CGenerateEvents::Init(CProfile* pProfile, CEventQueue* pEvQueue)
+void CGenerateEvents::Init(CProfile& pProfile, CEventQueue& pEvQueue)
 {
-	CGenerateEvents::pProfile = pProfile;
-	CGenerateEvents::pEvQueue = pEvQueue;
+	CGenerateEvents::pProfile = &pProfile;
+	CGenerateEvents::pEvQueue = &pEvQueue;
 }
 
 void CGenerateEvents::Mouse(PEV_COMMAND pev_command)

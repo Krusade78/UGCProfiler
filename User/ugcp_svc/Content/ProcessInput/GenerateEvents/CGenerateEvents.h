@@ -15,7 +15,7 @@ public:
 		HatShort,
 	};
 
-	static void Init(CProfile* pProfile, CEventQueue* pEvQueue);
+	static void Init(CProfile& pProfile, CEventQueue& pEvQueue);
 
 	static void Mouse(PEV_COMMAND action);
 	static void Command(UINT32 joyId, UINT16 actionId, UCHAR origin, Origin originType, PEV_COMMAND axisData);

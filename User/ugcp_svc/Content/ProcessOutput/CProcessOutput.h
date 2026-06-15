@@ -8,7 +8,7 @@
 class CProcessOutput
 {
 public:
-	CProcessOutput(CProfile* pPerfil, CVirtualHID* pVhid);
+	CProcessOutput(CProfile& pPerfil, CVirtualHID& pVhid);
 	~CProcessOutput();
 	void ClearEvents();
 
@@ -30,8 +30,8 @@ public:
 private:
 	static CProcessOutput* pNotifications;
 
-	CProfile* pProfile = nullptr;
-	CVirtualHID* pVhid = nullptr;
+	CProfile& pProfile;
+	CVirtualHID& pVhid;
 	HANDLE hWaitLockEvents = nullptr;
 	std::deque<CEventPacket*> eventsQueue;
 	HANDLE hEvEmptyQueue_OnlyHolds = nullptr;

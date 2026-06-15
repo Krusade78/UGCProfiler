@@ -3,10 +3,10 @@
 //#include "../Perfil/CPerfil.h"
 #include "../vJoy/vjoyinterface.h"
 
+#include "../../Tiempo.h"
+
 CVirtualHID::CVirtualHID()
 {
-   RtlZeroMemory(&status, sizeof(ST_STATUS));
-   hMutextMouse = CreateSemaphore(NULL, 1, 1, NULL);
    for (char i = 0; i < 16; i++)
    {
        available[i] = isVJDExists(i + 1);
@@ -19,8 +19,6 @@ CVirtualHID::~CVirtualHID()
     {
         if (available[i] && (GetVJDStatus(i + 1) == VJD_STAT_OWN)) { RelinquishVJD(i + 1); }
     }
-
-    CloseHandle(hMutextMouse);
 }
 
 bool CVirtualHID::Init()
@@ -77,12 +75,11 @@ bool CVirtualHID::Init()
     return true;
 }
 
-void CVirtualHID::SendRequestToJoystick(UCHAR joyId)
+void CVirtualHID::SendRequestToJoystick(std::uint8_t joyId)
 {
     if (Init())
     {
-        JOYSTICK_POSITION_V2 input;
-        RtlZeroMemory(&input, sizeof(JOYSTICK_POSITION_V2));
+        JOYSTICK_POSITION_V2 input{};
 
         input.wAxisX = status.DirectX[joyId].Axes[0];
         input.wAxisY = status.DirectX[joyId].Axes[1];
@@ -114,7 +111,9 @@ void CVirtualHID::SendRequestToJoystick(UCHAR joyId)
             {
                 if (joyId == vjId)
                 {
-                    UpdateVJD(i + 1, (PVOID)&input);
+                    UpdateVJD(i + 1, static_cast<PVOID>(&input));
+                    Tiempo::swFin = std::chrono::high_resolution_clock::now();
+                    Tiempo::Debug();
                     break;
                 }
                 vjId++;
@@ -124,7 +123,7 @@ void CVirtualHID::SendRequestToJoystick(UCHAR joyId)
     }
 }
 
-DWORD CVirtualHID::Hat2Switch(UCHAR pos)
+std::uint32_t CVirtualHID::Hat2Switch(std::uint8_t pos)
 {
     switch (pos)
     {

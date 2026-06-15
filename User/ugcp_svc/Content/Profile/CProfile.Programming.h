@@ -5,61 +5,61 @@ public:
 #pragma warning(disable:26495)
 	typedef struct
 	{
-		UCHAR MouseSensibility;
-		UCHAR VJoyOutput;
-		UCHAR Type;  //Mapped in bits 0:none, 1:Normal, 10:Inverted, 100:Mini, 1000:Mouse, 10000:Incremental, 100000: Bands
-		UCHAR OutputAxis; //0:X, Y, Z, Rx, Ry, Rz, Sl1, Sl2
-		UCHAR SoftDeadZone;
+		std::uint8_t MouseSensibility;
+		std::uint8_t VJoyOutput;
+		std::uint8_t Type;  //Mapped in bits 0:none, 1:Normal, 10:Inverted, 100:Mini, 1000:Mouse, 10000:Incremental, 100000: Bands
+		std::uint8_t OutputAxis; //0:X, Y, Z, Rx, Ry, Rz, Sl1, Sl2
+		std::uint8_t SoftDeadZone;
 		double SensibilityX[20]; // curve points in X, last point MUST be 1.0
 		double SensibilityY[20]; // curve points in Y
 		double SensibilityS[20]; // slopes for interpolation
-		UCHAR IsSlider;
+		std::uint8_t IsSlider;
 		//double Inertia;
 		double DampingK;
-		std::vector<UCHAR> Bands;
-		std::vector<UINT16> Actions;
-		UCHAR ToughnessInc;
-		UCHAR ToughnessDec;
+		std::vector<std::uint8_t> Bands;
+		std::vector<std::uint16_t> Actions;
+		std::uint8_t ToughnessInc;
+		std::uint8_t ToughnessDec;
 	} AXISMODEL;
-#pragma warning(default:26495)
 
 	typedef struct
 	{
-		UCHAR Type;  //0: normal, 1:Toggle
-		std::vector<UINT16> Actions;
+		std::uint8_t Type;  //0: normal, 1:Toggle
+		std::vector<std::uint16_t> Actions;
 	} BUTTONMODEL;
+#pragma warning(default:26495)
 private:
 	typedef struct
 	{
-		std::unordered_map<UCHAR, BUTTONMODEL> Buttons;
+		std::unordered_map<std::uint8_t, BUTTONMODEL> Buttons;
 	} BUTTONMODEMODEL;
 	typedef struct
 	{
-		std::unordered_map<UCHAR, BUTTONMODEMODEL> Modes;
+		std::unordered_map<std::uint8_t, BUTTONMODEMODEL> Modes;
 	} BUTTONMAPMODEL;
 
 
 	typedef struct
 	{
-		std::unordered_map<UCHAR, AXISMODEL> Axes;
+		std::unordered_map<std::uint8_t, AXISMODEL> Axes;
 	} AXISMODEMODEL;
 	typedef struct
 	{
-		std::unordered_map<UCHAR, AXISMODEMODEL> Modes;
+		std::unordered_map<std::uint8_t, AXISMODEMODEL> Modes;
 	} AXISMAPMODEL;
 
-	std::unordered_map<UINT32, BUTTONMAPMODEL> stButtonsMap;
-	std::unordered_map<UINT32, BUTTONMAPMODEL> stHatsMap;
-	std::unordered_map<UINT32, AXISMAPMODEL> stAxesMap;
+	std::unordered_map<std::uint32_t, BUTTONMAPMODEL> stButtonsMap;
+	std::unordered_map<std::uint32_t, BUTTONMAPMODEL> stHatsMap;
+	std::unordered_map<std::uint32_t, AXISMAPMODEL> stAxesMap;
 
 	class CButtonMap
 	{
 	private:
-		std::unordered_map<UINT32, BUTTONMAPMODEL>* pStButtonsMap;
+		std::unordered_map<std::uint32_t, BUTTONMAPMODEL>* pStButtonsMap;
 	public:
-		inline CButtonMap(std::unordered_map<UINT32, BUTTONMAPMODEL>* pStButtonsMap) { this->pStButtonsMap = pStButtonsMap; }
+		inline CButtonMap(std::unordered_map<std::uint32_t, BUTTONMAPMODEL>* pStButtonsMap) { this->pStButtonsMap = pStButtonsMap; }
 
-		inline std::vector<UINT16>* NewButton(UINT32 joyId, UCHAR mode, UCHAR button, UCHAR type)
+		inline std::vector<std::uint16_t>* NewButton(std::uint32_t joyId, std::uint8_t mode, std::uint8_t button, std::uint8_t type)
 		{
 			pStButtonsMap->insert({ joyId, BUTTONMAPMODEL() });
 			pStButtonsMap->at(joyId).Modes.insert({ mode , BUTTONMODEMODEL() });
@@ -68,12 +68,12 @@ private:
 			return &pStButtonsMap->at(joyId).Modes.at(mode).Buttons.at(button).Actions;
 		}
 
-		inline BUTTONMODEL* GetConf(UINT32 joyId, UCHAR* mode, UCHAR button)
+		inline BUTTONMODEL* GetConf(std::uint32_t joyId, std::uint8_t* mode, std::uint8_t button)
 		{
-			std::unordered_map<UINT32, BUTTONMAPMODEL>::iterator pBmm = pStButtonsMap->find(joyId);
+			std::unordered_map<std::uint32_t, BUTTONMAPMODEL>::iterator pBmm = pStButtonsMap->find(joyId);
 			if (pBmm != pStButtonsMap->end())
 			{
-				std::unordered_map<UCHAR, BUTTONMODEMODEL>::iterator pMm = pBmm->second.Modes.find(*mode);
+				std::unordered_map<std::uint8_t, BUTTONMODEMODEL>::iterator pMm = pBmm->second.Modes.find(*mode);
 				if (pMm == pBmm->second.Modes.end())
 				{
 					pMm = pBmm->second.Modes.find(0);
@@ -84,7 +84,7 @@ private:
 				}
 				if (pMm != pBmm->second.Modes.end())
 				{
-					std::unordered_map<UCHAR, BUTTONMODEL>::iterator pB = pMm->second.Buttons.find(button);
+					std::unordered_map<std::uint8_t, BUTTONMODEL>::iterator pB = pMm->second.Buttons.find(button);
 					if (pB != pMm->second.Buttons.end())
 					{
 						return &pB->second;
@@ -98,11 +98,11 @@ private:
 	class CAxesMap
 	{
 	private:
-		std::unordered_map<UINT32, AXISMAPMODEL>* pStAxesMap;
+		std::unordered_map<std::uint32_t, AXISMAPMODEL>* pStAxesMap;
 	public:
-		inline CAxesMap(std::unordered_map<UINT32, AXISMAPMODEL>* pStAxesMap) { this->pStAxesMap = pStAxesMap; }
+		inline CAxesMap(std::unordered_map<std::uint32_t, AXISMAPMODEL>* pStAxesMap) { this->pStAxesMap = pStAxesMap; }
 
-		inline AXISMODEL* NewAxis(UINT32 joyId, UCHAR mode, UCHAR axis)
+		inline AXISMODEL* NewAxis(std::uint32_t joyId, std::uint8_t mode, std::uint8_t axis)
 		{
 			pStAxesMap->insert({ joyId, PROGRAMMING::AXISMAPMODEL() });
 			pStAxesMap->at(joyId).Modes.insert({ mode , PROGRAMMING::AXISMODEMODEL() });
@@ -110,12 +110,12 @@ private:
 			return &pStAxesMap->at(joyId).Modes.at(mode).Axes.at(axis);
 		}
 
-		inline AXISMODEL* GetConf(UINT32 joyId, UCHAR* mode, UCHAR axis)
+		inline AXISMODEL* GetConf(std::uint32_t joyId, std::uint8_t* mode, std::uint8_t axis)
 		{
-			std::unordered_map<UINT32, AXISMAPMODEL>::iterator pAmm = pStAxesMap->find(joyId);
+			std::unordered_map<std::uint32_t, AXISMAPMODEL>::iterator pAmm = pStAxesMap->find(joyId);
 			if (pAmm != pStAxesMap->end())
 			{
-				std::unordered_map<UCHAR, AXISMODEMODEL>::iterator pMm = pAmm->second.Modes.find(*mode);
+				std::unordered_map<std::uint8_t, AXISMODEMODEL>::iterator pMm = pAmm->second.Modes.find(*mode);
 				if (pMm == pAmm->second.Modes.end())
 				{
 					pMm = pAmm->second.Modes.find(0);
@@ -126,7 +126,7 @@ private:
 				}
 				if (pMm != pAmm->second.Modes.end())
 				{
-					std::unordered_map<UCHAR, AXISMODEL>::iterator pA = pMm->second.Axes.find(axis);
+					std::unordered_map<std::uint8_t, AXISMODEL>::iterator pA = pMm->second.Axes.find(axis);
 					if (pA != pMm->second.Axes.end())
 					{
 						return &pA->second;
@@ -141,7 +141,7 @@ public:
 	CButtonMap HatsMap = CButtonMap(&stHatsMap);
 	CAxesMap AxesMap = CAxesMap(&stAxesMap);
 	std::deque<CEventPacket*>* Actions = nullptr;
-	UCHAR MouseTick = 5;
+	std::uint8_t MouseTick = 5;
 
 	inline void Clear() 
 	{
@@ -150,9 +150,9 @@ public:
 		stAxesMap.clear();
 	}
 
-	inline UCHAR GetRawDevice(UINT32 joyId) //to bypass profile and test/calibrate
+	inline UCHAR GetRawDevice(std::uint32_t joyId) //to bypass profile and test/calibrate
 	{
-		std::unordered_map<UINT32, bool> ids;
+		std::unordered_map<std::uint32_t, bool> ids;
 		for (auto const& id : stButtonsMap)
 		{
 			ids.insert({ id.first, false });
@@ -165,7 +165,7 @@ public:
 		{
 			ids.insert({ id.first, false });
 		}
-		UCHAR retId = 1;
+		std::uint8_t retId = 1;
 		for (auto const& joy : ids)
 		{
 			if (joy.first == joyId) return retId;
@@ -175,7 +175,7 @@ public:
 		return 0;
 	}
 
-	inline bool DeviceIncluded(UINT32 joyId)
+	inline bool DeviceIncluded(std::uint32_t joyId)
 	{
 		return ((stAxesMap.find(joyId) != stAxesMap.end()) || ((stButtonsMap.find(joyId) != stButtonsMap.end())) || ((stHatsMap.find(joyId) != stHatsMap.end())));
 	}

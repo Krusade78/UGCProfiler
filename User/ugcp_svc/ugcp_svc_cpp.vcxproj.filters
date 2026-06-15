@@ -168,6 +168,12 @@
     <ClInclude Include="Content\Profile\CProfile.Calibration.h">
       <Filter>Content\Profile</Filter>
     </ClInclude>
+    <ClInclude Include="Content\unique_handle.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Tiempo.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\X52\USBX52Write.cpp">

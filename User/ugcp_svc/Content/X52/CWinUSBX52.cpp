@@ -3,7 +3,7 @@
 #include <hidsdi.h>
 #include "CWinUSBX52.h"
 #include "MFDMenu.h"
-#include "USBX52Write.h"
+
 
 bool CWinUSBX52::Prepare()
 {
@@ -33,28 +33,24 @@ bool CWinUSBX52::Prepare()
         return false;
     }
 
-    UCHAR* buf = new UCHAR[size];
-    RtlZeroMemory(buf, size);
-    PSP_DEVICE_INTERFACE_DETAIL_DATA didData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)buf;
+    auto buf = std::make_unique<std::uint8_t[]>(size);
+    memset(buf.get(), 0, size);
+    PSP_DEVICE_INTERFACE_DETAIL_DATA didData = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(buf.get());
     didData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
     if (!SetupDiGetDeviceInterfaceDetail(diDevs, &diData, didData, size, &size, NULL))
     {
-        delete[] buf;
         SetupDiDestroyDeviceInfoList(diDevs);
         return false;
     }
 
-    WaitForSingleObject(mutex, INFINITE);
     {
+        std::lock_guard<std::mutex> lock(mutex);
         if (hardwareId == HARDWARE_ID_X52)
         {
-            pathInterface = new wchar_t[size];
-            StringCchCopy(pathInterface, size, didData->DevicePath);
+            pathInterface = didData->DevicePath; //string is copied
         }
     }
-    ReleaseSemaphore(mutex, 1, NULL);
 
-    delete[] buf;
     SetupDiDestroyDeviceInfoList(diDevs);
 
     return true;
@@ -62,109 +58,97 @@ bool CWinUSBX52::Prepare()
 
 bool CWinUSBX52::Open()
 {
-    WaitForSingleObject(mutex, INFINITE);
+    std::unique_lock<std::mutex> lock(mutex);
     {
-        if ((hardwareId != 0) && (pathInterface != nullptr) && (InterlockedCompareExchangePointer(&hwusb, nullptr, nullptr) == nullptr))
+        if ((hardwareId != 0) && (!pathInterface.empty()) && (hwusb.load() == nullptr))
         {
-            PVOID nhdev = CreateFile(pathInterface, GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
-            if (INVALID_HANDLE_VALUE == nhdev)
+            unique_handle nhdev(CreateFileW(pathInterface.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL));
+            if (!nhdev.valid())
             {
-                ReleaseSemaphore(mutex, 1, NULL);
                 return false;
             }
             else
             {
                 WINUSB_INTERFACE_HANDLE wih = nullptr;
-                if (!WinUsb_Initialize(nhdev, &wih))
+                if (!WinUsb_Initialize(nhdev.get(), &wih))
                 {
-                    CloseHandle(nhdev);
-                    ReleaseSemaphore(mutex, 1, NULL);
+                    lock.unlock();
                     Close(false);
                     return false;
                 }
 
-                InterlockedExchangePointer(&hdev, nhdev);
-                InterlockedExchangePointer(&hwusb, wih);
+                hdev.set(nhdev.move()); //hdev should be nullptr here
+                hwusb.store(wih);
 
-                ZeroMemory(&pipe, sizeof(WINUSB_PIPE_INFORMATION));
-                if (!WinUsb_QueryPipe(hwusb, 0, 0, &pipe))
+                memset(&pipe, 0, sizeof(WINUSB_PIPE_INFORMATION));
+                if (!WinUsb_QueryPipe(wih, 0, 0, &pipe))
                 {
-                    ReleaseSemaphore(mutex, 1, NULL);
+                    lock.unlock();
                     Close(false);
                     return false;
                 }
 
-                reportLenght = 0;
-                if (HidD_GetPreparsedData(nhdev, reinterpret_cast<PHIDP_PREPARSED_DATA*>(&preparsed)))
+                DWORD newReportLenght = 0;
+                if (HidD_GetPreparsedData(nhdev.get(), reinterpret_cast<PHIDP_PREPARSED_DATA*>(&preparsed)))
                 {
                     HIDP_CAPS caps;
                     if (HidP_GetCaps(reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), &caps) == HIDP_STATUS_SUCCESS)
                     {
                         if (GetDeviceMap(preparsed, &caps))
                         {
-                            reportLenght = caps.InputReportByteLength;
+                            newReportLenght = caps.InputReportByteLength;
                         }
                     }
                 }
-                if (reportLenght != 0)
+                if (newReportLenght != 0)
                 {
-                    reportBuffer = new CHAR[reportLenght];
-                    CX52Write::Get()->SetWinUSB(hwusb);
-                    CMFDMenu::Get()->SetWelcome();
+                    reportLenght.store(newReportLenght);
+                    reportBuffer = std::make_unique<CHAR[]>(newReportLenght);
+                    CMFDMenu::Get().SetWelcome();
                 }
                 else
                 {
-                    if (reportBuffer != nullptr)
-                    {
-                        delete[] reportBuffer;
-                        reportBuffer = nullptr;
-                    }
-                    if (preparsed != nullptr)
-                    {
-                        HidD_FreePreparsedData(reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed));
-                        preparsed = nullptr;
-                    }
-                    ReleaseSemaphore(mutex, 1, NULL);
+                    lock.unlock();
                     Close(false);
                     return false;
                 }
             }
         }
     }
-    ReleaseSemaphore(mutex, 1, NULL);
 
     return true;
 }
 
 void CWinUSBX52::Close(bool exit)
 {
-    WaitForSingleObject(mutex, INFINITE);
     {
-        if (InterlockedCompareExchangePointer(&hwusb, nullptr, nullptr) != nullptr)
+        std::unique_lock<std::mutex> lock(mutex);
+        HANDLE h = hwusb.exchange(nullptr);
+        if (h != nullptr)
         {
-            CX52Write::Get()->SetWinUSB(nullptr);
-
-            HANDLE h = InterlockedExchangePointer(&hwusb, nullptr);
             CancelIoEx(h, NULL);
             WinUsb_Free(h);
         }
     }
-    ReleaseSemaphore(mutex, 1, NULL);
 
     CHIDDevices::Close(exit);
 }
 
 unsigned short CWinUSBX52::Read(void* buff)
 {
-    if (!InterlockedOr8(&paused, 0))
+    if (!paused.load())
     {
-        if (InterlockedCompareExchangePointer(&hwusb, nullptr, nullptr) == nullptr)
+        auto hUSB = hwusb.load();
+        if (hUSB == nullptr)
         {
-            Sleep(3000);
-            WaitForSingleObject(mutex, INFINITE);
-            bool prepared = (pathInterface != nullptr);
-            bool exit = (hardwareId == 0);
-            ReleaseSemaphore(mutex, 1, NULL);
+            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            bool prepared;
+            bool exit;
+            {
+                std::unique_lock<std::mutex> lock(mutex);
+                prepared = !pathInterface.empty();
+                exit = (hardwareId == 0);
+            }
             if (exit)
             {
                 return 0;
@@ -179,14 +163,14 @@ unsigned short CWinUSBX52::Read(void* buff)
         else
         {
             ULONG readSize = 0;
-            ((CHAR*)buff)[0] = 0; //report id
-            if (WinUsb_ReadPipe(hwusb, pipe.PipeId, &static_cast<UCHAR*>(buff)[1], reportLenght - 1, &readSize, NULL))
+            static_cast<char*>(buff)[0] = 0; //report id
+            if (WinUsb_ReadPipe(hUSB, pipe.PipeId, &static_cast<std::uint8_t*>(buff)[1], reportLenght.load() - 1, &readSize, nullptr))
             {
                 readSize++;
                 ULONG size = 0;
-                if (HidP_GetData(HidP_Input, NULL, &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer, reportLenght) == HIDP_STATUS_BUFFER_TOO_SMALL)
+                if (HidP_GetData(HidP_Input, nullptr, &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer.get(), reportLenght.load()) == HIDP_STATUS_BUFFER_TOO_SMALL)
                 {
-                    if (HidP_GetData(HidP_Input, reinterpret_cast<PHIDP_DATA>(buff), &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer, reportLenght) == HIDP_STATUS_SUCCESS)
+                    if (HidP_GetData(HidP_Input, reinterpret_cast<PHIDP_DATA>(buff), &size, reinterpret_cast<PHIDP_PREPARSED_DATA>(preparsed), reportBuffer.get(), reportLenght.load()) == HIDP_STATUS_SUCCESS)
                     {
                         return static_cast<unsigned short>(size);
                     }
@@ -196,7 +180,7 @@ unsigned short CWinUSBX52::Read(void* buff)
         }
     }
 
-    Sleep(1500);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
     return 0;
 }
 
@@ -204,7 +188,7 @@ void CWinUSBX52::SetPause(bool onoff)
 {
     if (onoff)
     {
-        if (InterlockedOr8(&paused, 1) == 0)
+        if (paused.exchange(true) == false)
         {
             Close(false);
         }
@@ -212,6 +196,6 @@ void CWinUSBX52::SetPause(bool onoff)
     else
     {
         Close(false);
-        InterlockedAnd8(&paused, 0);
+        paused.store(false);
     }
 }

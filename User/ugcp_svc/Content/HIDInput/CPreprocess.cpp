@@ -4,9 +4,9 @@
 #include "../ProcessInput/GenerateEvents/CGenerateEvents.h" //init
 #include "Hid_Input_Data.h"
 
-CPreprocess::CPreprocess(CProfile* pProfile, CEventQueue* pEvQueue, void* ptrHIDInput, void (*FnLockDevices)(void*), void (*FnUnlockDevices)(void*), CHIDDevices* (*FnGetDevice)(void*, UINT32))
+CPreprocess::CPreprocess(CProfile& pProfile, CEventQueue& pEvQueue, void* ptrHIDInput, void (*FnLockDevices)(void*), void (*FnUnlockDevices)(void*), CHIDDevices* (*FnGetDevice)(void*, UINT32))
+	:pProfile(pProfile)
 {
-	this->pProfile = pProfile;
 	this->hidQueue = new CHIDQueue();
 	CGenerateEvents::Init(pProfile, pEvQueue);
 
@@ -74,13 +74,13 @@ void CPreprocess::ConvertToCommon(UCHAR* buffer, DWORD size, UINT32 joyId)
 			UCHAR idxButton = 0;
 			UCHAR idxAxis = 0;
 			UCHAR idxHat = 0;
-			for (auto const& mapIndex : *pDev->GetMap())
+			for (auto const& mapIndex : pDev->GetMap())
 			{
-				if (mapIndex->IsButton)
+				if (mapIndex.IsButton)
 				{
-					if ((data[idxData].DataIndex >= mapIndex->Index) && (data[idxData].DataIndex < (mapIndex->Index + mapIndex->Bits)))
+					if ((data[idxData].DataIndex >= mapIndex.Index) && (data[idxData].DataIndex < (mapIndex.Index + mapIndex.Bits)))
 					{
-						UCHAR idx = data[idxData].DataIndex - mapIndex->Index + idxButton;
+						UCHAR idx = data[idxData].DataIndex - mapIndex.Index + idxButton;
 						if (idx > 63)
 						{
 							hidData.Buttons[1] |= 1ull << (idx - 64);
@@ -90,19 +90,19 @@ void CPreprocess::ConvertToCommon(UCHAR* buffer, DWORD size, UINT32 joyId)
 							hidData.Buttons[0] |= 1ull << idx;
 						}
 					}
-					idxButton += mapIndex->Bits;
+					idxButton += mapIndex.Bits;
 				}
-				else if (mapIndex->IsHat)
+				else if (mapIndex.IsHat)
 				{
-					if (data[idxData].DataIndex == mapIndex->Index)
+					if (data[idxData].DataIndex == mapIndex.Index)
 					{
-						hidData.Hats[idxHat] = (static_cast<UCHAR>(data[idxData].RawValue) < (mapIndex->IsHat & 0xf)) || (static_cast<UCHAR>(data[idxData].RawValue) > (mapIndex->IsHat >> 4)) ? 255 : static_cast<UCHAR>(data[idxData].RawValue) - (mapIndex->IsHat & 0xf);
+						hidData.Hats[idxHat] = (static_cast<UCHAR>(data[idxData].RawValue) < (mapIndex.IsHat & 0xf)) || (static_cast<UCHAR>(data[idxData].RawValue) > (mapIndex.IsHat >> 4)) ? 255 : static_cast<UCHAR>(data[idxData].RawValue) - (mapIndex.IsHat & 0xf);
 					}
 					idxHat++;
 				}
 				else
 				{
-					if (data[idxData].DataIndex == mapIndex->Index)
+					if (data[idxData].DataIndex == mapIndex.Index)
 					{
 						hidData.Axis[idxAxis] = static_cast<UINT16>(data[idxData].RawValue);
 					}
@@ -114,7 +114,7 @@ void CPreprocess::ConvertToCommon(UCHAR* buffer, DWORD size, UINT32 joyId)
 	UnlockDevices(pHIDInput);
 
 	// Calibrate
-	if (!pProfile->GetCalibrationMode())
+	if (!pProfile.GetCalibrationMode())
 	{
 		calibration.Calibrate(pProfile, joyId, &hidData);
 	}

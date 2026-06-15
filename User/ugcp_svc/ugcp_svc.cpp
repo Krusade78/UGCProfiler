@@ -8,8 +8,9 @@
 #include "Content/X52/USBX52Write.h"
 #include "Content/X52/MFDMenu.h"
 #include "Content/NXT/HIDNXTWrite.h"
-#include <Dbt.h>
+#include <memory>
 #include <sas.h>
+
 #define DLLIMPORT
 #include "../CPP2CS/CExported.h"
 #pragma comment(lib, "Sas.lib")
@@ -23,60 +24,40 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
 
-	HANDLE mtx = CreateSemaphore(NULL, 0, 1, L"mtx_xhotas_svc");
-	if ((GetLastError() == ERROR_ALREADY_EXISTS) || (mtx == NULL))
+	unique_handle mtx(CreateMutexW(nullptr, TRUE, L"mtx_xhotas_svc"));
+	if ((GetLastError() == ERROR_ALREADY_EXISTS) || !mtx.valid())
 	{
-		if (mtx != NULL)
-		{
-			ReleaseSemaphore(mtx, 1, NULL);
-			CloseHandle(mtx);
-		}
 		return 1;
 	}
 
-	CExported* pExp = new CExported();
+	auto pExp = std::make_unique<CExported>();
 
 	//Init
 
-	CX52Write* x52Drv = new CX52Write();
-	CNXTWrite* nxtDrv = new CNXTWrite();
-	CMFDMenu* mfd = new CMFDMenu();
-	CVirtualHID* vhid = new CVirtualHID();
+	auto x52Drv = std::make_unique<CX52Write>();
+	auto nxtDrv = std::make_unique<CNXTWrite>();
+	auto mfd = std::make_unique<CMFDMenu>();
+	auto vhid = std::make_unique<CVirtualHID>();
 	if (vhid->Init())
 	{
-		CProfile* profile = new CProfile(vhid);
-		CComs* coms = new CComs(profile);
+		auto profile = std::make_unique<CProfile>();
+		auto coms = std::make_unique<CComs>(*profile);
 		if (coms->Init())
 		{
-			CEventQueue* evQueue = new CEventQueue();
-			CHIDOutput* output = new CHIDOutput(profile, evQueue, vhid);
+			auto evQueue = std::make_unique<CEventQueue>();
+			auto output = std::make_unique<CHIDOutput>(*profile, *evQueue, *vhid);
 			if (output->Init())
 			{
-				CHIDInput* input = new CHIDInput(profile, evQueue);
+				auto input = std::make_unique<CHIDInput>(*profile, *evQueue);
 				if (input->Init(hInstance))
 				{
 					coms->SetHwnd(input->GetHwnd());
 					pExp->LoadDefault();
 					input->LoopWnd();
 				}
-				delete input;
 			}
-			delete coms;
-			delete output;
-			delete evQueue;
 		}
-		else
-		{
-			delete coms;
-		}
-		delete profile;
 	}
-	delete vhid;
-	delete mfd;
-	delete nxtDrv;
-	delete x52Drv;
-
-	delete pExp;
 
 	return 0;
 }

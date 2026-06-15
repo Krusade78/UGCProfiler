@@ -1,7 +1,7 @@
 #include "../../framework.h"
 #include "CKeyboard.h"
 
-void CKeyboard::Processed(PEV_COMMAND pCommand, CVirtualHID* pVHid)
+void CKeyboard::Processed(PEV_COMMAND pCommand)
 {
 	bool release = ((pCommand->Type & CommandType::Release) == CommandType::Release);
 

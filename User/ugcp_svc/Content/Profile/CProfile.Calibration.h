@@ -4,28 +4,28 @@ class CALIBRATION
 public:
 	typedef struct TDST_LIMITS
 	{
-		UCHAR Null;
-		UINT16 Left;
-		UINT16 Center;
-		UINT16 Right;
-		UINT16 Range;
+		std::uint8_t Null;
+		std::uint16_t Left;
+		std::uint16_t Center;
+		std::uint16_t Right;
+		std::uint16_t Range;
 	} ST_LIMITS;
 	typedef struct TDST_JITTER
 	{
-		UCHAR Antiv;
-		UCHAR PosRepeated;
-		UCHAR Margin;
-		UCHAR Strength;
-		UINT16 PosChosen;
+		std::uint8_t Antiv;
+		std::uint8_t PosRepeated;
+		std::uint8_t Margin;
+		std::uint8_t Strength;
+		std::uint16_t PosChosen;
 	} ST_JITTER;
 
-	std::unordered_map<UINT32, std::vector<ST_LIMITS>> Limits;
-	std::unordered_map<UINT32, std::vector<ST_JITTER>> Jitters;
-	std::unordered_map<UINT32, bool> New;
+	std::unordered_map<std::uint32_t, std::vector<ST_LIMITS>> Limits;
+	std::unordered_map<std::uint32_t, std::vector<ST_JITTER>> Jitters;
+	std::unordered_map<std::uint32_t, bool> New;
 
-	ST_LIMITS* GetLimit(UINT32 joyId, UCHAR axis)
+	ST_LIMITS* GetLimit(std::uint32_t joyId, std::uint8_t axis)
 	{
-		std::unordered_map<UINT32, std::vector<ST_LIMITS>>::iterator pl = Limits.find(joyId);
+		std::unordered_map<std::uint32_t, std::vector<ST_LIMITS>>::iterator pl = Limits.find(joyId);
 		if (pl != Limits.end())
 		{
 			if (axis < pl->second.size())
@@ -36,9 +36,9 @@ public:
 		return nullptr;
 	}
 
-	ST_JITTER* GetJitter(UINT32 joyId, UCHAR axis)
+	ST_JITTER* GetJitter(std::uint32_t joyId, std::uint8_t axis)
 	{
-		std::unordered_map<UINT32, std::vector<ST_JITTER>>::iterator pj = Jitters.find(joyId);
+		std::unordered_map<std::uint32_t, std::vector<ST_JITTER>>::iterator pj = Jitters.find(joyId);
 		if (pj != Jitters.end())
 		{
 			if (axis < pj->second.size())

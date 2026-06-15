@@ -6,12 +6,12 @@
 #include "../X52/CWinUSBX52.h"
 //#include "CalibradoDx/CDirectInput.h"
 
-CHIDInput::CHIDInput(CProfile* profile, CEventQueue* evQueue)
+CHIDInput::CHIDInput(CProfile& profile, CEventQueue& evQueue)
+    : pProfile(profile)
 {
     processHID = new CPreprocess(profile, evQueue, this, &LockDevices, &UnlockDevices, &GetDevice);
-    pProfile = profile;
-    profile->SetRefreshDevicesCallback(this, &CallbackRefreshDevices);
-    profile->SetPauseWinUSBCallback(&CallbackPauseWinUSB);
+    profile.SetRefreshDevicesCallback(this, &CallbackRefreshDevices);
+    profile.SetPauseWinUSBCallback(&CallbackPauseWinUSB);
     mutexDevices = CreateSemaphore(NULL, 1, 1, NULL);
 }
 
@@ -35,7 +35,7 @@ CHIDInput::~CHIDInput()
 
     while (threadClosed.size() > 0)
     {
-        if (InterlockedCompareExchange16(&threadClosed.begin()->second, FALSE, FALSE) == FALSE)
+        if (InterlockedOr16(&threadClosed.begin()->second, FALSE) == FALSE)
         {
             Sleep(1000);
         }
@@ -57,7 +57,8 @@ bool CHIDInput::Init(HINSTANCE hInst)
     {
         return false;
     }
-
+    UINT32 id[] = { 0x6a30763 };
+    RefreshDevices(id, 1);
     return PnpNotification(hInst);
 }
 
@@ -77,13 +78,13 @@ void CHIDInput::RefreshDevices(UINT32* ids, UCHAR size)
             {
                 hidDevices.insert({ ids[i], new CHIDDevices(ids[i]) });
             }
-            threadClosed.insert({ ids[i], 1 });
+            threadClosed.insert({ ids[i], TRUE });
             exit.insert({ ids[i], false });
             ST_THREAD_PARAMS params{ this, ids[i]};
             HANDLE h = CreateThread(NULL, 0, ThreadRead, &params, 0, NULL);
             if (h != NULL)
             {
-                while (InterlockedCompareExchange16(&threadClosed.at(ids[i]), 0, 0) == 1)
+                while (InterlockedOr16(&threadClosed.at(ids[i]), FALSE) == TRUE)
                 {
                     Sleep(500);
                 }
@@ -113,7 +114,7 @@ void CHIDInput::RefreshDevices(UINT32* ids, UCHAR size)
         exit.at(notfound.back()) = true;
         while (true)
         {
-            if (InterlockedCompareExchange16(&threadClosed.at(notfound.back()), FALSE, FALSE) == FALSE)
+            if (InterlockedOr16(&threadClosed.at(notfound.back()), FALSE) == FALSE)
             {
                 Sleep(1000);
             }
@@ -183,6 +184,24 @@ LRESULT CALLBACK CHIDInput::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
     CHIDInput* local = (CHIDInput*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     switch (uMsg)
     {
+        case WM_POWERBROADCAST:
+        {
+            switch (wParam)
+            {
+                case PBT_APMSUSPEND:
+                    local->powerSuspended = true;
+                    local->PauseWinUSB(true);
+                    return TRUE;
+
+                case PBT_APMRESUMEAUTOMATIC:
+                case PBT_APMRESUMECRITICAL:
+                case PBT_APMRESUMESUSPEND:
+                    local->powerSuspended = false;
+                    local->PauseWinUSB(false);
+                    return TRUE;
+            }
+            return TRUE;
+        }
         case WM_DEVICECHANGE:
         {
             switch (wParam)
@@ -192,7 +211,7 @@ LRESULT CALLBACK CHIDInput::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                     {
                         PDEV_BROADCAST_DEVICEINTERFACE dbdi = (PDEV_BROADCAST_DEVICEINTERFACE)lParam;
                         UINT32 joyId = IHIDInput::GetHardwareId(dbdi->dbcc_name);
-                        if (local->pProfile->GetProfile()->DeviceIncluded(joyId))
+                        if (local->pProfile.GetProfile()->DeviceIncluded(joyId))
                         {
                             local->RefreshDevices(&joyId, 1);
                         }
@@ -212,7 +231,7 @@ LRESULT CALLBACK CHIDInput::PnpMsjProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                             local->exit.at(joyId) = true;
                             while (true)
                             {
-                                if (InterlockedCompareExchange16(&local->threadClosed.at(joyId), FALSE, FALSE) == FALSE)
+                                if (InterlockedOr16(&local->threadClosed.at(joyId), FALSE) == FALSE)
                                 {
                                     Sleep(1000);
                                 }
@@ -270,7 +289,12 @@ DWORD WINAPI CHIDInput::ThreadRead(LPVOID param)
     UCHAR buff[sizeof(UINT32) + (sizeof(HIDP_DATA) * 140)]{};//128 buttons, 8 axes, 4 hats
     RtlCopyMemory(buff, &joyId, sizeof(UINT32));
     while (!local->exit.at(joyId))
-    {  
+    { 
+        if (local->powerSuspended)
+        {
+            Sleep(500);
+            continue;
+        }
         unsigned short tam = dev->Read(&buff[sizeof(UINT32)]);
         if (tam > 0)
         {

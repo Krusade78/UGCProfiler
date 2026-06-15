@@ -5,9 +5,9 @@
 
 CButtonsHats* CButtonsHats::mainProcess = nullptr;
 
-CButtonsHats::CButtonsHats(CProfile* pProfile)
+CButtonsHats::CButtonsHats(CProfile& pProfile)
+	: pProfile(pProfile)
 {
-	this->pProfile = pProfile;
 	pStButtonsMap = new std::unordered_map<UINT64, PTP_TIMER>();
 	pStHatsMap = new std::unordered_map<UINT64, PTP_TIMER>();
 	hMutexStatus = CreateMutex(NULL, FALSE, NULL);
@@ -44,7 +44,7 @@ CButtonsHats::~CButtonsHats()
 }
 
 #pragma region static
-void CButtonsHats::CreateInstance(CProfile* pProfile)
+void CButtonsHats::CreateInstance(CProfile& pProfile)
 {
 	if (mainProcess == nullptr)
 	{
@@ -52,25 +52,25 @@ void CButtonsHats::CreateInstance(CProfile* pProfile)
 	}
 }
 
-void CButtonsHats::PressButton(CProfile* pProfile, UINT32 joyId, UCHAR idx)
+void CButtonsHats::PressButton(CProfile& pProfile, UINT32 joyId, UCHAR idx)
 {
 	CreateInstance(pProfile);
 	mainProcess->PressButton(joyId, idx, false);
 }
 
-void CButtonsHats::ReleaseButton(CProfile* pProfile, UINT32 joyId, UCHAR idx)
+void CButtonsHats::ReleaseButton(CProfile& pProfile, UINT32 joyId, UCHAR idx)
 {
 	CreateInstance(pProfile);
 	mainProcess->ReleaseButton(joyId, idx, false);
 }
 
-void CButtonsHats::PressHat(CProfile* pProfile, UINT32 joyId, UCHAR idx)
+void CButtonsHats::PressHat(CProfile& pProfile, UINT32 joyId, UCHAR idx)
 {
 	CreateInstance(pProfile);
 	mainProcess->PressHat(joyId, idx, false);
 }
 
-void CButtonsHats::ReleaseHat(CProfile* pProfile, UINT32 joyId, UCHAR idx)
+void CButtonsHats::ReleaseHat(CProfile& pProfile, UINT32 joyId, UCHAR idx)
 {
 	CreateInstance(pProfile);
 	mainProcess->ReleaseHat(joyId, idx, false);
@@ -82,26 +82,26 @@ void CButtonsHats::PressButton(UINT32 joyId, UCHAR idx, bool longPress)
 	UINT16 actionId = 0;
 	bool shortPress = 0;
 
-	pProfile->BeginProfileRead();
+	pProfile.BeginProfileRead();
 	{
-		pProfile->LockStatus();
+		pProfile.LockStatus();
 		{
-			UCHAR mode = pProfile->GetStatus()->Mode | pProfile->GetStatus()->SubMode << 4;
+			UCHAR mode = pProfile.GetStatus()->Mode | pProfile.GetStatus()->SubMode << 4;
 
-			PROGRAMMING* pdevExt = pProfile->GetProfile();
+			PROGRAMMING* pdevExt = pProfile.GetProfile();
 			UCHAR pos;
-			if (pProfile->GetStatus()->Buttons.GetPos(&pos, joyId, mode, idx))
+			if (pProfile.GetStatus()->Buttons.GetPos(&pos, joyId, mode, idx))
 			{
-				PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx);
+				PROGRAMMING::BUTTONMODEL* actions = pProfile.GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx);
 				if (actions != nullptr)
 				{
 					actionId = actions->Actions.at(pos);
 					if (actions->Type == 1)
 					{
-						pProfile->GetStatus()->Buttons.SetPos(1, false, joyId, mode, idx);
-						if (static_cast<UCHAR>(pos + 1) >= pProfile->GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx)->Actions.size())
+						pProfile.GetStatus()->Buttons.SetPos(1, false, joyId, mode, idx);
+						if (static_cast<UCHAR>(pos + 1) >= pProfile.GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx)->Actions.size())
 						{
-							pProfile->GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
+							pProfile.GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
 						}
 					}
 					else if (actions->Type == 2)
@@ -109,7 +109,7 @@ void CButtonsHats::PressButton(UINT32 joyId, UCHAR idx, bool longPress)
 						if (pos == 2)
 						{
 							shortPress = true;
-							pProfile->GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
+							pProfile.GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
 						}
 						if (!longPress)
 						{
@@ -139,35 +139,35 @@ void CButtonsHats::PressButton(UINT32 joyId, UCHAR idx, bool longPress)
 							{
 								delete ctx;
 							}
-							pProfile->UnlockStatus();
-							pProfile->EndProfileRead();
+							pProfile.UnlockStatus();
+							pProfile.EndProfileRead();
 							return;
 						}
 					}
 				}
-				pProfile->GetStatus()->Buttons.SetPressed(1, joyId, idx);
+				pProfile.GetStatus()->Buttons.SetPressed(1, joyId, idx);
 			}
 		}
-		pProfile->UnlockStatus();
+		pProfile.UnlockStatus();
 	}
-	pProfile->EndProfileRead();
+	pProfile.EndProfileRead();
 
 	CGenerateEvents::Command(joyId, actionId, idx, shortPress ? CGenerateEvents::Origin::ButtonShort : CGenerateEvents::Origin::Button, nullptr);
 }
 
 void CButtonsHats::ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease)
 {
-	pProfile->BeginProfileRead();
+	pProfile.BeginProfileRead();
 	{
 		UCHAR mode;
-		pProfile->LockStatus();
+		pProfile.LockStatus();
 		{
-			mode = pProfile->GetStatus()->Mode | pProfile->GetStatus()->SubMode << 4;
-			pProfile->GetStatus()->Buttons.SetPressed(0, joyId, idx);
+			mode = pProfile.GetStatus()->Mode | pProfile.GetStatus()->SubMode << 4;
+			pProfile.GetStatus()->Buttons.SetPressed(0, joyId, idx);
 		}
-		pProfile->UnlockStatus();
+		pProfile.UnlockStatus();
 
-		PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx);
+		PROGRAMMING::BUTTONMODEL* actions = pProfile.GetProfile()->ButtonsMap.GetConf(joyId, &mode, idx);
 		if (actions != nullptr)
 		{
 			bool longRelease = false;
@@ -180,7 +180,7 @@ void CButtonsHats::ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease)
 					{
 						accionId = actions->Actions.at(3);
 					}
-					pProfile->EndProfileRead();
+					pProfile.EndProfileRead();
 					if (accionId != 0)
 					{
 						CGenerateEvents::Command(joyId, accionId, idx, CGenerateEvents::Origin::Button, nullptr);
@@ -195,11 +195,11 @@ void CButtonsHats::ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease)
 						if (pStButtonsMap->contains(id)) //is waiting for longpress so do a short press/release
 						{
 							pStButtonsMap->erase(id);
-							pProfile->LockStatus();
+							pProfile.LockStatus();
 							{
-								pProfile->GetStatus()->Buttons.SetPos(2, true, joyId, mode, idx);
+								pProfile.GetStatus()->Buttons.SetPos(2, true, joyId, mode, idx);
 							}
-							pProfile->UnlockStatus();
+							pProfile.UnlockStatus();
 							ReleaseMutex(hMutexStatus);
 							PressButton(joyId, idx, true);
 
@@ -224,7 +224,7 @@ void CButtonsHats::ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease)
 								}
 								ReleaseMutex(hMutexStatus);
 								SetThreadpoolTimer(timerHandle, &timeout, 0, 0);
-								pProfile->EndProfileRead();
+								pProfile.EndProfileRead();
 								return;
 							}
 						}
@@ -243,7 +243,7 @@ void CButtonsHats::ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease)
 				{
 					accionId = actions->Actions.at(1);
 				}
-				pProfile->EndProfileRead();
+				pProfile.EndProfileRead();
 				if (accionId != 0)
 				{
 					CGenerateEvents::Command(joyId, accionId, idx, CGenerateEvents::Origin::Button, nullptr);
@@ -252,12 +252,12 @@ void CButtonsHats::ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease)
 			}
 			else
 			{
-				pProfile->EndProfileRead();
+				pProfile.EndProfileRead();
 			}
 		}
 		else
 		{
-			pProfile->EndProfileRead();
+			pProfile.EndProfileRead();
 		}
 		CGenerateEvents::CheckHolds();
 	}
@@ -268,26 +268,26 @@ void CButtonsHats::PressHat(UINT32 joyId, UCHAR idx, bool longPress)
 	UINT16 actionId = 0;
 	bool shortPress = 0;
 
-	pProfile->BeginProfileRead();
+	pProfile.BeginProfileRead();
 	{
-		pProfile->LockStatus();
+		pProfile.LockStatus();
 		{
-			UCHAR mode = pProfile->GetStatus()->Mode | pProfile->GetStatus()->SubMode << 4;
+			UCHAR mode = pProfile.GetStatus()->Mode | pProfile.GetStatus()->SubMode << 4;
 
-			PROGRAMMING* pdevExt = pProfile->GetProfile();
+			PROGRAMMING* pdevExt = pProfile.GetProfile();
 			UCHAR pos;
-			if (pProfile->GetStatus()->Hats.GetPos(&pos, joyId, mode, idx))
+			if (pProfile.GetStatus()->Hats.GetPos(&pos, joyId, mode, idx))
 			{
-				PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->HatsMap.GetConf(joyId, &mode, idx);
+				PROGRAMMING::BUTTONMODEL* actions = pProfile.GetProfile()->HatsMap.GetConf(joyId, &mode, idx);
 				if (actions != nullptr)
 				{
 					actionId = actions->Actions.at(pos);
 					if (actions->Type == 1)
 					{
-						pProfile->GetStatus()->Hats.SetPos(1, false, joyId, mode, idx);
-						if (static_cast<UCHAR>(pos + 1) >= pProfile->GetProfile()->HatsMap.GetConf(joyId, &mode, idx)->Actions.size())
+						pProfile.GetStatus()->Hats.SetPos(1, false, joyId, mode, idx);
+						if (static_cast<UCHAR>(pos + 1) >= pProfile.GetProfile()->HatsMap.GetConf(joyId, &mode, idx)->Actions.size())
 						{
-							pProfile->GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
+							pProfile.GetStatus()->Buttons.SetPos(0, true, joyId, mode, idx);
 						}
 					}
 					else if (actions->Type == 2)
@@ -295,7 +295,7 @@ void CButtonsHats::PressHat(UINT32 joyId, UCHAR idx, bool longPress)
 						if (pos == 2)
 						{
 							shortPress = true;
-							pProfile->GetStatus()->Hats.SetPos(0, true, joyId, mode, idx);
+							pProfile.GetStatus()->Hats.SetPos(0, true, joyId, mode, idx);
 						}
 						if (!longPress)
 						{
@@ -325,35 +325,35 @@ void CButtonsHats::PressHat(UINT32 joyId, UCHAR idx, bool longPress)
 							{
 								delete ctx;
 							}
-							pProfile->UnlockStatus();
-							pProfile->EndProfileRead();
+							pProfile.UnlockStatus();
+							pProfile.EndProfileRead();
 							return;
 						}
 					}
 				}
-				pProfile->GetStatus()->Hats.SetPressed(1, joyId, idx);
+				pProfile.GetStatus()->Hats.SetPressed(1, joyId, idx);
 			}
 		}
-		pProfile->UnlockStatus();
+		pProfile.UnlockStatus();
 	}
-	pProfile->EndProfileRead();
+	pProfile.EndProfileRead();
 
 	CGenerateEvents::Command(joyId, actionId, idx, shortPress ? CGenerateEvents::Origin::HatShort : CGenerateEvents::Origin::Hat, nullptr);
 }
 
 void CButtonsHats::ReleaseHat(UINT32 joyId, UCHAR idx, bool shortRelease)
 {
-	pProfile->BeginProfileRead();
+	pProfile.BeginProfileRead();
 	{
 		UCHAR mode;
-		pProfile->LockStatus();
+		pProfile.LockStatus();
 		{
-			mode = pProfile->GetStatus()->Mode | pProfile->GetStatus()->SubMode << 4;
-			pProfile->GetStatus()->Hats.SetPressed(0, joyId, idx);
+			mode = pProfile.GetStatus()->Mode | pProfile.GetStatus()->SubMode << 4;
+			pProfile.GetStatus()->Hats.SetPressed(0, joyId, idx);
 		}
-		pProfile->UnlockStatus();
+		pProfile.UnlockStatus();
 
-		PROGRAMMING::BUTTONMODEL* actions = pProfile->GetProfile()->HatsMap.GetConf(joyId, &mode, idx);
+		PROGRAMMING::BUTTONMODEL* actions = pProfile.GetProfile()->HatsMap.GetConf(joyId, &mode, idx);
 		if (actions != nullptr)
 		{
 			bool longRelease = false;
@@ -366,7 +366,7 @@ void CButtonsHats::ReleaseHat(UINT32 joyId, UCHAR idx, bool shortRelease)
 					{
 						accionId = actions->Actions.at(3);
 					}
-					pProfile->EndProfileRead();
+					pProfile.EndProfileRead();
 					if (accionId != 0)
 					{
 						CGenerateEvents::Command(joyId, accionId, idx, CGenerateEvents::Origin::Hat, nullptr);
@@ -381,11 +381,11 @@ void CButtonsHats::ReleaseHat(UINT32 joyId, UCHAR idx, bool shortRelease)
 						if (pStHatsMap->contains(id)) //is waiting for longpress so do a short press/release
 						{
 							pStHatsMap->erase(id);
-							pProfile->LockStatus();
+							pProfile.LockStatus();
 							{
-								pProfile->GetStatus()->Hats.SetPos(2, true, joyId, mode, idx);
+								pProfile.GetStatus()->Hats.SetPos(2, true, joyId, mode, idx);
 							}
-							pProfile->UnlockStatus();
+							pProfile.UnlockStatus();
 							ReleaseMutex(hMutexStatus);
 							PressButton(joyId, idx, true);
 
@@ -410,7 +410,7 @@ void CButtonsHats::ReleaseHat(UINT32 joyId, UCHAR idx, bool shortRelease)
 								}
 								ReleaseMutex(hMutexStatus);
 								SetThreadpoolTimer(timerHandle, &timeout, 0, 0);
-								pProfile->EndProfileRead();
+								pProfile.EndProfileRead();
 								return;
 							}
 						}
@@ -429,7 +429,7 @@ void CButtonsHats::ReleaseHat(UINT32 joyId, UCHAR idx, bool shortRelease)
 				{
 					accionId = actions->Actions.at(1);
 				}
-				pProfile->EndProfileRead();
+				pProfile.EndProfileRead();
 				if (accionId != 0)
 				{
 					CGenerateEvents::Command(joyId, accionId, idx, CGenerateEvents::Origin::Hat, nullptr);
@@ -438,12 +438,12 @@ void CButtonsHats::ReleaseHat(UINT32 joyId, UCHAR idx, bool shortRelease)
 			}
 			else
 			{
-				pProfile->EndProfileRead();
+				pProfile.EndProfileRead();
 			}
 		}
 		else
 		{
-			pProfile->EndProfileRead();
+			pProfile.EndProfileRead();
 		}
 		CGenerateEvents::CheckHolds();
 	}

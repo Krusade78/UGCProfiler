@@ -1,79 +1,58 @@
 #include "../framework.h"
 #include "USBX52Write.h"
-#include <winusb.h>
-
-
-CX52Write* CX52Write::pLocal = nullptr;
+#include <thread>
 
 CX52Write::CX52Write()
 {
-	pLocal = this;
-	semQueue = CreateSemaphore(NULL, 1, 1, NULL);
-	evQueue = CreateEvent(NULL, TRUE, FALSE, NULL);
-	CreateThread(NULL, 0, WkSend, this, 0, NULL);
+	pInstance = this;
+	threadWk = std::jthread([this](std::stop_token st) { CX52Write::WkSend(st); });
 }
 
 CX52Write::~CX52Write()
 {
-	pLocal = nullptr;
-	exit = true;
-	WaitForSingleObject(semQueue, INFINITE);
-	{
-		while (!queue.empty())
-		{
-			PORDER order = queue.front();
-			delete order;
-			queue.pop();
-		}
-	}
-	ReleaseSemaphore(semQueue, 1, NULL);
-	SetEvent(evQueue);
-	while (exit) { Sleep(500); }
-	CloseHandle(semQueue);
-	CloseHandle(evQueue);
+	pInstance = nullptr;
+
+	threadWk.request_stop();
+	evQueue.notify_all();
 }
 
 #pragma region "Orders"
-void CX52Write::Light_MFD(PUCHAR SystemBuffer)
+void CX52Write::Light_MFD(const std::uint8_t SystemBuffer)
 {
-	UCHAR params[3] = { *(SystemBuffer) ,0 , 0xb1};
+	std::uint8_t params[3] = { SystemBuffer ,0 , 0xb1};
 	SendOrder(params, 1);
 }
 
-void CX52Write::Light_Global(PUCHAR SystemBuffer)
+void CX52Write::Light_Global(const std::uint8_t SystemBuffer)
 {
-	UCHAR params[3] = { *(SystemBuffer),0 ,0xb2 };
+	std::uint8_t params[3] = { SystemBuffer, 0 ,0xb2 };
 	SendOrder(params, 1);
 }
 
-void CX52Write::Light_Info(PUCHAR SystemBuffer)
+void CX52Write::Light_Info(const std::uint8_t SystemBuffer)
 {
-	UCHAR params[3] = { static_cast<UCHAR>(*(SystemBuffer) + 0x50),0 , 0xb4 };
+	std::uint8_t params[3] = { std::uint8_t(SystemBuffer + 0x50),0 , 0xb4 };
 	SendOrder(params, 1);
 }
 
-void CX52Write::Set_Pinkie(PUCHAR SystemBuffer)
+void CX52Write::Set_Pinkie(const std::uint8_t SystemBuffer)
 {
-	UCHAR params[3] = { static_cast<UCHAR>(*(SystemBuffer) + 0x50),0 , 0xfd };
+	std::uint8_t params[3] = { std::uint8_t(SystemBuffer + 0x50), 0 , 0xfd };
 	SendOrder(params, 1);
 }
 
-void CX52Write::Set_Text(PUCHAR SystemBuffer, BYTE bufferSize)
+void CX52Write::Set_Text(std::span<const std::uint8_t> SystemBuffer)
 {
-	UCHAR params[3 * 17]{};
-	UCHAR text[16];
-	UCHAR nparams = 1;
-	UCHAR paramIdx = 0;
+	std::uint8_t params[3 * 17]{};
+	auto text = SystemBuffer.subspan(1);
+	std::uint8_t nparams = 1;
+	std::uint8_t paramIdx = 0;
 
-	if ((bufferSize - 1) > 16)
+	if ((SystemBuffer.size() - 1) > 16)
 		return;
 
-	RtlZeroMemory(text, 16);
-	RtlCopyMemory(text, &(SystemBuffer)[1], bufferSize - 1);
-
-
 	params[0] = 0x0; params[1] = 0;
-	switch (*(SystemBuffer)) //line
+	switch (SystemBuffer[0]) //line
 	{
 	case 1:
 		params[2] = 0xd9;
@@ -87,7 +66,7 @@ void CX52Write::Set_Text(PUCHAR SystemBuffer, BYTE bufferSize)
 		params[2] = 0xdc;
 		paramIdx = 0xd4;
 	}
-	for (UCHAR i = 0; i < 16; i += 2)
+	for (char i = 0; i < 16; i += 2)
 	{
 		if (text[i] == 0)
 			break;
@@ -100,35 +79,35 @@ void CX52Write::Set_Text(PUCHAR SystemBuffer, BYTE bufferSize)
 	SendOrder(params, nparams);
 }
 
-void CX52Write::Set_Hour(PUCHAR SystemBuffer)
+void CX52Write::Set_Hour(const std::array<std::uint8_t, 3>& SystemBuffer)
 {
-	UCHAR params[3] = { (SystemBuffer)[2] ,(SystemBuffer)[1] , static_cast<UCHAR>(*(SystemBuffer) + 0xbf) };
+	std::uint8_t params[3] = { (SystemBuffer)[2] , (SystemBuffer)[1], std::uint8_t(SystemBuffer[0] + 0xbf) };
 	SendOrder(params, 1);
 }
 
-void CX52Write::Set_Hour24(PUCHAR SystemBuffer)
+void CX52Write::Set_Hour24(const std::array<std::uint8_t, 3>& SystemBuffer)
 {
-	UCHAR params[3] = { (SystemBuffer)[2] ,static_cast<UCHAR>((SystemBuffer)[1] + 0x80), static_cast<UCHAR>(*(SystemBuffer) + 0xbf) };
+	std::uint8_t params[3] = { SystemBuffer[2] , std::uint8_t(SystemBuffer[1] + 0x80), std::uint8_t(SystemBuffer[0] + 0xbf) };
 	SendOrder(params, 1);
 }
 
-void CX52Write::Set_Date(PUCHAR SystemBuffer)
+void CX52Write::Set_Date(const std::array<std::uint8_t, 2>& SystemBuffer)
 {
-	UCHAR params[3] = { 0, 0, 0 };
+	std::uint8_t params[3] = { 0, 0, 0 };
 
 	switch (SystemBuffer[0])
 	{
 	case 1:
 		params[2] = 0xc4;
-		params[1] = (UCHAR)(Date >> 8);
+		params[1] = static_cast<std::uint8_t>(Date >> 8);
 		params[0] = SystemBuffer[1];
-		Date = *((USHORT*)params);
+		Date = *(reinterpret_cast<std::uint16_t*>(params));
 		break;
 	case 2:
 		params[2] = 0xc4;
 		params[1] = SystemBuffer[1];
-		params[0] = (UCHAR)(Date & 0xff);
-		Date = *((USHORT*)params);
+		params[0] = static_cast<std::uint8_t>(Date & 0xff);
+		Date = *(reinterpret_cast<std::uint16_t*>(params));
 		break;
 	case 3:
 		params[2] = 0xc8;
@@ -139,64 +118,60 @@ void CX52Write::Set_Date(PUCHAR SystemBuffer)
 }
 #pragma endregion
 
-void CX52Write::SendOrder(UCHAR* buffer, BYTE paquetes)
+void CX52Write::SendOrder(std::uint8_t* buffer, std::uint8_t packets)
 {
-	for (BYTE processed = 0; processed < paquetes; processed++)
+	for (std::uint8_t processed = 0; processed < packets; processed++)
 	{
-		PORDER order = new ORDER;
-		order->value = *((USHORT*)&buffer[processed * 3]);
-		order->idx = buffer[2 + (processed * 3)];
-
-		WaitForSingleObject(semQueue, INFINITE);
+		ORDER order{
+			.value = *(reinterpret_cast<std::uint16_t*>(&buffer[processed * 3])),
+			.idx = buffer[2 + (processed * 3)]
+		};
 		{
+			std::lock_guard<std::mutex> lock(mutexQueue);
 			queue.push(order);
-			SetEvent(evQueue);
 		}
-		ReleaseSemaphore(semQueue, 1, NULL);
+		evQueue.notify_one();
 	}
 }
 
-DWORD WINAPI  CX52Write::WkSend(LPVOID param)
+void CX52Write::WkSend(std::stop_token exit)
 {	
-	CX52Write* local = static_cast<CX52Write*>(param);
-	while (!local->exit)
+	while (true)
 	{
-		PORDER order = nullptr;
-		WaitForSingleObject(local->semQueue, INFINITE);
+		ORDER order;
 		{
-			if (!local->queue.empty())
-			{
-				order = local->queue.front();
-				local->queue.pop();
-				ResetEvent(local->evQueue);
-			}
-		}
-		ReleaseSemaphore(local->semQueue, 1, NULL);
+			std::unique_lock<std::mutex> lock(mutexQueue);
+			evQueue.wait(lock, [&] { return exit.stop_requested() || !queue.empty(); });
 
-		if (order != nullptr)
+			if (exit.stop_requested())
+			{
+				break;
+			}
+
+			order = queue.front();
+			queue.pop();
+		}
+
+		if (!exit.stop_requested())
 		{
 			WINUSB_SETUP_PACKET controlSetupPacket
 			{
 				controlSetupPacket.RequestType = 0b01000000,
 				controlSetupPacket.Request = 0x91, // Request
-				controlSetupPacket.Value = order->value, // Value
-				controlSetupPacket.Index = order->idx, // Index  
+				controlSetupPacket.Value = order.value, // Value
+				controlSetupPacket.Index = order.idx, // Index  
 				controlSetupPacket.Length = 0
 			};
 
-			delete order;
-
-			if (InterlockedCompareExchangePointer(&local->wUSB, nullptr, nullptr) != nullptr)
+			auto pUSB = pwhUSB.load();
+			if (pUSB != nullptr)
 			{
-				WinUsb_ControlTransfer(local->wUSB, controlSetupPacket, NULL, 0, NULL, NULL);
+				auto hUSB = pUSB->load();
+				if (hUSB != nullptr)
+				{
+					WinUsb_ControlTransfer(hUSB, controlSetupPacket, nullptr, 0, nullptr, nullptr);
+				}
 			}
 		}
-		else
-		{
-			WaitForSingleObject(local->evQueue, INFINITE);
-		}
 	}
-
-	local->exit = false;
-	return 0;
 }

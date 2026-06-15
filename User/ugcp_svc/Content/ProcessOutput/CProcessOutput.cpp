@@ -10,11 +10,10 @@
 
 CProcessOutput* CProcessOutput::pNotifications = nullptr;
 
-CProcessOutput::CProcessOutput(CProfile* pProfile, CVirtualHID* pVhid)
+CProcessOutput::CProcessOutput(CProfile& pProfile, CVirtualHID& pVhid)
+	: pProfile(pProfile), pVhid(pVhid)
 {
 	pNotifications = this;
-	this->pProfile = pProfile;
-	this->pVhid = pVhid;
 	hEvEmptyQueue_OnlyHolds = CreateEvent(NULL, TRUE, FALSE, NULL);
 	hWaitLockEvents = CreateSemaphore(NULL, 1, 1, NULL);
 	hMouseTimer = CreateThreadpoolTimer(EvtMouseTick, this, NULL);
@@ -63,9 +62,9 @@ void CProcessOutput::ClearEvents()
 			timersDelayList.pop_front();
 		}
 
-		RtlZeroMemory(&pVhid->GetStatus()->Keyboard, sizeof(pVhid->GetStatus()->Keyboard));
-		RtlZeroMemory(&pVhid->GetStatus()->Mouse, sizeof(pVhid->GetStatus()->Mouse)); //lock is not required here
-		RtlZeroMemory(&pVhid->GetStatus()->DirectX, sizeof(VHID_INPUT_DATA));
+		RtlZeroMemory(&pVhid.GetStatus()->Keyboard, sizeof(pVhid.GetStatus()->Keyboard));
+		RtlZeroMemory(&pVhid.GetStatus()->Mouse, sizeof(pVhid.GetStatus()->Mouse)); //lock is not required here
+		RtlZeroMemory(&pVhid.GetStatus()->DirectX, sizeof(VHID_INPUT_DATA));
 	}
 	ReleaseSemaphore(hWaitLockEvents, 1, NULL);
 }
@@ -161,41 +160,41 @@ void CProcessOutput::ProcessRequest()
 					else if ((command->Type & 0x7f) == CommandType::Key)
 					{
 						ncmds = true;
-						CKeyboard::Processed(command, pVhid);
+						CKeyboard::Processed(command);
 						deleted = true;
 					}
 					else if ((command->Type & 0x7f) == CommandType::PreciseMode)
 					{
-						pProfile->LockStatus();
+						pProfile.LockStatus();
 						{
 							if ((command->Type & 0x80) == CommandType::Release)
 							{
-								pProfile->GetStatus()->AxisPreciseMode.SetStatus(0, command->AxisPrecise.InputJoy, command->AxisPrecise.Axis);
+								pProfile.GetStatus()->AxisPreciseMode.SetStatus(0, command->AxisPrecise.InputJoy, command->AxisPrecise.Axis);
 							}
 							else
 							{
-								pProfile->GetStatus()->AxisPreciseMode.SetStatus(1, command->AxisPrecise.InputJoy, command->AxisPrecise.Axis);
+								pProfile.GetStatus()->AxisPreciseMode.SetStatus(1, command->AxisPrecise.InputJoy, command->AxisPrecise.Axis);
 							}
 						}
-						pProfile->UnlockStatus();
+						pProfile.UnlockStatus();
 						deleted = true;
 					}
 					else if (command->Type == CommandType::Mode)
 					{
-						pProfile->LockStatus();
+						pProfile.LockStatus();
 						{
-							pProfile->GetStatus()->Mode = command->Basic.Data1;
+							pProfile.GetStatus()->Mode = command->Basic.Data1;
 						}
-						pProfile->UnlockStatus();
+						pProfile.UnlockStatus();
 						deleted = true;
 					}
 					else if (command->Type == CommandType::Submode)
 					{
-						pProfile->LockStatus();
+						pProfile.LockStatus();
 						{
-							pProfile->GetStatus()->SubMode = command->Basic.Data1;
+							pProfile.GetStatus()->SubMode = command->Basic.Data1;
 						}
-						pProfile->UnlockStatus();
+						pProfile.UnlockStatus();
 						deleted = true;
 					}
 					else if (CX52::Process(commandQueue))
@@ -216,11 +215,11 @@ void CProcessOutput::ProcessRequest()
 							if (setTimer)
 							{
 								UCHAR tick = 100;
-								pProfile->BeginProfileRead();
+								pProfile.BeginProfileRead();
 								{
-									tick = pProfile->GetProfile()->MouseTick;
+									tick = pProfile.GetProfile()->MouseTick;
 								}
-								pProfile->EndProfileRead();
+								pProfile.EndProfileRead();
 								LARGE_INTEGER lit{};
 								lit.QuadPart = -10000LL * tick;
 								FILETIME ft{};
@@ -276,48 +275,47 @@ void APIENTRY CProcessOutput::EvtMouseTick(_Inout_ PTP_CALLBACK_INSTANCE Instanc
 	EV_COMMAND command;
 	RtlZeroMemory(&command, sizeof(EV_COMMAND));
 	
-	local->pVhid->LockMouse();
 	{
-		if (local->pVhid->GetStatus()->Mouse.X != 0)
+		std::lock_guard<std::mutex> lock(CMouse::GetLock());
+		if (local->pVhid.GetStatus()->Mouse.X != 0)
 		{
-			if (local->pVhid->GetStatus()->Mouse.X < 0)
+			if (local->pVhid.GetStatus()->Mouse.X < 0)
 			{
 				command.Type = CommandType::MouseLeft;
-				command.Basic.Data1 = -local->pVhid->GetStatus()->Mouse.X;
+				command.Basic.Data1 = -local->pVhid.GetStatus()->Mouse.X;
 			}
 			else
 			{
 				command.Type = CommandType::MouseRight;
-				command.Basic.Data1 = local->pVhid->GetStatus()->Mouse.X;
+				command.Basic.Data1 = local->pVhid.GetStatus()->Mouse.X;
 			}
 			send = true;
 		}
 	}
-	local->pVhid->UnlockMouse();
+
 	if (send)
 	{
 		CGenerateEvents::Mouse(&command);
 	}
 
 	send = false;
-	local->pVhid->LockMouse();
 	{
-		if (local->pVhid->GetStatus()->Mouse.Y != 0)
+		std::lock_guard<std::mutex> lock(CMouse::GetLock());
+		if (local->pVhid.GetStatus()->Mouse.Y != 0)
 		{
-			if (local->pVhid->GetStatus()->Mouse.Y < 0)
+			if (local->pVhid.GetStatus()->Mouse.Y < 0)
 			{
 				command.Type = CommandType::MouseUp;
-				command.Basic.Data1 = -local->pVhid->GetStatus()->Mouse.Y;
+				command.Basic.Data1 = -local->pVhid.GetStatus()->Mouse.Y;
 			}
 			else
 			{
 				command.Type = CommandType::MouseDown;
-				command.Basic.Data1 = local->pVhid->GetStatus()->Mouse.Y;
+				command.Basic.Data1 = local->pVhid.GetStatus()->Mouse.Y;
 			}
 			send = true;
 		}
 	}
-	local->pVhid->UnlockMouse();
 	if (send)
 	{
 		CGenerateEvents::Mouse(&command);

@@ -1,32 +1,31 @@
 #include "../framework.h"
 #include "MFDMenu.h"
 #include "USBX52Write.h"
-
-CMFDMenu* CMFDMenu::pLocal = nullptr;
+#include <fstream>
 
 CMFDMenu::CMFDMenu()
 {
-	pLocal = this;
-	RtlZeroMemory(&menuMFD, sizeof(menuMFD));
+	pInstance = this;
+	menuMFD = {};
 	ReadConfiguration();
-	menuMFD.TimerMenu = CreateThreadpoolTimer(EvtTickMenu, this, NULL);
-	menuMFD.TimerHour = CreateThreadpoolTimer(EvtTickHour, this, NULL);
+	timerMenu = CreateThreadpoolTimer(EvtTickMenu, this, nullptr);
+	timerHour = CreateThreadpoolTimer(EvtTickHour, this, nullptr);
 
 	LARGE_INTEGER t{};
 	t.QuadPart = -40000000LL; //4 seconds
 	FILETIME timeout{};
 	timeout.dwHighDateTime = t.HighPart;
 	timeout.dwLowDateTime = t.LowPart;
-	SetThreadpoolTimer(menuMFD.TimerHour, &timeout, 4000, 0);
+	SetThreadpoolTimer(timerHour, &timeout, 4000, 0);
 }
 
 CMFDMenu::~CMFDMenu()
 {
-	pLocal = nullptr;
-	SetThreadpoolTimer(menuMFD.TimerHour, NULL, 0, 0);
-	CloseThreadpoolTimer(menuMFD.TimerHour);
-	SetThreadpoolTimer(menuMFD.TimerMenu, NULL, 0, 0);
-	CloseThreadpoolTimer(menuMFD.TimerMenu);
+	pInstance = nullptr;
+	SetThreadpoolTimer(timerHour, nullptr, 0, 0);
+	CloseThreadpoolTimer(timerHour);
+	SetThreadpoolTimer(timerMenu, nullptr, 0, 0);
+	CloseThreadpoolTimer(timerMenu);
 	if (menuMFD.Activated)
 	{
 		CloseMenu();
@@ -35,15 +34,15 @@ CMFDMenu::~CMFDMenu()
 
 void CMFDMenu::SetWelcome()
 {
-	UCHAR row1[] = "\x01  Saitek X-52";
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(row1, static_cast<BYTE>(strnlen_s((char*)row1, 17)));
-	UCHAR row2[] = "\x02  Driver v11.0";
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(row2, static_cast<BYTE>(strnlen_s((char*)row2, 17)));
-	UCHAR row3[] = "\x03 ";
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(row3, static_cast<BYTE>(strnlen_s((char*)row3, 17)));
+	std::uint8_t row1[] = "\x01  Saitek X-52";
+	CX52Write::Get().Set_Text(row1);
+	std::uint8_t row2[] = "\x02  Driver v11.0";
+	CX52Write::Get().Set_Text(row2);
+	std::uint8_t row3[] = "\x03 ";
+	CX52Write::Get().Set_Text(row3);
 
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_Global(&menuMFD.GlobalLight);
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_MFD(&menuMFD.MFDLight);
+	CX52Write::Get().Light_Global(menuMFD.GlobalLight);
+	CX52Write::Get().Light_MFD(menuMFD.MFDLight);
 }
 
 #pragma region "Configuration"
@@ -52,118 +51,115 @@ void CMFDMenu::ReadConfiguration()
 	menuMFD.IsHourActivated = true;
 	menuMFD.IsDateActivated = true;
 
-	HANDLE f = CreateFile(L"mfdconf.dat", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-	if (f != INVALID_HANDLE_VALUE)
+	std::ifstream f("mfdconf.dat", std::ios_base::binary);
+	if (f.is_open())
 	{
-		DWORD size;
-		SHORT value = 0;
-		if (ReadFile(f, &value, 2, &size, NULL))
-		{
-			menuMFD.IsNXTActivated = static_cast<bool>(value);
-			if (ReadFile(f, &value, 2, &size, NULL))
-			{
-				menuMFD.GlobalLight = static_cast<UCHAR>(value);
-				if (ReadFile(f, &value, 2, &size, NULL))
-				{
-					menuMFD.MFDLight = static_cast<UCHAR>(value);
-					if (ReadFile(f, &value, 2, &size, NULL))
-					{
-						menuMFD.Hour[0].Minutes = value;
-						if (ReadFile(f, &value, 2, &size, NULL))
-						{
-							menuMFD.Hour[1].Minutes = value;
-							if (ReadFile(f, &value, 2, &size, NULL))
-							{
-								menuMFD.Hour[2].Minutes = value;
-								if (ReadFile(f, &value, 2, &size, NULL))
-								{
-									menuMFD.Hour[0]._24h = static_cast<bool>(value);
-									if (ReadFile(f, &value, 2, &size, NULL))
-									{
-										menuMFD.Hour[1]._24h = static_cast<bool>(value);
-										if (ReadFile(f, &value, 2, &size, NULL))
-											menuMFD.Hour[2]._24h = static_cast<bool>(value);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		CloseHandle(f);
+		short value = 0;
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.IsNXTActivated = static_cast<bool>(value);
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.GlobalLight = static_cast<std::uint8_t>(value);
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.MFDLight = static_cast<std::uint8_t>(value);
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.Hour[0].Minutes = value;
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.Hour[1].Minutes = value;
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.Hour[2].Minutes = value;
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.Hour[0]._24h = value == 1;
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.Hour[1]._24h = value == 1;
+
+		f.read(reinterpret_cast<char*>(&value), 2);
+		if (!f.good()) { return; }
+		menuMFD.Hour[2]._24h = value == 1;
 	}
 }
 
 void CMFDMenu::SaveConfiguration() const
 {
-	HANDLE f = CreateFile(L"mfdconf.dat", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL);
-	if (f != INVALID_HANDLE_VALUE)
+	std::ofstream f("mfdconf.dat", std::ios_base::binary | std::ios_base::trunc);
+	if (f.is_open())
 	{
-		DWORD size;
-		SHORT value = 0;
+		short value = 0;
 		value = static_cast<short>(menuMFD.IsNXTActivated);
-		if (WriteFile(f, &value, 2, &size, NULL))
-		{
-			value = static_cast<short>(menuMFD.GlobalLight);
-			if (WriteFile(f, &value, 2, &size, NULL))
-			{
-				value = static_cast<short>(menuMFD.MFDLight);
-				if (WriteFile(f, &value, 2, &size, NULL))
-				{
-					value = menuMFD.Hour[0].Minutes;
-					if (WriteFile(f, &value, 2, &size, NULL))
-					{
-						value = menuMFD.Hour[1].Minutes;
-						if (WriteFile(f, &value, 2, &size, NULL))
-						{
-							value = menuMFD.Hour[2].Minutes;
-							if (WriteFile(f, &value, 2, &size, NULL))
-							{
-								value = static_cast<short>(menuMFD.Hour[0]._24h);
-								if (WriteFile(f, &value, 2, &size, NULL))
-								{
-									value = static_cast<short>(menuMFD.Hour[1]._24h);
-									if (WriteFile(f, &value, 2, &size, NULL))
-									{
-										value = static_cast<short>(menuMFD.Hour[2]._24h);
-										WriteFile(f, &value, 2, &size, NULL);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		CloseHandle(f);
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+
+		value = static_cast<short>(menuMFD.GlobalLight);
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+		
+		value = static_cast<short>(menuMFD.MFDLight);
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+		
+		value = menuMFD.Hour[0].Minutes;
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+		
+		value = menuMFD.Hour[1].Minutes;
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+		
+		value = menuMFD.Hour[2].Minutes;
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+		
+		value = menuMFD.Hour[0]._24h ? 1 : 0;
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+		
+		value = menuMFD.Hour[1]._24h ? 1 : 0;
+		f.write(reinterpret_cast<const char*>(&value), 2);
+		if (!f.good()) { return; }
+		
+		value = menuMFD.Hour[2]._24h ? 1 : 0;
+		f.write(reinterpret_cast<const char*>(&value), 2);
 	}
 }
 #pragma endregion
 
-void CALLBACK CMFDMenu::EvtTickHour(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_TIMER Timer)
+void CALLBACK CMFDMenu::EvtTickHour(_Inout_ PTP_CALLBACK_INSTANCE pcInstance, _Inout_opt_ PVOID context, _Inout_ PTP_TIMER pTimer)
 {
-	if (Context != NULL)
+	if (context != NULL)
 	{
-		CMFDMenu* local = static_cast<CMFDMenu*>(Context);
-		UCHAR bf[3] = { 0, 0, 0 };
+		CMFDMenu* local = static_cast<CMFDMenu*>(context);
 		SYSTEMTIME now;
 		GetLocalTime(&now);
 
 		if (local->menuMFD.IsDateActivated)
 		{
-			bf[0] = 1; bf[1] = (UCHAR)now.wDay;
-			if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Date(bf);
-			bf[0] = 2; bf[1] = (UCHAR)now.wMonth;
-			if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Date(bf);
-			bf[0] = 3; bf[1] = (UCHAR)(now.wYear % 100);
-			if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Date(bf);
+			std::array<std::uint8_t, 2> bfd{};
+			bfd[0] = 1; bfd[1] = static_cast<std::uint8_t>(now.wDay);
+			CX52Write::Get().Set_Date(bfd);
+			bfd[0] = 2; bfd[1] = static_cast<std::uint8_t>(now.wMonth);
+			CX52Write::Get().Set_Date(bfd);
+			bfd[0] = 3; bfd[1] = static_cast<std::uint8_t>(now.wYear % 100);
+			CX52Write::Get().Set_Date(bfd);
 		}
 
 		if (local->menuMFD.IsHourActivated)
 		{
-			LONG hour = local->menuMFD.Hour[0].Minutes * 60;
-			__int64 absHour = ((hour < 0) ? -1 : 1) * static_cast<__int64>(hour);
+			long hour = local->menuMFD.Hour[0].Minutes * 60;
+			std::int64_t absHour = ((hour < 0) ? -1 : 1) * static_cast<__int64>(hour);
 			FILETIME nowFT;
 			SystemTimeToFileTime(&now, &nowFT);
 			LARGE_INTEGER liNowFT{};
@@ -174,33 +170,34 @@ void CALLBACK CMFDMenu::EvtTickHour(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Ino
 			nowFT.dwHighDateTime = liNowFT.HighPart;
 			nowFT.dwLowDateTime = liNowFT.LowPart;
 			FileTimeToSystemTime(&nowFT, &now);
+			std::array<std::uint8_t, 3> bf{};
 			bf[0] = 1;
-			bf[1] = (UCHAR)now.wHour;
-			bf[2] = (UCHAR)now.wMinute;
+			bf[1] = static_cast<std::uint8_t>(now.wHour);
+			bf[2] = static_cast<std::uint8_t>(now.wMinute);
 			if (local->menuMFD.Hour[0]._24h)
 			{
-				if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Hour24(bf);
+				CX52Write::Get().Set_Hour24(bf);
 			}
 			else
 			{
-				if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Hour(bf);
+				CX52Write::Get().Set_Hour(bf);
 			}
 		}
 	}
 }
 
-void CALLBACK CMFDMenu::EvtTickMenu(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_TIMER Timer)
+void CALLBACK CMFDMenu::EvtTickMenu(_Inout_ PTP_CALLBACK_INSTANCE pcInstance, _Inout_opt_ PVOID context, _Inout_ PTP_TIMER pTimer)
 {
-	if (Context != NULL)
+	if (context != NULL)
 	{
-		CMFDMenu* local = static_cast<CMFDMenu*>(Context);
-		UCHAR param = 1;
+		CMFDMenu* local = static_cast<CMFDMenu*>(context);
+		std::uint8_t param = 1;
 
 		local->menuMFD.Activated = true;
 		local->menuMFD.TimerWaiting = false;
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_Info(&param);
+		CX52Write::Get().Light_Info(param);
 		param = 2;
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_MFD(&param);
+		CX52Write::Get().Light_MFD(param);
 		local->menuMFD.ButtonStatus = 0;
 		local->menuMFD.CursorStatus = 0;
 		local->menuMFD.PageStatus = 0;
@@ -209,52 +206,51 @@ void CALLBACK CMFDMenu::EvtTickMenu(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Ino
 }
 
 #pragma region "Menu"
-void CMFDMenu::MenuPressButton(UCHAR button)
-{
-	if (button == static_cast<UCHAR>(Button::Enter))
-	{
-		if (!menuMFD.TimerWaiting && !menuMFD.Activated)
-		{
-			menuMFD.TimerWaiting = true;
-			LARGE_INTEGER t{};
-			t.QuadPart = -30000000LL; //3 segundos
-			FILETIME timeout{};
-			timeout.dwHighDateTime = t.HighPart;
-			timeout.dwLowDateTime = t.LowPart;
-			SetThreadpoolTimer(menuMFD.TimerMenu, &timeout, 0, 0);
-		}
-	}
-	if (menuMFD.Activated)
-	{
-		menuMFD.ButtonStatus |= 1 << button;
-	}
+//void CMFDMenu::MenuPressButton(std::uint8_t button)
+//{
+//	if (button == static_cast<std::uint8_t>(Button::Enter))
+//	{
+//		if (!menuMFD.TimerWaiting && !menuMFD.Activated)
+//		{
+//			menuMFD.TimerWaiting = true;
+//			LARGE_INTEGER t{};
+//			t.QuadPart = -30000000LL; //3 segundos
+//			FILETIME timeout{};
+//			timeout.dwHighDateTime = t.HighPart;
+//			timeout.dwLowDateTime = t.LowPart;
+//			SetThreadpoolTimer(timerMenu, &timeout, 0, 0);
+//		}
+//	}
+//	if (menuMFD.Activated)
+//	{
+//		menuMFD.ButtonStatus |= 1u << button;
+//	}
+//}
+//
+//void CMFDMenu::MenuReleaseButton(std::uint8_t button)
+//{
+//	if (button == static_cast<std::uint8_t>(Button::Enter))
+//	{
+//		if (menuMFD.TimerWaiting && !menuMFD.Activated)
+//		{
+//			menuMFD.TimerWaiting = false;
+//			SetThreadpoolTimer(timerMenu, nullptr, 0, 0);
+//		}
+//	}
+//	if (menuMFD.Activated)
+//	{
+//		if ((menuMFD.ButtonStatus >> button) & 1)
+//		{
+//			ChangeStatus(button);
+//		}
+//		menuMFD.ButtonStatus &= ~((std::uint8_t)(1 << button));
+//	}
+//}
 
-}
-
-void CMFDMenu::MenuReleaseButton(UCHAR button)
-{
-	if (button == static_cast<UCHAR>(Button::Enter))
-	{
-		if (menuMFD.TimerWaiting && !menuMFD.Activated)
-		{
-			menuMFD.TimerWaiting = false;
-			SetThreadpoolTimer(menuMFD.TimerMenu, NULL, 0, 0);
-		}
-	}
-	if (menuMFD.Activated)
-	{
-		if ((menuMFD.ButtonStatus >> button) & 1)
-		{
-			ChangeStatus(button);
-		}
-		menuMFD.ButtonStatus &= ~((UCHAR)(1 << button));
-	}
-}
-
-void CMFDMenu::ChangeStatus(UCHAR button)
+void CMFDMenu::ChangeStatus(std::uint8_t button)
 {
 	#pragma region "Enter button"
-	if (button == static_cast<UCHAR>(Button::Enter))
+	if (button == static_cast<std::uint8_t>(Button::Enter))
 	{
 		switch (menuMFD.PageStatus)
 		{
@@ -279,17 +275,17 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 					case 3:
 						menuMFD.CursorStatus = 0;
 						menuMFD.PageStatus = 4;
-						ShowPageHour(false, (CHAR)(menuMFD.Hour[0].Minutes / 60), (((menuMFD.Hour[0].Minutes < 0) ? -1 : 1) * menuMFD.Hour[0].Minutes) % 60, menuMFD.Hour[0]._24h);
+						ShowPageHour(false, static_cast<char>(menuMFD.Hour[0].Minutes / 60), (((menuMFD.Hour[0].Minutes < 0) ? -1 : 1) * menuMFD.Hour[0].Minutes) % 60, menuMFD.Hour[0]._24h);
 						break;
 					case 4:
 						menuMFD.CursorStatus = 0;
 						menuMFD.PageStatus = 5;
-						ShowPageHour(false, (CHAR)(menuMFD.Hour[1].Minutes / 60), (((menuMFD.Hour[1].Minutes < 0) ? -1 : 1) * menuMFD.Hour[1].Minutes) % 60, menuMFD.Hour[1]._24h);
+						ShowPageHour(false, static_cast<char>(menuMFD.Hour[1].Minutes / 60), (((menuMFD.Hour[1].Minutes < 0) ? -1 : 1) * menuMFD.Hour[1].Minutes) % 60, menuMFD.Hour[1]._24h);
 						break;
 					case 5:
 						menuMFD.CursorStatus = 0;
 						menuMFD.PageStatus = 6;
-						ShowPageHour(false, (CHAR)(menuMFD.Hour[0].Minutes / 60), (((menuMFD.Hour[2].Minutes < 0) ? -1 : 1) * menuMFD.Hour[2].Minutes) % 60, menuMFD.Hour[2]._24h);
+						ShowPageHour(false, static_cast<char>(menuMFD.Hour[2].Minutes / 60), (((menuMFD.Hour[2].Minutes < 0) ? -1 : 1) * menuMFD.Hour[2].Minutes) % 60, menuMFD.Hour[2]._24h);
 						break;
 					case 6:
 						CloseMenu();
@@ -304,7 +300,7 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 				break;
 			case 2: // global light
 				menuMFD.GlobalLight = menuMFD.CursorStatus;
-				if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_Global(&menuMFD.GlobalLight);
+				CX52Write::Get().Light_Global(menuMFD.GlobalLight);
 				menuMFD.CursorStatus = 1;
 				menuMFD.PageStatus = 0;
 				ShowPage1();
@@ -327,68 +323,68 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 				else
 				{
 					menuMFD.PageStatus = (menuMFD.PageStatus * 10 + menuMFD.CursorStatus);
-					ShowPageHour(true, (CHAR)(menuMFD.Hour[0].Minutes / 60), (((menuMFD.Hour[0].Minutes < 0) ? -1 : 1) * menuMFD.Hour[0].Minutes) % 60, menuMFD.Hour[0]._24h);
+					ShowPageHour(true, static_cast<char>(menuMFD.Hour[0].Minutes / 60), (((menuMFD.Hour[0].Minutes < 0) ? -1 : 1) * menuMFD.Hour[0].Minutes) % 60, menuMFD.Hour[0]._24h);
 				}
 				break;
 			case 40:
 			case 41:
 			case 42:
 				menuMFD.PageStatus = 4;
-				ShowPageHour(false, (CHAR)(menuMFD.Hour[0].Minutes / 60), (((menuMFD.Hour[0].Minutes < 0) ? -1 : 1) * menuMFD.Hour[0].Minutes) % 60, menuMFD.Hour[0]._24h);
+				ShowPageHour(false, static_cast<char>(menuMFD.Hour[0].Minutes / 60), (((menuMFD.Hour[0].Minutes < 0) ? -1 : 1) * menuMFD.Hour[0].Minutes) % 60, menuMFD.Hour[0]._24h);
 				break;
 			case 50:
 			case 51:
 			case 52:
 				{
-					UCHAR buffer[3] = { 2, 0, 0 };
+					std::array<std::uint8_t, 3> buffer = { 2, 0, 0 };
 					if (menuMFD.Hour[1].Minutes < 0)
 					{
-						buffer[1] = (UCHAR)(((-menuMFD.Hour[1].Minutes) >> 8) + 4);
-						buffer[2] = (UCHAR)((-menuMFD.Hour[1].Minutes) & 0xff);
+						buffer[1] = static_cast<std::uint8_t>(((-menuMFD.Hour[1].Minutes) >> 8) + 4);
+						buffer[2] = static_cast<std::uint8_t>((-menuMFD.Hour[1].Minutes) & 0xff);
 					}
 					else
 					{
-						buffer[1] = (UCHAR)(menuMFD.Hour[1].Minutes >> 8);
-						buffer[2] = (UCHAR)(menuMFD.Hour[1].Minutes & 0xff);
+						buffer[1] = static_cast<std::uint8_t>(menuMFD.Hour[1].Minutes >> 8);
+						buffer[2] = static_cast<std::uint8_t>(menuMFD.Hour[1].Minutes & 0xff);
 					}
 					if (menuMFD.Hour[1]._24h)
 					{
-						if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Hour24(buffer);
+						CX52Write::Get().Set_Hour24(buffer);
 					}
 					else
 					{
-						if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Hour24(buffer);
+						CX52Write::Get().Set_Hour24(buffer);
 					}
 
 					menuMFD.PageStatus = 5;
-					ShowPageHour(false, (CHAR)(menuMFD.Hour[1].Minutes / 60), (((menuMFD.Hour[1].Minutes < 0) ? -1 : 1) * menuMFD.Hour[1].Minutes) % 60, menuMFD.Hour[1]._24h);
+					ShowPageHour(false, static_cast<char>(menuMFD.Hour[1].Minutes / 60), (((menuMFD.Hour[1].Minutes < 0) ? -1 : 1) * menuMFD.Hour[1].Minutes) % 60, menuMFD.Hour[1]._24h);
 				}
 				break;
 			case 60:
 			case 61:
 			case 62:
 				{
-					UCHAR buffer[3] = { 3, 0, 0 };
+					std::array<std::uint8_t, 3> buffer = { 3, 0, 0 };
 					if (menuMFD.Hour[2].Minutes < 0)
 					{
-						buffer[1] = (UCHAR)(((-menuMFD.Hour[2].Minutes) >> 8) + 4);
-						buffer[2] = (UCHAR)((-menuMFD.Hour[2].Minutes) & 0xff);
+						buffer[1] = static_cast<std::uint8_t>(((-menuMFD.Hour[2].Minutes) >> 8) + 4);
+						buffer[2] = static_cast<std::uint8_t>((-menuMFD.Hour[2].Minutes) & 0xff);
 					}
 					else
 					{
-						buffer[1] = (UCHAR)(menuMFD.Hour[2].Minutes >> 8);
-						buffer[2] = (UCHAR)(menuMFD.Hour[2].Minutes & 0xff);
+						buffer[1] = static_cast<std::uint8_t>(menuMFD.Hour[2].Minutes >> 8);
+						buffer[2] = static_cast<std::uint8_t>(menuMFD.Hour[2].Minutes & 0xff);
 					}
 					if (menuMFD.Hour[2]._24h)
 					{
-						if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Hour24(buffer);
+						CX52Write::Get().Set_Hour24(buffer);
 					}
 					else
 					{
-						if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Hour24(buffer);
+						CX52Write::Get().Set_Hour24(buffer);
 					}
 					menuMFD.PageStatus = 6;
-					ShowPageHour(false, (CHAR)(menuMFD.Hour[2].Minutes / 60), (((menuMFD.Hour[2].Minutes < 0) ? -1 : 1) * menuMFD.Hour[2].Minutes) % 60, menuMFD.Hour[2]._24h);
+					ShowPageHour(false, static_cast<char>(menuMFD.Hour[2].Minutes / 60), (((menuMFD.Hour[2].Minutes < 0) ? -1 : 1) * menuMFD.Hour[2].Minutes) % 60, menuMFD.Hour[2]._24h);
 				}
 				break;
 		}
@@ -396,7 +392,7 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 	#pragma endregion
 
 	#pragma region "button up"
-	else if (button == static_cast<UCHAR>(Button::Up))
+	else if (button == static_cast<std::uint8_t>(Button::Up))
 	{
 		switch (menuMFD.PageStatus)
 		{
@@ -429,39 +425,39 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 				{
 					menuMFD.CursorStatus--;
 				}
-				ShowPageHour(false, (CHAR)(menuMFD.Hour[menuMFD.PageStatus - 4].Minutes / 60), (((menuMFD.Hour[menuMFD.PageStatus - 4].Minutes < 0) ? -1 : 1) * menuMFD.Hour[menuMFD.PageStatus - 4].Minutes) % 60, menuMFD.Hour[menuMFD.PageStatus - 4]._24h);
+				ShowPageHour(false, static_cast<char>(menuMFD.Hour[menuMFD.PageStatus - 4].Minutes / 60), (((menuMFD.Hour[menuMFD.PageStatus - 4].Minutes < 0) ? -1 : 1) * menuMFD.Hour[menuMFD.PageStatus - 4].Minutes) % 60, menuMFD.Hour[menuMFD.PageStatus - 4]._24h);
 				break;
 			case 40:
 			case 50:
 			case 60:
 				{
-					CHAR idx = (menuMFD.PageStatus / 10) - 4;
+					char idx = (menuMFD.PageStatus / 10) - 4;
 					if ((menuMFD.Hour[0].Minutes / 60) != 23)
 					{
 						menuMFD.Hour[idx].Minutes += 60;
 					}
-					ShowPageHour(true, (CHAR)(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
+					ShowPageHour(true, static_cast<char>(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
 				}
 				break;
 			case 41:
 			case 51:
 			case 61:
 				{
-					CHAR idx = (menuMFD.PageStatus / 10) - 4;
+					char idx = (menuMFD.PageStatus / 10) - 4;
 					if ((menuMFD.Hour[0].Minutes % 60) != 59)
 					{
 						menuMFD.Hour[idx].Minutes++;
 					}
-					ShowPageHour(true, (CHAR)(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
+					ShowPageHour(true, static_cast<char>(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
 				}
 				break;
 			case 42:
 			case 52:
 			case 62:
 				{
-					CHAR idx = (menuMFD.PageStatus / 10) - 4;
-					menuMFD.Hour[idx]._24h = ~menuMFD.Hour[idx]._24h;
-					ShowPageHour(true, (CHAR)(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
+					char idx = (menuMFD.PageStatus / 10) - 4;
+					menuMFD.Hour[idx]._24h = !menuMFD.Hour[idx]._24h;
+					ShowPageHour(true, static_cast<char>(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
 				}
 				break;
 		}
@@ -469,7 +465,7 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 	#pragma endregion
 
 	#pragma region "button down"
-	else if (button == static_cast<UCHAR>(Button::Down))
+	else if (button == static_cast<std::uint8_t>(Button::Down))
 	{
 		switch (menuMFD.PageStatus)
 		{
@@ -502,39 +498,39 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 				{
 					menuMFD.CursorStatus++;
 				}
-				ShowPageHour(false, (CHAR)(menuMFD.Hour[menuMFD.PageStatus - 4].Minutes / 60), (((menuMFD.Hour[menuMFD.PageStatus - 4].Minutes < 0) ? -1 : 1) * menuMFD.Hour[menuMFD.PageStatus - 4].Minutes) % 60, menuMFD.Hour[menuMFD.PageStatus - 4]._24h);
+				ShowPageHour(false, static_cast<char>(menuMFD.Hour[menuMFD.PageStatus - 4].Minutes / 60), (((menuMFD.Hour[menuMFD.PageStatus - 4].Minutes < 0) ? -1 : 1) * menuMFD.Hour[menuMFD.PageStatus - 4].Minutes) % 60, menuMFD.Hour[menuMFD.PageStatus - 4]._24h);
 				break;
 			case 40:
 			case 50:
 			case 60:
 				{
-					CHAR idx = (menuMFD.PageStatus / 10) - 4;
+					char idx = (menuMFD.PageStatus / 10) - 4;
 					if ((menuMFD.Hour[0].Minutes / 60) != -23)
 					{
 						menuMFD.Hour[idx].Minutes -= 60;
 					}
-					ShowPageHour(true, (CHAR)(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
+					ShowPageHour(true, static_cast<char>(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
 				}
 				break;
 			case 41:
 			case 51:
 			case 61:
 				{
-					CHAR idx = (menuMFD.PageStatus / 10) - 4;
+					char idx = (menuMFD.PageStatus / 10) - 4;
 					if ((menuMFD.Hour[0].Minutes % 60) != 0)
 					{
 						menuMFD.Hour[idx].Minutes--;
 					}
-					ShowPageHour(true, (CHAR)(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
+					ShowPageHour(true, static_cast<char>(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
 				}
 				break;
 			case 42:
 			case 52:
 			case 62:
 				{
-					CHAR idx = (menuMFD.PageStatus / 10) - 4;
-					menuMFD.Hour[idx]._24h = ~menuMFD.Hour[idx]._24h;
-					ShowPageHour(true, (CHAR)(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
+					char idx = (menuMFD.PageStatus / 10) - 4;
+					menuMFD.Hour[idx]._24h = !menuMFD.Hour[idx]._24h;
+					ShowPageHour(true, static_cast<char>(menuMFD.Hour[idx].Minutes / 60), (((menuMFD.Hour[idx].Minutes < 0) ? -1 : 1) * menuMFD.Hour[idx].Minutes) % 60, menuMFD.Hour[idx]._24h);
 				}
 				break;
 		}
@@ -545,18 +541,19 @@ void CMFDMenu::ChangeStatus(UCHAR button)
 void CMFDMenu::CloseMenu()
 {
 	//clear screen
-	UCHAR row[2] = { 1, 0 };
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(row, 2);
-	row[0] = 2;
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(row, 2);
-	row[0] = 3;
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(row, 2);
+	static constexpr std::uint8_t row1[2] = { 1, 0 };
+	CX52Write::Get().Set_Text(row1);
+	static constexpr std::uint8_t row2[2] = { 2, 0 };
+	CX52Write::Get().Set_Text(row2);
+	static constexpr std::uint8_t row3[2] = { 3, 0 };
+	CX52Write::Get().Set_Text(row3);
 
 	//turn of light
-	row[0] = 0;
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_Info(&row[0]);
+	{
+		CX52Write::Get().Light_Info(0);
+	}
 
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Light_MFD(&menuMFD.MFDLight);
+	CX52Write::Get().Light_MFD(menuMFD.MFDLight);
 
 	SaveConfiguration();
 	menuMFD.Activated = false;
@@ -566,45 +563,41 @@ void CMFDMenu::CloseMenu()
 #pragma region "Pages"
 void  CMFDMenu::ShowPage1() const
 {
-	UCHAR cursor = menuMFD.CursorStatus % 3;
-	UCHAR page = menuMFD.CursorStatus / 3;
-	CHAR f1[16], f2[16], f3[16], f4[16], f5[16], f6[16], f7[16], f8[16];
-	CHAR* rows[9]{f1, f2, f3, f4, f5, f6, f7, f8, f8};
-
-	RtlCopyMemory(f1, " Gladiator NXT  ", 16);
-	RtlCopyMemory(f2, " Luz botones    ", 16);
-	RtlCopyMemory(f3, " Luz MFD        ", 16);
-	RtlCopyMemory(f4, " Hora 1         ", 16);
-	RtlCopyMemory(f5, " Hora 2         ", 16);
-	RtlCopyMemory(f6, " Hora 3         ", 16); //251
-	RtlCopyMemory(f7, " Salir          ", 16); //252
-	RtlCopyMemory(f8, "                ", 16);
+	std::uint8_t cursor = menuMFD.CursorStatus % 3;
+	std::uint8_t page = menuMFD.CursorStatus / 3;
+	char f1[17] = " Gladiator NXT  ";
+	char f2[17] = " Buttons light  ";
+	char f3[17] = " MFD light      ";
+	char f4[17] = " Hour 1         ";
+	char f5[17] = " Hour 2         ";
+	char f6[17] = " Hour 3         "; //251
+	char f7[17] = " Exit           "; //252
+	char f8[17] = "                ";
+	char* rows[9]{f1, f2, f3, f4, f5, f6, f7, f8, f8};
 
 	rows[cursor + (page * 3)][0] = '>';
 
-	for (UCHAR i = 0; i < 3; i++)
+	for (std::uint8_t i = 0; i < 3; i++)
 	{
-		CHAR* text = rows[i + (page * 3)];
-		CHAR buffer[17]{};
-		for (UCHAR c = 0; c < 16; c++)
+		char* text = rows[i + (page * 3)];
+		std::uint8_t buffer[17]{};
+		for (std::uint8_t c = 0; c < 16; c++) // Must be 16, strings in buffer are NOT \0 terminated
 		{
 			buffer[c + 1] = text[c];
 		}
 
 		buffer[0] = i + 1;
 
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text((UCHAR*)buffer, 17);
+		CX52Write::Get().Set_Text(buffer);
 	}
 }
 
 void CMFDMenu::ShowPageOnOff()
 {
-	UCHAR cursor = menuMFD.CursorStatus;
-	CHAR f1[8], f2[8];
-	CHAR* rows[2]{ f1, f2 };
-
-	RtlCopyMemory(f1, " On     ", 8);
-	RtlCopyMemory(f2, " Off    ", 8);
+	std::uint8_t cursor = menuMFD.CursorStatus;
+	std::uint8_t f1[9] = " On     ";
+	std::uint8_t f2[9] = " Off    ";
+	std::uint8_t* rows[2]{ f1, f2 };
 
 	rows[cursor][0] = '>';
 
@@ -612,30 +605,28 @@ void CMFDMenu::ShowPageOnOff()
 	rows[(menuMFD.IsNXTActivated) ? 0 : 1][6] = '*';
 	rows[(menuMFD.IsNXTActivated) ? 0 : 1][7] = ')';
 
-	for (UCHAR i = 0; i < 2; i++)
+	for (char i = 0; i < 2; i++)
 	{
-		CHAR* text = rows[i];
-		CHAR buffer[9]{};
-		for (UCHAR c = 0; c < 8; c++)
+		std::uint8_t* text = rows[i];
+		std::uint8_t buffer[9]{};
+		for (char c = 0; c < 8; c++) // Must be 8, strings in buffer are NOT \0 terminated
 		{
 			buffer[c + 1] = text[c];
 		}
 		buffer[0] = i + 1;
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text((UCHAR*)buffer, 9);
+		CX52Write::Get().Set_Text(buffer);
 	}
-	f1[0] = 3; //row 3 empty
-	if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text((UCHAR*)f1, 1);
+	static constexpr std::uint8_t row3[1] = {3}; //row 3 empty
+	CX52Write::Get().Set_Text(row3);
 }
 
-void CMFDMenu::ShowPageLight(UCHAR status) const
+void CMFDMenu::ShowPageLight(std::uint8_t status) const
 {
-	UCHAR cursor = menuMFD.CursorStatus;
-	CHAR f1[10], f2[10], f3[10];
-	CHAR* rows[3]{f1, f2, f3};
-
-	RtlCopyMemory(f1, " Low      ", 10);
-	RtlCopyMemory(f2, " Medium   ", 10);
-	RtlCopyMemory(f3, " High     ", 10);
+	std::uint8_t cursor = menuMFD.CursorStatus;
+	char f1[11] = " Low      ";
+	char f2[11] = " Medium   ";
+	char f3[11] = " High     ";
+	char* rows[3]{f1, f2, f3};
 
 	rows[cursor][0] = '>';
 
@@ -643,51 +634,49 @@ void CMFDMenu::ShowPageLight(UCHAR status) const
 	rows[status][8] = '*';
 	rows[status][9] = ')';
 
-	for (UCHAR i = 0; i < 3; i++)
+	for (char i = 0; i < 3; i++)
 	{
-		CHAR* text = rows[i];
-		CHAR buffer[11]{};
-		for (UCHAR c = 0; c < 10; c++)
+		char* text = rows[i];
+		uint8_t buffer[11]{};
+		for (char c = 0; c < 10; c++) // Must be 10, strings in buffer are NOT \0 terminated
 		{
 			buffer[c + 1] = text[c];
 		}
 		buffer[0] = (i + 1);
 
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text((UCHAR*)buffer, 11);
+		CX52Write::Get().Set_Text(buffer);
 	}
 }
 
-void CMFDMenu::ShowPageHour(bool sel, CHAR hour, UCHAR minute, bool h24) const
+void CMFDMenu::ShowPageHour(bool sel, char hour, std::uint8_t minute, bool h24) const
 {
-	UCHAR cursor = menuMFD.CursorStatus % 3;
-	UCHAR page = menuMFD.CursorStatus / 3;
-	CHAR f1[11], f2[11], f3[11], f4[11], f5[11];
-	CHAR* rows[6]{ f1, f2, f3, f4, f5};
-
-	RtlCopyMemory(f1, " Hour:     ", 11);
-	RtlCopyMemory(f2, " Minute:   ", 11);
-	RtlCopyMemory(f3, " AM/PM:    ", 11);
-	RtlCopyMemory(f4, " Back      ", 11);
-	RtlCopyMemory(f5, "           ", 11);
+	std::uint8_t cursor = menuMFD.CursorStatus % 3;
+	std::uint8_t page = menuMFD.CursorStatus / 3;
+	char f1[12] = " Hour:     ";
+	char f2[12] = " Minute:   ";
+	char f3[12] = " AM/PM:    ";
+	char f4[12] = " Back      ";
+	char f5[12] = "           ";
+	char* rows[6]{ f1, f2, f3, f4, f5};
 
 	rows[cursor + (page * 3)][0] = (sel) ? '*' : '>';
 
-	sprintf_s(&f1[7], 2, "%02d", hour);
-	sprintf_s(&f2[9], 2, "%02u", minute);
-	RtlCopyMemory(&f3[8], (h24) ? "No " : "Yes", 3);
+	std::snprintf(&f1[7], 2, "%02d", hour);
+	std::snprintf(&f2[9], 2, "%02u", minute);
+	memcpy(&f3[8], (h24) ? "No " : "Yes", 3);
 
-	for (UCHAR i = 0; i < 3; i++)
+	for (std::uint8_t i = 0; i < 3; i++)
 	{
-		CHAR* text = rows[i + (page * 3)];
-		CHAR buffer[12]{};
+		char* text = rows[i + (page * 3)];
+		std::uint8_t buffer[12]{};
 
 		buffer[0] = i + 1;
-		for (UCHAR c = 0; c < 11; c++)
+		for (char c = 0; c < 11; c++) // Must be 11, strings in buffer are NOT \0 terminated
 		{
 			buffer[c + 1] = text[c];
 		}
 
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text((UCHAR*)buffer, 12);
+		CX52Write::Get().Set_Text(buffer);
 	}
 }
 #pragma endregion

@@ -5,9 +5,9 @@
 #include "GenerateEvents/ProcessUSBs_Axes.h"
 //#include "../X52/MFDMenu.h"
 
-CProcessInput::CProcessInput(CProfile* pProfile)
+CProcessInput::CProcessInput(CProfile& pProfile)
+	: pProfile(pProfile)
 {
-	this->pProfile = pProfile;
 }
 
 void CProcessInput::GetOldHidData(UINT32 joyId, PHID_INPUT_DATA data)
@@ -48,7 +48,7 @@ void CProcessInput::Process(UINT32 joyId, PHID_INPUT_DATA p_hidData)
 		return;
 	}
 
-	if (!pProfile->GetRawMode() && !pProfile->GetCalibrationMode())
+	if (!pProfile.GetRawMode() && !pProfile.GetCalibrationMode())
 	{
 		//	Buttons
 
@@ -95,9 +95,9 @@ void CProcessInput::Process(UINT32 joyId, PHID_INPUT_DATA p_hidData)
 	}
 	else
 	{
-		pProfile->BeginProfileRead();
-		UCHAR outputId = pProfile->GetProfile()->GetRawDevice(joyId);
-		pProfile->EndProfileRead();
+		pProfile.BeginProfileRead();
+		UCHAR outputId = pProfile.GetProfile()->GetRawDevice(joyId);
+		pProfile.EndProfileRead();
 		if (outputId == 0) { return; }
 
 		VHID_INPUT_DATA vJoyData;

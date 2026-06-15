@@ -1,40 +1,40 @@
 #pragma once
 #include "IHIDInput.h"
 #include <vector>
+#include <mutex>
+#include <hidsdi.h>
 
 class CHIDDevices : public IHIDInput
 {
+private:
+	typedef struct
+	{
+		//UCHAR ReportId;
+		std::uint8_t Bits;
+		std::uint8_t IsButton;
+		std::uint8_t IsHat;
+		//UCHAR Skip;
+		std::uint16_t Index;
+	} ST_MAP;
+	std::vector<ST_MAP> map;
 public:
-	CHIDDevices(UINT32 hardwareId);
+	CHIDDevices(std::uint32_t hardwareId);
 	~CHIDDevices();
 
 	//IHIDInput overrides
 	virtual unsigned short Read(void* buff) override;
 
-	typedef struct
-	{
-		//UCHAR ReportId;
-		UCHAR Bits;
-		UCHAR IsButton;
-		UCHAR IsHat;
-		//UCHAR Skip;
-		UINT16 Index;
-	} ST_MAP;
-
-	inline std::vector<ST_MAP*>* GetMap() { return &map; }
-private:
-	std::vector<ST_MAP*> map;
-
+	const std::vector<ST_MAP>& GetMap() const { return map; }
 protected:
-	UINT32 hardwareId = 0;
-	wchar_t* pathInterface = nullptr;
-	HANDLE mutex = nullptr;
-	PVOID hdev = nullptr;
-	PVOID preparsed = nullptr;
-	PCHAR reportBuffer = nullptr;
-	unsigned long reportLenght = 0;
+	std::uint32_t hardwareId{ 0 };
+	std::wstring pathInterface{};
+	std::mutex mutex;
+	unique_handle hdev{};
+	PHIDP_PREPARSED_DATA preparsed{ nullptr };
+	std::unique_ptr<CHAR[]> reportBuffer{};
+	std::atomic<DWORD> reportLenght{ 0 };
 
-	bool GetDeviceMap(void* preparsedData, void* pCaps);
+	bool GetDeviceMap(PHIDP_PREPARSED_DATA pData, PHIDP_CAPS pCaps);
 
 	//IHIDInput overrides
 	virtual bool Prepare() override;

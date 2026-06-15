@@ -4,62 +4,62 @@ class STATUS
 public:
 	typedef struct TDST_AXIS
 	{
-		UINT16 IncrementalPos = 0;
-		UCHAR Band = 0;
-		double LastPos = 0;
-		double LastVelocity = 0;
+		std::uint16_t IncrementalPos;
+		std::uint8_t Band;
+		double LastPos;
+		double LastVelocity;
 		//double LastInertiaPos = 0;
 	} ST_AXIS;
 private:
 	// Button definitions
 	typedef struct TDST_BUTTONMODEMODEL
 	{
-		std::unordered_map<UCHAR, UCHAR> Status; //values are CurrentPosition
+		std::unordered_map<std::uint8_t, std::uint8_t> Status; //values are CurrentPosition
 	} BUTTONMODEMODEL;
 	typedef struct TDST_BUTTONSTATUSMODEL
 	{
-		std::unordered_map<UCHAR, BUTTONMODEMODEL> Modes;
+		std::unordered_map<std::uint8_t, BUTTONMODEMODEL> Modes;
 	} BUTTONSTATUSMODEL;
 
 	typedef struct TDST_HIDBUTTONMODEL
 	{
-		UCHAR Status[16]{};
+		std::uint8_t Status[16]{};
 	} HIDBUTTONMODEL;
 
 	//Axis definitions
 	typedef struct
 	{
-		std::unordered_map<UCHAR, ST_AXIS> Status;
+		std::unordered_map<std::uint8_t, ST_AXIS> Status;
 	} AXISMODEMODEL;
 	typedef struct
 	{
-		std::unordered_map<UCHAR, AXISMODEMODEL> Modes;
+		std::unordered_map<std::uint8_t, AXISMODEMODEL> Modes;
 	} AXISSTATUSMODEL;
 
 
-	std::unordered_map<UINT32, BUTTONSTATUSMODEL> stButtons;
-	std::unordered_map<UINT32, HIDBUTTONMODEL> stHIDButtons;
+	std::unordered_map<std::uint32_t, BUTTONSTATUSMODEL> stButtons;
+	std::unordered_map<std::uint32_t, HIDBUTTONMODEL> stHIDButtons;
 
-	std::unordered_map<UINT32, BUTTONSTATUSMODEL> stHats;
-	std::unordered_map<UINT32, HIDBUTTONMODEL> stHIDHats;
+	std::unordered_map<std::uint32_t, BUTTONSTATUSMODEL> stHats;
+	std::unordered_map<std::uint32_t, HIDBUTTONMODEL> stHIDHats;
 
-	std::unordered_map<UINT32, AXISSTATUSMODEL> stAxes;
+	std::unordered_map<std::uint32_t, AXISSTATUSMODEL> stAxes;
 
-	std::unordered_map<UINT32, std::unordered_map<UCHAR, UCHAR>> stAxisPreciseMode;
+	std::unordered_map<std::uint32_t, std::unordered_map<std::uint8_t, std::uint8_t>> stAxisPreciseMode;
 
 	class CButtons
 	{
 	private:
-		std::unordered_map <UINT32, STATUS::BUTTONSTATUSMODEL>* pStButtons;
-		std::unordered_map<UINT32, HIDBUTTONMODEL>* pStHIDButtons;
+		std::unordered_map <std::uint32_t, STATUS::BUTTONSTATUSMODEL>* pStButtons;
+		std::unordered_map<std::uint32_t, HIDBUTTONMODEL>* pStHIDButtons;
 	public:
-		inline CButtons(std::unordered_map <UINT32, BUTTONSTATUSMODEL>* pStButtons, std::unordered_map<UINT32, HIDBUTTONMODEL>* pStHIDButtons)
+		inline CButtons(std::unordered_map <std::uint32_t, BUTTONSTATUSMODEL>* pStButtons, std::unordered_map<std::uint32_t, HIDBUTTONMODEL>* pStHIDButtons)
 		{
 			this->pStButtons = pStButtons;
 			this->pStHIDButtons = pStHIDButtons;
 		}
 
-		inline void NewStatus(UINT32 inputJoyId, UCHAR mode, UCHAR button)
+		inline void NewStatus(std::uint32_t inputJoyId, std::uint8_t mode, std::uint8_t button)
 		{
 			pStButtons->insert({ inputJoyId, BUTTONSTATUSMODEL() });
 			pStButtons->at(inputJoyId).Modes.insert({ mode , BUTTONMODEMODEL() });
@@ -67,19 +67,19 @@ private:
 			pStHIDButtons->insert({ inputJoyId, HIDBUTTONMODEL() });
 		}
 
-		inline bool GetPos(UCHAR* pos, UINT32 inputJoyId, UCHAR mode, UCHAR button)
+		inline bool GetPos(std::uint8_t* pos, std::uint32_t inputJoyId, std::uint8_t mode, std::uint8_t button)
 		{
-			std::unordered_map<UINT32, BUTTONSTATUSMODEL>::const_iterator pBsm = pStButtons->find(inputJoyId);
+			std::unordered_map<std::uint32_t, BUTTONSTATUSMODEL>::const_iterator pBsm = pStButtons->find(inputJoyId);
 			if (pBsm != pStButtons->end())
 			{
-				std::unordered_map<UCHAR, BUTTONMODEMODEL>::const_iterator pAmm = pBsm->second.Modes.find(mode);
+				std::unordered_map<std::uint8_t, BUTTONMODEMODEL>::const_iterator pAmm = pBsm->second.Modes.find(mode);
 				if (pAmm == pBsm->second.Modes.end())
 				{
 					pAmm = pBsm->second.Modes.find(0);
 				}
 				if (pAmm != pBsm->second.Modes.end())
 				{
-					std::unordered_map<UCHAR, UCHAR>::const_iterator pB = pAmm->second.Status.find(button);
+					std::unordered_map<std::uint8_t, std::uint8_t>::const_iterator pB = pAmm->second.Status.find(button);
 					if (pB != pAmm->second.Status.end())
 					{
 						*pos = pB->second;
@@ -92,19 +92,19 @@ private:
 			return false;
 		}
 
-		inline void SetPos(UCHAR pos, bool fixed, UINT32 inputJoyId, UCHAR mode, UCHAR button)
+		inline void SetPos(std::uint8_t pos, bool fixed, std::uint32_t inputJoyId, std::uint8_t mode, std::uint8_t button)
 		{
-			std::unordered_map<UINT32, BUTTONSTATUSMODEL>::iterator pBsm = pStButtons->find(inputJoyId);
+			std::unordered_map<std::uint32_t, BUTTONSTATUSMODEL>::iterator pBsm = pStButtons->find(inputJoyId);
 			if (pBsm != pStButtons->end())
 			{
-				std::unordered_map<UCHAR, BUTTONMODEMODEL>::iterator pAmm = pBsm->second.Modes.find(mode);
+				std::unordered_map<std::uint8_t, BUTTONMODEMODEL>::iterator pAmm = pBsm->second.Modes.find(mode);
 				if (pAmm == pBsm->second.Modes.end())
 				{
 					pAmm = pBsm->second.Modes.find(0);
 				}
 				if (pAmm != pBsm->second.Modes.end())
 				{
-					std::unordered_map<UCHAR, UCHAR>::iterator pB = pAmm->second.Status.find(button);
+					std::unordered_map<std::uint8_t, std::uint8_t>::iterator pB = pAmm->second.Status.find(button);
 					if (pB != pAmm->second.Status.end())
 					{
 						pB->second = fixed ? pos : pB->second + pos;
@@ -113,7 +113,7 @@ private:
 			}
 		}
 
-		inline bool GetPressed(UCHAR* pressed, UINT32 inputJoyId, UCHAR button)
+		inline bool GetPressed(std::uint8_t* pressed, std::uint32_t inputJoyId, std::uint8_t button)
 		{
 			std::unordered_map<UINT32, HIDBUTTONMODEL>::const_iterator ijoy = pStHIDButtons->find(inputJoyId);
 			if (ijoy != pStHIDButtons->end())
@@ -124,9 +124,9 @@ private:
 			return false;
 		}
 
-		inline void SetPressed(UCHAR pressed, UINT32 inputJoyId, UCHAR button)
+		inline void SetPressed(std::uint8_t pressed, std::uint32_t inputJoyId, std::uint8_t button)
 		{
-			std::unordered_map<UINT32, HIDBUTTONMODEL>::iterator ijoy = pStHIDButtons->find(inputJoyId);
+			std::unordered_map<std::uint32_t, HIDBUTTONMODEL>::iterator ijoy = pStHIDButtons->find(inputJoyId);
 			if (ijoy != pStHIDButtons->end())
 			{
 				if (pressed)
@@ -144,30 +144,30 @@ private:
 	class CAxes
 	{
 	private:
-		std::unordered_map<UINT32, AXISSTATUSMODEL>* pStAxes;
+		std::unordered_map<std::uint32_t, AXISSTATUSMODEL>* pStAxes;
 	public:
-		inline CAxes(std::unordered_map<UINT32, AXISSTATUSMODEL>* pStAxes) { this->pStAxes = pStAxes; }
+		inline CAxes(std::unordered_map<std::uint32_t, AXISSTATUSMODEL>* pStAxes) { this->pStAxes = pStAxes; }
 
-		inline void NewStatus(UINT32 inputJoyId, UCHAR mode, UCHAR axis)
+		inline void NewStatus(std::uint32_t inputJoyId, std::uint8_t mode, std::uint8_t axis)
 		{
 			pStAxes->insert({ inputJoyId, AXISSTATUSMODEL() });
 			pStAxes->at(inputJoyId).Modes.insert({ mode , AXISMODEMODEL() });
 			pStAxes->at(inputJoyId).Modes.at(mode).Status.insert({ axis, ST_AXIS()});
 		}
 
-		inline bool GetStatus(ST_AXIS** status, UINT32 inputJoyId, UCHAR mode, UCHAR axis)
+		inline bool GetStatus(ST_AXIS** status, std::uint32_t inputJoyId, std::uint8_t mode, std::uint8_t axis)
 		{
-			std::unordered_map<UINT32, AXISSTATUSMODEL>::iterator ijoy = pStAxes->find(inputJoyId);
+			std::unordered_map<std::uint32_t, AXISSTATUSMODEL>::iterator ijoy = pStAxes->find(inputJoyId);
 			if (ijoy != pStAxes->end())
 			{
-				std::unordered_map<UCHAR, AXISMODEMODEL>::iterator imode = ijoy->second.Modes.find(mode);
+				std::unordered_map<std::uint8_t, AXISMODEMODEL>::iterator imode = ijoy->second.Modes.find(mode);
 				if (imode == ijoy->second.Modes.end())
 				{
 					imode = ijoy->second.Modes.find(0);
 				}
 				if (imode != ijoy->second.Modes.end())
 				{
-					std::unordered_map<UCHAR, ST_AXIS>::iterator iaxis = imode->second.Status.find(axis);
+					std::unordered_map<std::uint8_t, ST_AXIS>::iterator iaxis = imode->second.Status.find(axis);
 					if (iaxis != imode->second.Status.end())
 					{
 						*status = &iaxis->second;
@@ -183,16 +183,16 @@ private:
 	class CAxesPreciseMode
 	{
 	private:
-		std::unordered_map<UINT32, std::unordered_map<UCHAR, UCHAR>>* stAxisPreciseMode;
+		std::unordered_map<std::uint32_t, std::unordered_map<std::uint8_t, std::uint8_t>>* stAxisPreciseMode;
 	public:
-		inline CAxesPreciseMode(std::unordered_map<UINT32, std::unordered_map<UCHAR, UCHAR>>* stAxes) { this->stAxisPreciseMode = stAxisPreciseMode; }
+		inline CAxesPreciseMode(std::unordered_map<std::uint32_t, std::unordered_map<std::uint8_t, std::uint8_t>>* stAxes) { this->stAxisPreciseMode = stAxisPreciseMode; }
 
-		inline bool GetStatus(UCHAR* status, UINT32 inputJoyId, UCHAR axis)
+		inline bool GetStatus(std::uint8_t* status, std::uint32_t inputJoyId, std::uint8_t axis)
 		{
-			std::unordered_map<UINT32, std::unordered_map<UCHAR, UCHAR>>::const_iterator ijoy = stAxisPreciseMode->find(inputJoyId);
+			std::unordered_map<std::uint32_t, std::unordered_map<std::uint8_t, std::uint8_t>>::const_iterator ijoy = stAxisPreciseMode->find(inputJoyId);
 			if (ijoy != stAxisPreciseMode->end())
 			{
-				std::unordered_map<UCHAR, UCHAR>::const_iterator iaxis = ijoy->second.find(axis);
+				std::unordered_map<std::uint8_t, std::uint8_t>::const_iterator iaxis = ijoy->second.find(axis);
 				if (iaxis != ijoy->second.end())
 				{
 					*status = iaxis->second;
@@ -203,12 +203,12 @@ private:
 			return false;
 		}
 
-		inline void SetStatus(UCHAR preciseMode, UINT32 inputJoyId, UCHAR axis)
+		inline void SetStatus(std::uint8_t preciseMode, std::uint32_t inputJoyId, std::uint8_t axis)
 		{
-			std::unordered_map<UINT32, std::unordered_map<UCHAR, UCHAR>>::iterator ijoy = stAxisPreciseMode->find(inputJoyId);
+			std::unordered_map<std::uint32_t, std::unordered_map<std::uint8_t, std::uint8_t>>::iterator ijoy = stAxisPreciseMode->find(inputJoyId);
 			if (ijoy != stAxisPreciseMode->end())
 			{
-				std::unordered_map<UCHAR, UCHAR>::iterator iaxis = ijoy->second.find(axis);
+				std::unordered_map<std::uint8_t, std::uint8_t>::iterator iaxis = ijoy->second.find(axis);
 				if (iaxis != ijoy->second.end())
 				{
 					iaxis->second = preciseMode;

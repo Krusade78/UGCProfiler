@@ -9,9 +9,8 @@
 #include "../ProcessOutput/CVirtualHID.h"
 
 
-CProfile::CProfile(void* pVHID)
+CProfile::CProfile()
 {
-	this->pVHID = pVHID;
 	hMutexProgram = CreateMutex(NULL, FALSE, NULL);
 	hMutexCalibration = CreateMutex(NULL, FALSE, NULL);
 	hMutexStatus = CreateMutex(NULL, FALSE, NULL);
@@ -70,39 +69,36 @@ void CProfile::ClearProfile()
 	ReleaseMutex(hMutexProgram);
 }
 
-bool CProfile::HF_IoWriteMap(BYTE* SystemBuffer, DWORD size)
+bool CProfile::HF_IoWriteMap(std::span<const std::uint8_t> SystemBuffer)
 {
 	if (!resetComanmds)
 	{
 		return false;
 	}
 	resetComanmds = false;
-	if (size < (17 + 1 + 2)) //txt, mouse, button sz, axes sz
+	if (SystemBuffer.size() < (17 + 1 + 2)) //txt, mouse, button sz, axes sz
 	{
 		ClearProfile();
 		return false;
 	}
 	else
 	{
-		BYTE txt[17];
-		RtlCopyMemory(txt, SystemBuffer, 17);
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(txt, 17);
-		RtlZeroMemory(txt, 17);
-		txt[0] = 2;
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(txt, 2);
-		txt[0] = 3;
-		if (CX52Write::Get() != nullptr) CX52Write::Get()->Set_Text(txt, 2);
+		CX52Write::Get().Set_Text(SystemBuffer.subspan(0, 17));
+		static constexpr std::uint8_t cmd2[] = { 2, 0 };
+		CX52Write::Get().Set_Text(cmd2);
+		static constexpr std::uint8_t cmd3[] = { 3, 0 };
+		CX52Write::Get().Set_Text(cmd3);
 	}
 
 	std::unordered_map<UINT32, char> ids;
 
 	WaitForSingleObject(hMutexProgram, INFINITE);
 	{
-		BYTE* ptr = SystemBuffer + 17;
+		const std::uint8_t* ptr = SystemBuffer.data() + 17;
 		RtlCopyMemory(&profile.MouseTick, ptr++ , 1);
 
 		BYTE count = *ptr++;
-		for (BYTE j = 0; j < *(SystemBuffer + 17 + 1); j++)
+		for (BYTE j = 0; j < *(SystemBuffer.data() + 17 + 1); j++)
 		{
 			UINT32 joyId = *((UINT32*)ptr);
 			ids.insert({ joyId, 0 });
@@ -169,16 +165,16 @@ bool CProfile::HF_IoWriteMap(BYTE* SystemBuffer, DWORD size)
 					axis->Type = *ptr++;
 					axis->OutputAxis = *ptr++;
 					axis->SoftDeadZone = *ptr++;
-					RtlCopyMemory(&axis->SensibilityX, ptr, 20 * sizeof(double));
+					memcpy(&axis->SensibilityX, ptr, 20 * sizeof(double));
 					ptr += 20 * sizeof(double);
-					RtlCopyMemory(&axis->SensibilityY, ptr, 20 * sizeof(double));
+					memcpy(&axis->SensibilityY, ptr, 20 * sizeof(double));
 					ptr += 20 * sizeof(double);
-					RtlCopyMemory(&axis->SensibilityS, ptr, 20 * sizeof(double));
+					memcpy(&axis->SensibilityS, ptr, 20 * sizeof(double));
 					ptr += 20 * sizeof(double);
 					axis->IsSlider = *ptr++;
 					//RtlCopyMemory(&axis->Inertia, ptr,  sizeof(double));
 					//ptr += sizeof(double);
-					RtlCopyMemory(&axis->DampingK, ptr, sizeof(double));
+					memcpy(&axis->DampingK, ptr, sizeof(double));
 					ptr += sizeof(double);
 					for (BYTE nBands = *ptr++; nBands > 0; nBands--)
 					{
@@ -215,23 +211,23 @@ bool CProfile::HF_IoWriteMap(BYTE* SystemBuffer, DWORD size)
 	return true;
 }
 
-bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
+bool CProfile::HF_IoWriteCommands(std::span<const std::uint8_t> SystemBuffer)
 {
-	BYTE* bufIn;
+	const std::uint8_t* bufIn;
 	size_t sizePredicted = 0;
 
 	ClearProfile();
 
-	if (InputBufferLength != 0)
+	if (SystemBuffer.size() != 0)
 	{
 		//Check OK
-		bufIn = SystemBuffer;
-		while (sizePredicted < InputBufferLength)
+		bufIn = SystemBuffer.data();
+		while (sizePredicted < SystemBuffer.size())
 		{
 			sizePredicted += (static_cast<size_t>(*bufIn) * 4) + 1;
 			bufIn += (static_cast<size_t>(*bufIn) * 4) + 1;
 		}
-		if (sizePredicted != InputBufferLength)
+		if (sizePredicted != SystemBuffer.size())
 		{
 			return false;
 		}
@@ -239,10 +235,10 @@ bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
 
 	resetComanmds = true;
 
-	if (CMFDMenu::Get() != nullptr) CMFDMenu::Get()->SetHourActivated(true);
-	if (CMFDMenu::Get() != nullptr) CMFDMenu::Get()->SetDateActivated(true);
+	CMFDMenu::Get().SetHourActivated(true);
+	CMFDMenu::Get().SetDateActivated(true);
 
-	if (InputBufferLength == 0)
+	if (SystemBuffer.size() == 0)
 	{
 		return true;
 	}
@@ -250,9 +246,9 @@ bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
 	WaitForSingleObject(hMutexProgram, INFINITE);
 	{
 		profile.Actions = new std::deque<CEventPacket*>();
-		bufIn = SystemBuffer;
+		bufIn = SystemBuffer.data();
 		sizePredicted = 0;
-		while (sizePredicted < InputBufferLength)
+		while (sizePredicted < SystemBuffer.size())
 		{
 			CEventPacket* commandQueue = new CEventPacket();
 			UCHAR actionSize = *bufIn;
@@ -272,11 +268,11 @@ bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
 				mem->Basic.OutputJoy = *(bufIn + 3) >> 4;
 				if ((((PEV_COMMAND)bufIn)->Type == CommandType::X52MfdHour) || (((PEV_COMMAND)bufIn)->Type == CommandType::X52MfdHour24))
 				{
-					if (CMFDMenu::Get() != nullptr) CMFDMenu::Get()->SetHourActivated(false);
+					CMFDMenu::Get().SetHourActivated(false);
 				}
 				else if (((PEV_COMMAND)bufIn)->Type == CommandType::MfdDate)
 				{
-					if (CMFDMenu::Get() != nullptr) CMFDMenu::Get()->SetDateActivated(false);
+					CMFDMenu::Get().SetDateActivated(false);
 				}
 				bufIn += 4;
 				sizePredicted += 4;
@@ -290,21 +286,21 @@ bool CProfile::HF_IoWriteCommands(BYTE* SystemBuffer, DWORD InputBufferLength)
 	return true;
 }
 
-void CProfile::WriteAntivibration(BYTE* datos)
+void CProfile::WriteAntivibration(std::span<const std::uint8_t> data)
 {
 	WaitForSingleObject(hMutexCalibration, INFINITE);
 
-	BYTE* ptr = datos;
+	const std::uint8_t* ptr = data.data();
 	ptr += sizeof(UINT32);
-	for (UINT32 njoys = 0; njoys < *reinterpret_cast<UINT32*>(datos); njoys++)
+	for (UINT32 njoys = 0; njoys < *reinterpret_cast<const UINT32*>(data.data()); njoys++)
 	{
-		std::unordered_map<UINT32, std::vector<CALIBRATION::ST_JITTER>>::iterator pOld = calibration.Jitters.find(*reinterpret_cast<UINT32*>(ptr));
+		std::unordered_map<UINT32, std::vector<CALIBRATION::ST_JITTER>>::iterator pOld = calibration.Jitters.find(*reinterpret_cast<const UINT32*>(ptr));
 		if (pOld != calibration.Jitters.end())
 		{
-			calibration.Jitters.erase(*reinterpret_cast<UINT32*>(ptr));
+			calibration.Jitters.erase(*reinterpret_cast<const UINT32*>(ptr));
 		}
-		calibration.New.insert({ *reinterpret_cast<UINT32*>(ptr), true }).first->second = true;
-		std::vector<CALIBRATION::ST_JITTER>* vector = &calibration.Jitters.insert({ *reinterpret_cast<UINT32*>(ptr), std::vector<CALIBRATION::ST_JITTER>()}).first->second;
+		calibration.New.insert({ *reinterpret_cast<const UINT32*>(ptr), true }).first->second = true;
+		std::vector<CALIBRATION::ST_JITTER>* vector = &calibration.Jitters.insert({ *reinterpret_cast<const UINT32*>(ptr), std::vector<CALIBRATION::ST_JITTER>()}).first->second;
 		ptr += sizeof(UINT32);
 		BYTE naxes = *ptr++;
 		for (BYTE njitters = 0; njitters < naxes; njitters++)
@@ -317,21 +313,21 @@ void CProfile::WriteAntivibration(BYTE* datos)
 	ReleaseMutex(hMutexCalibration);
 }
 
-void CProfile::WriteCalibration(BYTE* datos)
+void CProfile::WriteCalibration(std::span<const std::uint8_t> data)
 {
 	WaitForSingleObject(hMutexCalibration, INFINITE);
 
-	BYTE* ptr = datos;
+	const std::uint8_t* ptr = data.data();
 	ptr += sizeof(UINT32);
-	for (UINT32 njoys = 0; njoys < *reinterpret_cast<UINT32*>(datos); njoys++)
+	for (UINT32 njoys = 0; njoys < *reinterpret_cast<const UINT32*>(data.data()); njoys++)
 	{
-		std::unordered_map<UINT32, std::vector<CALIBRATION::ST_LIMITS>>::iterator pOld = calibration.Limits.find(*reinterpret_cast<UINT32*>(ptr));
+		std::unordered_map<UINT32, std::vector<CALIBRATION::ST_LIMITS>>::iterator pOld = calibration.Limits.find(*reinterpret_cast<const UINT32*>(ptr));
 		if (pOld != calibration.Limits.end())
 		{
-			calibration.Limits.erase(*reinterpret_cast<UINT32*>(ptr));
+			calibration.Limits.erase(*reinterpret_cast<const UINT32*>(ptr));
 		}
-		calibration.New.insert({ *reinterpret_cast<UINT32*>(ptr), true }).first->second = true;
-		std::vector<CALIBRATION::ST_LIMITS>* vector = &calibration.Limits.insert({ *reinterpret_cast<UINT32*>(ptr), std::vector<CALIBRATION::ST_LIMITS>()}).first->second;
+		calibration.New.insert({ *reinterpret_cast<const UINT32*>(ptr), true }).first->second = true;
+		std::vector<CALIBRATION::ST_LIMITS>* vector = &calibration.Limits.insert({ *reinterpret_cast<const UINT32*>(ptr), std::vector<CALIBRATION::ST_LIMITS>()}).first->second;
 		ptr += sizeof(UINT32);
 		BYTE naxes = *ptr++;
 		for (BYTE nlimits = 0; nlimits < naxes; nlimits++)

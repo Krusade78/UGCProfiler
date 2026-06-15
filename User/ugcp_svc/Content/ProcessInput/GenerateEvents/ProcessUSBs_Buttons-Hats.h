@@ -4,14 +4,14 @@
 class CButtonsHats
 {
 public:
-	CButtonsHats(CProfile* pProfile);
+	CButtonsHats(CProfile& pProfile);
 	~CButtonsHats();
 public:
-	static void PressButton(CProfile* pProfile, UINT32 joyId, UCHAR idx);
-	static void ReleaseButton(CProfile* pProfile, UINT32 joyId, UCHAR idx);
+	static void PressButton(CProfile& pProfile, UINT32 joyId, UCHAR idx);
+	static void ReleaseButton(CProfile& pProfile, UINT32 joyId, UCHAR idx);
 
-	static void PressHat(CProfile* pProfile, UINT32 joyId, UCHAR idx);
-	static void ReleaseHat(CProfile* pProfile, UINT32 joyId, UCHAR idx);
+	static void PressHat(CProfile& pProfile, UINT32 joyId, UCHAR idx);
+	static void ReleaseHat(CProfile& pProfile, UINT32 joyId, UCHAR idx);
 private:
 	typedef struct
 	{
@@ -23,11 +23,11 @@ private:
 
 	std::unordered_map<UINT64, PTP_TIMER>* pStButtonsMap = nullptr;
 	std::unordered_map<UINT64, PTP_TIMER>* pStHatsMap = nullptr;
-	CProfile* pProfile = nullptr;
+	CProfile& pProfile;
 	HANDLE hMutexStatus = nullptr;
 
 	static CButtonsHats* mainProcess;
-	static void CreateInstance(CProfile* pProfile);
+	static void CreateInstance(CProfile& pProfile);
 
 	void PressButton(UINT32 joyId, UCHAR idx, bool longPress);
 	void ReleaseButton(UINT32 joyId, UCHAR idx, bool shortRelease);

@@ -7,13 +7,13 @@ CCalibration::~CCalibration()
 	jittersCache.clear();
 }
 
-void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA pHidData)
+void CCalibration::Calibrate(CProfile& pProfile, UINT32 joyId, PHID_INPUT_DATA pHidData)
 {
-	pProfile->InitCalibrationRead();
+	pProfile.InitCalibrationRead();
 	{
 		bool read = true;
-		std::unordered_map<UINT32, bool>::iterator pnew = pProfile->GetCalibration()->New.find(joyId);
-		if (pnew != pProfile->GetCalibration()->New.end())
+		std::unordered_map<UINT32, bool>::iterator pnew = pProfile.GetCalibration()->New.find(joyId);
+		if (pnew != pProfile.GetCalibration()->New.end())
 		{
 			if (pnew->second)
 			{
@@ -21,7 +21,7 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 				{
 					limitsCache.erase(joyId);
 					limitsCache.insert({ joyId, std::vector<CALIBRATION::ST_LIMITS>() });
-					for (auto const& axis : pProfile->GetCalibration()->Limits.at(joyId))
+					for (auto const& axis : pProfile.GetCalibration()->Limits.at(joyId))
 					{
 						limitsCache.at(joyId).push_back(CALIBRATION::ST_LIMITS());
 						memcpy(&limitsCache.at(joyId).back(), &axis, sizeof(CALIBRATION::ST_LIMITS));
@@ -32,7 +32,7 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 				{
 					jittersCache.erase(joyId);
 					jittersCache.insert({ joyId, std::vector<CALIBRATION::ST_JITTER>()});
-					for (auto const& axis : pProfile->GetCalibration()->Jitters.at(joyId))
+					for (auto const& axis : pProfile.GetCalibration()->Jitters.at(joyId))
 					{
 						jittersCache.at(joyId).push_back(CALIBRATION::ST_JITTER());
 						memcpy(&jittersCache.at(joyId).back(), &axis, sizeof(CALIBRATION::ST_JITTER));
@@ -43,7 +43,7 @@ void CCalibration::Calibrate(CProfile* pProfile, UINT32 joyId, PHID_INPUT_DATA p
 			}
 		}
 	}
-	pProfile->EndCalibrationRead();
+	pProfile.EndCalibrationRead();
 
 	UCHAR idx = 0;
 

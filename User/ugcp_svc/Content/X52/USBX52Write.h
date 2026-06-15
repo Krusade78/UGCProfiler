@@ -1,40 +1,48 @@
 #pragma once
+#include <winusb.h>
 #include <queue>
+#include <span>
+#include <array>
 
 class CX52Write
 {
 public:
 	CX52Write();
 	~CX52Write();
-	static CX52Write* Get() { return pLocal; }
 
-	void SetWinUSB(void* ptr) { InterlockedExchangePointer(&wUSB, ptr); }
+	CX52Write(const CX52Write&) = delete;
+	CX52Write& operator=(const CX52Write&) = delete;
 
-	void Light_MFD(PUCHAR SystemBuffer);
-	void Light_Global(PUCHAR SystemBuffer);
-	void Light_Info(PUCHAR SystemBuffer);
-	void Set_Pinkie(PUCHAR SystemBuffer);
-	void Set_Text(PUCHAR SystemBuffer, BYTE bufferSize);
-	void Set_Hour(PUCHAR SystemBuffer);
-	void Set_Hour24(PUCHAR SystemBuffer);
-	void Set_Date(PUCHAR SystemBuffer);
+	static CX52Write& Get() { return *pInstance; }
+
+	void SetWinUSB(std::atomic<WINUSB_INTERFACE_HANDLE>* pawhUSB) { pwhUSB.store(pawhUSB); }
+
+	void Light_MFD(const std::uint8_t SystemBuffer);
+	void Light_Global(const std::uint8_t SystemBuffer);
+	void Light_Info(const std::uint8_t SystemBuffer);
+	void Set_Pinkie(const std::uint8_t SystemBuffer);
+	void Set_Text(std::span<const std::uint8_t> SystemBuffer);
+	void Set_Hour(const std::array<std::uint8_t, 3>& SystemBuffer);
+	void Set_Hour24(const std::array<std::uint8_t, 3>& SystemBuffer);
+	void Set_Date(const std::array<std::uint8_t, 2>& SystemBuffer);
 private:
-	USHORT Date = 0;
+	USHORT Date{ 0 };
 
-	typedef struct
+	struct ORDER
 	{
-		USHORT value;
-		BYTE idx;
-	} ORDER, *PORDER;
+		std::uint16_t value;
+		std::uint8_t idx;
+	};
 
-	static CX52Write* pLocal;
+	inline static CX52Write* pInstance{ nullptr };
 
-	bool exit = false;
-	HANDLE semQueue = nullptr;
-	void* wUSB = nullptr;
-	std::queue<PORDER> queue;
-	HANDLE evQueue = nullptr;
+	std::atomic<std::atomic<WINUSB_INTERFACE_HANDLE>*> pwhUSB { nullptr };
+	std::queue<ORDER> queue;
 
-	void SendOrder(UCHAR* params, BYTE packets);
-	static DWORD WINAPI WkSend(LPVOID param);
+	std::mutex mutexQueue;
+	std::condition_variable evQueue;
+	std::jthread threadWk;
+
+	void SendOrder(std::uint8_t* params, std::uint8_t packets);
+	void WkSend(std::stop_token exit);
 };

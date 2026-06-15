@@ -1,4 +1,6 @@
 #pragma once
+#include <cstdint>
+
 
 class CMFDMenu
 {
@@ -6,18 +8,18 @@ public:
 	CMFDMenu();
 	~CMFDMenu();
 
-	static CMFDMenu* Get() { return pLocal; }
+	static CMFDMenu& Get() { return *pInstance; }
 
 	void SetWelcome();
-	void MenuPressButton(UCHAR button);
-	void MenuReleaseButton(UCHAR button);
+	//void MenuPressButton(std::uint8_t button);
+	//void MenuReleaseButton(std::uint8_t button);
 	void SetHourActivated(bool onoff) { menuMFD.IsHourActivated = onoff; }
 	void SetDateActivated(bool onoff) { menuMFD.IsDateActivated = onoff; }
 	bool IsActivated() const { return menuMFD.Activated; }
 	bool X52Joy() const { return !menuMFD.IsNXTActivated; }
 
 private:
-	enum class Button : unsigned char
+	enum class Button : std::uint8_t
 	{
 		Enter = 0,
 		Down,
@@ -25,45 +27,43 @@ private:
 	};
 	struct
 	{
-		PTP_TIMER	TimerMenu;
-		bool		TimerWaiting;
-		bool		Activated;
-		UCHAR		ButtonStatus;
+		bool			TimerWaiting;
+		bool			Activated;
+		std::uint8_t	ButtonStatus;
 
-		PTP_TIMER	TimerHour;
-		bool		IsHourActivated;
-		bool		IsDateActivated;
+		bool			IsHourActivated;
+		bool			IsDateActivated;
 
-		UCHAR		CursorStatus;
-		UCHAR		PageStatus;
+		std::uint8_t	CursorStatus;
+		std::uint8_t	PageStatus;
 
-		bool		IsNXTActivated;
+		bool			IsNXTActivated;
 		struct
 		{
-			SHORT       Minutes; //horas + minutos (en minutos totales)
-			BOOLEAN		_24h;
+			short		Minutes; //horas + minutos (en minutos totales)
+			bool		_24h;
 		} Hour[3];
 
-		UCHAR		GlobalLight;
-		UCHAR		MFDLight;
+		std::uint8_t	GlobalLight;
+		std::uint8_t	MFDLight;
 	} menuMFD;
 
-	static CMFDMenu* pLocal;
+	PTP_TIMER timerMenu{};
+	PTP_TIMER timerHour{};
 
-	bool activeHour = false;
-	bool activeDate = false;
+	inline static CMFDMenu* pInstance{ nullptr };
 
 	void ReadConfiguration();
 	void SaveConfiguration() const;
-	static void CALLBACK EvtTickMenu(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_TIMER Timer);
-	static void CALLBACK EvtTickHour(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_opt_ PVOID Context, _Inout_ PTP_TIMER Timer);
+	static void CALLBACK EvtTickMenu(_Inout_ PTP_CALLBACK_INSTANCE pcInstance, _Inout_opt_ PVOID context, _Inout_ PTP_TIMER pTimer);
+	static void CALLBACK EvtTickHour(_Inout_ PTP_CALLBACK_INSTANCE pcInstance, _Inout_opt_ PVOID context, _Inout_ PTP_TIMER pTimer);
 
-	void ChangeStatus(UCHAR button);
+	void ChangeStatus(std::uint8_t button);
 	void CloseMenu();
 	void ShowPage1() const;
 	void ShowPageOnOff();
-	void ShowPageLight(UCHAR status) const;
-	void ShowPageHour(bool sel, CHAR hour, UCHAR minute, bool h24) const;
+	void ShowPageLight(std::uint8_t status) const;
+	void ShowPageHour(bool sel, char hour, std::uint8_t minute, bool h24) const;
 };
 
 

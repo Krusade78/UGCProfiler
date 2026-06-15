@@ -31,7 +31,7 @@ bool CNXT::Process(CEventPacket* queue)
 		delete (*pos);
 		queue->GetCommandQueue()->erase(pos);
 
-		if (CNXTWrite::Get() != nullptr) CNXTWrite::Get()->SetLed(params);
+		CNXTWrite::Get().SetLed(params);
 	}
 	else
 	{

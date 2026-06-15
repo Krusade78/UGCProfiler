@@ -1,21 +1,22 @@
 #include "framework.h"
 #include "CComs.h"
-#include <queue>
 
-CComs::CComs(CProfile* pProfile)
+CComs::CComs(CProfile& pProfile)
+	: pProfile(pProfile)
 {
-	this->pProfile = pProfile;
 }
 
 CComs::~CComs()
 {
-	exit = true;
-	if (hPipe != nullptr)
+	thread.request_stop();
+	if (hPipe.valid())
 	{
-		CancelIo(hPipe);
-		CloseHandle(hPipe);
+		CancelIoEx(hPipe.get(), nullptr);
 	}
-	while (InterlockedCompareExchange16(&threadClosed, 0, 0) == FALSE) Sleep(500);
+	if (thread.joinable())
+	{
+		thread.join();
+	}
 }
 
 bool CComs::Init()
@@ -23,75 +24,52 @@ bool CComs::Init()
 	char retry = 5;
 	while (retry-- > 0)
 	{
-		hPipe = CreateFileW(L"\\\\.\\pipe\\LauncherPipeSvc", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-		if (hPipe != INVALID_HANDLE_VALUE)
+		hPipe.set(CreateFileW(L"\\\\.\\pipe\\LauncherPipeSvc", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL));
+		if (hPipe.valid())
 		{
 			DWORD mode = PIPE_READMODE_MESSAGE;
-#pragma warning( push )
-#pragma warning( disable : 6001 )
-			if (SetNamedPipeHandleState(hPipe, &mode, NULL, NULL))
-#pragma warning( pop )
+			if (SetNamedPipeHandleState(hPipe.get(), &mode, NULL, NULL))
 			{
-				if (WriteFile(hPipe, "OK\r\n", 5, NULL, NULL))
+				if (WriteFile(hPipe.get(), "OK\r\n", 5, NULL, NULL))
 				{
-					HANDLE hilo = CreateThread(NULL, 0, ThreadRead, this, 0, NULL);
-					if (hilo != NULL)
+					thread = std::jthread([this](std::stop_token st) { ThreadRead(st); });
+					if (thread.joinable())
 					{
-						while (InterlockedCompareExchange16(&threadClosed, FALSE, FALSE))
-						{
-							Sleep(500);
-						}
 						return true;
 					}
 				}
 			}
-			CloseHandle(hPipe);
+			auto release = hPipe.move();
 		}
-		hPipe = nullptr;
-		Sleep(1000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 
 	return false;
 }
 
-DWORD WINAPI CComs::ThreadRead(LPVOID param)
+void CComs::ThreadRead(std::stop_token exit)
 {
-	CComs* local = (CComs*)param;
-	InterlockedExchange16(&local->threadClosed, FALSE);
-
 	SetThreadPriority(GetCurrentThread(), THREAD_MODE_BACKGROUND_BEGIN);
 
 	char retries = 5;
-	while (!local->exit && (retries >= 0))
+	while (!exit.stop_requested() && (retries >= 0))
 	{
 		BOOL ok = FALSE;
-		DWORD sizeMsg = 0;
-		std::queue <BYTE*> msg;
+		std::vector<std::uint8_t> msg;
 		do
 		{
+			const size_t prevSize = msg.size();
+			msg.resize(prevSize + 1024);
 			DWORD tam = 0;
-			BYTE* buff = new BYTE[1024];
-			ok = ReadFile(local->hPipe, buff, 1024, &tam, NULL);
-			sizeMsg += tam;
+			ok = ReadFile(hPipe.get(), msg.data() + prevSize, 1024, &tam, nullptr);
 			if (!ok && GetLastError() != ERROR_MORE_DATA)
 				break;
-			msg.push(buff);
+			msg.resize(prevSize + tam);
 
 		} while (!ok);  // repeat loop if ERROR_MORE_DATA 
-		if (ok)
+		if (ok && !msg.empty())
 		{
-			BYTE* buff = new BYTE[sizeMsg];
-			DWORD pt = 0;
-			while (!msg.empty())
-			{
-				DWORD size = ((sizeMsg - pt) >= 1024) ? 1024 : sizeMsg % 1024;
-				RtlCopyMemory(&buff[pt], msg.front(), size);
-				delete[] msg.front();
-				msg.pop();
-				pt += size;
-			}
-			local->ProcessMessage(buff, sizeMsg);
-			delete[] buff;
+			ProcessMessage(msg);
 
 			retries = 5;
 		}
@@ -99,38 +77,38 @@ DWORD WINAPI CComs::ThreadRead(LPVOID param)
 		{
 			retries--;
 		}
-		while (!msg.empty())
-		{
-			delete[] msg.front();
-			msg.pop();
-		}
 	}
 
-	InterlockedExchange16(&local->threadClosed, TRUE);
-	SendNotifyMessage(local->hWndMessages, WM_CLOSE, 0, 0);
-	return 0;
+	if (hWndMessages)
+	{
+		SendNotifyMessage(hWndMessages, WM_CLOSE, 0, 0);
+	}
 }
 
-bool CComs::ProcessMessage(BYTE* msg, DWORD size)
+bool CComs::ProcessMessage(std::span<const uint8_t> msg)
 {
 	switch (static_cast<MsjType>(msg[0]))
 	{
 		case MsjType::RawMode:
-			pProfile->SetRawMode(msg[1] == 1);
+			pProfile.SetRawMode(msg[1] == 1);
 			break;
 		case MsjType::CalibrationMode:
-			pProfile->SetCalibrationMode(msg[1] == 1);
+			pProfile.SetCalibrationMode(msg[1] == 1);
 			break;
 		case MsjType::Calibration:
-			pProfile->WriteCalibration(&msg[1]);
+			pProfile.WriteCalibration(msg.subspan(1));
 			break;
 		case MsjType::Antiv:
-			pProfile->WriteAntivibration(&msg[1]);
+			pProfile.WriteAntivibration(msg.subspan(1));
 			break;
 		case MsjType::Map:
-			return pProfile->HF_IoWriteMap(&msg[1], size - 1);
+			return pProfile.HF_IoWriteMap(msg.subspan(1));
 		case MsjType::Commands:
-			return pProfile->HF_IoWriteCommands((size > 1) ? &msg[1] : msg, size - 1);
+		{
+			return (msg.size() > 1)
+				? pProfile.HF_IoWriteCommands(msg.subspan(1))
+				: pProfile.HF_IoWriteCommands(msg);
+		}
 		default:
 			break;
 	}

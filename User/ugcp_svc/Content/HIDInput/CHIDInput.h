@@ -7,7 +7,7 @@
 class CHIDInput
 {
 public:
-	CHIDInput(CProfile* profile, CEventQueue* evQueue);
+	CHIDInput(CProfile& profile, CEventQueue& evQueue);
 	~CHIDInput();
 
 	bool Init(HINSTANCE hInst);
@@ -31,7 +31,8 @@ private:
 
 	HWND pnpHWnd = NULL;
 	HDEVNOTIFY pnpHdn = NULL;
-	CProfile* pProfile = nullptr;
+	CProfile& pProfile;
+	bool powerSuspended = false;
 
 	std::unordered_map<UINT32, short> threadClosed;
 	std::unordered_map<UINT32, bool> exit;

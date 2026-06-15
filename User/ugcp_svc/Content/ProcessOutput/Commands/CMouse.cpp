@@ -1,19 +1,18 @@
 #include "../../framework.h"
 #include "CMouse.h"
 
-bool CMouse::SendOutput(CVirtualHID* pVHid, CommandType cmd, bool axisX, bool axisY)
+bool CMouse::SendOutput(CVirtualHID& pVHid, CommandType cmd, bool axisX, bool axisY)
 {
 	BYTE buffer[4];
 	bool mouseOn = FALSE;
 
-	pVHid->LockMouse();
 	{
-		RtlCopyMemory(buffer, &pVHid->GetStatus()->Mouse, 4);
+		std::lock_guard<std::mutex> lock(GetLock());
+		RtlCopyMemory(buffer, &pVHid.GetStatus()->Mouse, 4);
 		if (!axisX) buffer[1] = 0;
 		if (!axisY) buffer[2] = 0;
-		mouseOn = ((pVHid->GetStatus()->Mouse.X != 0) || (pVHid->GetStatus()->Mouse.Y != 0));
+		mouseOn = ((pVHid.GetStatus()->Mouse.X != 0) || (pVHid.GetStatus()->Mouse.Y != 0));
 	}
-	pVHid->UnlockMouse();
 
 	INPUT ip;
 	RtlZeroMemory(&ip, sizeof(INPUT));
@@ -55,87 +54,86 @@ bool CMouse::SendOutput(CVirtualHID* pVHid, CommandType cmd, bool axisX, bool ax
 	return false;
 }
 
-bool CMouse::Process(CVirtualHID* pVHid, PEV_COMMAND command, bool* setTimer)
+bool CMouse::Process(CVirtualHID& pVHid, PEV_COMMAND command, bool* setTimer)
 {
 	bool release = ((command->Type & CommandType::Release) == CommandType::Release);
 	bool processed = true;
 	bool axisX = false, axisY = false;
 
-	pVHid->LockMouse();
 	{
+		std::lock_guard<std::mutex> lock(GetLock());
 		if ((command->Type & 0x7f) == CommandType::MouseBt1)
 		{
 			if (!release)
-				pVHid->GetStatus()->Mouse.Buttons |= 1;
+				pVHid.GetStatus()->Mouse.Buttons |= 1;
 			else
-				pVHid->GetStatus()->Mouse.Buttons &= 254;
+				pVHid.GetStatus()->Mouse.Buttons &= 254;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseBt2)
 		{
 			if (!release)
-				pVHid->GetStatus()->Mouse.Buttons |= 2;
+				pVHid.GetStatus()->Mouse.Buttons |= 2;
 			else
-				pVHid->GetStatus()->Mouse.Buttons &= 253;
+				pVHid.GetStatus()->Mouse.Buttons &= 253;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseBt3)
 		{
 			if (!release)
-				pVHid->GetStatus()->Mouse.Buttons |= 4;
+				pVHid.GetStatus()->Mouse.Buttons |= 4;
 			else
-				pVHid->GetStatus()->Mouse.Buttons &= 251;
+				pVHid.GetStatus()->Mouse.Buttons &= 251;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseLeft) //Axis -x
 		{
 			axisX = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.X = -command->Basic.Data1;
+				pVHid.GetStatus()->Mouse.X = -command->Basic.Data1;
 			else
-				pVHid->GetStatus()->Mouse.X = 0;
+				pVHid.GetStatus()->Mouse.X = 0;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseRight) //Axis x
 		{
 			axisX = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.X = command->Basic.Data1;
+				pVHid.GetStatus()->Mouse.X = command->Basic.Data1;
 			else
-				pVHid->GetStatus()->Mouse.X = 0;
+				pVHid.GetStatus()->Mouse.X = 0;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseUp) //Axis -y
 		{
 			axisY = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.Y = -command->Basic.Data1;
+				pVHid.GetStatus()->Mouse.Y = -command->Basic.Data1;
 			else
-				pVHid->GetStatus()->Mouse.Y = 0;
+				pVHid.GetStatus()->Mouse.Y = 0;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseDown) //Axis y
 		{
 			axisY = true;
 			if (!release)
-				pVHid->GetStatus()->Mouse.Y = command->Basic.Data1;
+				pVHid.GetStatus()->Mouse.Y = command->Basic.Data1;
 			else
-				pVHid->GetStatus()->Mouse.Y = 0;
+				pVHid.GetStatus()->Mouse.Y = 0;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseWhUp) // Wheel up
 		{
 			if (!release)
-				pVHid->GetStatus()->Mouse.Wheel = 127;
+				pVHid.GetStatus()->Mouse.Wheel = 127;
 			else
-				pVHid->GetStatus()->Mouse.Wheel = 0;
+				pVHid.GetStatus()->Mouse.Wheel = 0;
 		}
 		else if ((command->Type & 0x7f) == CommandType::MouseWhDown) // Wheel down
 		{
 			if (!release)
-				pVHid->GetStatus()->Mouse.Wheel = -127;
+				pVHid.GetStatus()->Mouse.Wheel = -127;
 			else
-				pVHid->GetStatus()->Mouse.Wheel = 0;
+				pVHid.GetStatus()->Mouse.Wheel = 0;
 		}
 		else
 		{
 			processed = false;
 		}
 	}
-	pVHid->UnlockMouse();
 
 	if (processed)
 	{

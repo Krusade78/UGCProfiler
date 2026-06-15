@@ -9,14 +9,14 @@
 class CPreprocess
 {
 public:
-	CPreprocess(CProfile* pProfile, CEventQueue* evQueue, void* ptrHIDInput, void (*FnLockDevices)(void*), void (*FnUnlockDevices)(void*), CHIDDevices* (*FnGetDevice)(void*, UINT32));
+	CPreprocess(CProfile& pProfile, CEventQueue& evQueue, void* ptrHIDInput, void (*FnLockDevices)(void*), void (*FnUnlockDevices)(void*), CHIDDevices* (*FnGetDevice)(void*, UINT32));
 	~CPreprocess();
 
 	bool Init();
 	void AddToQueue(UCHAR* buff, DWORD size) { hidQueue->Add(buff, size); };
 
 private:
-	CProfile* pProfile = nullptr;
+	CProfile& pProfile;
 	CHIDQueue* hidQueue = nullptr;
 
 	short threadClosed = TRUE;

@@ -5,12 +5,12 @@
 class CProcessInput
 {
 public:
-	CProcessInput(CProfile* profile);
+	CProcessInput(CProfile& profile);
 
 	void Process(UINT32 joyId, PHID_INPUT_DATA p_hidData);
 	//UCHAR ConvertirSeta(UCHAR pos);
 private:
-	CProfile* pProfile = nullptr;
+	CProfile& pProfile;
 
 	std::unordered_map<UINT32, HID_INPUT_DATA> lastStatus;
 

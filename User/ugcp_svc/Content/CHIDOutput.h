@@ -3,24 +3,24 @@
 #include "Eventqueue/CEventQueue.h"
 #include "ProcessOutput/CVirtualHID.h"
 #include "ProcessOutput/CProcessOutput.h"
+#include <memory>
 
 class CHIDOutput
 {
 public:
-	CHIDOutput(CProfile* profile, CEventQueue* evQueue, CVirtualHID* vhid);
+	explicit CHIDOutput(CProfile& profile, CEventQueue& evQueue, CVirtualHID& vhid);
 	~CHIDOutput();
 
 	bool Init();
 private:
-	HANDLE evExit = nullptr;
-	bool exit = false;
-	short threadClosed = TRUE;
+	unique_handle evExit{};
+	unique_handle threadClosed{};
 
-	CProfile* profile = nullptr;
-	CEventQueue* evQueue = nullptr;
-	CVirtualHID* vhid = nullptr;
-	CProcessOutput* output = nullptr;
+	CProfile& profile;
+	CEventQueue& evQueue;
+	CVirtualHID& vhid;
+	std::unique_ptr<CProcessOutput> output{ nullptr };
 
-	static DWORD WINAPI ThreadRead(LPVOID param);
+	static unsigned _stdcall ThreadRead(void* param);
 };
 

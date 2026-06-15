@@ -16,7 +16,7 @@
     <ProjectGuid>{fb85a669-9a7b-41e3-a150-48cc55e7c785}</ProjectGuid>
     <RootNamespace>xhotassvc</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>ugcp_svc</ProjectName>
+    <ProjectName>ugcp_svc_cpp</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -141,12 +141,14 @@ xcopy /y $(ProjectDir)lib\vJoyInterface.dll $(ProjectDir)$(Platform)\$(Configura
     <ClInclude Include="Content\Profile\CProfile.Programming.h" />
     <ClInclude Include="Content\Profile\CProfile.Status.h" />
     <ClInclude Include="Content\targetver.h" />
+    <ClInclude Include="Content\unique_handle.h" />
     <ClInclude Include="Content\vJoy\public.h" />
     <ClInclude Include="Content\vJoy\vjoyinterface.h" />
     <ClInclude Include="Content\X52\CWinUSBX52.h" />
     <ClInclude Include="Content\X52\USBX52Write.h" />
     <ClInclude Include="Content\X52\MFDMenu.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Tiempo.h" />
     <ClInclude Include="ugcp_svc.h" />
   </ItemGroup>
   <ItemGroup>

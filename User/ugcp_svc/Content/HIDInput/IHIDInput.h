@@ -1,31 +1,31 @@
 #pragma once
-#include <strsafe.h>
-#include <stdlib.h>
+#include <wchar.h>
+#include <Shlwapi.h>
 
-constexpr auto BUFF_TAM = 64;
+#pragma comment(lib, "Shlwapi.lib")
 
 class IHIDInput
 {
 public:
+    virtual ~IHIDInput() = default;
     virtual bool Prepare() = 0;
     virtual bool Open() = 0;
     virtual void Close(bool exit) = 0;
 	virtual unsigned short Read(void* buff) = 0;
 
-	inline static UINT32 GetHardwareId(wchar_t* path)
+	inline static std::uint32_t GetHardwareId(wchar_t* path)
     {
-        int size = lstrlen(path) + 1;
-        wchar_t* cmps = new wchar_t[size];
-        StringCchCopy(cmps, size, path);
+        std::uint32_t ret = 0xFFFFFFFF;
 
-        UINT32 ret = 0xFFFFFFFF;
-        try
+        const wchar_t* vidStr = StrStrIW(path, L"VID_");
+        if (vidStr)
         {
-            ret = static_cast<UINT32>(wcstol(&path[12], NULL, 16)) << 16;
-            ret |= static_cast<UINT32>(wcstol(&path[21], NULL, 16));
+            vidStr += 4;
+            const wchar_t* pidStr = vidStr + 9;
+
+            ret = wcstoul(vidStr, nullptr, 16) << 16;
+            ret |= wcstoul(pidStr, nullptr, 16);
         }
-        catch(...) {}
-        delete[] cmps;
         return ret;
     }
 }; 

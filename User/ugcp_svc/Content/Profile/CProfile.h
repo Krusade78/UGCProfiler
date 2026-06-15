@@ -1,6 +1,7 @@
 #pragma once
 #include <deque>
 #include <unordered_map>
+#include <span>
 #include "../EventQueue/CEventPacket.h"
 #include "CProfile.Status.h"
 #include "CProfile.Programming.h"
@@ -9,15 +10,15 @@
 class CProfile
 {
 public:
-	CProfile(void* pVHID);
+	CProfile();
 	~CProfile();
 
 	inline void SetCalibrationMode(bool mode) { InterlockedExchange16(&calibrationMode, mode); if (PauseWinUSB != nullptr) { PauseWinUSB(hidInput, mode); } };
 	inline void SetRawMode(bool mode) { InterlockedExchange16(&rawMode, mode); if (PauseWinUSB != nullptr) { PauseWinUSB(hidInput, mode); } };
-	void WriteCalibration(BYTE* data);
-	void WriteAntivibration(BYTE* data);
-	bool HF_IoWriteCommands(BYTE* data, DWORD size);
-	bool HF_IoWriteMap(BYTE* data, DWORD size);
+	void WriteCalibration(std::span<const std::uint8_t> msg);
+	void WriteAntivibration(std::span<const std::uint8_t> msg);
+	bool HF_IoWriteCommands(std::span<const std::uint8_t> msg);
+	bool HF_IoWriteMap(std::span<const std::uint8_t> msg);
 
 	inline bool GetCalibrationMode() { return InterlockedCompareExchange16(&calibrationMode, FALSE, FALSE) == TRUE; };
 	inline bool GetRawMode() { return InterlockedCompareExchange16(&rawMode, FALSE, FALSE) == TRUE; };
@@ -37,7 +38,6 @@ public:
 	inline void SetRefreshDevicesCallback(void* hidInput, void (*FnRefreshHidInputDevice)(void*, UINT32*, UCHAR)) { this->hidInput = hidInput, this->RefreshHidInputDevice = FnRefreshHidInputDevice; }
 	inline void SetPauseWinUSBCallback(void (*FnPauseWinUSB)(void*, bool)) { this->PauseWinUSB = FnPauseWinUSB; }
 private:
-	void* pVHID = nullptr;
 	HANDLE hMutexProgram = nullptr;
 	HANDLE hMutexCalibration = nullptr;
 	HANDLE hMutexStatus = nullptr;

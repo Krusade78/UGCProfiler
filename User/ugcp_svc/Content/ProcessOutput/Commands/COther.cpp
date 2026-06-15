@@ -8,7 +8,7 @@
 /// <returns><para>false: delete command[0] normal</para>
 /// <para>true: reprocess/skip action</para>
 /// </returns>
-bool COther::Process(CProfile* pProfile, std::deque<CEventPacket*>::iterator* posEvent, void* parent)
+bool COther::Process(CProfile& pProfile, std::deque<CEventPacket*>::iterator* posEvent, void* parent)
 {
 	CEventPacket* commandQueue = **posEvent;
 	CProcessOutput* local = static_cast<CProcessOutput*>(parent);
@@ -92,11 +92,11 @@ void CALLBACK COther::EvtDelay(_Inout_ PTP_CALLBACK_INSTANCE Instance, _Inout_op
 	}
 }
 
-bool COther::IsHoldOn(CProfile* pProfile, PEV_COMMAND command)
+bool COther::IsHoldOn(CProfile& pProfile, PEV_COMMAND command)
 {
 	bool pressed = false;
 
-	pProfile->LockStatus();
+	pProfile.LockStatus();
 	{
 		
 		if ((command->Extended.Origin & 128) == 128)  //axis or hat
@@ -104,18 +104,18 @@ bool COther::IsHoldOn(CProfile* pProfile, PEV_COMMAND command)
 			if (command->Extended.Mode == 255) //hat
 			{
 				UCHAR hatPressed;
-				if (pProfile->GetStatus()->Hats.GetPressed(&hatPressed, command->Extended.InputJoy, command->Extended.Origin & 127))
+				if (pProfile.GetStatus()->Hats.GetPressed(&hatPressed, command->Extended.InputJoy, command->Extended.Origin & 127))
 				{
 					pressed = hatPressed == 1;
 				}
 			}
 			else //axis
 			{
-				UCHAR mode = pProfile->GetStatus()->Mode;
-				UCHAR submode = pProfile->GetStatus()->SubMode;
+				UCHAR mode = pProfile.GetStatus()->Mode;
+				UCHAR submode = pProfile.GetStatus()->SubMode;
 				UCHAR cmode = mode | static_cast<UCHAR>(submode << 4);
 				STATUS::ST_AXIS* stAxis;
-				if (pProfile->GetStatus()->Axes.GetStatus(&stAxis, command->Extended.InputJoy, mode | static_cast<UCHAR>(submode << 4), command->Extended.Origin & 127))
+				if (pProfile.GetStatus()->Axes.GetStatus(&stAxis, command->Extended.InputJoy, mode | static_cast<UCHAR>(submode << 4), command->Extended.Origin & 127))
 				{
 					pressed = !((command->Extended.Mode == mode) && (command->Extended.Submode == submode) && ((command->Extended.Incremental != stAxis->IncrementalPos) || (command->Extended.Band != stAxis->Band)));
 				}
@@ -124,13 +124,13 @@ bool COther::IsHoldOn(CProfile* pProfile, PEV_COMMAND command)
 		else //button
 		{
 			UCHAR btPressed;
-			if (pProfile->GetStatus()->Buttons.GetPressed(&btPressed, command->Extended.InputJoy, command->Extended.Origin))
+			if (pProfile.GetStatus()->Buttons.GetPressed(&btPressed, command->Extended.InputJoy, command->Extended.Origin))
 			{
 				pressed = btPressed == 1;
 			}
 		}
 	}
-	pProfile->UnlockStatus();
+	pProfile.UnlockStatus();
 
 	return pressed;
 }
