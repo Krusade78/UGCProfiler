@@ -88,7 +88,7 @@ namespace Profiler
                     ((App)Microsoft.UI.Xaml.Application.Current).SetTitle($"{Translate.Get("save title")} [{System.IO.Path.GetFileNameWithoutExtension(filename)}]");
                     btSave.IsEnabled = true;
 
-                    foreach (Shared.ProfileModel.DeviceInfo di in data.Profile.DevicesIncluded)
+                    foreach (Shared.DeviceInfo di in data.Profile.DevicesIncluded)
                     {
                         ctlDevs.AddProfileDevice(di);
                     }
@@ -102,7 +102,7 @@ namespace Profiler
                 return await SaveAs();
             else
             {
-                System.Collections.Generic.List<Shared.ProfileModel.DeviceInfo> devs = [];
+                System.Collections.Generic.List<Shared.DeviceInfo> devs = [];
                 foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kv in ctlDevs.GetDevices())
                 {
                     devs.Add(kv.Value);
@@ -121,7 +121,7 @@ namespace Profiler
             var file = await fsp.PickSaveFileAsync();
             if (file != null)
             {
-                System.Collections.Generic.List<Shared.ProfileModel.DeviceInfo> devs = [];
+                System.Collections.Generic.List<Shared.DeviceInfo> devs = [];
                 foreach (System.Collections.Generic.KeyValuePair<string, Devices.DeviceInfo> kv in ctlDevs.GetDevices())
                 {
                     devs.Add(kv.Value);

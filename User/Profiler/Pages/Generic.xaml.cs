@@ -39,7 +39,7 @@ namespace Profiler.Pages
                 foreach (byte o in order)
                 {
                     byte count = 1;
-                    foreach (Shared.ProfileModel.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == o))
+                    foreach (Shared.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == o))
                     {
                         Uno.UI.Toolkit.ElevatedView bd = new()
                         {
@@ -66,7 +66,7 @@ namespace Profiler.Pages
             //Hats
             {
                 byte count = 1;
-                foreach (Shared.ProfileModel.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == 253))
+                foreach (Shared.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == 253))
                 {
                     byte posMin = (byte)(u.Range & 0xf);
                     System.Collections.Generic.List<Microsoft.UI.Xaml.Controls.Primitives.ToggleButton> hatPos = [];
@@ -99,7 +99,7 @@ namespace Profiler.Pages
             //Buttons
             {
                 byte count = 1;
-                foreach (Shared.ProfileModel.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == 254))
+                foreach (Shared.DeviceInfo.CUsage u in deviceInfo.Usages.Where(x => x.Type == 254))
                 {
                     for (byte pos = 0; pos <= u.Range; pos++)
                     {

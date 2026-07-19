@@ -6,157 +6,160 @@ using System.Threading.Tasks;
 
 namespace Launcher
 {
-	internal class CService(object main) : IDisposable
-	{
-		private System.Threading.CancellationTokenSource closePipe = new();
-		private System.Threading.CancellationTokenSource closePipeSvc = new();
-		private System.IO.BinaryWriter outputPipeSvc = null;
-		private readonly object main = main;
+    internal class CService(object main) : IDisposable
+    {
+        private readonly System.Threading.CancellationTokenSource closePipe = new();
+        private Task? tPipe = null;
+        private readonly System.Threading.CancellationTokenSource closePipeSvc = new();
+        private Task? tPipeSvc = null;
+        private NamedPipeServerStream? pipeServerSvc = null;
+        private readonly object main = main;
 
-		public event EventHandler<ResolveEventArgs> ExitEvt;
-		public enum MsgType : byte { RawMode, CalibrationMode, Calibration, Antivibration, Map, Macros };
+        public event EventHandler? ExitEvt;
+        public enum MsgType : byte { RawMode, CalibrationMode, Calibration, Antivibration, Map, Macros };
 
-		#region IDisposable Support
-		private bool disposedValue = false; // Para detectar llamadas redundantes
+        #region IDisposable Support
+        private bool disposedValue = false; // Para detectar llamadas redundantes
 
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!disposedValue)
-			{
-				if (disposing)
-				{
-					closePipe?.Cancel();
-					while (closePipe != null) { System.Threading.Thread.Sleep(100); }
-					closePipeSvc?.Cancel();
-					while (closePipeSvc != null) { System.Threading.Thread.Sleep(100); }
-				}
-				disposedValue = true;
-			}
-		}
-		public void Dispose()
-		{
-			 Dispose(true);
-			 GC.SuppressFinalize(this);
-		}
-		#endregion
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                disposedValue = true;
+                if (disposing)
+                {
+                    closePipe?.Cancel();
+                    tPipe?.Wait();
+                    closePipe?.Dispose();
+                    closePipeSvc?.Cancel();
+                    tPipeSvc?.Wait();
+                    closePipeSvc?.Dispose();
+                }
+            }
+        }
+        public void Dispose()
+        {
+             Dispose(true);
+             GC.SuppressFinalize(this);
+        }
+        #endregion
 
-		public bool Init()
-		{
-			Task.Run(() =>
-				{
-					while (!closePipe.Token.IsCancellationRequested)
-					{
-						using NamedPipeServerStream pipeServer = new("LauncherPipe", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough);
-						try { pipeServer.WaitForConnectionAsync(closePipe.Token).Wait(closePipe.Token); } catch { break; }
-						if (closePipe.Token.IsCancellationRequested)
-						{
-							break;
-						}
-						using System.IO.StreamReader r = new(pipeServer);
-						MessageIn(r.ReadToEnd());
-					}
-					closePipe.Dispose();
-					closePipe = null;
-				});
-			Task.Run(() =>
-			{
-				using (NamedPipeServerStream pipeServerSvc = new("LauncherPipeSvc", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough))
-				{
-					while (!closePipeSvc.Token.IsCancellationRequested)
-					{
-						try { pipeServerSvc.WaitForConnectionAsync(closePipeSvc.Token).Wait(closePipeSvc.Token); } catch { closePipeSvc.Cancel(); }
-						if (!closePipeSvc.Token.IsCancellationRequested)
-						{
-							try
-							{
-								using System.IO.StreamReader r = new(pipeServerSvc);
-								using System.IO.BinaryWriter w = new(pipeServerSvc);
-								while (!closePipeSvc.Token.IsCancellationRequested)
-								{
-									if (r.ReadLine() == "OK")
-									{
-										outputPipeSvc = w;
-										LoadCalibration();
-										closePipeSvc.Token.WaitHandle.WaitOne();
-									}
-									else
-									{
-										break;
-									}
-								}
-							}
-							catch
-							{
-								closePipeSvc.Cancel();
-							}
-							if (outputPipeSvc != null)
-							{
-								outputPipeSvc.Close();
-								outputPipeSvc = null;
-							}
-						}
-					}
-				}
-				closePipeSvc.Dispose();
-				closePipeSvc = null;
-			}).ContinueWith((ret) => ExitEvt.Invoke(null, null));
+        public bool Init()
+        {
+            tPipe = Task.Run(async() =>
+                {
+                    byte[] buff = new byte[270 * sizeof(char)];
+                    using NamedPipeServerStream pipeServer = new("LauncherPipe", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough);
+                    try { pipeServer.WaitForConnectionAsync(closePipe.Token).Wait(closePipe.Token); } catch { closePipeSvc.Cancel(); return; }
+                    while (!closePipe.Token.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            int size = await pipeServer.ReadAsync(buff.AsMemory(), closePipe.Token);
+                            MessageIn(System.Text.Encoding.UTF8.GetString(buff, 0, size));
+                        }
+                        catch { break; }
+                    }
+                });
+            tPipeSvc = Task.Run(async() =>
+            {
+                using NamedPipeServerStream tPipeServerSvc = new("LauncherPipeSvc", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.WriteThrough);
+                while (!closePipeSvc.Token.IsCancellationRequested)
+                {
+                    try { tPipeServerSvc.WaitForConnectionAsync(closePipeSvc.Token).Wait(closePipeSvc.Token); } catch { closePipeSvc.Cancel(); }
+                    if (!closePipeSvc.Token.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            if (!closePipeSvc.Token.IsCancellationRequested)
+                            {
+                                byte[] r = new byte[2];
+                                int size = await tPipeServerSvc.ReadAsync(r.AsMemory(0, 2), closePipeSvc.Token);
+                                if ((size == 2) && (r[0] == 1) && (r[1] == 1))
+                                {
+                                    pipeServerSvc = tPipeServerSvc;
+                                    lock (this)
+                                    {
+                                        LoadCalibration();
+                                    }
+                                    closePipeSvc.Token.WaitHandle.WaitOne();
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            closePipeSvc.Cancel();
+                        }
+                        pipeServerSvc = null;
+                    }
+                }
+            }).ContinueWith((ret) => ExitEvt?.Invoke(null, new()));
 
-			return true;
-		}
+            return true;
+        }
 
-		private void LoadCalibration()
-		{
-			CCalibration.Load(outputPipeSvc);
-		}
+        private void LoadCalibration()
+        {
+            if (pipeServerSvc != null)
+            {
+                CCalibration.Load(pipeServerSvc);
+            }
+        }
 
-		private void MessageIn(string msj)
-		{
-			if (msj.StartsWith("CCAL"))
-			{
-				LoadCalibration();
-			}
-			else if (msj.StartsWith("CAL:"))
-			{
-				if (outputPipeSvc != null)
-				{
-					byte[] buff = [(byte)MsgType.CalibrationMode, msj.Contains("True") ? (byte)1 : (byte)0];
-					outputPipeSvc.Write(buff, 0, 2);
-					outputPipeSvc.Flush();
-				}
-			}
-			else if (msj.StartsWith("RAW:"))
-			{
-				if (outputPipeSvc != null)
-				{
-					byte[] buff = [(byte)MsgType.RawMode, msj.Contains("True") ? (byte)1 : (byte)0];
-					outputPipeSvc.Write(buff, 0, 2);
-					outputPipeSvc.Flush();
-				}
-			}
-			else if (msj.StartsWith("DEF:"))
-			{
-				LoadProfile(null);
-			}
-			else
-			{
-				LoadProfile(msj);
-			}
-		}
+        private void MessageIn(string msj)
+        {
+            if (msj.StartsWith("CCAL"))
+            {
+                LoadCalibration();
+            }
+            //else if (msj.StartsWith("CAL:"))
+            //{
+            //    if (pipeServerSvc != null)
+            //    {
+            //        byte[] buff = [(byte)MsgType.CalibrationMode, (byte)(msj.Contains("True") ? 1 : 0)];
+            //        pipeServerSvc.Write(buff, 0, 2);
+            //        pipeServerSvc.Flush();
+            //    }
+            //}
+            else if (msj.StartsWith("RAW:"))
+            {
+                if (pipeServerSvc != null)
+                {
+                    byte[] buff = [(byte)MsgType.RawMode, (byte)(msj.Contains("True") ? 1 : 0)];
+                    pipeServerSvc.Write(buff, 0, 2);
+                    pipeServerSvc.Flush();
+                }
+            }
+            else if (msj.StartsWith("DEF:"))
+            {
+                LoadProfile(null);
+            }
+            else
+            {
+                LoadProfile(msj);
+            }
+        }
 
-		public void LoadProfile(string file)
-		{
-			bool ret;
-			lock (this)
-			{
+        public void LoadProfile(string? file)
+        {
+            bool ret = false;
+            lock (this)
+            {
+                if (pipeServerSvc != null)
+                {
+                    ret = new CProfile(main).Load(file, pipeServerSvc);
+                }
+            }
 
-				ret = new CProfile(main).Load(file, outputPipeSvc);
-			}
-
-			if (ret && (file != null))
-			{
-				string name = System.IO.Path.GetFileNameWithoutExtension(file);
-				((CMain)main).MessageBox(CTranslate.Get("profile loaded ok"), name, MessageBoxImage.Information);
-			}
-		}
-	}
+            if (ret && (file != null))
+            {
+                string name = System.IO.Path.GetFileNameWithoutExtension(file);
+                ((CMain)main).MessageBox(CTranslate.Get("profile loaded ok"), name, MessageBoxImage.Information);
+            }
+        }
+    }
 }

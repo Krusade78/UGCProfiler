@@ -9,7 +9,7 @@ namespace Profiler.Controls.Properties
             public static uint Joy { get; set; }
             public static ushort Idx { get; set; }
             public static byte HatPosition { get; set; }
-            public static Shared.ProfileModel.DeviceInfo.CUsage Usage { get; set; } = new();
+            public static Shared.DeviceInfo.CUsage Usage { get; set; } = new();
         }
 
         public Devices.DeviceInfo CurrentDevInfo { get; set; }
@@ -41,7 +41,7 @@ namespace Profiler.Controls.Properties
             CurrentSel.Joy = joy;
             CurrentSel.HatPosition = hatPosition;
             {
-                Shared.ProfileModel.DeviceInfo.CUsage? usage = CurrentDevInfo.Usages.Find(x => x.ReportIdx == idx);
+                Shared.DeviceInfo.CUsage? usage = CurrentDevInfo.Usages.Find(x => x.ReportIdx == idx);
                 usage ??= CurrentDevInfo.Usages.Find(x => (x.Type == (byte)CEnums.ElementType.Button) && (idx >= x.ReportIdx) && (idx <= x.Range)) ?? new();
                 CurrentSel.Usage = usage;
             }

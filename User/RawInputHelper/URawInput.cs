@@ -17,7 +17,7 @@ namespace RawInputHelper
             hEvClose = Win32.CreateEventW(0, true, false, null);
             if (hEvClose != IntPtr.Zero)
             {
-                hWnd = Win32.CreateWindowExW(0, "STATIC", null, 0, 0, 0, 0, 0, -3, 0, Win32.GetModuleHandleW(null) , 0);
+                hWnd = API.Win32.CreateWindowExW(0, "STATIC", null, 0, 0, 0, 0, 0, -3, 0, API.Win32.GetModuleHandleW(null) , 0);
                 if (hWnd != IntPtr.Zero)
                 {
                     Win32.RAWINPUTDEVICE[] rdev = new Win32.RAWINPUTDEVICE[1];
@@ -32,7 +32,7 @@ namespace RawInputHelper
 
                     if (!Win32.RegisterRawInputDevices(rdev, 1, (uint)Marshal.SizeOf<Win32.RAWINPUTDEVICE>()))
                     {
-                        Win32.DestroyWindow(hWnd);
+                        API.Win32.DestroyWindow(hWnd);
                         return;
                     }
 
@@ -53,7 +53,7 @@ namespace RawInputHelper
                         }
                     }
 
-                    Win32.DestroyWindow(hWnd);
+                    API.Win32.DestroyWindow(hWnd);
                     hWnd = IntPtr.Zero;
                 }
             }
@@ -70,7 +70,7 @@ namespace RawInputHelper
                 {
                     System.Threading.Thread.Sleep(100);
                 }
-                Win32.CloseHandle(hEvClose);
+                API.Win32.CloseHandle(hEvClose);
             }
         }
 
@@ -130,10 +130,10 @@ namespace RawInputHelper
                                         Marshal.Copy(IntPtr.Add(pNextRawInput, Marshal.SizeOf<Win32.RAWINPUTHEADER>() + Marshal.SizeOf<Win32.RAWHID>()), report, 0, (int)raw.hid.dwSizeHid);
 
                                         uint dataSize = 0;
-                                        if (0xC0110007 == Win32.HidP_GetData(Win32.HidP_ReportType.HidP_Input, IntPtr.Zero, ref dataSize, ppdBuffer, report, raw.hid.dwSizeHid))
+                                        if (0xC0110007 == API.HID.HidP_GetData(API.HID.HidP_ReportType.HidP_Input, IntPtr.Zero, ref dataSize, ppdBuffer, report, raw.hid.dwSizeHid))
                                         {
                                             IntPtr data = Marshal.AllocHGlobal((int)dataSize * Marshal.SizeOf<Win32.HIDP_DATA>());
-                                            if (0x00110000 == Win32.HidP_GetData(Win32.HidP_ReportType.HidP_Input, data, ref dataSize, ppdBuffer, report, raw.hid.dwSizeHid))
+                                            if (0x00110000 == API.HID.HidP_GetData(API.HID.HidP_ReportType.HidP_Input, data, ref dataSize, ppdBuffer, report, raw.hid.dwSizeHid))
                                             {
                                                 byte[] datab = new byte[Marshal.SizeOf<Win32.HIDP_DATA>() * dataSize];
                                                 Marshal.Copy(data, datab, 0, datab.Length);

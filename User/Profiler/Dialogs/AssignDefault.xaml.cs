@@ -47,7 +47,7 @@ namespace Profiler.Dialogs
             byte idxHat = 0;
             byte idxAxis = 0;
             System.Collections.Generic.List<byte> axesUsed = [];
-            foreach (Shared.ProfileModel.DeviceInfo.CUsage usg in devInfo.Usages)
+            foreach (Shared.DeviceInfo.CUsage usg in devInfo.Usages)
             {
                 if (usg.Type == 254)
                 {

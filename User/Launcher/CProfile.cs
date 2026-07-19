@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using API;
+using System;
 using System.Collections.Generic;
-using API;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace Launcher
 {
@@ -10,13 +10,13 @@ namespace Launcher
     {
         private readonly CMain main = (CMain)main;
 
-        public bool Load(string file, System.IO.BinaryWriter pipe)
+        public bool Load(string? file, System.IO.Pipes.NamedPipeServerStream pipe)
         {
-            Shared.ProfileModel profile;
+            Shared.ProfileModel? profile;
             if (string.IsNullOrEmpty(file))
             {
                 profile = new();
-                string devices = null;
+                string? devices = null;
                 if (LoadDefault(ref profile, ref devices))
                 {
                     file = CTranslate.Get("default");
@@ -32,7 +32,7 @@ namespace Launcher
                 try
                 {
                     string json = System.IO.File.ReadAllText(file);
-                    profile = System.Text.Json.JsonSerializer.Deserialize<Shared.ProfileModel>(json);
+                    profile = System.Text.Json.JsonSerializer.Deserialize<Shared.ProfileModel>(json) ?? throw new Exception("Profile format");
                 }
                 catch (Exception ex)
                 {
@@ -42,52 +42,10 @@ namespace Launcher
                 file = System.IO.Path.GetFileNameWithoutExtension(file);
             }
 
-            #region "Macros"
+            #region "Mapping and macros"
             {
-                uint tamBuffer = 0;
-                uint nActions = 0;
-                foreach (Shared.ProfileModel.MacroModel mm in profile.Macros)
-                {
-                    if (mm.Id == 0) //skip No action macro
-                    {
-                        continue;
-                    }
-                    nActions++;
-                    tamBuffer += 1 + (uint)(4 * mm.Commands.Count); //1 list size
-                }
-                byte[] bufferCommands = new byte[tamBuffer + 1];
-                bufferCommands[0] = (byte)CService.MsgType.Macros;
-
-                int pos = 1;
-                foreach (Shared.ProfileModel.MacroModel mm in profile.Macros)
-                {
-                    if (mm.Id == 0) //skip No action macro
-                    {
-                        continue;
-                    }
-                    bufferCommands[pos++] = (byte)mm.Commands.Count;
-                    for (byte i = 0; i < (byte)mm.Commands.Count; i++)
-                    {
-                        bufferCommands[pos++] = (byte)(mm.Commands[i] & 0xff);
-                        bufferCommands[pos++] = (byte)((mm.Commands[i] >> 8) & 0xff);
-                        bufferCommands[pos++] = (byte)((mm.Commands[i] >> 16) & 0xff);
-                        bufferCommands[pos++] = (byte)((mm.Commands[i] >> 24) & 0xff);
-                    }
-                }
-
-                if (pipe != null)
-                {
-                    pipe.Write(bufferCommands, 0, bufferCommands.Length);
-                    pipe.Flush();
-                }
-            }
-            #endregion
-
-            #region "Mapping"
-            {
-                List<byte> mapBuffer = [];
-
-                mapBuffer.Add((byte)CService.MsgType.Map);
+                System.Text.StringBuilder sb = new();
+                sb.Append((char)CService.MsgType.Map);
 
                 #region "X52 MFD Text"
                 {
@@ -97,144 +55,22 @@ namespace Launcher
                         pfName = pfName[..16];
                     else if (pfName.Length == 0)
                         pfName = "";
-                    pfName = pfName.Replace('ñ', 'ø').Replace('á', 'Ó').Replace('í', 'ß').Replace('ó', 'Ô').Replace('ú', 'Ò').Replace('Ñ', '£').Replace('ª', 'Ø').Replace('º', '×').Replace('¿', 'ƒ').Replace('¡', 'Ú').Replace('Á', 'A').Replace('É', 'E').Replace('Í', 'I').Replace('Ó', 'O').Replace('Ú', 'U');
-                    byte[] text = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.GetEncoding(20127), System.Text.Encoding.Unicode.GetBytes(pfName));
-                    for (byte i = 0; i < 16; i++)
-                    {
-                        if (text.Length >= (i + 1))
-                            txtBuffer[i + 1] = text[i];
-                        else
-                            txtBuffer[i + 1] = 0;
-                    }
 
-                    txtBuffer[0] = 1;
-
-                    mapBuffer.AddRange(txtBuffer);
+                    sb.Append((char)1);
+                    sb.Append(pfName.PadRight(16, '\0'));
                 }
                 #endregion
 
-                //MouseTick
-                mapBuffer.Add(profile.MouseTick);
-
-                //buttons
-                mapBuffer.Add((byte)profile.ButtonsMap.Count);
-                foreach (KeyValuePair<uint, Shared.ProfileModel.ButtonMapModel> bm in profile.ButtonsMap)
-                {
-                    mapBuffer.Add((byte)(bm.Key & 0xff));
-                    mapBuffer.Add((byte)((bm.Key >> 8) & 0xff));
-                    mapBuffer.Add((byte)((bm.Key >> 16) & 0xff));
-                    mapBuffer.Add((byte)((bm.Key >> 24) & 0xff));
-                    mapBuffer.Add((byte)bm.Value.Modes.Count);
-                    foreach (KeyValuePair<byte, Shared.ProfileModel.ButtonMapModel.ModeModel> bmm in bm.Value.Modes)
-                    {
-                        mapBuffer.Add(bmm.Key);
-                        mapBuffer.Add((byte)bmm.Value.Buttons.Count);
-                        foreach (KeyValuePair<byte, Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel> button in bmm.Value.Buttons)
-                        {
-                            mapBuffer.Add(button.Key);
-                            mapBuffer.Add(button.Value.Type);
-                            mapBuffer.Add((byte)button.Value.Actions.Count);
-                            foreach (ushort index in button.Value.Actions)
-                            {
-                                mapBuffer.Add((byte)(index & 0xff));
-                                mapBuffer.Add((byte)(index >> 8));
-                            }
-                        }
-                    }
-                }
-
-                //hats
-                mapBuffer.Add((byte)profile.HatsMap.Count);
-                foreach (KeyValuePair<uint, Shared.ProfileModel.ButtonMapModel> bm in profile.HatsMap)
-                {
-                    mapBuffer.Add((byte)(bm.Key & 0xff));
-                    mapBuffer.Add((byte)((bm.Key >> 8) & 0xff));
-                    mapBuffer.Add((byte)((bm.Key >> 16) & 0xff));
-                    mapBuffer.Add((byte)((bm.Key >> 24) & 0xff));
-                    mapBuffer.Add((byte)bm.Value.Modes.Count);
-                    foreach (KeyValuePair<byte, Shared.ProfileModel.ButtonMapModel.ModeModel> bmm in bm.Value.Modes)
-                    {
-                        mapBuffer.Add(bmm.Key);
-                        mapBuffer.Add((byte)bmm.Value.Buttons.Count);
-                        foreach (KeyValuePair<byte, Shared.ProfileModel.ButtonMapModel.ModeModel.ButtonModel> button in bmm.Value.Buttons)
-                        {
-                            mapBuffer.Add(button.Key);
-                            mapBuffer.Add(button.Value.Type);
-                            mapBuffer.Add((byte)button.Value.Actions.Count);
-                            foreach (ushort index in button.Value.Actions)
-                            {
-                                mapBuffer.Add((byte)(index & 0xff));
-                                mapBuffer.Add((byte)(index >> 8));
-                            }
-                        }
-                    }
-                }
-
-                //axes
-                mapBuffer.Add((byte)profile.AxesMap.Count);
-                foreach (KeyValuePair<uint, Shared.ProfileModel.AxisMapModel> am in profile.AxesMap)
-                {
-                    mapBuffer.Add((byte)(am.Key & 0xff));
-                    mapBuffer.Add((byte)((am.Key >> 8) & 0xff));
-                    mapBuffer.Add((byte)((am.Key >> 16) & 0xff));
-                    mapBuffer.Add((byte)((am.Key >> 24) & 0xff));
-                    mapBuffer.Add((byte)am.Value.Modes.Count);
-                    foreach (KeyValuePair<byte, Shared.ProfileModel.AxisMapModel.ModeModel> amm in am.Value.Modes)
-                    {
-                        mapBuffer.Add(amm.Key);
-                        mapBuffer.Add((byte)amm.Value.Axes.Count);
-                        foreach (KeyValuePair<byte, Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel> axis in amm.Value.Axes)
-                        {
-                            mapBuffer.Add(axis.Key);
-                            mapBuffer.Add(axis.Value.Mouse);
-                            mapBuffer.Add(axis.Value.IdJoyOutput);
-                            mapBuffer.Add(axis.Value.Type);
-                            mapBuffer.Add(axis.Value.OutputAxis);
-                            mapBuffer.Add(axis.Value.SoftDeadZone);
-                            foreach (double sens in axis.Value.SensibilityX)
-                            {
-                                mapBuffer.AddRange(BitConverter.GetBytes(sens));
-                            }
-                            foreach (double sens in axis.Value.SensibilityY)
-                            {
-                                mapBuffer.AddRange(BitConverter.GetBytes(sens));
-                            }
-                            foreach (double sens in axis.Value.SensibilityS)
-                            {
-                                mapBuffer.AddRange(BitConverter.GetBytes(sens));
-                            }
-                            mapBuffer.Add((byte)(axis.Value.IsSensibilityForSlider ? 1 : 0));
-                            mapBuffer.AddRange(BitConverter.GetBytes(axis.Value.DamplingK));
-                            mapBuffer.Add((byte)axis.Value.Zones.Count);
-                            foreach (byte band in axis.Value.Zones)
-                            {
-                                mapBuffer.Add(band);
-                            }
-                            mapBuffer.Add((byte)axis.Value.Actions.Count);
-                            foreach (ushort actionId in axis.Value.Actions)
-                            {
-                                ushort index = actionId;
-                                mapBuffer.Add((byte)(index & 0xff));
-                                mapBuffer.Add((byte)(index >> 8));
-                            }
-                            mapBuffer.Add(axis.Value.Resistance.Increment);
-                            mapBuffer.Add(axis.Value.Resistance.Decrement);
-                        }
-                    }
-                }
-
-                if (pipe != null)
-                {
-                    pipe.Write(mapBuffer.ToArray(), 0, mapBuffer.Count);
-                    pipe.Flush();
-                }
+                sb.Append(System.Text.Json.JsonSerializer.Serialize(profile));
+                pipe.Write(System.Text.Encoding.UTF8.GetBytes(sb.ToString()));
+                pipe.Flush();
             }
             #endregion
 
             return true;
         }
 
-        private static bool LoadDefault(ref Shared.ProfileModel profile, ref string ndevices)
+        private static bool LoadDefault(ref Shared.ProfileModel profile, ref string? ndevices)
         {
             #region Button Macros
             {
@@ -285,103 +121,86 @@ namespace Launcher
 
             SortedList<string, uint> selected = [];
 
-            CWinUSB.SP_DEVICE_INTERFACE_DATA diData = new();
+            SetupDi.SP_DEVICE_INTERFACE_DATA diData = new();
             Guid hidGuid = new();
             HID.HidD_GetHidGuid(ref hidGuid);
-            IntPtr diDevs = CWinUSB.SetupDiGetClassDevsW(ref hidGuid, null, IntPtr.Zero, 0x2 | 0x10);
-            if (new IntPtr(-1) == diDevs)
+            IntPtr diDevs = SetupDi.SetupDiGetClassDevsW(ref hidGuid, null, IntPtr.Zero, SetupDi.DIGCF_PRESENT | SetupDi.DIGCF_DEVICEINTERFACE);
+            if (Win32.INVALID_HANDLE_VALUE == diDevs)
             {
                 return false;
             }
 
-            diData.cbSize = Marshal.SizeOf<CWinUSB.SP_DEVICE_INTERFACE_DATA>();
+            diData.cbSize = Marshal.SizeOf<SetupDi.SP_DEVICE_INTERFACE_DATA>();
             uint idx = 0;
             byte devicesDetected = 0;
-            while (CWinUSB.SetupDiEnumDeviceInterfaces(diDevs, IntPtr.Zero, ref hidGuid, idx++, ref diData))
+            while (SetupDi.SetupDiEnumDeviceInterfaces(diDevs, IntPtr.Zero, ref hidGuid, idx++, ref diData))
             {
-                uint tam = 0;
-                if ((false == CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, IntPtr.Zero, 0, ref tam, IntPtr.Zero)) && (122 != CWinUSB.GetLastError()))
+                if (!SetupDi.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, IntPtr.Zero, 0, out uint size, IntPtr.Zero) && (122 != Marshal.GetLastWin32Error()))
                 {
                     continue;
                 }
 
-                IntPtr buf = Marshal.AllocHGlobal((int)tam);
-                Marshal.WriteInt32(buf, 8);
-                if (!CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, buf, tam, ref tam, IntPtr.Zero))
-                {
-                    Marshal.FreeHGlobal(buf);
-                    continue;
-                }
-
-                string ninterface = Marshal.PtrToStringAuto(buf + 4);
-                Marshal.FreeHGlobal(buf);
-                if (!ninterface.Contains("vid", StringComparison.InvariantCultureIgnoreCase) || !ninterface.Contains("pid", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    continue;
-                }
-                uint joyId;
-                try
-                {
-                    joyId = uint.Parse(ninterface[12..16], System.Globalization.NumberStyles.AllowHexSpecifier) << 16;
-                    joyId |= uint.Parse(ninterface[21..25], System.Globalization.NumberStyles.AllowHexSpecifier);
-                }
-                catch
+                using Shared.RAII.HGlobalHandle buf = new((int)size);
+                Marshal.WriteInt32(buf.DangerousGetHandle(), 8);
+                if (!SetupDi.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, buf.DangerousGetHandle(), size, out size, IntPtr.Zero))
                 {
                     continue;
                 }
 
-                IntPtr hDev = CWinUSB.CreateFileW(ninterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x00000080 | 0x40000000, IntPtr.Zero);
-                if (hDev == CWinUSB.INVALID_HANDLE_VALUE)
+                string ninterface = Marshal.PtrToStringAuto(buf.DangerousGetHandle() + 4) ?? "";
+                if (!uint.TryParse(ninterface[12..16], System.Globalization.NumberStyles.AllowHexSpecifier, null, out uint joyId))
+                {
+                    continue;
+                }
+                joyId <<= 16;
+                if (!uint.TryParse(ninterface[21..25], System.Globalization.NumberStyles.AllowHexSpecifier, null, out uint joyId_vid))
+                {
+                    continue;
+                }
+                joyId |= joyId_vid;
+
+                using Shared.RAII.UniqueHandle hDev = new(Win32.CreateFileW(ninterface, Win32.GENERIC_READ | Win32.GENERIC_WRITE, Win32.FILE_SHARE_READ | Win32.FILE_SHARE_WRITE, IntPtr.Zero, Win32.OPEN_EXISTING, 0, IntPtr.Zero));
+                if (hDev.IsInvalid)
                 {
                     continue;
                 }
 
                 IntPtr pdata = IntPtr.Zero;
-                if (!HID.HidD_GetPreparsedData(hDev, ref pdata))
+                if (!HID.HidD_GetPreparsedData(hDev.DangerousGetHandle(), ref pdata))
                 {
-                    CWinUSB.CloseHandle(hDev);
                     continue;
                 }
 
-                IntPtr pcaps = Marshal.AllocHGlobal(Marshal.SizeOf<HID.HIDP_CAPS>());
-                if (HID.HidP_GetCaps(pdata, pcaps) == 0x110000)
+                using Shared.RAII.HGlobalHandle pcaps = new(Marshal.SizeOf<HID.HIDP_CAPS>());
+                if (HID.HidP_GetCaps(pdata, pcaps.DangerousGetHandle()) == HID.HIDP_STATUS_SUCCESS)
                 {
-                    HID.HIDP_CAPS caps = Marshal.PtrToStructure<HID.HIDP_CAPS>(pcaps);
-                    Marshal.FreeHGlobal(pcaps);
+                    HID.HIDP_CAPS caps = Marshal.PtrToStructure<HID.HIDP_CAPS>(pcaps.DangerousGetHandle());
                     if ((caps.UsagePage == 1) && ((caps.Usage == 4) || (caps.Usage == 5)))
                     {
                         if (!LoadDefaultDeviceProfile(ref profile, joyId, devicesDetected, pdata, ref caps))
                         {
                             HID.HidD_FreePreparsedData(pdata);
-                            CWinUSB.CloseHandle(hDev);
                             continue;
                         }
 
-                        buf = Marshal.AllocHGlobal(256);
-                        HID.HidD_GetProductString(hDev, buf, 0);
-                        if (HID.HidD_GetProductString(hDev, buf, 256))
+                        using Shared.RAII.HGlobalHandle psBuf = new(256);
+                        HID.HidD_GetProductString(hDev.DangerousGetHandle(), buf.DangerousGetHandle(), 0);
+                        if (HID.HidD_GetProductString(hDev.DangerousGetHandle(), buf.DangerousGetHandle(), 256))
                         {
-                            selected.Add(Marshal.PtrToStringAuto(buf).Trim(), joyId);
+                            selected.Add(Marshal.PtrToStringAuto(buf.DangerousGetHandle())?.Trim() ?? $"{CTranslate.Get("unkown")} {devicesDetected}", joyId);
                         }
                         else
                         {
                             selected.Add($"{CTranslate.Get("unkown")} {devicesDetected}", joyId);
                         }
-                        Marshal.FreeHGlobal(buf);
                         devicesDetected++;
                     }
                 }
-                else
-                {
-                    Marshal.FreeHGlobal(pcaps);
-                }
 
                 HID.HidD_FreePreparsedData(pdata);
-                CWinUSB.CloseHandle(hDev);
             }
 
-            CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
-
+            SetupDi.SetupDiDestroyDeviceInfoList(diDevs);
 
 
             if (devicesDetected > 0)
@@ -416,32 +235,28 @@ namespace Launcher
             if (caps.NumberInputButtonCaps != 0)
             {
                 ushort ustam = caps.NumberInputButtonCaps;
-                IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf<HID.HIDP_BUTTON_CAPS>() * ustam);
-                if (HID.HidP_GetButtonCaps(0, ptr, ref ustam, pdata) != 0x110000)
+                using Shared.RAII.HGlobalHandle ptr = new(Marshal.SizeOf<HID.HIDP_BUTTON_CAPS>() * ustam);
+                if (HID.HidP_GetButtonCaps(0, ptr.DangerousGetHandle(), ref ustam, pdata) != HID.HIDP_STATUS_SUCCESS)
                 {
-                    Marshal.FreeHGlobal(ptr);
                     return false;
                 }
                 for (int i = 0; i < ustam; i++)
                 {
-                    bcaps[i] = Marshal.PtrToStructure<HID.HIDP_BUTTON_CAPS>(ptr + Marshal.SizeOf<HID.HIDP_VALUE_CAPS>() * i);
+                    bcaps[i] = Marshal.PtrToStructure<HID.HIDP_BUTTON_CAPS>(ptr.DangerousGetHandle() + Marshal.SizeOf<HID.HIDP_VALUE_CAPS>() * i);
                 }
-                Marshal.FreeHGlobal(ptr);
             }
             if (caps.NumberInputValueCaps != 0)
             {
                 ushort ustam = caps.NumberInputValueCaps;
-                IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf<HID.HIDP_VALUE_CAPS>() * ustam);
-                if (HID.HidP_GetValueCaps(0, ptr, ref ustam, pdata) != 0x110000)
+                using Shared.RAII.HGlobalHandle ptr = new(Marshal.SizeOf<HID.HIDP_VALUE_CAPS>() * ustam);
+                if (HID.HidP_GetValueCaps(0, ptr.DangerousGetHandle(), ref ustam, pdata) != HID.HIDP_STATUS_SUCCESS)
                 {
-                    Marshal.FreeHGlobal(ptr);
                     return false;
                 }
                 for (int i = 0; i < ustam; i++)
                 {
-                    vcaps[i] = Marshal.PtrToStructure<HID.HIDP_VALUE_CAPS>(ptr + Marshal.SizeOf<HID.HIDP_VALUE_CAPS>() * i);
+                    vcaps[i] = Marshal.PtrToStructure<HID.HIDP_VALUE_CAPS>(ptr.DangerousGetHandle() + Marshal.SizeOf<HID.HIDP_VALUE_CAPS>() * i);
                 }
-                Marshal.FreeHGlobal(ptr);
             }
             #endregion
 
@@ -451,7 +266,7 @@ namespace Launcher
             List<byte> axisUsed = [];
             foreach (KeyValuePair<uint, Shared.ProfileModel.AxisMapModel> kvp in profile.AxesMap)
             {
-                if (kvp.Value.Modes.TryGetValue(0, out Shared.ProfileModel.AxisMapModel.ModeModel mode))
+                if (kvp.Value.Modes.TryGetValue(0, out Shared.ProfileModel.AxisMapModel.ModeModel? mode))
                 {
                     foreach (KeyValuePair<byte ,Shared.ProfileModel.AxisMapModel.ModeModel.AxisModel> axis in mode.Axes)
                     {
@@ -469,11 +284,11 @@ namespace Launcher
                 {
                     if (bt.Anonymous.Range.DataIndexMin == idx)
                     {
-                        if (!profile.ButtonsMap.TryGetValue(joyId, out Shared.ProfileModel.ButtonMapModel newv))
+                        if (!profile.ButtonsMap.TryGetValue(joyId, out Shared.ProfileModel.ButtonMapModel? newv))
                         {
                             profile.ButtonsMap.Add(joyId, newv = new());
                         }
-                        if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.ButtonMapModel.ModeModel mode))
+                        if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.ButtonMapModel.ModeModel? mode))
                         {
                             newv.Modes.Add(0, mode = new());
                         }
@@ -532,11 +347,11 @@ namespace Launcher
                             else
                             {
                                 if ((val.LogicalMax + 1 - val.LogicalMin) != 8 && (val.LogicalMax + 1 - val.LogicalMin) != 4) { throw new NotImplementedException(); }
-                                if (!profile.HatsMap.TryGetValue(joyId, out Shared.ProfileModel.ButtonMapModel newv))
+                                if (!profile.HatsMap.TryGetValue(joyId, out Shared.ProfileModel.ButtonMapModel? newv))
                                 {
                                     profile.HatsMap.Add(joyId, newv = new());
                                 }
-                                if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.ButtonMapModel.ModeModel mode))
+                                if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.ButtonMapModel.ModeModel? mode))
                                 {
                                     newv.Modes.Add(0, mode = new());
                                 }
@@ -553,11 +368,11 @@ namespace Launcher
                         }
                         else
                         {
-                            if (!profile.AxesMap.TryGetValue(joyId, out Shared.ProfileModel.AxisMapModel newv))
+                            if (!profile.AxesMap.TryGetValue(joyId, out Shared.ProfileModel.AxisMapModel? newv))
                             {
                                 profile.AxesMap.Add(joyId, newv = new());
                             }
-                            if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.AxisMapModel.ModeModel mode))
+                            if (!newv.Modes.TryGetValue(0, out Shared.ProfileModel.AxisMapModel.ModeModel? mode))
                             {
                                 newv.Modes.Add(0, mode = new());
                             }
@@ -567,10 +382,10 @@ namespace Launcher
                                 {
                                     IdJoyOutput = outJoy,
                                     Type = 1,
-                                    OutputAxis = destinationAxis
+                                    OutputAxis = destinationAxis,
+                                    IsSensibilityForSlider = KnownSliderAxes(joyId, destinationAxis),
+                                    DampingK = KnownDamplingAxes(joyId, destinationAxis) ? 0.25 : 0
                                 };
-                                newAxis.IsSensibilityForSlider = KnownSliderAxes(joyId, destinationAxis);
-                                newAxis.DamplingK = KnownDamplingAxes(joyId, destinationAxis) ? 0.25 : 0;
                                 mode.Axes.Add(axId++, newAxis);
                                 axisUsed.Add(destinationAxis);
                             }

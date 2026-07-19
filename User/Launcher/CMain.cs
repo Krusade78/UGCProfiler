@@ -6,8 +6,8 @@ namespace Launcher
 {
     public class CMain
     {
-        private System.Windows.Forms.NotifyIcon notifyIcon = null;
-        private CService service = null;
+        private System.Windows.Forms.NotifyIcon? notifyIcon = null;
+        private CService? service = null;
 
         public CMain() { }
 
@@ -18,10 +18,10 @@ namespace Launcher
             if (service.Init())
             {
                 service.ExitEvt += Service_ExitEvt;
-                Application.ResourceAssembly = typeof(CMain).Assembly;
-                notifyIcon = new System.Windows.Forms.NotifyIcon
+                System.IO.Stream? strIco = System.Reflection.Assembly.GetAssembly(typeof(CMain))?.GetManifestResourceStream("Launcher.res.launcher.ico");
+                notifyIcon = new()
                 {
-                    Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("/res/Launcher.ico", UriKind.Relative)).Stream),
+                    Icon = strIco == null ? null : new System.Drawing.Icon(strIco),
                     Visible = true,
                     Text = "Universal Game Controller Profiler"
                 };
@@ -40,17 +40,19 @@ namespace Launcher
 
         public void LoadDefault()
         {
-            service.LoadProfile(null);
+            service?.LoadProfile(null);
         }
 
-        private void Service_ExitEvt(object sender, ResolveEventArgs e)
+        private void Service_ExitEvt(object? sender, EventArgs e)
         {
             notifyIcon?.Dispose();
+            notifyIcon = null;
             service?.Dispose();
+            service = null;
             //System.Windows.Application.Current.Shutdown();
         }
 
-        private void NotifyIcon_Click(object sender, EventArgs e)
+        private void NotifyIcon_Click(object? sender, EventArgs e)
         {
             System.Threading.Thread th = new(MenuWnd);
             th.SetApartmentState(System.Threading.ApartmentState.STA);
@@ -59,11 +61,16 @@ namespace Launcher
 
         private void MenuWnd()
         {
-            MenuLauncher popup = new(service);
-            if (popup.ShowDialog() == true)
+            if (service != null)
             {
-                notifyIcon?.Dispose();
-                service?.Dispose();
+                MenuLauncher popup = new(service);
+                if (popup.ShowDialog() == true)
+                {
+                    notifyIcon?.Dispose();
+                    notifyIcon = null;
+                    service?.Dispose();
+                    service = null;
+                }
             }
         }
 

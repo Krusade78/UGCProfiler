@@ -58,10 +58,10 @@ namespace Profiler.Calibrator
             }
             try
             {
-                Shared.Calibration.CCalibration? cal = System.Text.Json.JsonSerializer.Deserialize<Shared.Calibration.CCalibration>(System.IO.File.ReadAllText("calibration.dat"));
+                Shared.Calibration.HighLevel.Model? cal = System.Text.Json.JsonSerializer.Deserialize<Shared.Calibration.HighLevel.Model>(System.IO.File.ReadAllText("calibration.dat"));
                 if (cal != null)
                 {
-                    foreach (Shared.Calibration.Limits r in cal.Limits)
+                    foreach (Shared.Calibration.HighLevel.Limits r in cal.JoyLimits)
                     {
                         Shared.CTypes.STLIMITS l = new()
                         {
@@ -80,7 +80,7 @@ namespace Profiler.Calibrator
                             limitJoy.Add(r.IdAxis, l);
                         }
                     }
-                    foreach (Shared.Calibration.Jitter r in cal.Jitters)
+                    foreach (Shared.Calibration.HighLevel.Jitter r in cal.JoyJitters)
                     {
                         Shared.CTypes.STJITTER j = new()
                         {
@@ -110,7 +110,7 @@ namespace Profiler.Calibrator
         {
             byte x = 1, y = 1, z = 1, rx = 1, ry = 1, rz = 1, sl = 1;
             SortedList<ushort, SelectorBarItem> navs = [];
-            foreach (Shared.ProfileModel.DeviceInfo.CUsage u in devInfo.Usages)
+            foreach (Shared.DeviceInfo.CUsage u in devInfo.Usages)
             {
                 switch (u.Type)
                 {
@@ -179,8 +179,6 @@ namespace Profiler.Calibrator
                 {
                     v.PosRepeated = 0;
                     v.PosChosen = pollAxis;
-                    //v.PosPosible = pollAxis;
-                    //jitter[joySel][ejeSel] = v;
                 }
                 else
                 {
@@ -194,23 +192,6 @@ namespace Profiler.Calibrator
                         v.PosRepeated = 0;
                         v.PosChosen = pollAxis;
                     }
-                    //if (pollAxis == v.PosPosible)
-                    //{
-                    //	v.PosRepeated++;
-                    //	if (v.PosRepeated == v.Strength)
-                    //	{
-                    //		v.PosRepeated = 0;
-                    //		v.PosChosen = pollAxis;
-                    //		jitters[joySel][axisSel] = v;
-                    //	}
-                    //}
-                    //else
-                    //{
-                    //	v.PosRepeated = 0;
-                    //	v.PosPosible = pollAxis;
-                    //	jitters[joySel][axisSel] = v;
-                    //}
-                    //pollAxis = v.PosChosen;
                 }
             }
 
@@ -245,13 +226,13 @@ namespace Profiler.Calibrator
                             if (width1 != 0)
                             {
                                 pollAxis -= limit.Left;
-                                pollAxisGame = (ushort)((pollAxis * 16382) / (limit.Center - 1));
-                                pollAxis = (ushort)((pollAxis * limit.Center) / width1);
+                                pollAxisGame = (ushort)(((pollAxis * 16383) + (16383 /2)) / 16383);
+                                pollAxis = (ushort)(((pollAxis * limit.Center) + (width1 / 2)) / width1);
                             }
                             else
                             {
-                                pollAxis = 0;
-                                pollAxisGame = 0;
+                                pollAxis = limit.Center;
+                                pollAxisGame = 16383;
                             }
                         }
                         else
@@ -259,13 +240,16 @@ namespace Profiler.Calibrator
                             if (width2 != 0)
                             {
                                 pollAxis -= (ushort)(limit.Center + limit.Null + 1);
-                                pollAxisGame = (ushort)(16384 + ((pollAxis * 16383) / (width2 - 1)));
-                                pollAxis = (ushort)(limit.Center + 1 + ((pollAxis * (devInfo.Usages[axisId].Range - limit.Center)) / (width2 - 1)));
+
+                                pollAxisGame = (ushort)(((pollAxis * 16384) + 8192) / 16384);
+                                pollAxisGame += 16384;
+                                pollAxis = (ushort)(((pollAxis * (devInfo.Usages[axisId].Range - limit.Center)) + (width2 / 2)) / width2); //Equivalent to round function
+                                pollAxis += (ushort)(limit.Center + 1);
                             }
                             else
                             {
-                                pollAxis = 0;
-                                pollAxisGame = 0;
+                                pollAxis = limit.Center;
+                                pollAxisGame = 16383;
                             }
                         }
                     }
@@ -391,20 +375,20 @@ namespace Profiler.Calibrator
         {
             Apply();
             {
-                Shared.Calibration.CCalibration dsc = new();
+                Shared.Calibration.HighLevel.Model dsc = new();
 
                 foreach (var v in limitsCal)
                 {
                     foreach (KeyValuePair<byte, Shared.CTypes.STLIMITS> l in v.Value)
                     {
-                        dsc.Limits.Add(new() { IdJoy = v.Key, IdAxis = l.Key, Null = l.Value.Null, Left = l.Value.Left, Center = l.Value.Center, Right = l.Value.Right, Range = l.Value.Range });
+                        dsc.JoyLimits.Add(new() { IdJoy = v.Key, IdAxis = l.Key, Null = l.Value.Null, Left = l.Value.Left, Center = l.Value.Center, Right = l.Value.Right, Range = l.Value.Range });
                     }
                 }
                 foreach (var v in jitters)
                 {
                     foreach (KeyValuePair<byte, Shared.CTypes.STJITTER> j in v.Value)
                     {
-                        dsc.Jitters.Add(new() { IdJoy = v.Key, IdAxis = j.Key, Antiv = j.Value.Antiv, Margin = j.Value.Margin, Strength = j.Value.Strength });
+                        dsc.JoyJitters.Add(new() { IdJoy = v.Key, IdAxis = j.Key, Antiv = j.Value.Antiv, Margin = j.Value.Margin, Strength = j.Value.Strength });
                     }
                 }
 

@@ -1,0 +1,34 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Docs/">
+    <File Path="Docs/vJoy 1.0.3 - configurable driver.odt" />
+    <File Path="Docs/VKB LEDs Protocol.pdf" />
+    <File Path="Docs/x52_buttons.txt" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Driver/">
+    <File Path="Driver/vJoySetup.exe" />
+    <File Path="Driver/winusb_x52.cat" />
+    <File Path="Driver/winusb_x52.inf" />
+  </Folder>
+  <Folder Name="/User/">
+    <Project Path="User/Launcher/Launcher.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="User/Profiler/Profiler.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="User/RawInputHelper/RawInputHelper.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="User/Shrared/Shared.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="User/ugcp_svc/ugcp_svc.csproj">
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+</Solution>

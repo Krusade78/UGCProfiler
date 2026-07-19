@@ -73,28 +73,27 @@ namespace Profiler.Controls
 
         private void AddConnectedDevices()
         {
-            API.CWinUSB.SP_DEVICE_INTERFACE_DATA diData = new();
+            API.SetupDi.SP_DEVICE_INTERFACE_DATA diData = new();
             Guid hidGuid = new();
             API.HID.HidD_GetHidGuid(ref hidGuid);
-            IntPtr diDevs = API.CWinUSB.SetupDiGetClassDevsW(ref hidGuid, null, IntPtr.Zero, 0x2 | 0x10);
+            IntPtr diDevs = API.SetupDi.SetupDiGetClassDevsW(ref hidGuid, null, IntPtr.Zero, 0x2 | 0x10);
             if (new IntPtr(-1) == diDevs)
             {
                 return;
             }
 
-            diData.cbSize = System.Runtime.InteropServices.Marshal.SizeOf<API.CWinUSB.SP_DEVICE_INTERFACE_DATA>();
+            diData.cbSize = System.Runtime.InteropServices.Marshal.SizeOf<API.SetupDi.SP_DEVICE_INTERFACE_DATA>();
             uint idx = 0;
-            while (API.CWinUSB.SetupDiEnumDeviceInterfaces(diDevs, IntPtr.Zero, ref hidGuid, idx++, ref diData))
+            while (API.SetupDi.SetupDiEnumDeviceInterfaces(diDevs, IntPtr.Zero, ref hidGuid, idx++, ref diData))
             {
-                uint tam = 0;
-                if ((false == API.CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, IntPtr.Zero, 0, ref tam, IntPtr.Zero)) && (122 != API.CWinUSB.GetLastError()))
+                if ((false == API.SetupDi.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, IntPtr.Zero, 0, out uint tam, IntPtr.Zero)) && (122 != System.Runtime.InteropServices.Marshal.GetLastWin32Error()))
                 {
                     continue;
                 }
 
                 IntPtr buf = System.Runtime.InteropServices.Marshal.AllocHGlobal((int)tam);
                 System.Runtime.InteropServices.Marshal.WriteInt32(buf, 8);
-                if (!API.CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, buf, tam, ref tam, IntPtr.Zero))
+                if (!API.SetupDi.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, buf, tam, out tam, IntPtr.Zero))
                 {
                     System.Runtime.InteropServices.Marshal.FreeHGlobal(buf);
                     continue;
@@ -107,8 +106,8 @@ namespace Profiler.Controls
                     continue;
                 }
 
-                IntPtr hDev = API.CWinUSB.CreateFileW(ninterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x00000080 | 0x40000000, IntPtr.Zero);
-                if (hDev == API.CWinUSB.INVALID_HANDLE_VALUE)
+                IntPtr hDev = API.Win32.CreateFileW(ninterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x00000080 | 0x40000000, IntPtr.Zero);
+                if (hDev == API.Win32.INVALID_HANDLE_VALUE)
                 {
                     continue;
                 }
@@ -116,7 +115,7 @@ namespace Profiler.Controls
                 IntPtr pdata = IntPtr.Zero;
                 if (!API.HID.HidD_GetPreparsedData(hDev, ref pdata))
                 {
-                    API.CWinUSB.CloseHandle(hDev);
+                    API.Win32.CloseHandle(hDev);
                     continue;
                 }
 
@@ -135,10 +134,10 @@ namespace Profiler.Controls
                     System.Runtime.InteropServices.Marshal.FreeHGlobal(pcaps);
                 }
                 API.HID.HidD_FreePreparsedData(pdata);
-                API.CWinUSB.CloseHandle(hDev);
+                API.Win32.CloseHandle(hDev);
             }
 
-            API.CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
+            API.SetupDi.SetupDiDestroyDeviceInfoList(diDevs);
         }
 
         public void AddWinUSBX52Device()
@@ -174,7 +173,7 @@ namespace Profiler.Controls
             lockNavView.Release();
         }
 
-        public void AddProfileDevice(Shared.ProfileModel.DeviceInfo devProfileInfo)
+        public void AddProfileDevice(Shared.DeviceInfo devProfileInfo)
         {
             Devices.DeviceInfo? di = devices.Select(x => x.Value).FirstOrDefault(x => x.Id == devProfileInfo.Id);
             if (di != null)

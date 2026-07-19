@@ -6,8 +6,8 @@ Based on the XHOTAS code this new software will be able to program any HID game 
 
 ### Status
 
-- 98% Working (known bugs but not important).
-- [Service] Hot unplug seems to have some problem and needs debugging.
+- 99% Working (may have some bugs).
+- C++ service code has been ported to high performance c# code. Hidden memory corruption has been fixed.
 
 ### Devices
 
@@ -33,13 +33,13 @@ keeping it easy to use, with an event based system.
 The other important feature that is on the roadmap is to make the profiles script based so you can go to a lower level and
 do almost anything (v12?).
 
-The GUI has been ported to WinUI 3.
+The GUI has been ported to WinUI 3 (Uno/SkiaRender).
 <br>
 <br>
 
 ## Source code
 
-All the source code has been moved to user layer, no WDK required. C# and .NET are used for gui, and C++ for background processing to make it as fast as possible.
+All the source code has been moved to user layer, no WDK required. The most recent implementation use only C#/.NET.
 Can be compiled with Visual Studio Community 2022.
 <br>
 <br>

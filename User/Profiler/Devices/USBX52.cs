@@ -42,49 +42,48 @@ namespace Profiler.Devices
 
         private bool Prepare()
         {
-            CWinUSB.SP_DEVICE_INTERFACE_DATA diData = new();
+            SetupDi.SP_DEVICE_INTERFACE_DATA diData = new();
 
-            IntPtr diDevs = CWinUSB.SetupDiGetClassDevsW(ref guidInterface, null, IntPtr.Zero, 0x2 | 0x10);
+            IntPtr diDevs = SetupDi.SetupDiGetClassDevsW(ref guidInterface, null, IntPtr.Zero, 0x2 | 0x10);
             if (new IntPtr(-1) == diDevs)
             {
                 return false;
             }
 
-            diData.cbSize = Marshal.SizeOf<CWinUSB.SP_DEVICE_INTERFACE_DATA>();
-            if (!CWinUSB.SetupDiEnumDeviceInterfaces(diDevs, IntPtr.Zero, ref guidInterface, 0, ref diData))
+            diData.cbSize = Marshal.SizeOf<SetupDi.SP_DEVICE_INTERFACE_DATA>();
+            if (!SetupDi.SetupDiEnumDeviceInterfaces(diDevs, IntPtr.Zero, ref guidInterface, 0, ref diData))
             {
                 //uint err = CWinUSB.GetLastError();
-                CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
+                SetupDi.SetupDiDestroyDeviceInfoList(diDevs);
                 return false; // (err == 259); // ERROR_NO_MORE_ITEMS);
             }
 
-            uint size = 0;
-            if ((false == CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, IntPtr.Zero, 0, ref size, IntPtr.Zero)) && (122 != CWinUSB.GetLastError()))
+            if ((false == SetupDi.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, IntPtr.Zero, 0, out uint  size, IntPtr.Zero)) && (122 != System.Runtime.InteropServices.Marshal.GetLastWin32Error()))
             {
-                CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
+                SetupDi.SetupDiDestroyDeviceInfoList(diDevs);
                 return false;
             }
 
             IntPtr buf = Marshal.AllocHGlobal((int)size);
             Marshal.WriteInt32(buf, 8);
-            if (!CWinUSB.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, buf, size, ref size, IntPtr.Zero))
+            if (!SetupDi.SetupDiGetDeviceInterfaceDetailW(diDevs, ref diData, buf, size, out size, IntPtr.Zero))
             {
                 Marshal.FreeHGlobal(buf);
-                CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
+                SetupDi.SetupDiDestroyDeviceInfoList(diDevs);
                 return false;
             }
 
             hidInterface = Marshal.PtrToStringAuto(buf + 4);
 
             Marshal.FreeHGlobal(buf);
-            CWinUSB.SetupDiDestroyDeviceInfoList(diDevs);
+            SetupDi.SetupDiDestroyDeviceInfoList(diDevs);
             return true;
         }
 
         private bool Open()
         {
-            usbh = CWinUSB.CreateFileW(hidInterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x80 | 0x40000000, IntPtr.Zero);
-            if (CWinUSB.INVALID_HANDLE_VALUE == usbh)
+            usbh = Win32.CreateFileW(hidInterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x80 | 0x40000000, IntPtr.Zero);
+            if (Win32.INVALID_HANDLE_VALUE == usbh)
             {
                 usbh = IntPtr.Zero;
                 return false;
@@ -92,7 +91,7 @@ namespace Profiler.Devices
 
             if(!CWinUSB.WinUsb_Initialize(usbh, out hwusb))
             {
-                CWinUSB.CloseHandle(usbh);
+                Win32.CloseHandle(usbh);
                 usbh = IntPtr.Zero;
                 return false;
             }
@@ -101,7 +100,7 @@ namespace Profiler.Devices
             {
                 CWinUSB.WinUsb_Free(hwusb);
                 hwusb = IntPtr.Zero;
-                CWinUSB.CloseHandle(usbh);
+                Win32.CloseHandle(usbh);
                 usbh = IntPtr.Zero;
                 return false;
             }
@@ -118,7 +117,7 @@ namespace Profiler.Devices
             }
             if (usbh != IntPtr.Zero)
             {
-                CWinUSB.CloseHandle(usbh);
+                Win32.CloseHandle(usbh);
                 usbh = IntPtr.Zero;
             }
         }
@@ -146,8 +145,8 @@ namespace Profiler.Devices
                 }
 
                 IntPtr usbbuf = Marshal.AllocHGlobal(14);
-                IntPtr tam = Marshal.AllocHGlobal(8);
-                if (!CWinUSB.WinUsb_ReadPipe(hwusb, pipe.PipeId, usbbuf, 14, tam, IntPtr.Zero))
+                uint tam = 0;
+                if (!CWinUSB.WinUsb_ReadPipe(hwusb, pipe.PipeId, usbbuf, 14,ref tam, IntPtr.Zero))
                 {
                     System.Threading.Thread.Sleep(2000);
                     reset++;
@@ -162,7 +161,6 @@ namespace Profiler.Devices
                         wnd.SetStatus(0x06a30255, buf);
                     });
                 }
-                Marshal.FreeHGlobal(tam);
                 Marshal.FreeHGlobal(usbbuf);
                 if (reset == 10)
                 {

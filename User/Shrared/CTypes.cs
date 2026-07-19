@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 
 namespace Shared
 {
@@ -7,21 +8,31 @@ namespace Shared
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STLIMITS
 		{
-			public byte Null;
-			public ushort Left;
-			public ushort Center;
-			public ushort Right;
-			public ushort Range;
+            [JsonInclude]
+            public byte Null;
+            [JsonInclude]
+            public ushort Left;
+            [JsonInclude]
+            public ushort Center;
+            [JsonInclude]
+            public ushort Right;
+            [JsonInclude]
+            public ushort Range;
 		};
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct STJITTER
 		{
-			public byte Antiv; //bool
-			public byte PosRepeated;
-			public byte Margin;
-			public byte Strength;
-			public ushort PosChosen;
+            [JsonInclude]
+            public byte Antiv; //bool
+            [JsonInclude]
+            public byte PosRepeated;
+            [JsonInclude]
+            public byte Margin;
+            [JsonInclude]
+            public byte Strength;
+            [JsonInclude]
+            public ushort PosChosen;
 			//public ushort PosPosible;
 		};
 

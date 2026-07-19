@@ -124,7 +124,7 @@ namespace Profiler.Dialogs
             chkSlider.IsOn = axisData.IsSensibilityForSlider;
             model.Blend.Value = axisData.Curve.Blend;
             model.Exponent.Value = axisData.Curve.Exponent;
-            model.DampingK.Value = axisData.DamplingK;
+            model.DampingK.Value = axisData.DampingK;
             //model.Inertia.Value = axisData.Intertia;
             model.SoftDeadZone.Value = axisData.SoftDeadZone;
         }
@@ -156,7 +156,7 @@ namespace Profiler.Dialogs
             }
 
             axisData.IsSensibilityForSlider = chkSlider.IsOn == true;
-            axisData.DamplingK = model.DampingK.Value;
+            axisData.DampingK = model.DampingK.Value;
             axisData.SoftDeadZone = model.SoftDeadZone.Value;
             parent.GetData().Modified = true;
         }

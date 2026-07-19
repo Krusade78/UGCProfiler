@@ -9,10 +9,10 @@ namespace Profiler
 			return await SendAsync("RAW:" + on.ToString(), onClose);
 		}
 
-		public static async System.Threading.Tasks.Task<bool> SetCalibrationMode(bool on, bool onClose = false)
-		{
-			return await SendAsync("CAL:" + on.ToString(), onClose);
-		}
+		//public static async System.Threading.Tasks.Task<bool> SetCalibrationMode(bool on, bool onClose = false)
+		//{
+		//	return await SendAsync("CAL:" + on.ToString(), onClose);
+		//}
 
 		public static async System.Threading.Tasks.Task<bool> Reset()
 		{
@@ -26,13 +26,12 @@ namespace Profiler
 
 		private static async System.Threading.Tasks.Task<bool> SendAsync(string msj, bool onClose = false)
 		{
-			using System.IO.Pipes.NamedPipeClientStream pipeClient = new("LauncherPipe");
+			using System.IO.Pipes.NamedPipeClientStream pipeClient = new(".", "LauncherPipe", System.IO.Pipes.PipeDirection.Out);
 			try
 			{
 				await pipeClient.ConnectAsync(200);
-				using System.IO.StreamWriter sw = new(pipeClient);
-				sw.WriteLine(msj);
-				sw.Flush();
+				pipeClient.Write(System.Text.Encoding.UTF8.GetBytes(msj));
+				pipeClient.Flush();
 			}
 			catch (Exception ex)
 			{

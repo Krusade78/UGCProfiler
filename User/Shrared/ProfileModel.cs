@@ -18,11 +18,11 @@ namespace Shared
 
         public class ButtonMapModel
         {
-            public Dictionary<byte, ModeModel> Modes { get; set; } = []; //Mode as key mmmm_ssss binary Mode/Submode
+            public OrderedDictionary<byte, ModeModel> Modes { get; set; } = []; //Mode as key mmmm_ssss binary Mode/Submode
 
             public class ModeModel
             {
-                public Dictionary<byte, ButtonModel> Buttons { get; set; } = []; //Button Id as key
+                public OrderedDictionary<byte, ButtonModel> Buttons { get; set; } = []; //Button Id as key
                 public class ButtonModel
                 {
                     public byte Type { get; set; } = 0;
@@ -33,11 +33,11 @@ namespace Shared
 
         public class AxisMapModel
         {
-            public Dictionary<byte, ModeModel> Modes { get; set; } = []; //Mode as key mmmm_ssss binary Mode/Submode
+            public OrderedDictionary<byte, ModeModel> Modes { get; set; } = []; //Mode as key mmmm_ssss binary Mode/Submode
 
             public class ModeModel
             {
-                public Dictionary<byte, AxisModel> Axes { get; set; } = []; //Axis Id as key
+                public OrderedDictionary<byte, AxisModel> Axes { get; set; } = []; //Axis Id as key
                 public class AxisModel
                 {
                     public class CurveModel
@@ -61,7 +61,7 @@ namespace Shared
                     public double[] SensibilityY { get; set; } = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00];
                     public double[] SensibilityS { get; set; } = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
                     public bool IsSensibilityForSlider { get; set; }
-                    public double DamplingK { get; set; } = 0;
+                    public double DampingK { get; set; } = 0;
                     //public double Intertia { get; set; } = 0;
                     public byte SoftDeadZone { get; set; } = 0;
                     public List<byte> Zones { get; set; } = []; //zone position %
@@ -74,33 +74,12 @@ namespace Shared
 
         public class MacroModel
         {
-            [MaxLength(32)]
             public ushort Id { get; set; }
+            [MaxLength(32)]
             public string Name { get; set; }
             public List<uint> Commands { get; set; } = [];
         }
 
         public List<DeviceInfo> DevicesIncluded { get; set; } = [];
-        public class DeviceInfo
-        {
-            public class CUsage
-            {
-                public ushort ReportId { get; set; }
-                public ushort ReportIdx { get; set; }
-                public byte Id { get; set; }
-                public byte Type { get; set; }
-                public byte Bits { get; set; }
-                public ushort Range { get; set; }
-            }
-
-            public uint Id { get; set; }
-            public string Name { get; set; }
-
-            public byte NAxes { get; set; }
-            public byte NHats { get; set; }
-            public ushort NButtons { get; set; }
-
-            public List<CUsage> Usages { get; set; } = []; //sorted by idx
-        }
     }
 }

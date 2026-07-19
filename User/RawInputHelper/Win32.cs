@@ -14,29 +14,6 @@ namespace RawInputHelper
             string? lpName // puede ser null
         );
 
-        [LibraryImport("user32.dll", EntryPoint = "CreateWindowExW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial IntPtr CreateWindowExW(
-            uint dwExStyle,
-            string lpClassName,
-            string? lpWindowName,
-            uint dwStyle,
-            int x,
-            int y,
-            int nWidth,
-            int nHeight,
-            IntPtr hWndParent,
-            IntPtr hMenu,
-            IntPtr hInstance,
-            IntPtr lpParam
-        );
-
-        [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
-        internal static partial IntPtr GetModuleHandleW(string? lpModuleName);
-
-        [LibraryImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool DestroyWindow(IntPtr hWnd);
-
         [LibraryImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static partial bool SetEvent(IntPtr hEvent);
@@ -56,10 +33,6 @@ namespace RawInputHelper
             uint dwMilliseconds,
             uint dwWakeMask
         );
-
-        [LibraryImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool CloseHandle(IntPtr hObject);
         #endregion
 
         #region RawInput structs
@@ -185,22 +158,6 @@ namespace RawInputHelper
             uint uiCommand,
             IntPtr pData,
             ref uint pcbSize);
-
-        public enum HidP_ReportType
-        {
-            HidP_Input,
-            HidP_Output,
-            HidP_Feature
-        }
-
-        [LibraryImport("hid.dll", SetLastError = true)]
-        internal static partial long HidP_GetData(
-            HidP_ReportType ReportType,
-            IntPtr DataList,
-            ref uint DataLength,
-            IntPtr PreparsedData,
-            [In] byte[] Report,
-            uint ReportLength);
         #endregion
     }
 }

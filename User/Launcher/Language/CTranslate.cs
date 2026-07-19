@@ -4,7 +4,7 @@ namespace Launcher
 {
     internal static class CTranslate
     {
-        private static ResourceDictionary langDict;
+        private static ResourceDictionary? langDict = null;
 
         public static void Load()
         {
@@ -24,9 +24,9 @@ namespace Launcher
             }
         }
 
-        public static ResourceDictionary GetDictionary() => langDict;
+        public static ResourceDictionary? GetDictionary() => langDict;
 
-        public static string Get(string key) => (string)langDict[key];
+        public static string Get(string key) => (string?)langDict?[key] ?? "";
 
 
     }

@@ -75,7 +75,7 @@ namespace Profiler
             }
             if (await CLauncherPipe.SetRawMode(false, true))
             {
-                await CLauncherPipe.SetCalibrationMode(false, true);
+                //await CLauncherPipe.SetCalibrationMode(false, true);
             }
             ctlDevs.Dispose();
             exit = true;

@@ -70,7 +70,7 @@ namespace Profiler.Dialogs
                     axisData.SensibilityS[i] = axis.SensibilityS[i];
                 }
                 axisData.IsSensibilityForSlider = axis.IsSensibilityForSlider;
-                axisData.DamplingK = axis.DamplingK;
+                axisData.DampingK = axis.DampingK;
                 axisData.SoftDeadZone = axis.SoftDeadZone;
                 parent.GetData().Modified = true;
                 lastMode = (byte)NumericUpDownM.Value;

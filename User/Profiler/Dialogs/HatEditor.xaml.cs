@@ -10,12 +10,12 @@ namespace Profiler.Dialogs
         //private byte pov;
         private readonly byte currentModes;
         private readonly uint currentJoy;
-        private readonly Shared.ProfileModel.DeviceInfo.CUsage usage;
+        private readonly Shared.DeviceInfo.CUsage usage;
 
 #if DEBUG
         public HatEditor() { InitializeComponent(); usage = new(); }
 #endif
-        public HatEditor(uint joyId, byte mode, Shared.ProfileModel.DeviceInfo.CUsage usage)
+        public HatEditor(uint joyId, byte mode, Shared.DeviceInfo.CUsage usage)
         {
             InitializeComponent();
             currentModes = mode;
@@ -24,7 +24,7 @@ namespace Profiler.Dialogs
             //pov = idSeta;
         }
 
-        public static async System.Threading.Tasks.Task Show(uint joyId, byte mode, Shared.ProfileModel.DeviceInfo.CUsage usage)
+        public static async System.Threading.Tasks.Task Show(uint joyId, byte mode, Shared.DeviceInfo.CUsage usage)
         {
             HatEditor content = new(joyId, mode, usage);
             ContentDialog dlg = new()

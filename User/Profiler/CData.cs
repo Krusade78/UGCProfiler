@@ -69,7 +69,7 @@ namespace Profiler
             return true;
         }
 
-        public async System.Threading.Tasks.Task<bool> Save(string filename, List<ProfileModel.DeviceInfo> devs)
+        public async System.Threading.Tasks.Task<bool> Save(string filename, List<DeviceInfo> devs)
         {
             //Reorder action ids
             ushort id = 0;
@@ -160,15 +160,15 @@ namespace Profiler
 
             using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.Pedals.json") ?? throw new NotImplementedException()))
             {
-                Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<ProfileModel.DeviceInfo>(r.ReadToEnd()));
+                Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<DeviceInfo>(r.ReadToEnd()));
             }
             using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.X52.json") ?? throw new NotImplementedException()))
             {
-                Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<ProfileModel.DeviceInfo>(r.ReadToEnd()));
+                Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<DeviceInfo>(r.ReadToEnd()));
             }
             using (System.IO.StreamReader r = new(typeof(App).Assembly.GetManifestResourceStream("Profiler.OldProfile.GladiatosNXT.json") ?? throw new NotImplementedException()))
             {
-                Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<ProfileModel.DeviceInfo>(r.ReadToEnd()));
+                Profile.DevicesIncluded.Add(System.Text.Json.JsonSerializer.Deserialize<DeviceInfo>(r.ReadToEnd()));
             }
 
 

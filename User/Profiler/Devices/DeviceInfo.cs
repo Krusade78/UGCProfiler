@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Profiler.Devices
 {
-    public class DeviceInfo : Shared.ProfileModel.DeviceInfo
+    public class DeviceInfo : Shared.DeviceInfo
     {
         public class HID_INPUT_DATA
         {
@@ -35,8 +35,8 @@ namespace Profiler.Devices
                 return UsbX52.GetInfo(joy);
             }
 
-            IntPtr hDev = CWinUSB.CreateFileW(ninterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x00000080| 0x40000000, IntPtr.Zero);
-            if (hDev == CWinUSB.INVALID_HANDLE_VALUE)
+            IntPtr hDev = Win32.CreateFileW(ninterface, 0x80000000 | 0x40000000, 1 | 2, IntPtr.Zero, 3, 0x00000080| 0x40000000, IntPtr.Zero);
+            if (hDev == Win32.INVALID_HANDLE_VALUE)
             {
                 goto error;
             }
@@ -183,13 +183,13 @@ namespace Profiler.Devices
                 }
             }
 
-            CWinUSB.CloseHandle(hDev);
+            Win32.CloseHandle(hDev);
             return devData;
 
         errorPD:
             HID.HidD_FreePreparsedData(pdata);
         error:
-            CWinUSB.CloseHandle(hDev);
+            Win32.CloseHandle(hDev);
             return null;
         }
 
